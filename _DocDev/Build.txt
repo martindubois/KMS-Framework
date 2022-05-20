@@ -1,0 +1,42 @@
+
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      _DocDev/Build.txt
+
+Name                _________________________________________________________
+
+Date and time       20 ______ - ______ - ______               ______ : ______
+
+Computer            _________________________________________________________
+
+[ ] File "Common/Version.h" - Edit the Version
+
+Version             ______ . ______ . ______ . ______ - _____________________
+
+[ ] File "_DocUser/KMS.ReadMe.txt"
+
+[ ] File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"
+
+[ ] File "KMS-Builder/_DocUser/KMS.KMS-Builder.ReadMe.txt"
+[ ] File "KMS-ByteTool/_DocUser/KMS.KMS-ByteTool.ReadMe.txt"
+[ ] File "KMS-Importer/_DocUser/KMS.KMS-Importer.ReadMe.txt"
+
+[ ] Tool "Visual Studio 2022"
+        - Build KMS-Builder in Debug x64
+        - Close
+
+[ ] Tools "PowerShell" - In the product folder
+        .\x64\Debug\KMS-Builder.exe
+
+[ ] Tools "GIT GUI"
+    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
+    - Push the servers
+
+[ ] If needed, update KMS-Importer.exe in K:\Export
+[ ] If needed, upload the release on GitHub.com
+
+Time and duration   ______ : ______           ______ hours and ______ minutes
+
+Signature           _________________________________________________________

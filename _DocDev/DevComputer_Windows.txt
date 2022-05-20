@@ -1,0 +1,66 @@
+
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      _DocDev/DevComputer_Windows.txt
+
+Name                _________________________________________________________
+
+Date and time       20 ______ - ______ - ______               ______ : ______
+
+Computer            _________________________________________________________
+
+[ ] Install Windows 10 Pro 64 bits
+[ ] Add the computer to the domain
+[ ] Connect the K: to \\pdc\Server
+[ ] Copy K:\Utilisateurs\{UserName}\.ssh in the user home directory
+[ ] K:\TheKit\GIT\Git-2.36.0-64-bit.exe
+    - In the "Open File - Security Warning" dialog
+	- Click "Run"
+    - In the "User acount control" dialog
+        - Click "Yes"
+    - In the "Git 2.36.0 Setup" dialog
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Select "Use Git from Git Bash only"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Next"
+        - Click "Install"
+        - Wait
+        - Check "Launch Git Bash"
+        - Press ENTER
+            - In "Git Bash"
+                git config --global user.name "{FirstName} {LastName}"
+                git config --global user.email "{UserName}@kms-quebec.com"
+                exit
+[ ] K:\TheKit\VisualStudioCode\VSCodeSetup-x64-1.66.2.exe
+    - In the "Open File - Security Warning" dialog
+	- Click "Run"
+    - In the "User Acount Control" dialog
+        - Click "Yes"
+    - In the "Setup - Microsoft Visual Studio Code" dialog
+        - Select "I accept the agreement"
+        - Click "Next >"
+        - Click "Next >"
+        - Click "Next >"
+        - Click "Next >"
+        - Clicl "Install"
+        - Wait
+        - Click "Finish"
+[ ] Install "Visual Studio 2022 LTSC (Version 17.2)"
+    - Select "Desktop developement in C++"
+
+Time and duration   ______ : ______           ______ hours and ______ minutes
+
+Signature           _________________________________________________________
