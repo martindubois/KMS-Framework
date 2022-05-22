@@ -4,3 +4,6 @@ Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
+
+0.0.1 Dev 2022-05-20
+- KMS::Build::Importer - Fix attribute's names

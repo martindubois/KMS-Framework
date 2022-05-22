@@ -56,6 +56,11 @@ namespace KMS
                 }
                 break;
             case 2:
+                if (NULL != strstr(lLine.c_str(), "KMS_VERSION(\"\")"))
+                {
+                    mType = "";
+                    return;
+                }
                 char lType[32];
                 if (1 == sscanf_s(lLine.c_str(), " KMS_VERSION(\"%[^\"]\");", lType SizeInfo(lType)))
                 {

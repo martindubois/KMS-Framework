@@ -4,3 +4,6 @@ Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocUser/KMS.ReadMe.txt
+
+0.0.2 2022-05-21
+- Debug_Static and Release_Static configurations
