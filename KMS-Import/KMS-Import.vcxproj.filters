@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KMS-Builder.cpp">
+    <ClCompile Include="KMS-Import.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

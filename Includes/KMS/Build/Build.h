@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Build/BuildBuilder.h
+// File      Includes/KMS/Build/Build.h
 
 #pragma once
 
@@ -17,14 +17,14 @@ namespace KMS
     namespace Build
     {
         
-        class Builder : public Config::Configurable
+        class Build : public Config::Configurable
         {
 
         public:
 
             static int Main(int aCount, const char** aVector);
 
-            Builder();
+            Build();
 
             void AddBinary       (const char * aB);
             void AddConfiguration(const char * aC);
@@ -41,16 +41,16 @@ namespace KMS
             int Run();
 
             // ===== Config::Configurable ===================================
-            virtual ~Builder();
+            virtual ~Build();
             virtual bool SetAttribute(const char *aA);
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:
 
-            Builder(const Builder &);
+            Build(const Build &);
 
-            const Builder & operator = (const Builder &);
+            const Build & operator = (const Build &);
 
             void Compile();
             void Export();

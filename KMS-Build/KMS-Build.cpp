@@ -3,11 +3,11 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-Builder/KMS-Builder.cpp
+// File      KMS-Build/KMS-Build.cpp
 
 // ===== Includes ===========================================================
 #include <KMS/Banner.h>
-#include <KMS/Build/Builder.h>
+#include <KMS/Build/Build.h>
 
 // ===== KMS-ByteTool =======================================================
 #include "../Common/Version.h"
@@ -17,7 +17,7 @@
 
 int main(int aCount, const char** aVector)
 {
-    KMS_BANNER("KMS-Framework", "KMS-Builder");
+    KMS_BANNER("KMS-Framework", "KMS-Build");
 
-    return KMS::Build::Builder::Main(aCount, aVector);
+    return KMS::Build::Build::Main(aCount, aVector);
 }

@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Build/BuildBuilder.h
+// File      Includes/KMS/Build/Import.h
 
 #pragma once
 
@@ -17,33 +17,33 @@ namespace KMS
     namespace Build
     {
         
-        class Importer : public Config::Configurable
+        class Import : public Config::Configurable
         {
 
         public:
 
             static int Main(int aCount, const char** aVector);
 
-            Importer();
+            Import();
 
             void AddDependency(const char *aD);
             void AddRepository(const char *aR);
 
-            void Import(const char* aDependency);
+            void ImportDependency(const char* aDependency);
 
             int Run();
 
             // ===== Config::Configurable ===================================
-            virtual ~Importer();
+            virtual ~Import();
             virtual bool AddAttribute(const char* aA, const char* aV);
 
         private:
 
             typedef std::list<File::Folder> FolderList;
 
-            Importer(const Importer &);
+            Import(const Import &);
 
-            const Importer & operator = (const Importer &);
+            const Import & operator = (const Import &);
 
             File::Folder mImport;
 

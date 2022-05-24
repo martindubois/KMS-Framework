@@ -6,4 +6,4 @@ Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 0.0.1 Dev 2022-05-20
-- KMS::Build::Importer - Fix attribute's names
+- KMS::Build::Import - Fix attribute's names

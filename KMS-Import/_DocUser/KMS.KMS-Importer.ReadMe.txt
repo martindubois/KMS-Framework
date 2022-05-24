@@ -3,7 +3,7 @@ Author    KMS - Martin Dubois, P. Eng.
 Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
-File      KMS-Importer/_DocUser/KMS.KMS-Impoter.ReadMe.txt
+File      KMS-Import/_DocUser/KMS.KMS-Impoter.ReadMe.txt
 
 0.0.2 2022-05-21
 - Fix attribute's names

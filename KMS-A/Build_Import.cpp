@@ -3,20 +3,19 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Build_Importer.cpp
+// File      KMS-A/Build_Import.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
-#include <KMS/Exception.h>
 
-#include <KMS/Build/Importer.h>
+#include <KMS/Build/Import.h>
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
-#define CONFIG_FILE ("KMS-Importer.cfg")
+#define CONFIG_FILE ("KMS-Import.cfg")
 
 #define DEFAULT_EXPORT_FOLDER ("K:\\Export")
 
@@ -28,7 +27,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        int Importer::Main(int aCount, const char** aVector)
+        int Import::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
             assert(NULL != aVector);
@@ -38,7 +37,7 @@ namespace KMS
 
             try
             {
-                KMS::Build::Importer      lI;
+                KMS::Build::Import        lI;
                 KMS::Config::Configurator lC;
 
                 lI.InitConfigurator(&lC);
@@ -50,20 +49,20 @@ namespace KMS
 
                 lResult = lI.Run();
             }
-            KMS_CATCH_RESULT(lResult)
+            KMS_CATCH_RESULT(lResult);
 
             return lResult;
         }
 
-        Importer::Importer() : mImport("Import")
+        Import::Import() : mImport("Import")
         {
             mRepositories.push_back(File::Folder(DEFAULT_EXPORT_FOLDER));
         }
 
-        void Importer::AddDependency(const char* aD) { mDependencies.insert(aD); }
-        void Importer::AddRepository(const char* aR) { mRepositories.push_back(File::Folder(aR)); }
+        void Import::AddDependency(const char* aD) { mDependencies.insert(aD); }
+        void Import::AddRepository(const char* aR) { mRepositories.push_back(File::Folder(aR)); }
 
-        void Importer::Import(const char* aDependency)
+        void Import::ImportDependency(const char* aDependency)
         {
             char lProduct[1024];
 
@@ -98,7 +97,7 @@ namespace KMS
             KMS_EXCEPTION_WITH_INFO(DEPENDENCY, "Dependency not found", aDependency);
         }
 
-        int Importer::Run()
+        int Import::Run()
         {
             if (mImport.DoesExist())
             {
@@ -109,7 +108,7 @@ namespace KMS
 
             for (std::string lD : mDependencies)
             {
-                Import(lD.c_str());
+                ImportDependency(lD.c_str());
             }
 
             return 0;
@@ -117,9 +116,9 @@ namespace KMS
 
         // ===== Config::Configurable =======================================
 
-        Importer::~Importer() {}
+        Import::~Import() {}
 
-        bool Importer::AddAttribute(const char* aA, const char* aV)
+        bool Import::AddAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
 

@@ -19,22 +19,23 @@ Version             ______ . ______ . ______ . ______ - _____________________
 
 [ ] File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"
 
-[ ] File "KMS-Builder/_DocUser/KMS.KMS-Builder.ReadMe.txt"
+[ ] File "KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt"
 [ ] File "KMS-ByteTool/_DocUser/KMS.KMS-ByteTool.ReadMe.txt"
-[ ] File "KMS-Importer/_DocUser/KMS.KMS-Importer.ReadMe.txt"
+[ ] File "KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt"
+[ ] File "KMS-Sync/_DocUser/KMS.KMS-Import.ReadMe.txt"
 
 [ ] Tool "Visual Studio 2022"
-        - Build KMS-Builder in Debug x64
+        - Build KMS-Build in Debug x64
         - Close
 
 [ ] Tools "PowerShell" - In the product folder
-        .\x64\Debug\KMS-Builder.exe
+        .\x64\Debug\KMS-Build.exe
 
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
     - Push the servers
 
-[ ] If needed, update KMS-Importer.exe in K:\Export
+[ ] If needed, update KMS-Import.exe in K:\Export
 [ ] If needed, upload the release on GitHub.com
 
 Time and duration   ______ : ______           ______ hours and ______ minutes

@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Build_Builder.cpp
+// File      KMS-A/Build_Build.cpp
 
 #include "Component.h"
 
@@ -12,16 +12,16 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
-#include <KMS/File/FileList.h>
+#include <KMS/File/FileInfoList.h>
 #include <KMS/Process.h>
 #include <KMS/Version.h>
 
-#include <KMS/Build/Builder.h>
+#include <KMS/Build/Build.h>
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
-#define CONFIG_FILE ("KMS-Builder.cfg")
+#define CONFIG_FILE ("KMS-Build.cfg")
 
 #define DEFAULT_DO_NOT_COMPILE (false)
 #define DEFAULT_DO_NOT_EXPORT  (false)
@@ -37,7 +37,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        int Builder::Main(int aCount, const char ** aVector)
+        int Build::Main(int aCount, const char ** aVector)
         {
             assert(1 <= aCount);
             assert(NULL != aVector);
@@ -47,7 +47,7 @@ namespace KMS
 
             try
             {
-                KMS::Build::Builder       lB;
+                KMS::Build::Build         lB;
                 KMS::Config::Configurator lC;
 
                 lB.InitConfigurator(&lC);
@@ -63,7 +63,7 @@ namespace KMS
             return lResult;
         }
 
-        Builder::Builder()
+        Build::Build()
             : mDoNotCompile(DEFAULT_DO_NOT_COMPILE)
             , mDoNotExport(DEFAULT_DO_NOT_EXPORT)
             , mExportFolder(DEFAULT_EXPORT_FOLDER)
@@ -71,19 +71,19 @@ namespace KMS
         {
         }
 
-        void Builder::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .insert(aB); }
-        void Builder::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.insert(aC); }
-        void Builder::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .insert(aL); }
-        void Builder::AddProcessor    (const char* aP) { assert(NULL != aP); mProcessors    .insert(aP); }
-        void Builder::AddTest         (const char* aT) { assert(NULL != aT); mTests         .insert(aT); }
+        void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .insert(aB); }
+        void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.insert(aC); }
+        void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .insert(aL); }
+        void Build::AddProcessor    (const char* aP) { assert(NULL != aP); mProcessors    .insert(aP); }
+        void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .insert(aT); }
 
-        void Builder::SetDoNotCompile(bool aDNC) { mDoNotCompile = aDNC; }
-        void Builder::SetDoNotExport (bool aDNE) { mDoNotExport  = aDNE; }
+        void Build::SetDoNotCompile(bool aDNC) { mDoNotCompile = aDNC; }
+        void Build::SetDoNotExport (bool aDNE) { mDoNotExport  = aDNE; }
 
-        void Builder::SetProduct     (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
-        void Builder::SetProductShort(const char* aPS) { assert(NULL != aPS); mProductShort = aPS; }
+        void Build::SetProduct     (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
+        void Build::SetProductShort(const char* aPS) { assert(NULL != aPS); mProductShort = aPS; }
 
-        int Builder::Run()
+        int Build::Run()
         {
             // TODO Verify the attributes
 
@@ -106,9 +106,9 @@ namespace KMS
 
         // ===== Config::Configurable =======================================
 
-        Builder::~Builder() {}
+        Build::~Build() {}
 
-        bool Builder::AddAttribute(const char* aA, const char* aV)
+        bool Build::AddAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
 
@@ -121,7 +121,7 @@ namespace KMS
             return Configurable::AddAttribute(aA, aV);
         }
 
-        bool Builder::SetAttribute(const char* aA)
+        bool Build::SetAttribute(const char* aA)
         {
             assert(NULL != aA);
 
@@ -131,7 +131,7 @@ namespace KMS
             return Configurable::SetAttribute(aA);
         }
 
-        bool Builder::SetAttribute(const char* aA, const char* aV)
+        bool Build::SetAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
 
@@ -144,7 +144,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Builder::Compile()
+        void Build::Compile()
         {
             for (std::string lC : mConfigurations)
             {
@@ -164,13 +164,13 @@ namespace KMS
                     int lRet = lProcess.Run();
                     if (0 != lRet)
                     {
-                        KMS_EXCEPTION_WITH_INFO(BUILDER_COMPILE, "The compilation failed", lProcess.GetCmdLine());
+                        KMS_EXCEPTION_WITH_INFO(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
                     }
                 }
             }
         }
 
-        void Builder::Export()
+        void Build::Export()
         {
             Version lVersion(File::Folder("Common"), "Version.h");
 
@@ -187,14 +187,14 @@ namespace KMS
             mTempFolder.Compress(lProduct, lZip);
         }
 
-        void Builder::Package()
+        void Build::Package()
         {
             Package_Component();
             Package_Header();
             Package_ReadMe();
         }
 
-        void Builder::Package_Component()
+        void Build::Package_Component()
         {
             File::Folder lBinaries(mTempFolder, "Binaries");
             File::Folder lLibraries(mTempFolder, "Libraries");
@@ -233,11 +233,11 @@ namespace KMS
             }
         }
 
-        void Builder::Package_Header()
+        void Build::Package_Header()
         {
             File::Folder lIncludes_Src("Includes");
 
-            File::FileList lHeaders(lIncludes_Src, "*", true);
+            File::FileInfoList lHeaders(lIncludes_Src, "*", true);
 
             if (0 < lHeaders.GetCount())
             {
@@ -249,7 +249,7 @@ namespace KMS
             }
         }
 
-        void Builder::Package_ReadMe()
+        void Build::Package_ReadMe()
         {
             File::Folder("_DocUser").Copy(mTempFolder, (mProductShort + ".ReadMe.txt").c_str());
 
@@ -264,7 +264,7 @@ namespace KMS
             }
         }
 
-        void Builder::Test()
+        void Build::Test()
         {
             for (std::string lC : mConfigurations)
             {
@@ -277,7 +277,7 @@ namespace KMS
                         int lRet = lProcess.Run();
                         if (0 != lRet)
                         {
-                            KMS_EXCEPTION_WITH_INFO(BUILDER_TEST, "The test failed", lProcess.GetCmdLine());
+                            KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
                         }
                     }
                 }
