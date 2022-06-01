@@ -39,7 +39,7 @@
     <ClCompile Include="Console_Color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Build_Builder.cpp">
+    <ClCompile Include="Build_Build.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Process.cpp">
@@ -48,13 +48,19 @@
     <ClCompile Include="Text_TextFile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="File_FileList.cpp">
+    <ClCompile Include="File_FileInfoList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="File_Folder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Build_Importer.cpp">
+    <ClCompile Include="Build_Import.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File_FileInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -15,27 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KMS-A-Test.cpp">
+    <ClCompile Include="KMS-Sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test_TestManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ByteTool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Sync.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="..\Common\Version.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

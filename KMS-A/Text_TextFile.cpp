@@ -33,7 +33,7 @@ namespace KMS
             std::ifstream lStream(lPath);
             if (!lStream.is_open())
             {
-                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open text file", lPath);
+                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open text file for reading", lPath);
             }
 
             std::string lLine;
@@ -44,10 +44,46 @@ namespace KMS
             }
         }
 
+        void TextFile::Write(const File::Folder& aFolder, const char* aFile)
+        {
+            char lPath[1024];
+            aFolder.GetPath(aFile, lPath, sizeof(lPath));
+
+            std::ofstream lStream(lPath);
+            if (!lStream.is_open())
+            {
+                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open text file for writing", lPath);
+            }
+
+            for (std::string lLine : mLines)
+            {
+                lStream << lLine << std::endl;
+            }
+        }
+
         void TextFile::RemoveComments_CPP   () { RemoveLines(std::regex("[ \t]*//.*")); }
         void TextFile::RemoveComments_Script() { RemoveLines(std::regex("[ \t]*#.*")); }
 
         void TextFile::RemoveEmptyLines() { RemoveLines(std::regex("[ \t]*$")); }
+
+        void TextFile::ReplaceLines(const char* aRegEx, const char* aReplace)
+        {
+            assert(NULL != aRegEx);
+            assert(NULL != aReplace);
+
+            std::regex lRegEx(aRegEx);
+
+            StringList::iterator lIt = mLines.begin();
+            while (lIt != mLines.end())
+            {
+                if (std::regex_match(*lIt, lRegEx))
+                {
+                    (*lIt) = aReplace;
+                }
+
+                lIt++;
+            }
+        }
 
         // Private
         // //////////////////////////////////////////////////////////////////

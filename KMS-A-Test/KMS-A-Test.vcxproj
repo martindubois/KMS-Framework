@@ -266,6 +266,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ByteTool.cpp" />
+    <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
   </ItemGroup>

@@ -56,12 +56,13 @@ namespace KMS
         mInfo = lInfo;
     }
 
-    Exception::Code Exception::GetCode    () const { return mCode; }
-    const char    * Exception::GetCodeName() const { return ToCodeName(mCode); }
-    const char    * Exception::GetFile    () const { return mFile    .c_str(); }
-    const char    * Exception::GetFunction() const { return mFunction.c_str(); }
-    const char    * Exception::GetInfo    () const { return mInfo    .c_str(); }
-    unsigned int    Exception::GetLine    () const { return mLine; }
+    Exception::Code Exception::GetCode     () const { return mCode; }
+    const char    * Exception::GetCodeName () const { return ToCodeName(mCode); }
+    const char    * Exception::GetFile     () const { return mFile    .c_str(); }
+    const char    * Exception::GetFunction () const { return mFunction.c_str(); }
+    const char    * Exception::GetInfo     () const { return mInfo    .c_str(); }
+    unsigned int    Exception::GetLastError() const { return mLastError; }
+    unsigned int    Exception::GetLine     () const { return mLine; }
 
     // Provate
     // //////////////////////////////////////////////////////////////////////
@@ -76,7 +77,7 @@ namespace KMS
         mCode      = aCode;
         mFile      = aFile;
         mFunction  = aFunction;
-        mLastError = GetLastError();
+        mLastError = ::GetLastError();
         mLine      = aLine;
     }
 
@@ -84,12 +85,28 @@ namespace KMS
 
 std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE)
 {
+    const char * lInfo      = aE.GetInfo();
+    unsigned int lLastError = aE.GetLastError();
+
     aOut << aE.what() << std::endl;
     aOut << "Code     : " << aE.GetCode    () << std::endl;
     aOut << "File     : " << aE.GetFile    () << std::endl;
     aOut << "Function : " << aE.GetFunction() << std::endl;
     aOut << "Line     : " << aE.GetLine    () << std::endl;
-    aOut << "Info     : " << aE.GetInfo    () << std::endl;
+
+    if (0 < strlen(lInfo))
+    {
+        aOut << "Info     : " << aE.GetInfo() << std::endl;
+    }
+
+    if (0 != lLastError)
+    {
+        char lLastErrorHex[16];
+
+        sprintf_s(lLastErrorHex, " (0x%08x)", lLastError);
+
+        aOut << "Last err.: " << lLastError << lLastErrorHex << std::endl;
+    }
 
     return aOut;
 }
@@ -108,10 +125,10 @@ const char* ToCodeName(KMS::Exception::Code aCode)
 {
     static const char* CODE_NAMES[static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY)] =
     {
-        "BUILDER_COMPILE", "BUILDER_TEST",
-        "CONFIG_FORMAT", "CONFIG_TYPE", "CONFIG_INDEX",
+        "BUILD_COMPILE", "BUILD_TEST",
+        "CONFIG", "CONFIG_FORMAT", "CONFIG_TYPE", "CONFIG_INDEX",
         "DEPENDENCY",
-        "FILE_COPY", "FILE_OPEN", "FILE_WRITE",
+        "FILE_BACKUP", "FILE_COPY", "FILE_OPEN", "FILE_RENAME", "FILE_WRITE",
         "FOLDER_COMPRESS", "FOLDER_CREATE", "FOLDER_INIT", "FOLDER_REMOVE", "FOLDER_UNCOMPRESS"
         "PROCESS_EXIT_CODE", "PROCESS_START", "PROCESS_TIMEOUT",
         "TEST",

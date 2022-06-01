@@ -33,6 +33,9 @@ Version             ______ . ______ . ______ . ______ - _____________________
 
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
+[ ] Tool "GIT Bash" - In the product folder
+        git tag {Ma}.{Mi}.{Bu}[-{Type}]
+[ ] Tools "GIT GUI"
     - Push the servers
 
 [ ] If needed, update KMS-Import.exe in K:\Export

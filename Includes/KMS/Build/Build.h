@@ -14,6 +14,8 @@
 
 namespace KMS
 {
+    class Version;
+
     namespace Build
     {
         
@@ -28,15 +30,18 @@ namespace KMS
 
             void AddBinary       (const char * aB);
             void AddConfiguration(const char * aC);
+            void AddEditOperation(const char * aC);
             void AddLibrary      (const char * aL);
             void AddProcessor    (const char * aP);
             void AddTest         (const char * aT);
 
             void SetDoNotCompile(bool aDNC = true);
             void SetDoNotExport (bool aDNE = true);
+            void SetDoNotPackage(bool aDNP = true);
 
-            void SetProduct     (const char * aP );
-            void SetProductShort(const char * aPS);
+            void SetProduct     (const char *aP );
+            void SetProductShort(const char *aPS);
+            void SetVersionFile (const char* aVF);
 
             int Run();
 
@@ -53,12 +58,14 @@ namespace KMS
             const Build & operator = (const Build &);
 
             void Compile();
-            void Export();
+            void Edit  (const Version & aVersion);
+            void Export(const Version & aVersion);
             void Package();
             void Package_Component();
             void Package_Header();
             void Package_ReadMe();
             void Test();
+            void VerifyConfig();
 
             File::Folder mTempFolder;
 
@@ -67,12 +74,15 @@ namespace KMS
             StringSet    mConfigurations;
             bool         mDoNotCompile;
             bool         mDoNotExport;
+            bool         mDoNotPackage;
+            StringSet    mEditOperations;
             File::Folder mExportFolder;
             StringSet    mLibraries;
             StringSet    mProcessors;
             std::string  mProduct;
             std::string  mProductShort;
             StringSet    mTests;
+            std::string  mVersionFile;
 
         };
 

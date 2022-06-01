@@ -31,6 +31,15 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        // The flag must be differenent than the one defined in
+        // File_FileInfoList.cpp.
+        const unsigned int Folder::FLAG_BACKUP        = 0x01000000;
+        const unsigned int Folder::FLAG_BACKUP_RENAME = 0x02000000;
+        const unsigned int Folder::FLAG_IGNORE_ERROR  = 0x04000000;
+        const unsigned int Folder::FLAG_OVERWRITE     = 0x08000000;
+        const unsigned int Folder::FLAG_RED           = 0x10000000;
+        const unsigned int Folder::FLAG_VERBOSE       = 0x20000000;
+
         Folder::Folder(Id aId)
         {
             switch (aId)
@@ -41,7 +50,7 @@ namespace KMS
             case Id::EXECUTABLE: Init_Executable(); break;
             case Id::TEMPORARY : Init_Temporary (); break;
 
-            case Id::HOME         : Init_Env("HOME"        ); break;
+            case Id::HOME         : Init_Env("USERPROFILE" ); break;
             case Id::PROGRAM_FILES: Init_Env("ProgramFiles"); break;
 
             default: assert(false);
@@ -94,6 +103,54 @@ namespace KMS
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
         }
 
+        const char* Folder::GetPath() const { return mPath.c_str(); }
+
+        void Folder::GetPath(const char* aFile, char* aOut, unsigned int aOutSize_byte) const
+        {
+            assert(NULL != aFile);
+            assert(NULL != aOut);
+            assert(0 < aOutSize_byte);
+
+            if (0 < mPath.size())
+            {
+                sprintf_s(aOut, aOutSize_byte, "%s\\%s", mPath.c_str(), aFile);
+            }
+            else
+            {
+                sprintf_s(aOut, aOutSize_byte, "%s", aFile);
+            }
+        }
+
+        void Folder::Backup(const char* aFile, unsigned int aFlags) const
+        {
+            assert(NULL != aFile);
+
+            for (unsigned int i = 0; i < 1000; i++)
+            {
+                char lFile[MAX_PATH];
+
+                sprintf_s(lFile, "%s.%03u.bak", aFile, i);
+
+                if (!DoesFileExist(lFile))
+                {
+                    unsigned int lFlags = aFlags & ~(FLAG_BACKUP | FLAG_BACKUP_RENAME | FLAG_OVERWRITE);
+
+                    if (FLAG_BACKUP_RENAME == (aFlags & FLAG_BACKUP_RENAME))
+                    {
+                        Rename(aFile, lFile, lFlags);
+                    }
+                    else
+                    {
+                        Copy(aFile, lFile, lFlags);
+                    }
+
+                    return;
+                }
+            }
+
+            KMS_EXCEPTION_WITH_INFO(FILE_BACKUP, "Too many backup", aFile);
+        }
+
         void Folder::Compress(const Folder& aFolder, const char* aFile)
         {
             char lDst[MAX_PATH];
@@ -141,18 +198,30 @@ namespace KMS
             }
         }
 
-        void Folder::Copy(const Folder& aDst, const char* aFile)
+        void Folder::Copy(const char* aSrc, const char* aDst, unsigned int aFlags) const
         {
+            BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
+
+            char lDst[MAX_PATH];
+            char lSrc[MAX_PATH];
+
+            GetPath(aDst, lDst, sizeof(lDst));
+            GetPath(aSrc, lSrc, sizeof(lSrc));
+
+            Copy_Internal(lDst, lSrc, aFlags);
+        }
+
+        void Folder::Copy(const Folder& aDst, const char* aFile, unsigned int aFlags) const
+        {
+            aDst.BackupIfNeeded(aFile, aFlags & ~FLAG_IGNORE_ERROR);
+
             char lDst[MAX_PATH];
             char lSrc[MAX_PATH];
 
             aDst.GetPath(aFile, lDst, sizeof(lDst));
                  GetPath(aFile, lSrc, sizeof(lSrc));
 
-            if (!CopyFile(lSrc, lDst, TRUE))
-            {
-                KMS_EXCEPTION_WITH_INFO(FILE_COPY, "CopyFile failed", lSrc);
-            }
+            Copy_Internal(lDst, lSrc, aFlags);
         }
 
         void Folder::Create()
@@ -171,24 +240,61 @@ namespace KMS
             }
         }
 
-        void Folder::GetPath(const char* aFile, char * aOut, unsigned int aOutSize_byte) const
+        void Folder::Rename(const char* aSrc, const char* aDst, unsigned int aFlags) const
         {
-            assert(NULL != aFile);
-            assert(NULL != aOut);
-            assert(0 < aOutSize_byte);
+            BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
 
-            if (0 < mPath.size())
+            char lDst[MAX_PATH];
+            char lSrc[MAX_PATH];
+
+            GetPath(aDst, lDst, sizeof(lDst));
+            GetPath(aSrc, lSrc, sizeof(lSrc));
+
+            if (MoveFile(lSrc, lDst))
             {
-                sprintf_s(aOut, aOutSize_byte, "%s\\%s", mPath.c_str(), aFile);
+                Verbose(lSrc, "renamed to", lDst, aFlags);
             }
             else
             {
-                sprintf_s(aOut, aOutSize_byte, "%s", aFile);
+                Verbose(lSrc, "not renamed to", lDst, aFlags | FLAG_RED);
+
+                KMS_EXCEPTION_WITH_INFO(FILE_RENAME, "MoveFile failed", lSrc);
+            }
+        }
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void Folder::BackupIfNeeded(const char* aFile, unsigned int aFlags) const
+        {
+            if ((FLAG_BACKUP == (aFlags & FLAG_BACKUP)) && DoesFileExist(aFile))
+            {
+                Backup(aFile, aFlags | FLAG_BACKUP_RENAME | FLAG_RED);
             }
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void Folder::Copy_Internal(const char* aDst, const char* aSrc, unsigned int aFlags) const
+        {
+            assert(NULL != aDst);
+            assert(NULL != aSrc);
+
+            if (CopyFile(aSrc, aDst, (FLAG_OVERWRITE == (aFlags & FLAG_OVERWRITE)) ? FALSE : TRUE))
+            {
+                Verbose(aSrc, "copied to", aDst, aFlags);
+            }
+            else
+            {
+                Verbose(aSrc, "not copied to", aDst, aFlags | FLAG_RED);
+
+                if (FLAG_IGNORE_ERROR != (aFlags & FLAG_IGNORE_ERROR))
+                {
+                    KMS_EXCEPTION_WITH_INFO(FILE_COPY, "CopyFile failed", aSrc);
+                }
+            }
+        }
 
         void Folder::Init_Env(const char * aVariable)
         {
@@ -251,6 +357,26 @@ namespace KMS
             mPath = lFolder;
 
             Create();
+        }
+
+        void Folder::Verbose(const char* aSrc, const char* aOp, const char* aDst, unsigned int aFlags) const
+        {
+            if (FLAG_VERBOSE == (aFlags & FLAG_VERBOSE))
+            {
+                bool lRed = FLAG_RED == (aFlags & FLAG_RED);
+
+                if (lRed)
+                {
+                    std::cout << Console::Color::RED;
+                }
+
+                std::cout << aSrc << " " << aOp << " " << aDst << std::endl;
+
+                if (lRed)
+                {
+                    std::cout << Console::Color::WHITE;
+                }
+            }
         }
 
     }

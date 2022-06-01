@@ -24,14 +24,17 @@ namespace KMS
 
         enum class Code
         {
-            BUILDER_COMPILE = 0,
-            BUILDER_TEST,
+            BUILD_COMPILE = 0,
+            BUILD_TEST,
+            CONFIG,
             CONFIG_FORMAT,
             CONFIG_INDEX,
             CONFIG_TYPE,
             DEPENDENCY,
+            FILE_BACKUP,
             FILE_COPY,
             FILE_OPEN,
+            FILE_RENAME,
             FILE_WRITE,
             FOLDER_COMPRESS,
             FOLDER_CREATE,
@@ -52,12 +55,13 @@ namespace KMS
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, const char * aInfo);
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, uint64_t aInfo);
 
-        Code         GetCode    () const;
-        const char * GetCodeName() const;
-        const char * GetFile    () const;
-        const char * GetFunction() const;
-        const char * GetInfo    () const;
-        unsigned int GetLine    () const;
+        Code         GetCode     () const;
+        const char * GetCodeName () const;
+        const char * GetFile     () const;
+        const char * GetFunction () const;
+        const char * GetInfo     () const;
+        unsigned int GetLastError() const;
+        unsigned int GetLine     () const;
 
     private:
 
@@ -87,7 +91,7 @@ std::ostream & operator << (std::ostream & aOut, const KMS::Exception::Code & aC
     {                                                                      \
         std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
         std::cerr << eE << KMS::Console::Color::WHITE;                     \
-        R = __LINE__;                                                      \
+        R = static_cast<int>(eE.GetCode());                                \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \

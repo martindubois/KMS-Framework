@@ -34,6 +34,8 @@ namespace KMS
 
             void RemoveEmptyLines();
 
+            void ReplaceLines(const char * aRegEx, const char * aReplace);
+
             StringList mLines;
 
         private:
