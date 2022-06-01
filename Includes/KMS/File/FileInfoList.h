@@ -51,6 +51,8 @@ namespace KMS
 
             const FileInfoList & operator = (const FileInfoList &);
 
+            void CreateFolders(const Folder& aNewToot);
+
             void Find(const char * aPattern, bool aRecurse);
             void FindInFolder(const char * aFullFolder, const char * aFolder, const char * aPattern);
 

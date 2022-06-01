@@ -5,6 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+- KMS::File::FileInfoList
+    - Create folder structure on copy
+
 0.0.3 2022-06-01
 - KMS::Build::Build
     - EditOperations attribute

@@ -57,14 +57,9 @@ namespace KMS
             mFiles.insert(FileInfoMap::value_type(aRelPath, aInfo));
         }
 
-        void FileInfoList::Copy(const File::Folder& aNewRoot, unsigned int aFlags)
+        void FileInfoList::Copy(const Folder& aNewRoot, unsigned int aFlags)
         {
-            for (std::string lFolder : mFolders)
-            {
-                Folder lF(aNewRoot, lFolder.c_str());
-
-                lF.Create();
-            }
+            CreateFolders(aNewRoot);
 
             for (FileInfoMap::value_type lInfo : mFiles)
             {
@@ -78,6 +73,8 @@ namespace KMS
             assert(0 != aFlags);
 
             const Folder& lNewRoot = aList->GetRoot();
+
+            CreateFolders(lNewRoot);
 
             for (FileInfoMap::value_type& lPair : mFiles)
             {
@@ -127,6 +124,18 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void FileInfoList::CreateFolders(const Folder& aNewRoot)
+        {
+            for (std::string lFolder : mFolders)
+            {
+                Folder lF(aNewRoot, lFolder.c_str());
+                if (!lF.DoesExist())
+                {
+                    lF.Create();
+                }
+            }
+        }
 
         void FileInfoList::Find(const char* aPattern, bool aRecurse)
         {
