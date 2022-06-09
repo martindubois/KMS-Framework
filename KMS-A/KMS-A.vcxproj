@@ -54,6 +54,8 @@
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />
+    <ClCompile Include="Thread_Gate.cpp" />
+    <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Thread_Thread.cpp" />
     <ClCompile Include="Version.cpp" />
   </ItemGroup>

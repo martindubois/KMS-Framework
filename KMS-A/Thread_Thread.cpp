@@ -5,11 +5,11 @@
 // Product   KMS-Framework
 // File      KMS-A/Thread_Thread.cpp
 
-// TODO Use the classes Thread::Gate and Thread::Lock
-
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Thread/Lock.h>
+
 #include <KMS/Thread/Thread.h>
 
 // Static function declarations
@@ -34,14 +34,9 @@ namespace KMS
             , mOnStopping(this)
             , mState(State::STOPPED)
         {
-            InitializeCriticalSection(&mGate);
         }
 
         Thread::~Thread() { CloseIfNeeded(); }
-
-        void Thread::Lock() { EnterCriticalSection(&mGate); }
-
-        void Thread::Unlock() { LeaveCriticalSection(&mGate); }
 
         void Thread::Start()
         {
@@ -66,21 +61,21 @@ namespace KMS
 
         void Thread::Stop()
         {
-            Lock();
+            Lock lLock(&mGate);
+
+            switch (mState)
             {
-                switch (mState)
-                {
-                case State::RUNNING:
-                case State::STARTING: mState = State::STOPPING; break;
+            case State::RUNNING:
+            case State::STARTING: mState = State::STOPPING; break;
 
-                case State::STOPPED:
-                case State::STOPPING:
-                    break;
+            case State::STOPPED:
+            case State::STOPPING:
+                break;
 
-                default: assert(false);
-                }
+            default: assert(false);
             }
-            Unlock();
+
+            lLock.Unlock();
 
             mOnStop.Send();
         }
@@ -93,29 +88,27 @@ namespace KMS
 
         void Thread::Wait(unsigned int aTimeout_ms)
         {
-            Lock();
+            Lock lLock(&mGate);
+
+            switch (mState)
             {
-                switch (mState)
-                {
-                case State::RUNNING:
-                case State::STARTING:
-                case State::STOPPING:
-                    assert(NULL != mHandle);
+            case State::RUNNING:
+            case State::STARTING:
+            case State::STOPPING:
+                assert(NULL != mHandle);
 
-                    Unlock();
-                    {
-                        DWORD lRet = WaitForSingleObject(mHandle, aTimeout_ms);
-                        assert(WAIT_OBJECT_0 == lRet);
-                    }
-                    Lock();
-                    break;
+                lLock.Unlock();
 
-                case State::STOPPED: break;
+                DWORD lRet;
 
-                default: assert(false);
-                }
+                lRet = WaitForSingleObject(mHandle, aTimeout_ms);
+                assert(WAIT_OBJECT_0 == lRet);
+                break;
+
+            case State::STOPPED: break;
+
+            default: assert(false);
             }
-            Unlock();
         }
 
         // Internal
@@ -125,49 +118,45 @@ namespace KMS
         {
             if (mOnStarting.Send())
             {
-                Lock();
+                Lock lLock(&mGate);
+
+                if (State::STARTING == mState)
                 {
-                    if (State::STARTING == mState)
+                    mState = State::RUNNING;
+
+                    if (mOnRun.IsSet())
                     {
-                        mState = State::RUNNING;
-
-                        if (mOnRun.IsSet())
+                        lLock.Unlock();
                         {
-                            Unlock();
-                            {
-                                mOnRun.Send();
-                            }
-                            Lock();
-
-                            mState = State::STOPPING;
+                            mOnRun.Send();
                         }
-                        else
+                        lLock.Relock();
+
+                        mState = State::STOPPING;
+                    }
+                    else
+                    {
+                        while (State::RUNNING == mState)
                         {
-                            while (State::RUNNING == mState)
+                            bool lRet = false;
+
+                            lLock.Unlock();
                             {
-                                bool lRet = false;
+                                lRet = mOnIterate.Send();
+                            }
+                            lLock.Relock();
 
-                                Unlock();
-                                {
-                                    lRet = mOnIterate.Send();
-                                }
-                                Lock();
-
-                                if (!lRet)
-                                {
-                                    break;
-                                }
+                            if (!lRet)
+                            {
+                                break;
                             }
                         }
                     }
 
-                    Unlock();
-                    {
-                        mOnStopping.Send();
-                    }
-                    Lock();
+                    lLock.Unlock();
+
+                    mOnStopping.Send();
                 }
-                Unlock();
             }
 
             mState = State::STOPPED;

@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Message/Sender.h>
+#include <KMS/Thread/Gate.h>
 
 namespace KMS
 {
@@ -33,8 +34,7 @@ namespace KMS
             void StopAndWait(unsigned int aTimeout_ms);
             void Wait(unsigned int aTimeout_ms);
 
-            void Lock();
-            void Unlock();
+            Gate mGate;
 
             Message::Sender mOnIterate;
             Message::Sender mOnRun;
@@ -64,8 +64,6 @@ namespace KMS
             };
 
             void CloseIfNeeded();
-
-            CRITICAL_SECTION mGate;
 
             HANDLE mHandle;
 

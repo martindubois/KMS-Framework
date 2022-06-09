@@ -269,6 +269,7 @@
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
+    <ClCompile Include="Thread_Lock.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
