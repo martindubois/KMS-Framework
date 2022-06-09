@@ -62,22 +62,6 @@ namespace KMS
             assert(NULL != aSocket);
 
             memset(&mBuffer, 0, sizeof(mBuffer));
-
-            try
-            {
-                unsigned int lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
-                if ((0 >= lSize_byte) || (sizeof(mBuffer) <= lSize_byte))
-                {
-                    KMS_EXCEPTION(HTTP_REQUEST, "Empty HTTP request");
-                }
-
-                Parse();
-            }
-            catch (...)
-            {
-                delete mSocket;
-                throw;
-            }
         }
 
         Request::~Request()
@@ -117,6 +101,17 @@ namespace KMS
             return lResult;
         }
 
+        bool Request::Receive()
+        {
+            unsigned int lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
+            if ((0 >= lSize_byte) || (sizeof(mBuffer) <= lSize_byte))
+            {
+                return false;
+            }
+
+            return Parse();
+        }
+
         void Request::Reply()
         {
             static const char* DAY_NAMES[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
@@ -147,14 +142,14 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Request::Parse()
+        bool Request::Parse()
         {
             char lPath[1024];
             char lCmd[1024];
 
             if (4 != sscanf_s(mBuffer, "%[A-Z] %[^ ] HTTP/%u.%u", lCmd SizeInfo(lCmd), lPath SizeInfo(lPath), &mMajor, &mMinor))
             {
-                KMS_EXCEPTION_WITH_INFO(HTTP_REQUEST, "Invalid HTTP request", mBuffer);
+                return false;
             }
 
             if      (0 == strncmp(lCmd, "GET"    , 3)) { mType = Type::GET; }
@@ -162,12 +157,14 @@ namespace KMS
             else if (0 == strncmp(lCmd, "POST"   , 4)) { mType = Type::POST; }
             else
             {
-                KMS_EXCEPTION_WITH_INFO(HTTP_REQUEST, "Unsupporter HTTP request type", lCmd);
+                return false;
             }
 
             mPath = lPath;
 
             mRequestHeader.HTTP_Set(strchr(mBuffer, '\n') + 1);
+
+            return true;
         }
 
     }

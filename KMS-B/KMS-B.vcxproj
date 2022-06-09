@@ -41,6 +41,7 @@
     <ClCompile Include="Network_Address.cpp" />
     <ClCompile Include="Network_AddressRange.cpp" />
     <ClCompile Include="Network_AddressRangeList.cpp" />
+    <ClCompile Include="Network_Server.cpp" />
     <ClCompile Include="Network_Socket.cpp" />
   </ItemGroup>
   <ItemGroup>

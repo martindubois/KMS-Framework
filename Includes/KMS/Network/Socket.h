@@ -80,8 +80,7 @@ namespace KMS
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
             // ===== Configurable attributes ================================
-            AddressRangeList mAllowAccept;
-            AddressRangeList mAllowReceive;
+            AddressRangeList mAllow;
 
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);

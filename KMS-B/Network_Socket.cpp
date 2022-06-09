@@ -87,7 +87,7 @@ namespace KMS
                 {
                     aFrom->SetInternalSize(lSize_byte);
 
-                    if (mAllowAccept.IsInRanges(*aFrom))
+                    if (mAllow.IsInRanges(*aFrom))
                     {
                         lResult = new Socket(Socket::Type::STREAM);
                         assert(NULL != lResult);
@@ -189,8 +189,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "AllowAccept" )) { mAllowAccept .Add(AddressRange(aV)); return true; }
-            if (0 == strcmp(aA, "AllowReceive")) { mAllowReceive.Add(AddressRange(aV)); return true; }
+            if (0 == strcmp(aA, "Allow" )) { mAllow.Add(AddressRange(aV)); return true; }
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -199,8 +198,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "AllowAccept" )) { mAllowAccept .Clear(); return true; }
-            if (0 == strcmp(aA, "AllowReceive")) { mAllowReceive.Clear(); return true; }
+            if (0 == strcmp(aA, "Allow" )) { mAllow.Clear(); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -209,8 +207,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "AllowAccept"   )) { mAllowAccept .Clear(); mAllowAccept .Add(AddressRange(aV)); return true; }
-            if (0 == strcmp(aA, "AllowReceive"  )) { mAllowReceive.Clear(); mAllowReceive.Add(AddressRange(aV)); return true; }
+            if (0 == strcmp(aA, "Allow"         )) { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
             if (0 == strcmp(aA, "LocalAddress"  )) { SetLocalAddress  (Address(aV)); return true; }
             if (0 == strcmp(aA, "LocalPort"     )) { SetLocalPort     (Convert::ToUInt16(aV)); return true; }
             if (0 == strcmp(aA, "ReceiveTimeout")) { SetReceiveTimeout(Convert::ToUInt32(aV)); return true; }

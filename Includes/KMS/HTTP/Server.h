@@ -8,19 +8,15 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Network/Socket.h>
-#include <KMS/Message/IReceiver.h>
+#include <KMS/Network/Server.h>
 #include <KMS/Message/Sender.h>
-#include <KMS/Thread/Thread.h>
 
 namespace KMS
 {
     namespace HTTP
     {
 
-        class Request;
-
-        class Server : public Message::IReceiver
+        class Server : public Network::Server
         {
 
         public:
@@ -29,18 +25,9 @@ namespace KMS
 
             Message::Sender mOnRequest;
 
-            Network::Socket mSocket;
-            Thread::Thread  mThread;
+        protected:
 
-            // ===== Message::IReceiver =====================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
-
-        private:
-
-            bool OnIterate ();
-            bool OnStarting();
-            bool OnStop    ();
-            bool OnStopping();
+            virtual void OnConnect(Network::Socket* aSocket);
 
         };
 

@@ -76,6 +76,8 @@ namespace KMS
 
             const char* GetResultName() const;
 
+            bool Receive();
+
             void Reply();
 
         private:
@@ -84,7 +86,7 @@ namespace KMS
 
             const Request& operator = (const Request&);
 
-            void Parse();
+            bool Parse();
 
             char mBuffer[1024];
 
