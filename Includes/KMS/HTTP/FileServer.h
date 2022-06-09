@@ -7,6 +7,9 @@
 
 #pragma once
 
+// ===== C++ ================================================================
+#include <map>
+
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurable.h>
 #include <KMS/File/Folder.h>
@@ -23,13 +26,23 @@ namespace KMS
 
         public:
 
+            typedef void (*FileTypeFunction)(Request*);
+
             static const unsigned int CODE_ON_REQUEST;
+
+            static void FileType_Text_HTML (Request* aRequest);
+            static void FileType_Text_Plain(Request* aRequest);
 
             static int Main(int aCount, const char** aVector);
 
             FileServer();
 
+            void RemoveFileType(const char* aExt);
+
+            void SetFileType(const char* aExt, FileTypeFunction aFunction);
+
             void SetRoot(const File::Folder& aR);
+
             void SetVerbose(bool aV = true);
 
             void ProcessRequest(Request* aR);
@@ -45,7 +58,11 @@ namespace KMS
 
         private:
 
+            typedef std::map<std::string, FileTypeFunction> FileTypeMap;
+
             bool OnRequest(void* aData);
+
+            FileTypeMap mFileTypes;
 
             // ===== Configurable attributes ================================
             File::Folder mRoot;

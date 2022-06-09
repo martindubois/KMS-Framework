@@ -36,6 +36,21 @@ namespace KMS
 
         const unsigned int FileServer::CODE_ON_REQUEST = 1;
 
+        void FileServer::FileType_Text_HTML(Request* aRequest)
+        {
+            assert(NULL != aRequest);
+
+            aRequest->mResponseHeader.Set("Content-Type", "text/html; charset=utf-8");
+        }
+
+        void FileServer::FileType_Text_Plain(Request* aRequest)
+        {
+            assert(NULL != aRequest);
+
+            aRequest->mResponseHeader.Set("Content-Disposition", "inline");
+            aRequest->mResponseHeader.Set("Content-Type", "text/plain; charset=utf-8");
+        }
+
         int FileServer::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
@@ -82,7 +97,27 @@ namespace KMS
             return lResult;
         }
 
-        FileServer::FileServer() : mRoot("."), mVerbose(false) { }
+        FileServer::FileServer() : mRoot("."), mVerbose(false)
+        {
+            SetFileType("htm" , FileType_Text_HTML);
+            SetFileType("html", FileType_Text_HTML);
+            SetFileType("txt" , FileType_Text_Plain);
+        }
+
+        void FileServer::SetFileType(const char* aExt, FileTypeFunction aFunction)
+        {
+            assert(NULL != aExt);
+
+            FileTypeMap::iterator lIt = mFileTypes.find(aExt);
+            if (mFileTypes.end() == lIt)
+            {
+                mFileTypes.insert(FileTypeMap::value_type(aExt, aFunction));
+            }
+            else
+            {
+                lIt->second = aFunction;
+            }
+        }
 
         void FileServer::SetRoot(const File::Folder& aR) { mRoot = aR; }
 
@@ -109,23 +144,36 @@ namespace KMS
         {
             assert(NULL != aR);
 
-            if (mRoot.DoesFileExist(aR->GetPath()))
+            const char* lPath = aR->GetPath();
+
+            const char* lExt = strrchr(lPath, '.');
+            if (NULL == lExt)
             {
-                File::Binary* lFile = new File::Binary(mRoot, aR->GetPath() + 1);
-                assert(NULL != lFile);
-
-                // TODO Use a map to retrieve the Content-Type and Content-Disposition from the file extension.
-
-                aR->mResponseHeader.Set("Content-Disposition", "inline");
-                aR->mResponseHeader.Set("Content-Length", lFile->GetSize());
-                aR->mResponseHeader.Set("Content-Type", "text/plain; charset=utf-8");
-
-                aR->SetFile(lFile);
+                aR->SetResult(Request::Result::FORBIDDEN);
+                return;
             }
-            else
+
+            FileTypeMap::iterator lIt = mFileTypes.find(lExt + 1);
+            if (mFileTypes.end() == lIt)
+            {
+                aR->SetResult(Request::Result::FORBIDDEN);
+                return;
+            }
+
+            if (!mRoot.DoesFileExist(lPath + 1))
             {
                 aR->SetResult(Request::Result::NOT_FOUND);
+                return;
             }
+
+            lIt->second(aR);
+
+            File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
+            assert(NULL != lFile);
+
+            aR->mResponseHeader.Set("Content-Length", lFile->GetSize());
+
+            aR->SetFile(lFile);
         }
 
         // ===== Config::Configurable =======================================

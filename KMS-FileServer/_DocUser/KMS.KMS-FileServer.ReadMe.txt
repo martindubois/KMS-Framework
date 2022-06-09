@@ -3,7 +3,4 @@ Author    KMS - Martin Dubois, P. Eng.
 Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
-File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
-
-* KMS::HTTP::FileServer - File type list
-* KMS::Network::Server
+File      KMS-FileServer/_DocUser/KMS.KMS-FileServer.ReadMe.txt
