@@ -90,6 +90,8 @@ namespace KMS
         {
         }
 
+        Build::~Build() {}
+
         void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .insert(aB); }
         void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.insert(aC); }
         void Build::AddEditOperation(const char* aC) { assert(NULL != aC); mEditOperations.insert(aC); }
@@ -134,8 +136,6 @@ namespace KMS
         }
 
         // ===== Config::Configurable =======================================
-
-        Build::~Build() {}
 
         bool Build::AddAttribute(const char* aA, const char* aV)
         {

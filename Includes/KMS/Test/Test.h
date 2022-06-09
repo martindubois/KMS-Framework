@@ -55,9 +55,9 @@ namespace KMS
 
         private:
 
-            Test(const Test &);
+            Test(const Test&);
 
-            const Test & operator = (const Test &);
+            const Test& operator = (const Test&);
 
             unsigned int mErrorCount;
             std::string  mGroup;
@@ -68,7 +68,7 @@ namespace KMS
     }
 }
 
-std::ostream & operator << (std::ostream & aOut, const KMS::Test::Test & aT);
+std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
 
 #define KMS_TEST(C,N,G,V)            \
     class C : public KMS::Test::Test \

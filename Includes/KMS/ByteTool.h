@@ -21,21 +21,22 @@ namespace KMS
 
     public:
 
-        static int Main(int aCount, const char ** aVector);
+        static int Main(int aCount, const char** aVector);
 
         ByteTool();
 
-        const unsigned int * GetHistrogram() const;
+        ~ByteTool();
+
+        const unsigned int* GetHistrogram() const;
 
         int Run();
 
         void SetByteTable(unsigned int aIndex, uint8_t aValue);
 
-        void SetDestination(FILE * aFile);
-        void SetSource     (FILE * aFile);
+        void SetDestination(FILE* aFile);
+        void SetSource     (FILE* aFile);
 
-        // ===== Config::IConfigurable ======================================
-        virtual ~ByteTool();
+        // ===== Config::Configurable =======================================
         virtual bool SetAttribute(const char* aA, const char* aV);
         virtual bool SetAttribute(const char* aA, unsigned int aI, const char * aV);
         
@@ -54,4 +55,4 @@ namespace KMS
 
 }
 
-std::ostream & operator << (std::ostream & aOut, const KMS::ByteTool & aBT);
+std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT);

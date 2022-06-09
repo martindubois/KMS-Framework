@@ -51,8 +51,8 @@ namespace KMS
                 lS.InitConfigurator(&lC);
 
                 lC.Init();
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE, false);
                 lC.ParseFile(File::Folder(File::Folder::Id::HOME), CONFIG_FILE, false);
+                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE, false);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 lResult = lS.Run();
@@ -63,6 +63,13 @@ namespace KMS
         }
 
         Sync::Sync() {}
+
+        Sync::~Sync()
+        {
+            ClearFolderList(&mDestinations);
+            ClearFolderList(&mFolders);
+            ClearFolderList(&mSources);
+        }
 
         void Sync::AddDestination(const char* aD) { mDestinations.push_back(ToFileInfoList(aD)); }
         void Sync::AddFolder     (const char* aF) { mFolders     .push_back(ToFileInfoList(aF)); }
@@ -87,20 +94,15 @@ namespace KMS
 
         // ===== Config::Configurable =======================================
 
-        Sync::~Sync()
-        {
-            ClearFolderList(&mDestinations);
-            ClearFolderList(&mFolders);
-            ClearFolderList(&mSources);
-        }
-
         bool Sync::AddAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Destinations")) { AddDestination(aV); return true; }
-            if (0 == strcmp(aA, "Folders"     )) { AddFolder     (aV); return true; }
-            if (0 == strcmp(aA, "Sources"     )) { AddSource     (aV); return true; }
+            char lE[1024];
+
+            if (0 == strcmp(aA, "Destinations")) { Expand(aV, lE, sizeof(lE)); AddDestination(lE); return true; }
+            if (0 == strcmp(aA, "Folders"     )) { Expand(aV, lE, sizeof(lE)); AddFolder     (lE); return true; }
+            if (0 == strcmp(aA, "Sources"     )) { Expand(aV, lE, sizeof(lE)); AddSource     (lE); return true; }
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -120,8 +122,10 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Destination")) { SetDestination(aV); return true; }
-            if (0 == strcmp(aA, "Source"     )) { SetSource     (aV); return true; }
+            char lE[1024];
+
+            if (0 == strcmp(aA, "Destination")) { Expand(aV, lE, sizeof(lE)); SetDestination(lE); return true; }
+            if (0 == strcmp(aA, "Source"     )) { Expand(aV, lE, sizeof(lE)); SetSource     (lE); return true; }
 
             return Configurable::SetAttribute(aA, aV);
         }

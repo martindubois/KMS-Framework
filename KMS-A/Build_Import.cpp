@@ -59,6 +59,8 @@ namespace KMS
             mRepositories.push_back(File::Folder(DEFAULT_EXPORT_FOLDER));
         }
 
+        Import::~Import() {}
+
         void Import::AddDependency(const char* aD) { mDependencies.insert(aD); }
         void Import::AddRepository(const char* aR) { mRepositories.push_back(File::Folder(aR)); }
 
@@ -115,8 +117,6 @@ namespace KMS
         }
 
         // ===== Config::Configurable =======================================
-
-        Import::~Import() {}
 
         bool Import::AddAttribute(const char* aA, const char* aV)
         {

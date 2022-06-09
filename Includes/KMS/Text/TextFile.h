@@ -26,15 +26,15 @@ namespace KMS
 
             TextFile();
 
-            void Read (const File::Folder & aFolder, const char * aFileName);
-            void Write(const File::Folder & aFolder, const char * aFileName);
+            void Read (const File::Folder& aFolder, const char* aFileName);
+            void Write(const File::Folder& aFolder, const char* aFileName);
 
             void RemoveComments_CPP   ();
             void RemoveComments_Script();
 
             void RemoveEmptyLines();
 
-            void ReplaceLines(const char * aRegEx, const char * aReplace);
+            void ReplaceLines(const char* aRegEx, const char* aReplace);
 
             StringList mLines;
 
@@ -42,9 +42,9 @@ namespace KMS
 
             TextFile(const TextFile&);
 
-            const TextFile & operator = (const TextFile&);
+            const TextFile& operator = (const TextFile&);
 
-            void RemoveLines(const std::regex & aRegEx);
+            void RemoveLines(const std::regex& aRegEx);
 
         };
 

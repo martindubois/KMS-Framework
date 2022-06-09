@@ -7,10 +7,6 @@
 
 #pragma once
 
-// ==== C ===================================================================
-#include <stdint.h>
-#include <stdio.h>
-
 namespace KMS
 {
     namespace Config
@@ -33,8 +29,10 @@ namespace KMS
 
         protected:
 
-            static FILE *  ToFile (const char * aValue, const char * aMode = "rb");
-            static uint8_t ToUInt8(const char * aValue, int aRadix = 10);
+            // TODO Find a better place for the Expand function.
+            static void Expand(const char* aIn, char* aOut, unsigned int aOutSize_byte);
+
+            Configurable();
 
         };
 

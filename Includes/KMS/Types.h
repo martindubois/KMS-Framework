@@ -15,6 +15,12 @@
 namespace KMS
 {
 
+    enum class Radix
+    {
+        DECIMAL     = 10,
+        HEXADECIMAL = 16,
+    };
+
     typedef std::list<std::string> StringList;
     
     typedef std::set<std::string> StringSet;

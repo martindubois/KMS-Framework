@@ -39,6 +39,7 @@ Version             ______ . ______ . ______ . ______ - _____________________
     - Push the servers
 
 [ ] If needed, update KMS-Import.exe in K:\Export
+[ ] If needed, update KMS-Sync.exe in K:\Export
 [ ] If needed, upload the release on GitHub.com
 
 Time and duration   ______ : ______           ______ hours and ______ minutes

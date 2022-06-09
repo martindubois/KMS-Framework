@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
+#include <KMS/Convert.h>
 
 #include <KMS/ByteTool.h>
 
@@ -147,8 +148,10 @@ namespace KMS
         assert(NULL != aA);
         assert(NULL != aV);
 
-        if (0 == strcmp(aA, "Destination")) { SetDestination(ToFile(aV, "wb")); return true; }
-        if (0 == strcmp(aA, "Source"     )) { SetSource     (ToFile(aV, "rb")); return true; }
+        char lE[1024];
+
+        if (0 == strcmp(aA, "Destination")) { Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
+        if (0 == strcmp(aA, "Source"     )) { Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
 
         return Configurable::SetAttribute(aA, aV);
     }
@@ -158,7 +161,7 @@ namespace KMS
         assert(NULL != aA);
         assert(NULL != aV);
 
-        if (0 == strcmp(aA, "ByteTable")) { SetByteTable(aI, ToUInt8(aV)); return true; }
+        if (0 == strcmp(aA, "ByteTable")) { SetByteTable(aI, Convert::ToUInt8(aV)); return true; }
 
         return Configurable::SetAttribute(aA, aI, aV);
     }

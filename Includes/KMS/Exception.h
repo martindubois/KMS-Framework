@@ -24,29 +24,24 @@ namespace KMS
 
         enum class Code
         {
-            BUILD_COMPILE = 0,
-            BUILD_TEST,
-            CONFIG,
-            CONFIG_FORMAT,
-            CONFIG_INDEX,
-            CONFIG_TYPE,
+            BUILD_COMPILE = 0, BUILD_TEST,
+            CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
+            CONVERT_FORMAT, CONVERT_TYPE,
             DEPENDENCY,
-            FILE_BACKUP,
-            FILE_COPY,
-            FILE_OPEN,
-            FILE_RENAME,
-            FILE_WRITE,
-            FOLDER_COMPRESS,
-            FOLDER_CREATE,
-            FOLDER_INIT,
-            FOLDER_REMOVE,
-            FOLDER_UNCOMPRESS,
-            PROCESS_EXIT_CODE,
-            PROCESS_START,
-            PROCESS_TIMEOUT,
+            FILE_ACCESS, FILE_BACKUP, FILE_COPY, FILE_OPEN,
+                FILE_READ, FILE_RENAME, FILE_WRITE,
+            FOLDER, FOLDER_COMPRESS, FOLDER_CREATE, FOLDER_INIT,
+                FOLDER_REMOVE, FOLDER_UNCOMPRESS,
+            HTTP_REQUEST,
+            NETWORK_ADDRESS, NETWORK_ADDRESS_RANGE, NETWORK_PORT,
+            OUTPUT_TOO_SHORT,
+            PROCESS_EXIT_CODE, PROCESS_START, PROCESS_TIMEOUT,
+            SOCKET, SOCKET_ACCEPT, SOCKET_BIND, SOCKET_LISTEN,
+                SOCKET_OPTION, SOCKET_RECEIVE, SOCKET_SEND, SOCKET_STARTUP,
+            STATE,
             TEST,
-            VERSION_FILE,
-            VERSION_NUMBER,
+            THREAD_START,
+            VERSION_FILE, VERSION_NUMBER,
 
             CODE_QTY
         };
@@ -65,7 +60,7 @@ namespace KMS
 
     private:
 
-        void Init(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode);
+        void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode);
 
         Code mCode;
 
@@ -82,9 +77,26 @@ namespace KMS
 
 }
 
-std::ostream & operator << (std::ostream & aOut, const KMS::Exception & aE);
+std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE);
 
-std::ostream & operator << (std::ostream & aOut, const KMS::Exception::Code & aC);
+std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
+
+#define KMS_CATCH                                                          \
+    catch (KMS::Exception eE)                                              \
+    {                                                                      \
+        std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
+        std::cerr << eE << KMS::Console::Color::WHITE;                     \
+    }                                                                      \
+    catch (std::exception eE)                                              \
+    {                                                                      \
+        std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
+        std::cerr << eE.what() << std::endl << KMS::Console::Color::WHITE; \
+    }                                                                      \
+    catch (...)                                                            \
+    {                                                                      \
+        std::cerr << KMS::Console::Color::RED << "UNKNOWN EXCEPTION\n";    \
+        std::cerr << KMS::Console::Color::WHITE;                           \
+    }
 
 #define KMS_CATCH_RESULT(R)                                                \
     catch (KMS::Exception eE)                                              \

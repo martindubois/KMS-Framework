@@ -26,6 +26,8 @@ namespace KMS
 
             Import();
 
+            ~Import();
+
             void AddDependency(const char *aD);
             void AddRepository(const char *aR);
 
@@ -34,7 +36,6 @@ namespace KMS
             int Run();
 
             // ===== Config::Configurable ===================================
-            virtual ~Import();
             virtual bool AddAttribute(const char* aA, const char* aV);
 
         private:

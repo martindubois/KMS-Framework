@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Config_Configurator.cpp
 
+// TODO Do not read the same configuration file twice.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================

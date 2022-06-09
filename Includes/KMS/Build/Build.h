@@ -28,6 +28,8 @@ namespace KMS
 
             Build();
 
+            ~Build();
+
             void AddBinary       (const char * aB);
             void AddConfiguration(const char * aC);
             void AddEditOperation(const char * aC);
@@ -46,9 +48,8 @@ namespace KMS
             int Run();
 
             // ===== Config::Configurable ===================================
-            virtual ~Build();
-            virtual bool SetAttribute(const char *aA);
             virtual bool AddAttribute(const char* aA, const char* aV);
+            virtual bool SetAttribute(const char *aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:

@@ -29,6 +29,8 @@ namespace KMS
 
             Sync();
 
+            ~Sync();
+
             void AddDestination(const char *aD);
             void AddFolder(const char* aF);
             void AddSource(const char* aS);
@@ -42,8 +44,7 @@ namespace KMS
 
             int Run();
 
-            // ===== Config::IConfigurable ==================================
-            virtual ~Sync();
+            // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool SetAttribute(const char* aA);
             virtual bool SetAttribute(const char* aA, const char* aV);

@@ -29,7 +29,7 @@ namespace KMS
     {
         assert(NULL != aMessage);
 
-        Init(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode);
     }
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, const char* aInfo)
@@ -37,7 +37,7 @@ namespace KMS
     {
         assert(NULL != aMessage);
 
-        Init(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode);
 
         mInfo = aInfo;
     }
@@ -47,7 +47,7 @@ namespace KMS
     {
         assert(NULL != aMessage);
 
-        Init(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode);
 
         char lInfo[64];
 
@@ -67,7 +67,7 @@ namespace KMS
     // Provate
     // //////////////////////////////////////////////////////////////////////
 
-    void Exception::Init(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode)
+    void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode)
     {
         assert(NULL != aFile);
         assert(NULL != aFunction);
@@ -126,12 +126,22 @@ const char* ToCodeName(KMS::Exception::Code aCode)
     static const char* CODE_NAMES[static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY)] =
     {
         "BUILD_COMPILE", "BUILD_TEST",
-        "CONFIG", "CONFIG_FORMAT", "CONFIG_TYPE", "CONFIG_INDEX",
+        "CONFIG", "CONFIG_EXPAND", "CONFIG_FORMAT", "CONFIG_INDEX",
+        "CONVERT_FORMAT", "CONVERT_TYPE",
         "DEPENDENCY",
-        "FILE_BACKUP", "FILE_COPY", "FILE_OPEN", "FILE_RENAME", "FILE_WRITE",
-        "FOLDER_COMPRESS", "FOLDER_CREATE", "FOLDER_INIT", "FOLDER_REMOVE", "FOLDER_UNCOMPRESS"
+        "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_OPEN",
+            "FILE_READ", "FILE_RENAME", "FILE_WRITE",
+        "FOLDER", "FOLDER_COMPRESS", "FOLDER_CREATE", "FOLDER_INIT",
+            "FOLDER_REMOVE", "FOLDER_UNCOMPRESS",
+        "HTTP_REQUEST",
+        "NETWORK_ADDRESS", "NETWORK_ADDRESS_RANGE", "NETWORK_PORT",
+        "OUTPUT_TOO_SHORT",
         "PROCESS_EXIT_CODE", "PROCESS_START", "PROCESS_TIMEOUT",
+        "SOCKET", "SOCKET_ACCEPT", "SOCKET_BIND", "SOCKET_LISTEN",
+            "SOCKET_OPTION", "SOCKET_RECEIVE", "SOCKET_SEND", "SOCKET_STARTUP",
+        "STATE",
         "TEST",
+        "THREAD_START",
         "VERSION_FILE", "VERSION_NUMBER",
     };
 

@@ -25,8 +25,8 @@ namespace KMS
 
             TestManager();
 
-            void AddGroup(const char * aGroup);
-            void AddTest (const char * aTest);
+            void AddGroup(const char* aGroup);
+            void AddTest (const char* aTest);
 
             unsigned int GetErrorCount() const;
 
@@ -41,9 +41,9 @@ namespace KMS
 
         private:
 
-            TestManager(const TestManager &);
+            TestManager(const TestManager&);
 
-            const TestManager & operator = (const TestManager &);
+            const TestManager& operator = (const TestManager&);
 
             unsigned int mErrorCount;
 
@@ -55,4 +55,4 @@ namespace KMS
     }
 }
 
-std::ostream & operator << (std::ostream & aOut, const KMS::Test::TestManager & aTM);
+std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager & aTM);

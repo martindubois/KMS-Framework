@@ -1,0 +1,43 @@
+
+// Author    KMS - Martin Dubois, P. Eng.
+// Copyright (C) 2022 KMS
+// License   http://www.apache.org/licenses/LICENSE-2.0
+// Product   KMS-Framework
+// File      Includes/KMS/Message/Receiver.h
+
+#pragma once
+
+namespace KMS
+{
+    namespace Message
+    {
+
+        class IReceiver;
+
+        class Sender
+        {
+
+        public:
+
+            Sender(void* aSender);
+
+            void Clear();
+
+            bool IsSet() const;
+
+            void Set(IReceiver* aR, unsigned int aCode);
+
+            bool Send(void* aData = NULL);
+
+        private:
+
+            unsigned int mCode;
+
+            IReceiver* mReceiver;
+
+            void* mSender;
+
+        };
+
+    }
+}
