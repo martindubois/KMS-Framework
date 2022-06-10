@@ -100,9 +100,9 @@ namespace KMS
 
             char lE[1024];
 
-            if (0 == strcmp(aA, "Destinations")) { Expand(aV, lE, sizeof(lE)); AddDestination(lE); return true; }
-            if (0 == strcmp(aA, "Folders"     )) { Expand(aV, lE, sizeof(lE)); AddFolder     (lE); return true; }
-            if (0 == strcmp(aA, "Sources"     )) { Expand(aV, lE, sizeof(lE)); AddSource     (lE); return true; }
+            CFG_EXPAND("Destinations", AddDestination);
+            CFG_EXPAND("Folders"     , AddFolder     );
+            CFG_EXPAND("Sources"     , AddSource     );
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -111,9 +111,9 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Destinations")) { ClearDestinations(); return true; }
-            if (0 == strcmp(aA, "Folders"     )) { ClearFolders     (); return true; }
-            if (0 == strcmp(aA, "Sources"     )) { ClearSources     (); return true; }
+            CFG_IF("Destinations") { ClearDestinations(); return true; }
+            CFG_IF("Folders"     ) { ClearFolders     (); return true; }
+            CFG_IF("Sources"     ) { ClearSources     (); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -124,8 +124,8 @@ namespace KMS
 
             char lE[1024];
 
-            if (0 == strcmp(aA, "Destination")) { Expand(aV, lE, sizeof(lE)); SetDestination(lE); return true; }
-            if (0 == strcmp(aA, "Source"     )) { Expand(aV, lE, sizeof(lE)); SetSource     (lE); return true; }
+            CFG_EXPAND("Destination", SetDestination);
+            CFG_EXPAND("Source"     , SetSource     );
 
             return Configurable::SetAttribute(aA, aV);
         }

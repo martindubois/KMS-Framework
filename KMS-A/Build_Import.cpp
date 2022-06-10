@@ -122,8 +122,8 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Dependencies")) { AddDependency(aV); return true; }
-            if (0 == strcmp(aA, "Repositories")) { AddRepository(aV); return true; }
+            CFG_CALL("Dependencies", AddDependency);
+            CFG_CALL("Repositories", AddRepository);
 
             return Configurable::AddAttribute(aA, aV);
         }

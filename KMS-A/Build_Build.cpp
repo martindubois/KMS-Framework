@@ -141,12 +141,12 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Binaries"      )) { AddBinary       (aV); return true; }
-            if (0 == strcmp(aA, "Configurations")) { AddConfiguration(aV); return true; }
-            if (0 == strcmp(aA, "EditOperations")) { AddEditOperation(aV); return true; }
-            if (0 == strcmp(aA, "Libraries"     )) { AddLibrary      (aV); return true; }
-            if (0 == strcmp(aA, "Processors"    )) { AddProcessor    (aV); return true; }
-            if (0 == strcmp(aA, "Tests"         )) { AddTest         (aV); return true; }
+            CFG_CALL("Binaries"      , AddBinary       );
+            CFG_CALL("Configurations", AddConfiguration);
+            CFG_CALL("EditOperations", AddEditOperation);
+            CFG_CALL("Libraries"     , AddLibrary      );
+            CFG_CALL("Processors"    , AddProcessor    );
+            CFG_CALL("Tests"         , AddTest         );
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -155,9 +155,9 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "DoNotCompile")) { SetDoNotCompile(); return true; }
-            if (0 == strcmp(aA, "DoNotExport" )) { SetDoNotExport (); return true; }
-            if (0 == strcmp(aA, "DoNotPackage")) { SetDoNotPackage(); return true; }
+            CFG_IF("DoNotCompile") { SetDoNotCompile(); return true; }
+            CFG_IF("DoNotExport" ) { SetDoNotExport (); return true; }
+            CFG_IF("DoNotPackage") { SetDoNotPackage(); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -166,9 +166,9 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Product"     )) { SetProduct     (aV); return true; }
-            if (0 == strcmp(aA, "ProductShort")) { SetProductShort(aV); return true; }
-            if (0 == strcmp(aA, "VersionFile" )) { SetVersionFile (aV); return true; }
+            CFG_CALL("Product"     , SetProduct     );
+            CFG_CALL("ProductShort", SetProductShort);
+            CFG_CALL("VersionFile" , SetVersionFile );
 
             return Configurable::SetAttribute(aA, aV);
         }

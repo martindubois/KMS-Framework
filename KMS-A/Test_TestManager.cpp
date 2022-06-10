@@ -104,8 +104,10 @@ namespace KMS
 
         bool TestManager::AddAttribute(const char* aA, const char* aV)
         {
-            if (0 == strcmp(aA, "Group")) { AddGroup(aV); return true; }
-            if (0 == strcmp(aA, "Test" )) { AddTest (aV); return true; }
+            assert(NULL != aA);
+
+            CFG_CALL("Group", AddGroup);
+            CFG_CALL("Test" , AddTest );
 
             return false;
         }

@@ -189,7 +189,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Allow" )) { mAllow.Add(AddressRange(aV)); return true; }
+            CFG_IF("Allow") { mAllow.Add(AddressRange(aV)); return true; }
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -198,7 +198,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Allow" )) { mAllow.Clear(); return true; }
+            CFG_IF("Allow") { mAllow.Clear(); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -207,11 +207,13 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Allow"         )) { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
-            if (0 == strcmp(aA, "LocalAddress"  )) { SetLocalAddress  (Address(aV)); return true; }
-            if (0 == strcmp(aA, "LocalPort"     )) { SetLocalPort     (Convert::ToUInt16(aV)); return true; }
-            if (0 == strcmp(aA, "ReceiveTimeout")) { SetReceiveTimeout(Convert::ToUInt32(aV)); return true; }
-            if (0 == strcmp(aA, "ReceiveTimeout")) { SetSendTimeout   (Convert::ToUInt32(aV)); return true; }
+            CFG_CALL("LocalAddress", SetLocalAddress);
+
+            CFG_CONVERT("LocalPort"     , SetLocalPort     , ToUInt16);
+            CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, ToUInt32);
+            CFG_CONVERT("ReceiveTimeout", SetSendTimeout   , ToUInt32);
+
+            CFG_IF("Allow") { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
 
             return Configurable::SetAttribute(aA, aV);
         }

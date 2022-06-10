@@ -36,6 +36,20 @@ namespace KMS
 
         const unsigned int FileServer::CODE_ON_REQUEST = 1;
 
+        void FileServer::FileType_App_JS(Request* aRequest)
+        {
+            assert(NULL != aRequest);
+
+            aRequest->mResponseHeader.Set("Content-Type", "application/javascript");
+        }
+
+        void FileServer::FileType_Text_CSS(Request* aRequest)
+        {
+            assert(NULL != aRequest);
+
+            aRequest->mResponseHeader.Set("Content-Type", "text/css");
+        }
+
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
@@ -99,8 +113,10 @@ namespace KMS
 
         FileServer::FileServer() : mRoot("."), mVerbose(false)
         {
+            SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
             SetFileType("html", FileType_Text_HTML);
+            SetFileType("js"  , FileType_App_JS);
             SetFileType("txt" , FileType_Text_Plain);
         }
 
@@ -146,6 +162,8 @@ namespace KMS
 
             const char* lPath = aR->GetPath();
 
+            // TODO Protect against .. in path.
+
             const char* lExt = strrchr(lPath, '.');
             if (NULL == lExt)
             {
@@ -182,7 +200,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            if (0 == strcmp(aA, "Verbose")) { SetVerbose(); return true; }
+            CFG_IF("Verbose") { SetVerbose(); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -193,8 +211,9 @@ namespace KMS
 
             char lE[1024];
 
-            if (0 == strcmp(aA, "Root")) { Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
-            if (0 == strcmp(aA, "Verbose")) { SetVerbose(Convert::ToBool(aV)); return true; }
+            CFG_IF("Root") { Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
+
+            CFG_CONVERT("Verbose", SetVerbose, ToBool);
 
             return Configurable::SetAttribute(aA, aV);
         }
