@@ -34,10 +34,19 @@ namespace KMS
 
         void Configurator::AddConfigurable(Configurable* aC) { assert(NULL != aC); mConfigurables.push_back(aC); }
 
+        void Configurator::AddConfigFile(const char* aPath)
+        {
+            ParseFile(File::Folder(File::Folder::Id::NONE), aPath);
+        }
+
+        void Configurator::AddOptionalConfigFile(const char* aPath)
+        {
+            ParseFile(File::Folder(File::Folder::Id::NONE), aPath, false);
+        }
+
         unsigned int Configurator::GetIgnoredCount() const { return mIgnoredCount; }
 
-        // TODO Add the configurator to the list.
-        void Configurator::Init() {}
+        void Configurator::Init() { mConfigurables.push_back(this); }
 
         void Configurator::ParseArguments(int aCount, const char ** aVector)
         {
@@ -67,6 +76,19 @@ namespace KMS
             }
         }
 
+        // ===== Configurable ===========================================
+        bool Configurator::AddAttribute(const char* aA, const char* aV)
+        {
+            assert(NULL != aA);
+
+            char lE[1024];
+
+            CFG_EXPAND("ConfigFile"        , AddConfigFile        );
+            CFG_EXPAND("OptionalConfigFile", AddOptionalConfigFile);
+
+            return Configurable::AddAttribute(aA, aV);
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
 
@@ -79,17 +101,17 @@ namespace KMS
 
             unsigned int lI;
 
-            if (3 == sscanf_s(aLine, FMT_ATT "[%u]=" FMT_VAL, lA SizeInfo(lA), &lI, lV SizeInfo(lV))) { SetAttribute(lA, lI, lV); return; }
+            if (3 == sscanf_s(aLine, FMT_ATT "[%u]=" FMT_VAL, lA SizeInfo(lA), &lI, lV SizeInfo(lV))) { CallSetAttribute(lA, lI, lV); return; }
 
-            if (2 == sscanf_s(aLine, FMT_ATT "+=" FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { AddAttribute(lA, lV); return; }
-            if (2 == sscanf_s(aLine, FMT_ATT "="  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { SetAttribute(lA, lV); return; }
+            if (2 == sscanf_s(aLine, FMT_ATT "+=" FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallAddAttribute(lA, lV); return; }
+            if (2 == sscanf_s(aLine, FMT_ATT "="  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallSetAttribute(lA, lV); return; }
 
             if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { SetAttribute(lA); return; }
 
             KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid configuration format", aLine);
         }
 
-        void Configurator::AddAttribute(const char* aA, const char* aV)
+        void Configurator::CallAddAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
             assert(NULL != aV);
@@ -107,7 +129,7 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::SetAttribute(const char* aA)
+        void Configurator::CallSetAttribute(const char* aA)
         {
             assert(NULL != aA);
 
@@ -124,7 +146,7 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::SetAttribute(const char* aA, const char* aV)
+        void Configurator::CallSetAttribute(const char* aA, const char* aV)
         {
             assert(NULL != aA);
             assert(NULL != aV);
@@ -142,7 +164,7 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::SetAttribute(const char* aA, unsigned int aI, const char* aV)
+        void Configurator::CallSetAttribute(const char* aA, unsigned int aI, const char* aV)
         {
             assert(NULL != aA);
             assert(NULL != aV);

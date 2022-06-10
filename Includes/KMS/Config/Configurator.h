@@ -11,15 +11,15 @@
 #include <list>
 
 // ===== Includes ===========================================================
+#include <KMS/Config/Configurable.h>
 #include <KMS/File/Folder.h>
 
 namespace KMS
 {
     namespace Config
     {
-        class Configurable;
 
-        class Configurator
+        class Configurator : public Configurable
         {
 
         public:
@@ -28,6 +28,10 @@ namespace KMS
 
             void AddConfigurable(Configurable * aInterface);
 
+            void AddConfigFile(const char* aPath);
+
+            void AddOptionalConfigFile(const char* aPath);
+
             unsigned int GetIgnoredCount() const;
             
             void Init();
@@ -35,6 +39,9 @@ namespace KMS
             void ParseArguments(int aCount, const char ** aVector);
 
             void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = true);
+
+            // ===== Configurable ===========================================
+            virtual bool AddAttribute(const char* aA, const char* aV);
 
         private:
 
@@ -46,11 +53,11 @@ namespace KMS
 
             void ParseLine(const char * aLine);
 
-            void AddAttribute(const char * aA, const char * aV);
+            void CallAddAttribute(const char * aA, const char * aV);
 
-            void SetAttribute(const char * aA);
-            void SetAttribute(const char * aA, const char * aV);
-            void SetAttribute(const char * aA, unsigned int aI, const char * aV);
+            void CallSetAttribute(const char * aA);
+            void CallSetAttribute(const char * aA, const char * aV);
+            void CallSetAttribute(const char * aA, unsigned int aI, const char * aV);
 
             ConfigurableList mConfigurables;
 
