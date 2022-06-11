@@ -97,14 +97,24 @@ namespace KMS
             assert(NULL != aLine);
 
             char lA[1024];
+            char lI[1024];
             char lV[1024];
 
-            unsigned int lI;
+            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ] += " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
+            {
+                CallAddAttribute_Indexed(lA, lI, lV); return;
+            }
 
-            if (3 == sscanf_s(aLine, FMT_ATT "[%u]=" FMT_VAL, lA SizeInfo(lA), &lI, lV SizeInfo(lV))) { CallSetAttribute(lA, lI, lV); return; }
+            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ] = " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
+            {
+                CallSetAttribute_Indexed(lA, lI, lV); return;
+            }
 
-            if (2 == sscanf_s(aLine, FMT_ATT "+=" FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallAddAttribute(lA, lV); return; }
-            if (2 == sscanf_s(aLine, FMT_ATT "="  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallSetAttribute(lA, lV); return; }
+            if (2 == sscanf_s(aLine, FMT_ATT " += " FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallAddAttribute(lA, lV); return; }
+
+            if (2 == sscanf_s(aLine, FMT_ATT " = "  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallSetAttribute(lA, lV); return; }
+
+            if (2 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ]", lA SizeInfo(lA), lI SizeInfo(lI))) { SetAttribute_Indexed(lA, lI); return; }
 
             if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { SetAttribute(lA); return; }
 
@@ -121,6 +131,25 @@ namespace KMS
                 assert(NULL != lC);
 
                 if (lC->AddAttribute(aA, aV))
+                {
+                    return;
+                }
+            }
+
+            mIgnoredCount++;
+        }
+
+        void Configurator::CallAddAttribute_Indexed(const char* aA, const char* aI, const char* aV)
+        {
+            assert(NULL != aA);
+            assert(NULL != aI);
+            assert(NULL != aV);
+
+            for (Configurable* lC : mConfigurables)
+            {
+                assert(NULL != lC);
+
+                if (lC->AddAttribute_Indexed(aA, aI, aV))
                 {
                     return;
                 }
@@ -164,7 +193,7 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::CallSetAttribute(const char* aA, unsigned int aI, const char* aV)
+        void Configurator::CallSetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
         {
             assert(NULL != aA);
             assert(NULL != aV);
@@ -173,7 +202,7 @@ namespace KMS
             {
                 assert(NULL != lC);
 
-                if (lC->SetAttribute(aA, aI, aV))
+                if (lC->SetAttribute_Indexed(aA, aI, aV))
                 {
                     return;
                 }

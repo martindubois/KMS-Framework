@@ -20,6 +20,8 @@
 
 #define CONFIG_FILE ("KMS-Sync.cfg")
 
+#define DEFAULT_GROUP ("Default")
+
 // Static fonction desclarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -51,6 +53,7 @@ namespace KMS
                 lS.InitConfigurator(&lC);
 
                 lC.Init();
+                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE, false);
                 lC.ParseFile(File::Folder(File::Folder::Id::HOME), CONFIG_FILE, false);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE, false);
                 lC.ParseArguments(aCount - 1, aVector + 1);
@@ -67,17 +70,55 @@ namespace KMS
         Sync::~Sync()
         {
             ClearFolderList(&mDestinations);
-            ClearFolderList(&mFolders);
             ClearFolderList(&mSources);
+
+            for (GroupMap::value_type lP : mGroups)
+            {
+                ClearFolderList(lP.second);
+                delete lP.second;
+            }
         }
 
         void Sync::AddDestination(const char* aD) { mDestinations.push_back(ToFileInfoList(aD)); }
-        void Sync::AddFolder     (const char* aF) { mFolders     .push_back(ToFileInfoList(aF)); }
         void Sync::AddSource     (const char* aS) { mSources     .push_back(ToFileInfoList(aS)); }
 
+        void Sync::AddFolder(const char* aG, const char* aF)
+        {
+            assert(NULL != aG);
+
+            FolderList* lG;
+
+            GroupMap::iterator lIt = mGroups.find(aG);
+            if (mGroups.end() == lIt)
+            {
+                lG = new FolderList;
+
+                mGroups.insert(GroupMap::value_type(aG, lG));
+            }
+            else
+            {
+                lG = lIt->second;
+            }
+            assert(NULL != lG);
+
+            lG->push_back(ToFileInfoList(aF));
+        }
+
         void Sync::ClearDestinations() { ClearFolderList(&mDestinations); }
-        void Sync::ClearFolders     () { ClearFolderList(&mFolders); }
         void Sync::ClearSources     () { ClearFolderList(&mSources); }
+
+        void Sync::ClearFolders(const char* aG)
+        {
+            assert(NULL != aG);
+
+            GroupMap::iterator lIt = mGroups.find(aG);
+            if (mGroups.end() != lIt)
+            {
+                assert(NULL != lIt->second);
+
+                ClearFolderList(lIt->second);
+            }
+        }
 
         void Sync::SetDestination(const char* aD) { ClearFolderList(&mDestinations); AddDestination(aD); }
         void Sync::SetSource     (const char* aS) { ClearFolderList(&mSources     ); AddSource     (aS); }
@@ -101,10 +142,22 @@ namespace KMS
             char lE[1024];
 
             CFG_EXPAND("Destinations", AddDestination);
-            CFG_EXPAND("Folders"     , AddFolder     );
             CFG_EXPAND("Sources"     , AddSource     );
 
+            CFG_IF("Folders") { Expand(aV, lE, sizeof(lE)), AddFolder(DEFAULT_GROUP, lE); return true; }
+
             return Configurable::AddAttribute(aA, aV);
+        }
+
+        bool Sync::AddAttribute_Indexed(const char* aA, const char* aI, const char* aV)
+        {
+            assert(NULL != aA);
+
+            char lE[1024];
+
+            CFG_IF("Folders") { Expand(aV, lE, sizeof(lE)); AddFolder(aI, lE); return true; }
+
+            return Configurable::AddAttribute_Indexed(aA, aI, aV);
         }
 
         bool Sync::SetAttribute(const char* aA)
@@ -112,8 +165,9 @@ namespace KMS
             assert(NULL != aA);
 
             CFG_IF("Destinations") { ClearDestinations(); return true; }
-            CFG_IF("Folders"     ) { ClearFolders     (); return true; }
             CFG_IF("Sources"     ) { ClearSources     (); return true; }
+
+            CFG_IF("Folders") { ClearFolders(DEFAULT_GROUP); return true; }
 
             return Configurable::SetAttribute(aA);
         }
@@ -130,18 +184,32 @@ namespace KMS
             return Configurable::SetAttribute(aA, aV);
         }
 
+        bool Sync::SetAttribute_Indexed(const char* aA, const char* aI)
+        {
+            assert(NULL != aA);
+
+            CFG_IF("Folders") { ClearFolders(aI); return true; }
+
+            return Configurable::SetAttribute_Indexed(aA, aI);
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
 
         void Sync::Run_Bidirectional()
         {
-            for (FileInfoList* lA : mFolders)
+            for (GroupMap::value_type lP : mGroups)
             {
-                for (FileInfoList* lB : mFolders)
+                assert(NULL != lP.second);
+
+                for (FileInfoList* lA : *lP.second)
                 {
-                    if (lA != lB)
+                    for (FileInfoList* lB : *lP.second)
                     {
-                        Run_Bidirectional(lA, lB);
+                        if (lA != lB)
+                        {
+                            Run_Bidirectional(lA, lB);
+                        }
                     }
                 }
             }
@@ -185,19 +253,17 @@ namespace KMS
 
         void Sync::VerifyConfig() const
         {
-            if (mDestinations.empty() && mFolders.empty())
-            {
-                KMS_EXCEPTION(CONFIG, "No folders");
-            }
-
             if (mDestinations.size() != mSources.size())
             {
                 KMS_EXCEPTION(CONFIG, "Number of sources does not match the number of destinations");
             }
 
-            if (1 == mFolders.size())
+            for (GroupMap::value_type lP : mGroups)
             {
-                KMS_EXCEPTION(CONFIG, "Number of folders cannot be one");
+                if (1 == lP.second->size())
+                {
+                    KMS_EXCEPTION(CONFIG, "Number of folders cannot be one");
+                }
             }
         }
 

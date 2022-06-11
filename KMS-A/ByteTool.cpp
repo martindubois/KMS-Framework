@@ -156,14 +156,14 @@ namespace KMS
         return Configurable::SetAttribute(aA, aV);
     }
 
-    bool ByteTool::SetAttribute(const char* aA, unsigned int aI, const char* aV)
+    bool ByteTool::SetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
     {
         assert(NULL != aA);
         assert(NULL != aV);
 
-        CFG_IF("ByteTable") { SetByteTable(aI, Convert::ToUInt8(aV)); return true; }
+        CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aV)); return true; }
 
-        return Configurable::SetAttribute(aA, aI, aV);
+        return Configurable::SetAttribute_Indexed(aA, aI, aV);
     }
 
     // Private

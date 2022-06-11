@@ -9,6 +9,7 @@
 
 // ===== C++ ================================================================
 #include <list>
+#include <map>
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurable.h>
@@ -32,12 +33,14 @@ namespace KMS
             ~Sync();
 
             void AddDestination(const char *aD);
-            void AddFolder(const char* aF);
             void AddSource(const char* aS);
 
+            void AddFolder(const char* aG, const char* aF);
+
             void ClearDestinations();
-            void ClearFolders();
             void ClearSources();
+
+            void ClearFolders(const char* aG);
 
             void SetDestination(const char* aD);
             void SetSource     (const char* aS);
@@ -46,14 +49,18 @@ namespace KMS
 
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
+            virtual bool AddAttribute_Indexed(const char* aA, const char* aI, const char* aV);
             virtual bool SetAttribute(const char* aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
+            virtual bool SetAttribute_Indexed(const char* aA, const char* aI);
 
         // internal
 
-            typedef std::list<FileInfoList *> FolderList;
+            typedef std::list<FileInfoList*> FolderList;
 
         private:
+
+            typedef std::map<std::string, FolderList*> GroupMap;
 
             Sync(const Sync &);
 
@@ -68,7 +75,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             FolderList mDestinations;
-            FolderList mFolders;
+            GroupMap   mGroups;
             FolderList mSources;
 
         };

@@ -55,9 +55,12 @@ namespace KMS
 
             void CallAddAttribute(const char * aA, const char * aV);
 
+            void CallAddAttribute_Indexed(const char* aA, const char* aI, const char* aV);
+
             void CallSetAttribute(const char * aA);
             void CallSetAttribute(const char * aA, const char * aV);
-            void CallSetAttribute(const char * aA, unsigned int aI, const char * aV);
+
+            void CallSetAttribute_Indexed(const char * aA, const char* aI, const char * aV);
 
             ConfigurableList mConfigurables;
 

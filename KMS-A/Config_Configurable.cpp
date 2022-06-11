@@ -35,36 +35,17 @@ namespace KMS
             aC->AddConfigurable(this);
         }
 
-        bool Configurable::AddAttribute(const char* aAttribute, const char* aValue)
-        {
-            assert(NULL != aAttribute);
-            assert(NULL != aValue);
+        bool Configurable::AddAttribute(const char*, const char*) { return false; }
 
-            return false;
-        }
+        bool Configurable::AddAttribute_Indexed(const char*, const char*, const char*) { return false; }
 
-        bool Configurable::SetAttribute(const char* aAttribute)
-        {
-            assert(NULL != aAttribute);
+        bool Configurable::SetAttribute(const char*) { return false; }
 
-            return false;
-        }
+        bool Configurable::SetAttribute(const char*, const char*) { return false; }
 
-        bool Configurable::SetAttribute(const char* aAttribute, const char* aValue)
-        {
-            assert(NULL != aAttribute);
-            assert(NULL != aValue);
+        bool Configurable::SetAttribute_Indexed(const char*, const char*) { return false; }
 
-            return false;
-        }
-
-        bool Configurable::SetAttribute(const char* aAttribute, unsigned int aIndex, const char* aValue)
-        {
-            assert(NULL != aAttribute);
-            assert(NULL != aValue);
-
-            return false;
-        }
+        bool Configurable::SetAttribute_Indexed(const char*, const char*, const char*) { return false; }
 
         // Protected
         // //////////////////////////////////////////////////////////////////
@@ -95,7 +76,7 @@ namespace KMS
                 case STATE_MARK:
                     switch (*lIn)
                     {
-                    case '$': lState = STATE_NAME;
+                    case '$': lState = STATE_NAME; break;
 
                     default:
                         *lOut = '{' ; lOut++; lOutSize_byte--;
@@ -139,6 +120,8 @@ namespace KMS
 
                 lIn++;
             }
+
+            *lOut = '\0';
         }
 
         Configurable::Configurable() {}
