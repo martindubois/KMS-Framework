@@ -11,6 +11,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurable.h>
+#include <KMS/Environment.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
 

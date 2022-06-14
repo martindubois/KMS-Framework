@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Console/Color.cpp
+// File      KMS-A/Console_Color_W.cpp
 
 #include "Component.h"
 

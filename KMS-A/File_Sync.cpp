@@ -144,7 +144,7 @@ namespace KMS
             CFG_EXPAND("Destinations", AddDestination);
             CFG_EXPAND("Sources"     , AddSource     );
 
-            CFG_IF("Folders") { Expand(aV, lE, sizeof(lE)), AddFolder(DEFAULT_GROUP, lE); return true; }
+            CFG_IF("Folders") { Environment::Expand(aV, lE, sizeof(lE)), AddFolder(DEFAULT_GROUP, lE); return true; }
 
             return Configurable::AddAttribute(aA, aV);
         }
@@ -155,7 +155,7 @@ namespace KMS
 
             char lE[1024];
 
-            CFG_IF("Folders") { Expand(aV, lE, sizeof(lE)); AddFolder(aI, lE); return true; }
+            CFG_IF("Folders") { Environment::Expand(aV, lE, sizeof(lE)); AddFolder(aI, lE); return true; }
 
             return Configurable::AddAttribute_Indexed(aA, aI, aV);
         }

@@ -19,13 +19,15 @@ namespace KMS
 
     public:
 
-        Process(const File::Folder & aFolder, const char * aExecutable);
+        Process(const File::Folder& aFolder, const char* aExecutable);
 
         ~Process();
 
         void AddArgument(const char * aArgument);
 
         const char* GetCmdLine() const;
+
+        void SetWorkingDirectory(const char* aWD);
 
         int Run();
 
@@ -35,10 +37,13 @@ namespace KMS
 
         const Process & operator = (const Process &);
 
+        int Run_Internal();
+
         StringList   mArguments;
         char       * mCmdLine;
         std::string  mExecutable;
         File::Folder mFolder;
+        std::string  mWorkingDirectory;
 
     };
 

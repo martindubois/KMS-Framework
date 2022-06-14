@@ -7,18 +7,8 @@
 
 #include "Component.h"
 
-// ===== Windows ============================================================
-#include <Windows.h>
-
 // ===== Includes ===========================================================
 #include <KMS/Process.h>
-
-// Static function declarations
-// //////////////////////////////////////////////////////////////////////////
-
-static void CloseHandles(PROCESS_INFORMATION* aInfo);
-
-static int WaitAndClose(PROCESS_INFORMATION* aInfo);
 
 namespace KMS
 {
@@ -51,6 +41,8 @@ namespace KMS
 
     const char* Process::GetCmdLine() const { return mCmdLine; }
 
+    void Process::SetWorkingDirectory(const char* aWD) { assert(NULL != aWD); mWorkingDirectory = aWD; }
+
     int Process::Run()
     {
         char lExec[MAX_PATH];
@@ -62,7 +54,14 @@ namespace KMS
 
         for (std::string lA : mArguments)
         {
-            lCmdLine += " \"" + lA + "\"";
+            if (std::string::npos == lA.find_first_of(' '))
+            {
+                lCmdLine += " " + lA;
+            }
+            else
+            {
+                lCmdLine += " \"" + lA + "\"";
+            }
         }
 
         size_t lLen = lCmdLine.size() + 1;
@@ -72,60 +71,7 @@ namespace KMS
 
         memcpy(mCmdLine, lCmdLine.c_str(), lLen * sizeof(char));
 
-        PROCESS_INFORMATION lInfo;
-        STARTUPINFO lStart;
-
-        memset(&lStart, 0, sizeof(lStart));
-
-        lStart.cb = sizeof(lStart);
-
-        BOOL lRetB = CreateProcess(NULL, mCmdLine, NULL, NULL, TRUE, 0, NULL, NULL, &lStart, &lInfo);
-        if (!lRetB)
-        {
-            KMS_EXCEPTION_WITH_INFO(PROCESS_START, "CreateProcess failed", mCmdLine);
-        }
-
-        return WaitAndClose(&lInfo);
+        return Run_Internal();
     }
 
-}
-
-// Static function declarations
-// //////////////////////////////////////////////////////////////////////////
-
-void CloseHandles(PROCESS_INFORMATION* aInfo)
-{
-    assert(NULL != aInfo);
-
-    BOOL lRet = CloseHandle(aInfo->hProcess);
-    assert(lRet);
-
-    lRet = CloseHandle(aInfo->hThread);
-    assert(lRet);
-}
-
-int WaitAndClose(PROCESS_INFORMATION* aInfo)
-{
-    assert(NULL != aInfo);
-
-    DWORD lRet = WaitForSingleObject(aInfo->hProcess, 5 * 60 * 1000);
-    if (WAIT_OBJECT_0 != lRet)
-    {
-        CloseHandles(aInfo);
-
-        KMS_EXCEPTION_WITH_INFO(PROCESS_TIMEOUT, "WaitForSingleObject failed", lRet);
-    }
-
-    DWORD lResult;
-
-    if (!GetExitCodeProcess(aInfo->hProcess, &lResult))
-    {
-        CloseHandles(aInfo);
-
-        KMS_EXCEPTION(PROCESS_EXIT_CODE, "GetExitCodeProcess failed");
-    }
-
-    CloseHandles(aInfo);
-
-    return lResult;
 }

@@ -148,6 +148,18 @@ namespace KMS
             CFG_CALL("Processors"    , AddProcessor    );
             CFG_CALL("Tests"         , AddTest         );
 
+            #ifdef _KMS_LINUX_
+                CFG_CALL("LinuxBinaries" , AddBinary);
+                CFG_CALL("LinuxLibraries", AddLibrary);
+                CFG_CALL("LinuxTests"    , AddTest);
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                CFG_CALL("WindowsBinaries" , AddBinary);
+                CFG_CALL("WindowsLibraries", AddLibrary);
+                CFG_CALL("WindowsTests"    , AddTest);
+            #endif
+
             return Configurable::AddAttribute(aA, aV);
         }
 

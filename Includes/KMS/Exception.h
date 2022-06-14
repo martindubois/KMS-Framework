@@ -28,11 +28,12 @@ namespace KMS
             CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
             CONVERT_FORMAT, CONVERT_TYPE,
             DEPENDENCY,
-            FILE_ACCESS, FILE_BACKUP, FILE_COPY, FILE_OPEN,
-                FILE_READ, FILE_RENAME, FILE_WRITE,
-            FOLDER, FOLDER_COMPRESS, FOLDER_CREATE, FOLDER_INIT,
-                FOLDER_REMOVE, FOLDER_UNCOMPRESS,
+            FILE_ACCESS, FILE_BACKUP, FILE_COPY, FILE_DELETE,
+                FILE_OPEN, FILE_READ, FILE_RENAME, FILE_WRITE,
+            FOLDER, FOLDER_ACCESS, FOLDER_COMPRESS, FOLDER_CREATE,
+                FOLDER_INIT, FOLDER_REMOVE, FOLDER_UNCOMPRESS,
             HTTP_REQUEST,
+            MAKE_DEPEND,
             NETWORK_ADDRESS, NETWORK_ADDRESS_RANGE, NETWORK_PORT,
             OUTPUT_TOO_SHORT,
             PROCESS_EXIT_CODE, PROCESS_START, PROCESS_TIMEOUT,
@@ -58,9 +59,12 @@ namespace KMS
         unsigned int GetLastError() const;
         unsigned int GetLine     () const;
 
+        // ===== std::exception =============================================
+        virtual const char* what() const throw();
+
     private:
 
-        void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode);
+        void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage);
 
         Code mCode;
 
@@ -72,6 +76,8 @@ namespace KMS
         std::string mInfo;
 
         unsigned int mLastError;
+
+        std::string mMessage;
 
     };
 

@@ -106,11 +106,11 @@ namespace KMS
 
         if (0 < mType.size())
         {
-            sprintf_s(aOut, aOutSize_byte, "%s_%u.%u.%u-%s", aProduct, mMajor, mMinor, mBuild, mType.c_str());
+            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s", aProduct, mMajor, mMinor, mBuild, mType.c_str());
         }
         else
         {
-            sprintf_s(aOut, aOutSize_byte, "%s_%u.%u.%u", aProduct, mMajor, mMinor, mBuild);
+            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u", aProduct, mMajor, mMinor, mBuild);
         }
     }
 
@@ -118,11 +118,11 @@ namespace KMS
     {
         switch (aElement)
         {
-        case 1: sprintf_s(aOut, aOutSize_byte, "%u", mMajor); break;
-        case 2: sprintf_s(aOut, aOutSize_byte, "%u.%u", mMajor, mMinor); break;
-        case 3: sprintf_s(aOut, aOutSize_byte, "%u.%u.%u", mMajor, mMinor, mBuild); break;
-        case 4: sprintf_s(aOut, aOutSize_byte, "%u.%u.%u.%u", mMajor, mMinor, mBuild, mCompat); break;
-        case 5: sprintf_s(aOut, aOutSize_byte, "%u.%u.%u.%u %s", mMajor, mMinor, mBuild, mCompat, mType.c_str()); break;
+        case 1: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mMajor); break;
+        case 2: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u", mMajor, mMinor); break;
+        case 3: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u", mMajor, mMinor, mBuild); break;
+        case 4: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u", mMajor, mMinor, mBuild, mCompat); break;
+        case 5: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u %s", mMajor, mMinor, mBuild, mCompat, mType.c_str()); break;
 
         default: assert(false);
         }

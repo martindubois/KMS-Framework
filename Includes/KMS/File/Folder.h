@@ -37,6 +37,7 @@ namespace KMS
             static const unsigned int FLAG_RED;
             static const unsigned int FLAG_VERBOSE;
 
+            Folder();
             Folder(Id aId);
             Folder(const char * aPath);
             Folder(const Folder & aRoot, const char * aFolder);
@@ -65,6 +66,10 @@ namespace KMS
             void Create();
 
             void Delete();
+
+            void DeleteFile(const char* aFile);
+
+            void DeleteFiles(const char* aPattern);
 
             // aFlags FLAG_BACKUP, FLAG_RED, FLAG_VERBOSE
             void Rename(const char * aSrc, const char * aDst, unsigned int aFlags = 0) const;

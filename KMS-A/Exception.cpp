@@ -10,8 +10,10 @@
 // ===== C ==================================================================
 #include <stdint.h>
 
-// ===== Windows ============================================================
-#include <Windows.h>
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -25,33 +27,30 @@ namespace KMS
     // //////////////////////////////////////////////////////////////////////
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage)
-        : std::exception(aMessage)
     {
-        assert(NULL != aMessage);
-
-        Construct(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode, aMessage);
     }
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, const char* aInfo)
-        : std::exception(aMessage)
     {
-        assert(NULL != aMessage);
-
-        Construct(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode, aMessage);
 
         mInfo = aInfo;
     }
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, uint64_t aInfo)
-        : std::exception(aMessage)
     {
-        assert(NULL != aMessage);
-
-        Construct(aFile, aFunction, aLine, aCode);
+        Construct(aFile, aFunction, aLine, aCode, aMessage);
 
         char lInfo[64];
 
-        sprintf_s(lInfo, "%llu 0x%llx", aInfo, aInfo);
+        #ifdef _KMS_WINDOWS_
+            sprintf_s(lInfo, "%llu 0x%llx", aInfo, aInfo);
+        #endif
+
+        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUS_ )
+            sprintf_s(lInfo, "%lu 0x%lx", aInfo, aInfo);
+        #endif
 
         mInfo = lInfo;
     }
@@ -64,21 +63,33 @@ namespace KMS
     unsigned int    Exception::GetLastError() const { return mLastError; }
     unsigned int    Exception::GetLine     () const { return mLine; }
 
-    // Provate
+    // ===== std::exception =============================================
+    const char* Exception::what() const throw () { return mMessage.c_str(); }
+
+    // Private
     // //////////////////////////////////////////////////////////////////////
 
-    void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode)
+    void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage)
     {
         assert(NULL != aFile);
         assert(NULL != aFunction);
         assert(0 < aLine);
         assert(Code::CODE_QTY > aCode);
+        assert(NULL != aMessage);
 
         mCode      = aCode;
         mFile      = aFile;
         mFunction  = aFunction;
-        mLastError = ::GetLastError();
         mLine      = aLine;
+        mMessage   = aMessage;
+
+        #ifdef _KMS_WINDOWS_
+            mLastError = ::GetLastError();
+        #endif
+
+        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+            mLastError = errno;
+        #endif
     }
 
 }
@@ -129,11 +140,12 @@ const char* ToCodeName(KMS::Exception::Code aCode)
         "CONFIG", "CONFIG_EXPAND", "CONFIG_FORMAT", "CONFIG_INDEX",
         "CONVERT_FORMAT", "CONVERT_TYPE",
         "DEPENDENCY",
-        "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_OPEN",
-            "FILE_READ", "FILE_RENAME", "FILE_WRITE",
-        "FOLDER", "FOLDER_COMPRESS", "FOLDER_CREATE", "FOLDER_INIT",
-            "FOLDER_REMOVE", "FOLDER_UNCOMPRESS",
+        "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_DELETE",
+            "FILE_OPEN", "FILE_READ", "FILE_RENAME", "FILE_WRITE",
+        "FOLDER", "FOLDER_ACCESS", "FOLDER_COMPRESS", "FOLDER_CREATE",
+            "FOLDER_INIT", "FOLDER_REMOVE", "FOLDER_UNCOMPRESS",
         "HTTP_REQUEST",
+        "MAKE_DEPEND",
         "NETWORK_ADDRESS", "NETWORK_ADDRESS_RANGE", "NETWORK_PORT",
         "OUTPUT_TOO_SHORT",
         "PROCESS_EXIT_CODE", "PROCESS_START", "PROCESS_TIMEOUT",

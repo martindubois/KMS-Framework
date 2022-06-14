@@ -6,6 +6,7 @@ Product   KMS-Framework
 File      _DocUser/KMS.ReadMe.txt
 
 * KMS-FileServer
+* KMS-Make (Linux only)
 
 0.0.3 2022-06-01
 * KMS-Sync
