@@ -16,6 +16,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
 #include <KMS/Convert.h>
+#include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
 

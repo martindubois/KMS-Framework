@@ -11,6 +11,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
+#include <KMS/Environment.h>
 #include <KMS/File/FileInfoList.h>
 
 #include <KMS/File/Sync.h>

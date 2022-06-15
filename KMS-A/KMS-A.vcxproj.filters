@@ -36,9 +36,6 @@
     <ClCompile Include="Test_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Console_Color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Build_Build.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -82,6 +79,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Thread_Lock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Console_Color_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Folder_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Process_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -45,7 +45,8 @@ namespace KMS
 
     int Process::Run()
     {
-        char lExec[MAX_PATH];
+        char lExec[512];
+
         mFolder.GetPath(mExecutable.c_str(), lExec, sizeof(lExec));
 
         std::string lCmdLine = "\"";

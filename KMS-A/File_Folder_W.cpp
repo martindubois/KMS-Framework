@@ -212,7 +212,7 @@ namespace KMS
                 KMS_EXCEPTION_WITH_INFO(FOLDER_INIT, "GetTempFileName failed", lRoot);
             }
 
-            BOOL lRetB = DeleteFile(lFolder);
+            BOOL lRetB = ::DeleteFile(lFolder);
             assert(lRetB);
 
             mPath = lFolder;

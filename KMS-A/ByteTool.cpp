@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/ByteTool.cpp
 
+// TEST COVERAGE 2022-06-14 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C++ ================================================================
@@ -13,6 +15,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
 #include <KMS/Convert.h>
+#include <KMS/Environment.h>
 
 #include <KMS/ByteTool.h>
 
@@ -111,6 +114,7 @@ namespace KMS
     {
         if (BYTE_QTY <= aIndex)
         {
+            // NOT TESTED
             KMS_EXCEPTION_WITH_INFO(CONFIG_INDEX, "The index into the ByteTable must be between 0 and 255", aIndex);
         }
 

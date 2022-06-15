@@ -61,7 +61,7 @@ namespace KMS
 
         Folder::Folder(const Folder& aRoot, const char* aFolder)
         {
-            char lPath[MAX_PATH];
+            char lPath[512];
 
             aRoot.GetPath(aFolder, lPath, sizeof(lPath));
 
@@ -92,7 +92,7 @@ namespace KMS
 
             for (unsigned int i = 0; i < 1000; i++)
             {
-                char lFile[MAX_PATH];
+                char lFile[512];
 
                 sprintf_s(lFile, "%s.%03u.bak", aFile, i);
 
@@ -120,8 +120,8 @@ namespace KMS
         {
             BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
 
-            char lDst[MAX_PATH];
-            char lSrc[MAX_PATH];
+            char lDst[512];
+            char lSrc[512];
 
             GetPath(aDst, lDst, sizeof(lDst));
             GetPath(aSrc, lSrc, sizeof(lSrc));
@@ -133,8 +133,8 @@ namespace KMS
         {
             aDst.BackupIfNeeded(aFile, aFlags & ~FLAG_IGNORE_ERROR);
 
-            char lDst[MAX_PATH];
-            char lSrc[MAX_PATH];
+            char lDst[512];
+            char lSrc[512];
 
             aDst.GetPath(aFile, lDst, sizeof(lDst));
                  GetPath(aFile, lSrc, sizeof(lSrc));
@@ -160,7 +160,7 @@ namespace KMS
         {
             assert(NULL != aVariable);
 
-            char lPath[MAX_PATH];
+            char lPath[512];
 
             Environment::GetVariableValue(aVariable, lPath, sizeof(lPath));
 
