@@ -23,6 +23,8 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest)
         "Unknown=1",
     };
 
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), 0);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_A), 0);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(7, VECTOR_A), 0);
 
     static const char* VECTOR_B[] =
@@ -54,8 +56,6 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Folders+=DoesNotExist_A",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), 2);
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_A), 2);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_A), 2);
 
     static const char* VECTOR_B[] =

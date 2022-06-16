@@ -66,7 +66,7 @@ KMS_TEST(ByteTool_Fail, "ByteTool_Fail", "Auto", sTest_Fail)
 
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONFIG_INDEX);
+    KMS_TEST_CATCH(CONVERT_TYPE);
 }
 
 KMS_TEST(ByteTool_Main, "ByteTool_Main", "Auto", sTest_Main)

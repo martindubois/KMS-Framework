@@ -192,7 +192,7 @@ namespace KMS
                 CFG_IF("Folders") { ClearFolders(aI); AddFolder(aI, aV); return true; }
             }
 
-            return Configurable::SetAttribute_Indexed(aA, aI);
+            return Configurable::SetAttribute_Indexed(aA, aI, aV);
         }
 
         // Private
