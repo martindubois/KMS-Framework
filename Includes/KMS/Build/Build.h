@@ -34,7 +34,6 @@ namespace KMS
             void AddConfiguration(const char * aC);
             void AddEditOperation(const char * aC);
             void AddLibrary      (const char * aL);
-            void AddProcessor    (const char * aP);
             void AddTest         (const char * aT);
 
             void SetDoNotCompile(bool aDNC = true);
@@ -47,9 +46,12 @@ namespace KMS
 
             int Run();
 
+            #ifdef _KMS_WINDOWS_
+                void AddProcessor(const char * aP);
+            #endif
+
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char *aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:
@@ -59,13 +61,16 @@ namespace KMS
             const Build & operator = (const Build &);
 
             void Compile();
+            void Compile(const char* aC);
             void Edit  (const Version & aVersion);
             void Export(const Version & aVersion);
             void Package();
             void Package_Component();
+            void Package_Component(const char* aC);
             void Package_Header();
             void Package_ReadMe();
             void Test();
+            void Test(const char* aC);
             void VerifyConfig();
 
             File::Folder mTempFolder;
@@ -79,11 +84,14 @@ namespace KMS
             StringSet    mEditOperations;
             File::Folder mExportFolder;
             StringSet    mLibraries;
-            StringSet    mProcessors;
             std::string  mProduct;
             std::string  mProductShort;
             StringSet    mTests;
             std::string  mVersionFile;
+
+            #ifdef _KMS_WINDOWS_
+                StringSet mProcessors;
+            #endif
 
         };
 

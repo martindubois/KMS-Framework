@@ -141,7 +141,7 @@ namespace KMS
         {
             assert(NULL != aPattern);
 
-            char lPattern[MAX_PATH];
+            char lPattern[PATH_LENGTH];
             mRoot.GetPath(aPattern, lPattern, sizeof(lPattern));
 
             WIN32_FIND_DATA lData;
@@ -182,7 +182,7 @@ namespace KMS
 
             mFolders.insert(aFullFolder);
 
-            char lPattern[MAX_PATH];
+            char lPattern[PATH_LENGTH];
             lFolder.GetPath(aPattern, lPattern, sizeof(lPattern));
 
             WIN32_FIND_DATA lData;

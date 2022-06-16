@@ -45,7 +45,7 @@ namespace KMS
 
     int Process::Run()
     {
-        char lExec[512];
+        char lExec[PATH_LENGTH];
 
         mFolder.GetPath(mExecutable.c_str(), lExec, sizeof(lExec));
 

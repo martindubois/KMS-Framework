@@ -28,19 +28,18 @@ namespace KMS
 
             ~Make();
 
-            void AddBinary (const char* aB);
-            void AddLibrary(const char* aL);
-            void AddTest   (const char* aT);
+            void AddBinary   (const char* aB);
+            void AddLibrary  (const char* aL);
+            void AddOperation(const char* aO);
+            void AddTest     (const char* aT);
 
             void SetComponent    (const char* aC);
             void SetConfiguration(const char* aC);
-            void SetOperation    (const char* aO);
 
             int Run();
 
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char *aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:
@@ -90,7 +89,7 @@ namespace KMS
             ComponentType mComponentType;
             std::string   mConfiguration;
             StringSet     mLibraries;
-            std::string   mOperation;
+            StringSet     mOperations;
             StringSet     mTests;
 
         };

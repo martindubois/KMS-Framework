@@ -34,7 +34,7 @@ namespace KMS
             char       * lOut = aOut;
             unsigned int lOutSize_byte = aOutSize_byte;
             unsigned int lState = STATE_TEXT;
-            char         lVarName[1024];
+            char         lVarName[NAME_LENGTH];
             unsigned int lVarIndex = 0;
 
             while ('\0' != *lIn)

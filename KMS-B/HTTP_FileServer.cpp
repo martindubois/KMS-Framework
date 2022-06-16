@@ -27,6 +27,8 @@
 
 #define CONFIG_FILE ("KMS-FileServer.cfg")
 
+#define DEFAULT_ROOT (".")
+
 namespace KMS
 {
     namespace HTTP
@@ -97,7 +99,7 @@ namespace KMS
 
                 std::cout << "Press ENTER to stop the file server" << std::endl;
 
-                char lLine[1024];
+                char lLine[LINE_LENGTH];
 
                 fgets(lLine, sizeof(lLine), stdin);
 
@@ -112,7 +114,7 @@ namespace KMS
             return lResult;
         }
 
-        FileServer::FileServer() : mRoot("."), mVerbose(false)
+        FileServer::FileServer() : mRoot(DEFAULT_ROOT), mVerbose(false)
         {
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
@@ -197,24 +199,22 @@ namespace KMS
 
         // ===== Config::Configurable =======================================
 
-        bool FileServer::SetAttribute(const char* aA)
-        {
-            assert(NULL != aA);
-
-            CFG_IF("Verbose") { SetVerbose(); return true; }
-
-            return Configurable::SetAttribute(aA);
-        }
-
         bool FileServer::SetAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
+            if (NULL == aV)
+            {
+                CFG_IF("Root") { SetRoot(DEFAULT_ROOT); return true; }
 
-            char lE[1024];
+                CFG_IF("Verbose") { SetVerbose(); return true; }
+            }
+            else
+            {
+                char lE[LINE_LENGTH];
 
-            CFG_IF("Root") { Environment::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
+                CFG_IF("Root") { Environment::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
 
-            CFG_CONVERT("Verbose", SetVerbose, ToBool);
+                CFG_CONVERT("Verbose", SetVerbose, ToBool);
+            }
 
             return Configurable::SetAttribute(aA, aV);
         }

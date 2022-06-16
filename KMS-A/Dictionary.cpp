@@ -71,8 +71,8 @@ namespace KMS
 
         for (;;)
         {
-            char lName [1024];
-            char lValue[1024];
+            char lName [NAME_LENGTH];
+            char lValue[LINE_LENGTH];
 
             if (2 != sscanf_s(lHTTP, "%[^:]: %[^\r\n]", lName SizeInfo(lName), lValue SizeInfo(lValue)))
             {

@@ -25,10 +25,8 @@ namespace KMS
 
             virtual bool AddAttribute_Indexed(const char* aAttribute, const char* aIndex, const char* aValue);
 
-            virtual bool SetAttribute(const char* aAttribute);
             virtual bool SetAttribute(const char* aAttribute, const char* aValue);
 
-            virtual bool SetAttribute_Indexed(const char* aAttribute, const char* aIndex);
             virtual bool SetAttribute_Indexed(const char* aAttribute, const char* aIndex, const char* aValue);
 
         protected:

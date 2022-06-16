@@ -140,7 +140,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            char lE[1024];
+            char lE[LINE_LENGTH];
 
             CFG_EXPAND("Destinations", AddDestination);
             CFG_EXPAND("Sources"     , AddSource     );
@@ -154,42 +154,43 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            char lE[1024];
+            char lE[LINE_LENGTH];
 
             CFG_IF("Folders") { Environment::Expand(aV, lE, sizeof(lE)); AddFolder(aI, lE); return true; }
 
             return Configurable::AddAttribute_Indexed(aA, aI, aV);
         }
 
-        bool Sync::SetAttribute(const char* aA)
-        {
-            assert(NULL != aA);
-
-            CFG_IF("Destinations") { ClearDestinations(); return true; }
-            CFG_IF("Sources"     ) { ClearSources     (); return true; }
-
-            CFG_IF("Folders") { ClearFolders(DEFAULT_GROUP); return true; }
-
-            return Configurable::SetAttribute(aA);
-        }
-
         bool Sync::SetAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
+            if (NULL == aV)
+            {
+                CFG_IF("Destinations") { ClearDestinations(); return true; }
+                CFG_IF("Sources"     ) { ClearSources     (); return true; }
 
-            char lE[1024];
+                CFG_IF("Folders") { ClearFolders(DEFAULT_GROUP); return true; }
+            }
+            else
+            {
+                char lE[LINE_LENGTH];
 
-            CFG_EXPAND("Destination", SetDestination);
-            CFG_EXPAND("Source"     , SetSource     );
+                CFG_EXPAND("Destination", SetDestination);
+                CFG_EXPAND("Source"     , SetSource     );
+            }
 
             return Configurable::SetAttribute(aA, aV);
         }
 
-        bool Sync::SetAttribute_Indexed(const char* aA, const char* aI)
+        bool Sync::SetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
         {
-            assert(NULL != aA);
-
-            CFG_IF("Folders") { ClearFolders(aI); return true; }
+            if (NULL == aV)
+            {
+                CFG_IF("Folders") { ClearFolders(aI); return true; }
+            }
+            else
+            {
+                CFG_IF("Folders") { ClearFolders(aI); AddFolder(aI, aV); return true; }
+            }
 
             return Configurable::SetAttribute_Indexed(aA, aI);
         }

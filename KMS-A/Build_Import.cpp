@@ -66,7 +66,7 @@ namespace KMS
 
         void Import::ImportDependency(const char* aDependency)
         {
-            char lProduct[1024];
+            char lProduct[LINE_LENGTH];
 
             strcpy_s(lProduct, aDependency);
 
@@ -84,7 +84,7 @@ namespace KMS
                 {
                     File::Folder lProductFolder(lR, lProduct);
 
-                    char lDependency[1024];
+                    char lDependency[LINE_LENGTH];
 
                     sprintf_s(lDependency, "%s.zip", aDependency);
 

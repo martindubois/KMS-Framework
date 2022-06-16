@@ -21,8 +21,6 @@
 
 #define DEFAULT_CONFIGURATION "Debug"
 
-#define DEFAULT_OPERATION "Make"
-
 namespace KMS
 {
     namespace Build
@@ -41,15 +39,14 @@ namespace KMS
 
             try
             {
-                KMS::Build::Make          lM;
                 KMS::Config::Configurator lC;
+                KMS::Build::Make          lM;
 
                 lM.InitConfigurator(&lC);
 
+                lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), "KMS-Build.cfg");
                 lC.ParseArguments(aCount - 1, aVector + 1);
-
-                lC.Init();
 
                 lResult = lM.Run();
             }
@@ -62,7 +59,6 @@ namespace KMS
             : mComponentType(ComponentType::NONE)
             , mConfiguration(DEFAULT_CONFIGURATION)
             , mF_Product(File::Folder::Id::CURRENT)
-            , mOperation(DEFAULT_OPERATION)
         {
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
@@ -70,13 +66,13 @@ namespace KMS
 
         Make::~Make() {}
 
-        void Make::AddBinary (const char* aB) { assert(NULL != aB); mBinaries .insert(aB); }
-        void Make::AddLibrary(const char* aL) { assert(NULL != aL); mLibraries.insert(aL); }
-        void Make::AddTest   (const char* aT) { assert(NULL != aT); mTests    .insert(aT); }
+        void Make::AddBinary   (const char* aB) { assert(NULL != aB); mBinaries  .insert(aB); }
+        void Make::AddLibrary  (const char* aL) { assert(NULL != aL); mLibraries .insert(aL); }
+        void Make::AddOperation(const char* aO) { assert(NULL != aO); mOperations.insert(aO); }
+        void Make::AddTest     (const char* aT) { assert(NULL != aT); mTests     .insert(aT); }
 
         void Make::SetComponent    (const char* aC) { assert(NULL != aC); mComponent     = aC; }
         void Make::SetConfiguration(const char* aC) { assert(NULL != aC); mConfiguration = aC; }
-        void Make::SetOperation    (const char* aO) { assert(NULL != aO); mOperation     = aO; }
 
         int Make::Run()
         {
@@ -87,12 +83,15 @@ namespace KMS
 
             Prepare();
 
-            if      (mOperation == "Clean" ) { Run_Clean(); }
-            else if (mOperation == "Depend") { Run_Depend(); }
-            else if (mOperation == "Make"  ) { Run_Make(); }
-            else
+            for (std::string lO : mOperations)
             {
-                KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid operation", mOperation.c_str());
+                if      (lO == "Clean" ) { Run_Clean (); }
+                else if (lO == "Depend") { Run_Depend(); }
+                else if (lO == "Make"  ) { Run_Make  (); }
+                else
+                {
+                    KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid operation", lO.c_str());
+                }
             }
 
             return 0;
@@ -102,9 +101,10 @@ namespace KMS
 
         bool Make::AddAttribute(const char* aA, const char* aV)
         {
-            CFG_CALL("Binaries" , AddBinary);
-            CFG_CALL("Libraries", AddLibrary);
-            CFG_CALL("Tests"    , AddTest);
+            CFG_CALL("Binaries"  , AddBinary);
+            CFG_CALL("Libraries" , AddLibrary);
+            CFG_CALL("Operations", AddOperation);
+            CFG_CALL("Tests"     , AddTest);
 
             CFG_CALL("LinuxBinaries" , AddBinary);
             CFG_CALL("LinuxLibraries", AddLibrary);
@@ -113,21 +113,25 @@ namespace KMS
             return Configurable::AddAttribute(aA, aV);
         }
 
-        bool Make::SetAttribute(const char *aA)
-        {
-            CFG_IF("Binaries" ) { mBinaries .clear(); return true; }
-            CFG_IF("Component") { mComponent.clear(); return true; }
-            CFG_IF("Libraries") { mLibraries.clear(); return true; }
-            CFG_IF("Tests"    ) { mTests    .clear(); return true; }
-
-            return Configurable::SetAttribute(aA);
-        }
-
         bool Make::SetAttribute(const char* aA, const char* aV)
         {
-            CFG_CALL("Component"    , SetComponent);
-            CFG_CALL("Configuration", SetConfiguration);
-            CFG_CALL("Operation"    , SetOperation);
+            if (NULL == aV)
+            {
+                CFG_IF("Binaries"  ) { mBinaries  .clear(); return true; }
+                CFG_IF("Component" ) { mComponent .clear(); return true; }
+                CFG_IF("Libraries" ) { mLibraries .clear(); return true; }
+                CFG_IF("Operations") { mOperations.clear(); return true; }
+                CFG_IF("Tests"     ) { mTests     .clear(); return true; }
+            }
+            else
+            {
+                CFG_CALL("Component"    , SetComponent);
+                CFG_CALL("Configuration", SetConfiguration);
+
+                CFG_IF("Binary"   ) { mBinaries  .clear(); AddBinary   (aV); return true; }
+                CFG_IF("Library"  ) { mLibraries .clear(); AddLibrary  (aV); return true; }
+                CFG_IF("Operation") { mOperations.clear(); AddOperation(aV); return true; }
+            }
 
             return Configurable::SetAttribute(aA, aV);
         }
@@ -146,6 +150,11 @@ namespace KMS
 
         void Make::Clean_Binary(const char* aB)
         {
+            if (0 == strcmp(aB, "KMS-Make"))
+            {
+                return;
+            }
+
             if (mF_Bin_Cfg.DoesFileExist(aB))
             {
                 mF_Bin_Cfg.DeleteFile(aB);
@@ -161,7 +170,7 @@ namespace KMS
 
         void Make::Clean_Library(const char* aL)
         {
-            char lL[1024];
+            char lL[FILE_LENGTH];
 
             sprintf_s(lL, "%s.a", aL);
 
@@ -233,7 +242,7 @@ namespace KMS
 
             if (0 != lRet)
             {
-                KMS_EXCEPTION_WITH_INFO(MAKE_DEPEND, "Cannot uptdate file dependencies", lP.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(MAKE_MAKE, "Cannot make", lP.GetCmdLine());
             }
         }
 

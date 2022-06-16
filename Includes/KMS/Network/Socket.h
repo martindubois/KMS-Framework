@@ -84,7 +84,6 @@ namespace KMS
 
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char* aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         // Internal

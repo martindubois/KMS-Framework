@@ -12,7 +12,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
-#include <KMS/File/FileInfoList.h>
 #include <KMS/Process.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
@@ -28,15 +27,9 @@
 #define DEFAULT_DO_NOT_COMPILE (false)
 #define DEFAULT_DO_NOT_EXPORT  (false)
 #define DEFAULT_DO_NOT_PACKAGE (false)
-#define DEFAULT_EXPORT_FOLDER  ("K:\\Export")
-#define DEFAULT_VERSION_FILE   ("Common\\Version.h")
+#define DEFAULT_VERSION_FILE   ("Common" SLASH "Version.h")
 
 #define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
-
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define STRING_LEN (1024)
 
 // Static function declarataions
 // //////////////////////////////////////////////////////////////////////////
@@ -84,9 +77,14 @@ namespace KMS
             : mDoNotCompile(DEFAULT_DO_NOT_COMPILE)
             , mDoNotExport(DEFAULT_DO_NOT_EXPORT)
             , mDoNotPackage(DEFAULT_DO_NOT_PACKAGE)
-            , mExportFolder(DEFAULT_EXPORT_FOLDER)
             , mTempFolder(File::Folder::Id::TEMPORARY)
             , mVersionFile(DEFAULT_VERSION_FILE)
+            #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+                , mExportFolder(File::Folder(File::Folder::Id::HOME), "Export")
+            #endif
+            #ifdef _KMS_WINDOWS_
+                , mExportFolder("K:\\Export")
+            #endif
         {
         }
 
@@ -96,7 +94,6 @@ namespace KMS
         void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.insert(aC); }
         void Build::AddEditOperation(const char* aC) { assert(NULL != aC); mEditOperations.insert(aC); }
         void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .insert(aL); }
-        void Build::AddProcessor    (const char* aP) { assert(NULL != aP); mProcessors    .insert(aP); }
         void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .insert(aT); }
 
         void Build::SetDoNotCompile(bool aDNC) { mDoNotCompile = aDNC; }
@@ -145,7 +142,6 @@ namespace KMS
             CFG_CALL("Configurations", AddConfiguration);
             CFG_CALL("EditOperations", AddEditOperation);
             CFG_CALL("Libraries"     , AddLibrary      );
-            CFG_CALL("Processors"    , AddProcessor    );
             CFG_CALL("Tests"         , AddTest         );
 
             #ifdef _KMS_LINUX_
@@ -155,32 +151,29 @@ namespace KMS
             #endif
 
             #ifdef _KMS_WINDOWS_
-                CFG_CALL("WindowsBinaries" , AddBinary);
-                CFG_CALL("WindowsLibraries", AddLibrary);
-                CFG_CALL("WindowsTests"    , AddTest);
+                CFG_CALL("WindowsBinaries"  , AddBinary);
+                CFG_CALL("WindowsLibraries" , AddLibrary);
+                CFG_CALL("WindowsProcessors", AddProcessor);
+                CFG_CALL("WindowsTests"     , AddTest);
             #endif
 
             return Configurable::AddAttribute(aA, aV);
         }
 
-        bool Build::SetAttribute(const char* aA)
-        {
-            assert(NULL != aA);
-
-            CFG_IF("DoNotCompile") { SetDoNotCompile(); return true; }
-            CFG_IF("DoNotExport" ) { SetDoNotExport (); return true; }
-            CFG_IF("DoNotPackage") { SetDoNotPackage(); return true; }
-
-            return Configurable::SetAttribute(aA);
-        }
-
         bool Build::SetAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
-
-            CFG_CALL("Product"     , SetProduct     );
-            CFG_CALL("ProductShort", SetProductShort);
-            CFG_CALL("VersionFile" , SetVersionFile );
+            if (NULL == aV)
+            {
+                CFG_IF("DoNotCompile") { SetDoNotCompile(); return true; }
+                CFG_IF("DoNotExport" ) { SetDoNotExport (); return true; }
+                CFG_IF("DoNotPackage") { SetDoNotPackage(); return true; }
+            }
+            else
+            {
+                CFG_CALL("Product"     , SetProduct     );
+                CFG_CALL("ProductShort", SetProductShort);
+                CFG_CALL("VersionFile" , SetVersionFile );
+            }
 
             return Configurable::SetAttribute(aA, aV);
         }
@@ -192,25 +185,7 @@ namespace KMS
         {
             for (std::string lC : mConfigurations)
             {
-                for (std::string lP : mProcessors)
-                {
-                    File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
-                    File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
-
-                    KMS::Process lProcess(lBin, "MSBuild.exe");
-
-                    lProcess.AddArgument("Solution.sln");
-                    lProcess.AddArgument("/target:rebuild");
-
-                    lProcess.AddArgument(("/Property:Configuration=" + lC).c_str());
-                    lProcess.AddArgument(("/property:Platform="      + lP).c_str());
-
-                    int lRet = lProcess.Run();
-                    if (0 != lRet)
-                    {
-                        KMS_EXCEPTION_WITH_INFO(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
-                    }
-                }
+                Compile(lC.c_str());
             }
         }
 
@@ -220,9 +195,9 @@ namespace KMS
 
             for (std::string lOp : mEditOperations)
             {
-                char lFile[1024];
-                char lRegEx[1024];
-                char lReplace[STRING_LEN];
+                char lFile   [FILE_LENGTH];
+                char lRegEx  [LINE_LENGTH];
+                char lReplace[LINE_LENGTH];
 
                 if (3 != sscanf_s(lOp.c_str(), "%[^;];%[^;];%[^\n\r]", lFile SizeInfo(lFile), lRegEx SizeInfo(lRegEx), lReplace SizeInfo(lReplace)))
                 {
@@ -247,11 +222,16 @@ namespace KMS
         {
             File::Folder lProduct(mExportFolder, mProduct.c_str());
 
-            char lPackage[1024];
+            if (!lProduct.DoesExist())
+            {
+                lProduct.Create();
+            }
+
+            char lPackage[FILE_LENGTH];
 
             aVersion.GetPackageName(mProduct.c_str(), lPackage, sizeof(lPackage));
 
-            char lZip[1024];
+            char lZip[FILE_LENGTH + 4];
 
             sprintf_s(lZip, "%s.zip", lPackage);
 
@@ -275,48 +255,19 @@ namespace KMS
 
             for (std::string lC : mConfigurations)
             {
-                for (std::string lP : mProcessors)
-                {
-                    std::string lCfg = lC;
-
-                    lCfg += "_";
-                    lCfg += lP;
-
-                    File::Folder lBin(lBinaries, lCfg.c_str());
-                    File::Folder lLib(lLibraries, lCfg.c_str());
-                    File::Folder lOut_Src((lP + "\\" + lC).c_str());
-
-                    lBin.Create();
-                    lLib.Create();
-
-                    for (std::string lB : mBinaries)
-                    {
-                        lOut_Src.Copy(lBin, (lB + ".exe").c_str());
-                        lOut_Src.Copy(lBin, (lB + ".pdb").c_str());
-                    }
-
-                    for (std::string lB : mLibraries)
-                    {
-                        lOut_Src.Copy(lLib, (lB + ".lib").c_str());
-                        lOut_Src.Copy(lLib, (lB + ".pdb").c_str());
-                    }
-                }
+                Package_Component(lC.c_str());
             }
         }
 
         void Build::Package_Header()
         {
-            File::Folder lIncludes_Src("Includes");
+            File::Folder lSrc("Includes");
 
-            File::FileInfoList lHeaders(lIncludes_Src, "*", true);
-
-            if (0 < lHeaders.GetCount())
+            if (lSrc.DoesExist())
             {
-                File::Folder lIncludes(mTempFolder, "Includes");
+                File::Folder lDst(mTempFolder, "Includes");
 
-                lIncludes.Create();
-
-                lHeaders.Copy(lIncludes);
+                lSrc.Copy(lDst);
             }
         }
 
@@ -339,19 +290,7 @@ namespace KMS
         {
             for (std::string lC : mConfigurations)
             {
-                for (std::string lP : mProcessors)
-                {
-                    for (std::string lT : mTests)
-                    {
-                        KMS::Process lProcess((lP + "\\" + lC).c_str(), (lT + ".exe").c_str());
-
-                        int lRet = lProcess.Run();
-                        if (0 != lRet)
-                        {
-                            KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
-                        }
-                    }
-                }
+                Test(lC.c_str());
             }
         }
 
@@ -364,10 +303,12 @@ namespace KMS
                     KMS_EXCEPTION(CONFIG, "No configuration");
                 }
 
-                if (0 >= mProcessors.size())
-                {
-                    KMS_EXCEPTION(CONFIG, "No processor");
-                }
+                #ifdef _KMS_WINDOWS_
+                    if (0 >= mProcessors.size())
+                    {
+                        KMS_EXCEPTION(CONFIG, "No processor");
+                    }
+                #endif
             }
 
             if (!mDoNotExport)

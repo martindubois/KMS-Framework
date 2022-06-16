@@ -68,7 +68,7 @@ KMS_TEST(Test_TestManager_Fail1, "Test_TestManager_Fail1", "Fail", sTest_Fail1)
 
 KMS_TEST(Test_TestManager_Fail2, "Test_TestManager_Fail2", "Fai2", sTest_Fail2)
 {
-    throw std::exception("Test");
+    throw std::exception();
 }
 
 KMS_TEST(Test_TestManager_Fail3, "Test_TestManager_Fail3", "Fai3", sTest_Fail3)

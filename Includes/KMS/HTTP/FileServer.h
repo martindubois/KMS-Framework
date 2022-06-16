@@ -52,7 +52,6 @@ namespace KMS
             void ProcessRequest_GET(Request* aR);
 
             // ===== Config::Configurable ===================================
-            virtual bool SetAttribute(const char* aA);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
             // ===== Message::IReceived =====================================

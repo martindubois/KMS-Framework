@@ -27,7 +27,8 @@ namespace KMS
         {
             assert(NULL != aFile);
 
-            char lPath[1024];
+            char lPath[PATH_LENGTH];
+
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ifstream lStream(lPath);
@@ -46,7 +47,8 @@ namespace KMS
 
         void TextFile::Write(const File::Folder& aFolder, const char* aFile)
         {
-            char lPath[1024];
+            char lPath[PATH_LENGTH];
+
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ofstream lStream(lPath);

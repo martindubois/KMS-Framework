@@ -149,23 +149,27 @@ namespace KMS
 
     bool ByteTool::SetAttribute(const char* aA, const char* aV)
     {
-        assert(NULL != aA);
-        assert(NULL != aV);
+        if (NULL != aV)
+        {
+            char lE[LINE_LENGTH];
 
-        char lE[1024];
-
-        CFG_IF("Destination") { Environment::Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
-        CFG_IF("Source"     ) { Environment::Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
+            CFG_IF("Destination") { Environment::Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
+            CFG_IF("Source"     ) { Environment::Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
+        }
 
         return Configurable::SetAttribute(aA, aV);
     }
 
     bool ByteTool::SetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
     {
-        assert(NULL != aA);
-        assert(NULL != aV);
-
-        CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aV)); return true; }
+        if (NULL == aV)
+        {
+            CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aI)); return true; }
+        }
+        else
+        {
+            CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aV)); return true; }
+        }
 
         return Configurable::SetAttribute_Indexed(aA, aI, aV);
     }

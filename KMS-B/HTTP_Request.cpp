@@ -144,7 +144,7 @@ namespace KMS
 
         bool Request::Parse()
         {
-            char lPath[1024];
+            char lPath[PATH_LENGTH];
             char lCmd[1024];
 
             if (4 != sscanf_s(mBuffer, "%[A-Z] %[^ ] HTTP/%u.%u", lCmd SizeInfo(lCmd), lPath SizeInfo(lPath), &mMajor, &mMinor))

@@ -3,10 +3,4 @@ Author    KMS - Martin Dubois, P. Eng.
 Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
-File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
-
-* On Linux
-
-0.0.3 2022-06-01
-
-0.0.2 2022-05-21
+File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt

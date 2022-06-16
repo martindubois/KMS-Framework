@@ -95,7 +95,7 @@ namespace KMS
         {
             assert(NULL != aAR);
 
-            char lA[1024];
+            char lA[LINE_LENGTH];
             unsigned int lM;
 
             if (2 == sscanf_s(aAR, "%[^/]/%u", lA SizeInfo(lA), &lM))

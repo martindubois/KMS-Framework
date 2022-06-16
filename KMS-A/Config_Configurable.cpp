@@ -31,11 +31,7 @@ namespace KMS
 
         bool Configurable::AddAttribute_Indexed(const char*, const char*, const char*) { return false; }
 
-        bool Configurable::SetAttribute(const char*) { return false; }
-
         bool Configurable::SetAttribute(const char*, const char*) { return false; }
-
-        bool Configurable::SetAttribute_Indexed(const char*, const char*) { return false; }
 
         bool Configurable::SetAttribute_Indexed(const char*, const char*, const char*) { return false; }
 

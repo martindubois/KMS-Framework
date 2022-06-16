@@ -35,7 +35,7 @@ namespace KMS
 
         bool Folder::DoesFileExist(const char* aFile) const
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             GetPath(aFile, lPath, sizeof(lPath));
 
@@ -46,7 +46,7 @@ namespace KMS
 
         bool Folder::DoesFolderExist(const char* aFolder) const
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             GetPath(aFolder, lPath, sizeof(lPath));
 
@@ -57,7 +57,7 @@ namespace KMS
 
         void Folder::Compress(const Folder& aFolder, const char* aFile)
         {
-            char lDst[MAX_PATH];
+            char lDst[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
@@ -76,7 +76,7 @@ namespace KMS
 
         void Folder::Uncompress(const Folder& aFolder, const char* aFile)
         {
-            char lSrc[MAX_PATH];
+            char lSrc[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
@@ -90,6 +90,21 @@ namespace KMS
             if (0 != lRet)
             {
                 KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lProcess.GetCmdLine());
+            }
+        }
+
+        void Folder::Copy(const Folder& aDst) const
+        {
+            Process lProcess(Folder(Id::NONE), "cp");
+
+            lProcess.AddArgument("-R");
+            lProcess.AddArgument(mPath.c_str());
+            lProcess.AddArgument(aDst.GetPath());
+
+            int lRet = lProcess.Run();
+            if (0 != lRet)
+            {
+                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lProcess.GetCmdLine());
             }
         }
 
@@ -111,7 +126,7 @@ namespace KMS
 
         void Folder::DeleteFile(const char* aFile)
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             GetPath(aFile, lPath, sizeof(lPath));
 
@@ -123,7 +138,7 @@ namespace KMS
 
         void Folder::DeleteFiles(const char* aPattern)
         {
-            char lPattern[MAX_PATH];
+            char lPattern[PATH_LENGTH];
 
             GetPath(aPattern, lPattern, sizeof(lPattern));
 
@@ -143,8 +158,8 @@ namespace KMS
         {
             BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
 
-            char lDst[MAX_PATH];
-            char lSrc[MAX_PATH];
+            char lDst[PATH_LENGTH];
+            char lSrc[PATH_LENGTH];
 
             GetPath(aDst, lDst, sizeof(lDst));
             GetPath(aSrc, lSrc, sizeof(lSrc));
@@ -188,7 +203,7 @@ namespace KMS
 
         void Folder::Init_Executable()
         {
-            char lModule[MAX_PATH];
+            char lModule[PATH_LENGTH];
 
             ssize_t lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
             if ((0 >= lRet) || (sizeof(lModule) <= lRet))
@@ -209,7 +224,7 @@ namespace KMS
 
         void Folder::Init_Temporary()
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             strcpy(lPath, "/tmp/KMSXXXXXX");
 

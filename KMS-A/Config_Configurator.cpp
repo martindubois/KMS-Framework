@@ -82,7 +82,7 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            char lE[1024];
+            char lE[LINE_LENGTH];
 
             CFG_EXPAND("ConfigFile"        , AddConfigFile        );
             CFG_EXPAND("OptionalConfigFile", AddOptionalConfigFile);
@@ -97,9 +97,9 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            char lA[1024];
-            char lI[1024];
-            char lV[1024];
+            char lA[NAME_LENGTH];
+            char lI[NAME_LENGTH];
+            char lV[LINE_LENGTH];
 
             if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ] += " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
             {
@@ -115,9 +115,9 @@ namespace KMS
 
             if (2 == sscanf_s(aLine, FMT_ATT " = "  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { CallSetAttribute(lA, lV); return; }
 
-            if (2 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ]", lA SizeInfo(lA), lI SizeInfo(lI))) { SetAttribute_Indexed(lA, lI); return; }
+            if (2 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ]", lA SizeInfo(lA), lI SizeInfo(lI))) { CallSetAttribute_Indexed(lA, lI, NULL); return; }
 
-            if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { SetAttribute(lA); return; }
+            if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { CallSetAttribute(lA, NULL); return; }
 
             KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid configuration format", aLine);
         }
@@ -142,10 +142,6 @@ namespace KMS
 
         void Configurator::CallAddAttribute_Indexed(const char* aA, const char* aI, const char* aV)
         {
-            assert(NULL != aA);
-            assert(NULL != aI);
-            assert(NULL != aV);
-
             for (Configurable* lC : mConfigurables)
             {
                 assert(NULL != lC);
@@ -159,28 +155,8 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::CallSetAttribute(const char* aA)
-        {
-            assert(NULL != aA);
-
-            for (Configurable* lC : mConfigurables)
-            {
-                assert(NULL != lC);
-
-                if (lC->SetAttribute(aA))
-                {
-                    return;
-                }
-            }
-
-            mIgnoredCount++;
-        }
-
         void Configurator::CallSetAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
-            assert(NULL != aV);
-
             for (Configurable* lC : mConfigurables)
             {
                 assert(NULL != lC);
@@ -196,9 +172,6 @@ namespace KMS
 
         void Configurator::CallSetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
         {
-            assert(NULL != aA);
-            assert(NULL != aV);
-
             for (Configurable* lC : mConfigurables)
             {
                 assert(NULL != lC);

@@ -16,6 +16,7 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_LOCAL_ADDRESS   ("127.0.0.1")
+#define DEFAULT_LOCAL_PORT      (0)
 #define DEFAULT_RECEIVE_TIMEOUT (1000)
 #define DEFAULT_SEND_TIMEOUT    (1000)
 
@@ -194,26 +195,26 @@ namespace KMS
             return Configurable::AddAttribute(aA, aV);
         }
 
-        bool Socket::SetAttribute(const char* aA)
-        {
-            assert(NULL != aA);
-
-            CFG_IF("Allow") { mAllow.Clear(); return true; }
-
-            return Configurable::SetAttribute(aA);
-        }
-
         bool Socket::SetAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
+            if (NULL == aV)
+            {
+                CFG_IF("Allow"         ) { mAllow.Clear(); return true; }
+                CFG_IF("LocalAddress"  ) { SetLocalAddress  (DEFAULT_LOCAL_ADDRESS  ); return true; }
+                CFG_IF("LocalPort"     ) { SetLocalPort     (DEFAULT_LOCAL_PORT     ); return true; }
+                CFG_IF("ReceiveTimeout") { SetReceiveTimeout(DEFAULT_RECEIVE_TIMEOUT); return true; }
+                CFG_IF("SendTimeout"   ) { SetSendTimeout   (DEFAULT_SEND_TIMEOUT   ); return true; }
+            }
+            else
+            {
+                CFG_CALL("LocalAddress", SetLocalAddress);
 
-            CFG_CALL("LocalAddress", SetLocalAddress);
+                CFG_CONVERT("LocalPort"     , SetLocalPort     , ToUInt16);
+                CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, ToUInt32);
+                CFG_CONVERT("SendTimeout"   , SetSendTimeout   , ToUInt32);
 
-            CFG_CONVERT("LocalPort"     , SetLocalPort     , ToUInt16);
-            CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, ToUInt32);
-            CFG_CONVERT("ReceiveTimeout", SetSendTimeout   , ToUInt32);
-
-            CFG_IF("Allow") { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
+                CFG_IF("Allow") { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
+            }
 
             return Configurable::SetAttribute(aA, aV);
         }

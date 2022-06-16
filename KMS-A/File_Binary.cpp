@@ -22,7 +22,7 @@ namespace KMS
 
         Binary::Binary(const Folder& aFolder, const char* aFile, bool aWrite)
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 

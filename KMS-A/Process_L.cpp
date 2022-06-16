@@ -30,7 +30,7 @@ namespace KMS
 
         bool lCD = 0 < mWorkingDirectory.size();
 
-        char lDir[MAX_PATH];
+        char lDir[PATH_LENGTH];
 
         if (lCD)
         {

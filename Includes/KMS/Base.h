@@ -30,6 +30,11 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
+#define FILE_LENGTH (256)
+#define LINE_LENGTH (512)
+#define NAME_LENGTH (128)
+#define PATH_LENGTH (512)
+
 #ifdef _KMS_WINDOWS_
     #define SLASH   "\\"
     #define SLASH_C '\\'

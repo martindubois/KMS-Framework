@@ -120,7 +120,7 @@ namespace KMS
             if      (0 == _strnicmp(aA, "IPv4:", 5)) { SetType(Type::IPv4); lA += 5; }
             else if (0 == _strnicmp(aA, "IPv6:", 5)) { SetType(Type::IPv6); lA += 5; }
 
-            char lN[1024];
+            char lN[LINE_LENGTH];
             unsigned int lP;
 
             if (2 == sscanf_s(lA, "%[^:]:%u", lN SizeInfo(lN), &lP)) { SetAddress(lN); SetPortNumber(lP); return; }

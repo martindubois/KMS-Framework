@@ -42,7 +42,7 @@ namespace KMS
 
         bool Folder::DoesFileExist(const char* aFile) const
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             GetPath(aFile, lPath, sizeof(lPath));
 
@@ -54,7 +54,7 @@ namespace KMS
 
         bool Folder::DoesFolderExist(const char* aFolder) const
         {
-            char lPath[MAX_PATH];
+            char lPath[PATH_LENGTH];
 
             GetPath(aFolder, lPath, sizeof(lPath));
 
@@ -66,7 +66,7 @@ namespace KMS
 
         void Folder::Compress(const Folder& aFolder, const char* aFile)
         {
-            char lDst[MAX_PATH];
+            char lDst[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
@@ -89,7 +89,7 @@ namespace KMS
 
         void Folder::Uncompress(const Folder& aFolder, const char* aFile)
         {
-            char lSrc[MAX_PATH];
+            char lSrc[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
@@ -131,8 +131,8 @@ namespace KMS
         {
             BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
 
-            char lDst[MAX_PATH];
-            char lSrc[MAX_PATH];
+            char lDst[PATH_LENGTH];
+            char lSrc[PATH_LENGTH];
 
             GetPath(aDst, lDst, sizeof(lDst));
             GetPath(aSrc, lSrc, sizeof(lSrc));
@@ -174,7 +174,7 @@ namespace KMS
 
         void Folder::Init_Executable()
         {
-            char lModule[MAX_PATH];
+            char lModule[PATH_LENGTH];
 
             DWORD lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
             if ((0 >= lRet) || (sizeof(lModule) <= lRet))
@@ -195,7 +195,7 @@ namespace KMS
 
         void Folder::Init_Temporary()
         {
-            char lRoot[MAX_PATH];
+            char lRoot[PATH_LENGTH];
 
             unsigned int lLength = sizeof(lRoot) / sizeof(lRoot[0]);
 
@@ -205,7 +205,7 @@ namespace KMS
                 KMS_EXCEPTION(FOLDER_INIT, "GetTempPath failed");
             }
 
-            char lFolder[MAX_PATH];
+            char lFolder[PATH_LENGTH];
 
             if (0 == GetTempFileName(lRoot, "KMS_", 0, lFolder))
             {
