@@ -6,6 +6,7 @@
 // File      KMS-A/Version.cpp
 
 // TEST COVERAGE 2022-06-16 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================

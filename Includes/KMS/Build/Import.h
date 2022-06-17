@@ -37,6 +37,7 @@ namespace KMS
 
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
+            virtual void DisplayHelp(FILE* aOut) const;
 
         private:
 

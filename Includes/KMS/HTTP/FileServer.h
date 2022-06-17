@@ -53,6 +53,7 @@ namespace KMS
 
             // ===== Config::Configurable ===================================
             virtual bool SetAttribute(const char* aA, const char* aV);
+            virtual void DisplayHelp(FILE* aOut) const;
 
             // ===== Message::IReceived =====================================
             bool Receive(void* aSender, unsigned int aCode, void* aData);

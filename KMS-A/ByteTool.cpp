@@ -61,7 +61,7 @@ namespace KMS
             lBT.InitConfigurator(&lC);
 
             lC.Init();
-            lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE, false);
+            lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE);
             lC.ParseArguments(aCount - 1, aVector + 1);
 
             lResult = lBT.Run();
@@ -80,6 +80,12 @@ namespace KMS
             mByteTable[i] = static_cast<uint8_t>(i);
             mHistogram[i] = 0;
         }
+    }
+
+    ByteTool::~ByteTool()
+    {
+        CloseFile(mDestination);
+        CloseFile(mSource);
     }
 
     const unsigned int* ByteTool::GetHistrogram() const { return mHistogram; }
@@ -141,12 +147,6 @@ namespace KMS
 
     // ===== Config/IConfigurable ===========================================
 
-    ByteTool::~ByteTool()
-    {
-        CloseFile(mDestination);
-        CloseFile(mSource);
-    }
-
     bool ByteTool::SetAttribute(const char* aA, const char* aV)
     {
         if (NULL != aV)
@@ -172,6 +172,27 @@ namespace KMS
         }
 
         return Configurable::SetAttribute_Indexed(aA, aI, aV);
+    }
+
+    void ByteTool::DisplayHelp(FILE* aOut) const
+    {
+        fprintf(aOut,
+            "===== KMS::ByteTool =====\n"
+            "ByteTable[{Index}]\n"
+            "    Set an entry into the byte table to the default value\n"
+            "    0 <= Index <= 255\n"
+            "    Default: The index\n"
+            "ByteTable[{Index}] = {Value}\n"
+            "    Set an entry into the byte table\n"
+            "    0 <= Index <= 255\n"
+            "    0 <= Value <= 255\n"
+            "Destination = {Path}\n"
+            "    Set the destination\n"
+            "Source = {Path}\n"
+            "    Set the source\n"
+            "    Mandatory\n");
+
+        Configurable::DisplayHelp(aOut);
     }
 
     // Private

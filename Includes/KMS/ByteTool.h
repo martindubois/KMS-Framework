@@ -39,6 +39,7 @@ namespace KMS
         // ===== Config::Configurable =======================================
         virtual bool SetAttribute(const char* aA, const char* aV);
         virtual bool SetAttribute_Indexed(const char* aA, const char* aI, const char * aV);
+        virtual void DisplayHelp(FILE* aOut) const;
         
     private:
 

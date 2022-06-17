@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Process.h>
+
 #include <KMS/Build/Build.h>
 
 // Configuration
@@ -40,7 +42,7 @@ namespace KMS
                 lProcess.AddArgument("Solution.sln");
                 lProcess.AddArgument("/target:rebuild");
 
-                lProcess.AddArgument(("/Property:Configuration=" + lC).c_str());
+                lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
                 lProcess.AddArgument(("/property:Platform="      + lP).c_str());
 
                 if (0 != lProcess.Run())
@@ -64,7 +66,7 @@ namespace KMS
 
                 File::Folder lBin(lBinaries, lCfg.c_str());
                 File::Folder lLib(lLibraries, lCfg.c_str());
-                File::Folder lOut_Src((lP + "\\" + lC).c_str());
+                File::Folder lOut_Src((lP + "\\" + aC).c_str());
 
                 lBin.Create();
                 lLib.Create();

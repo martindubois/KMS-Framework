@@ -15,10 +15,10 @@
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
-#define DEFAULT_LOCAL_ADDRESS   ("127.0.0.1")
-#define DEFAULT_LOCAL_PORT      (0)
-#define DEFAULT_RECEIVE_TIMEOUT (1000)
-#define DEFAULT_SEND_TIMEOUT    (1000)
+#define DEFAULT_LOCAL_ADDRESS      ("127.0.0.1")
+#define DEFAULT_LOCAL_PORT         (0)
+#define DEFAULT_RECEIVE_TIMEOUT_ms (1000)
+#define DEFAULT_SEND_TIMEOUT_ms    (1000)
 
 namespace KMS
 {
@@ -51,8 +51,8 @@ namespace KMS
         Socket::Socket(Type aType)
             : mBroadcastReceive(false)
             , mLocalAddress     (DEFAULT_LOCAL_ADDRESS)
-            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT)
-            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT)
+            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms)
+            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms)
             , mSocket(INVALID_SOCKET)
             , mState(State::CLOSED)
             , mType(aType)
@@ -200,10 +200,10 @@ namespace KMS
             if (NULL == aV)
             {
                 CFG_IF("Allow"         ) { mAllow.Clear(); return true; }
-                CFG_IF("LocalAddress"  ) { SetLocalAddress  (DEFAULT_LOCAL_ADDRESS  ); return true; }
-                CFG_IF("LocalPort"     ) { SetLocalPort     (DEFAULT_LOCAL_PORT     ); return true; }
-                CFG_IF("ReceiveTimeout") { SetReceiveTimeout(DEFAULT_RECEIVE_TIMEOUT); return true; }
-                CFG_IF("SendTimeout"   ) { SetSendTimeout   (DEFAULT_SEND_TIMEOUT   ); return true; }
+                CFG_IF("LocalAddress"  ) { SetLocalAddress  (DEFAULT_LOCAL_ADDRESS     ); return true; }
+                CFG_IF("LocalPort"     ) { SetLocalPort     (DEFAULT_LOCAL_PORT        ); return true; }
+                CFG_IF("ReceiveTimeout") { SetReceiveTimeout(DEFAULT_RECEIVE_TIMEOUT_ms); return true; }
+                CFG_IF("SendTimeout"   ) { SetSendTimeout   (DEFAULT_SEND_TIMEOUT_ms   ); return true; }
             }
             else
             {
@@ -217,6 +217,40 @@ namespace KMS
             }
 
             return Configurable::SetAttribute(aA, aV);
+        }
+
+        void Socket::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::Network::Socket =====\n"
+                "Allow\n"
+                "    Clear the allower address range list\n"
+                "Allow = {AddressRange}\n"
+                "    Set the allowed address range\n"
+                "Allow += {AddressRange}\n"
+                "    Add an allower address range\n"
+                "LocalAddress\n"
+                "    Default: %s\n"
+                "LocalAddress = {Address}\n"
+                "    Set the local address\n"
+                "LocalPort\n"
+                "    Default: %u\n"
+                "LocalPort = {Port}\n"
+                "    Set the local port\n"
+                "ReceiveTimeout\n"
+                "    Default: %u ms\n"
+                "ReceiveTimeout = {Timeout}\n"
+                "    Set the receive timeout (in ms)\n"
+                "SendTimeout\n"
+                "    Default: %u ms\n"
+                "SendTimeout = {Timeout}\n"
+                "    Set the send timeout (in ms)\n",
+                DEFAULT_LOCAL_ADDRESS,
+                DEFAULT_LOCAL_PORT,
+                DEFAULT_RECEIVE_TIMEOUT_ms,
+                DEFAULT_SEND_TIMEOUT_ms);
+
+            Configurable::DisplayHelp(aOut);
         }
 
         // Internal

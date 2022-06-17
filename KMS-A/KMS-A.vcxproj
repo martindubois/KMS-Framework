@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Build_Build.cpp" />
+    <ClCompile Include="Build_Build_W.cpp" />
     <ClCompile Include="Build_Import.cpp" />
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Config_Configurable.cpp" />

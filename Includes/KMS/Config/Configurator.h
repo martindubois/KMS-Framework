@@ -33,15 +33,19 @@ namespace KMS
             void AddOptionalConfigFile(const char* aPath);
 
             unsigned int GetIgnoredCount() const;
-            
+
+            void Help(FILE* aOut = NULL) const;
+
             void Init();
 
             void ParseArguments(int aCount, const char ** aVector);
 
-            void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = true);
+            void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = false);
 
             // ===== Configurable ===========================================
             virtual bool AddAttribute(const char* aA, const char* aV);
+            virtual bool SetAttribute(const char* aA, const char* aV);
+            virtual void DisplayHelp(FILE* aOut) const;
 
         private:
 

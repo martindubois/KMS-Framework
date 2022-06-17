@@ -111,6 +111,21 @@ namespace KMS
             }
         }
 
+        void Folder::Copy(const Folder& aDst) const
+        {
+            Process lProcess(Folder(Id::NONE), "xcopy");
+
+            lProcess.AddArgument("/CEKIV");
+            lProcess.AddArgument(mPath.c_str());
+            lProcess.AddArgument(aDst.GetPath());
+
+            int lRet = lProcess.Run();
+            if (0 != lRet)
+            {
+                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lProcess.GetCmdLine());
+            }
+        }
+
         void Folder::Create()
         {
             if (!CreateDirectory(mPath.c_str(), NULL))

@@ -54,9 +54,9 @@ namespace KMS
                 lS.InitConfigurator(&lC);
 
                 lC.Init();
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::HOME), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE, false);
+                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 lResult = lS.Run();
@@ -193,6 +193,40 @@ namespace KMS
             }
 
             return Configurable::SetAttribute_Indexed(aA, aI, aV);
+        }
+
+        void Sync::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::File::Sync =====\n"
+                "Destination = {Path}\n"
+                "    Set a destination\n"
+                "    A matching source must be set\n"
+                "Destinations\n"
+                "    Clear all destinations\n"
+                "Destinations += {Path}\n"
+                "    Add a destination\n"
+                "    A matching source must be added\n"
+                "Folders\n"
+                "    Clear folders in the Default group\n"
+                "Folders += {Path}\n"
+                "    Add a folder in the Default group\n"
+                "Folders[{Group}]\n"
+                "    Clear folders in the specified group\n"
+                "Folders[{Group}] = {Path}\n"
+                "    Set a folder in the specified group\n"
+                "Folders[{Group}] += {Path}\n"
+                "    Add a folder in the specified group\n"
+                "Source = {Path}\n"
+                "    Set a source\n"
+                "    A matching destination must be set\n"
+                "Sources\n"
+                "    Clear all sources\n"
+                "Sources += {Path}\n"
+                "    Add a source\n"
+                "    A matching destination must be added\n");
+
+            Configurable::DisplayHelp(aOut);
         }
 
         // Private

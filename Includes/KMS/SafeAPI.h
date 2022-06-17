@@ -15,8 +15,8 @@
 
 #ifdef _KMS_WINDOWS_
 
-    #define SizeInfo(V)  , static_cast<unsigned int>(sizeof(V))
-    #define SizeInfoV(V) , V
+    #define SizeInfo(V)  , static_cast<unsigned int>(sizeof(V) - 1)
+    #define SizeInfoV(V) , ((V) - 1)
 
 #endif
 

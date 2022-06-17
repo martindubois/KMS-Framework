@@ -33,7 +33,8 @@ namespace KMS
             int Run();
 
             // ===== Config::Configurable ===================================
-            bool AddAttribute(const char* aA, const char* aValue);
+            virtual bool AddAttribute(const char* aA, const char* aValue);
+            virtual void DisplayHelp(FILE* aOut) const;
 
         // internal
 

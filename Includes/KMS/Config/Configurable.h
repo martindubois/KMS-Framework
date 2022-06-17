@@ -29,6 +29,8 @@ namespace KMS
 
             virtual bool SetAttribute_Indexed(const char* aAttribute, const char* aIndex, const char* aValue);
 
+            virtual void DisplayHelp(FILE* aOut) const;
+
         protected:
 
             Configurable();

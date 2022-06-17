@@ -90,9 +90,9 @@ namespace KMS
                 lS.mSocket.InitConfigurator(&lC);
 
                 lC.Init();
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE, false);
+                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 lS.mThread.Start();
@@ -217,6 +217,23 @@ namespace KMS
             }
 
             return Configurable::SetAttribute(aA, aV);
+        }
+
+        void FileServer::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::HTTP::FileServer =====\n"
+                "Root\n"
+                "    Default: %s\n"
+                "Root = {Path}\n"
+                "    Set the root\n"
+                "Verbose\n"
+                "    Set the verbose flag\n"
+                "Verbose = {Boolean}\n"
+                "    Set or clear the verbose flag\n",
+                DEFAULT_ROOT);
+
+            Configurable::DisplayHelp(aOut);
         }
 
         // ===== Message::IReceiver =========================================

@@ -112,6 +112,18 @@ namespace KMS
             return false;
         }
 
+        void TestManager::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::Test::TestManager =====\n"
+                "Group += {Name}\n"
+                "    Add the test of the group to the tests to run\n"
+                "Test += {Name}\n"
+                "    Add the test to the tests to run\n");
+
+            Configurable::DisplayHelp(aOut);
+        }
+
         // Internal
         // //////////////////////////////////////////////////////////////////
 

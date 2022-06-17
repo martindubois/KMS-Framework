@@ -44,8 +44,8 @@ namespace KMS
                 lI.InitConfigurator(&lC);
 
                 lC.Init();
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 lResult = lI.Run();
@@ -140,6 +140,42 @@ namespace KMS
             #endif
 
             return Configurable::AddAttribute(aA, aV);
+        }
+
+        void Import::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::Build::Import =====\n"
+                "Dependencies += {Product};{Version}\n"
+                "    Add a dependency\n"
+                "Repositories += {Path}\n"
+                "    Add a repository\n");
+
+            #ifdef _KMS_DARWIN_
+                fprintf(aOut,
+                    "DarawinDependencies += {Product};{Version}\n"
+                    "    See Dependencies\n"
+                    "DarwinRepositories += {Path}\n"
+                    "    See repositories\n");
+            #endif
+
+            #ifdef _KMS_LINUX_
+                fprintf(aOut,
+                    "LinuxDependencies += {Product};{Version}\n"
+                    "    See Dependencies\n"
+                    "LinuxRepositories += {Path}\n"
+                    "    See repositories\n");
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                fprintf(aOut,
+                    "WindowsDependencies += {Product};{Version}\n"
+                    "    See Dependencies\n"
+                    "WindowsRepositories += {Path}\n"
+                    "    See repositories\n");
+            #endif
+
+            Configurable::DisplayHelp(aOut);
         }
 
     }

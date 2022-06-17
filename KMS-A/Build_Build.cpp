@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
+#include <KMS/Convert.h>
 #include <KMS/Process.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
@@ -62,8 +63,8 @@ namespace KMS
                 lB.InitConfigurator(&lC);
 
                 lC.Init();
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE, false);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
+                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE, true);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 lResult = lB.Run();
@@ -144,6 +145,12 @@ namespace KMS
             CFG_CALL("Libraries"     , AddLibrary      );
             CFG_CALL("Tests"         , AddTest         );
 
+            #ifdef _KMS_DARWIN_
+                CFG_CALL("DarwinBinaries" , AddBinary);
+                CFG_CALL("DarwinLibraries", AddLibrary);
+                CFG_CALL("DarwinTests"    , AddTest);
+            #endif
+
             #ifdef _KMS_LINUX_
                 CFG_CALL("LinuxBinaries" , AddBinary);
                 CFG_CALL("LinuxLibraries", AddLibrary);
@@ -167,15 +174,91 @@ namespace KMS
                 CFG_IF("DoNotCompile") { SetDoNotCompile(); return true; }
                 CFG_IF("DoNotExport" ) { SetDoNotExport (); return true; }
                 CFG_IF("DoNotPackage") { SetDoNotPackage(); return true; }
+                CFG_IF("VersionFile" ) { SetVersionFile(DEFAULT_VERSION_FILE); return true; }
             }
             else
             {
                 CFG_CALL("Product"     , SetProduct     );
                 CFG_CALL("ProductShort", SetProductShort);
                 CFG_CALL("VersionFile" , SetVersionFile );
+
+                CFG_CONVERT("DoNotCompile", SetDoNotCompile, ToBool);
+                CFG_CONVERT("DoNotExport" , SetDoNotExport , ToBool);
+                CFG_CONVERT("DoNotPackage", SetDoNotPackage, ToBool);
             }
 
             return Configurable::SetAttribute(aA, aV);
+        }
+
+        void Build::DisplayHelp(FILE* aOut) const
+        {
+            fprintf(aOut,
+                "===== KMS::Build::Build =====\n"
+                "Binaries += {Name}\n"
+                "    Add a builded binary\n"
+                "Configurations += {Name}\n"
+                "    Add a build configuration\n"
+                "DoNotCompile\n"
+                "    Set the do not compile flag\n"
+                "DoNotCompile = {Boolean}\n"
+                "    Set or clear the do not compile flag\n"
+                "DoNotExport\n"
+                "    Set the do not export flag\n"
+                "DoNotExport = {Boolean}\n"
+                "    Set or clear the do not compile flag\n"
+                "DoNotPackage\n"
+                "    Set the do not package flag\n"
+                "DoNotPackage = {Boolean}\n"
+                "    Set or clear the do not package flag\n"
+                "EditOperations += {Path};{RegEx};{Line}\n"
+                "    Add an edit operations to change the version in a text file\n"
+                "Libraries += {Name}\n"
+                "    Add a builded library\n"
+                "Product = {Name}\n"
+                "    Set the product name\n"
+                "    Mandatory\n"
+                "ProductShort = {Name}\n"
+                "    Set the product short name\n"
+                "    Mandatory\n"
+                "Tests += {Name}\n"
+                "    Add a builded and executed test program\n"
+                "VersionFile\n"
+                "    Default: %s\n"
+                "VersionFile = {Path}\n"
+                "    Set the version file.\n",
+                DEFAULT_VERSION_FILE);
+
+            #ifdef _KMS_DARWIN_
+                fprintf(aOut,
+                    "DarwinBinaries += {Name}\n"
+                    "    See Bionaries\n"
+                    "DarwinLibraries += {Name}\n"
+                    "    See Libraries\n"
+                    "DarwinTests += {Name}\n"
+                    "    See Tests\n");
+            #endif
+
+            #ifdef _KMS_LINUX_
+                fprintf(aOut,
+                    "LinuxBinaries += {Name}\n"
+                    "    See Bionaries\n"
+                    "LinuxLibraries += {Name}\n"
+                    "    See Libraries\n"
+                    "LinuxTests += {Name}\n"
+                    "    See Tests\n");
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                fprintf(aOut,
+                    "WindowsBinaries += {Name}\n"
+                    "    See Bionaries\n"
+                    "WindowsLibraries += {Name}\n"
+                    "    See Libraries\n"
+                    "WindowsTests += {Name}\n"
+                    "    See Tests\n");
+            #endif
+
+            Configurable::DisplayHelp(aOut);
         }
 
         // Private

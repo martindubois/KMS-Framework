@@ -35,6 +35,8 @@ namespace KMS
 
         bool Configurable::SetAttribute_Indexed(const char*, const char*, const char*) { return false; }
 
+        void Configurable::DisplayHelp(FILE* aOut) const { fprintf(aOut, "\n"); }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 

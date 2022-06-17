@@ -79,12 +79,13 @@ namespace KMS
 
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
-            // ===== Configurable attributes ================================
-            AddressRangeList mAllow;
-
             // ===== Config::Configurable ===================================
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool SetAttribute(const char* aA, const char* aV);
+            virtual void DisplayHelp(FILE* aOut) const;
+
+            // ===== Configurable attributes ================================
+            AddressRangeList mAllow;
 
         // Internal
 
