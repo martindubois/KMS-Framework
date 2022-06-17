@@ -42,7 +42,7 @@ namespace KMS
             STATE,
             TEST,
             THREAD_START,
-            VERSION_FILE, VERSION_NUMBER,
+            VERSION_FILE, VERSION_FORMAT, VERSION_NUMBER,
 
             CODE_QTY
         };

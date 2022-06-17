@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
+#include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
 
@@ -66,17 +67,19 @@ namespace KMS
 
         void Import::ImportDependency(const char* aDependency)
         {
-            char lProduct[LINE_LENGTH];
+            char lProduct[NAME_LENGTH];
+            char lVersion[NAME_LENGTH];
 
-            strcpy_s(lProduct, aDependency);
-
-            char* lPtr = strrchr(lProduct, '_');
-            if (NULL == lPtr)
+            if (2 != sscanf_s(aDependency, "%[^;] ; %[^\n\r]", lProduct SizeInfo(lProduct), lVersion SizeInfo(lVersion)))
             {
                 KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid dependency", aDependency);
             }
 
-            *lPtr = '\0';
+            Version lV(lVersion);
+
+            char lPackage[FILE_LENGTH];
+
+            lV.GetPackageName(lProduct, lPackage, sizeof(lPackage));
 
             for (File::Folder& lR : mRepositories)
             {
@@ -84,13 +87,9 @@ namespace KMS
                 {
                     File::Folder lProductFolder(lR, lProduct);
 
-                    char lDependency[LINE_LENGTH];
-
-                    sprintf_s(lDependency, "%s.zip", aDependency);
-
-                    if (lProductFolder.DoesFileExist(lDependency))
+                    if (lProductFolder.DoesFileExist(lPackage))
                     {
-                        mImport.Uncompress(lProductFolder, lDependency);
+                        mImport.Uncompress(lProductFolder, lPackage);
                         return;
                     }
                 }
@@ -124,6 +123,21 @@ namespace KMS
 
             CFG_CALL("Dependencies", AddDependency);
             CFG_CALL("Repositories", AddRepository);
+
+            #ifdef _KMS_DARWIN_
+                CFG_CALL("DarwinDependencies", AddDependency);
+                CFG_CALL("DarwinRepositories", AddRepository);
+            #endif
+
+            #ifdef _KMS_LINUX_
+                CFG_CALL("LinuxDependencies", AddDependency);
+                CFG_CALL("LinuxRepositories", AddRepository);
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                CFG_CALL("WindowsDependencies", AddDependency);
+                CFG_CALL("WindowsRepositories", AddRepository);
+            #endif
 
             return Configurable::AddAttribute(aA, aV);
         }

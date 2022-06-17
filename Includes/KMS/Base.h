@@ -36,6 +36,8 @@
 #define PATH_LENGTH (512)
 
 #ifdef _KMS_WINDOWS_
+    #define OS_NAME "Windows"
+
     #define SLASH   "\\"
     #define SLASH_C '\\'
 #endif
@@ -43,4 +45,10 @@
 #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
     #define SLASH   "/"
     #define SLASH_C '/'
+#endif
+
+#ifdef OS_PROC
+    #define OS_NAME_PROC OS_NAME "_" OS_PROC
+#else
+    #define OS_NAME_PROC OS_NAME
 #endif

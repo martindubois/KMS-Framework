@@ -270,6 +270,7 @@
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Thread_Lock.cpp" />
+    <ClCompile Include="Version.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

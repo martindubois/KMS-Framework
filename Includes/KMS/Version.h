@@ -24,6 +24,8 @@ namespace KMS
 
     public:
 
+        Version(const char* aVersion);
+
         Version(const File::Folder& aFolder, const char * aFile);
 
         Version(uint8_t aMajor, uint8_t aMinor, uint8_t aBuild, uint8_t aCompat, bool aDebug, const char * aDate, const char * aType);

@@ -5,7 +5,11 @@
 # Product   KMS-Framework
 # File      Release.mk
 
-CFLAGS = -DNDEBUG -fpic -ggdb -O2
+UNAME = $(shell uname)
+
+UNAME_P = $(shell uname -p)
+
+CFLAGS = -DNDEBUG -DOS_NAME=$(UNAME) -DOS_PROC=$(UNAME_PROC) -fpic -ggdb -O2
 
 INCLUDES = -I ../Includes
 

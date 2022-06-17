@@ -5,6 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Version.cpp
 
+// TEST COVERAGE 2022-06-16 KMS - Martin Dubois, P. Eng.
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -17,6 +18,32 @@ namespace KMS
 
     // Public
     // //////////////////////////////////////////////////////////////////////
+
+    Version::Version(const char* aVersion)
+    {
+        unsigned int lMajor;
+        unsigned int lMinor = 0;
+        unsigned int lBuild = 0;
+        unsigned int lCompat = 0;
+
+        char lType[NAME_LENGTH];
+
+        memset(&lType, 0, sizeof(lType));
+
+        if (   (5 != sscanf_s(aVersion, "%u.%u.%u.%u-%s", &lMajor, &lMinor, &lBuild, &lCompat, lType SizeInfo(lType)))
+            && (4 != sscanf_s(aVersion, "%u.%u.%u-%s"   , &lMajor, &lMinor, &lBuild,           lType SizeInfo(lType)))
+            && (4 != sscanf_s(aVersion, "%u.%u.%u.%u"   , &lMajor, &lMinor, &lBuild, &lCompat                       ))
+            && (3 != sscanf_s(aVersion, "%u.%u-%s"      , &lMajor, &lMinor,                    lType SizeInfo(lType)))
+            && (3 != sscanf_s(aVersion, "%u.%u.%u"      , &lMajor, &lMinor, &lBuild                                 ))
+            && (2 != sscanf_s(aVersion, "%u.%u"         , &lMajor, &lMinor                                          )))
+        {
+            KMS_EXCEPTION_WITH_INFO(VERSION_FORMAT, "Invalid version format", aVersion);
+        }
+
+        SetNumbers(lMajor, lMinor, lBuild, lCompat);
+
+        mType = lType;
+    }
 
     Version::Version(const File::Folder& aFolder, const char* aFile)
     {
@@ -50,6 +77,7 @@ namespace KMS
                 {
                     if (!Verify(lMajor, lMinor, lBuild, lCompat))
                     {
+                        // NOT TESTED
                         KMS_EXCEPTION(VERSION_FILE, "Incoherent version file");
                     }
                     lState++;
@@ -73,6 +101,7 @@ namespace KMS
             }
         }
 
+        // NOT TESTED
         KMS_EXCEPTION_WITH_INFO(VERSION_FILE, "Incomplet version file", aFile);
     }
 
@@ -106,11 +135,11 @@ namespace KMS
 
         if (0 < mType.size())
         {
-            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s", aProduct, mMajor, mMinor, mBuild, mType.c_str());
+            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType.c_str());
         }
         else
         {
-            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u", aProduct, mMajor, mMinor, mBuild);
+            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
         }
     }
 
@@ -122,7 +151,6 @@ namespace KMS
         case 2: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u", mMajor, mMinor); break;
         case 3: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u", mMajor, mMinor, mBuild); break;
         case 4: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u", mMajor, mMinor, mBuild, mCompat); break;
-        case 5: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u %s", mMajor, mMinor, mBuild, mCompat, mType.c_str()); break;
 
         default: assert(false);
         }

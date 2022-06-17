@@ -5,7 +5,11 @@
 # Product   KMS-Framework
 # File      Debug.mk
 
-CFLAGS = -DDEBUG -fpic -ggdb -O2
+UNAME = $(shell uname)
+
+UNAME_P = $(shell uname -p)
+
+CFLAGS = -DDEBUG -DOS_NAME=$(UNAME) -DOS_PROC=$(UNAME_P) -fpic -ggdb -O2
 
 INCLUDES = -I ../Includes
 

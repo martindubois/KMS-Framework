@@ -14,8 +14,8 @@ KMS_TEST(ByteTool, "ByteTool", "Auto", sTest)
 {
     static const char* VECTOR[] =
     {
-        "Source=ByteTool.cpp",
-        "Destination=ByteTool.cpp.bak",
+        "Source=KMS-A-Test" SLASH "ByteTool.cpp",
+        "Destination=KMS-A-Test" SLASH "ByteTool.cpp.bak",
         "ByteTable[0]=0",
         "DoesNotExist=Ignored",
         "DoesNotExist+=Ignored",
@@ -44,8 +44,8 @@ KMS_TEST(ByteTool_Fail, "ByteTool_Fail", "Auto", sTest_Fail)
 {
     static const char* VECTOR[] =
     {
-        "Source=ByteTool.cpp",
-        "Destination=ByteTool.cpp.bak",
+        "Source=KMS-A-Test" SLASH "ByteTool.cpp",
+        "Destination=KMS-A-Test" SLASH "ByteTool.cpp.bak",
         "ByteTable[0]=0",
         "DoesNotExist=Ignored",
         "DoesNotExist+=Ignored",
@@ -74,7 +74,7 @@ KMS_TEST(ByteTool_Main, "ByteTool_Main", "Auto", sTest_Main)
     static const char* VECTOR[] =
     {
         "KMS-A-Test.exe",
-        "Source=ByteTool.cpp",
+        "Source=KMS-A-Test" SLASH "ByteTool.cpp",
     };
 
     KMS::ByteTool::Main(2, VECTOR);

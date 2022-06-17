@@ -154,7 +154,7 @@ const char* ToCodeName(KMS::Exception::Code aCode)
         "STATE",
         "TEST",
         "THREAD_START",
-        "VERSION_FILE", "VERSION_NUMBER",
+        "VERSION_FILE", "VERSION_FORMAT", "VERSION_NUMBER",
     };
 
     unsigned int lCode = static_cast<unsigned int>(aCode);
