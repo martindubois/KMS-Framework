@@ -54,8 +54,8 @@
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="Message_Sender.cpp" />
-    <ClCompile Include="Process.cpp" />
-    <ClCompile Include="Process_W.cpp" />
+    <ClCompile Include="Process_Process.cpp" />
+    <ClCompile Include="Process_Process_W.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />

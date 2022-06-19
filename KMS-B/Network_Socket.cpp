@@ -61,6 +61,8 @@ namespace KMS
 
         Socket::~Socket() { VerifyState(State::CLOSED); }
 
+        uint16_t Socket::GetLocalPort() const { return mLocalAddress.GetPortNumber(); }
+
         void Socket::SetLocalAddress(const Address& aA) { mLocalAddress = aA; }
 
         void Socket::SetLocalPort(uint16_t aP) { mLocalAddress.SetPortNumber(aP); }
@@ -209,9 +211,9 @@ namespace KMS
             {
                 CFG_CALL("LocalAddress", SetLocalAddress);
 
-                CFG_CONVERT("LocalPort"     , SetLocalPort     , ToUInt16);
-                CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, ToUInt32);
-                CFG_CONVERT("SendTimeout"   , SetSendTimeout   , ToUInt32);
+                CFG_CONVERT("LocalPort"     , SetLocalPort     , Convert::ToUInt16);
+                CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, Convert::ToUInt32);
+                CFG_CONVERT("SendTimeout"   , SetSendTimeout   , Convert::ToUInt32);
 
                 CFG_IF("Allow") { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
             }

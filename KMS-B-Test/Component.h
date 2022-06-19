@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <KMS/Base.h>
+
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
 #include <KMS/Exception.h>

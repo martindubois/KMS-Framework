@@ -11,7 +11,7 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process.h>
+#include <KMS/Process/Process.h>
 
 #include <KMS/File/Folder.h>
 
@@ -70,7 +70,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
-            Process lProcess(Folder(Id::NONE), "PowerShell.exe");
+            Process::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
 
             lProcess.AddArgument("-NoLogo");
             lProcess.AddArgument("-Command");
@@ -80,8 +80,9 @@ namespace KMS
             lProcess.AddArgument("-DestinationPath");
             lProcess.AddArgument(lDst);
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lProcess.Run(1000 * 60 * 5);
+
+            if (0 != lProcess.GetExitCode())
             {
                 KMS_EXCEPTION_WITH_INFO(FOLDER_COMPRESS, "Cannot compress the folder's elements", lProcess.GetCmdLine());
             }
@@ -93,7 +94,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
-            Process lProcess(Folder(Id::NONE), "PowerShell.exe");
+            Process::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
 
             lProcess.AddArgument("-NoLogo");
             lProcess.AddArgument("-Command");
@@ -104,8 +105,9 @@ namespace KMS
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument("-Force");
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lProcess.Run(1000 * 60 * 5);
+
+            if (0 != lProcess.GetExitCode())
             {
                 KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lProcess.GetCmdLine());
             }
@@ -113,14 +115,15 @@ namespace KMS
 
         void Folder::Copy(const Folder& aDst) const
         {
-            Process lProcess(Folder(Id::NONE), "xcopy");
+            Process::Process lProcess(Folder(Id::NONE), "xcopy");
 
             lProcess.AddArgument("/CEKIV");
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument(aDst.GetPath());
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lProcess.Run(1000 * 60 * 5);
+
+            if (0 != lProcess.GetExitCode())
             {
                 KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lProcess.GetCmdLine());
             }
@@ -185,6 +188,17 @@ namespace KMS
                     KMS_EXCEPTION_WITH_INFO(FILE_COPY, "CopyFile failed", aSrc);
                 }
             }
+        }
+
+        void Folder::Init_Current()
+        {
+            char lPath[PATH_LENGTH];
+
+            DWORD lRet = GetCurrentDirectory(sizeof(lPath), lPath);
+            assert(0 < lRet);
+            assert(sizeof(lPath) > lRet);
+
+            mPath = lPath;
         }
 
         void Folder::Init_Executable()

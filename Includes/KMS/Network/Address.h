@@ -63,9 +63,9 @@ namespace KMS
             //        A:B:C:D:E:F:G:H:Port
             void Get(char* aOut, unsigned int aOutSize_byte) const;
 
-            const char* GetName() const;
-            uint16_t    GetPort() const;
-            Type        GetType() const;
+            const char* GetName      () const;
+            uint16_t    GetPortNumber() const;
+            Type        GetType      () const;
 
             bool IsBroadcast() const;
             bool IsMulticast() const;

@@ -13,7 +13,6 @@
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
 #include <KMS/Convert.h>
-#include <KMS/Process.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
 #include <KMS/Version.h>
@@ -182,9 +181,9 @@ namespace KMS
                 CFG_CALL("ProductShort", SetProductShort);
                 CFG_CALL("VersionFile" , SetVersionFile );
 
-                CFG_CONVERT("DoNotCompile", SetDoNotCompile, ToBool);
-                CFG_CONVERT("DoNotExport" , SetDoNotExport , ToBool);
-                CFG_CONVERT("DoNotPackage", SetDoNotPackage, ToBool);
+                CFG_CONVERT("DoNotCompile", SetDoNotCompile, Convert::ToBool);
+                CFG_CONVERT("DoNotExport" , SetDoNotExport , Convert::ToBool);
+                CFG_CONVERT("DoNotPackage", SetDoNotPackage, Convert::ToBool);
             }
 
             return Configurable::SetAttribute(aA, aV);

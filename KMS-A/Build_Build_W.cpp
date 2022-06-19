@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Process.h>
+#include <KMS/Process/Process.h>
 
 #include <KMS/Build/Build.h>
 
@@ -37,7 +37,7 @@ namespace KMS
                 File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
                 File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
 
-                KMS::Process lProcess(lBin, "MSBuild.exe");
+                KMS::Process::Process lProcess(lBin, "MSBuild.exe");
 
                 lProcess.AddArgument("Solution.sln");
                 lProcess.AddArgument("/target:rebuild");
@@ -45,7 +45,9 @@ namespace KMS
                 lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
                 lProcess.AddArgument(("/property:Platform="      + lP).c_str());
 
-                if (0 != lProcess.Run())
+                lProcess.Run(1000 * 60 * 5);
+
+                if (0 != lProcess.GetExitCode())
                 {
                     KMS_EXCEPTION_WITH_INFO(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
                 }
@@ -91,11 +93,13 @@ namespace KMS
             {
                 for (std::string lT : mTests)
                 {
-                    KMS::Process lProcess((lP + "\\" + aC).c_str(), (lT + ".exe").c_str());
+                    KMS::Process::Process lProcess((lP + "\\" + aC).c_str(), (lT + ".exe").c_str());
 
                     lProcess.AddArgument("Group=Auto");
 
-                    if (0 != lProcess.Run())
+                    lProcess.Run(1000 * 60 * 5);
+
+                    if (0 != lProcess.GetExitCode())
                     {
                         KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
                     }

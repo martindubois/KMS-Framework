@@ -39,6 +39,21 @@ namespace KMS
             memset(&mAddress, 0, sizeof(mAddress));
         }
 
+        uint16_t Address::GetPortNumber() const
+        {
+            uint16_t lPort = 0;
+
+            switch (mType)
+            {
+            case Type::IPv4: lPort = ntohs(mAddress.mIPv4.sin_port ); break;
+            case Type::IPv6: lPort = ntohs(mAddress.mIPv6.sin6_port); break;
+
+            default: assert(false);
+            }
+
+            return lPort;
+        }
+
         Address::Type Address::GetType() const { return mType; }
 
         void Address::SetPortNumber(uint16_t aP)
@@ -134,7 +149,7 @@ namespace KMS
 
             unsigned int lB[4];
 
-            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3)) { SetIPv4(lB); }
+            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3)) { SetIPv4(lB); return; }
 
             SetName(aA);
         }

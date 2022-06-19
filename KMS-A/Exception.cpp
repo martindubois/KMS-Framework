@@ -136,8 +136,10 @@ const char* ToCodeName(KMS::Exception::Code aCode)
 {
     static const char* CODE_NAMES[static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY)] =
     {
+        "BROWSER_START",
         "BUILD_COMPILE", "BUILD_TEST",
         "CONFIG", "CONFIG_EXPAND", "CONFIG_FORMAT", "CONFIG_INDEX",
+            "CONFIG_VALUE",
         "CONVERT_FORMAT", "CONVERT_TYPE",
         "DEPENDENCY",
         "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_DELETE",
@@ -148,7 +150,8 @@ const char* ToCodeName(KMS::Exception::Code aCode)
         "MAKE_DEPEND", "MAKE_MAKE",
         "NETWORK_ADDRESS", "NETWORK_ADDRESS_RANGE", "NETWORK_PORT",
         "OUTPUT_TOO_SHORT",
-        "PROCESS_EXIT_CODE", "PROCESS_START", "PROCESS_TIMEOUT",
+        "PROCESS_EXIT_CODE", "PROCESS_KILL", "PROCESS_START", "PROCESS_TIMEOUT",
+            "PROCESS_WAIT",
         "SOCKET", "SOCKET_ACCEPT", "SOCKET_BIND", "SOCKET_LISTEN",
             "SOCKET_OPTION", "SOCKET_RECEIVE", "SOCKET_SEND", "SOCKET_STARTUP",
         "STATE",

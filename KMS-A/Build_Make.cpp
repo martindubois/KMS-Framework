@@ -201,7 +201,7 @@ namespace KMS
 
         void Make::Depend_Component(const char* aC)
         {
-            Process lP(File::Folder(File::Folder::Id::NONE), "make");
+            Process::Process lP(File::Folder(File::Folder::Id::NONE), "make");
 
             lP.SetWorkingDirectory(aC);
 
@@ -224,7 +224,7 @@ namespace KMS
 
         void Make::Make_Component(const char* aC)
         {
-            Process lP(File::Folder(File::Folder::Id::NONE), "make");
+            Process::Process lP(File::Folder(File::Folder::Id::NONE), "make");
 
             lP.AddArgument(("CONFIG=" + mConfiguration).c_str());
 

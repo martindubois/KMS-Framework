@@ -8,9 +8,9 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Process.h>
 #include <KMS/Build/Make.h>
 #include <KMS/Config/Configurator.h>
+#include <KMS/Process/Process.h>
 
 #include <KMS/Build/Build.h>
 

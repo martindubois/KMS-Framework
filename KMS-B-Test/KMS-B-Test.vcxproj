@@ -265,6 +265,7 @@
   <ItemGroup>
     <ClCompile Include="HTTP_Server.cpp" />
     <ClCompile Include="KMS-B-Test.cpp" />
+    <ClCompile Include="Process_Browser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

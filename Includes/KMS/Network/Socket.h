@@ -23,7 +23,6 @@ namespace KMS
 {
     namespace Network
     {
-        class Address;
 
         extern void Thread_Startup();
         extern void Thread_Cleanup();

@@ -27,6 +27,7 @@ namespace KMS
                 HOME,
                 NONE,
                 PROGRAM_FILES,
+                PROGRAM_FILES_X86,
                 TEMPORARY,
             };
 
@@ -88,6 +89,7 @@ namespace KMS
 
             void Init_Env(const char* aVariable);
 
+            void Init_Current   ();
             void Init_Executable();
             void Init_Temporary ();
 

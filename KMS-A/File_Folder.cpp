@@ -35,19 +35,20 @@ namespace KMS
         {
             switch (aId)
             {
-            case Id::CURRENT: mPath = "."; break;
-            case Id::NONE   : mPath = "" ; break;
-
+            case Id::CURRENT   : Init_Current   (); break;
             case Id::EXECUTABLE: Init_Executable(); break;
             case Id::TEMPORARY : Init_Temporary (); break;
 
-            #ifdef _KMS_WINDOWS_
-                case Id::HOME         : Init_Env("USERPROFILE" ); break;
-                case Id::PROGRAM_FILES: Init_Env("ProgramFiles"); break;
-            #endif
+            case Id::NONE: mPath = ""; break;
 
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
                 case Id::HOME: Init_Env("HOME"); break;
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                case Id::HOME             : Init_Env("USERPROFILE"      ); break;
+                case Id::PROGRAM_FILES    : Init_Env("ProgramFiles"     ); break;
+                case Id::PROGRAM_FILES_X86: Init_Env("ProgramFiles(x86)"); break;
             #endif
 
             default: assert(false);

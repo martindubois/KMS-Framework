@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Process_L.cpp
+// File      KMS-A/Process_Process_L.cpp
 
 #include "Component.h"
 
@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process.h>
+#include <KMS/Process/Process.h>
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -20,38 +20,41 @@ static void ChangeDirectory(const char* aD);
 
 namespace KMS
 {
-
-    // Pirvate
-    // //////////////////////////////////////////////////////////////////////
-
-    int Process::Run_Internal()
+    namespace Process
     {
-        assert(NULL != mCmdLine);
 
-        bool lCD = 0 < mWorkingDirectory.size();
+        // Pirvate
+        // //////////////////////////////////////////////////////////////////
 
-        char lDir[PATH_LENGTH];
-
-        if (lCD)
+        int Process::Run_Internal()
         {
-            if (NULL == getcwd(lDir, sizeof(lDir)))
+            assert(NULL != mCmdLine);
+
+            bool lCD = 0 < mWorkingDirectory.size();
+
+            char lDir[PATH_LENGTH];
+
+            if (lCD)
             {
-                KMS_EXCEPTION(FOLDER_ACCESS, "getcwd failed");
+                if (NULL == getcwd(lDir, sizeof(lDir)))
+                {
+                    KMS_EXCEPTION(FOLDER_ACCESS, "getcwd failed");
+                }
+
+                ChangeDirectory(mWorkingDirectory.c_str());
             }
 
-            ChangeDirectory(mWorkingDirectory.c_str());
+            int lResult = system(mCmdLine);
+
+            if (lCD)
+            {
+                ChangeDirectory(lDir);
+            }
+
+            return lResult;
         }
 
-        int lResult = system(mCmdLine);
-
-        if (lCD)
-        {
-            ChangeDirectory(lDir);
-        }
-
-        return lResult;
     }
-
 }
 
 // Static function declarations
