@@ -73,13 +73,15 @@ namespace KMS
         {
             for (std::string lT : mTests)
             {
-                KMS::Process lProcess((std::string("Binaries/") + aC).c_str(), lT.c_str());
+                KMS::Process::Process lP((std::string("Binaries/") + aC).c_str(), lT.c_str());
 
-                lProcess.AddArgument("Group=Auto");
+                lP.AddArgument("Group=Auto");
 
-                if (0 != lProcess.Run())
+                lP.Run(1000 * 60 * 5);
+
+                if (0 != lP.GetExitCode())
                 {
-                    KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
+                    KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lP.GetCmdLine());
                 }
             }
         }

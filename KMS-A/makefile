@@ -15,6 +15,7 @@ SOURCES = Build_Build_L.cpp       \
           Config_Configurable.cpp \
 		  Config_Configurator.cpp \
           Console_Color_L.cpp     \
+		  Convert.cpp             \
 		  Environment_L.cpp       \
 		  Environment.cpp         \
           Exception.cpp           \
@@ -52,11 +53,11 @@ Build_Build_L.o: /usr/include/features.h /usr/include/features-time64.h
 Build_Build_L.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 Build_Build_L.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Build_Build_L.o: /usr/include/strings.h ../Includes/KMS/Exception.h
-Build_Build_L.o: ../Includes/KMS/Console/Color.h ../Includes/KMS/Process/Process.h
+Build_Build_L.o: ../Includes/KMS/Console/Color.h ../Includes/KMS/Build/Make.h
+Build_Build_L.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
 Build_Build_L.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
-Build_Build_L.o: ../Includes/KMS/Build/Make.h
-Build_Build_L.o: ../Includes/KMS/Config/Configurable.h
 Build_Build_L.o: ../Includes/KMS/Config/Configurator.h
+Build_Build_L.o: ../Includes/KMS/Process/Process.h
 Build_Build_L.o: ../Includes/KMS/Build/Build.h
 Build_Build.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 Build_Build.o: /usr/include/features.h /usr/include/features-time64.h
@@ -65,8 +66,8 @@ Build_Build.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Build_Build.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Build_Build.o: ../Includes/KMS/Console/Color.h
 Build_Build.o: ../Includes/KMS/Config/Configurator.h
-Build_Build.o: ../Includes/KMS/Config/Configurable.h
-Build_Build.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Process/Process.h
+Build_Build.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
+Build_Build.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Convert.h
 Build_Build.o: ../Includes/KMS/Types.h ../Includes/KMS/Text/TextFile.h
 Build_Build.o: ../Includes/KMS/Version.h /usr/include/stdint.h
 Build_Build.o: ../Includes/KMS/Build/Build.h
@@ -77,7 +78,7 @@ Build_Make.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Build_Make.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Build_Make.o: ../Includes/KMS/Console/Color.h /usr/include/unistd.h
 Build_Make.o: ../Includes/KMS/Config/Configurator.h
-Build_Make.o: ../Includes/KMS/Config/Configurable.h
+Build_Make.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
 Build_Make.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Process/Process.h
 Build_Make.o: ../Includes/KMS/Types.h ../Includes/KMS/Build/Make.h
 Config_Configurable.o: Component.h ../Includes/KMS/Base.h
@@ -89,7 +90,7 @@ Config_Configurable.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Config_Configurable.o: ../Includes/KMS/Console/Color.h
 Config_Configurable.o: ../Includes/KMS/Config/Configurator.h
 Config_Configurable.o: ../Includes/KMS/Config/Configurable.h
-Config_Configurable.o: ../Includes/KMS/File/Folder.h
+Config_Configurable.o: /usr/include/stdio.h ../Includes/KMS/File/Folder.h
 Config_Configurator.o: Component.h ../Includes/KMS/Base.h
 Config_Configurator.o: /usr/include/assert.h /usr/include/features.h
 Config_Configurator.o: /usr/include/features-time64.h
@@ -98,7 +99,7 @@ Config_Configurator.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Config_Configurator.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Config_Configurator.o: ../Includes/KMS/Console/Color.h
 Config_Configurator.o: ../Includes/KMS/Config/Configurable.h
-Config_Configurator.o: ../Includes/KMS/Environment.h
+Config_Configurator.o: /usr/include/stdio.h ../Includes/KMS/Environment.h
 Config_Configurator.o: ../Includes/KMS/Text/TextFile.h
 Config_Configurator.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 Config_Configurator.o: ../Includes/KMS/Config/Configurator.h
@@ -133,8 +134,8 @@ File_Folder_L.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 File_Folder_L.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 File_Folder_L.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 File_Folder_L.o: ../Includes/KMS/Console/Color.h /usr/include/unistd.h
-File_Folder_L.o: ../Includes/KMS/Process/Process.h ../Includes/KMS/File/Folder.h
-File_Folder_L.o: ../Includes/KMS/Types.h
+File_Folder_L.o: ../Includes/KMS/Process/Process.h
+File_Folder_L.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 File_Folder.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 File_Folder.o: /usr/include/features.h /usr/include/features-time64.h
 File_Folder.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
@@ -148,14 +149,15 @@ Process_Process_L.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 Process_Process_L.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Process_Process_L.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Process_Process_L.o: ../Includes/KMS/Console/Color.h /usr/include/unistd.h
-Process_Process_L.o: ../Includes/KMS/Process_Process.h ../Includes/KMS/File/Folder.h
-Process_Process_L.o: ../Includes/KMS/Types.h
+Process_Process_L.o: ../Includes/KMS/Process/Process.h
+Process_Process_L.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 Process_Process.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 Process_Process.o: /usr/include/features.h /usr/include/features-time64.h
 Process_Process.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 Process_Process.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Process_Process.o: /usr/include/strings.h ../Includes/KMS/Exception.h
-Process_Process.o: ../Includes/KMS/Console/Color.h ../Includes/KMS/Process/Process.h
+Process_Process.o: ../Includes/KMS/Console/Color.h
+Process_Process.o: ../Includes/KMS/Process/Process.h
 Process_Process.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 Test_Test.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 Test_Test.o: /usr/include/features.h /usr/include/features-time64.h
@@ -171,7 +173,7 @@ Test_TestManager.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Test_TestManager.o: ../Includes/KMS/Console/Color.h
 Test_TestManager.o: ../Includes/KMS/Config/Configurator.h
 Test_TestManager.o: ../Includes/KMS/Config/Configurable.h
-Test_TestManager.o: ../Includes/KMS/File/Folder.h
+Test_TestManager.o: /usr/include/stdio.h ../Includes/KMS/File/Folder.h
 Test_TestManager.o: ../Includes/KMS/Test/TestManager.h
 Test_TestManager.o: ../Includes/KMS/Test/Test.h
 Text_TextFile.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h

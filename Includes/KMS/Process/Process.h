@@ -45,6 +45,8 @@ namespace KMS
 
             void Detach();
 
+            // LIMITATION Darwin and Linux implementations ignore the aTimeout_ms
+            //            argument.
             void Run(unsigned int aTimeout_ms);
 
             void Start();

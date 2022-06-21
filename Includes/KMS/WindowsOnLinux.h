@@ -14,5 +14,10 @@
 // //////////////////////////////////////////////////////////////////////////
 
 // ===== ..._s ==============================================================
+
+#define _stricmp strcasecmp
+
 #define sprintf_s sprintf
 #define sscanf_s  sscanf
+
+#define fopen_s(F,N,M) ((NULL != (*(F) = fopen((N), (M)))) ? 0 : -1)

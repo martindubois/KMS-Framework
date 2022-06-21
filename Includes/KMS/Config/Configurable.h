@@ -7,6 +7,9 @@
 
 #pragma once
 
+// ===== C ==================================================================
+#include <stdio.h>
+
 namespace KMS
 {
     namespace Config
