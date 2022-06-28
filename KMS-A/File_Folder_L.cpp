@@ -202,7 +202,7 @@ namespace KMS
 
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy the file", lP.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FILE_COPY, "Cannot copy the file", lP.GetCmdLine());
             }
         }
 

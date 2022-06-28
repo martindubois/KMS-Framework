@@ -30,11 +30,14 @@ namespace KMS
 
             ~Build();
 
-            void AddBinary       (const char * aB);
-            void AddConfiguration(const char * aC);
-            void AddEditOperation(const char * aC);
-            void AddLibrary      (const char * aL);
-            void AddTest         (const char * aT);
+            void AddBinary       (const char* aB);
+            void AddConfiguration(const char* aC);
+            void AddEditOperation(const char* aC);
+            void AddFile         (const char* aF);
+            void AddFolder       (const char* aF);
+            void AddLibrary      (const char* aL);
+            void AddPreBuildCmd  (const char* aC);
+            void AddTest         (const char* aT);
 
             void SetDoNotCompile(bool aDNC = true);
             void SetDoNotExport (bool aDNE = true);
@@ -63,13 +66,14 @@ namespace KMS
 
             void Compile();
             void Compile(const char* aC);
-            void Edit  (const Version & aVersion);
+            void Edit(const Version& aVersion);
+            void ExecuteCommands(const StringSet& aCommands);
             void Export(const Version & aVersion);
             void Package();
             void Package_Component();
             void Package_Component(const char* aC);
-            void Package_Header();
-            void Package_ReadMe();
+            void Package_Files();
+            void Package_Folders();
             void Test();
             void Test(const char* aC);
             void VerifyConfig();
@@ -84,9 +88,11 @@ namespace KMS
             bool         mDoNotPackage;
             StringSet    mEditOperations;
             File::Folder mExportFolder;
+            StringSet    mFiles;
+            StringSet    mFolders;
             StringSet    mLibraries;
+            StringSet    mPreBuildCmds;
             std::string  mProduct;
-            std::string  mProductShort;
             StringSet    mTests;
             std::string  mVersionFile;
 

@@ -25,7 +25,7 @@ namespace KMS
         enum class Code
         {
             BROWSER_START = 0,
-            BUILD_COMPILE, BUILD_TEST,
+            BUILD_COMMAND, BUILD_COMPILE, BUILD_TEST,
             CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
                 CONFIG_VALUE,
             CONVERT_FORMAT, CONVERT_TYPE,

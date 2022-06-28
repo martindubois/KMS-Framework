@@ -109,6 +109,13 @@ Console_Color_L.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 Console_Color_L.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 Console_Color_L.o: /usr/include/strings.h ../Includes/KMS/Exception.h
 Console_Color_L.o: ../Includes/KMS/Console/Color.h
+Convert.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
+Convert.o: /usr/include/features.h /usr/include/features-time64.h
+Convert.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
+Convert.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
+Convert.o: /usr/include/strings.h ../Includes/KMS/Exception.h
+Convert.o: ../Includes/KMS/Console/Color.h ../Includes/KMS/Convert.h
+Convert.o: ../Includes/KMS/Types.h
 Environment_L.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 Environment_L.o: /usr/include/features.h /usr/include/features-time64.h
 Environment_L.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
