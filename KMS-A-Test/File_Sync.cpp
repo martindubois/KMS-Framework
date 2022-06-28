@@ -10,7 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/File/Sync.h>
 
-KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest)
+KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
 {
     static const char* VECTOR_A[] =
     {

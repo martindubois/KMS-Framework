@@ -10,7 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/ByteTool.h>
 
-KMS_TEST(ByteTool, "ByteTool", "Auto", sTest)
+KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
 {
     static const char* VECTOR[] =
     {
