@@ -5,7 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt
 
+* Compiled on Linux
+
 0.0.3 2022-06-02
 
 0.0.2 2022-05-21
-- Fix attribute's names
+* Fix attribute's names

@@ -11,6 +11,7 @@ OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 
 SOURCES = Build_Build_L.cpp       \
           Build_Build.cpp         \
+		  Build_Import.cpp        \
           Build_Make.cpp          \
           Config_Configurable.cpp \
 		  Config_Configurator.cpp \
