@@ -61,16 +61,17 @@ namespace KMS
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
-            Process lProcess(Folder(Id::NONE), "zip");
+            Process::Process lP(Folder(Id::NONE), "zip");
 
-            lProcess.AddArgument("-r");
-            lProcess.AddArgument(lDst);
-            lProcess.AddArgument((mPath + SLASH + "*").c_str());
+            lP.AddArgument("-r");
+            lP.AddArgument(lDst);
+            lP.AddArgument((mPath + SLASH + "*").c_str());
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lP.Run(1000 * 60 * 5);
+
+            if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_COMPRESS, "Cannot compress the folder's elements", lProcess.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FOLDER_COMPRESS, "Cannot compress the folder's elements", lP.GetCmdLine());
             }
         }
 
@@ -80,31 +81,33 @@ namespace KMS
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
-            Process::Process lProcess(Folder(Id::NONE), "unzip");
+            Process::Process lP(Folder(Id::NONE), "unzip");
 
-            lProcess.AddArgument(lSrc);
-            lProcess.AddArgument("-d");
-            lProcess.AddArgument(mPath.c_str());
+            lP.AddArgument(lSrc);
+            lP.AddArgument("-d");
+            lP.AddArgument(mPath.c_str());
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lP.Run(1000 * 60 * 5);
+
+            if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lProcess.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lP.GetCmdLine());
             }
         }
 
         void Folder::Copy(const Folder& aDst) const
         {
-            Process::Process lProcess(Folder(Id::NONE), "cp");
+            Process::Process lP(Folder(Id::NONE), "cp");
 
-            lProcess.AddArgument("-R");
-            lProcess.AddArgument(mPath.c_str());
-            lProcess.AddArgument(aDst.GetPath());
+            lP.AddArgument("-R");
+            lP.AddArgument(mPath.c_str());
+            lP.AddArgument(aDst.GetPath());
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lP.Run(1000 * 60 * 2);
+
+            if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lProcess.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lP.GetCmdLine());
             }
         }
 
@@ -142,15 +145,16 @@ namespace KMS
 
             GetPath(aPattern, lPattern, sizeof(lPattern));
 
-            Process::Process lProcess(Folder(Id::NONE), "rm");
+            Process::Process lP(Folder(Id::NONE), "rm");
 
-            lProcess.AddArgument("-f");
-            lProcess.AddArgument(lPattern);
+            lP.AddArgument("-f");
+            lP.AddArgument(lPattern);
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lP.Run(1000 * 60 * 2);
+
+            if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot delete files", lProcess.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot delete files", lP.GetCmdLine());
             }
         }
 
@@ -184,21 +188,32 @@ namespace KMS
             assert(NULL != aDst);
             assert(NULL != aSrc);
 
-            Process::Process lProcess(Folder(Id::NONE), "cp");
+            Process::Process lP(Folder(Id::NONE), "cp");
 
             if (FLAG_OVERWRITE == (aFlags & FLAG_OVERWRITE))
             {
-                lProcess.AddArgument("-f");
+                lP.AddArgument("-f");
             }
 
-            lProcess.AddArgument(aSrc);
-            lProcess.AddArgument(aDst);
+            lP.AddArgument(aSrc);
+            lP.AddArgument(aDst);
 
-            int lRet = lProcess.Run();
-            if (0 != lRet)
+            lP.Run(1000 * 60 * 2);
+
+            if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy the file", lProcess.GetCmdLine());
+                KMS_EXCEPTION_WITH_INFO(FILE_COPY, "Cannot copy the file", lP.GetCmdLine());
             }
+        }
+
+        void Folder::Init_Current()
+        {
+            char lPath[PATH_LENGTH];
+
+            char* lRet = getcwd(lPath, sizeof(lPath));
+            assert(lPath == lRet);
+
+            mPath = lPath;
         }
 
         void Folder::Init_Executable()

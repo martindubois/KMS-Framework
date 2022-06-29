@@ -93,16 +93,18 @@ namespace KMS
         void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .insert(aB); }
         void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.insert(aC); }
         void Build::AddEditOperation(const char* aC) { assert(NULL != aC); mEditOperations.insert(aC); }
+        void Build::AddFile         (const char* aF) { assert(NULL != aF); mFiles         .insert(aF); }
+        void Build::AddFolder       (const char* aF) { assert(NULL != aF); mFolders       .insert(aF); }
         void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .insert(aL); }
+        void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .insert(aC); }
         void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .insert(aT); }
 
         void Build::SetDoNotCompile(bool aDNC) { mDoNotCompile = aDNC; }
         void Build::SetDoNotExport (bool aDNE) { mDoNotExport  = aDNE; }
         void Build::SetDoNotPackage(bool aDNP) { mDoNotPackage = aDNP; }
 
-        void Build::SetProduct     (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
-        void Build::SetProductShort(const char* aPS) { assert(NULL != aPS); mProductShort = aPS; }
-        void Build::SetVersionFile (const char* aVF) { assert(NULL != aVF); mVersionFile  = aVF; }
+        void Build::SetProduct    (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
+        void Build::SetVersionFile(const char* aVF) { assert(NULL != aVF); mVersionFile  = aVF; }
 
         int Build::Run()
         {
@@ -111,6 +113,8 @@ namespace KMS
             Version lVersion(File::Folder(File::Folder::Id::CURRENT), mVersionFile.c_str());
 
             Edit(lVersion);
+
+            ExecuteCommands(mPreBuildCmds);
 
             if (!mDoNotCompile)
             {
@@ -141,23 +145,29 @@ namespace KMS
             CFG_CALL("Binaries"      , AddBinary       );
             CFG_CALL("Configurations", AddConfiguration);
             CFG_CALL("EditOperations", AddEditOperation);
+            CFG_CALL("Files"         , AddFile         );
+            CFG_CALL("Folders"       , AddFolder       );
             CFG_CALL("Libraries"     , AddLibrary      );
+            CFG_CALL("PreBuildCmds"  , AddPreBuildCmd  );
             CFG_CALL("Tests"         , AddTest         );
 
             #ifdef _KMS_DARWIN_
                 CFG_CALL("DarwinBinaries" , AddBinary);
+                CFG_CALL("DarwinFiles"    , AddFile);
                 CFG_CALL("DarwinLibraries", AddLibrary);
                 CFG_CALL("DarwinTests"    , AddTest);
             #endif
 
             #ifdef _KMS_LINUX_
                 CFG_CALL("LinuxBinaries" , AddBinary);
+                CFG_CALL("LinuxFiles"    , AddFile);
                 CFG_CALL("LinuxLibraries", AddLibrary);
                 CFG_CALL("LinuxTests"    , AddTest);
             #endif
 
             #ifdef _KMS_WINDOWS_
                 CFG_CALL("WindowsBinaries"  , AddBinary);
+                CFG_CALL("WindowsFiles"     , AddFile);
                 CFG_CALL("WindowsLibraries" , AddLibrary);
                 CFG_CALL("WindowsProcessors", AddProcessor);
                 CFG_CALL("WindowsTests"     , AddTest);
@@ -177,9 +187,8 @@ namespace KMS
             }
             else
             {
-                CFG_CALL("Product"     , SetProduct     );
-                CFG_CALL("ProductShort", SetProductShort);
-                CFG_CALL("VersionFile" , SetVersionFile );
+                CFG_CALL("Product"    , SetProduct    );
+                CFG_CALL("VersionFile", SetVersionFile);
 
                 CFG_CONVERT("DoNotCompile", SetDoNotCompile, Convert::ToBool);
                 CFG_CONVERT("DoNotExport" , SetDoNotExport , Convert::ToBool);
@@ -211,13 +220,16 @@ namespace KMS
                 "    Set or clear the do not package flag\n"
                 "EditOperations += {Path};{RegEx};{Line}\n"
                 "    Add an edit operations to change the version in a text file\n"
+                "Files += {File}\n"
+                "    Add a file to package\n"
+                "Folders += {Source};{Destination}\n"
+                "    Add a folder to package\n"
                 "Libraries += {Name}\n"
                 "    Add a builded library\n"
+                "PreBuildCmds += {Command Arg0 Arg1 ...}\n"
+                "    Add a pre-build command\n"
                 "Product = {Name}\n"
                 "    Set the product name\n"
-                "    Mandatory\n"
-                "ProductShort = {Name}\n"
-                "    Set the product short name\n"
                 "    Mandatory\n"
                 "Tests += {Name}\n"
                 "    Add a builded and executed test program\n"
@@ -231,6 +243,8 @@ namespace KMS
                 fprintf(aOut,
                     "DarwinBinaries += {Name}\n"
                     "    See Bionaries\n"
+                    "DarwinFiles += {Name}\n"
+                    "    See Files\n"
                     "DarwinLibraries += {Name}\n"
                     "    See Libraries\n"
                     "DarwinTests += {Name}\n"
@@ -241,6 +255,8 @@ namespace KMS
                 fprintf(aOut,
                     "LinuxBinaries += {Name}\n"
                     "    See Bionaries\n"
+                    "LinuxFiles += {Name}\n"
+                    "    See Files\n"
                     "LinuxLibraries += {Name}\n"
                     "    See Libraries\n"
                     "LinuxTests += {Name}\n"
@@ -251,6 +267,8 @@ namespace KMS
                 fprintf(aOut,
                     "WindowsBinaries += {Name}\n"
                     "    See Bionaries\n"
+                    "WindowsFiles += {Name}\n"
+                    "    See Files\n"
                     "WindowsLibraries += {Name}\n"
                     "    See Libraries\n"
                     "WindowsTests += {Name}\n"
@@ -300,6 +318,17 @@ namespace KMS
             }
         }
 
+        void Build::ExecuteCommands(const StringSet& aCommands)
+        {
+            for (const std::string& lCommand : aCommands)
+            {
+                if (0 != system(lCommand.c_str()))
+                {
+                    KMS_EXCEPTION_WITH_INFO(BUILD_COMMAND, "The command failed", lCommand.c_str());
+                }
+            }
+        }
+
         void Build::Export(const Version& aVersion)
         {
             File::Folder lProduct(mExportFolder, mProduct.c_str());
@@ -323,8 +352,8 @@ namespace KMS
         void Build::Package()
         {
             Package_Component();
-            Package_Header();
-            Package_ReadMe();
+            Package_Files();
+            Package_Folders();
         }
 
         void Build::Package_Component()
@@ -341,30 +370,42 @@ namespace KMS
             }
         }
 
-        void Build::Package_Header()
+        void Build::Package_Files()
         {
-            File::Folder lSrc("Includes");
+            File::Folder lCurrent(File::Folder::Id::CURRENT);
 
-            if (lSrc.DoesExist())
+            for (const std::string& lF : mFiles)
             {
-                File::Folder lDst(mTempFolder, "Includes");
+                const char* lPtr = strrchr(lF.c_str(), '/');
+                if (NULL == lPtr)
+                {
+                    lPtr = lF.c_str();
+                }
+                else
+                {
+                    lPtr++;
+                }
 
-                lSrc.Copy(lDst);
+                lCurrent.Copy(mTempFolder, lF.c_str(), lPtr);
             }
         }
 
-        void Build::Package_ReadMe()
+        void Build::Package_Folders()
         {
-            File::Folder("_DocUser").Copy(mTempFolder, (mProductShort + ".ReadMe.txt").c_str());
-
-            for (std::string lB : mBinaries)
+            for (std::string lF : mFolders)
             {
-                File::Folder(lB.c_str(), "_DocUser").Copy(mTempFolder, (mProductShort + "." + lB + ".ReadMe.txt").c_str());
-            }
+                char lDst[NAME_LENGTH];
+                char lSrc[NAME_LENGTH];
 
-            for (std::string lL : mLibraries)
-            {
-                File::Folder(lL.c_str(), "_DocUser").Copy(mTempFolder, (mProductShort + "." + lL + ".ReadMe.txt").c_str());
+                if (2 != sscanf_s(lF.c_str(), "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
+                {
+                    KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid folder operation", lF.c_str());
+                }
+
+                File::Folder lFD(mTempFolder, lDst);
+                File::Folder lFS(lSrc);
+
+                lFS.Copy(lDst);
             }
         }
 
@@ -378,39 +419,34 @@ namespace KMS
 
         void Build::VerifyConfig()
         {
-            if (!mDoNotCompile)
+            if ((0 < mBinaries.size()) || (0 < mLibraries.size()))
             {
-                if (0 >= mConfigurations.size())
+                if (!mDoNotCompile)
                 {
-                    KMS_EXCEPTION(CONFIG, "No configuration");
-                }
-
-                #ifdef _KMS_WINDOWS_
-                    if (0 >= mProcessors.size())
+                    if (0 >= mConfigurations.size())
                     {
-                        KMS_EXCEPTION(CONFIG, "No processor");
+                        KMS_EXCEPTION(CONFIG, "No configuration");
                     }
-                #endif
-            }
 
-            if (!mDoNotExport)
-            {
-                if (!mExportFolder.DoesExist())
-                {
-                    KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid export folder", mExportFolder.GetPath());
+                    #ifdef _KMS_WINDOWS_
+                        if (0 >= mProcessors.size())
+                        {
+                            KMS_EXCEPTION(CONFIG, "No processor");
+                        }
+                    #endif
                 }
 
-                if (0 >= mProduct.size())
+                if (!mDoNotExport)
                 {
-                    KMS_EXCEPTION(CONFIG, "Invalid product name");
-                }
-            }
+                    if (!mExportFolder.DoesExist())
+                    {
+                        KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid export folder", mExportFolder.GetPath());
+                    }
 
-            if (!mDoNotPackage)
-            {
-                if (0 >= mProductShort.size())
-                {
-                    KMS_EXCEPTION(CONFIG, "Invalid product short name");
+                    if (0 >= mProduct.size())
+                    {
+                        KMS_EXCEPTION(CONFIG, "Invalid product name");
+                    }
                 }
             }
 

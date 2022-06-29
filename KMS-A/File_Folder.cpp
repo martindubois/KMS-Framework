@@ -143,6 +143,19 @@ namespace KMS
             Copy_Internal(lDst, lSrc, aFlags);
         }
 
+        void Folder::Copy(const Folder& aDst, const char* aFileSrc, const char* aFileDst, unsigned int aFlags) const
+        {
+            aDst.BackupIfNeeded(aFileDst, aFlags & ~FLAG_IGNORE_ERROR);
+
+            char lDst[PATH_LENGTH];
+            char lSrc[PATH_LENGTH];
+
+            aDst.GetPath(aFileDst, lDst, sizeof(lDst));
+                 GetPath(aFileSrc, lSrc, sizeof(lSrc));
+
+            Copy_Internal(lDst, lSrc, aFlags);
+        }
+
         // Internal
         // //////////////////////////////////////////////////////////////////
 

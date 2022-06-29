@@ -12,7 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurator.h>
-#include <KMS/Process.h>
+#include <KMS/Process/Process.h>
 
 #include <KMS/Build/Make.h>
 
@@ -208,7 +208,9 @@ namespace KMS
             lP.AddArgument("depend");
             lP.AddArgument(("CONFIG=" + mConfiguration).c_str());
 
-            if (0 != lP.Run())
+            lP.Run(1000 * 60 * 2);
+
+            if (0 != lP.GetExitCode())
             {
                 KMS_EXCEPTION_WITH_INFO(MAKE_DEPEND, "Cannot uptdate file dependencies", lP.GetCmdLine());
             }
@@ -226,21 +228,13 @@ namespace KMS
         {
             Process::Process lP(File::Folder(File::Folder::Id::NONE), "make");
 
+            lP.SetWorkingDirectory(aC);
+
             lP.AddArgument(("CONFIG=" + mConfiguration).c_str());
 
-            if (0 != chdir(aC))
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_ACCESS, "Cannot change current directory", aC);
-            }
+            lP.Run(1000 * 60 * 5);
 
-            int lRet = lP.Run();
-
-            if (0 != chdir(".."))
-            {
-                KMS_EXCEPTION(FOLDER_ACCESS, "Cannot change current directory");
-            }
-
-            if (0 != lRet)
+            if (0 != lP.GetExitCode())
             {
                 KMS_EXCEPTION_WITH_INFO(MAKE_MAKE, "Cannot make", lP.GetCmdLine());
             }

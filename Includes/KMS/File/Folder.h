@@ -66,6 +66,9 @@ namespace KMS
             // aFlags FLAG_BACKUP, FLAG_INGORE_ERROR, FLAG_OVERWRITE, FLAG_RED, FLAG_VERBOSE
             void Copy(const Folder & aDst, const char * aFile, unsigned int aFlags = 0) const;
 
+            // aFlags FLAG_BACKUP, FLAG_INGORE_ERROR, FLAG_OVERWRITE, FLAG_RED, FLAG_VERBOSE
+            void Copy(const Folder& aDst, const char* aFileSrc, const char* aFileDst, unsigned int aFlags = 0) const;
+
             void Create();
 
             void Delete();

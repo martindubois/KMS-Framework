@@ -9,7 +9,7 @@ UNAME = $(shell uname)
 
 UNAME_P = $(shell uname -p)
 
-CFLAGS = -DDEBUG -DOS_NAME=$(UNAME) -DOS_PROC=$(UNAME_P) -fpic -ggdb -O2
+CFLAGS = -DDEBUG -DOS_NAME=\"$(UNAME)\" -DOS_PROC=\"$(UNAME_P)\" -fpic -ggdb -O2
 
 INCLUDES = -I ../Includes
 

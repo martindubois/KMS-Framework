@@ -26,7 +26,7 @@ namespace KMS
         // Pirvate
         // //////////////////////////////////////////////////////////////////
 
-        int Process::Run_Internal()
+        void Process::Run_Internal(unsigned int)
         {
             assert(NULL != mCmdLine);
 
@@ -44,14 +44,61 @@ namespace KMS
                 ChangeDirectory(mWorkingDirectory.c_str());
             }
 
-            int lResult = system(mCmdLine);
+            mExitCode = system(mCmdLine);
 
             if (lCD)
             {
                 ChangeDirectory(lDir);
             }
+        }
 
-            return lResult;
+        void Process::Start_Internal()
+        {
+            pid_t lPId = fork();
+            switch (lPId)
+            {
+            case -1: KMS_EXCEPTION_WITH_INFO(PROCESS_START, "fork failed", mCmdLine);
+
+            case 0:
+                int lResult;
+                lResult = __LINE__;
+                try
+                {
+                    unsigned int lIndex = 1;
+                    char lPath[PATH_LENGTH];
+                    const char* lVector[mArguments.size() + 2];
+
+                    mFolder.GetPath(mExecutable.c_str(), lPath, sizeof(lPath));
+
+                    lVector[0] = lPath;
+
+                    for (std::string& lA : mArguments)
+                    {
+                        lVector[lIndex] = lA.c_str(); lIndex++;
+                    }
+
+                    lVector[lIndex] = NULL;
+
+                    if (0 < mWorkingDirectory.size())
+                    {
+                        if (0 != chdir(mWorkingDirectory.c_str()))
+                        {
+                            KMS_EXCEPTION_WITH_INFO(FOLDER_ACCESS, "chdir failed", mWorkingDirectory.c_str());
+                        }
+                    }
+
+                    int lRet = execv(lPath, const_cast<char **>(lVector));
+                    assert(-1 == lRet);
+
+                    KMS_EXCEPTION_WITH_INFO(PROCESS_START, "execv failed", mCmdLine);
+                }
+                KMS_CATCH_RESULT(lResult);
+
+                exit(lResult);
+                break;
+
+            default: mHandle = lPId;
+            }
         }
 
     }

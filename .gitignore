@@ -5,6 +5,8 @@
 # Product   KMS-Framework
 # File      .gitignore
 
+Temp.sh
+
 *.bak
 
 # ===== Linux ===============================================================

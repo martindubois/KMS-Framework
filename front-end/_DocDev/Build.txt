@@ -1,0 +1,28 @@
+
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      front-end/_DocDev/Build.txt
+
+Name                _________________________________________________________
+
+Date and time       20 ______ - ______ - ______               ______ : ______
+
+Computer            _________________________________________________________
+
+[ ] File "Common/Version.h" - Edit the Version and add "front-end" to the
+    type.
+
+Version             ______ . ______ . ______ . ______ - _____________________
+
+[ ] File "front-end/_DocUser/KMS.ReadMe.txt"
+[ ] Tools "Terminal" - In the front-end sub folder
+        ..\Binaries\Debug\KMS-Build.exe
+[ ] Tools "GIT GUI"
+    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
+    - Push the servers
+
+Time and duration   ______ : ______           ______ hours and ______ minutes
+
+Signature           _________________________________________________________
