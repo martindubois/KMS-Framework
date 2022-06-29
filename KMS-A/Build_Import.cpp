@@ -62,10 +62,11 @@ namespace KMS
 
         Import::~Import() {}
 
-        void Import::AddDependency(const char* aD) { mDependencies.insert(aD); }
-        void Import::AddRepository(const char* aR) { mRepositories.push_back(File::Folder(aR)); }
+        void Import::AddDependency       (const char* aD) { mDependencies     .insert(aD); }
+        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.insert(aD); }
+        void Import::AddRepository       (const char* aR) { mRepositories.push_back(File::Folder(aR)); }
 
-        void Import::ImportDependency(const char* aDependency)
+        void Import::ImportDependency(const char* aDependency, bool aOSIndependent)
         {
             char lProduct[NAME_LENGTH];
             char lVersion[NAME_LENGTH];
@@ -77,9 +78,11 @@ namespace KMS
 
             Version lV(lVersion);
 
+            unsigned int lFlags = aOSIndependent ? Version::FLAG_OS_INDEPENDENT : 0;
+
             char lPackage[FILE_LENGTH];
 
-            lV.GetPackageName(lProduct, lPackage, sizeof(lPackage));
+            lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
 
             for (File::Folder& lR : mRepositories)
             {
@@ -109,7 +112,12 @@ namespace KMS
 
             for (std::string lD : mDependencies)
             {
-                ImportDependency(lD.c_str());
+                ImportDependency(lD.c_str(), false);
+            }
+
+            for (std::string lD : mOSIndependentDeps)
+            {
+                ImportDependency(lD.c_str(), true);
             }
 
             return 0;
@@ -121,8 +129,9 @@ namespace KMS
         {
             assert(NULL != aA);
 
-            CFG_CALL("Dependencies", AddDependency);
-            CFG_CALL("Repositories", AddRepository);
+            CFG_CALL("Dependencies"     , AddDependency       );
+            CFG_CALL("OSIndependentDeps", AddOSIndependentDeps);
+            CFG_CALL("Repositories"     , AddRepository       );
 
             #ifdef _KMS_DARWIN_
                 CFG_CALL("DarwinDependencies", AddDependency);
@@ -148,6 +157,8 @@ namespace KMS
                 "===== KMS::Build::Import =====\n"
                 "Dependencies += {Product};{Version}\n"
                 "    Add a dependency\n"
+                "OSIndependentDeps += {Product};{Version}\n"
+                "    Add an OS independent dependency\n"
                 "Repositories += {Path}\n"
                 "    Add a repository\n");
 

@@ -20,6 +20,8 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
+    const unsigned int Version::FLAG_OS_INDEPENDENT = 0x00000001;
+
     Version::Version(const char* aVersion)
     {
         unsigned int lMajor;
@@ -123,24 +125,38 @@ namespace KMS
 
     bool Version::GetDebug() const { return mDebug; }
 
-    unsigned int Version::GetMajor() const { return mMajor; }
-    unsigned int Version::GetMinor() const { return mMinor; }
-    unsigned int Version::GetBuild() const { return mBuild; }
+    unsigned int Version::GetMajor () const { return mMajor ; }
+    unsigned int Version::GetMinor () const { return mMinor ; }
+    unsigned int Version::GetBuild () const { return mBuild ; }
     unsigned int Version::GetCompat() const { return mCompat; }
 
-    void Version::GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte) const
+    void Version::GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags) const
     {
         assert(NULL != aProduct);
         assert(NULL != aOut);
         assert(0 < aOutSize_byte);
 
-        if (0 < mType.size())
+        if (0 == (aFlags & FLAG_OS_INDEPENDENT))
         {
-            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType.c_str());
+            if (0 < mType.size())
+            {
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s", aProduct, mMajor, mMinor, mBuild, mType.c_str());
+            }
+            else
+            {
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u", aProduct, mMajor, mMinor, mBuild);
+            }
         }
         else
         {
-            sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
+            if (0 < mType.size())
+            {
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType.c_str());
+            }
+            else
+            {
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
+            }
         }
     }
 

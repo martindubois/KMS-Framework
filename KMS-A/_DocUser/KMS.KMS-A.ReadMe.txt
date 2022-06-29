@@ -9,6 +9,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     * Compiled on Linux
     * Files
     * Folders
+    * OSIndependent
     * Pre-build command
 * KMS::Build::Import * Compiled on Linux
 * KMS::Build::Make (Linux only)
@@ -21,6 +22,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS::Import
     * Dependency format is {Product};{Version}
     * Support dependency by OS
+    * Support OS independent dependency
     * Use KMS::Version to generate package name
 * KMS::Thread
 * KMS::Thread::Gate

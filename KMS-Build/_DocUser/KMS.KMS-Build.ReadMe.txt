@@ -8,6 +8,7 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 * Compile on Linux
 * Files
 * Folders
+* OSIndependent
 * Pre-build command
 
 0.0.3 2022-06-01

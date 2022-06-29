@@ -65,7 +65,9 @@ namespace KMS
 
             lP.AddArgument("-r");
             lP.AddArgument(lDst);
-            lP.AddArgument((mPath + SLASH + "*").c_str());
+            lP.AddArgument("*");
+
+            lP.SetWorkingDirectory(mPath.c_str());
 
             lP.Run(1000 * 60 * 5);
 

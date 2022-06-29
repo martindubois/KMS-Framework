@@ -27,6 +27,7 @@
 #define DEFAULT_DO_NOT_COMPILE (false)
 #define DEFAULT_DO_NOT_EXPORT  (false)
 #define DEFAULT_DO_NOT_PACKAGE (false)
+#define DEFAULT_OS_INDEPENDENT (false)
 #define DEFAULT_VERSION_FILE   ("Common" SLASH "Version.h")
 
 #define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
@@ -74,9 +75,10 @@ namespace KMS
         }
 
         Build::Build()
-            : mDoNotCompile(DEFAULT_DO_NOT_COMPILE)
-            , mDoNotExport(DEFAULT_DO_NOT_EXPORT)
-            , mDoNotPackage(DEFAULT_DO_NOT_PACKAGE)
+            : mDoNotCompile (DEFAULT_DO_NOT_COMPILE)
+            , mDoNotExport  (DEFAULT_DO_NOT_EXPORT)
+            , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
+            , mOSIndependent(DEFAULT_OS_INDEPENDENT)
             , mTempFolder(File::Folder::Id::TEMPORARY)
             , mVersionFile(DEFAULT_VERSION_FILE)
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
@@ -99,9 +101,10 @@ namespace KMS
         void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .insert(aC); }
         void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .insert(aT); }
 
-        void Build::SetDoNotCompile(bool aDNC) { mDoNotCompile = aDNC; }
-        void Build::SetDoNotExport (bool aDNE) { mDoNotExport  = aDNE; }
-        void Build::SetDoNotPackage(bool aDNP) { mDoNotPackage = aDNP; }
+        void Build::SetDoNotCompile (bool aDNC) { mDoNotCompile  = aDNC; }
+        void Build::SetDoNotExport  (bool aDNE) { mDoNotExport   = aDNE; }
+        void Build::SetDoNotPackage (bool aDNP) { mDoNotPackage  = aDNP; }
+        void Build::SetOSIndependent(bool aOSI) { mOSIndependent = aOSI; }
 
         void Build::SetProduct    (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
         void Build::SetVersionFile(const char* aVF) { assert(NULL != aVF); mVersionFile  = aVF; }
@@ -180,19 +183,21 @@ namespace KMS
         {
             if (NULL == aV)
             {
-                CFG_IF("DoNotCompile") { SetDoNotCompile(); return true; }
-                CFG_IF("DoNotExport" ) { SetDoNotExport (); return true; }
-                CFG_IF("DoNotPackage") { SetDoNotPackage(); return true; }
-                CFG_IF("VersionFile" ) { SetVersionFile(DEFAULT_VERSION_FILE); return true; }
+                CFG_IF("DoNotCompile" ) { SetDoNotCompile (); return true; }
+                CFG_IF("DoNotExport"  ) { SetDoNotExport  (); return true; }
+                CFG_IF("DoNotPackage" ) { SetDoNotPackage (); return true; }
+                CFG_IF("OSIndependent") { SetOSIndependent(); return true; }
+                CFG_IF("VersionFile"  ) { SetVersionFile(DEFAULT_VERSION_FILE); return true; }
             }
             else
             {
                 CFG_CALL("Product"    , SetProduct    );
                 CFG_CALL("VersionFile", SetVersionFile);
 
-                CFG_CONVERT("DoNotCompile", SetDoNotCompile, Convert::ToBool);
-                CFG_CONVERT("DoNotExport" , SetDoNotExport , Convert::ToBool);
-                CFG_CONVERT("DoNotPackage", SetDoNotPackage, Convert::ToBool);
+                CFG_CONVERT("DoNotCompile" , SetDoNotCompile , Convert::ToBool);
+                CFG_CONVERT("DoNotExport"  , SetDoNotExport  , Convert::ToBool);
+                CFG_CONVERT("DoNotPackage" , SetDoNotPackage , Convert::ToBool);
+                CFG_CONVERT("OSIndependent", SetOSIndependent, Convert::ToBool);
             }
 
             return Configurable::SetAttribute(aA, aV);
@@ -226,6 +231,10 @@ namespace KMS
                 "    Add a folder to package\n"
                 "Libraries += {Name}\n"
                 "    Add a builded library\n"
+                "OSIndependend\n"
+                "    Set the OS independent flag\n"
+                "OSIndependent = {Boolean}\n"
+                "    Set or clear the OS independent flag\n"
                 "PreBuildCmds += {Command Arg0 Arg1 ...}\n"
                 "    Add a pre-build command\n"
                 "Product = {Name}\n"
@@ -338,9 +347,11 @@ namespace KMS
                 lProduct.Create();
             }
 
+            unsigned int lFlags = mOSIndependent ? Version::FLAG_OS_INDEPENDENT : 0;
+
             char lPackage[FILE_LENGTH];
 
-            aVersion.GetPackageName(mProduct.c_str(), lPackage, sizeof(lPackage));
+            aVersion.GetPackageName(mProduct.c_str(), lPackage, sizeof(lPackage), lFlags);
 
             char lZip[FILE_LENGTH + 4];
 
@@ -358,11 +369,11 @@ namespace KMS
 
         void Build::Package_Component()
         {
-            File::Folder lBinaries(mTempFolder, "Binaries");
-            File::Folder lLibraries(mTempFolder, "Libraries");
+            File::Folder lBin(mTempFolder, "Binaries" );
+            File::Folder lLib(mTempFolder, "Libraries");
 
-            lBinaries.Create();
-            lLibraries.Create();
+            if (0 < mBinaries .size()) { lBin.Create(); }
+            if (0 < mLibraries.size()) { lLib.Create(); }
 
             for (std::string lC : mConfigurations)
             {
@@ -405,7 +416,7 @@ namespace KMS
                 File::Folder lFD(mTempFolder, lDst);
                 File::Folder lFS(lSrc);
 
-                lFS.Copy(lDst);
+                lFS.Copy(lFD);
             }
         }
 

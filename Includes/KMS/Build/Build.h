@@ -39,9 +39,10 @@ namespace KMS
             void AddPreBuildCmd  (const char* aC);
             void AddTest         (const char* aT);
 
-            void SetDoNotCompile(bool aDNC = true);
-            void SetDoNotExport (bool aDNE = true);
-            void SetDoNotPackage(bool aDNP = true);
+            void SetDoNotCompile (bool aDNC = true);
+            void SetDoNotExport  (bool aDNE = true);
+            void SetDoNotPackage (bool aDNP = true);
+            void SetOSIndependent(bool aOSI = true);
 
             void SetProduct     (const char *aP );
             void SetProductShort(const char *aPS);
@@ -91,6 +92,7 @@ namespace KMS
             StringSet    mFiles;
             StringSet    mFolders;
             StringSet    mLibraries;
+            bool         mOSIndependent;
             StringSet    mPreBuildCmds;
             std::string  mProduct;
             StringSet    mTests;
