@@ -28,10 +28,11 @@ namespace KMS
 
             ~Import();
 
-            void AddDependency(const char *aD);
-            void AddRepository(const char *aR);
+            void AddDependency       (const char* aD);
+            void AddOSIndependentDeps(const char* aD);
+            void AddRepository       (const char* aR);
 
-            void ImportDependency(const char* aDependency);
+            void ImportDependency(const char* aDependency, bool aOSIndependent);
 
             int Run();
 
@@ -51,6 +52,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             StringSet  mDependencies;
+            StringSet  mOSIndependentDeps;
             FolderList mRepositories;
 
         };

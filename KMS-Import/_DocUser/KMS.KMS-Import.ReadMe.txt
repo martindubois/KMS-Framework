@@ -6,6 +6,7 @@ Product   KMS-Framework
 File      KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt
 
 * Compiled on Linux
+* Support OS independent dependency
 
 0.0.3 2022-06-02
 
