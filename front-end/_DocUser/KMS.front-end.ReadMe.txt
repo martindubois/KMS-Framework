@@ -5,6 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      front-end/_DocUser/KMS.front-end.ReadMe.txt
 
+0.0.5-front-end 2022-07-04
+- Fix function names
+
 0.0.4-front-end 2022-06-28
 
 0.0.3-front-end 2022-06-26

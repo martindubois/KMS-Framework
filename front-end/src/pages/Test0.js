@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 const Test0 = () =>
 {
-    return fetch( 'http://127.0.0.1/Test0' )
+    return fetch( 'http://127.0.0.1/RunTest0' )
         .then( ( aResponse ) => { return 'PASSED' } )
         .catch( ( aError ) => { return 'FAILED' } )
 }

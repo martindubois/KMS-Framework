@@ -10,7 +10,7 @@ import { Outlet, Link } from "react-router-dom"
 
 const GetBackEndVersion = () =>
 {
-    return fetch( 'http://127.0.0.1/Version' )
+    return fetch( 'http://127.0.0.1/GetVersion' )
         .then( ( aResponse ) => { return aResponse.json() } )
         .then( ( aData ) => { return aData.Version } )
         .catch( ( aError ) => { return 'ERROR' } )
