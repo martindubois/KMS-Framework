@@ -211,7 +211,7 @@ namespace KMS
             {
                 char lE[LINE_LENGTH];
 
-                CFG_IF("Root") { Environment::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
+                CFG_IF("Root") { Env::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
 
                 CFG_CONVERT("Verbose", SetVerbose, Convert::ToBool);
             }

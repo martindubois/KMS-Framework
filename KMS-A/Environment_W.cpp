@@ -15,7 +15,7 @@
 
 namespace KMS
 {
-    namespace Environment
+    namespace Env
     {
 
         // Functions

@@ -153,8 +153,8 @@ namespace KMS
         {
             char lE[LINE_LENGTH];
 
-            CFG_IF("Destination") { Environment::Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
-            CFG_IF("Source"     ) { Environment::Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
+            CFG_IF("Destination") { Env::Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
+            CFG_IF("Source"     ) { Env::Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
         }
 
         return Configurable::SetAttribute(aA, aV);

@@ -176,7 +176,7 @@ namespace KMS
 
             char lPath[PATH_LENGTH];
 
-            Environment::GetVariableValue(aVariable, lPath, sizeof(lPath));
+            Env::GetVariableValue(aVariable, lPath, sizeof(lPath));
 
             mPath = lPath;
         }

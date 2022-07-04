@@ -47,6 +47,6 @@ namespace KMS
 
 #define CFG_CONVERT(N,F,T) if (0 == strcmp(aA, N)) { (F)(T(aV)); return true; }
 
-#define CFG_EXPAND(N,F) if (0 == strcmp(aA, N)) { KMS::Environment::Expand(aV, lE, sizeof(lE)); (F)(lE); return true; }
+#define CFG_EXPAND(N,F) if (0 == strcmp(aA, N)) { KMS::Env::Expand(aV, lE, sizeof(lE)); (F)(lE); return true; }
 
 #define CFG_IF(N) if (0 == strcmp(aA, N))
