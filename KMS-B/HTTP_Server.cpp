@@ -38,7 +38,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        void Server::OnConnect(Network::Socket* aSocket)
+        void Server::OnConnect(Net::Socket* aSocket)
         {
             try
             {

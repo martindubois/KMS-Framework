@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Network/Server.h>
+#include <KMS/Net/Server.h>
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         // Public
@@ -52,7 +52,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Server::Server() : mSocket(Network::Socket::Type::STREAM)
+        Server::Server() : mSocket(Net::Socket::Type::STREAM)
         {
             mThread.mOnIterate .Set(this, CODE_ON_ITERATE );
             mThread.mOnStarting.Set(this, CODE_ON_START   );
@@ -67,9 +67,9 @@ namespace KMS
         {
             bool lResult = true;
 
-            Network::Address lFrom;
+            Net::Address lFrom;
 
-            Network::Socket* lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
+            Net::Socket* lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
             if (NULL != lSocket)
             {
                 OnConnect(lSocket);
@@ -80,7 +80,7 @@ namespace KMS
 
         bool Server::OnStarting()
         {
-            Network::Thread_Startup();
+            Net::Thread_Startup();
 
             return true;
         }
@@ -94,7 +94,7 @@ namespace KMS
 
         bool Server::OnStopping()
         {
-            Network::Thread_Cleanup();
+            Net::Thread_Cleanup();
 
             return true;
         }

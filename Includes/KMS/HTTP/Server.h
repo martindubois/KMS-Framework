@@ -9,15 +9,15 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Dictionary.h>
-#include <KMS/Network/Server.h>
 #include <KMS/Msg/Sender.h>
+#include <KMS/Net/Server.h>
 
 namespace KMS
 {
     namespace HTTP
     {
 
-        class Server : public Network::Server
+        class Server : public Net::Server
         {
 
         public:
@@ -30,7 +30,7 @@ namespace KMS
 
         protected:
 
-            virtual void OnConnect(Network::Socket* aSocket);
+            virtual void OnConnect(Net::Socket* aSocket);
 
         };
 

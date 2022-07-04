@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Network/Address.h
+// File      Includes/KMS/Net/Address.h
 
 #pragma once
 
@@ -20,7 +20,7 @@
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         class Address
@@ -131,6 +131,6 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Network::Address& aA);
+std::ostream& operator << (std::ostream& aOut, const KMS::Net::Address& aA);
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Network::Address::Type& aT);
+std::ostream& operator << (std::ostream& aOut, const KMS::Net::Address::Type& aT);

@@ -3,14 +3,14 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B/Network_Socket.cpp
+// File      KMS-B/Net_Socket.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/Convert.h>
 
-#include <KMS/Network/Socket.h>
+#include <KMS/Net/Socket.h>
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         // Functions
@@ -224,7 +224,7 @@ namespace KMS
         void Socket::DisplayHelp(FILE* aOut) const
         {
             fprintf(aOut,
-                "===== KMS::Network::Socket =====\n"
+                "===== KMS::Net::Socket =====\n"
                 "Allow\n"
                 "    Clear the allower address range list\n"
                 "Allow = {AddressRange}\n"

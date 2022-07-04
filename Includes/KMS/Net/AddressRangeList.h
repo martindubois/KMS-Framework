@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Network/AddressRangeList.h
+// File      Includes/KMS/Net/AddressRangeList.h
 
 #pragma once
 
@@ -12,11 +12,11 @@
 #include <vector>
 
 // ===== Includes ===========================================================
-#include <KMS/Network/AddressRange.h>
+#include <KMS/Net/AddressRange.h>
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         class AddressRangeList
@@ -53,4 +53,4 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Network::AddressRangeList& aARL);
+std::ostream& operator << (std::ostream& aOut, const KMS::Net::AddressRangeList& aARL);

@@ -3,18 +3,18 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B/Network_AddressRange.cpp
+// File      KMS-B/Net_AddressRange.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/SafeAPI.h>
 
-#include <KMS/Network/AddressRange.h>
+#include <KMS/Net/AddressRange.h>
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         // Public

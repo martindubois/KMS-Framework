@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B/Network_Address.cpp
+// File      KMS-B/Net_Address.cpp
 
 #include "Component.h"
 
@@ -11,12 +11,13 @@
 #include <WS2tcpip.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Network/Address.h>
 #include <KMS/SafeAPI.h>
+
+#include <KMS/Net/Address.h>
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         // Public

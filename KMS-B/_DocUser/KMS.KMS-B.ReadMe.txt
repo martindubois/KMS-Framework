@@ -6,5 +6,5 @@ Product   KMS-Framework
 File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 * KMS::HTTP::FileServer - File type list
-* KMS::Network::Server
+* KMS::Net::Server
 * KMS::Process::Browser

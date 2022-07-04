@@ -76,7 +76,7 @@ namespace KMS
 
             int lResult = __LINE__;
 
-            Network::Thread_Startup();
+            Net::Thread_Startup();
 
             try
             {
@@ -109,7 +109,7 @@ namespace KMS
             }
             KMS_CATCH_RESULT(lResult);
 
-            Network::Thread_Cleanup();
+            Net::Thread_Cleanup();
 
             return lResult;
         }

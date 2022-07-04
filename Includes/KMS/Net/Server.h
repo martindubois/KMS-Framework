@@ -3,19 +3,19 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Network/Server.h
+// File      Includes/KMS/Net/Server.h
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Network/Socket.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Msg/Sender.h>
+#include <KMS/Net/Socket.h>
 #include <KMS/Thread/Thread.h>
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         class Server : public Msg::IReceiver
@@ -23,7 +23,7 @@ namespace KMS
 
         public:
 
-            Network::Socket mSocket;
+            Net::Socket     mSocket;
             Thread::Thread  mThread;
 
             // ===== Msg::IReceiver =========================================

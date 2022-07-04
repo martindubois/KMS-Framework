@@ -14,7 +14,7 @@
 #include <KMS/Dictionary.h>
 #include <KMS/File/Binary.h>
 #include <KMS/File/Folder.h>
-#include <KMS/Network/Socket.h>
+#include <KMS/Net/Socket.h>
 
 namespace KMS
 {
@@ -73,7 +73,7 @@ namespace KMS
 
         // Internal
 
-            Request(Network::Socket* aSocket);
+            Request(Net::Socket* aSocket);
 
             ~Request();
 
@@ -107,7 +107,7 @@ namespace KMS
 
             Result mResult;
 
-            Network::Socket* mSocket;
+            Net::Socket* mSocket;
 
             Type mType;
 

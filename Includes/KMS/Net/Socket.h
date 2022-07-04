@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Network/Socket.h
+// File      Includes/KMS/Net/Socket.h
 
 #pragma once
 
@@ -16,12 +16,12 @@
 // ===== Includes ========================================================
 #include <KMS/Config/Configurable.h>
 #include <KMS/File/Binary.h>
-#include <KMS/Network/Address.h>
-#include <KMS/Network/AddressRangeList.h>
+#include <KMS/Net/Address.h>
+#include <KMS/Net/AddressRangeList.h>
 
 namespace KMS
 {
-    namespace Network
+    namespace Net
     {
 
         extern void Thread_Startup();

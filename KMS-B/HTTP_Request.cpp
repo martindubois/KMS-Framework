@@ -58,7 +58,7 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Request::Request(Network::Socket* aSocket)
+        Request::Request(Net::Socket* aSocket)
             : mData(NULL)
             , mDataSize_byte(0)
             , mFile(NULL)

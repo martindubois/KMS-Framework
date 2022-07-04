@@ -18,16 +18,16 @@
     <ClCompile Include="HTTP_Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network_Socket.cpp">
+    <ClCompile Include="Net_Socket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network_Address.cpp">
+    <ClCompile Include="Net_Address.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network_AddressRangeList.cpp">
+    <ClCompile Include="Net_AddressRangeList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network_AddressRange.cpp">
+    <ClCompile Include="Net_AddressRange.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HTTP_FileServer.cpp">
@@ -36,7 +36,7 @@
     <ClCompile Include="HTTP_Request.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Network_Server.cpp">
+    <ClCompile Include="Net_Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Process_Browser.cpp">
