@@ -236,7 +236,7 @@ namespace KMS
             Configurable::DisplayHelp(aOut);
         }
 
-        // ===== Message::IReceiver =========================================
+        // ===== Msg::IReceiver =============================================
 
         bool FileServer::Receive(void* aSender, unsigned int aCode, void* aData)
         {

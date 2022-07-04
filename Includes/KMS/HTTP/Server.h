@@ -10,7 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Dictionary.h>
 #include <KMS/Network/Server.h>
-#include <KMS/Message/Sender.h>
+#include <KMS/Msg/Sender.h>
 
 namespace KMS
 {
@@ -26,7 +26,7 @@ namespace KMS
 
             Dictionary mResponseHeader;
 
-            Message::Sender mOnRequest;
+            Msg::Sender mOnRequest;
 
         protected:
 

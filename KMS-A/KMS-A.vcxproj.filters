@@ -60,7 +60,7 @@
     <ClCompile Include="File_Sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Message_Sender.cpp">
+    <ClCompile Include="Msg_Sender.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Thread_Thread.cpp">

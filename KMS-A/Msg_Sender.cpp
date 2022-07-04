@@ -3,18 +3,18 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Message_Sender.cpp
+// File      KMS-A/Msg_Sender.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Message/IReceiver.h>
+#include <KMS/Msg/IReceiver.h>
 
-#include <KMS/Message/Sender.h>
+#include <KMS/Msg/Sender.h>
 
 namespace KMS
 {
-    namespace Message
+    namespace Msg
     {
 
         // Public

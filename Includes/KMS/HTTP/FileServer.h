@@ -13,7 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Config/Configurable.h>
 #include <KMS/File/Folder.h>
-#include <KMS/Message/IReceiver.h>
+#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
@@ -21,7 +21,7 @@ namespace KMS
     {
         class Request;
 
-        class FileServer : public Config::Configurable, public Message::IReceiver
+        class FileServer : public Config::Configurable, public Msg::IReceiver
         {
 
         public:
@@ -55,7 +55,7 @@ namespace KMS
             virtual bool SetAttribute(const char* aA, const char* aV);
             virtual void DisplayHelp(FILE* aOut) const;
 
-            // ===== Message::IReceived =====================================
+            // ===== Msg::IReceived =========================================
             virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
 
         private:

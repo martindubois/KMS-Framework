@@ -11,7 +11,7 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Message/Sender.h>
+#include <KMS/Msg/Sender.h>
 #include <KMS/Thread/Gate.h>
 
 namespace KMS
@@ -36,11 +36,11 @@ namespace KMS
 
             Gate mGate;
 
-            Message::Sender mOnIterate;
-            Message::Sender mOnRun;
-            Message::Sender mOnStarting;
-            Message::Sender mOnStop;
-            Message::Sender mOnStopping;
+            Msg::Sender mOnIterate;
+            Msg::Sender mOnRun;
+            Msg::Sender mOnStarting;
+            Msg::Sender mOnStop;
+            Msg::Sender mOnStopping;
 
         // internal
 

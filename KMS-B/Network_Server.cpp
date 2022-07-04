@@ -28,7 +28,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Message::IReceiver =========================================
+        // ===== Msg::IReceiver =============================================
 
         bool Server::Receive(void* aSender, unsigned int aCode, void* aData)
         {

@@ -53,7 +53,7 @@
     <ClCompile Include="File_FileInfoList.cpp" />
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
-    <ClCompile Include="Message_Sender.cpp" />
+    <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="Process_Process.cpp" />
     <ClCompile Include="Process_Process_W.cpp" />
     <ClCompile Include="Test_Test.cpp" />

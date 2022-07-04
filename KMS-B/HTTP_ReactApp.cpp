@@ -35,9 +35,9 @@ namespace KMS
             mServer.mOnRequest.Set(this, MSG_ON_REQUEST);
         }
 
-        void ReactApp::AddFunction(const char* aPath, Message::IReceiver* aReceiver, unsigned int aCode)
+        void ReactApp::AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode)
         {
-            mFunctions.insert(FunctionMap::value_type(aPath, Message::Sender(this, aReceiver, aCode)));
+            mFunctions.insert(FunctionMap::value_type(aPath, Msg::Sender(this, aReceiver, aCode)));
         }
 
         void ReactApp::AddRoute(const char* aPath)
@@ -54,7 +54,7 @@ namespace KMS
             mServer.mSocket.InitConfigurator(aC);
         }
 
-        // ===== Message::IReceiver =========================================
+        // ===== Msg::IReceiver =============================================
 
         bool ReactApp::Receive(void* aSender, unsigned int aCode, void* aData)
         {

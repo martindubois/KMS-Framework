@@ -15,7 +15,7 @@
 #include <KMS/Config/Configurable.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
-#include <KMS/Message/Sender.h>
+#include <KMS/Msg/Sender.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -23,27 +23,27 @@ namespace KMS
     namespace HTTP
     {
 
-        class ReactApp : public Config::Configurable, public Message::IReceiver
+        class ReactApp : public Config::Configurable, public Msg::IReceiver
         {
 
         public:
 
             ReactApp();
 
-            void AddFunction(const char* aRelPath, Message::IReceiver* aReceiver, unsigned int aCode);
-            void AddRoute   (const char* aRelPath);
+            void AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode);
+            void AddRoute   (const char* aPath);
 
             // ===== Config::Configurable ===================================
             virtual void InitConfigurator(Config::Configurator* aC);
 
-            // ===== Message::IReceiver =====================================
+            // ===== Msg::IReceiver =========================================
             virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
 
             Server mServer;
 
         private:
 
-            typedef std::map<std::string, Message::Sender> FunctionMap;
+            typedef std::map<std::string, Msg::Sender> FunctionMap;
 
             ReactApp(const ReactApp&);
 

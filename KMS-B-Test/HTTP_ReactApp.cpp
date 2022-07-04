@@ -12,15 +12,15 @@
 
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Request.h>
+#include <KMS/Msg/IReceiver.h>
 #include <KMS/Process/Browser.h>
-#include <KMS/Test/MessageReceiver.h>
 
 #include <KMS/HTTP/ReactApp.h>
 
 // ===== KMS-B-Test =========================================================
 #include "../Common/Version.h"
 
-class TestApp : public KMS::Message::IReceiver
+class TestApp : public KMS::Msg::IReceiver
 {
 
 public:
@@ -29,7 +29,7 @@ public:
 
     bool GetResult() const;
 
-    // ===== KMS::Message::IReceiver ========================================
+    // ===== KMS::Msg::IReceiver ============================================
     virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
 
 private:
@@ -86,7 +86,7 @@ bool TestApp::GetResult() const
     return (2 == mGetVersion) && (2 == mRunTest0);
 }
 
-// ===== KMS::Message::Receiver =============================================
+// ===== KMS::Msg::Receiver =================================================
 
 bool TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 {

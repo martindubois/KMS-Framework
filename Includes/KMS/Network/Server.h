@@ -9,8 +9,8 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Network/Socket.h>
-#include <KMS/Message/IReceiver.h>
-#include <KMS/Message/Sender.h>
+#include <KMS/Msg/IReceiver.h>
+#include <KMS/Msg/Sender.h>
 #include <KMS/Thread/Thread.h>
 
 namespace KMS
@@ -18,7 +18,7 @@ namespace KMS
     namespace Network
     {
 
-        class Server : public Message::IReceiver
+        class Server : public Msg::IReceiver
         {
 
         public:
@@ -26,7 +26,7 @@ namespace KMS
             Network::Socket mSocket;
             Thread::Thread  mThread;
 
-            // ===== Message::IReceiver =====================================
+            // ===== Msg::IReceiver =========================================
             virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
 
         protected:
