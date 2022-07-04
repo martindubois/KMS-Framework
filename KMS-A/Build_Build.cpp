@@ -353,11 +353,7 @@ namespace KMS
 
             aVersion.GetPackageName(mProduct.c_str(), lPackage, sizeof(lPackage), lFlags);
 
-            char lZip[FILE_LENGTH + 4];
-
-            sprintf_s(lZip, "%s.zip", lPackage);
-
-            mTempFolder.Compress(lProduct, lZip);
+            mTempFolder.Compress(lProduct, lPackage);
         }
 
         void Build::Package()

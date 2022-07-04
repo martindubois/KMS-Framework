@@ -21,6 +21,8 @@ namespace KMS
 
             Sender(void* aSender);
 
+            Sender(void* aSender, IReceiver* aReceiver, unsigned int aCode);
+
             void Clear();
 
             bool IsSet() const;

@@ -47,16 +47,16 @@ namespace KMS
 
             void SetVerbose(bool aV = true);
 
-            void ProcessRequest(Request* aR);
+            void ProcessRequest(Request* aR, const char* aPath = NULL);
 
-            void ProcessRequest_GET(Request* aR);
+            void ProcessRequest_GET(Request* aR, const char* aPath = NULL);
 
             // ===== Config::Configurable ===================================
             virtual bool SetAttribute(const char* aA, const char* aV);
             virtual void DisplayHelp(FILE* aOut) const;
 
             // ===== Message::IReceived =====================================
-            bool Receive(void* aSender, unsigned int aCode, void* aData);
+            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
 
         private:
 

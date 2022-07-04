@@ -45,6 +45,12 @@ namespace KMS
             return lResult;
         }
 
+        void Request::SetData(const void* aData, unsigned int aDataSize_byte)
+        {
+            mData          = aData;
+            mDataSize_byte = aDataSize_byte;
+        }
+
         void Request::SetFile(File::Binary* aF) { assert(NULL != aF); mFile = aF; }
 
         void Request::SetResult(Result aR) { mResult = aR; }
@@ -53,7 +59,9 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Request::Request(Network::Socket* aSocket)
-            : mFile(NULL)
+            : mData(NULL)
+            , mDataSize_byte(0)
+            , mFile(NULL)
             , mMajor(0)
             , mMinor(0)
             , mResult(Result::OK)
@@ -117,6 +125,18 @@ namespace KMS
             static const char* DAY_NAMES[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
             static const char* MONTH_NAMES[13] = { NULL, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dev" };
 
+            char lData[1024];
+
+            if (!mResponseData.IsEmpty())
+            {
+                unsigned int lSize_byte = mResponseData.JSON_Get(lData, sizeof(lData));
+
+                mResponseHeader.Set("Content-Length", lSize_byte);
+                mResponseHeader.Set("Content-Type", "application/json");
+
+                SetData(lData, lSize_byte);
+            }
+
             SYSTEMTIME lST;
 
             GetSystemTime(&lST);
@@ -133,7 +153,13 @@ namespace KMS
 
             mSocket->Send(mBuffer, lSize_byte);
 
-            if (NULL != mFile)
+            if (0 < mDataSize_byte)
+            {
+                assert(NULL != mData);
+
+                mSocket->Send(mData, mDataSize_byte);
+            }
+            else if (NULL != mFile)
             {
                 mSocket->Send(mFile);
             }

@@ -62,10 +62,13 @@ namespace KMS
 
             const char* GetTypeName() const;
 
+            void SetData(const void* aData, unsigned int aDataSize_byte);
+
             void SetFile(File::Binary* aF);
 
             void SetResult(Result aR);
 
+            Dictionary mResponseData;
             Dictionary mResponseHeader;
 
         // Internal
@@ -89,6 +92,9 @@ namespace KMS
             bool Parse();
 
             char mBuffer[1024];
+
+            const void * mData;
+            unsigned int mDataSize_byte;
 
             File::Binary* mFile;
 

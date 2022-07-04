@@ -18,6 +18,8 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
+    bool Dictionary::IsEmpty() const { return (0 >= mEntries.size()); }
+
     void Dictionary::Set(const char* aName, const char* aValue)
     {
         assert(NULL != aName);
@@ -89,6 +91,50 @@ namespace KMS
 
             lHTTP += 1;
         }
+    }
+
+    unsigned int Dictionary::JSON_Get(char* aOut, unsigned int aOutSize_byte)
+    {
+        assert(NULL != aOut);
+
+        unsigned int lNeeded_byte = 2 + 6 * static_cast<unsigned int>(mEntries.size());
+
+        for (Internal::value_type& lEntry : mEntries)
+        {
+            lNeeded_byte += static_cast<unsigned int>(lEntry.first.size());
+            lNeeded_byte += static_cast<unsigned int>(lEntry.second.size());
+        }
+
+        if (aOutSize_byte < lNeeded_byte)
+        {
+            KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lNeeded_byte);
+        }
+
+        bool lFirst = true;
+        unsigned int lResult_byte = 0;
+
+        aOut[lResult_byte] = '{'; lResult_byte++;
+
+        for (Internal::value_type& lEntry : mEntries)
+        {
+            if (lFirst)
+            {
+                lFirst = false;
+            }
+            else
+            {
+                aOut[lResult_byte] = ','; lResult_byte++;
+            }
+
+            lResult_byte += sprintf_s(aOut + lResult_byte SizeInfoV(aOutSize_byte - lResult_byte), "\"%s\":\"%s\"", lEntry.first.c_str(), lEntry.second.c_str());
+        }
+
+        aOut[lResult_byte] = '}'; lResult_byte++;
+        aOut[lResult_byte] = '\0';
+
+        assert(lNeeded_byte - 1 == lResult_byte);
+
+        return lResult_byte;
     }
 
     // Internal

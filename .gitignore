@@ -5,6 +5,8 @@
 # Product   KMS-Framework
 # File      .gitignore
 
+/Import/
+
 Temp.sh
 
 *.bak

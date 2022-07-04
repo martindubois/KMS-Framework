@@ -140,22 +140,22 @@ namespace KMS
         {
             if (0 < mType.size())
             {
-                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s", aProduct, mMajor, mMinor, mBuild, mType.c_str());
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s.zip", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType.c_str());
             }
             else
             {
-                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u", aProduct, mMajor, mMinor, mBuild);
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u.zip", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
             }
         }
         else
         {
             if (0 < mType.size())
             {
-                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType.c_str());
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s.zip", aProduct, mMajor, mMinor, mBuild, mType.c_str());
             }
             else
             {
-                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u.zip", aProduct, mMajor, mMinor, mBuild);
             }
         }
     }

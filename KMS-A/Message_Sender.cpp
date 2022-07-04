@@ -25,6 +25,13 @@ namespace KMS
             assert(NULL != aSender);
         }
 
+        Sender::Sender(void* aSender, IReceiver* aReceiver, unsigned int aCode) : mCode(aCode), mReceiver(aReceiver), mSender(aSender)
+        {
+            assert(NULL != aSender);
+            assert(NULL != aReceiver);
+            assert(0 < aCode);
+        }
+
         bool Sender::IsSet() const { return NULL != mReceiver; }
 
         void Sender::Set(IReceiver* aR, unsigned int aCode)
