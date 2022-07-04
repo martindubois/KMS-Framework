@@ -47,9 +47,9 @@ namespace KMS
             mRoutes.insert(aPath);
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
-        void ReactApp::InitConfigurator(Config::Configurator* aC)
+        void ReactApp::InitConfigurator(Cfg::Configurator* aC)
         {
             mServer.mSocket.InitConfigurator(aC);
         }

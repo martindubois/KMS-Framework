@@ -11,12 +11,12 @@
 #include <ostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 
 namespace KMS
 {
 
-    class ByteTool : public Config::Configurable
+    class ByteTool : public Cfg::Configurable
     {
 
     public:
@@ -36,7 +36,7 @@ namespace KMS
         void SetDestination(FILE* aFile);
         void SetSource     (FILE* aFile);
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
         virtual bool SetAttribute(const char* aA, const char* aV);
         virtual bool SetAttribute_Indexed(const char* aA, const char* aI, const char * aV);
         virtual void DisplayHelp(FILE* aOut) const;

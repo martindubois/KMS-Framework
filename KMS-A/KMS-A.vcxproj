@@ -39,8 +39,8 @@
     <ClCompile Include="Build_Build_W.cpp" />
     <ClCompile Include="Build_Import.cpp" />
     <ClCompile Include="ByteTool.cpp" />
-    <ClCompile Include="Config_Configurable.cpp" />
-    <ClCompile Include="Config_Configurator.cpp" />
+    <ClCompile Include="Cfg_Configurable.cpp" />
+    <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dictionary.cpp" />
@@ -54,8 +54,8 @@
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="Msg_Sender.cpp" />
-    <ClCompile Include="Process_Process.cpp" />
-    <ClCompile Include="Process_Process_W.cpp" />
+    <ClCompile Include="Proc_Process.cpp" />
+    <ClCompile Include="Proc_Process_W.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />

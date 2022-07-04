@@ -14,7 +14,7 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Convert.h>
 #include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
@@ -80,9 +80,9 @@ namespace KMS
 
             try
             {
-                KMS::Config::Configurator lC;
-                KMS::HTTP::FileServer     lFS;
-                KMS::HTTP::Server         lS;
+                KMS::Cfg::Configurator lC;
+                KMS::HTTP::FileServer  lFS;
+                KMS::HTTP::Server      lS;
 
                 lS.mOnRequest.Set(&lFS, FileServer::CODE_ON_REQUEST);
 
@@ -197,7 +197,7 @@ namespace KMS
             aR->SetFile(lFile);
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool FileServer::SetAttribute(const char* aA, const char* aV)
         {

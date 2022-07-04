@@ -12,7 +12,7 @@
 #include <string>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
 #include <KMS/Msg/Sender.h>
@@ -23,7 +23,7 @@ namespace KMS
     namespace HTTP
     {
 
-        class ReactApp : public Config::Configurable, public Msg::IReceiver
+        class ReactApp : public Cfg::Configurable, public Msg::IReceiver
         {
 
         public:
@@ -33,8 +33,8 @@ namespace KMS
             void AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode);
             void AddRoute   (const char* aPath);
 
-            // ===== Config::Configurable ===================================
-            virtual void InitConfigurator(Config::Configurator* aC);
+            // ===== Cfg::Configurable ======================================
+            virtual void InitConfigurator(Cfg::Configurator* aC);
 
             // ===== Msg::IReceiver =========================================
             virtual bool Receive(void* aSender, unsigned int aCode, void* aData);

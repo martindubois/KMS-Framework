@@ -39,7 +39,7 @@
     <ClCompile Include="Net_Server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Process_Browser.cpp">
+    <ClCompile Include="Proc_Browser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HTTP_ReactApp.cpp">

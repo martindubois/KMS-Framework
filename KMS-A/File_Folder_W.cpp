@@ -11,7 +11,7 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
 #include <KMS/File/Folder.h>
 
@@ -70,7 +70,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
-            Process::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
+            Proc::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
 
             lProcess.AddArgument("-NoLogo");
             lProcess.AddArgument("-Command");
@@ -94,7 +94,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
-            Process::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
+            Proc::Process lProcess(Folder(Id::NONE), "PowerShell.exe");
 
             lProcess.AddArgument("-NoLogo");
             lProcess.AddArgument("-Command");
@@ -115,7 +115,7 @@ namespace KMS
 
         void Folder::Copy(const Folder& aDst) const
         {
-            Process::Process lProcess(Folder(Id::NONE), "xcopy");
+            Proc::Process lProcess(Folder(Id::NONE), "xcopy");
 
             lProcess.AddArgument("/CEKIV");
             lProcess.AddArgument(mPath.c_str());

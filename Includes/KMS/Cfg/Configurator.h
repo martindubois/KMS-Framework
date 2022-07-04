@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Config/Configurator.h
+// File      Includes/KMS/Cfg/Configurator.h
 
 #pragma once
 
@@ -11,12 +11,12 @@
 #include <list>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
 
 namespace KMS
 {
-    namespace Config
+    namespace Cfg
     {
 
         class Configurator : public Configurable

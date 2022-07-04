@@ -22,8 +22,8 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
         "DoesNotExist[0]=Ignored",
     };
 
-    KMS::ByteTool             lBT;
-    KMS::Config::Configurator lC;
+    KMS::ByteTool          lBT;
+    KMS::Cfg::Configurator lC;
 
     lBT.InitConfigurator(&lC);
 
@@ -53,8 +53,8 @@ KMS_TEST(ByteTool_Fail, "ByteTool_Fail", "Auto", sTest_Fail)
         "ByteTable[256]=0",
     };
 
-    KMS::ByteTool             lBT;
-    KMS::Config::Configurator lC;
+    KMS::ByteTool          lBT;
+    KMS::Cfg::Configurator lC;
 
     lBT.InitConfigurator(&lC);
 

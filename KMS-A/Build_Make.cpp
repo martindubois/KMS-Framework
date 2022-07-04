@@ -11,8 +11,8 @@
 #include <unistd.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
-#include <KMS/Process/Process.h>
+#include <KMS/Cfg/Configurator.h>
+#include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Make.h>
 
@@ -39,8 +39,8 @@ namespace KMS
 
             try
             {
-                KMS::Config::Configurator lC;
-                KMS::Build::Make          lM;
+                KMS::Cfg::Configurator lC;
+                KMS::Build::Make       lM;
 
                 lM.InitConfigurator(&lC);
 
@@ -97,7 +97,7 @@ namespace KMS
             return 0;
         }
 
-        // ===== Config::Configurable ===================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Make::AddAttribute(const char* aA, const char* aV)
         {
@@ -201,7 +201,7 @@ namespace KMS
 
         void Make::Depend_Component(const char* aC)
         {
-            Process::Process lP(File::Folder(File::Folder::Id::NONE), "make");
+            Proc::Process lP(File::Folder(File::Folder::Id::NONE), "make");
 
             lP.SetWorkingDirectory(aC);
 
@@ -226,7 +226,7 @@ namespace KMS
 
         void Make::Make_Component(const char* aC)
         {
-            Process::Process lP(File::Folder(File::Folder::Id::NONE), "make");
+            Proc::Process lP(File::Folder(File::Folder::Id::NONE), "make");
 
             lP.SetWorkingDirectory(aC);
 

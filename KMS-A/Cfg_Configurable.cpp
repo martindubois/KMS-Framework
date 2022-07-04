@@ -3,18 +3,18 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Config_Configurable.cpp
+// File      KMS-A/Cfg_Configurable.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 
 namespace KMS
 {
-    namespace Config
+    namespace Cfg
     {
 
         // Public

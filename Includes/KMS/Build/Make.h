@@ -8,7 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 
@@ -17,7 +17,7 @@ namespace KMS
     namespace Build
     {
 
-        class Make : public Config::Configurable
+        class Make : public Cfg::Configurable
         {
 
         public:
@@ -38,7 +38,7 @@ namespace KMS
 
             int Run();
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool SetAttribute(const char* aA, const char* aV);
 

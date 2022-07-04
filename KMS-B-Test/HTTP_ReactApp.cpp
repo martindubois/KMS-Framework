@@ -13,7 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Request.h>
 #include <KMS/Msg/IReceiver.h>
-#include <KMS/Process/Browser.h>
+#include <KMS/Proc/Browser.h>
 
 #include <KMS/HTTP/ReactApp.h>
 
@@ -47,7 +47,7 @@ private:
 
 KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
     KMS::HTTP::ReactApp lRA;
     TestApp lTA;
 
@@ -61,7 +61,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lRA.mServer.mThread.Start();
 
-    lB.SetPrefered(KMS::Process::Browser::Type::EDGE);
+    lB.SetPrefered(KMS::Proc::Browser::Type::EDGE);
 
     lB.Open(lRA.mServer, "Test0", "KMS-Framework");
 

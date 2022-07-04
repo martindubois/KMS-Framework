@@ -8,7 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/Test/Test.h>
 
 namespace KMS
@@ -16,7 +16,7 @@ namespace KMS
     namespace Test
     {
 
-        class TestManager : public Config::Configurable
+        class TestManager : public Cfg::Configurable
         {
 
         public:
@@ -32,7 +32,7 @@ namespace KMS
 
             int Run();
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aValue);
             virtual void DisplayHelp(FILE* aOut) const;
 

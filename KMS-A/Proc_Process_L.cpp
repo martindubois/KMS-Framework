@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Process_Process_L.cpp
+// File      KMS-A/Proc_Process_L.cpp
 
 #include "Component.h"
 
@@ -11,7 +11,7 @@
 #include <unistd.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ static void ChangeDirectory(const char* aD);
 
 namespace KMS
 {
-    namespace Process
+    namespace Proc
     {
 
         // Pirvate

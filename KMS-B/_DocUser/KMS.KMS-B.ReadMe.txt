@@ -7,4 +7,4 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 * KMS::HTTP::FileServer - File type list
 * KMS::Net::Server
-* KMS::Process::Browser
+* KMS::Proc::Browser

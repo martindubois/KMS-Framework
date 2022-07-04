@@ -14,7 +14,7 @@
 #include <sys/stat.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
 #include <KMS/File/Folder.h>
 
@@ -61,7 +61,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lDst, sizeof(lDst));
 
-            Process::Process lP(Folder(Id::NONE), "zip");
+            Proc::Process lP(Folder(Id::NONE), "zip");
 
             lP.AddArgument("-r");
             lP.AddArgument(lDst);
@@ -83,7 +83,7 @@ namespace KMS
 
             aFolder.GetPath(aFile, lSrc, sizeof(lSrc));
 
-            Process::Process lP(Folder(Id::NONE), "unzip");
+            Proc::Process lP(Folder(Id::NONE), "unzip");
 
             lP.AddArgument(lSrc);
             lP.AddArgument("-d");
@@ -99,7 +99,7 @@ namespace KMS
 
         void Folder::Copy(const Folder& aDst) const
         {
-            Process::Process lP(Folder(Id::NONE), "cp");
+            Proc::Process lP(Folder(Id::NONE), "cp");
 
             lP.AddArgument("-R");
             lP.AddArgument(mPath.c_str());
@@ -147,7 +147,7 @@ namespace KMS
 
             GetPath(aPattern, lPattern, sizeof(lPattern));
 
-            Process::Process lP(Folder(Id::NONE), "rm");
+            Proc::Process lP(Folder(Id::NONE), "rm");
 
             lP.AddArgument("-f");
             lP.AddArgument(lPattern);
@@ -190,7 +190,7 @@ namespace KMS
             assert(NULL != aDst);
             assert(NULL != aSrc);
 
-            Process::Process lP(Folder(Id::NONE), "cp");
+            Proc::Process lP(Folder(Id::NONE), "cp");
 
             if (FLAG_OVERWRITE == (aFlags & FLAG_OVERWRITE))
             {

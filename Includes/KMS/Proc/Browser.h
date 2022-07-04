@@ -3,23 +3,23 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Process/Process.h
+// File      Includes/KMS/Proc/Browser.h
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
 #include <KMS/HTTP/Server.h>
 
 namespace KMS
 {
-    namespace Process
+    namespace Proc
     {
 
         class Process;
 
-        class Browser : public Config::Configurable
+        class Browser : public Cfg::Configurable
         {
 
         public:
@@ -61,7 +61,7 @@ namespace KMS
 
             void Start(const File::Folder& aFolder, const char* aFile);
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool SetAttribute(const char* aA, const char* aV);
             virtual void DisplayHelp(FILE* aOut);
 

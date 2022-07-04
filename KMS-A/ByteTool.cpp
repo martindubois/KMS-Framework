@@ -13,7 +13,7 @@
 #include <iostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Convert.h>
 #include <KMS/Environment.h>
 
@@ -55,8 +55,8 @@ namespace KMS
 
         try
         {
-            KMS::ByteTool             lBT;
-            KMS::Config::Configurator lC;
+            KMS::ByteTool          lBT;
+            KMS::Cfg::Configurator lC;
 
             lBT.InitConfigurator(&lC);
 
@@ -145,7 +145,7 @@ namespace KMS
         mSource = aFile;
     }
 
-    // ===== Config/IConfigurable ===========================================
+    // ===== Cfg::Configurable ==============================================
 
     bool ByteTool::SetAttribute(const char* aA, const char* aV)
     {

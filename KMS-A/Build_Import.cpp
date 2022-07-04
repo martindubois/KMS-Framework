@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
@@ -38,8 +38,8 @@ namespace KMS
 
             try
             {
-                KMS::Build::Import        lI;
-                KMS::Config::Configurator lC;
+                KMS::Build::Import     lI;
+                KMS::Cfg::Configurator lC;
 
                 lI.InitConfigurator(&lC);
 
@@ -123,7 +123,7 @@ namespace KMS
             return 0;
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Import::AddAttribute(const char* aA, const char* aV)
         {

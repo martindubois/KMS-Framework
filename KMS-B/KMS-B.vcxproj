@@ -44,7 +44,7 @@
     <ClCompile Include="Net_AddressRangeList.cpp" />
     <ClCompile Include="Net_Server.cpp" />
     <ClCompile Include="Net_Socket.cpp" />
-    <ClCompile Include="Process_Browser.cpp" />
+    <ClCompile Include="Proc_Browser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

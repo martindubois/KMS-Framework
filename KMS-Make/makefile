@@ -34,6 +34,6 @@ depend:
 
 KMS-Make.o: ../Includes/KMS/Banner.h ../Includes/KMS/Console/Color.h
 KMS-Make.o: ../Includes/KMS/Build/Make.h
-KMS-Make.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
+KMS-Make.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
 KMS-Make.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 KMS-Make.o: ../Common/Version.h

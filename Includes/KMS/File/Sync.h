@@ -12,7 +12,7 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 
 namespace KMS
 {
@@ -21,7 +21,7 @@ namespace KMS
 
         class FileInfoList;
 
-        class Sync : public Config::Configurable
+        class Sync : public Cfg::Configurable
         {
 
         public:
@@ -47,7 +47,7 @@ namespace KMS
 
             int Run();
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool AddAttribute_Indexed(const char* aA, const char* aI, const char* aV);
             virtual bool SetAttribute(const char* aA, const char* aV);

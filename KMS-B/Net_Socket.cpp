@@ -186,7 +186,7 @@ namespace KMS
             while (sizeof(lBuffer) == lSize_byte);
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Socket::AddAttribute(const char* aA, const char* aV)
         {

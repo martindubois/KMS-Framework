@@ -11,7 +11,7 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Msg/IReceiver.h>
 
@@ -21,7 +21,7 @@ namespace KMS
     {
         class Request;
 
-        class FileServer : public Config::Configurable, public Msg::IReceiver
+        class FileServer : public Cfg::Configurable, public Msg::IReceiver
         {
 
         public:
@@ -51,7 +51,7 @@ namespace KMS
 
             void ProcessRequest_GET(Request* aR, const char* aPath = NULL);
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool SetAttribute(const char* aA, const char* aV);
             virtual void DisplayHelp(FILE* aOut) const;
 

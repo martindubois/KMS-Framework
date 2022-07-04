@@ -34,6 +34,6 @@ depend:
 
 KMS-Import.o: ../Includes/KMS/Banner.h ../Includes/KMS/Console/Color.h
 KMS-Import.o: ../Includes/KMS/Build/Import.h
-KMS-Import.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
+KMS-Import.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
 KMS-Import.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 KMS-Import.o: ../Common/Version.h

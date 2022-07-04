@@ -10,7 +10,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Environment.h>
 #include <KMS/File/FileInfoList.h>
 
@@ -48,8 +48,8 @@ namespace KMS
 
             try
             {
-                KMS::Config::Configurator lC;
-                KMS::File::Sync           lS;
+                KMS::Cfg::Configurator lC;
+                KMS::File::Sync        lS;
 
                 lS.InitConfigurator(&lC);
 
@@ -134,7 +134,7 @@ namespace KMS
             return 0;
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Sync::AddAttribute(const char* aA, const char* aV)
         {

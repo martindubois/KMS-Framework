@@ -3,19 +3,19 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Config_Configurator.cpp
+// File      KMS-A/Cfg_Configurator.cpp
 
 // TODO Do not read the same configuration file twice.
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/Environment.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
 
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@
 
 namespace KMS
 {
-    namespace Config
+    namespace Cfg
     {
 
         // Public
@@ -114,7 +114,7 @@ namespace KMS
         void Configurator::DisplayHelp(FILE* aOut) const
         {
             fprintf(aOut,
-                "===== KMS::Config::Configurator =====\n"
+                "===== KMS::Cfg::Configurator =====\n"
                 "ConfigFile += {Path}\n"
                 "    Include the specified configuration file\n"
                 "Help\n"

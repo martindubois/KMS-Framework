@@ -14,7 +14,7 @@
 #include <winsock2.h>
 
 // ===== Includes ========================================================
-#include <KMS/Config/Configurable.h>
+#include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Binary.h>
 #include <KMS/Net/Address.h>
 #include <KMS/Net/AddressRangeList.h>
@@ -27,7 +27,7 @@ namespace KMS
         extern void Thread_Startup();
         extern void Thread_Cleanup();
 
-        class Socket : public Config::Configurable
+        class Socket : public Cfg::Configurable
         {
 
         public:
@@ -78,7 +78,7 @@ namespace KMS
 
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
-            // ===== Config::Configurable ===================================
+            // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aV);
             virtual bool SetAttribute(const char* aA, const char* aV);
             virtual void DisplayHelp(FILE* aOut) const;

@@ -3,32 +3,32 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B-Test/Process_Browser.cpp
+// File      KMS-B-Test/Proc_Browser.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Browser.h>
+#include <KMS/Proc/Browser.h>
 
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
 
 static KMS::File::Folder sCurrent(KMS::File::Folder::Id::CURRENT);
 
-KMS_TEST(Process_Browser_Base, "Process_Browser_Base", "Auto", sTest_Base)
+KMS_TEST(Proc_Browser_Base, "Proc_Browser_Base", "Auto", sTest_Base)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
 
     KMS_TEST_ASSERT(!lB.IsOpen());
 
     lB.SetAppMode  (false);
     lB.SetKioskMode(false);
-    lB.SetPrefered(KMS::Process::Browser::Type::NONE);
+    lB.SetPrefered(KMS::Proc::Browser::Type::NONE);
 
     lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     lB.Close();
 
-    lB.SetPrefered(KMS::Process::Browser::Type::DEFAULT);
+    lB.SetPrefered(KMS::Proc::Browser::Type::DEFAULT);
 
     lB.Detach();
 
@@ -37,11 +37,11 @@ KMS_TEST(Process_Browser_Base, "Process_Browser_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(lB.IsOpen());
 }
 
-KMS_TEST(Process_Browser_Chrome, "Process_Browser_Chrome", "Chrome", sTest_Chrome)
+KMS_TEST(Proc_Browser_Chrome, "Proc_Browser_Chrome", "Chrome", sTest_Chrome)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
 
-    lB.SetPrefered(KMS::Process::Browser::Type::CHROME);
+    lB.SetPrefered(KMS::Proc::Browser::Type::CHROME);
 
     lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
 
@@ -57,9 +57,9 @@ KMS_TEST(Process_Browser_Chrome, "Process_Browser_Chrome", "Chrome", sTest_Chrom
     lB.Close();
 }
 
-KMS_TEST(Process_Browser_Config, "Process_Browser_Config", "Auto", sTest_Config)
+KMS_TEST(Proc_Browser_Config, "Proc_Browser_Config", "Auto", sTest_Config)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
 
     KMS_TEST_ASSERT(lB.SetAttribute("Prefered", NULL));
 
@@ -73,9 +73,9 @@ KMS_TEST(Process_Browser_Config, "Process_Browser_Config", "Auto", sTest_Config)
     lB.DisplayHelp(stdout);
 }
 
-KMS_TEST(Process_Browser_Fail, "Process_Browser_Fail", "Auto", sTest_Fail)
+KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
 
     try
     {
@@ -86,11 +86,11 @@ KMS_TEST(Process_Browser_Fail, "Process_Browser_Fail", "Auto", sTest_Fail)
     KMS_TEST_CATCH(CONFIG_VALUE);
 }
 
-KMS_TEST(Process_Browser_Interactive, "Process_Browser_Interactive", "Interactive", sTest_Interactive)
+KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sTest_Interactive)
 {
-    KMS::Process::Browser lB;
+    KMS::Proc::Browser lB;
 
-    lB.SetPrefered(KMS::Process::Browser::Type::DEFAULT);
+    lB.SetPrefered(KMS::Proc::Browser::Type::DEFAULT);
 
     lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html", "KMS-B-Test/Tests/Test1.html");
     lB.Detach();
@@ -100,11 +100,11 @@ KMS_TEST(Process_Browser_Interactive, "Process_Browser_Interactive", "Interactiv
 
 #ifdef _KMS_WINDOWS_
 
-    KMS_TEST(Process_Browser_Window, "Process_Browser_Windows", "Auto", sTest_Windows)
+    KMS_TEST(Proc_Browser_Window, "Proc_Browser_Windows", "Auto", sTest_Windows)
     {
-        KMS::Process::Browser lB;
+        KMS::Proc::Browser lB;
 
-        lB.SetPrefered(KMS::Process::Browser::Type::EDGE);
+        lB.SetPrefered(KMS::Proc::Browser::Type::EDGE);
         lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     }
 

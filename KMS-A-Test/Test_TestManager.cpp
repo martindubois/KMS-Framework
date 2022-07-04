@@ -16,7 +16,7 @@
 
 KMS_TEST(Test_TestManager_Fail, "Test_TestManager_Fail", "Auto", sTest_Fail)
 {
-    KMS::Config::Configurator lC;
+    KMS::Cfg::Configurator lC;
     KMS::Test::TestManager lTM;
 
     lTM.InitConfigurator(&lC);

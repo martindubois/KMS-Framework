@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Process/Process.h
+// File      Includes/KMS/Proc/Process.h
 
 #pragma once
 
@@ -13,7 +13,7 @@
 
 namespace KMS
 {
-    namespace Process
+    namespace Proc
     {
 
         class Process

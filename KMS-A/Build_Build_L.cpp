@@ -9,8 +9,8 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Build/Make.h>
-#include <KMS/Config/Configurator.h>
-#include <KMS/Process/Process.h>
+#include <KMS/Cfg/Configurator.h>
+#include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
 
@@ -24,7 +24,7 @@ namespace KMS
 
         void Build::Compile(const char* aC)
         {
-            Config::Configurator lC;
+            Cfg::Configurator lC;
             Make lM;
 
             lM.InitConfigurator(&lC);
@@ -73,7 +73,7 @@ namespace KMS
         {
             for (std::string lT : mTests)
             {
-                KMS::Process::Process lP((std::string("Binaries/") + aC).c_str(), lT.c_str());
+                Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT.c_str());
 
                 lP.AddArgument("Group=Auto");
 

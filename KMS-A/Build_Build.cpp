@@ -11,7 +11,7 @@
 #include <iostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Convert.h>
 #include <KMS/SafeAPI.h>
 #include <KMS/Text/TextFile.h>
@@ -57,8 +57,8 @@ namespace KMS
 
             try
             {
-                KMS::Build::Build         lB;
-                KMS::Config::Configurator lC;
+                KMS::Build::Build      lB;
+                KMS::Cfg::Configurator lC;
 
                 lB.InitConfigurator(&lC);
 
@@ -139,7 +139,7 @@ namespace KMS
             return 0;
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Build::AddAttribute(const char* aA, const char* aV)
         {

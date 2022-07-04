@@ -11,7 +11,7 @@
 #include <iostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Console/Color.h>
 
 #include <KMS/Test/TestManager.h>
@@ -33,8 +33,8 @@ namespace KMS
 
             try
             {
-                KMS::Config::Configurator lC;
-                KMS::Test::TestManager    lTM;
+                KMS::Cfg::Configurator lC;
+                KMS::Test::TestManager lTM;
 
                 lTM.InitConfigurator(&lC);
 
@@ -100,7 +100,7 @@ namespace KMS
             return (0 >= mErrorCount) ? 0 : 98;
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool TestManager::AddAttribute(const char* aA, const char* aV)
         {

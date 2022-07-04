@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Process_Process_W.cpp
+// File      KMS-A/Proc_Process_W.cpp
 
 #include "Component.h"
 
@@ -11,11 +11,11 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
 namespace KMS
 {
-    namespace Process
+    namespace Proc
     {
         // Public
         // //////////////////////////////////////////////////////////////////

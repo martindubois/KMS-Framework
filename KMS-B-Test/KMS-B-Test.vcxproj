@@ -266,7 +266,7 @@
     <ClCompile Include="HTTP_ReactApp.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />
     <ClCompile Include="KMS-B-Test.cpp" />
-    <ClCompile Include="Process_Browser.cpp" />
+    <ClCompile Include="Proc_Browser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

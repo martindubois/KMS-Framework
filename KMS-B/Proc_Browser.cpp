@@ -3,16 +3,16 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B/Process_Browser.cpp
+// File      KMS-B/Proc_Browser.cpp
 
 // TEST COVERAGE 2022-06-19 KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
-#include <KMS/Process/Browser.h>
+#include <KMS/Proc/Browser.h>
 
 // Config
 // //////////////////////////////////////////////////////////////////////////
@@ -22,11 +22,11 @@
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Process::Browser::Type ToBrowserType(const char* aBT);
+static KMS::Proc::Browser::Type ToBrowserType(const char* aBT);
 
 namespace KMS
 {
-    namespace Process
+    namespace Proc
     {
 
         // Public
@@ -140,7 +140,7 @@ namespace KMS
             Detach();
         }
 
-        // ===== Config::Configurable =======================================
+        // ===== Cfg::Configurable ==========================================
 
         bool Browser::SetAttribute(const char* aA, const char* aV)
         {
@@ -378,14 +378,14 @@ namespace KMS
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-KMS::Process::Browser::Type ToBrowserType(const char* aBT)
+KMS::Proc::Browser::Type ToBrowserType(const char* aBT)
 {
     assert(NULL != aBT);
 
-    if (0 == strcmp(aBT, "CHROME" )) { return KMS::Process::Browser::Type::CHROME ; }
-    if (0 == strcmp(aBT, "DEFAULT")) { return KMS::Process::Browser::Type::DEFAULT; }
-    if (0 == strcmp(aBT, "EDGE"   )) { return KMS::Process::Browser::Type::EDGE   ; }
-    if (0 == strcmp(aBT, "NONE"   )) { return KMS::Process::Browser::Type::NONE   ; }
+    if (0 == strcmp(aBT, "CHROME" )) { return KMS::Proc::Browser::Type::CHROME ; }
+    if (0 == strcmp(aBT, "DEFAULT")) { return KMS::Proc::Browser::Type::DEFAULT; }
+    if (0 == strcmp(aBT, "EDGE"   )) { return KMS::Proc::Browser::Type::EDGE   ; }
+    if (0 == strcmp(aBT, "NONE"   )) { return KMS::Proc::Browser::Type::NONE   ; }
 
     KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid browser type", aBT);
 }

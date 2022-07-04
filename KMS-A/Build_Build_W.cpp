@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Process/Process.h>
+#include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
 
@@ -37,7 +37,7 @@ namespace KMS
                 File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
                 File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
 
-                KMS::Process::Process lProcess(lBin, "MSBuild.exe");
+                Proc::Process lProcess(lBin, "MSBuild.exe");
 
                 lProcess.AddArgument("Solution.sln");
                 lProcess.AddArgument("/target:rebuild");
@@ -93,7 +93,7 @@ namespace KMS
             {
                 for (std::string lT : mTests)
                 {
-                    KMS::Process::Process lProcess((lP + "\\" + aC).c_str(), (lT + ".exe").c_str());
+                    Proc::Process lProcess((lP + "\\" + aC).c_str(), (lT + ".exe").c_str());
 
                     lProcess.AddArgument("Group=Auto");
 

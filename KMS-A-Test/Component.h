@@ -10,6 +10,6 @@
 #include <KMS/Base.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Config/Configurator.h>
+#include <KMS/Cfg/Configurator.h>
 #include <KMS/Exception.h>
 #include <KMS/Test/Test.h>

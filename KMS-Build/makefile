@@ -34,6 +34,6 @@ depend:
 
 KMS-Build.o: ../Includes/KMS/Banner.h ../Includes/KMS/Console/Color.h
 KMS-Build.o: ../Includes/KMS/Build/Build.h
-KMS-Build.o: ../Includes/KMS/Config/Configurable.h /usr/include/stdio.h
+KMS-Build.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
 KMS-Build.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
 KMS-Build.o: ../Common/Version.h

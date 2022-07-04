@@ -18,7 +18,7 @@
     <ClCompile Include="ByteTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Config_Configurator.cpp">
+    <ClCompile Include="Cfg_Configurator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
@@ -27,7 +27,7 @@
     <ClCompile Include="Version.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Config_Configurable.cpp">
+    <ClCompile Include="Cfg_Configurable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Test_TestManager.cpp">
@@ -39,7 +39,7 @@
     <ClCompile Include="Build_Build.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Process_Process.cpp">
+    <ClCompile Include="Proc_Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Text_TextFile.cpp">
@@ -90,7 +90,7 @@
     <ClCompile Include="File_Folder_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Process_Process_W.cpp">
+    <ClCompile Include="Proc_Process_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Environment.cpp">
