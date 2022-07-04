@@ -139,6 +139,8 @@ namespace KMS
 
         void Folder::Delete()
         {
+            // TODO Allow to remove none empty folder.
+
             if (!RemoveDirectory(mPath.c_str()))
             {
                 KMS_EXCEPTION_WITH_INFO(FOLDER_REMOVE, "RemoveDirectory failed", mPath.c_str());

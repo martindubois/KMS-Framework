@@ -25,8 +25,17 @@ class TestApp : public KMS::Message::IReceiver
 
 public:
 
+    TestApp();
+
+    bool GetResult() const;
+
     // ===== KMS::Message::IReceiver ========================================
     virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+
+private:
+
+    unsigned int mGetVersion;
+    unsigned int mRunTest0;
 
 };
 
@@ -61,10 +70,21 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     lB.Close();
 
     lRA.mServer.mThread.StopAndWait(1000);
+
+    KMS_TEST_ASSERT(lTA.GetResult());
 }
 
 // Public
 // //////////////////////////////////////////////////////////////////////////
+
+TestApp::TestApp() : mGetVersion(0), mRunTest0(0)
+{
+}
+
+bool TestApp::GetResult() const
+{
+    return (2 == mGetVersion) && (2 == mRunTest0);
+}
 
 // ===== KMS::Message::Receiver =============================================
 
@@ -77,6 +97,8 @@ bool TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
     switch (aCode)
     {
     case MSG_GET_VERSION:
+        mGetVersion++;
+
         char lVersion[16];
 
         VERSION.GetString(lVersion, sizeof(lVersion));
@@ -87,6 +109,8 @@ bool TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
         break;
 
     case MSG_RUN_TEST_0:
+        mRunTest0++;
+
         lRequest->mResponseHeader.Set("Access-Control-Allow-Origin", "*");
         lResult = true;
         break;

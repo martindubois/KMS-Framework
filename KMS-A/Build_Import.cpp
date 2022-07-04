@@ -103,12 +103,12 @@ namespace KMS
 
         int Import::Run()
         {
-            if (mImport.DoesExist())
-            {
-                mImport.Delete();
-            }
+            // TODO Make the Import folder empty
 
-            mImport.Create();
+            if (!mImport.DoesExist())
+            {
+                mImport.Create();
+            }
 
             for (std::string lD : mDependencies)
             {
