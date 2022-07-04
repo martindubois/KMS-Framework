@@ -30,6 +30,8 @@ namespace KMS
 
         Server::Server() : mOnRequest(this)
         {
+            mResponseHeader.Set("Server", "KMS-Framework");
+
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }
 
@@ -41,6 +43,8 @@ namespace KMS
             try
             {
                 Request lRequest(aSocket);
+
+                lRequest.mResponseHeader = mResponseHeader;
 
                 if (lRequest.Receive())
                 {

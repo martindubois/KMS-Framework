@@ -34,6 +34,8 @@ namespace KMS
         void GetWithDefault(const char* aKey,  int32_t* aOut,  int32_t aDefault, Radix aRadix = Radix::DECIMAL) const;
         void GetWithDefault(const char* aKey, uint32_t* aOut, uint32_t aDefault, Radix aRadix = Radix::DECIMAL) const;
 
+        bool IsEmpty() const;
+
         bool IsPresent(const char* aKey) const;
 
         void Remove(const char* aKey);

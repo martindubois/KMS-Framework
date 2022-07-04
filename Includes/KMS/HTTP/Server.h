@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Dictionary.h>
 #include <KMS/Network/Server.h>
 #include <KMS/Message/Sender.h>
 
@@ -22,6 +23,8 @@ namespace KMS
         public:
 
             Server();
+
+            Dictionary mResponseHeader;
 
             Message::Sender mOnRequest;
 

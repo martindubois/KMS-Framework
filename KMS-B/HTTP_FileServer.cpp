@@ -142,13 +142,13 @@ namespace KMS
 
         void FileServer::SetVerbose(bool aV) { mVerbose = aV; }
 
-        void FileServer::ProcessRequest(Request* aR)
+        void FileServer::ProcessRequest(Request* aR, const char* aPath)
         {
             assert(NULL != aR);
 
             switch (aR->GetType())
             {
-            case Request::Type::GET: ProcessRequest_GET(aR); break;
+            case Request::Type::GET: ProcessRequest_GET(aR, aPath); break;
 
             default: aR->SetResult(Request::Result::METHOD_NOT_ALLOWED);
             }
@@ -159,11 +159,11 @@ namespace KMS
             }
         }
 
-        void FileServer::ProcessRequest_GET(Request* aR)
+        void FileServer::ProcessRequest_GET(Request* aR, const char* aPath)
         {
             assert(NULL != aR);
 
-            const char* lPath = aR->GetPath();
+            const char* lPath = (NULL == aPath) ? aR->GetPath() : aPath;
 
             // TODO Protect against .. in path.
 
@@ -213,7 +213,7 @@ namespace KMS
 
                 CFG_IF("Root") { Environment::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
 
-                CFG_CONVERT("Verbose", SetVerbose, ToBool);
+                CFG_CONVERT("Verbose", SetVerbose, Convert::ToBool);
             }
 
             return Configurable::SetAttribute(aA, aV);
