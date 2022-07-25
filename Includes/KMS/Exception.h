@@ -26,10 +26,12 @@ namespace KMS
         {
             BROWSER_START = 0,
             BUILD_COMMAND, BUILD_COMPILE, BUILD_TEST,
+            COM_CONFIG, COM_CONNECT,
             CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
                 CONFIG_VALUE,
             CONVERT_FORMAT, CONVERT_TYPE,
             DEPENDENCY,
+            DEVICE,
             FILE_ACCESS, FILE_BACKUP, FILE_COPY, FILE_DELETE,
                 FILE_OPEN, FILE_READ, FILE_RENAME, FILE_WRITE,
             FOLDER, FOLDER_ACCESS, FOLDER_COMPRESS, FOLDER_CREATE,
@@ -37,6 +39,7 @@ namespace KMS
             HTTP_REQUEST,
             INSTALLATION,
             MAKE_DEPEND, MAKE_MAKE,
+            MODBUS_CRC, MODBUS_EXCEPTION, MODBUS_MASTER,
             NETWORK_ADDRESS, NETWORK_ADDRESS_RANGE, NETWORK_PORT,
             OUTPUT_TOO_SHORT,
             PROCESS_EXIT_CODE, PROCESS_KILL, PROCESS_START, PROCESS_TIMEOUT,
@@ -51,9 +54,9 @@ namespace KMS
             CODE_QTY
         };
 
-        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage);
-        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, const char * aInfo);
-        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, uint64_t aInfo);
+        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg);
+        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, const char * aInfo);
+        Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, uint64_t aInfo);
 
         Code         GetCode     () const;
         const char * GetCodeName () const;
@@ -68,7 +71,7 @@ namespace KMS
 
     private:
 
-        void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage);
+        void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg);
 
         Code mCode;
 

@@ -26,21 +26,21 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
-    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage)
+    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg)
     {
-        Construct(aFile, aFunction, aLine, aCode, aMessage);
+        Construct(aFile, aFunction, aLine, aCode, aMsg);
     }
 
-    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, const char* aInfo)
+    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, const char* aInfo)
     {
-        Construct(aFile, aFunction, aLine, aCode, aMessage);
+        Construct(aFile, aFunction, aLine, aCode, aMsg);
 
         mInfo = aInfo;
     }
 
-    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage, uint64_t aInfo)
+    Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, uint64_t aInfo)
     {
-        Construct(aFile, aFunction, aLine, aCode, aMessage);
+        Construct(aFile, aFunction, aLine, aCode, aMsg);
 
         char lInfo[64];
 
@@ -69,19 +69,19 @@ namespace KMS
     // Private
     // //////////////////////////////////////////////////////////////////////
 
-    void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMessage)
+    void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg)
     {
         assert(NULL != aFile);
         assert(NULL != aFunction);
         assert(0 < aLine);
         assert(Code::CODE_QTY > aCode);
-        assert(NULL != aMessage);
+        assert(NULL != aMsg);
 
         mCode      = aCode;
         mFile      = aFile;
         mFunction  = aFunction;
         mLine      = aLine;
-        mMessage   = aMessage;
+        mMessage   = aMsg;
 
         #ifdef _KMS_WINDOWS_
             mLastError = ::GetLastError();
@@ -138,10 +138,12 @@ const char* ToCodeName(KMS::Exception::Code aCode)
     {
         "BROWSER_START",
         "BUILD_COMMAND", "BUILD_COMPILE", "BUILD_TEST",
+        "COM_CONFIG", "COM_CONNECT",
         "CONFIG", "CONFIG_EXPAND", "CONFIG_FORMAT", "CONFIG_INDEX",
             "CONFIG_VALUE",
         "CONVERT_FORMAT", "CONVERT_TYPE",
         "DEPENDENCY",
+        "DEVICE"
         "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_DELETE",
             "FILE_OPEN", "FILE_READ", "FILE_RENAME", "FILE_WRITE",
         "FOLDER", "FOLDER_ACCESS", "FOLDER_COMPRESS", "FOLDER_CREATE",
@@ -149,6 +151,7 @@ const char* ToCodeName(KMS::Exception::Code aCode)
         "HTTP_REQUEST",
         "INSTALLATION",
         "MAKE_DEPEND", "MAKE_MAKE",
+        "MODBUS_CRC", "MODBUS_EXCEPTION", "MODBUS_MASTER",
         "NETWORK_ADDRESS", "NETWORK_ADDRESS_RANGE", "NETWORK_PORT",
         "OUTPUT_TOO_SHORT",
         "PROCESS_EXIT_CODE", "PROCESS_KILL", "PROCESS_START", "PROCESS_TIMEOUT",
