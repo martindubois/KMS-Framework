@@ -4,3 +4,5 @@ Copyright (C) 2022 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-ModbusSim/_DocUser/KMS.KMS-ModbusSim.ReadMe.txt
+
+0.0.6-Dev 2022-07-27

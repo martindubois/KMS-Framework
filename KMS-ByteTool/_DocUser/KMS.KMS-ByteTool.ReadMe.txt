@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-ByteTool/_DocUser/KMS.KMS-ByteTool.ReadMe.txt
 
+0.0.6-Dev 2022-07-27
+
 0.0.3 2022-06-01
 
 0.0.2 2022-05-21

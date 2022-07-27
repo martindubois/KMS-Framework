@@ -56,7 +56,7 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Folders+=DoesNotExist_A",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_A), 2);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_A), static_cast<int>(KMS::Exception::Code::CONFIG));
 
     static const char* VECTOR_B[] =
     {
@@ -67,8 +67,8 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Destination=DoesNotExist",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_B), 2);
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(5, VECTOR_B), 2);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(5, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
 
     static const char* VECTOR_C[] =
     {
@@ -80,8 +80,8 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Folders+=DoesNotExist",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_C), 2);
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_C), 2);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
 
     std::cerr << KMS::Console::Color::BLUE;
     std::cerr << "IMPORTANT : End of the test of failling tests." << std::endl;

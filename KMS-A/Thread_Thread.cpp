@@ -36,7 +36,26 @@ namespace KMS
         {
         }
 
-        Thread::~Thread() { CloseIfNeeded(); }
+        Thread::~Thread()
+        {
+            Lock lLock(&mGate);
+
+            switch (mState)
+            {
+            case State::RUNNING:
+            case State::STARTING: mState = State::STOPPING; // no break
+
+            case State::STOPPING: Wait(2000); break;
+
+            case State::STOPPED: break;
+
+            default: assert(false);
+            }
+
+            lLock.Unlock();
+
+            CloseIfNeeded();
+        }
 
         void Thread::Start()
         {

@@ -69,7 +69,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lB.Close();
 
-    lRA.mServer.mThread.StopAndWait(1000);
+    lRA.mServer.mThread.StopAndWait(2000);
 
     KMS_TEST_ASSERT(lTA.GetResult());
 }

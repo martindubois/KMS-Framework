@@ -5,6 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
+0.0.6-Dev 2022-07-27
 * Compile on Linux
 * Files
 * Folders
