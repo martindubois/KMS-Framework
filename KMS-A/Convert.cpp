@@ -72,9 +72,23 @@ namespace KMS
         {
             assert(NULL != aValue);
 
+            Radix       lRadix;
+            const char* lValue;
+
+            if (0 == strncmp("0x", aValue, 2))
+            {
+                lRadix = Radix::HEXADECIMAL;
+                lValue = aValue + 2;
+            }
+            else
+            {
+                lRadix = aRadix;
+                lValue = aValue;
+            }
+
             char* lPtr;
 
-            unsigned long lResult = strtoul(aValue, &lPtr, static_cast<int>(aRadix));
+            unsigned long lResult = strtoul(lValue, &lPtr, static_cast<int>(lRadix));
 
             if ('\0' != *lPtr)
             {

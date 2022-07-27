@@ -79,6 +79,19 @@ namespace KMS
             }
         }
 
+        void Port::ApplySignals()
+        {
+            if (!EscapeCommFunction(*this, mDTR ? SETDTR : CLRDTR))
+            {
+                KMS_EXCEPTION(COM_CONTROL, "Cannot update DTR signal");
+            }
+
+            if (!EscapeCommFunction(*this, mRTS ? SETRTS : CLRRTS))
+            {
+                KMS_EXCEPTION(COM_CONTROL, "Cannot update RTS signal");
+            }
+        }
+
         void Port::ApplyTimeouts()
         {
             COMMTIMEOUTS lCT;

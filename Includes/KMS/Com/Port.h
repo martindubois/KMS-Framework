@@ -70,11 +70,14 @@ namespace KMS
             const Port& operator = (const Port&);
 
             void ApplyConfig  ();
+            void ApplySignals ();
             void ApplyTimeouts();
 
             // ===== Configurable attributes ================================
+            bool         mDTR;
             Parity       mParity;
             unsigned int mReadTimeout_ms;
+            bool         mRTS;
             unsigned int mSpeed_bps;
             unsigned int mWriteTimeout_ms;
 

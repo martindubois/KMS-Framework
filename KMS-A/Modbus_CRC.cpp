@@ -41,7 +41,7 @@ namespace KMS
             WriteUInt8(aBuffer, lSize_byte + 1, lValue >> 8);
         }
 
-        void Verify(const uint8_t* aBuffer, unsigned int aSize_byte)
+        void CRC::Verify(const uint8_t* aBuffer, unsigned int aSize_byte)
         {
             assert(CRC_SIZE_byte < aSize_byte);
 
@@ -51,7 +51,12 @@ namespace KMS
 
             lCRC.Compute(aBuffer, lSize_byte);
 
-            if (lCRC != KMS::Modbus::ReadUInt16(aBuffer, lSize_byte))
+            uint16_t lReceived = aBuffer[lSize_byte + 1];
+
+            lReceived <<= 8;
+            lReceived |= aBuffer[lSize_byte];
+
+            if (lCRC != lReceived)
             {
                 KMS_EXCEPTION(MODBUS_CRC, "Bad Modbus CRC");
             }

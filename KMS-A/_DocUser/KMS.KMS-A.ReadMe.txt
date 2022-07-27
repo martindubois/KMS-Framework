@@ -17,6 +17,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     * AddConfigFile and AddOptionalConfigFile
     * Help
 * KMS::Convert
+* KMS::DAQ
 * KMS::Dictionary
 * KMS::File::FileInfoList * Create folder structure on copy
 * KMS::Import
@@ -24,6 +25,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     * Support dependency by OS
     * Support OS independent dependency
     * Use KMS::Version to generate package name
+* KMS::Modbus::CRC
+* KMS::Modbus::Slave
 * KMS::Thread
 * KMS::Thread::Gate
 * KMS::Thread::Lock

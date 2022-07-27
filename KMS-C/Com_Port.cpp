@@ -15,8 +15,10 @@
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
+#define DEFAULT_DTR              (false)
 #define DEFAULT_PARITY           (Parity::NONE)
 #define DEFAULT_READ_TIMEOUT_ms  (1000)
+#define DEFAULT_RTS              (false)
 #define DEFAULT_SPEED_bps        (115200)
 #define DEFAULT_WRITE_TIMEOUT_ms (1000)
 
@@ -40,6 +42,9 @@ namespace KMS
             , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms)
         {}
 
+        void Port::SetDTR(bool aDTR) { mDTR = aDTR; if (IsConnected()) { ApplySignals(); } }
+        void Port::SetRTS(bool aRTS) { mRTS = aRTS; if (IsConnected()) { ApplySignals(); } }
+
         void Port::SetParity      (Parity       aP    ) { mParity          = aP    ; if (IsConnected()) { ApplyConfig  (); } }
         void Port::SetReadTimeout (unsigned int aRT_ms) { mReadTimeout_ms  = aRT_ms; if (IsConnected()) { ApplyTimeouts(); } }
         void Port::SetSpeed       (unsigned int aS_bps) { mSpeed_bps       = aS_bps; if (IsConnected()) { ApplyConfig  (); } }
@@ -52,6 +57,7 @@ namespace KMS
             Dev::Device::Connect(aFlags);
 
             ApplyConfig();
+            ApplySignals();
             ApplyTimeouts();
         }
 
@@ -63,6 +69,11 @@ namespace KMS
 
             fprintf(aOut,
                 "===== KMS::Com::Port =====\n"
+                "DTR\n"
+                "    Set the DTR signal to the default value\n"
+                "    Default: %s\n"
+                "DTR = false|true\n"
+                "    Set the DTR signal\n"
                 "Parity\n"
                 "    Set the parity to the default value\n"
                 "    Default: NONE\n"
@@ -73,6 +84,11 @@ namespace KMS
                 "    Default: %u ms\n"
                 "ReadTimeout = {Value_ms}\n"
                 "    Read timeout in ms\n"
+                "RTS\n"
+                "    Set the RTS signal to the default value\n"
+                "    Default: %s\n"
+                "RTS = false|true\n"
+                "    Set the RTS signal\n"
                 "Speed\n"
                 "    Set the speed to the default value\n"
                 "    Default: %u bps\n"
@@ -83,7 +99,9 @@ namespace KMS
                 "    Default: %u ms\n"
                 "WriteTimeout = {Value_ms}\n"
                 "    Transmit timeout in ms\n",
+                DEFAULT_DTR ? "true" : "false",
                 DEFAULT_READ_TIMEOUT_ms,
+                DEFAULT_RTS ? "true" : "false",
                 DEFAULT_SPEED_bps,
                 DEFAULT_WRITE_TIMEOUT_ms);
 
@@ -94,15 +112,19 @@ namespace KMS
         {
             if (NULL == aV)
             {
+                CFG_IF("DTR"         ) { SetDTR         (DEFAULT_DTR             ); return true; }
                 CFG_IF("Parity"      ) { SetParity      (DEFAULT_PARITY          ); return true; }
                 CFG_IF("ReadTimeout" ) { SetReadTimeout (DEFAULT_READ_TIMEOUT_ms ); return true; }
+                CFG_IF("RTS"         ) { SetRTS         (DEFAULT_RTS             ); return true; }
                 CFG_IF("Speed"       ) { SetSpeed       (DEFAULT_SPEED_bps       ); return true; }
                 CFG_IF("WriteTimeout") { SetWriteTimeout(DEFAULT_WRITE_TIMEOUT_ms); return true; }
             }
             else
             {
+                CFG_CONVERT("DTR"         , SetDTR         , Convert::ToBool  );
                 CFG_CONVERT("Parity"      , SetParity      , ToParity         );
                 CFG_CONVERT("ReadTimeout" , SetReadTimeout , Convert::ToUInt32);
+                CFG_CONVERT("RTS"         , SetRTS         , Convert::ToBool  );
                 CFG_CONVERT("Speed"       , SetSpeed       , Convert::ToUInt32);
                 CFG_CONVERT("WriteTimeout", SetWriteTimeout, Convert::ToUInt32);
             }

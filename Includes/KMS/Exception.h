@@ -26,7 +26,7 @@ namespace KMS
         {
             BROWSER_START = 0,
             BUILD_COMMAND, BUILD_COMPILE, BUILD_TEST,
-            COM_CONFIG, COM_CONNECT,
+            COM_CONFIG, COM_CONNECT, COM_CONTROL,
             CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
                 CONFIG_VALUE,
             CONVERT_FORMAT, CONVERT_TYPE,

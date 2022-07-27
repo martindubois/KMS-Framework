@@ -138,12 +138,12 @@ const char* ToCodeName(KMS::Exception::Code aCode)
     {
         "BROWSER_START",
         "BUILD_COMMAND", "BUILD_COMPILE", "BUILD_TEST",
-        "COM_CONFIG", "COM_CONNECT",
+        "COM_CONFIG", "COM_CONNECT", "COM_CONTROL",
         "CONFIG", "CONFIG_EXPAND", "CONFIG_FORMAT", "CONFIG_INDEX",
             "CONFIG_VALUE",
         "CONVERT_FORMAT", "CONVERT_TYPE",
         "DEPENDENCY",
-        "DEVICE"
+        "DEVICE",
         "FILE_ACCESS", "FILE_BACKUP", "FILE_COPY", "FILE_DELETE",
             "FILE_OPEN", "FILE_READ", "FILE_RENAME", "FILE_WRITE",
         "FOLDER", "FOLDER_ACCESS", "FOLDER_COMPRESS", "FOLDER_CREATE",

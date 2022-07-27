@@ -19,7 +19,7 @@ namespace KMS
 
             static void Add(uint8_t* aBuffer, unsigned int aSize_byte);
 
-            static void Verify(uint8_t* aBuffer, unsigned int aSize_byte);
+            static void Verify(const uint8_t* aBuffer, unsigned int aSize_byte);
 
             CRC();
 

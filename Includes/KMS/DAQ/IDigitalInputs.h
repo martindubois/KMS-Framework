@@ -1,0 +1,28 @@
+
+// Author    KMS - Martin Dubois, P. Eng.
+// Copyright (C) 2022 KMS
+// License   http://www.apache.org/licenses/LICENSE-2.0
+// Product   KMS-Framework
+// File      Includes/KMS/DAQ/IDigitalInputs.h
+
+#pragma once
+
+// ===== Includes ===========================================================
+#include <KMS/DAQ/DAQ.h>
+
+namespace KMS
+{
+    namespace DAQ
+    {
+
+        class IDigitalInputs
+        {
+
+        public:
+
+            virtual bool DI_Read(Id aId) = 0;
+
+        };
+
+    }
+}
