@@ -68,7 +68,10 @@ namespace KMS
 
                 File::Folder lBin(lBinaries, lCfg.c_str());
                 File::Folder lLib(lLibraries, lCfg.c_str());
-                File::Folder lOut_Src((lP + "\\" + aC).c_str());
+
+                std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + aC;
+
+                File::Folder lOut_Src(lOutDir.c_str());
 
                 lBin.Create();
                 lLib.Create();
@@ -93,7 +96,9 @@ namespace KMS
             {
                 for (std::string lT : mTests)
                 {
-                    Proc::Process lProcess((lP + "\\" + aC).c_str(), (lT + ".exe").c_str());
+                    std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + aC;
+
+                    Proc::Process lProcess(lOutDir.c_str(), (lT + ".exe").c_str());
 
                     lProcess.AddArgument("Group=Auto");
 

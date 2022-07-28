@@ -22,6 +22,10 @@ Temp.sh
 
 /.vs/
 
+Debug/
+Debug_Static/
+Release/
+Release_Static/
 x64/
 
 *.vcxproj.user

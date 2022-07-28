@@ -170,6 +170,7 @@ namespace KMS
 
             #ifdef _KMS_WINDOWS_
                 CFG_CALL("WindowsBinaries"  , AddBinary);
+                CFG_CALL("WindowsConfigurations", AddConfiguration);
                 CFG_CALL("WindowsFiles"     , AddFile);
                 CFG_CALL("WindowsLibraries" , AddLibrary);
                 CFG_CALL("WindowsProcessors", AddProcessor);
@@ -276,6 +277,8 @@ namespace KMS
                 fprintf(aOut,
                     "WindowsBinaries += {Name}\n"
                     "    See Bionaries\n"
+                    "WindowsConfigurations += {Name}\n"
+                    "    Add a build configuration\n"
                     "WindowsFiles += {Name}\n"
                     "    See Files\n"
                     "WindowsLibraries += {Name}\n"

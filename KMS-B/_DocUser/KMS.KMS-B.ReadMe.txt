@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
+0.0.7-Dev 2022-07-27
+
 0.0.6-Dev 2022-07-27
 * KMS::HTTP::FileServer - File type list
 * KMS::Net::Server
