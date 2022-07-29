@@ -29,17 +29,17 @@ Version             ______ . ______ . ______ . ______ - _____________________
 [ ] File "KMS-ModbusTool/_DocUser/KMS.KMS-ModbusTool.ReadMe.txt"
 [ ] File "KMS-Sync/_DocUser/KMS.KMS-Import.ReadMe.txt"
 
+===== Windows only ==========================================================
 [ ] Tool "Visual Studio 2022"
         - Build KMS-Build in Debug x64
         - Close
-
 [ ] Tools "PowerShell" - In the product folder
         .\x64\Debug\KMS-Build.exe
 
 [ ] Tools "GIT GUI"
-    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
+    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as message
 [ ] Tool "GIT Bash" - In the product folder
-        git tag {Ma}.{Mi}.{Bu}[-{Type}]
+        git tag {Ma}.{Mi}.{Bu}[-{Type}]_Linux|Windows
 [ ] Tools "GIT GUI"
     - Push the servers
 
