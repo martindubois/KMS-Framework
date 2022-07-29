@@ -27,9 +27,9 @@ namespace KMS
 
         void DigitalOutput::Clear() { assert(NULL != mInterface); mInterface->DO_Clear(mId); }
 
-        bool DigitalOutput::Get() const { assert(NULL != mInterface); return mInterface->DO_Get  (mId); }
+        bool DigitalOutput::Get() const { assert(NULL != mInterface); return mInterface->DO_Get(mId); }
 
-        void DigitalOutput::Set(bool aValue) { assert(NULL != mInterface); mInterface->DO_Set(aValue); }
+        void DigitalOutput::Set(bool aValue) { assert(NULL != mInterface); mInterface->DO_Set(mId, aValue); }
 
     }
 }
