@@ -47,6 +47,7 @@
     <ClCompile Include="DAQ_AnalogOutput.cpp" />
     <ClCompile Include="DAQ_DigitalInput.cpp" />
     <ClCompile Include="DAQ_DigitalOutput.cpp" />
+    <ClCompile Include="DAQ_Dummy.cpp" />
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Environment_W.cpp" />
