@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Convert.cpp
 
+// TEST COVERAGE 2022-07-30 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -17,6 +19,37 @@ namespace KMS
 
         // Functions
         // //////////////////////////////////////////////////////////////////
+
+        bool ToBool(const char* aValue)
+        {
+            assert(NULL != aValue);
+
+            if ((0 == _stricmp(aValue, "true")) || (0 == strcmp(aValue, "1")))
+            {
+                return true;
+            }
+
+            if ((0 == _stricmp(aValue, "false")) || (0 == strcmp(aValue, "0")))
+            {
+                return false;
+            }
+
+            KMS_EXCEPTION_WITH_INFO(CONVERT_FORMAT, "Invalid boolean value", aValue);
+        }
+
+        double ToDouble(const char* aValue)
+        {
+            char* lPtr;
+
+            double lResult = strtod(aValue, &lPtr);
+
+            if ('\0' != *lPtr)
+            {
+                KMS_EXCEPTION_WITH_INFO(CONVERT_FORMAT, "Invalid double format", aValue);
+            }
+
+            return lResult;
+        }
 
         FILE* ToFile(const char* aValue, const char* aMode)
         {
@@ -38,23 +71,6 @@ namespace KMS
             assert(NULL != lResult);
 
             return lResult;
-        }
-
-        bool ToBool(const char* aValue)
-        {
-            assert(NULL != aValue);
-
-            if ((0 == _stricmp(aValue, "true")) || (0 == strcmp(aValue, "1")))
-            {
-                return true;
-            }
-
-            if ((0 == _stricmp(aValue, "false")) || (0 == strcmp(aValue, "0")))
-            {
-                return false;
-            }
-
-            KMS_EXCEPTION_WITH_INFO(CONVERT_FORMAT, "Invalid boolean value", aValue);
         }
 
         uint16_t ToUInt16(const char* aValue, Radix aRadix)

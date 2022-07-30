@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+* KMS::Convert::ToDouble
+
 0.0.8-Dev Windows 2022-07-29
 * KMS::DAQ::Dummy
 - KMS::DAQ::DigitalOutput::Get and Set - Fixed

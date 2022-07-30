@@ -16,6 +16,7 @@ namespace KMS
     {
 
         extern bool     ToBool  (const char* aValue);
+        extern double   ToDouble(const char* aValue);
         extern FILE   * ToFile  (const char* aValue, const char * aMode = "rb");
         extern uint16_t ToUInt16(const char* aValue, Radix aRadix = Radix::DECIMAL);
         extern uint32_t ToUInt32(const char* aValue, Radix aRadix = Radix::DECIMAL);
