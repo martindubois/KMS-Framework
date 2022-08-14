@@ -52,8 +52,8 @@ namespace KMS
 
             virtual void Connect() = 0;
 
-            // ===== Msg::IRecevier =========================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+            // ===== Msg::IReceiver =========================================
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             // ===== Cfg::Configurable ======================================
             virtual void DisplayHelp(FILE* aOut) const;
@@ -65,7 +65,7 @@ namespace KMS
 
             DeviceAddress GetDeviceAddress() const;
 
-            virtual bool OnIterate() = 0;
+            virtual unsigned int OnIterate() = 0;
 
             void OnRequest_A_Bit (Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Sender* aSender);
             void OnRequest_A_Word(Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Sender* aSender);

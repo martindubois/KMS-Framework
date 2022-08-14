@@ -17,9 +17,28 @@ namespace KMS
 
         public:
 
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData) = 0;
+            // Errors
+            static const unsigned int MSG_ERROR;
+            static const unsigned int MSG_EXCEPTION;
+            static const unsigned int MSG_EXCEPTION_STD;
+            static const unsigned int MSG_EXCEPTION_UNKNOWN;
+
+            // Warnings
+            static const unsigned int MSG_IGNORED;
+
+            // Action
+            static const unsigned int MSG_SENDER_CLEAR;
+
+            // Groups
+            static const unsigned int MSG_ALL_ERRORS;
+            static const unsigned int MSG_ALL_ERRORS_AND_WARNINGS;
+
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData) = 0;
 
         };
 
     }
 }
+
+#define KMS_MSG_SUCCESS(R)            (0 == ((R) & KMS::Msg::IReceiver::MSG_ALL_ERRORS_AND_WARNINGS))
+#define KMS_MSG_SUCCESS_OR_WARNING(R) (0 == ((R) & KMS::Msg::IReceiver::MSG_ALL_ERRORS))

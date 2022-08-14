@@ -48,14 +48,15 @@ namespace KMS
 
         // ===== Msg::IReceiver =============================================
 
-        bool Slave::Receive(void* aSender, unsigned int aCode, void* aData)
+        unsigned int Slave::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            bool lResult = false;
+            unsigned int lResult;
 
             if (MSG_ITERATE == aCode) { lResult = OnIterate(); }
             else
             {
                 assert(false);
+                lResult = Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -118,31 +119,25 @@ namespace KMS
 
             lData.mException = Exception::NO_EXCEPTION;
 
-            if (aSender->IsSet())
+            uint8_t lBuffer[256];
+
+            lData.mBuffer    = lBuffer;
+            lData.mQty       = aQty;
+            lData.mStartAddr = aStartAddr;
+
+            unsigned int lRet = aSender->Send(&lData);
+            if (KMS_MSG_SUCCESS(lRet))
             {
-                uint8_t lBuffer[256];
-
-                lData.mBuffer    = lBuffer;
-                lData.mQty       = aQty;
-                lData.mStartAddr = aStartAddr;
-
-                if (aSender->Send(&lData))
+                if (Exception::NO_EXCEPTION == lData.mException)
                 {
-                    if (Exception::NO_EXCEPTION == lData.mException)
+                    uint8_t lSize_byte = lData.mQty / 8;
+
+                    if (0 != (lData.mQty % 8))
                     {
-                        uint8_t lSize_byte = lData.mQty / 8;
-
-                        if (0 != (lData.mQty % 8))
-                        {
-                            lSize_byte++;
-                        }
-
-                        SendResponse_A(aFunction, lSize_byte, lBuffer);
+                        lSize_byte++;
                     }
-                }
-                else
-                {
-                    lData.mException = Exception::ILLEGAL_FUNCTION;
+
+                    SendResponse_A(aFunction, lSize_byte, lBuffer);
                 }
             }
             else
@@ -164,24 +159,18 @@ namespace KMS
 
             lData.mException = Exception::NO_EXCEPTION;
 
-            if (aSender->IsSet())
+            uint8_t lBuffer[256];
+
+            lData.mBuffer    = lBuffer;
+            lData.mQty       = aQty;
+            lData.mStartAddr = aStartAddr;
+
+            unsigned int lRet = aSender->Send(&lData);
+            if (KMS_MSG_SUCCESS(lRet))
             {
-                uint8_t lBuffer[256];
-
-                lData.mBuffer    = lBuffer;
-                lData.mQty       = aQty;
-                lData.mStartAddr = aStartAddr;
-
-                if (aSender->Send(&lData))
+                if (Exception::NO_EXCEPTION == lData.mException)
                 {
-                    if (Exception::NO_EXCEPTION == lData.mException)
-                    {
-                        SendResponse_A(aFunction, static_cast<uint8_t>(sizeof(RegisterValue) * lData.mQty), lBuffer);
-                    }
-                }
-                else
-                {
-                    lData.mException = Exception::ILLEGAL_FUNCTION;
+                    SendResponse_A(aFunction, static_cast<uint8_t>(sizeof(RegisterValue) * lData.mQty), lBuffer);
                 }
             }
             else
@@ -203,22 +192,16 @@ namespace KMS
 
             lData.mException = Exception::NO_EXCEPTION;
 
-            if (aSender->IsSet())
-            {
-                lData.mBuffer    = reinterpret_cast<uint8_t*>(aData);
-                lData.mQty       = 1;
-                lData.mStartAddr = aStartAddr;
+            lData.mBuffer    = reinterpret_cast<uint8_t*>(aData);
+            lData.mQty       = 1;
+            lData.mStartAddr = aStartAddr;
 
-                if (aSender->Send(&lData))
+            unsigned int lRet = aSender->Send(&lData);
+            if (KMS_MSG_SUCCESS(lRet))
+            {
+                if (Exception::NO_EXCEPTION == lData.mException)
                 {
-                    if (Exception::NO_EXCEPTION == lData.mException)
-                    {
-                        SendResponse_B(aFunction, aStartAddr, aData);
-                    }
-                }
-                else
-                {
-                    lData.mException = Exception::ILLEGAL_FUNCTION;
+                    SendResponse_B(aFunction, aStartAddr, aData);
                 }
             }
             else

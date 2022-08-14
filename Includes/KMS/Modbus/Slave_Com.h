@@ -33,7 +33,7 @@ namespace KMS
         protected:
 
             // ===== Slave ==================================================
-            virtual bool OnIterate();
+            virtual unsigned int OnIterate();
             virtual void SendException(Function aFunction, Exception aException);
             virtual void SendResponse_A(Function aFunction, uint8_t aSize_byte, const void* aData);
             virtual void SendResponse_B(Function aFunction, Address aAddress, const void* aData);

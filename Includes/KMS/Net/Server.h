@@ -27,7 +27,7 @@ namespace KMS
             Thread::Thread  mThread;
 
             // ===== Msg::IReceiver =========================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
         protected:
 
@@ -37,10 +37,10 @@ namespace KMS
 
         private:
 
-            bool OnIterate ();
-            bool OnStarting();
-            bool OnStop    ();
-            bool OnStopping();
+            unsigned int OnIterate ();
+            unsigned int OnStarting();
+            unsigned int OnStop    ();
+            unsigned int OnStopping();
 
         };
 

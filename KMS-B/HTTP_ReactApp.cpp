@@ -56,15 +56,17 @@ namespace KMS
 
         // ===== Msg::IReceiver =============================================
 
-        bool ReactApp::Receive(void* aSender, unsigned int aCode, void* aData)
+        unsigned int ReactApp::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            bool lResult = false;
+            unsigned int lResult;
 
             switch (aCode)
             {
             case MSG_ON_REQUEST: lResult = OnRequest(aData); break;
 
-            default: assert(false);
+            default:
+                assert(false);
+                lResult = Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -106,7 +108,7 @@ namespace KMS
             }
         }
 
-        bool ReactApp::OnFunction(Request* aRequest)
+        unsigned int ReactApp::OnFunction(Request* aRequest)
         {
             assert(NULL != aRequest);
 
@@ -119,20 +121,17 @@ namespace KMS
             }
             else
             {
-                try
-                {
-                    lIt->second.Send(aRequest);
-                }
-                catch (...)
+                unsigned int lRet = lIt->second.Send(aRequest);
+                if (!KMS_MSG_SUCCESS(lRet))
                 {
                     aRequest->SetResult(Request::Result::INTERNAL_SERVER_ERROR);
                 }
             }
 
-            return true;
+            return 0;
         }
 
-        bool ReactApp::OnRequest(void* aData)
+        unsigned int ReactApp::OnRequest(void* aData)
         {
             assert(NULL != aData);
 
@@ -150,7 +149,7 @@ namespace KMS
                 mFileServer.ProcessRequest(lRequest, "/index.html");
             }
 
-            return true;
+            return 0;
         }
 
     }

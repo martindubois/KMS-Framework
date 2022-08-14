@@ -29,7 +29,7 @@ namespace KMS
 
             void Set(IReceiver* aR, unsigned int aCode);
 
-            bool Send(void* aData = NULL);
+            unsigned int Send(void* aData = NULL);
 
         private:
 

@@ -30,11 +30,11 @@ namespace KMS
 
         // ===== Msg::IReceiver =============================================
 
-        bool Server::Receive(void* aSender, unsigned int aCode, void* aData)
+        unsigned int Server::Receive(void* aSender, unsigned int aCode, void* aData)
         {
             assert(&mThread == aSender);
 
-            bool lResult = false;
+            unsigned int lResult;
 
             switch (aCode)
             {
@@ -43,7 +43,9 @@ namespace KMS
             case CODE_ON_STOP    : lResult = OnStop    (); break;
             case CODE_ON_STOPPING: lResult = OnStopping(); break;
 
-            default: assert(false);
+            default:
+                assert(false);
+                lResult = Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -63,10 +65,8 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        bool Server::OnIterate()
+        unsigned int Server::OnIterate()
         {
-            bool lResult = true;
-
             Net::Address lFrom;
 
             Net::Socket* lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
@@ -75,28 +75,28 @@ namespace KMS
                 OnConnect(lSocket);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Server::OnStarting()
+        unsigned int Server::OnStarting()
         {
             Net::Thread_Startup();
 
-            return true;
+            return 0;
         }
 
-        bool Server::OnStop()
+        unsigned int Server::OnStop()
         {
             mSocket.Close();
 
-            return true;
+            return 0;
         }
 
-        bool Server::OnStopping()
+        unsigned int Server::OnStopping()
         {
             Net::Thread_Cleanup();
 
-            return true;
+            return 0;
         }
 
     }

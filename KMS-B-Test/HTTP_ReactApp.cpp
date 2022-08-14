@@ -30,7 +30,7 @@ public:
     bool GetResult() const;
 
     // ===== KMS::Msg::IReceiver ============================================
-    virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+    virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
 private:
 
@@ -88,11 +88,11 @@ bool TestApp::GetResult() const
 
 // ===== KMS::Msg::Receiver =================================================
 
-bool TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
+unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 {
     KMS::HTTP::Request* lRequest = reinterpret_cast<KMS::HTTP::Request*>(aData);
 
-    bool lResult = false;
+    unsigned int lResult = 0;
 
     switch (aCode)
     {
@@ -105,17 +105,17 @@ bool TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         lRequest->mResponseHeader.Set("Access-Control-Allow-Origin", "*");
         lRequest->mResponseData.Set("Version", lVersion);
-        lResult = true;
         break;
 
     case MSG_RUN_TEST_0:
         mRunTest0++;
 
         lRequest->mResponseHeader.Set("Access-Control-Allow-Origin", "*");
-        lResult = true;
         break;
 
-    default: assert(false);
+    default:
+        assert(false);
+        lResult = KMS::Msg::IReceiver::MSG_IGNORED;
     }
 
     return lResult;

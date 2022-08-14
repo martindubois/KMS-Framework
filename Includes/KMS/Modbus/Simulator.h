@@ -53,7 +53,7 @@ namespace KMS
             void Stop();
 
             // ===== Msg::IReceiver =============================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             // ===== Cfg::Configurable ==========================================
             virtual bool AddAttribute(const char* aA, const char* aV);
@@ -80,12 +80,12 @@ namespace KMS
         private:
 
             // ===== Message handlers =======================================
-            bool OnReadCoils           (Slave::MsgData* aData);
-            bool OnReadDiscreteInputs  (Slave::MsgData* aData);
-            bool OnReadHoldingRegisters(Slave::MsgData* aData);
-            bool OnReadInputRegisters  (Slave::MsgData* aData);
-            bool OnWriteSingleCoil     (Slave::MsgData* aData);
-            bool OnWriteSingleRegister (Slave::MsgData* aData);
+            unsigned int OnReadCoils           (Slave::MsgData* aData);
+            unsigned int OnReadDiscreteInputs  (Slave::MsgData* aData);
+            unsigned int OnReadHoldingRegisters(Slave::MsgData* aData);
+            unsigned int OnReadInputRegisters  (Slave::MsgData* aData);
+            unsigned int OnWriteSingleCoil     (Slave::MsgData* aData);
+            unsigned int OnWriteSingleRegister (Slave::MsgData* aData);
 
             Slave* mSlave;
 

@@ -48,7 +48,8 @@ namespace KMS
 
                 if (lRequest.Receive())
                 {
-                    if (mOnRequest.Send(&lRequest))
+                    unsigned int lRet = mOnRequest.Send(&lRequest);
+                    if (KMS_MSG_SUCCESS(lRet))
                     {
                         lRequest.Reply();
                     }

@@ -140,11 +140,11 @@ namespace KMS
 
         // ===== Msg::IReceiver =============================================
 
-        bool Simulator::Receive(void* aSender, unsigned int aCode, void* aData)
+        unsigned int Simulator::Receive(void* aSender, unsigned int aCode, void* aData)
         {
             Slave::MsgData* lData = reinterpret_cast<Slave::MsgData*>(aData);
 
-            bool lResult = false;
+            unsigned int lResult;
 
             switch (aCode)
             {
@@ -155,7 +155,9 @@ namespace KMS
             case MSG_WRITE_SINGLE_COIL     : lResult = OnWriteSingleCoil     (lData); break;
             case MSG_WRITE_SINGLE_REGISTER : lResult = OnWriteSingleRegister (lData); break;
 
-            default: assert(false);
+            default:
+                assert(false);
+                lResult = KMS::Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -224,7 +226,7 @@ namespace KMS
 
         // ===== Message handlers ===========================================
 
-        bool Simulator::OnReadCoils(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadCoils(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -247,10 +249,10 @@ namespace KMS
                 WriteBit(aData->mBuffer, 0, i, lValue);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Simulator::OnReadDiscreteInputs(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadDiscreteInputs(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -273,10 +275,10 @@ namespace KMS
                 WriteBit(aData->mBuffer, 0, i, lValue);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Simulator::OnReadHoldingRegisters(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadHoldingRegisters(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -299,10 +301,10 @@ namespace KMS
                 WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Simulator::OnReadInputRegisters(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadInputRegisters(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -325,10 +327,10 @@ namespace KMS
                 WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Simulator::OnWriteSingleCoil(Slave::MsgData* aData)
+        unsigned int Simulator::OnWriteSingleCoil(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -353,10 +355,10 @@ namespace KMS
                 TraceKnown("Write Single Coil", aData->mStartAddr, lIt->second, lFlags);
             }
 
-            return true;
+            return 0;
         }
 
-        bool Simulator::OnWriteSingleRegister(Slave::MsgData* aData)
+        unsigned int Simulator::OnWriteSingleRegister(Slave::MsgData* aData)
         {
             assert(NULL != aData);
 
@@ -380,7 +382,7 @@ namespace KMS
                 TraceKnown("Write Single Register", aData->mStartAddr, lIt->second, lFlags);
             }
 
-            return true;
+            return 0;
         }
 
     }

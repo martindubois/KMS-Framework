@@ -37,7 +37,7 @@ namespace KMS
             virtual void InitConfigurator(Cfg::Configurator* aC);
 
             // ===== Msg::IReceiver =========================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             Server mServer;
 
@@ -51,8 +51,8 @@ namespace KMS
 
             void LocateFrontEnd();
 
-            bool OnFunction(Request* aRequest);
-            bool OnRequest (void   * aData   );
+            unsigned int OnFunction(Request* aRequest);
+            unsigned int OnRequest (void   * aData   );
 
             FileServer  mFileServer;
             FunctionMap mFunctions;

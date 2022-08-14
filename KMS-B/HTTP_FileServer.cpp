@@ -238,15 +238,17 @@ namespace KMS
 
         // ===== Msg::IReceiver =============================================
 
-        bool FileServer::Receive(void* aSender, unsigned int aCode, void* aData)
+        unsigned int FileServer::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            bool lResult = false;
+            unsigned int lResult;
 
             switch (aCode)
             {
             case CODE_ON_REQUEST: lResult = OnRequest(aData); break;
 
-            default: assert(false);
+            default:
+                assert(false);
+                lResult = Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -255,18 +257,11 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        bool FileServer::OnRequest(void* aData)
+        unsigned int FileServer::OnRequest(void* aData)
         {
-            bool lResult = false;
+            ProcessRequest(reinterpret_cast<Request*>(aData));
 
-            try
-            {
-                ProcessRequest(reinterpret_cast<Request*>(aData));
-                lResult = true;
-            }
-            KMS_CATCH;
-
-            return lResult;
+            return 0;
         }
 
     }

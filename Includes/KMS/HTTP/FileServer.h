@@ -56,13 +56,13 @@ namespace KMS
             virtual void DisplayHelp(FILE* aOut) const;
 
             // ===== Msg::IReceived =========================================
-            virtual bool Receive(void* aSender, unsigned int aCode, void* aData);
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
         private:
 
             typedef std::map<std::string, FileTypeFunction> FileTypeMap;
 
-            bool OnRequest(void* aData);
+            unsigned int OnRequest(void* aData);
 
             FileTypeMap mFileTypes;
 

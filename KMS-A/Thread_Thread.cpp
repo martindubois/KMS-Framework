@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Msg/IReceiver.h>
 #include <KMS/Thread/Lock.h>
 
 #include <KMS/Thread/Thread.h>
@@ -96,7 +97,8 @@ namespace KMS
 
             lLock.Unlock();
 
-            mOnStop.Send();
+            unsigned int lRet = mOnStop.Send();
+            assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
         }
 
         void Thread::StopAndWait(unsigned int aTimeout_ms)
@@ -135,7 +137,8 @@ namespace KMS
 
         void Thread::Run()
         {
-            if (mOnStarting.Send())
+            unsigned int lRet = mOnStarting.Send();
+            if (KMS_MSG_SUCCESS_OR_WARNING(lRet))
             {
                 Lock lLock(&mGate);
 
@@ -147,7 +150,8 @@ namespace KMS
                     {
                         lLock.Unlock();
                         {
-                            mOnRun.Send();
+                            lRet = mOnRun.Send();
+                            assert(KMS_MSG_SUCCESS(lRet));
                         }
                         lLock.Relock();
 
@@ -157,15 +161,13 @@ namespace KMS
                     {
                         while (State::RUNNING == mState)
                         {
-                            bool lRet = false;
-
                             lLock.Unlock();
                             {
                                 lRet = mOnIterate.Send();
                             }
                             lLock.Relock();
 
-                            if (!lRet)
+                            if (!KMS_MSG_SUCCESS(lRet))
                             {
                                 break;
                             }
@@ -174,7 +176,8 @@ namespace KMS
 
                     lLock.Unlock();
 
-                    mOnStopping.Send();
+                    lRet = mOnStopping.Send();
+                    assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
                 }
             }
 

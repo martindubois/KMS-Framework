@@ -62,6 +62,7 @@
     <ClCompile Include="Modbus_CRC.cpp" />
     <ClCompile Include="Modbus_Master.cpp" />
     <ClCompile Include="Modbus_Slave.cpp" />
+    <ClCompile Include="Msg_IReceiver.cpp" />
     <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />

@@ -70,7 +70,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        bool Slave_Com::OnIterate()
+        unsigned int Slave_Com::OnIterate()
         {
             char lBuffer[260];
 
@@ -96,7 +96,7 @@ namespace KMS
                 }
             }
 
-            return true;
+            return 0;
         }
 
         void Slave_Com::SendException(Function aFunction, Exception aException)
