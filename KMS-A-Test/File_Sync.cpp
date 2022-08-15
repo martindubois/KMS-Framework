@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Color.h>
+
 #include <KMS/File/Sync.h>
 
 KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)

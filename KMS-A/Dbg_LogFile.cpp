@@ -33,7 +33,7 @@ namespace KMS
 
             aFolder.GetPath(lFileName, lPath, sizeof(lPath));
 
-            int lRet = fopen_s(&mFile, lPath, "wb");
+            int lRet = fopen_s(&mFile, lPath, "ab");
             if (0 != lRet)
             {
                 KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open log file", lPath);

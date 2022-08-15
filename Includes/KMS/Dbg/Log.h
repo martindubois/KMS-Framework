@@ -58,10 +58,13 @@ namespace KMS
 
             const Log& operator = (const Log&);
 
+            void CloseLogFiles();
+
             LogFile* FindLogFile();
 
             unsigned int mCounter;
             bool         mEnabled;
+            LogFile::Level mEntryLevel;
             FileMap      mFiles;
             unsigned int mProcessId;
 

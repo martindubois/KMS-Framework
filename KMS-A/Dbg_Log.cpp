@@ -8,12 +8,10 @@
 // TODO Add a Level attribute with a default value of LEVEL_INFO. Only log
 //      information of this LEVEL or lower.
 
-// TODO Display log entry on the console if the level is LEVEL_ERROR and the
-//      log is disabled.
-
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Color.h>
 #include <KMS/Environment.h>
 #include <KMS/OS.h>
 #include <KMS/Proc/Process.h>
@@ -29,18 +27,12 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Log::Log() : mCounter(0), mProcessId(OS::GetProcessId())
+        Log::Log() : mCounter(0), mEntryLevel(LogFile::Level::LEVEL_NOISE), mProcessId(OS::GetProcessId())
         {
             ResetFolder();
         }
 
-        Log::~Log()
-        {
-            for (const FileMap::value_type& lVT : mFiles)
-            {
-                delete lVT.second;
-            }
-        }
+        Log::~Log() { CloseLogFiles(); }
 
         bool Log::IsEnabled() const { return mEnabled; }
 
@@ -48,15 +40,45 @@ namespace KMS
         {
             File::Folder lHome(File::Folder::Id::HOME);
 
-            mFolder = File::Folder(lHome, "KMS-Framework");
-
-            mEnabled = mFolder.DoesExist();
+            SetFolder(File::Folder(lHome, "KMS-Framework"));
         }
 
-        void Log::SetFolder(const File::Folder& aF) { mFolder = aF; }
+        void Log::SetFolder(const File::Folder& aF)
+        {
+            mFolder = aF;
+
+            mEnabled = mFolder.DoesExist();
+
+            CloseLogFiles();
+        }
+
+        void Log::WriteData(const void* aData, unsigned int aSize_byte)
+        {
+            if (mEnabled)
+            {
+                LogFile* lLF = FindLogFile();
+                assert(NULL != lLF);
+
+                lLF->WriteData(aData, aSize_byte);
+            }
+            else
+            {
+                switch (mEntryLevel)
+                {
+                case LogFile::Level::LEVEL_ERROR:
+                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+                }
+            }
+        }
 
         void Log::WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, Dbg::LogFile::Level aLevel)
         {
+            mEntryLevel = aLevel;
+
             if (mEnabled)
             {
                 LogFile* lLF = FindLogFile();
@@ -65,6 +87,17 @@ namespace KMS
                 mCounter++;
 
                 lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
+            }
+            else
+            {
+                switch (mEntryLevel)
+                {
+                case LogFile::Level::LEVEL_ERROR:
+                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << "E\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+                }
             }
         }
 
@@ -77,6 +110,18 @@ namespace KMS
 
                 lLF->WriteException(aException);
             }
+            else
+            {
+                switch (mEntryLevel)
+                {
+                case LogFile::Level::LEVEL_ERROR:
+                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << "X" << std::endl;
+                    std::cerr << aException << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+                }
+            }
         }
 
         void Log::WriteMessage(const char* aMsg)
@@ -87,6 +132,17 @@ namespace KMS
                 assert(NULL != lLF);
 
                 lLF->WriteMessage(aMsg);
+            }
+            else
+            {
+                switch (mEntryLevel)
+                {
+                case LogFile::Level::LEVEL_ERROR:
+                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << "M\t\"" << aMsg << "\"" << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+                }
             }
         }
 
@@ -127,6 +183,16 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void Log::CloseLogFiles()
+        {
+            for (const FileMap::value_type& lVT : mFiles)
+            {
+                delete lVT.second;
+            }
+
+            mFiles.clear();
+        }
 
         LogFile* Log::FindLogFile()
         {

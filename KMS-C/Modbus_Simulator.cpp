@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
 #include <KMS/Modbus/Slave_Com.h>
 

@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Color.h>
 #include <KMS/Environment.h>
 
 #include <KMS/File/Folder.h>
