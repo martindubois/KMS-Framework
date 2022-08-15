@@ -129,6 +129,18 @@
     <ClCompile Include="Msg_IReceiver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dbg_Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_LogFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OS_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Msg_Destination.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

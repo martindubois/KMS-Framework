@@ -48,6 +48,8 @@
     <ClCompile Include="DAQ_DigitalInput.cpp" />
     <ClCompile Include="DAQ_DigitalOutput.cpp" />
     <ClCompile Include="DAQ_Dummy.cpp" />
+    <ClCompile Include="Dbg_Log.cpp" />
+    <ClCompile Include="Dbg_LogFile.cpp" />
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Environment_W.cpp" />
@@ -62,8 +64,10 @@
     <ClCompile Include="Modbus_CRC.cpp" />
     <ClCompile Include="Modbus_Master.cpp" />
     <ClCompile Include="Modbus_Slave.cpp" />
+    <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Msg_IReceiver.cpp" />
     <ClCompile Include="Msg_Sender.cpp" />
+    <ClCompile Include="OS_W.cpp" />
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />
     <ClCompile Include="Test_Test.cpp" />
