@@ -18,6 +18,8 @@
 
 namespace KMS
 {
+
+    class Exception;
     class Version;
 
     namespace Dbg

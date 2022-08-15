@@ -8,6 +8,9 @@
 // TODO Add a Level attribute with a default value of LEVEL_INFO. Only log
 //      information of this LEVEL or lower.
 
+// TODO Display log entry on the console if the level is LEVEL_ERROR and the
+//      log is disabled.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================

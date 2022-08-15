@@ -13,6 +13,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
+#include <KMS/Dbg/Log.h>
 
 namespace KMS
 {
@@ -97,16 +98,20 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
 #define KMS_CATCH                                                          \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
+        KMS::Dbg::gLog.WriteException(eE);                                 \
         std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
         std::cerr << eE << KMS::Console::Color::WHITE;                     \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
         std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
         std::cerr << eE.what() << std::endl << KMS::Console::Color::WHITE; \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
         std::cerr << KMS::Console::Color::RED << "UNKNOWN EXCEPTION\n";    \
         std::cerr << KMS::Console::Color::WHITE;                           \
     }
@@ -114,18 +119,22 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
 #define KMS_CATCH_RESULT(R)                                                \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
+        KMS::Dbg::gLog.WriteException(eE);                                 \
         std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
         std::cerr << eE << KMS::Console::Color::WHITE;                     \
         R = static_cast<int>(eE.GetCode());                                \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
         std::cerr << KMS::Console::Color::RED << "EXCEPTION\n";            \
         std::cerr << eE.what() << std::endl << KMS::Console::Color::WHITE; \
         R = __LINE__;                                                      \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
+        KMS_DBG_LOG_ERROR();                                               \
         std::cerr << KMS::Console::Color::RED << "UNKNOWN EXCEPTION\n";    \
         std::cerr << KMS::Console::Color::WHITE;                           \
         R = __LINE__;                                                      \

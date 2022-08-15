@@ -11,6 +11,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS::Msg
     * Destination
     * IReceiver::Receive - Return a bit mask
+- KMS::Cfg::Configurator - Log ignored attribute
+- KMS::Exception - Log throw and catch
 
 0.0.9-Dev Windows 2022-07-30
 * KMS::Convert::ToDouble

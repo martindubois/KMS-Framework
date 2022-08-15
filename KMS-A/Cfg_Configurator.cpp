@@ -159,9 +159,6 @@ namespace KMS
 
         void Configurator::CallAddAttribute(const char* aA, const char* aV)
         {
-            assert(NULL != aA);
-            assert(NULL != aV);
-
             for (Configurable* lC : mConfigurables)
             {
                 assert(NULL != lC);
@@ -171,6 +168,10 @@ namespace KMS
                     return;
                 }
             }
+
+            KMS_DBG_LOG_WARNING();
+            Dbg::gLog.WriteMessage(aA);
+            Dbg::gLog.WriteMessage(aV);
 
             mIgnoredCount++;
         }
@@ -187,6 +188,11 @@ namespace KMS
                 }
             }
 
+            KMS_DBG_LOG_WARNING();
+            Dbg::gLog.WriteMessage(aA);
+            Dbg::gLog.WriteMessage(aI);
+            Dbg::gLog.WriteMessage(aV);
+
             mIgnoredCount++;
         }
 
@@ -202,6 +208,13 @@ namespace KMS
                 }
             }
 
+            KMS_DBG_LOG_WARNING();
+            Dbg::gLog.WriteMessage(aA);
+            if (NULL != aV)
+            {
+                Dbg::gLog.WriteMessage(aV);
+            }
+
             mIgnoredCount++;
         }
 
@@ -215,6 +228,14 @@ namespace KMS
                 {
                     return;
                 }
+            }
+
+            KMS_DBG_LOG_WARNING();
+            Dbg::gLog.WriteMessage(aA);
+            Dbg::gLog.WriteMessage(aI);
+            if (NULL != aV)
+            {
+                Dbg::gLog.WriteMessage(aV);
             }
 
             mIgnoredCount++;

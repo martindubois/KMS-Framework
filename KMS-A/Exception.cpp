@@ -29,6 +29,9 @@ namespace KMS
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg)
     {
         Construct(aFile, aFunction, aLine, aCode, aMsg);
+
+        KMS_DBG_LOG_ERROR();
+        Dbg::gLog.WriteException(*this);
     }
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, const char* aInfo)
@@ -36,6 +39,9 @@ namespace KMS
         Construct(aFile, aFunction, aLine, aCode, aMsg);
 
         mInfo = aInfo;
+
+        KMS_DBG_LOG_ERROR();
+        Dbg::gLog.WriteException(*this);
     }
 
     Exception::Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg, uint64_t aInfo)
@@ -53,6 +59,9 @@ namespace KMS
         #endif
 
         mInfo = lInfo;
+
+        KMS_DBG_LOG_ERROR();
+        Dbg::gLog.WriteException(*this);
     }
 
     Exception::Code Exception::GetCode     () const { return mCode; }
