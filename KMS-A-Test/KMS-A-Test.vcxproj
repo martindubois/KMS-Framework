@@ -269,6 +269,7 @@
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
+    <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Version.cpp" />

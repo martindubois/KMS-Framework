@@ -171,6 +171,11 @@ namespace KMS
                             {
                                 break;
                             }
+
+                            if (0 != (lRet & Msg::IReceiver::MSG_ACTION_STOP))
+                            {
+                                break;
+                            }
                         }
                     }
 

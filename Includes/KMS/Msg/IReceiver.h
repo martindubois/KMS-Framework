@@ -27,11 +27,13 @@ namespace KMS
             static const unsigned int MSG_IGNORED;
 
             // Action
-            static const unsigned int MSG_SENDER_CLEAR;
+            static const unsigned int MSG_ACTION_CLEAR;
+            static const unsigned int MSG_ACTION_QUEUE;
+            static const unsigned int MSG_ACTION_STOP;
 
             // Groups
-            static const unsigned int MSG_ALL_ERRORS;
-            static const unsigned int MSG_ALL_ERRORS_AND_WARNINGS;
+            static const unsigned int MSG_ERRORS;
+            static const unsigned int MSG_ERRORS_AND_WARNINGS;
 
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData) = 0;
 
@@ -40,5 +42,5 @@ namespace KMS
     }
 }
 
-#define KMS_MSG_SUCCESS(R)            (0 == ((R) & KMS::Msg::IReceiver::MSG_ALL_ERRORS_AND_WARNINGS))
-#define KMS_MSG_SUCCESS_OR_WARNING(R) (0 == ((R) & KMS::Msg::IReceiver::MSG_ALL_ERRORS))
+#define KMS_MSG_SUCCESS(R)            (0 == ((R) & KMS::Msg::IReceiver::MSG_ERRORS_AND_WARNINGS))
+#define KMS_MSG_SUCCESS_OR_WARNING(R) (0 == ((R) & KMS::Msg::IReceiver::MSG_ERRORS))
