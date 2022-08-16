@@ -267,6 +267,7 @@
   <ItemGroup>
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Msg_Sender.cpp" />

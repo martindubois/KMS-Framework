@@ -5,9 +5,6 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Log.cpp
 
-// TODO Add a Level attribute with a default value of LEVEL_INFO. Only log
-//      information of this LEVEL or lower.
-
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -18,6 +15,11 @@
 #include <KMS/Thread/Thread.h>
 
 #include <KMS/Dbg/Log.h>
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static KMS::Dbg::LogFile::Level ToLevel(const char* aIn);
 
 namespace KMS
 {
@@ -30,6 +32,7 @@ namespace KMS
         Log::Log() : mCounter(0), mEntryLevel(LogFile::Level::LEVEL_NOISE), mProcessId(OS::GetProcessId())
         {
             ResetFolder();
+            ResetLevel();
         }
 
         Log::~Log() { CloseLogFiles(); }
@@ -43,6 +46,8 @@ namespace KMS
             SetFolder(File::Folder(lHome, "KMS-Framework"));
         }
 
+        void Log::ResetLevel() { SetLevel(LogFile::Level::LEVEL_INFO); }
+
         void Log::SetFolder(const File::Folder& aF)
         {
             mFolder = aF;
@@ -52,14 +57,19 @@ namespace KMS
             CloseLogFiles();
         }
 
+        void Log::SetLevel(LogFile::Level aL) { mLevel = aL; }
+
         void Log::WriteData(const void* aData, unsigned int aSize_byte)
         {
             if (mEnabled)
             {
-                LogFile* lLF = FindLogFile();
-                assert(NULL != lLF);
+                if (mLevel >= mEntryLevel)
+                {
+                    LogFile* lLF = FindLogFile();
+                    assert(NULL != lLF);
 
-                lLF->WriteData(aData, aSize_byte);
+                    lLF->WriteData(aData, aSize_byte);
+                }
             }
             else
             {
@@ -79,14 +89,17 @@ namespace KMS
         {
             mEntryLevel = aLevel;
 
+            mCounter++;
+
             if (mEnabled)
             {
-                LogFile* lLF = FindLogFile();
-                assert(NULL != lLF);
+                if (mLevel >= mEntryLevel)
+                {
+                    LogFile* lLF = FindLogFile();
+                    assert(NULL != lLF);
 
-                mCounter++;
-
-                lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
+                    lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
+                }
             }
             else
             {
@@ -105,10 +118,13 @@ namespace KMS
         {
             if (mEnabled)
             {
-                LogFile* lLF = FindLogFile();
-                assert(NULL != lLF);
+                if (mLevel >= mEntryLevel)
+                {
+                    LogFile* lLF = FindLogFile();
+                    assert(NULL != lLF);
 
-                lLF->WriteException(aException);
+                    lLF->WriteException(aException);
+                }
             }
             else
             {
@@ -128,10 +144,13 @@ namespace KMS
         {
             if (mEnabled)
             {
-                LogFile* lLF = FindLogFile();
-                assert(NULL != lLF);
+                if (mLevel >= mEntryLevel)
+                {
+                    LogFile* lLF = FindLogFile();
+                    assert(NULL != lLF);
 
-                lLF->WriteMessage(aMsg);
+                    lLF->WriteMessage(aMsg);
+                }
             }
             else
             {
@@ -160,7 +179,12 @@ namespace KMS
                 "    Set the folde to the default value\n"
                 "    Default: ~/KMS-Framework\n"
                 "Folder = {Value}\n"
-                "    Set the folder\n");
+                "    Set the folder\n"
+                "Level\n"
+                "    Set the level to the default value\n"
+                "    Default: INFO\n"
+                "Level = ERROR|WARNING|INFO|NOISE\n"
+                "    Set the level\n");
 
             Cfg::Configurable::DisplayHelp(aOut);
         }
@@ -170,12 +194,15 @@ namespace KMS
             if (NULL == aV)
             {
                 CFG_IF("Folder") { ResetFolder(); return true; }
+                CFG_IF("Level" ) { ResetLevel (); return true; }
             }
             else
             {
                 char lE[PATH_LENGTH];
 
                 CFG_EXPAND("Folder", SetFolder);
+
+                CFG_CONVERT("Level", SetLevel, ToLevel);
             }
 
             return Cfg::Configurable::SetAttribute(aA, aV);
@@ -217,4 +244,17 @@ namespace KMS
         }
 
     }
+}
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+KMS::Dbg::LogFile::Level ToLevel(const char* aIn)
+{
+    if (0 == _stricmp("ERROR"  , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_ERROR  ; }
+    if (0 == _stricmp("WARNING", aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_WARNING; }
+    if (0 == _stricmp("INFO"   , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_INFO   ; }
+    if (0 == _stricmp("NOISE"  , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_NOISE  ; }
+
+    KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid level name", aIn);
 }

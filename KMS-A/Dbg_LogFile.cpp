@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_LogFile.cpp
 
+// TEST COVERAGE 2022-08-15 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -36,6 +38,7 @@ namespace KMS
             int lRet = fopen_s(&mFile, lPath, "ab");
             if (0 != lRet)
             {
+                // NOT TESTED
                 KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open log file", lPath);
             }
 
@@ -80,6 +83,7 @@ namespace KMS
 
             char lET;
 
+            // NOT TESTED Level::LEVEL_NOISE case
             switch (aLevel)
             {
             case Level::LEVEL_ERROR  : lET = static_cast<char>(EntryType::TYPE_ERROR  ); break;
