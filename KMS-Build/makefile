@@ -33,7 +33,6 @@ depend:
 # DO NOT DELETE
 
 KMS-Build.o: ../Includes/KMS/Banner.h ../Includes/KMS/Console/Color.h
-KMS-Build.o: ../Includes/KMS/Build/Build.h
-KMS-Build.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
-KMS-Build.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Types.h
-KMS-Build.o: ../Common/Version.h
+KMS-Build.o: ../Includes/KMS/Build/Build.h ../Includes/KMS/Cfg/Configurable.h
+KMS-Build.o: /usr/include/stdio.h ../Includes/KMS/File/Folder.h
+KMS-Build.o: ../Includes/KMS/Types.h ../Common/Version.h

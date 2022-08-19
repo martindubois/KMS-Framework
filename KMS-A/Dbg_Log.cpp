@@ -12,7 +12,6 @@
 #include <KMS/Environment.h>
 #include <KMS/OS.h>
 #include <KMS/Proc/Process.h>
-#include <KMS/Thread/Thread.h>
 
 #include <KMS/Dbg/Log.h>
 

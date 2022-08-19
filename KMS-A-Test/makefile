@@ -40,18 +40,20 @@ KMS-A-Test.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
 KMS-A-Test.o: /usr/include/strings.h ../Includes/KMS/Cfg/Configurator.h
 KMS-A-Test.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
 KMS-A-Test.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Exception.h
-KMS-A-Test.o: ../Includes/KMS/Console/Color.h ../Includes/KMS/Test/Test.h
-KMS-A-Test.o: ../Includes/KMS/Banner.h ../Includes/KMS/Test/TestManager.h
-KMS-A-Test.o: ../Common/Version.h
+KMS-A-Test.o: ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h
+KMS-A-Test.o: ../Includes/KMS/Version.h /usr/include/stdint.h
+KMS-A-Test.o: ../Includes/KMS/Test/Test.h ../Includes/KMS/Banner.h
+KMS-A-Test.o: ../Includes/KMS/Console/Color.h
+KMS-A-Test.o: ../Includes/KMS/Test/TestManager.h ../Common/Version.h
 Test_TestManager.o: Component.h ../Includes/KMS/Base.h /usr/include/assert.h
 Test_TestManager.o: /usr/include/features.h /usr/include/features-time64.h
 Test_TestManager.o: /usr/include/stdc-predef.h ../Includes/KMS/SafeAPI.h
 Test_TestManager.o: ../Includes/KMS/WindowsOnLinux.h /usr/include/string.h
-Test_TestManager.o: /usr/include/strings.h
-Test_TestManager.o: ../Includes/KMS/Cfg/Configurator.h
-Test_TestManager.o: ../Includes/KMS/Cfg/Configurable.h
-Test_TestManager.o: /usr/include/stdio.h ../Includes/KMS/File/Folder.h
-Test_TestManager.o: ../Includes/KMS/Exception.h
-Test_TestManager.o: ../Includes/KMS/Console/Color.h
+Test_TestManager.o: /usr/include/strings.h ../Includes/KMS/Cfg/Configurator.h
+Test_TestManager.o: ../Includes/KMS/Cfg/Configurable.h /usr/include/stdio.h
+Test_TestManager.o: ../Includes/KMS/File/Folder.h ../Includes/KMS/Exception.h
+Test_TestManager.o: ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h
+Test_TestManager.o: ../Includes/KMS/Version.h /usr/include/stdint.h
 Test_TestManager.o: ../Includes/KMS/Test/Test.h
+Test_TestManager.o: ../Includes/KMS/Console/Color.h
 Test_TestManager.o: ../Includes/KMS/Test/TestManager.h
