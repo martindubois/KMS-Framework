@@ -5,7 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
-* KMS:Dbg
+* KMS::Build::Depend
+* KMS::Dbg
     * Log
     * LogFile
 * KMS::Msg

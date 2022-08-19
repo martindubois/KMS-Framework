@@ -10,12 +10,15 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
+#include <KMS/Text/TextFile.h>
 #include <KMS/Types.h>
 
 namespace KMS
 {
     namespace Build
     {
+
+        class Depend;
 
         class Make : public Cfg::Configurable
         {
@@ -29,9 +32,17 @@ namespace KMS
             ~Make();
 
             void AddBinary   (const char* aB);
+            void AddInclude  (const char* aI);
             void AddLibrary  (const char* aL);
             void AddOperation(const char* aO);
             void AddTest     (const char* aT);
+
+            void ResetBinaries  ();
+            void ResetComponent ();
+            void ResetIncludes  ();
+            void ResetLibraries ();
+            void ResetOperations();
+            void ResetTests     ();
 
             void SetComponent    (const char* aC);
             void SetConfiguration(const char* aC);
@@ -40,6 +51,7 @@ namespace KMS
 
             // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aV);
+            virtual void DisplayHelp(FILE* aOut);
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:
@@ -65,6 +77,8 @@ namespace KMS
 
             void Depend_Component(const char* aC);
             void Depend_Components(const StringSet& aComponents);
+            void Depend_ParseMakeFile(Text::TextFile* aMF, StringSet* aSources);
+            void Depend_ParseSource(Depend* aDepend, const char* aSource, Text::TextFile* aMakeFile);
 
             void Make_Component(const char* aC);
             void Make_Components(const StringSet& aComponents);
@@ -88,6 +102,7 @@ namespace KMS
             std::string   mComponent;
             ComponentType mComponentType;
             std::string   mConfiguration;
+            StringSet     mIncludes;
             StringSet     mLibraries;
             StringSet     mOperations;
             StringSet     mTests;
