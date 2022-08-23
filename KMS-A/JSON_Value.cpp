@@ -74,13 +74,13 @@ namespace KMS
             Set(lValue);
         }
 
-        // ===== Base =======================================================
+        // ===== Object =====================================================
 
         Value::~Value() {}
 
         void Value::Clear() { mValue.clear(); }
 
-        Base* Value::Copy() const { return new Value(*this); }
+        Object* Value::Copy() const { return new Value(*this); }
 
         bool Value::IsEmpty() const { return mValue.empty(); }
 

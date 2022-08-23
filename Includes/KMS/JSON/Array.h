@@ -12,14 +12,14 @@
 #include <vector>
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Base.h>
+#include <KMS/JSON/Object.h>
 
 namespace KMS
 {
     namespace JSON
     {
 
-        class Array : public Base
+        class Array : public Object
         {
 
         public:
@@ -32,23 +32,23 @@ namespace KMS
 
             void operator += (const Array& aA);
 
-            void operator += (Base* aE);
+            void operator += (Object* aE);
 
-            Base* GetEntry(unsigned int aIndex);
+            Object* GetEntry(unsigned int aIndex);
 
-            const Base* GetEntry(unsigned int aIndex) const;
+            const Object* GetEntry(unsigned int aIndex) const;
 
             void RemoveEntry(unsigned int aIndex);
 
-            void SetEntry(unsigned int aIndex, Base* aE);
+            void SetEntry(unsigned int aIndex, Object* aE);
 
-            // ===== Base ===================================================
+            // ===== Object =================================================
 
             virtual ~Array();
 
             virtual void Clear();
 
-            virtual Base* Copy() const;
+            virtual Object* Copy() const;
 
             virtual bool IsEmpty() const;
 
@@ -60,7 +60,7 @@ namespace KMS
 
         // Internal
 
-            typedef std::vector<Base *> Internal;
+            typedef std::vector<Object *> Internal;
 
             const Internal& GetInternal() const;
 

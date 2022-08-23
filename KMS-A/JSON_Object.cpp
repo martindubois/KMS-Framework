@@ -3,12 +3,12 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/JSON_Base.cpp
+// File      KMS-A/JSON_Object.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Base.h>
+#include <KMS/JSON/Object.h>
 
 namespace KMS
 {
@@ -17,17 +17,17 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Base::~Base() {}
+        Object::~Object() {}
 
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Base::Base() {}
+        Object::Object() {}
 
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Base& aD)
+std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Object& aO)
 {
     // TODO
     

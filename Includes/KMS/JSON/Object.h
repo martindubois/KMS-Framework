@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/JSON/Dictionary.h
+// File      Includes/KMS/JSON/Object.h
 
 #pragma once
 
@@ -15,16 +15,16 @@ namespace KMS
     namespace JSON
     {
 
-        class Base
+        class Object
         {
 
         public:
 
-            virtual ~Base();
+            virtual ~Object();
 
             virtual void Clear() = 0;
 
-            virtual Base* Copy() const = 0;
+            virtual Object* Copy() const = 0;
 
             virtual bool IsEmpty() const = 0;
 
@@ -36,17 +36,17 @@ namespace KMS
 
         protected:
 
-            Base();
+            Object();
 
         private:
 
-            Base(const Base&);
+            Object(const Object&);
 
-            const Base & operator == (const Base&);
+            const Object & operator == (const Object&);
 
         };
 
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Base& aD);
+std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Object& aO);

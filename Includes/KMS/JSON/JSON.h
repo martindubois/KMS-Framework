@@ -12,10 +12,10 @@ namespace KMS
     namespace JSON
     {
 
-        class Base;
+        class Object;
 
-        unsigned int CreateFromHTTP(const char* aIn, unsigned int aInSize_byte, Base** aOut);
-        unsigned int CreateFromJSON(const char* aIn, unsigned int aInSize_byte, Base** aOut);
+        unsigned int CreateFromHTTP(const char* aIn, unsigned int aInSize_byte, Object** aOut);
+        unsigned int CreateFromJSON(const char* aIn, unsigned int aInSize_byte, Object** aOut);
 
     }
 }

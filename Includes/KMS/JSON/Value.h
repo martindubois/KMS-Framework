@@ -12,7 +12,7 @@
 #include <string>
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Base.h>
+#include <KMS/JSON/Object.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -20,7 +20,7 @@ namespace KMS
     namespace JSON
     {
 
-        class Value : public Base
+        class Value : public Object
         {
 
         public:
@@ -51,13 +51,13 @@ namespace KMS
             void Set( int32_t    aValue, Radix aRadix = Radix::DECIMAL);
             void Set(uint32_t    aValue, Radix aRadix = Radix::DECIMAL);
 
-            // ===== Base ===================================================
+            // ===== Object =================================================
 
             virtual ~Value();
 
             virtual void Clear();
 
-            virtual Base* Copy() const;
+            virtual Object* Copy() const;
 
             virtual bool IsEmpty() const;
 

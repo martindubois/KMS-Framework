@@ -48,7 +48,7 @@ namespace KMS
             }
         }
 
-        const Base* Dictionary::GetEntry(const char* aKey) const
+        const Object* Dictionary::GetEntry(const char* aKey) const
         {
             assert(NULL != aKey);
 
@@ -63,7 +63,7 @@ namespace KMS
             return lIt->second;
         }
 
-        void Dictionary::SetEntry(const char* aKey, Base* aE)
+        void Dictionary::SetEntry(const char* aKey, Object* aE)
         {
             assert(NULL != aKey);
             assert(NULL != aE);
@@ -83,7 +83,7 @@ namespace KMS
             }
         }
 
-        // ===== Base =======================================================
+        // ===== Object =====================================================
 
         Dictionary::~Dictionary() { Clear(); }
 
@@ -99,7 +99,7 @@ namespace KMS
             mEntries.clear();
         }
 
-        Base* Dictionary::Copy() const { return new Dictionary(*this); }
+        Object* Dictionary::Copy() const { return new Dictionary(*this); }
 
         bool Dictionary::IsEmpty() const { return mEntries.empty(); }
 
@@ -156,11 +156,11 @@ namespace KMS
 
                     lResult_byte += static_cast<unsigned int>(strlen(lName) + 1);
 
-                    Base* lBase;
+                    Object* lObj;
 
-                    lResult_byte += CreateFromHTTP(aIn + lResult_byte, aInSize_byte - lResult_byte, &lBase);
+                    lResult_byte += CreateFromHTTP(aIn + lResult_byte, aInSize_byte - lResult_byte, &lObj);
 
-                    SetEntry(lName, lBase);
+                    SetEntry(lName, lObj);
                 }
             }
 

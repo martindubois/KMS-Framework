@@ -22,11 +22,11 @@ namespace KMS
         // Functions
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int CreateFromHTTP(const char* aIn, unsigned int aInSize_byte, Base** aOut)
+        unsigned int CreateFromHTTP(const char* aIn, unsigned int aInSize_byte, Object** aOut)
         {
             assert(NULL != aIn);
 
-            Base* lBase = NULL;
+            Object* lObj = NULL;
 
             unsigned int lResult_byte = 0;
             while (aInSize_byte > lResult_byte)
@@ -38,10 +38,10 @@ namespace KMS
                 case '\r':
                 case '\t': break;
 
-                default: lBase = new Value(); assert(NULL != lBase); break;
+                default: lObj = new Value(); assert(NULL != lObj); break;
                 }
 
-                if (NULL != lBase)
+                if (NULL != lObj)
                 {
                     break;
                 }
@@ -49,23 +49,23 @@ namespace KMS
                 lResult_byte++;
             }
 
-            if (NULL == lBase)
+            if (NULL == lObj)
             {
                 KMS_EXCEPTION(HTTP_FORMAT, "Invalid HTTP format");
             }
 
-            lResult_byte += lBase->HTTP_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
+            lResult_byte += lObj->HTTP_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
 
-            *aOut = lBase;
+            *aOut = lObj;
 
             return lResult_byte;
         }
 
-        unsigned int CreateFromJSON(const char* aIn, unsigned int aInSize_byte, Base** aOut)
+        unsigned int CreateFromJSON(const char* aIn, unsigned int aInSize_byte, Object** aOut)
         {
             assert(NULL != aIn);
 
-            Base* lBase = NULL;
+            Object* lObj = NULL;
 
             unsigned int lResult_byte = 0;
             while (aInSize_byte < lResult_byte)
@@ -77,12 +77,12 @@ namespace KMS
                 case '\r':
                 case '\t': break;
 
-                case '[': lBase = new Array     (); assert(NULL != lBase); break;
-                case '{': lBase = new Dictionary(); assert(NULL != lBase); break;
-                default : lBase = new Value     (); assert(NULL != lBase); break;
+                case '[': lObj = new Array     (); assert(NULL != lObj); break;
+                case '{': lObj = new Dictionary(); assert(NULL != lObj); break;
+                default : lObj = new Value     (); assert(NULL != lObj); break;
                 }
 
-                if (NULL != lBase)
+                if (NULL != lObj)
                 {
                     break;
                 }
@@ -90,14 +90,14 @@ namespace KMS
                 lResult_byte++;
             }
 
-            if (NULL == lBase)
+            if (NULL == lObj)
             {
                 KMS_EXCEPTION(JSON_FORMAT, "Invalid JSON format");
             }
 
-            lResult_byte += lBase->JSON_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
+            lResult_byte += lObj->JSON_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
 
-            *aOut = lBase;
+            *aOut = lObj;
 
             return lResult_byte;
         }

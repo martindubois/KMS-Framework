@@ -37,33 +37,33 @@ namespace KMS
         {
             const Internal& lA = aA.GetInternal();
 
-            for (const Base* lB : lA)
+            for (const Object* lObj : lA)
             {
-                assert(NULL != lB);
+                assert(NULL != lObj);
 
-                *this += lB->Copy();
+                *this += lObj->Copy();
             }
         }
 
-        void Array::operator += (Base* aE) { assert(NULL != aE); mEntries.push_back(aE); }
+        void Array::operator += (Object* aE) { assert(NULL != aE); mEntries.push_back(aE); }
 
-        // ===== Base =======================================================
+        // ===== Object =====================================================
 
         Array::~Array() { Clear(); }
 
         void Array::Clear()
         {
-            for (Base* lBase : mEntries)
+            for (Object* lObj : mEntries)
             {
-                assert(NULL != lBase);
+                assert(NULL != lObj);
 
-                delete lBase;
+                delete lObj;
             }
 
             mEntries.clear();
         }
 
-        Base* Array::Copy() const { return new Array(*this); }
+        Object* Array::Copy() const { return new Array(*this); }
 
         bool Array::IsEmpty() const { return mEntries.empty(); }
 
@@ -83,9 +83,9 @@ namespace KMS
 
             unsigned int lResult_byte = 0;
 
-            for (const Base* lBase : mEntries)
+            for (const Object* lObj : mEntries)
             {
-                assert(NULL != lBase);
+                assert(NULL != lObj);
 
                 if (aOutSize_byte < lResult_byte + 1)
                 {
@@ -94,7 +94,7 @@ namespace KMS
 
                 aOut[lResult_byte] = (0 == lResult_byte) ? '[' : ','; lResult_byte++;
 
-                lResult_byte += lBase->JSON_Get(aOut + lResult_byte, aOutSize_byte - lResult_byte);
+                lResult_byte += lObj->JSON_Get(aOut + lResult_byte, aOutSize_byte - lResult_byte);
             }
 
             if (aOutSize_byte < lResult_byte + 2)
@@ -126,12 +126,12 @@ namespace KMS
                 case ']': return lResult_byte;
 
                 default:
-                    Base* lBase;
+                    Object* lObj;
 
-                    lResult_byte += CreateFromJSON(aIn + lResult_byte, aInSize_byte - lResult_byte, &lBase);
-                    assert(NULL != lBase);
+                    lResult_byte += CreateFromJSON(aIn + lResult_byte, aInSize_byte - lResult_byte, &lObj);
+                    assert(NULL != lObj);
 
-                    *this += lBase;
+                    *this += lObj;
                 }
             }
 

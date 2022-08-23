@@ -12,7 +12,7 @@
 #include <ostream>
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Base.h>
+#include <KMS/JSON/Object.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -20,7 +20,7 @@ namespace KMS
     namespace JSON
     {
 
-        class Dictionary : public Base
+        class Dictionary : public Object
         {
 
         public:
@@ -33,21 +33,21 @@ namespace KMS
 
             void operator += (const Dictionary& aD);
 
-            const Base* GetEntry(const char* aKey) const;
+            const Object* GetEntry(const char* aKey) const;
 
             bool IsEntryPresent(const char* aKey) const;
 
             void RemoveEntry(const char* aKey);
 
-            void SetEntry(const char* aKey, Base *aE);
+            void SetEntry(const char* aKey, Object *aE);
 
-            // ===== Base ===================================================
+            // ===== Object =================================================
 
             virtual ~Dictionary();
 
             virtual void Clear();
 
-            virtual Base* Copy() const;
+            virtual Object* Copy() const;
 
             virtual bool IsEmpty() const;
 
@@ -59,7 +59,7 @@ namespace KMS
 
         // Internal
 
-            typedef std::map<std::string, Base*> Internal;
+            typedef std::map<std::string, Object*> Internal;
 
             const Internal& GetInternal() const;
 
