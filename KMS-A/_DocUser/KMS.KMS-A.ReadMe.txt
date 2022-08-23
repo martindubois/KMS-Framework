@@ -9,6 +9,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS::Dbg
     * Log
     * LogFile
+* KMS::JSON
+    * Dictionary
+    * Value
 * KMS::Msg
     * Destination
     * IReceiver::Receive - Return a bit mask

@@ -30,10 +30,11 @@ namespace KMS
 
             static const unsigned int CODE_ON_REQUEST;
 
-            static void FileType_App_JS    (Request* aRequest);
-            static void FileType_Text_CSS  (Request* aRequest);
-            static void FileType_Text_HTML (Request* aRequest);
-            static void FileType_Text_Plain(Request* aRequest);
+            static void FileType_App_JS     (Request* aRequest);
+            static void FileType_Image_XIcon(Request* aRequest);
+            static void FileType_Text_CSS   (Request* aRequest);
+            static void FileType_Text_HTML  (Request* aRequest);
+            static void FileType_Text_Plain (Request* aRequest);
 
             static int Main(int aCount, const char** aVector);
 

@@ -19,6 +19,7 @@
 #include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
+#include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/FileServer.h>
 
@@ -43,29 +44,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.Set("Content-Type", "application/javascript");
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("application/javascript"));
+        }
+
+        void FileServer::FileType_Image_XIcon(Request* aRequest)
+        {
+            assert(NULL != aRequest);
+
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("image/x-icon"));
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.Set("Content-Type", "text/css");
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/css"));
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.Set("Content-Type", "text/html; charset=utf-8");
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/html; charset=utf-8"));
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.Set("Content-Disposition", "inline");
-            aRequest->mResponseHeader.Set("Content-Type", "text/plain; charset=utf-8");
+            aRequest->mResponseHeader.SetEntry("Content-Disposition", new JSON::Value("inline"));
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/plain; charset=utf-8"));
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -119,6 +127,7 @@ namespace KMS
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
             SetFileType("html", FileType_Text_HTML);
+            SetFileType("ico" , FileType_Image_XIcon);
             SetFileType("js"  , FileType_App_JS);
             SetFileType("txt" , FileType_Text_Plain);
         }
@@ -192,7 +201,7 @@ namespace KMS
             File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            aR->mResponseHeader.Set("Content-Length", lFile->GetSize());
+            aR->mResponseHeader.SetEntry("Content-Length", new JSON::Value(lFile->GetSize()));
 
             aR->SetFile(lFile);
         }
