@@ -38,7 +38,7 @@ namespace KMS
                 case '\r':
                 case '\t': break;
 
-                default: lObj = new Value(); assert(NULL != lObj); break;
+                default: lObj = new Value(); break;
                 }
 
                 if (NULL != lObj)
@@ -77,9 +77,9 @@ namespace KMS
                 case '\r':
                 case '\t': break;
 
-                case '[': lObj = new Array     (); assert(NULL != lObj); break;
-                case '{': lObj = new Dictionary(); assert(NULL != lObj); break;
-                default : lObj = new Value     (); assert(NULL != lObj); break;
+                case '[': lObj = new Array     (); break;
+                case '{': lObj = new Dictionary(); break;
+                default : lObj = new Value     (); break;
                 }
 
                 if (NULL != lObj)

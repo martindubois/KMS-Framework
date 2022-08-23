@@ -52,7 +52,6 @@
     <ClCompile Include="Dbg_LogFile.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="JSON_Array.cpp" />
-    <ClCompile Include="JSON_Base.cpp" />
     <ClCompile Include="JSON_Dictionary.cpp" />
     <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Environment_W.cpp" />
@@ -63,6 +62,7 @@
     <ClCompile Include="File_FileInfoList.cpp" />
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
+    <ClCompile Include="JSON_Object.cpp" />
     <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="Modbus.cpp" />
     <ClCompile Include="Modbus_CRC.cpp" />

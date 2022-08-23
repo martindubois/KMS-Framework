@@ -89,7 +89,6 @@ namespace KMS
         void FileInfo::Allocate()
         {
             WIN32_FIND_DATA* lData = new WIN32_FIND_DATA;
-            assert(NULL != lData);
 
             mData = lData;
         }

@@ -238,7 +238,6 @@ namespace KMS
             File::Folder lPF(File::Folder::Id::PROGRAM_FILES);
 
             mProcess = new Process(File::Folder(lPF, "Google\\Chrome\\Application"), "chrome.exe");
-            assert(NULL != mProcess);
 
             mProcess->AddArgument("--disable-background-mode");
             mProcess->AddArgument("--disable-plugins");
@@ -269,7 +268,6 @@ namespace KMS
             assert(NULL == mProcess);
 
             mProcess = new Process(File::Folder(File::Folder::Id::NONE), aURL);
-            assert(NULL != mProcess);
 
             mProcess->SetVerb("open");
         }
@@ -281,7 +279,6 @@ namespace KMS
             File::Folder lPF(File::Folder::Id::PROGRAM_FILES_X86);
 
             mProcess = new Process(File::Folder(lPF, "Microsoft\\Edge\\Application"), "msedge.exe");
-            assert(NULL != mProcess);
 
             if (mKioskMode)
             {

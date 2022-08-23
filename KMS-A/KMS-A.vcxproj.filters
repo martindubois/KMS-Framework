@@ -144,13 +144,13 @@
     <ClCompile Include="JSON_Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="JSON_Base.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JSON_Array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JSON.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON_Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

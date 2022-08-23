@@ -22,7 +22,9 @@ KMS_TEST(JSON_Dictionary_Base, "JSON_Dictionary_Base", "Auto", sTest_Base)
     lD0.SetEntry("Test1", new KMS::JSON::Value("Test1"));
     lD0.SetEntry("Test2", new KMS::JSON::Value("Test2"));
 
-    KMS::JSON::Base* lB0 = lD0.Copy();
+    KMS::JSON::Object* lO0 = lD0.Copy();
+
+    delete lO0;
 
     char lStr[32];
 
@@ -31,8 +33,6 @@ KMS_TEST(JSON_Dictionary_Base, "JSON_Dictionary_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(0 == strcmp("{\"Test1\":Test1,\"Test2\":Test2}", lStr));
 
     KMS_TEST_COMPARE(lD1.HTTP_Set("", 0), 0L);
-
-    delete lB0;
 
     std::cout << lD0;
 }

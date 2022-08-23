@@ -103,7 +103,6 @@ namespace KMS
             size_t lLen = lCmdLine.size() + 1;
 
             mCmdLine = new char[lLen];
-            assert(NULL != mCmdLine);
 
             memcpy(mCmdLine, lCmdLine.c_str(), lLen * sizeof(char));
         }

@@ -93,7 +93,6 @@ namespace KMS
                     if (mAllow.IsInRanges(*aFrom))
                     {
                         lResult = new Socket(Socket::Type::STREAM);
-                        assert(NULL != lResult);
 
                         lResult->Set(lSocket);
                     }
@@ -290,7 +289,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             int lRet = closesocket(mSocket);
-            assert(0 == lRet);
+            // TODO assert(0 == lRet);
 
             mSocket = INVALID_SOCKET;
             mState = State::CLOSED;
