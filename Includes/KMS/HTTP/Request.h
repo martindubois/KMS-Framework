@@ -11,9 +11,9 @@
 #include <ostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Dictionary.h>
 #include <KMS/File/Binary.h>
 #include <KMS/File/Folder.h>
+#include <KMS/JSON/Dictionary.h>
 #include <KMS/Net/Socket.h>
 
 namespace KMS
@@ -49,14 +49,14 @@ namespace KMS
                 POST,
             };
 
-            void AddData(const Dictionary& aD);
+            void AddData(const JSON::Dictionary& aD);
             void AddData(const File::Folder& aF, const char* aFile);
 
-            const Dictionary& GetParameters() const;
+            const JSON::Dictionary& GetParameters() const;
 
             const char* GetPath() const;
 
-            const Dictionary& GetRequestHeader() const;
+            const JSON::Dictionary& GetRequestHeader() const;
 
             Type GetType() const;
 
@@ -68,8 +68,8 @@ namespace KMS
 
             void SetResult(Result aR);
 
-            Dictionary mResponseData;
-            Dictionary mResponseHeader;
+            JSON::Dictionary mResponseData;
+            JSON::Dictionary mResponseHeader;
 
         // Internal
 
@@ -98,7 +98,7 @@ namespace KMS
 
             File::Binary* mFile;
 
-            Dictionary mRequestHeader;
+            JSON::Dictionary mRequestHeader;
 
             unsigned int mMajor;
             unsigned int mMinor;

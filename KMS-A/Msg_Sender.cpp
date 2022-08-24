@@ -24,6 +24,8 @@ namespace KMS
 
         Sender::Sender(void* aSender, IReceiver* aR, unsigned int aCode) : Destination(aR, aCode), mSender(aSender) {}
 
+        void Sender::operator = (const Destination& aD) { *static_cast<Destination*>(this) = aD; }
+
         unsigned int Sender::Send(void* aData) { return Destination::Send(mSender, aData); }
 
     }

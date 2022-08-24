@@ -13,6 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
+#include <KMS/Msg/Destination.h>
 #include <KMS/Msg/IReceiver.h>
 
 namespace KMS
@@ -28,14 +29,15 @@ namespace KMS
 
             typedef void (*FileTypeFunction)(Request*);
 
-            static const unsigned int CODE_ON_REQUEST;
-
-            static void FileType_App_JS    (Request* aRequest);
-            static void FileType_Text_CSS  (Request* aRequest);
-            static void FileType_Text_HTML (Request* aRequest);
-            static void FileType_Text_Plain(Request* aRequest);
+            static void FileType_App_JS     (Request* aRequest);
+            static void FileType_Image_XIcon(Request* aRequest);
+            static void FileType_Text_CSS   (Request* aRequest);
+            static void FileType_Text_HTML  (Request* aRequest);
+            static void FileType_Text_Plain (Request* aRequest);
 
             static int Main(int aCount, const char** aVector);
+
+            const Msg::Destination ON_REQUEST;
 
             FileServer();
 

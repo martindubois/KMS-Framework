@@ -65,7 +65,6 @@ namespace KMS
             else
             {
                 lResult = new StringSet;
-                assert(NULL != lResult);
 
                 // Important to add it to the cache before filling the set to
                 // avoid infinit recursivity.

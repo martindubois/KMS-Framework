@@ -11,7 +11,7 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/SafeAPI.h>
+#include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/Request.h>
 
@@ -25,7 +25,7 @@ namespace KMS
 
         const char* Request::GetPath() const { return mPath.c_str(); }
 
-        const Dictionary& Request::GetRequestHeader() const { return mRequestHeader; }
+        const JSON::Dictionary& Request::GetRequestHeader() const { return mRequestHeader; }
 
         Request::Type Request::GetType() const { return mType; }
 
@@ -131,8 +131,8 @@ namespace KMS
             {
                 unsigned int lSize_byte = mResponseData.JSON_Get(lData, sizeof(lData));
 
-                mResponseHeader.Set("Content-Length", lSize_byte);
-                mResponseHeader.Set("Content-Type", "application/json");
+                mResponseHeader.SetEntry("Content-Length", new JSON::Value(lSize_byte));
+                mResponseHeader.SetEntry("Content-Type"  , new JSON::Value("application/json"));
 
                 SetData(lData, lSize_byte);
             }
@@ -188,7 +188,12 @@ namespace KMS
 
             mPath = lPath;
 
-            mRequestHeader.HTTP_Set(strchr(mBuffer, '\n') + 1);
+            char* lPtr = strchr(mBuffer, '\n');
+            assert(NULL != lPtr);
+
+            unsigned int lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
+
+            mRequestHeader.HTTP_Set(mBuffer + lIndex, sizeof(mBuffer) - lIndex);
 
             return true;
         }

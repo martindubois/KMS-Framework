@@ -1,0 +1,66 @@
+
+// Author    KMS - Martin Dubois, P. Eng.
+// Copyright (C) 2022 KMS
+// License   http://www.apache.org/licenses/LICENSE-2.0
+// Product   KMS-Framework
+// File      KMS-A-Test/Dbg_Log.cpp
+
+// TEST COVERAGE 2022-08-15 KMS - Martin Dubois, P. Eng.
+
+#include "Component.h"
+
+// ===== Includes ===========================================================
+#include <KMS/Console/Color.h>
+#include <KMS/Dbg/Log.h>
+
+KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
+{
+    KMS::Exception lE(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::TEST, "Test");
+    KMS::Dbg::Log  lL;
+
+    lL.DisplayHelp(stdout);
+
+    lL.SetAttribute("Folder", "DoesNotExist");
+
+    KMS_TEST_ASSERT(!lL.IsEnabled());
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_NOISE);
+    lL.WriteData(&lL, sizeof(lL));
+
+    std::cerr << KMS::Console::Color::BLUE;
+    std::cerr << "IMPORTANT : Ignore the following error messages. The current test tests error logging." << std::endl;
+    std::cerr << KMS::Console::Color::WHITE;
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_ERROR);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteException(lE);
+    lL.WriteMessage("Test");
+
+    std::cerr << KMS::Console::Color::BLUE;
+    std::cerr << "IMPORTANT : End of the test of error logging." << std::endl;
+    std::cerr << KMS::Console::Color::WHITE;
+
+    KMS_TEST_ASSERT(lL.SetAttribute("Level", "ERROR"  ));
+    KMS_TEST_ASSERT(lL.SetAttribute("Level", "WARNING"));
+    KMS_TEST_ASSERT(lL.SetAttribute("Level", "INFO"   ));
+    KMS_TEST_ASSERT(lL.SetAttribute("Level", "NOISE"  ));
+
+    KMS_TEST_ASSERT(lL.SetAttribute("Level", NULL));
+
+    KMS_TEST_ASSERT(!lL.SetAttribute("Invalid", NULL));
+
+    KMS_DBG_LOG_INFO();
+    KMS::Dbg::gLog.WriteData(&lL, sizeof(lL));
+}
+
+KMS_TEST(Dbg_Log_Exception, "Dbg_Log_Exception", "Auto", sTest_Exception)
+{
+    KMS::Dbg::Log  lL;
+
+    try
+    {
+        lL.SetAttribute("Level", "INVALID");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(CONFIG_VALUE);
+}

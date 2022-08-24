@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Request.h>
+#include <KMS/JSON/Value.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Proc/Browser.h>
 
@@ -83,7 +84,7 @@ TestApp::TestApp() : mGetVersion(0), mRunTest0(0)
 
 bool TestApp::GetResult() const
 {
-    return (2 == mGetVersion) && (2 == mRunTest0);
+    return (1 <= mGetVersion) && (1 <= mRunTest0);
 }
 
 // ===== KMS::Msg::Receiver =================================================
@@ -103,14 +104,14 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         VERSION.GetString(lVersion, sizeof(lVersion));
 
-        lRequest->mResponseHeader.Set("Access-Control-Allow-Origin", "*");
-        lRequest->mResponseData.Set("Version", lVersion);
+        lRequest->mResponseHeader.SetEntry("Access-Control-Allow-Origin", new KMS::JSON::Value("*"));
+        lRequest->mResponseData  .SetEntry("Version"                    , new KMS::JSON::Value(lVersion));
         break;
 
     case MSG_RUN_TEST_0:
         mRunTest0++;
 
-        lRequest->mResponseHeader.Set("Access-Control-Allow-Origin", "*");
+        lRequest->mResponseHeader.SetEntry("Access-Control-Allow-Origin", new KMS::JSON::Value("*"));
         break;
 
     default:

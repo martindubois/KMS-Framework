@@ -326,7 +326,6 @@ void ClearFolderList(KMS::File::Sync::FolderList* aFolders)
 KMS::File::FileInfoList* ToFileInfoList(const char* aFolder)
 {
     KMS::File::FileInfoList* lResult = new KMS::File::FileInfoList(KMS::File::Folder(aFolder), "*", true);
-    assert(NULL != lResult);
 
     return lResult;
 }

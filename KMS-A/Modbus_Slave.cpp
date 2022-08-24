@@ -17,6 +17,11 @@
 
 #define DEFAULT_DEVICE_ADDRESS (1)
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#define MSG_ITERATE (1)
+
 namespace KMS
 {
     namespace Modbus
@@ -24,8 +29,6 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
-
-        const unsigned int Slave::MSG_ITERATE = 1;
 
         void Slave::SetDeviceAddress(DeviceAddress aDA) { mDeviceAddress = aDA; }
 
@@ -98,7 +101,8 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Slave::Slave()
-            : mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
+            : ON_ITERATE(this, MSG_ITERATE)
+            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
             , mOnReadCoils           (this)
             , mOnReadDiscreteInputs  (this)
             , mOnReadHoldingRegisters(this)

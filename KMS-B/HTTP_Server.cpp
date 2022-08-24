@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Request.h>
+#include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/Server.h>
 
@@ -30,7 +31,7 @@ namespace KMS
 
         Server::Server() : mOnRequest(this)
         {
-            mResponseHeader.Set("Server", "KMS-Framework");
+            mResponseHeader.SetEntry("Server", new JSON::Value("KMS-Framework"));
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }

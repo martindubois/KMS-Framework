@@ -24,6 +24,8 @@ namespace KMS
 
             Sender(void* aSender, IReceiver* aR, unsigned int aCode);
 
+            void operator = (const Destination& aD);
+
             unsigned int Send(void* aData = NULL);
 
         private:

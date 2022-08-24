@@ -269,6 +269,8 @@
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="File_Sync.cpp" />
+    <ClCompile Include="JSON_Dictionary.cpp" />
+    <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
