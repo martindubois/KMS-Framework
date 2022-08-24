@@ -76,7 +76,7 @@ namespace KMS
 
                 for (const std::string& lLine : lFile.mLines)
                 {
-                    char lInclude[PATH_LENGTH];
+                    char lInclude[FILE_LENGTH];
 
                     if (1 == sscanf(lLine.c_str(), "#include <%[^>]>", lInclude))
                     {
@@ -107,16 +107,16 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         // Only add the dependency if it is not already in the list.
-        void AddDependency(StringSet* aInOut, const char* aFile)
+        void Depend::AddDependency(StringSet* aInOut, const char* aFile)
         {
             assert(NULL != aInOut);
             assert(NULL != aFile);
 
             if (aInOut->end() == aInOut->find(aFile))
             {
-                aInOut->insert(lHeader);
+                aInOut->insert(aFile);
 
-                StringSet* lRet = ParseFile(lHeader);
+                StringSet* lRet = ParseFile(aFile);
                 assert(NULL != lRet);
 
                 InsertStringSet(aInOut, lRet);

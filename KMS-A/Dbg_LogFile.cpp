@@ -52,7 +52,14 @@ namespace KMS
 
             uint64_t lTimeStamp = OS::GetSystemTime();
 
-            fprintf(mFile, "Z\t%016llx\n", lTimeStamp);
+            fprintf(mFile,
+                #ifdef _KMS_LINUX_
+                    "Z\t%016lx\n",
+                #endif
+                #ifdef _KMS_WINDOWS_
+                    "Z\t%016llx\n",
+                #endif
+                lTimeStamp);
 
             fclose(mFile);
         }
@@ -96,7 +103,13 @@ namespace KMS
 
             uint64_t lTimeStamp = OS::GetSystemTime();
 
-            fprintf(mFile, "%c\t%016llx\t%u\t%u\t%s\t%s\n",
+            fprintf(mFile,
+                #ifdef _KMS_LINUX_
+                    "%c\t%016lx\t%u\t%u\t%s\t%s\n",
+                #endif
+                #ifdef _KMS_WINDOWS_
+                    "%c\t%016llx\t%u\t%u\t%s\t%s\n",
+                #endif
                 lET,
                 lTimeStamp,
                 aCounter,
