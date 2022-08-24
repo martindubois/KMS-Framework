@@ -30,6 +30,11 @@
 
 #define DEFAULT_ROOT (".")
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#define MSG_ON_REQUEST (1)
+
 namespace KMS
 {
     namespace HTTP
@@ -37,8 +42,6 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
-
-        const unsigned int FileServer::CODE_ON_REQUEST = 1;
 
         void FileServer::FileType_App_JS(Request* aRequest)
         {
@@ -92,7 +95,7 @@ namespace KMS
                 KMS::HTTP::FileServer  lFS;
                 KMS::HTTP::Server      lS;
 
-                lS.mOnRequest.Set(&lFS, FileServer::CODE_ON_REQUEST);
+                lS.mOnRequest = lFS.ON_REQUEST;
 
                 lFS.InitConfigurator(&lC);
                 lS.mSocket.InitConfigurator(&lC);
@@ -122,7 +125,7 @@ namespace KMS
             return lResult;
         }
 
-        FileServer::FileServer() : mRoot(DEFAULT_ROOT), mVerbose(false)
+        FileServer::FileServer() : ON_REQUEST(this, MSG_ON_REQUEST), mRoot(DEFAULT_ROOT), mVerbose(false)
         {
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
@@ -253,7 +256,7 @@ namespace KMS
 
             switch (aCode)
             {
-            case CODE_ON_REQUEST: lResult = OnRequest(aData); break;
+            case MSG_ON_REQUEST: lResult = OnRequest(aData); break;
 
             default:
                 assert(false);

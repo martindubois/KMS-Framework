@@ -35,9 +35,9 @@ namespace KMS
 
             };
 
-            static const unsigned int MSG_ITERATE;
-
             void SetDeviceAddress(DeviceAddress aDA);
+
+            const Msg::Destination ON_ITERATE;
 
             virtual void Run();
 
