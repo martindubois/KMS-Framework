@@ -5,9 +5,36 @@
 // Product   KMS-Framework
 // File      front-end/src/pages/Home.js
 
+import { Link } from "react-router-dom"
+
 const Home = () =>
 {
-    return <h1>Home</h1>
+    return (
+        <>
+            <h1>Home</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <td><u>Name</u></td>
+                        <td><u>Description</u></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><Link to = "/" >Home</Link></td>
+                        <td>This page</td>
+                    </tr>
+                    <tr>
+                        <td><Link to = "ModbusTool" >ModbusTool</Link></td>
+                        <td>GUI of the Modbus tool (KMS-ModbusTool)</td>
+                    </tr>
+                    <tr>
+                        <td><Link to = "Test0" >Test0</Link></td>
+                        <td>Page used for automated test (KMS-B-Test)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </> )
 }
 
 export default Home;

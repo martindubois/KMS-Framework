@@ -9,10 +9,11 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import './App.css';
 
-import Layout from './pages/Layout'
-import Home   from './pages/Home'
-import NoPage from './pages/NoPage'
-import Test0  from './pages/Test0'
+import Layout      from './pages/Layout'
+import Home        from './pages/Home'
+import ModbustTool from './pages/ModbusTool'
+import NoPage      from './pages/NoPage'
+import Test0       from './pages/Test0'
 
 function App() {
     return (
@@ -20,12 +21,12 @@ function App() {
             <Routes>
                 <Route path = "/" element = { <Layout /> }>
                     <Route element = { <Home /> } index />
-                    <Route element = { <Test0 /> } path = "Test0" />
+                    <Route element = { <ModbustTool /> } path = "ModbusTool" />
+                    <Route element = { <Test0       /> } path = "Test0"      />
                     <Route element = { <NoPage /> } path = "*" />
                 </Route>
             </Routes>
-        </BrowserRouter>
-    );
+        </BrowserRouter> )
 }
 
-export default App;
+export default App

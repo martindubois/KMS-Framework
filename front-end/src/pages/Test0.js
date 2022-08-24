@@ -7,22 +7,29 @@
 
 import { useEffect, useState } from "react";
 
-const Test0 = () =>
-{
-    return fetch( 'http://127.0.0.1/RunTest0' )
-        .then( ( aResponse ) => { return 'PASSED' } )
-        .catch( ( aError ) => { return 'FAILED' } )
-}
-
 const Home = () =>
 {
     const [ sState, SetState ] = useState('PENDING')
 
-    useEffect(() =>
+    const OnData = ( aData ) =>
     {
-        Test0()
-            .then( ( aState ) => { SetState( aState ); } )
-    })
+        SetState( 'PASSED' )
+    }
+
+    const OnError = ( aError ) =>
+    {
+        SetState( 'FAILED' )
+    }
+
+    const OnLoad = () =>
+    {
+        fetch( 'http://127.0.0.1/RunTest0' )
+            .then( ( aResponse ) => { return aResponse.json() } )
+            .then( OnData )
+            .catch( OnError )
+    }
+
+    useEffect( OnLoad, [] )
 
     return (
         <>

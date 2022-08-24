@@ -7,19 +7,48 @@ Product   KMS-Framework
 File      front-end/src/App.css
 */
 
-.App
+
+a:link
 {
-    text-align: center;
+    color: white;
 }
 
-.App-header
+a:visited
 {
-    align-items     : center;
-    background-color: #282c34;
+    color: whitesmoke;
+}
+
+body
+{
+    background-color: #005c87; /* Bleu KMS : RGB 0 92 135 = 00 5c 87 */
+}
+
+div
+{
+    background-color: black;
     color           : white;
-    display         : flex;
-    flex-direction  : column;
-    font-size       : calc(10px + 2vmin);
-    justify-content : center;
-    min-height      : 98vh;
+}
+
+div.main
+{
+    display   : flow-root;
+    min-height: 94vh;
+}
+
+footer
+{
+    background-color: #005c87;
+    font-size       : large;
+}
+
+nav
+{
+    background-color: #005c87;
+    font-size       : x-large;
+}
+
+td.Nav
+{
+    text-align: center;
+    width     : 100px;
 }

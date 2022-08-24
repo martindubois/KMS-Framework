@@ -6,36 +6,47 @@
 // File      front-end/src/pages/Layout.js
 
 import { useEffect, useState } from "react";
-import { Outlet, Link } from "react-router-dom"
-
-const GetBackEndVersion = () =>
-{
-    return fetch( 'http://127.0.0.1/GetVersion' )
-        .then( ( aResponse ) => { return aResponse.json() } )
-        .then( ( aData ) => { return aData.Version } )
-        .catch( ( aError ) => { return 'ERROR' } )
-}
+import { Link, Outlet } from "react-router-dom"
 
 const Layout = () =>
 {
     const [ sBackEndVersion, SetBackEndVersion ] = useState( '' )
 
-    useEffect( () =>
+    const OnData = ( aData ) =>
     {
-        GetBackEndVersion()
-            .then( ( aVersion ) => { SetBackEndVersion( aVersion ); } )
-    })
+        SetBackEndVersion( aData.Version )
+    }
+
+    const OnError = ( aError ) =>
+    {
+        SetBackEndVersion( 'ERROR' )
+    }
+
+    const OnLoad = () =>
+    {
+        fetch( 'http://127.0.0.1/GetVersion' )
+            .then( ( aResponse ) => { return aResponse.json() } )
+            .then( OnData )
+            .catch( OnError )
+    }
+
+    useEffect( OnLoad, [] )
 
     return (
         <>
             <nav>
-                <ul>
-                    <li><Link to="/"     >Home </Link></li>
-                    <li><Link to="/Test0">Test0</Link></li>
-                </ul>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td className = "Nav" ><Link to = "/" >Home</Link></td>
+                        </tr>
+                    </tbody>
+                </table>
             </nav>
 
-            <Outlet />
+            <div className = "main" >
+                <Outlet />
+            </div>
 
             <footer>
                 <address>
