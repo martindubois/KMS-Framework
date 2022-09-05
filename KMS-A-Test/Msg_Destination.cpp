@@ -3,14 +3,14 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A-Test/Msg_Sender.cpp
+// File      KMS-A-Test/Msg_Destination.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/Msg/IReceiver.h>
 
-#include <KMS/Msg/Sender.h>
+#include <KMS/Msg/Destination.h>
 
 class TestReceiver : public KMS::Msg::IReceiver
 {
@@ -19,44 +19,44 @@ public:
     unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 };
 
-KMS_TEST(Msg_Sender_Base, "Msg_Sender_Base", "Auto", sTest_Base)
+KMS_TEST(Msg_Destination_Base, "Msg_Destination_Base", "Auto", sTest_Base)
 {
     TestReceiver lR;
-    KMS::Msg::Sender lS(NULL);
+    KMS::Msg::Destination lD;
 
-    KMS_TEST_ASSERT(!lS.IsSet());
+    KMS_TEST_ASSERT(!lD.IsSet());
 
-    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_IGNORED, lS.Send());
+    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_IGNORED, lD.Send(NULL));
 
-    lS.Set(&lR, 1);
+    lD.Set(&lR, 1);
 
-    KMS_TEST_ASSERT(lS.IsSet());
+    KMS_TEST_ASSERT(lD.IsSet());
 
-    KMS_TEST_COMPARE(0L, lS.Send());
+    KMS_TEST_COMPARE(0L, lD.Send(NULL));
 
-    lS.Set(&lR, 2);
+    lD.Set(&lR, 2);
 
-    KMS_TEST_ASSERT(lS.IsSet());
+    KMS_TEST_ASSERT(lD.IsSet());
 
-    KMS_TEST_COMPARE(0L, lS.Send());
+    KMS_TEST_COMPARE(0L, lD.Send(NULL));
 
-    KMS_TEST_ASSERT(!lS.IsSet());
+    KMS_TEST_ASSERT(!lD.IsSet());
 }
 
-KMS_TEST(Msg_Sender_Exceptions, "Msg_Sender_Exceptions", "Auto", sTest_Exceptions)
+KMS_TEST(Msg_Destination_Exceptions, "Msg_DESTINATION_Exceptions", "Auto", sTest_Exceptions)
 {
     TestReceiver lR;
-    KMS::Msg::Sender lS(NULL, &lR, 3);
+    KMS::Msg::Destination lD(&lR, 3);
 
-    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION, lS.Send());
+    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION, lD.Send(NULL));
 
-    lS.Set(&lR, 4);
+    lD.Set(&lR, 4);
 
-    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION_STD, lS.Send());
+    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION_STD, lD.Send(NULL));
 
-    lS.Set(&lR, 5);
+    lD.Set(&lR, 5);
 
-    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION_UNKNOWN, lS.Send());
+    KMS_TEST_COMPARE(KMS::Msg::IReceiver::MSG_EXCEPTION_UNKNOWN, lD.Send(NULL));
 }
 
 unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aData)

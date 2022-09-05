@@ -29,7 +29,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Server::Server() : mOnRequest(this)
+        Server::Server()
         {
             mResponseHeader.SetEntry("Server", new JSON::Value("KMS-Framework"));
 
@@ -49,7 +49,7 @@ namespace KMS
 
                 if (lRequest.Receive())
                 {
-                    unsigned int lRet = mOnRequest.Send(&lRequest);
+                    unsigned int lRet = mOnRequest.Send(this, &lRequest);
                     if (KMS_MSG_SUCCESS(lRet))
                     {
                         lRequest.Reply();

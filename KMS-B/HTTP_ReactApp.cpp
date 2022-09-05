@@ -37,7 +37,7 @@ namespace KMS
 
         void ReactApp::AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode)
         {
-            mFunctions.insert(FunctionMap::value_type(aPath, Msg::Sender(this, aReceiver, aCode)));
+            mFunctions.insert(FunctionMap::value_type(aPath, Msg::Destination(aReceiver, aCode)));
         }
 
         void ReactApp::AddRoute(const char* aPath)
@@ -121,7 +121,7 @@ namespace KMS
             }
             else
             {
-                unsigned int lRet = lIt->second.Send(aRequest);
+                unsigned int lRet = lIt->second.Send(this, aRequest);
                 if (!KMS_MSG_SUCCESS(lRet))
                 {
                     aRequest->SetResult(Request::Result::INTERNAL_SERVER_ERROR);

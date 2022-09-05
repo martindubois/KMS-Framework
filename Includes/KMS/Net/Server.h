@@ -9,7 +9,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Msg/IReceiver.h>
-#include <KMS/Msg/Sender.h>
 #include <KMS/Net/Socket.h>
 #include <KMS/Thread/Thread.h>
 

@@ -28,11 +28,6 @@ namespace KMS
 
         Thread::Thread()
             : mHandle(NULL)
-            , mOnIterate (this)
-            , mOnRun     (this)
-            , mOnStarting(this)
-            , mOnStop    (this)
-            , mOnStopping(this)
             , mState(State::STOPPED)
         {
         }
@@ -97,7 +92,7 @@ namespace KMS
 
             lLock.Unlock();
 
-            unsigned int lRet = mOnStop.Send();
+            unsigned int lRet = mOnStop.Send(this);
             assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
         }
 
@@ -137,7 +132,7 @@ namespace KMS
 
         void Thread::Run()
         {
-            unsigned int lRet = mOnStarting.Send();
+            unsigned int lRet = mOnStarting.Send(this);
             if (KMS_MSG_SUCCESS_OR_WARNING(lRet))
             {
                 Lock lLock(&mGate);
@@ -150,7 +145,7 @@ namespace KMS
                     {
                         lLock.Unlock();
                         {
-                            lRet = mOnRun.Send();
+                            lRet = mOnRun.Send(this);
                             assert(KMS_MSG_SUCCESS(lRet));
                         }
                         lLock.Relock();
@@ -163,7 +158,7 @@ namespace KMS
                         {
                             lLock.Unlock();
                             {
-                                lRet = mOnIterate.Send();
+                                lRet = mOnIterate.Send(this);
                             }
                             lLock.Relock();
 
@@ -181,7 +176,7 @@ namespace KMS
 
                     lLock.Unlock();
 
-                    lRet = mOnStopping.Send();
+                    lRet = mOnStopping.Send(this);
                     assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
                 }
             }

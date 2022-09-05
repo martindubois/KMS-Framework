@@ -9,7 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/JSON/Dictionary.h>
-#include <KMS/Msg/Sender.h>
+#include <KMS/Msg/Destination.h>
 #include <KMS/Net/Server.h>
 
 namespace KMS
@@ -26,7 +26,7 @@ namespace KMS
 
             JSON::Dictionary mResponseHeader;
 
-            Msg::Sender mOnRequest;
+            Msg::Destination mOnRequest;
 
         protected:
 

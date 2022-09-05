@@ -70,7 +70,6 @@
     <ClCompile Include="Modbus_Slave.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Msg_IReceiver.cpp" />
-    <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="OS_W.cpp" />
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />
