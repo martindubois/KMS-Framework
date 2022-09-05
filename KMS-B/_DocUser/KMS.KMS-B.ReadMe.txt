@@ -5,6 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
+- KMS::HTTP::ReactApp
+    - Fix the location of the front-end in 32 bits debug on Windows.
+
 0.0.9-Dev Windows 2022-07-30
 
 0.0.8-Dev Windows 2022-07-29

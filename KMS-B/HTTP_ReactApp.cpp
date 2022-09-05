@@ -86,7 +86,11 @@ namespace KMS
             }
             else
             {
-                File::Folder lProduct(lExec, ".." SLASH "..");
+                #if defined(_KMS_WINDOWS_) && ! defined(_WIN64)
+                    File::Folder lProduct(lExec, "..");
+                #else
+                    File::Folder lProduct(lExec, ".." SLASH "..");
+                #endif
 
                 File::Folder lB(lProduct, "Import" SLASH "front-end");
                 if (lB.DoesExist())
