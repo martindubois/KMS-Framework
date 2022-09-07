@@ -20,6 +20,7 @@ namespace KMS
             BLUE,
             GREEN,
             RED,
+            YELLOW,
             WHITE,
 
             COLOR_QTY,

@@ -22,7 +22,7 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 
     lL.SetAttribute("Folder", "DoesNotExist");
 
-    KMS_TEST_ASSERT(!lL.IsEnabled());
+    KMS_TEST_ASSERT(!lL.IsFileEnabled());
 
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_NOISE);
     lL.WriteData(&lL, sizeof(lL));
@@ -30,6 +30,10 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     std::cerr << KMS::Console::Color::BLUE;
     std::cerr << "IMPORTANT : Ignore the following error messages. The current test tests error logging." << std::endl;
     std::cerr << KMS::Console::Color::WHITE;
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_WARNING);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteException(lE);
 
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_ERROR);
     lL.WriteData(&lL, sizeof(lL));
@@ -40,12 +44,21 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     std::cerr << "IMPORTANT : End of the test of error logging." << std::endl;
     std::cerr << KMS::Console::Color::WHITE;
 
-    KMS_TEST_ASSERT(lL.SetAttribute("Level", "ERROR"  ));
-    KMS_TEST_ASSERT(lL.SetAttribute("Level", "WARNING"));
-    KMS_TEST_ASSERT(lL.SetAttribute("Level", "INFO"   ));
-    KMS_TEST_ASSERT(lL.SetAttribute("Level", "NOISE"  ));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "NONE"));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "ERROR"));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "WARNING"));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "INFO"));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "NOISE"));
 
-    KMS_TEST_ASSERT(lL.SetAttribute("Level", NULL));
+    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", NULL));
+
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "NONE"   ));
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "ERROR"  ));
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "WARNING"));
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "INFO"   ));
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "NOISE"  ));
+
+    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", NULL));
 
     KMS_TEST_ASSERT(!lL.SetAttribute("Invalid", NULL));
 
@@ -59,7 +72,7 @@ KMS_TEST(Dbg_Log_Exception, "Dbg_Log_Exception", "Auto", sTest_Exception)
 
     try
     {
-        lL.SetAttribute("Level", "INVALID");
+        lL.SetAttribute("FileLevel", "INVALID");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONFIG_VALUE);

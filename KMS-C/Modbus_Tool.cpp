@@ -51,6 +51,9 @@ namespace KMS
 
                 lM.InitConfigurator(&lC);
                 lT.InitConfigurator(&lC);
+
+                Dbg::gLog.InitConfigurator(&lC);
+
                 lT.InitMaster(&lM);
 
                 lC.Init();

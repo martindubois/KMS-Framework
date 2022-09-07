@@ -19,7 +19,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const uint8_t CODES[static_cast<unsigned int>(KMS::Console::Color::COLOR_QTY)] = { 0x09, 0x0a, 0x0c, 0x07 };
+static const uint8_t CODES[static_cast<unsigned int>(KMS::Console::Color::COLOR_QTY)] = { 0x09, 0x0a, 0x0c, 0x0e, 0x07 };
 
 // Static variable
 // //////////////////////////////////////////////////////////////////////////

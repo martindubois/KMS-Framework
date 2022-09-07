@@ -10,6 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/JSON/Array.h>
 #include <KMS/JSON/Dictionary.h>
+#include <KMS/JSON/String.h>
 #include <KMS/JSON/Value.h>
 
 #include <KMS/JSON/JSON.h>
@@ -38,7 +39,7 @@ namespace KMS
                 case '\r':
                 case '\t': break;
 
-                default: lObj = new Value(); break;
+                default: lObj = new String(); break;
                 }
 
                 if (NULL != lObj)
@@ -79,6 +80,7 @@ namespace KMS
 
                 case '[': lObj = new Array     (); break;
                 case '{': lObj = new Dictionary(); break;
+                case '"': lObj = new String    (); break;
                 default : lObj = new Value     (); break;
                 }
 

@@ -63,6 +63,7 @@
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="JSON_Object.cpp" />
+    <ClCompile Include="JSON_String.cpp" />
     <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="Modbus.cpp" />
     <ClCompile Include="Modbus_CRC.cpp" />

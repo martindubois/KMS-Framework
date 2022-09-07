@@ -5,6 +5,10 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+* KMS::Console::Color::YELLOW
+* KMS::Dbg::Log - ConsoleLevel and FileLevel configurable attributes
+* KMS::JSON::String
+
 0.0.11-Dev Windows 2022-09-24
 * KMS::Msg::Sender - Removed
 

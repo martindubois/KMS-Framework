@@ -150,6 +150,9 @@
     <ClCompile Include="JSON_Object.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="JSON_String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

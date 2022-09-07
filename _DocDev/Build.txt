@@ -41,9 +41,8 @@ Version             ______ . ______ . ______ . ______ - _____________________
         - Close
 [ ] Tools "PowerShell" - In the product folder
         .\x64\Debug\KMS-Build.exe
-[ ] If needed, update KMS-Import.exe in K:\Export
-[ ] If needed, update KMS-Sync.exe in K:\Export
-[ ] If needed, upload the release on GitHub.com
+[ ] If needed, update KMS-Import.exe in K:\
+[ ] If needed, update KMS-Sync.exe in K:\
 
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as message
@@ -51,6 +50,7 @@ Version             ______ . ______ . ______ . ______ - _____________________
         git tag {Ma}.{Mi}.{Bu}[-{Type}]_Linux|Windows
 [ ] Tools "GIT GUI"
     - Push the servers
+[ ] If needed, upload the release on GitHub.com
 
 Time and duration   ______ : ______           ______ hours and ______ minutes
 

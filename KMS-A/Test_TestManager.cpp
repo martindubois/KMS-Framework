@@ -38,6 +38,8 @@ namespace KMS
 
                 lTM.InitConfigurator(&lC);
 
+                Dbg::gLog.InitConfigurator(&lC);
+
                 lC.Init();
                 lC.ParseArguments(aCount - 1, aVector + 1);
 

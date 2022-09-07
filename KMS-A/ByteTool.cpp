@@ -60,6 +60,8 @@ namespace KMS
 
             lBT.InitConfigurator(&lC);
 
+            Dbg::gLog.InitConfigurator(&lC);
+
             lC.Init();
             lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE);
             lC.ParseArguments(aCount - 1, aVector + 1);
