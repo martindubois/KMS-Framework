@@ -67,16 +67,6 @@ namespace KMS
 
         bool Array::IsEmpty() const { return mEntries.empty(); }
 
-        unsigned int Array::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const
-        {
-            KMS_EXCEPTION(TODO, "Not implemented yet");
-        }
-
-        unsigned int Array::HTTP_Set(const char* aIn, unsigned int aInSize_byte)
-        {
-            KMS_EXCEPTION(TODO, "Not implemented yet");
-        }
-
         unsigned int Array::JSON_Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(NULL != aOut);
