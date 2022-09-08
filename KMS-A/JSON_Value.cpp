@@ -80,8 +80,6 @@ namespace KMS
 
         void Value::Clear() { mValue.clear(); }
 
-        Object* Value::Copy() const { return new Value(*this); }
-
         bool Value::IsEmpty() const { return mValue.empty(); }
 
         unsigned int Value::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const

@@ -44,7 +44,9 @@ namespace KMS
             {
                 assert(NULL != lPair.second);
 
-                SetEntry(lPair.first.c_str(), lPair.second->Copy());
+                lPair.second->IncRefCount();
+
+                SetEntry(lPair.first.c_str(), lPair.second);
             }
         }
 
@@ -77,7 +79,7 @@ namespace KMS
             {
                 assert(NULL != lIt->second);
 
-                delete lIt->second;
+                lIt->second->DecRefCount();
 
                 lIt->second = aE;
             }
@@ -93,13 +95,11 @@ namespace KMS
             {
                 assert(NULL != lPair.second);
 
-                delete lPair.second;
+                lPair.second->DecRefCount();
             }
 
             mEntries.clear();
         }
-
-        Object* Dictionary::Copy() const { return new Dictionary(*this); }
 
         bool Dictionary::IsEmpty() const { return mEntries.empty(); }
 

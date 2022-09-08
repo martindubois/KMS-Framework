@@ -47,8 +47,6 @@ namespace KMS
 
             virtual void Clear();
 
-            virtual Object* Copy() const;
-
             virtual bool IsEmpty() const;
 
             virtual unsigned int HTTP_Get(      char* aOut, unsigned int aOutSize_byte) const;

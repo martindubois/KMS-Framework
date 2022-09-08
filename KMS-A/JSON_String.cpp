@@ -36,8 +36,6 @@ namespace KMS
 
         void String::Clear() { mValue.clear(); }
 
-        Object* String::Copy() const { return new String(*this); }
-
         bool String::IsEmpty() const { return mValue.empty(); }
 
         unsigned int String::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const

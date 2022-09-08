@@ -26,11 +26,7 @@ namespace KMS
 
             Array();
 
-            Array(const Array& aA);
-
-            const Array& operator = (const Array& aA);
-
-            void operator += (const Array& aA);
+            void operator += (Array* aA);
 
             void operator += (Object* aE);
 
@@ -48,8 +44,6 @@ namespace KMS
 
             virtual void Clear();
 
-            virtual Object* Copy() const;
-
             virtual bool IsEmpty() const;
 
             virtual unsigned int JSON_Get(      char* aOut, unsigned int aOutSize_byte) const;
@@ -60,6 +54,8 @@ namespace KMS
             typedef std::vector<Object *> Internal;
 
             const Internal& GetInternal() const;
+
+            Internal* GetInternal();
 
         private:
 

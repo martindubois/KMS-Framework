@@ -74,6 +74,7 @@
     <ClCompile Include="OS_W.cpp" />
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />
+    <ClCompile Include="RefCount.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />
