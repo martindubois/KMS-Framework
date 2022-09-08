@@ -11,6 +11,9 @@
 #include <list>
 #include <string>
 
+// ===== Includes ===========================================================
+#include <KMS/Console/Color.h>
+
 namespace KMS
 {
     namespace Test
@@ -106,3 +109,18 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
     {                                                                                         \
         if (!Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ )) { return; } \
     }
+
+#define KMS_TEST_EXPECTED_ERROR()                \
+    std::cout << KMS::Console::Color::BLUE;      \
+    std::cout << "EXPECTED ERROR" << std::endl; \
+    std::cout << KMS::Console::Color::WHITE
+
+#define KMS_TEST_EXPECTED_EXCEPTION()               \
+    std::cout << KMS::Console::Color::BLUE;         \
+    std::cout << "EXPECTED EXCEPTION" << std::endl; \
+    std::cout << KMS::Console::Color::WHITE
+
+#define KMS_TEST_EXPECTED_WARNINGS(N)                              \
+    std::cout << KMS::Console::Color::BLUE;                        \
+    std::cout << "EXPECTED WARNINGS (" << (N) << ")" << std::endl; \
+    std::cout << KMS::Console::Color::WHITE

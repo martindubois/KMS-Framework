@@ -44,6 +44,7 @@ KMS_TEST(JSON_Value_Exception, "JSON_Value_Exception", "Auto", sTest_Exception)
     {
         try
         {
+            KMS_TEST_EXPECTED_EXCEPTION();
             lV0.HTTP_Get(lStr, i);
             KMS_TEST_ASSERT(false);
         }
@@ -54,6 +55,7 @@ KMS_TEST(JSON_Value_Exception, "JSON_Value_Exception", "Auto", sTest_Exception)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         lV0.HTTP_Set("\"", 1);
         KMS_TEST_ASSERT(false);
     }
@@ -61,6 +63,7 @@ KMS_TEST(JSON_Value_Exception, "JSON_Value_Exception", "Auto", sTest_Exception)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         lV0.HTTP_Set("", 0);
         KMS_TEST_ASSERT(false);
     }

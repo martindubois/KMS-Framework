@@ -70,9 +70,19 @@ unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aDat
     {
     case 1: break;
     case 2: lResult = KMS::Msg::IReceiver::MSG_ACTION_CLEAR; break;
-    case 3: KMS_EXCEPTION(TEST, "Test exception");
-    case 4: throw std::exception();
-    case 5: throw "Test unknown exception";
+
+    case 3:
+        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS_TEST_EXPECTED_ERROR();
+        KMS_EXCEPTION(TEST, "Test exception");
+
+    case 4:
+        KMS_TEST_EXPECTED_ERROR();
+        throw std::exception();
+
+    case 5:
+        KMS_TEST_EXPECTED_ERROR();
+        throw "Test unknown exception";
 
     default: assert(false);
     }

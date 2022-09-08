@@ -45,16 +45,16 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
 {
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Version lV0("0");
-
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(VERSION_FORMAT);
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Version lV0("0.0.0.256");
-
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(VERSION_NUMBER);

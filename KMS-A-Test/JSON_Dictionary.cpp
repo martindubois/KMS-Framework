@@ -22,10 +22,6 @@ KMS_TEST(JSON_Dictionary_Base, "JSON_Dictionary_Base", "Auto", sTest_Base)
     lD0.SetEntry("Test1", new KMS::JSON::Value("Test1"));
     lD0.SetEntry("Test2", new KMS::JSON::Value("Test2"));
 
-    KMS::JSON::Object* lO0 = lD0.Copy();
-
-    delete lO0;
-
     char lStr[32];
 
     KMS_TEST_COMPARE(lD0.JSON_Get(lStr, sizeof(lStr)), 29L);
@@ -49,6 +45,7 @@ KMS_TEST(JSON_Dictionary_Exception, "JSON_Dictionary_Exception", "Auto", sTest_E
     {
         try
         {
+            KMS_TEST_EXPECTED_EXCEPTION();
             lD0.HTTP_Get(lStr, i);
             KMS_TEST_ASSERT(false);
         }
@@ -61,6 +58,7 @@ KMS_TEST(JSON_Dictionary_Exception, "JSON_Dictionary_Exception", "Auto", sTest_E
     {
         try
         {
+            KMS_TEST_EXPECTED_EXCEPTION();
             lD0.JSON_Get(lStr, i);
             KMS_TEST_ASSERT(false);
         }

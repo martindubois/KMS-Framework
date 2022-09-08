@@ -79,8 +79,8 @@ KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         lB.SetAttribute("Prefered", "INVALID");
-
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONFIG_VALUE);

@@ -27,6 +27,8 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
 
     KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), 0);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_A), 0);
+
+    KMS_TEST_EXPECTED_WARNINGS(2);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(7, VECTOR_A), 0);
 
     static const char* VECTOR_B[] =
@@ -46,10 +48,6 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
 
 KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
 {
-    std::cerr << KMS::Console::Color::BLUE;
-    std::cerr << "IMPORTANT : Ignore the following error messages. The current test tests failling tests." << std::endl;
-    std::cerr << KMS::Console::Color::WHITE;
-
     static const char* VECTOR_A[] =
     {
         "KMS-Test.exe",
@@ -58,6 +56,8 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Folders+=DoesNotExist_A",
     };
 
+    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS_TEST_EXPECTED_ERROR();
     KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_A), static_cast<int>(KMS::Exception::Code::CONFIG));
 
     static const char* VECTOR_B[] =
@@ -69,7 +69,11 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Destination=DoesNotExist",
     };
 
+    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS_TEST_EXPECTED_ERROR();
     KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS_TEST_EXPECTED_ERROR();
     KMS_TEST_COMPARE(KMS::File::Sync::Main(5, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
 
     static const char* VECTOR_C[] =
@@ -82,10 +86,10 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Folders+=DoesNotExist",
     };
 
+    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS_TEST_EXPECTED_ERROR();
     KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS_TEST_EXPECTED_ERROR();
     KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
-
-    std::cerr << KMS::Console::Color::BLUE;
-    std::cerr << "IMPORTANT : End of the test of failling tests." << std::endl;
-    std::cerr << KMS::Console::Color::WHITE;
 }
