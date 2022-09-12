@@ -11,7 +11,7 @@
 #include <KMS/Cfg/Configurable.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Msg/IReceiver.h>
-#include <KMS/Msg/Sender.h>
+#include <KMS/Msg/Destination.h>
 
 namespace KMS
 {
@@ -43,12 +43,12 @@ namespace KMS
 
             virtual void Stop();
 
-            Msg::Sender mOnReadCoils;
-            Msg::Sender mOnReadDiscreteInputs;
-            Msg::Sender mOnReadHoldingRegisters;
-            Msg::Sender mOnReadInputRegisters;
-            Msg::Sender mOnWriteSingleCoil;
-            Msg::Sender mOnWriteSingleRegister;
+            Msg::Destination mOnReadCoils;
+            Msg::Destination mOnReadDiscreteInputs;
+            Msg::Destination mOnReadHoldingRegisters;
+            Msg::Destination mOnReadInputRegisters;
+            Msg::Destination mOnWriteSingleCoil;
+            Msg::Destination mOnWriteSingleRegister;
 
             virtual void Connect() = 0;
 
@@ -67,10 +67,10 @@ namespace KMS
 
             virtual unsigned int OnIterate() = 0;
 
-            void OnRequest_A_Bit (Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Sender* aSender);
-            void OnRequest_A_Word(Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Sender* aSender);
+            void OnRequest_A_Bit (Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Destination* aDst);
+            void OnRequest_A_Word(Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Destination* aDst);
 
-            void OnRequest_B(Function aFunction, Address aStartAddr, void* aData, Msg::Sender* aSender);
+            void OnRequest_B(Function aFunction, Address aStartAddr, void* aData, Msg::Destination* aDst);
 
             virtual void SendException(Function aFunction, Exception aException) = 0;
 

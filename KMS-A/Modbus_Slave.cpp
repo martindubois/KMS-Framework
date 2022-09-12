@@ -103,21 +103,15 @@ namespace KMS
         Slave::Slave()
             : ON_ITERATE(this, MSG_ITERATE)
             , mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
-            , mOnReadCoils           (this)
-            , mOnReadDiscreteInputs  (this)
-            , mOnReadHoldingRegisters(this)
-            , mOnReadInputRegisters  (this)
-            , mOnWriteSingleCoil     (this)
-            , mOnWriteSingleRegister (this)
             , mStopped(false)
         {
         }
 
         DeviceAddress Slave::GetDeviceAddress() const { return mDeviceAddress; }
 
-        void Slave::OnRequest_A_Bit(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Sender* aSender)
+        void Slave::OnRequest_A_Bit(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Destination* aDst)
         {
-            assert(NULL != aSender);
+            assert(NULL != aDst);
 
             MsgData lData;
 
@@ -129,7 +123,7 @@ namespace KMS
             lData.mQty       = aQty;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aSender->Send(&lData);
+            unsigned int lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
@@ -155,9 +149,9 @@ namespace KMS
             }
         }
 
-        void Slave::OnRequest_A_Word(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Sender* aSender)
+        void Slave::OnRequest_A_Word(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Destination* aDst)
         {
-            assert(NULL != aSender);
+            assert(NULL != aDst);
 
             MsgData lData;
 
@@ -169,7 +163,7 @@ namespace KMS
             lData.mQty       = aQty;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aSender->Send(&lData);
+            unsigned int lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
@@ -188,9 +182,9 @@ namespace KMS
             }
         }
 
-        void Slave::OnRequest_B(Function aFunction, uint16_t aStartAddr, void * aData, Msg::Sender* aSender)
+        void Slave::OnRequest_B(Function aFunction, uint16_t aStartAddr, void * aData, Msg::Destination* aDst)
         {
-            assert(NULL != aSender);
+            assert(NULL != aDst);
 
             MsgData lData;
 
@@ -200,7 +194,7 @@ namespace KMS
             lData.mQty       = 1;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aSender->Send(&lData);
+            unsigned int lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)

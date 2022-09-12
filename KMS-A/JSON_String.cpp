@@ -3,14 +3,14 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/JSON_Value.cpp
+// File      KMS-A/JSON_String.cpp
 
-// TEST COVERAGE 2022-08-23 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Value.h>
+#include <KMS/JSON/String.h>
 
 namespace KMS
 {
@@ -20,69 +20,25 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////////
 
-        Value::Value() {}
+        String::String() {}
 
-        Value::Value(const Value& aV) { Set(aV.Get()); }
+        String::String(const String& aV) { Set(aV.Get()); }
 
-        Value::Value(const char* aValue) { Set(aValue); }
+        String::String(const char* aValue) { Set(aValue); }
 
-        Value::Value(double aValue) { Set(aValue); }
+        const char* String::Get() const { return mValue.c_str(); }
 
-        Value::Value( int32_t aValue, Radix aRadix) { Set(aValue, aRadix); }
-        Value::Value(uint32_t aValue, Radix aRadix) { Set(aValue, aRadix); }
-
-        const char* Value::Get() const { return mValue.c_str(); }
-
-        void Value::Set(const char* aValue) { assert(NULL != aValue); mValue = aValue; }
-
-        void Value::Set(double aValue)
-        {
-            char lValue[32];
-
-            sprintf_s(lValue, "%f", aValue);
-
-            Set(lValue);
-        }
-
-        void Value::Set(int32_t aValue, Radix aRadix)
-        {
-            char lValue[16];
-
-            switch (aRadix)
-            {
-            case Radix::DECIMAL    : sprintf_s(lValue, "%d", aValue); break;
-            case Radix::HEXADECIMAL: sprintf_s(lValue, "%x", aValue); break;
-
-            default: assert(false);
-            }
-
-            Set(lValue);
-        }
-
-        void Value::Set(uint32_t aValue, Radix aRadix)
-        {
-            char lValue[16];
-
-            switch (aRadix)
-            {
-            case Radix::DECIMAL    : sprintf_s(lValue, "%u", aValue); break;
-            case Radix::HEXADECIMAL: sprintf_s(lValue, "%x", aValue); break;
-
-            default: assert(false);
-            }
-
-            Set(lValue);
-        }
+        void String::Set(const char* aValue) { assert(NULL != aValue); mValue = aValue; }
 
         // ===== Object =====================================================
 
-        Value::~Value() {}
+        String::~String() {}
 
-        void Value::Clear() { mValue.clear(); }
+        void String::Clear() { mValue.clear(); }
 
-        bool Value::IsEmpty() const { return mValue.empty(); }
+        bool String::IsEmpty() const { return mValue.empty(); }
 
-        unsigned int Value::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int String::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(NULL != aOut);
 
@@ -97,7 +53,7 @@ namespace KMS
             return lResult_byte;
         }
 
-        unsigned int Value::HTTP_Set(const char* aIn, unsigned int aInSize_byte)
+        unsigned int String::HTTP_Set(const char* aIn, unsigned int aInSize_byte)
         {
             assert(NULL != aIn);
 
@@ -119,9 +75,7 @@ namespace KMS
                         KMS_EXCEPTION(HTTP_FORMAT, "Invalid HTTP format");
                     }
 
-                    mValue = "\"";
-                    mValue += lValue;
-                    mValue += "\"";
+                    mValue = lValue;
 
                     lResult_byte += static_cast<unsigned int>(strlen(lValue));
                     return lResult_byte;
@@ -142,22 +96,22 @@ namespace KMS
             KMS_EXCEPTION(HTTP_FORMAT, "Invalid HTTP format");
         }
 
-        unsigned int Value::JSON_Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int String::JSON_Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(NULL != aOut);
 
             unsigned int lResult_byte = static_cast<unsigned int>(mValue.size());
-            if (aOutSize_byte < lResult_byte + 2)
+            if (aOutSize_byte < lResult_byte + 4)
             {
                 KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lResult_byte);
             }
 
-            strcpy_s(aOut SizeInfoV(aOutSize_byte), mValue.c_str());
+            sprintf_s(aOut SizeInfoV(aOutSize_byte), "\"%s\"", mValue.c_str());
 
             return lResult_byte;
         }
 
-        unsigned int Value::JSON_Set(const char* aIn, unsigned int aInSize_byte)
+        unsigned int String::JSON_Set(const char* aIn, unsigned int aInSize_byte)
         {
             assert(NULL != aIn);
 

@@ -62,6 +62,8 @@ namespace KMS
 
                 lB.InitConfigurator(&lC);
 
+                Dbg::gLog.InitConfigurator(&lC);
+
                 lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE, true);

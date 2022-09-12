@@ -32,6 +32,7 @@ namespace KMS
 
             enum class Level
             {
+                LEVEL_NONE   ,
                 LEVEL_ERROR  ,
                 LEVEL_WARNING,
                 LEVEL_INFO   ,

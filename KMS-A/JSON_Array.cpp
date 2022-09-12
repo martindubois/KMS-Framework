@@ -22,26 +22,17 @@ namespace KMS
 
         Array::Array() {}
 
-        Array::Array(const Array& aA) { *this += aA; }
-
-        const Array& Array::operator = (const Array& aA)
+        void Array::operator += (Array* aA)
         {
-            Clear();
+            Internal* lA = aA->GetInternal();
 
-            *this += aA;
-
-            return *this;
-        }
-
-        void Array::operator += (const Array& aA)
-        {
-            const Internal& lA = aA.GetInternal();
-
-            for (const Object* lObj : lA)
+            for (Object* lObj : *lA)
             {
                 assert(NULL != lObj);
 
-                *this += lObj->Copy();
+                lObj->IncRefCount();
+
+                *this += lObj;
             }
         }
 
@@ -57,25 +48,13 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                delete lObj;
+                lObj->DecRefCount();
             }
 
             mEntries.clear();
         }
 
-        Object* Array::Copy() const { return new Array(*this); }
-
         bool Array::IsEmpty() const { return mEntries.empty(); }
-
-        unsigned int Array::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const
-        {
-            KMS_EXCEPTION(TODO, "Not implemented yet");
-        }
-
-        unsigned int Array::HTTP_Set(const char* aIn, unsigned int aInSize_byte)
-        {
-            KMS_EXCEPTION(TODO, "Not implemented yet");
-        }
 
         unsigned int Array::JSON_Get(char* aOut, unsigned int aOutSize_byte) const
         {
@@ -142,6 +121,8 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         const Array::Internal& Array::GetInternal() const { return mEntries; }
+
+        Array::Internal* Array::GetInternal() { return &mEntries; }
 
     }
 }

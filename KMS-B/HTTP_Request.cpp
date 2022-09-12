@@ -11,6 +11,7 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
+#include <KMS/JSON/String.h>
 #include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/Request.h>
@@ -132,7 +133,7 @@ namespace KMS
                 unsigned int lSize_byte = mResponseData.JSON_Get(lData, sizeof(lData));
 
                 mResponseHeader.SetEntry("Content-Length", new JSON::Value(lSize_byte));
-                mResponseHeader.SetEntry("Content-Type"  , new JSON::Value("application/json"));
+                mResponseHeader.SetEntry("Content-Type"  , new JSON::String("application/json"));
 
                 SetData(lData, lSize_byte);
             }

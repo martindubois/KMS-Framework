@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Log.cpp
 
+// TEST COVERAGE 2022-09-06 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -30,13 +32,17 @@ namespace KMS
 
         Log::Log() : mCounter(0), mEntryLevel(LogFile::Level::LEVEL_NOISE), mProcessId(OS::GetProcessId())
         {
-            ResetFolder();
-            ResetLevel();
+            ResetConsoleLevel();
+            ResetFileLevel   ();
+            ResetFolder      ();
         }
 
         Log::~Log() { CloseLogFiles(); }
 
-        bool Log::IsEnabled() const { return mEnabled; }
+        bool Log::IsFileEnabled() const { return mEnabled; }
+
+        void Log::ResetConsoleLevel() { SetConsoleLevel(LogFile::Level::LEVEL_WARNING); }
+        void Log::ResetFileLevel   () { SetFileLevel   (LogFile::Level::LEVEL_INFO   ); }
 
         void Log::ResetFolder()
         {
@@ -45,7 +51,8 @@ namespace KMS
             SetFolder(File::Folder(lHome, "KMS-Framework"));
         }
 
-        void Log::ResetLevel() { SetLevel(LogFile::Level::LEVEL_INFO); }
+        void Log::SetConsoleLevel(LogFile::Level aL) { mConsoleLevel = aL; }
+        void Log::SetFileLevel   (LogFile::Level aL) { mFileLevel    = aL; }
 
         void Log::SetFolder(const File::Folder& aF)
         {
@@ -56,21 +63,20 @@ namespace KMS
             CloseLogFiles();
         }
 
-        void Log::SetLevel(LogFile::Level aL) { mLevel = aL; }
+        #define IF_FILE    if (mEnabled && (mFileLevel >= mEntryLevel))
+        #define IF_CONSOLE if (((!mEnabled) && LogFile::Level::LEVEL_WARNING >= mEntryLevel) || (mConsoleLevel >= mEntryLevel))
 
         void Log::WriteData(const void* aData, unsigned int aSize_byte)
         {
-            if (mEnabled)
+            IF_FILE
             {
-                if (mLevel >= mEntryLevel)
-                {
-                    LogFile* lLF = FindLogFile();
-                    assert(NULL != lLF);
+                LogFile* lLF = FindLogFile();
+                assert(NULL != lLF);
 
-                    lLF->WriteData(aData, aSize_byte);
-                }
+                lLF->WriteData(aData, aSize_byte);
             }
-            else
+
+            IF_CONSOLE
             {
                 switch (mEntryLevel)
                 {
@@ -80,6 +86,22 @@ namespace KMS
                     std::cerr << std::endl;
                     std::cerr << KMS::Console::Color::WHITE;
                     break;
+
+                case LogFile::Level::LEVEL_WARNING:
+                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+
+                case LogFile::Level::LEVEL_INFO:
+                case LogFile::Level::LEVEL_NOISE:
+                    // NOT TESTED
+                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << std::endl;
+                    break;
+
+                default: assert(false);
                 }
             }
         }
@@ -90,17 +112,15 @@ namespace KMS
 
             mCounter++;
 
-            if (mEnabled)
+            IF_FILE
             {
-                if (mLevel >= mEntryLevel)
-                {
-                    LogFile* lLF = FindLogFile();
-                    assert(NULL != lLF);
+                LogFile* lLF = FindLogFile();
+                assert(NULL != lLF);
 
-                    lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
-                }
+                lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
             }
-            else
+
+            IF_CONSOLE
             {
                 switch (mEntryLevel)
                 {
@@ -109,23 +129,39 @@ namespace KMS
                     std::cerr << "E\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
                     std::cerr << KMS::Console::Color::WHITE;
                     break;
+
+                case LogFile::Level::LEVEL_WARNING:
+                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << "W\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+
+                case LogFile::Level::LEVEL_INFO:
+                    // NOT TESTED
+                    std::cerr << "I\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    break;
+
+                case LogFile::Level::LEVEL_NOISE:
+                    // NOT TESTED
+                    std::cerr << "N\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    break;
+
+                default: assert(false);
                 }
             }
         }
 
         void Log::WriteException(const Exception& aException)
         {
-            if (mEnabled)
+            IF_FILE
             {
-                if (mLevel >= mEntryLevel)
-                {
-                    LogFile* lLF = FindLogFile();
-                    assert(NULL != lLF);
+                LogFile* lLF = FindLogFile();
+                assert(NULL != lLF);
 
-                    lLF->WriteException(aException);
-                }
+                lLF->WriteException(aException);
             }
-            else
+
+            IF_CONSOLE
             {
                 switch (mEntryLevel)
                 {
@@ -135,23 +171,37 @@ namespace KMS
                     std::cerr << aException << std::endl;
                     std::cerr << KMS::Console::Color::WHITE;
                     break;
+
+                case LogFile::Level::LEVEL_WARNING:
+                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << "X" << std::endl;
+                    std::cerr << aException << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+
+                case LogFile::Level::LEVEL_INFO:
+                case LogFile::Level::LEVEL_NOISE:
+                    // NOT TESTED
+                    std::cerr << "X" << std::endl;
+                    std::cerr << aException << std::endl;
+                    break;
+
+                default: assert(false);
                 }
             }
-        }
+            }
 
         void Log::WriteMessage(const char* aMsg)
         {
-            if (mEnabled)
+            IF_FILE
             {
-                if (mLevel >= mEntryLevel)
-                {
-                    LogFile* lLF = FindLogFile();
-                    assert(NULL != lLF);
+                LogFile* lLF = FindLogFile();
+                assert(NULL != lLF);
 
-                    lLF->WriteMessage(aMsg);
-                }
+                lLF->WriteMessage(aMsg);
             }
-            else
+
+            IF_CONSOLE
             {
                 switch (mEntryLevel)
                 {
@@ -160,6 +210,20 @@ namespace KMS
                     std::cerr << "M\t\"" << aMsg << "\"" << std::endl;
                     std::cerr << KMS::Console::Color::WHITE;
                     break;
+
+                case LogFile::Level::LEVEL_WARNING:
+                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << "M\t\"" << aMsg << "\"" << std::endl;
+                    std::cerr << KMS::Console::Color::WHITE;
+                    break;
+
+                case LogFile::Level::LEVEL_INFO:
+                case LogFile::Level::LEVEL_NOISE:
+                    // NOT TESTED
+                    std::cerr << "M\t\"" << aMsg << "\"" << std::endl;
+                    break;
+
+                default: assert(false);
                 }
             }
         }
@@ -174,16 +238,21 @@ namespace KMS
 
             fprintf(aOut,
                 "===== KMS::Dbg::Log =====\n"
+                "ConsoleLevel\n"
+                "    Set the console level to the default value\n"
+                "    Default: WARNING\n"
+                "ConsoleLevel = NONE|ERROR|WARNING|INFO|NOISE\n"
+                "    Set the level\n"
+                "FileLevel\n"
+                "    Set the file level to the default value\n"
+                "    Default: INFO\n"
+                "FileLevel = NONE|ERROR|WARNING|INFO|NOISE\n"
+                "    Set the level\n"
                 "Folder\n"
                 "    Set the folde to the default value\n"
                 "    Default: ~/KMS-Framework\n"
                 "Folder = {Value}\n"
-                "    Set the folder\n"
-                "Level\n"
-                "    Set the level to the default value\n"
-                "    Default: INFO\n"
-                "Level = ERROR|WARNING|INFO|NOISE\n"
-                "    Set the level\n");
+                "    Set the folder\n");
 
             Cfg::Configurable::DisplayHelp(aOut);
         }
@@ -192,16 +261,18 @@ namespace KMS
         {
             if (NULL == aV)
             {
-                CFG_IF("Folder") { ResetFolder(); return true; }
-                CFG_IF("Level" ) { ResetLevel (); return true; }
+                CFG_IF("ConsoleLevel") { ResetConsoleLevel(); return true; }
+                CFG_IF("FileLevel"   ) { ResetFileLevel   (); return true; }
+                CFG_IF("Folder"      ) { ResetFolder      (); return true; }
             }
             else
             {
                 char lE[PATH_LENGTH];
 
-                CFG_EXPAND("Folder", SetFolder);
+                CFG_CONVERT("ConsoleLevel", SetConsoleLevel, ToLevel);
+                CFG_CONVERT("FileLevel"   , SetFileLevel   , ToLevel);
 
-                CFG_CONVERT("Level", SetLevel, ToLevel);
+                CFG_EXPAND("Folder", SetFolder);
             }
 
             return Cfg::Configurable::SetAttribute(aA, aV);
@@ -250,6 +321,7 @@ namespace KMS
 
 KMS::Dbg::LogFile::Level ToLevel(const char* aIn)
 {
+    if (0 == _stricmp("NONE"   , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_NONE   ; }
     if (0 == _stricmp("ERROR"  , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_ERROR  ; }
     if (0 == _stricmp("WARNING", aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_WARNING; }
     if (0 == _stricmp("INFO"   , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_INFO   ; }

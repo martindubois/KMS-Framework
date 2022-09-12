@@ -3,67 +3,62 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/JSON/Array.h
+// File      Includes/KMS/JSON/String.h
 
 #pragma once
 
 // ===== C ==================================================================
-#include <ostream>
-#include <vector>
+#include <string>
 
 // ===== Includes ===========================================================
 #include <KMS/JSON/Object.h>
+#include <KMS/Types.h>
 
 namespace KMS
 {
     namespace JSON
     {
 
-        class Array : public Object
+        class String : public Object
         {
 
         public:
 
-            Array();
+            String();
 
-            void operator += (Array* aA);
+            String(const String& aV);
 
-            void operator += (Object* aE);
+            String(const char* aValue);
 
-            Object* GetEntry(unsigned int aIndex);
+            const String& operator = (const char* aValue);
 
-            const Object* GetEntry(unsigned int aIndex) const;
+            const char* Get() const;
 
-            void RemoveEntry(unsigned int aIndex);
+            void Get(char* aOut, unsigned int aOutSize_byte) const;
 
-            void SetEntry(unsigned int aIndex, Object* aE);
+            void GetWithDefault(char* aOut, unsigned int aOutSize_byte, const char* aDefault) const;
+
+            void Set(const char* aValue);
 
             // ===== Object =================================================
 
-            virtual ~Array();
+            virtual ~String();
 
             virtual void Clear();
 
             virtual bool IsEmpty() const;
 
+            virtual unsigned int HTTP_Get(      char* aOut, unsigned int aOutSize_byte) const;
+            virtual unsigned int HTTP_Set(const char* aIn , unsigned int aInSize_byte);
+
             virtual unsigned int JSON_Get(      char* aOut, unsigned int aOutSize_byte) const;
             virtual unsigned int JSON_Set(const char* aIn , unsigned int aInSize_byte);
 
-        // Internal
-
-            typedef std::vector<Object *> Internal;
-
-            const Internal& GetInternal() const;
-
-            Internal* GetInternal();
-
         private:
 
-            Internal mEntries;
+            std::string mValue;
 
         };
 
     }
 }
-
-std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Array& aA);

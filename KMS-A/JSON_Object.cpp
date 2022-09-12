@@ -19,6 +19,20 @@ namespace KMS
 
         Object::~Object() {}
 
+        unsigned int Object::HTTP_Get(char* aOut, unsigned int aOutSize_byte) const
+        {
+            assert(false);
+
+            KMS_EXCEPTION(NOT_IMPLEMENTED, "The derived class does not implement the HTTP_Get method");
+        }
+
+        unsigned int Object::HTTP_Set(const char* aIn, unsigned int aInSize_byte)
+        {
+            assert(false);
+
+            KMS_EXCEPTION(NOT_IMPLEMENTED, "The derived class does not implement the HTTP_Set method");
+        }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 
@@ -30,6 +44,6 @@ namespace KMS
 std::ostream& operator << (std::ostream& aOut, const KMS::JSON::Object& aO)
 {
     // TODO
-    
+
     return aOut;
 }

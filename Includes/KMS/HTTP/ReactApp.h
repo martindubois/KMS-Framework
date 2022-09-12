@@ -15,7 +15,7 @@
 #include <KMS/Cfg/Configurable.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
-#include <KMS/Msg/Sender.h>
+#include <KMS/Msg/Destination.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -43,7 +43,7 @@ namespace KMS
 
         private:
 
-            typedef std::map<std::string, Msg::Sender> FunctionMap;
+            typedef std::map<std::string, Msg::Destination> FunctionMap;
 
             ReactApp(const ReactApp&);
 

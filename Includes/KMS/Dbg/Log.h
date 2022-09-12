@@ -30,15 +30,19 @@ namespace KMS
 
             ~Log();
 
-            bool IsEnabled() const;
+            bool IsFileEnabled() const;
 
-            void ResetLevel();
+            void ResetConsoleLevel();
+
+            void ResetFileLevel();
 
             void ResetFolder();
 
-            void SetFolder(const File::Folder& aF);
+            void SetConsoleLevel(LogFile::Level aL);
 
-            void SetLevel(LogFile::Level aL);
+            void SetFileLevel(LogFile::Level aL);
+
+            void SetFolder(const File::Folder& aF);
 
             void WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, LogFile::Level aLevel);
 
@@ -73,8 +77,9 @@ namespace KMS
             unsigned int   mProcessId;
 
             // ===== Configurable attributes ================================
+            LogFile::Level mConsoleLevel;
+            LogFile::Level mFileLevel;
             File::Folder   mFolder;
-            LogFile::Level mLevel;
 
         };
 

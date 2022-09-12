@@ -10,29 +10,31 @@
 // ===== C++ ================================================================
 #include <ostream>
 
+// ===== Includes ===========================================================
+#include <KMS/RefCount.h>
+
 namespace KMS
 {
     namespace JSON
     {
 
-        class Object
+        class Object : public RefCount
         {
 
         public:
 
-            virtual ~Object();
-
             virtual void Clear() = 0;
-
-            virtual Object* Copy() const = 0;
 
             virtual bool IsEmpty() const = 0;
 
-            virtual unsigned int HTTP_Get(      char* aOut, unsigned int aOutSize_byte) const = 0;
-            virtual unsigned int HTTP_Set(const char* aIn , unsigned int aInSize_byte) = 0;
+            virtual unsigned int HTTP_Get(      char* aOut, unsigned int aOutSize_byte) const;
+            virtual unsigned int HTTP_Set(const char* aIn , unsigned int aInSize_byte);
 
             virtual unsigned int JSON_Get(      char* aOut, unsigned int aOutSize_byte) const = 0;
             virtual unsigned int JSON_Set(const char* aIn , unsigned int aInSize_byte) = 0;
+
+            // ===== RefCount ===============================================
+            virtual ~Object();
 
         protected:
 

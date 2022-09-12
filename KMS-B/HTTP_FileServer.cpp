@@ -19,6 +19,7 @@
 #include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
+#include <KMS/JSON/String.h>
 #include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/FileServer.h>
@@ -47,36 +48,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("application/javascript"));
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("application/javascript"));
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("image/x-icon"));
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("image/x-icon"));
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/css"));
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("text/css"));
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/html; charset=utf-8"));
+            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("text/html; charset=utf-8"));
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Disposition", new JSON::Value("inline"));
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::Value("text/plain; charset=utf-8"));
+            aRequest->mResponseHeader.SetEntry("Content-Disposition", new JSON::String("inline"));
+            aRequest->mResponseHeader.SetEntry("Content-Type"       , new JSON::String("text/plain; charset=utf-8"));
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -99,6 +100,8 @@ namespace KMS
 
                 lFS.InitConfigurator(&lC);
                 lS.mSocket.InitConfigurator(&lC);
+
+                Dbg::gLog.InitConfigurator(&lC);
 
                 lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);

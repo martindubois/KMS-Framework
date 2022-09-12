@@ -38,6 +38,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 {
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToBool("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -45,6 +46,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToDouble("0.0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -52,6 +54,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToFile("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -59,6 +62,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
@@ -66,6 +70,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToUInt32("0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -73,6 +78,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_EXCEPTION();
         KMS::Convert::ToUInt8("0x100");
         KMS_TEST_ASSERT(false);
     }

@@ -28,6 +28,8 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
     lBT.InitConfigurator(&lC);
 
     lC.Init();
+
+    KMS_TEST_EXPECTED_WARNINGS(3);
     lC.ParseArguments(6, VECTOR);
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 3U);
@@ -62,8 +64,9 @@ KMS_TEST(ByteTool_Fail, "ByteTool_Fail", "Auto", sTest_Fail)
 
     try
     {
+        KMS_TEST_EXPECTED_WARNINGS(3);
+        KMS_TEST_EXPECTED_EXCEPTION();
         lC.ParseArguments(7, VECTOR);
-
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_TYPE);

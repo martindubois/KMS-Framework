@@ -60,9 +60,6 @@
     <ClCompile Include="File_Sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Msg_Sender.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Thread_Thread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -151,6 +148,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JSON_Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON_String.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RefCount.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogInputConverter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogOutputConverter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

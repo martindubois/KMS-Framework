@@ -44,7 +44,9 @@
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="DAQ_AnalogInput.cpp" />
+    <ClCompile Include="DAQ_AnalogInputConverter.cpp" />
     <ClCompile Include="DAQ_AnalogOutput.cpp" />
+    <ClCompile Include="DAQ_AnalogOutputConverter.cpp" />
     <ClCompile Include="DAQ_DigitalInput.cpp" />
     <ClCompile Include="DAQ_DigitalOutput.cpp" />
     <ClCompile Include="DAQ_Dummy.cpp" />
@@ -63,6 +65,7 @@
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="JSON_Object.cpp" />
+    <ClCompile Include="JSON_String.cpp" />
     <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="Modbus.cpp" />
     <ClCompile Include="Modbus_CRC.cpp" />
@@ -70,10 +73,10 @@
     <ClCompile Include="Modbus_Slave.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Msg_IReceiver.cpp" />
-    <ClCompile Include="Msg_Sender.cpp" />
     <ClCompile Include="OS_W.cpp" />
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />
+    <ClCompile Include="RefCount.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />

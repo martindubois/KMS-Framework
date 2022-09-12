@@ -36,7 +36,7 @@
     <ClCompile Include="Convert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Msg_Sender.cpp">
+    <ClCompile Include="Msg_Destination.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dbg_Log.cpp">

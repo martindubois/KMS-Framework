@@ -85,6 +85,9 @@ namespace KMS
 
                 lSl.InitConfigurator(&lC);
                 lSi.InitConfigurator(&lC);
+
+                Dbg::gLog.InitConfigurator(&lC);
+
                 lSi.InitSlave(&lSl);
 
                 lC.Init();

@@ -22,8 +22,6 @@ namespace KMS
 
         typedef uint32_t Period;
 
-        static const Count INFINITE;
-
         static const Period DEFAULT_PULSE_WIDE;
 
     }

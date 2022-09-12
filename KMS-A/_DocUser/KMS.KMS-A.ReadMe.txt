@@ -7,8 +7,24 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 * KMS::Build::Import
     * Use ~/Export as default repository on Linux
+* KMS::DAQ
+    * AnalogInputConverter
+    * AnalogOutputConverter
 
-0.0.10-Dev Linux 2022-08-24
+0.0.13-Dev Windows 2022-09-12
+* KMS::RefCount
+
+0.0.12-Dev Windows 2022-09-07
+* KMS::Console::Color::YELLOW
+* KMS::Dbg::Log - ConsoleLevel and FileLevel configurable attributes
+* KMS::JSON
+    * String
+    - Object - Default implementation for Copy, HTTP_Get and HTTP_Set
+
+0.0.11-Dev Windows 2022-09-06
+* KMS::Msg::Sender - Removed
+
+0.0.10-Dev Linux x86_64 2022-08-24
 * KMS::Build::Depend
 * KMS::Dbg
     * Log
