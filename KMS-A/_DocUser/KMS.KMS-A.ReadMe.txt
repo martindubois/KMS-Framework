@@ -5,6 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+* KMS::Build::Import
+    * Use ~/Export as default repository on Linux
+
 0.0.10-Dev Linux 2022-08-24
 * KMS::Build::Depend
 * KMS::Dbg
