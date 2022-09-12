@@ -44,7 +44,9 @@
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="DAQ_AnalogInput.cpp" />
+    <ClCompile Include="DAQ_AnalogInputConverter.cpp" />
     <ClCompile Include="DAQ_AnalogOutput.cpp" />
+    <ClCompile Include="DAQ_AnalogOutputConverter.cpp" />
     <ClCompile Include="DAQ_DigitalInput.cpp" />
     <ClCompile Include="DAQ_DigitalOutput.cpp" />
     <ClCompile Include="DAQ_Dummy.cpp" />
