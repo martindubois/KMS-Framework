@@ -15,7 +15,7 @@ a:link
 
 a:visited
 {
-    color: whitesmoke;
+    color: darkgrey;
 }
 
 body
@@ -29,7 +29,7 @@ div
     color           : white;
 }
 
-div.main
+div.Main
 {
     display   : flow-root;
     min-height: 94vh;

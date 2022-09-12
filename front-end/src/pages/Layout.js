@@ -44,7 +44,7 @@ const Layout = () =>
                 </table>
             </nav>
 
-            <div className = "main" >
+            <div className = "Main" >
                 <Outlet />
             </div>
 
