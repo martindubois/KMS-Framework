@@ -43,6 +43,7 @@
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
+    <ClCompile Include="DAQ_AnalogConverter.cpp" />
     <ClCompile Include="DAQ_AnalogInput.cpp" />
     <ClCompile Include="DAQ_AnalogInputConverter.cpp" />
     <ClCompile Include="DAQ_AnalogOutput.cpp" />

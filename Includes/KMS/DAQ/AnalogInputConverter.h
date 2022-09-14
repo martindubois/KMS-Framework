@@ -8,28 +8,28 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DAQ/AnalogInput.h>
+#include <KMS/DAQ/AnalogConverter.h>
+#include <KMS/DAQ/IAnalogInputs.h>
 
 namespace KMS
 {
     namespace DAQ
     {
 
-        class AnalogInputConverter
+        class AnalogInputConverter : public AnalogConverter, public IAnalogInputs
         {
 
         public:
 
-            AnalogInputConverter(const AnalogInput& aInput, double aScale, double aOffset = 0.0);
+            AnalogInputConverter(IAnalogInputs* aInterface);
 
-            AnalogValue Read();
+            // ===== IAnalogInputs ==========================================
+            virtual AnalogValue     AI_Read    (Id aId);
+            virtual AnalogValue_Raw AI_Read_Raw(Id aId);
 
         private:
 
-            AnalogInput mInput;
-
-            double mOffset;
-            double mScale;
+            IAnalogInputs* mInterface;
 
         };
 

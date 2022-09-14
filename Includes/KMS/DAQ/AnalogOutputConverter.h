@@ -8,30 +8,30 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DAQ/AnalogOutput.h>
+#include <KMS/DAQ/AnalogConverter.h>
+#include <KMS/DAQ/IAnalogOutputs.h>
 
 namespace KMS
 {
     namespace DAQ
     {
 
-        class AnalogOutputConverter
+        class AnalogOutputConverter : public AnalogConverter, public IAnalogOutputs
         {
 
         public:
 
-            AnalogOutputConverter(const AnalogOutput& aOutput, double aScale, double aOffset = 0.0);
+            AnalogOutputConverter(IAnalogOutputs* aInterface);
 
-            AnalogValue Get() const;
-
-            void Write(AnalogValue aValue);
+            // ===== IAnalogOutputs =========================================
+            virtual AnalogValue     AO_Get      (Id aId);
+            virtual AnalogValue_Raw AO_Get_Raw  (Id aId);
+            virtual void            AO_Write    (Id aId, AnalogValue     aValue);
+            virtual void            AO_Write_Raw(Id aId, AnalogValue_Raw aValue);
 
         private:
 
-            AnalogOutput mOutput;
-
-            double mOffset;
-            double mScale;
+            IAnalogOutputs* mInterface;
 
         };
 
