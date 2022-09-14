@@ -58,7 +58,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     lRA.AddRoute("/");
     lRA.AddRoute("/Test0");
 
-    lRA.AddFunction("/GetVersion", &lTA, MSG_GET_VERSION);
+    lRA.AddFunction("/Version/GetData", &lTA, MSG_GET_VERSION);
     lRA.AddFunction("/RunTest0", &lTA, MSG_RUN_TEST_0);
 
     lRA.mServer.mThread.Start();
