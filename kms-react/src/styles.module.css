@@ -1,0 +1,38 @@
+
+/*
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      kms-react/src/style.module.css
+*/
+
+a.KMS:link
+{
+    color: white;
+}
+
+a.KMS:visited
+{
+    color: darkgrey;
+}
+
+div.Group
+{
+    border-color : #83c548; /* KMS green : RGB 131 197 75 = 83 c5 48 */
+    border-radius: 20px;
+    border-style : solid;
+    clear        : right;
+    float        : left;
+    margin       : 10px;
+    padding      : 10px;
+    width        : 400px;
+}
+
+div.Screen
+{
+    background-color: black;
+    color           : white;
+    display         : flow-root;
+    min-height      : 94vh;
+}

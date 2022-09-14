@@ -5,33 +5,12 @@
 // Product   KMS-Framework
 // File      front-end/src/pages/Layout.js
 
-import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom"
+
+import { Footer } from 'kms-react'
 
 const Layout = () =>
 {
-    const [ sBackEndVersion, SetBackEndVersion ] = useState( '' )
-
-    const OnData = ( aData ) =>
-    {
-        SetBackEndVersion( aData.Version )
-    }
-
-    const OnError = ( aError ) =>
-    {
-        SetBackEndVersion( 'ERROR' )
-    }
-
-    const OnLoad = () =>
-    {
-        fetch( 'http://127.0.0.1/GetVersion' )
-            .then( ( aResponse ) => { return aResponse.json() } )
-            .then( OnData )
-            .catch( OnError )
-    }
-
-    useEffect( OnLoad, [] )
-
     return (
         <>
             <nav>
@@ -44,17 +23,13 @@ const Layout = () =>
                 </table>
             </nav>
 
-            <div className = "main" >
+            <div className = "Main" >
                 <Outlet />
             </div>
 
-            <footer>
-                <address>
-                    Copyright &copy; 2022 KMS -
-                    Back-end { sBackEndVersion } -
-                    Front-end 0.0.0
-                </address>
-            </footer>
+            <Footer Author  = "KMS"
+                    Version = "0.0.0"
+                    Year    = "2022" />
         </> )
 };
 

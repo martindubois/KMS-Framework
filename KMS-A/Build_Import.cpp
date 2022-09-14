@@ -18,8 +18,6 @@
 
 #define CONFIG_FILE ("KMS-Import.cfg")
 
-#define DEFAULT_EXPORT_FOLDER ("K:\\Export")
-
 namespace KMS
 {
     namespace Build
@@ -59,7 +57,15 @@ namespace KMS
 
         Import::Import() : mImport("Import")
         {
-            mRepositories.push_back(File::Folder(DEFAULT_EXPORT_FOLDER));
+            #ifdef _KMS_LINUX_
+                File::Folder lExport(File::Folder::Id::HOME, "Export");
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                File::Folder lExport("K:\\Export");
+            #endif
+
+            mRepositories.push_back(lExport);
         }
 
         Import::~Import() {}
