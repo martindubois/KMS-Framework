@@ -11,8 +11,8 @@ Date and time       20 ______ - ______ - ______               ______ : ______
 
 Computer            _________________________________________________________
 
-[ ] File "Common/Version.h" - Edit the Version and add "front-end" to the
-    type.
+[ ] File "Common/Version.h" - Edit the Version and set the type to
+    "front-end"
 
 Version             ______ . ______ . ______ . ______ - _____________________
 

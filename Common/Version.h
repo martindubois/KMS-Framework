@@ -19,5 +19,5 @@
 #define VERSION_STR "0.0.13.0"
 
 #ifdef __cplusplus
-    KMS_VERSION("Dev");
+    KMS_VERSION("front-end");
 #endif
