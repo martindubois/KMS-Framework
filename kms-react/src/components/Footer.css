@@ -1,0 +1,15 @@
+
+/*
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      kms-react/src/Footer.css
+*/
+
+footer.Footer
+{
+    background-color: #005c87;
+    color           : white;
+    font-size       : large;
+}
