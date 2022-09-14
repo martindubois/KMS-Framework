@@ -51,7 +51,7 @@ namespace KMS
 
             // ===== Cfg::Configurable ======================================
             virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut);
+            virtual void DisplayHelp(FILE* aOut) const;
             virtual bool SetAttribute(const char* aA, const char* aV);
 
         private:

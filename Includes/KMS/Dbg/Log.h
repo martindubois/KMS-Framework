@@ -55,7 +55,7 @@ namespace KMS
             void WriteVersion(const char* aProduct, const Version& aVersion);
 
             // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut);
+            virtual void DisplayHelp(FILE* aOut) const;
             virtual bool SetAttribute(const char* aN, const char* aV);
 
         private:

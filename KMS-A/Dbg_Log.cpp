@@ -232,7 +232,7 @@ namespace KMS
 
         // ===== Cfg::Configurables =========================================
 
-        void Log::DisplayHelp(FILE* aOut)
+        void Log::DisplayHelp(FILE* aOut) const
         {
             assert(NULL != aOut);
 

@@ -132,7 +132,7 @@ namespace KMS
             return Configurable::AddAttribute(aA, aV);
         }
 
-        void Make::DisplayHelp(FILE* aOut)
+        void Make::DisplayHelp(FILE* aOut) const
         {
             assert(NULL != aOut);
 

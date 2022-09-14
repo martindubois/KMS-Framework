@@ -156,7 +156,7 @@ namespace KMS
             return Configurable::SetAttribute(aA, aV);
         }
 
-        void Browser::DisplayHelp(FILE* aOut)
+        void Browser::DisplayHelp(FILE* aOut) const
         {
             fprintf(aOut,
                 "===== KMS::Process::Browser =====\n"
