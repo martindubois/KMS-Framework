@@ -234,7 +234,7 @@ namespace KMS
                 "    Add a folder to package\n"
                 "Libraries += {Name}\n"
                 "    Add a builded library\n"
-                "OSIndependend\n"
+                "OSIndependent\n"
                 "    Set the OS independent flag\n"
                 "OSIndependent = {Boolean}\n"
                 "    Set or clear the OS independent flag\n"
