@@ -1,0 +1,28 @@
+
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      kms-react/_DocDev/Build.txt
+
+Name                _________________________________________________________
+
+Date and time       20 ______ - ______ - ______               ______ : ______
+
+Computer            _________________________________________________________
+
+[ ] File "kms-react/package.json"
+
+Version             ______ . ______ . ______
+
+[ ] File "kms-react/_DocUser/KMS.kms-react.ReadMe.txt"
+[ ] Tool "Terminal" - in the kms-react sub folder
+        npm run build
+        npm publish
+[ ] Tool "GIT GUI"
+    - Commit all modified File with {Ma}.{Mi}.{Bu}-kms-react as message
+    - Push the servers
+
+Time and duration   ______ : ______           ______ hours and ______ minutes
+
+Signature           _________________________________________________________

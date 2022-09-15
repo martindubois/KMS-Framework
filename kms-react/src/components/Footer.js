@@ -10,6 +10,10 @@
 //  Version  Front-end version
 //  Year
 
+// API /Version/GetData
+//  Output
+//      Version  The version number (string)
+
 import React, { useEffect, useState } from 'react'
 
 import Styles from './Footer.css'
@@ -18,19 +22,9 @@ const Footer = ( aProps ) =>
 {
     const [ sBackEndVersion, SetBackEndVersion ] = useState( 'LOADING' )
 
-    const OnData = ( aData ) =>
-    {
-        SetBackEndVersion( aData.Version );
-    }
+    const OnData = ( aData ) => { SetBackEndVersion( aData.Version ) }
 
-    const OnError = () =>
-    {
-        SetBackEndVersion( 'ERROR' )
-    }
-
-    // API /Version/GetData
-    //  Output
-    //      Version  The version number (string)
+    const OnError = () => { SetBackEndVersion( 'ERROR' ) }
 
     useEffect( () =>
     {
