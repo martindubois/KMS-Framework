@@ -9,20 +9,23 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import './App.css';
 
-import Layout      from './pages/Layout'
-import Home        from './pages/Home'
-import ModbustTool from './pages/ModbusTool'
-import NoPage      from './pages/NoPage'
-import Test0       from './pages/Test0'
+import Layout           from './pages/Layout'
+import Home             from './pages/Home'
+import ModbustTool      from './pages/ModbusTool'
+import NoPage           from './pages/NoPage'
+import TestDynamicForm  from './pages/TestDynamicForm'
+import TestDynamicImage from './pages/TestDynamicImage'
 
-function App() {
+function App()
+{
     return (
         <BrowserRouter>
             <Routes>
                 <Route path = "/" element = { <Layout /> }>
                     <Route element = { <Home /> } index />
-                    <Route element = { <ModbustTool /> } path = "ModbusTool" />
-                    <Route element = { <Test0       /> } path = "Test0"      />
+                    <Route element = { <ModbustTool      /> } path = "ModbusTool"       />
+                    <Route element = { <TestDynamicForm  /> } path = "TestDynamicForm"  />
+                    <Route element = { <TestDynamicImage /> } path = "TestDynamicImage" />
                     <Route element = { <NoPage /> } path = "*" />
                 </Route>
             </Routes>

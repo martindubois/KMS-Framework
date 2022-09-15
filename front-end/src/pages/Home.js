@@ -29,8 +29,12 @@ const Home = () =>
                         <td>GUI of the Modbus tool (KMS-ModbusTool)</td>
                     </tr>
                     <tr>
-                        <td><Link to = "Test0" >Test0</Link></td>
-                        <td>Page used for automated test (KMS-B-Test)</td>
+                        <td><Link to = "TestDynamicForm" >Test DynamicForm</Link></td>
+                        <td>Page used for test (KMS-B-Test)</td>
+                    </tr>
+                    <tr>
+                        <td><Link to = "TestDynamicImage" >Test DynamicImage</Link></td>
+                        <td>Page used for test (KMS-B-Test)</td>
                     </tr>
                 </tbody>
             </table>
