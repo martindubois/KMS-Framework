@@ -65,6 +65,21 @@ namespace KMS
             return lIt->second;
         }
 
+        Object* Dictionary::GetEntry(const char* aKey)
+        {
+            assert(NULL != aKey);
+
+            Internal::iterator lIt = mEntries.find(aKey);
+            if (mEntries.end() == lIt)
+            {
+                return NULL;
+            }
+
+            assert(NULL != lIt->second);
+
+            return lIt->second;
+        }
+
         void Dictionary::SetEntry(const char* aKey, Object* aE)
         {
             assert(NULL != aKey);
@@ -113,19 +128,11 @@ namespace KMS
             {
                 assert(NULL != lPair.second);
 
-                if (aOutSize_byte < lResult_byte + 3 + lPair.first.size())
-                {
-                    KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output buffer is too small");
-                }
-
+                VerifyOutputSize(aOutSize_byte, lResult_byte + 3 + static_cast<unsigned int>(lPair.first.size()));
                 lResult_byte += sprintf_s(aOut + lResult_byte, aOutSize_byte - lResult_byte, "%s: ", lPair.first.c_str());
                 lResult_byte += lPair.second->HTTP_Get(aOut + lResult_byte, aOutSize_byte - lResult_byte);
 
-                if (aOutSize_byte < lResult_byte + 3)
-                {
-                    KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output buffer is too small");
-                }
-
+                VerifyOutputSize(aOutSize_byte, lResult_byte + 3);
                 sprintf_s(aOut + lResult_byte, aOutSize_byte - lResult_byte, "\r\n"); lResult_byte += 2;
             }
 
@@ -185,10 +192,7 @@ namespace KMS
             {
                 assert(NULL != lEntry.second);
 
-                if (aOutSize_byte < lResult_byte + 5 + lEntry.first.size())
-                {
-                    KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output buffer is too small");
-                }
+                VerifyOutputSize(aOutSize_byte, lResult_byte + 5 + static_cast<unsigned int>(lEntry.first.size()));
 
                 if (lFirst)
                 {
@@ -203,12 +207,7 @@ namespace KMS
                 lResult_byte += lEntry.second->JSON_Get(aOut + lResult_byte SizeInfoV(aOutSize_byte - lResult_byte));
             }
 
-            if (aOutSize_byte < lResult_byte + 2)
-            {
-                // NOT TESTED
-                KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output buffer is too small");
-            }
-
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 2);
             aOut[lResult_byte] = '}'; lResult_byte++;
             aOut[lResult_byte] = '\0';
 

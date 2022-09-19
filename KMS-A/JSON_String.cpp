@@ -26,6 +26,8 @@ namespace KMS
 
         String::String(const char* aValue) { Set(aValue); }
 
+        String::operator const char* () const { return mValue.c_str(); }
+
         const char* String::Get() const { return mValue.c_str(); }
 
         void String::Set(const char* aValue) { assert(NULL != aValue); mValue = aValue; }
@@ -43,11 +45,8 @@ namespace KMS
             assert(NULL != aOut);
 
             unsigned int lResult_byte = static_cast<unsigned int>(mValue.size());
-            if (aOutSize_byte < lResult_byte + 2)
-            {
-                KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lResult_byte);
-            }
 
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mValue.c_str());
 
             return lResult_byte;
@@ -100,12 +99,9 @@ namespace KMS
         {
             assert(NULL != aOut);
 
-            unsigned int lResult_byte = static_cast<unsigned int>(mValue.size());
-            if (aOutSize_byte < lResult_byte + 4)
-            {
-                KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lResult_byte);
-            }
+            unsigned int lResult_byte = static_cast<unsigned int>(mValue.size()) + 2;
 
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
             sprintf_s(aOut SizeInfoV(aOutSize_byte), "\"%s\"", mValue.c_str());
 
             return lResult_byte;

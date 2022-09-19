@@ -435,16 +435,10 @@ namespace KMS
             {
                 if (!mDoNotCompile)
                 {
-                    if (0 >= mConfigurations.size())
-                    {
-                        KMS_EXCEPTION(CONFIG, "No configuration");
-                    }
+                    KMS_EXCEPTION_ASSERT(0 < mConfigurations.size(), CONFIG, "No configuration");
 
                     #ifdef _KMS_WINDOWS_
-                        if (0 >= mProcessors.size())
-                        {
-                            KMS_EXCEPTION(CONFIG, "No processor");
-                        }
+                        KMS_EXCEPTION_ASSERT(0 < mProcessors.size(), CONFIG, "No processor");
                     #endif
                 }
 
@@ -455,17 +449,11 @@ namespace KMS
                         KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid export folder", mExportFolder.GetPath());
                     }
 
-                    if (0 >= mProduct.size())
-                    {
-                        KMS_EXCEPTION(CONFIG, "Invalid product name");
-                    }
+                    KMS_EXCEPTION_ASSERT(0 < mProduct.size(), CONFIG, "Invalid product name");
                 }
             }
 
-            if (0 >= mVersionFile.size())
-            {
-                KMS_EXCEPTION(CONFIG, "Invalid version file");
-            }
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.size(), CONFIG, "Invalid version file");
         }
 
     }
@@ -529,7 +517,7 @@ std::string ProcessReplaceLine(const char * aIn, const KMS::Version & aVersion)
             case 'T':
                 if (NULL != lType)
                 {
-                    lResult += "_";
+                    lResult += "-";
                     lResult += aVersion.GetType();
                 }
                 break;

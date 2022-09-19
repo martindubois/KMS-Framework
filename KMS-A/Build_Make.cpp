@@ -495,10 +495,7 @@ namespace KMS
                 }
             }
 
-            if (0 == mConfiguration.size())
-            {
-                KMS_EXCEPTION(CONFIG, "Empty configuration");
-            }
+            KMS_EXCEPTION_ASSERT(0 < mConfiguration.size(), CONFIG, "Empty configuration");
         }
 
     }

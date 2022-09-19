@@ -246,10 +246,7 @@ namespace KMS
             strcpy(lPath, "/tmp/KMSXXXXXX");
 
             char* lRet = mkdtemp(lPath);
-            if (NULL == lRet)
-            {
-                KMS_EXCEPTION(FOLDER_INIT, "mkdtemp failed");
-            }
+            KMS_EXCEPTION_ASSERT(NULL != lRet, FOLDER_INIT, "mkdtemp failed");
 
             mPath = lPath;
         }

@@ -38,6 +38,8 @@ namespace KMS
 
         void Array::operator += (Object* aE) { assert(NULL != aE); mEntries.push_back(aE); }
 
+        unsigned int Array::GetEntryCount() const { return static_cast<unsigned int>(mEntries.size()); }
+
         // ===== Object =====================================================
 
         Array::~Array() { Clear(); }
@@ -62,25 +64,25 @@ namespace KMS
 
             unsigned int lResult_byte = 0;
 
-            for (const Object* lObj : mEntries)
+            if (mEntries.empty())
             {
-                assert(NULL != lObj);
-
-                if (aOutSize_byte < lResult_byte + 1)
+                VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
+                aOut[lResult_byte] = '['; lResult_byte++;
+            }
+            else
+            {
+                for (const Object* lObj : mEntries)
                 {
-                    KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output bufer is too small");
+                    assert(NULL != lObj);
+
+                    VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
+                    aOut[lResult_byte] = (0 == lResult_byte) ? '[' : ','; lResult_byte++;
+
+                    lResult_byte += lObj->JSON_Get(aOut + lResult_byte, aOutSize_byte - lResult_byte);
                 }
-
-                aOut[lResult_byte] = (0 == lResult_byte) ? '[' : ','; lResult_byte++;
-
-                lResult_byte += lObj->JSON_Get(aOut + lResult_byte, aOutSize_byte - lResult_byte);
             }
 
-            if (aOutSize_byte < lResult_byte + 2)
-            {
-                KMS_EXCEPTION(OUTPUT_TOO_SHORT, "The output bufer is too small");
-            }
-
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 2);
             aOut[lResult_byte] = ']'; lResult_byte++;
             aOut[lResult_byte] = '\0';
 

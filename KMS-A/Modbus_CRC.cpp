@@ -56,10 +56,7 @@ namespace KMS
             lReceived <<= 8;
             lReceived |= aBuffer[lSize_byte];
 
-            if (lCRC != lReceived)
-            {
-                KMS_EXCEPTION(MODBUS_CRC, "Bad Modbus CRC");
-            }
+            KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC, "Bad Modbus CRC");
         }
 
 

@@ -127,10 +127,7 @@ namespace KMS
             }
 
             mSocket = socket(mLocalAddress.GetInternalFamily(), lType, lProt);
-            if (INVALID_SOCKET == mSocket)
-            {
-                KMS_EXCEPTION(SOCKET, "socket failed");
-            }
+            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, SOCKET, "socket failed");
 
             SetOption(SO_RCVTIMEO, mReceiveTimeout_ms);
             SetOption(SO_SNDTIMEO, mSendTimeout_ms);
@@ -301,10 +298,7 @@ namespace KMS
             assert(State::OPEN == mState);
 
             int lRet = listen(mSocket, 1);
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION(SOCKET_LISTEN, "listen failed");
-            }
+            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_LISTEN, "listen failed");
 
             mState = State::LISTEN;
         }
@@ -330,10 +324,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             int lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION(SOCKET_OPTION, "setsockopt failed");
-            }
+            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_OPTION, "setsockopt failed");
         }
 
         void Socket::VerifyState(State aS)

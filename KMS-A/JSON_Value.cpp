@@ -87,11 +87,8 @@ namespace KMS
             assert(NULL != aOut);
 
             unsigned int lResult_byte = static_cast<unsigned int>(mValue.size());
-            if (aOutSize_byte < lResult_byte + 2)
-            {
-                KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lResult_byte);
-            }
 
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mValue.c_str());
 
             return lResult_byte;
@@ -147,11 +144,8 @@ namespace KMS
             assert(NULL != aOut);
 
             unsigned int lResult_byte = static_cast<unsigned int>(mValue.size());
-            if (aOutSize_byte < lResult_byte + 2)
-            {
-                KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "The output buffer is too small", lResult_byte);
-            }
 
+            VerifyOutputSize(aOutSize_byte, lResult_byte + 1);
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mValue.c_str());
 
             return lResult_byte;

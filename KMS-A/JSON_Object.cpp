@@ -38,6 +38,11 @@ namespace KMS
 
         Object::Object() {}
 
+        void Object::VerifyOutputSize(unsigned int aMax, unsigned int aValue) const
+        {
+            KMS_EXCEPTION_ASSERT(aMax >= aValue + 1, OUTPUT_TOO_SHORT, "The output bufer is too small");
+        }
+
     }
 }
 

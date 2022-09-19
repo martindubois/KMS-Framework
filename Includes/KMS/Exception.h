@@ -24,7 +24,8 @@ namespace KMS
 
         enum class Code
         {
-            BROWSER_START = 0,
+            APPLICATION = 0,
+            BROWSER_START,
             BUILD_COMMAND, BUILD_COMPILE, BUILD_TEST,
             COM_CONFIG, COM_CONNECT, COM_CONTROL,
             CONFIG, CONFIG_EXPAND, CONFIG_FORMAT, CONFIG_INDEX,
@@ -50,6 +51,8 @@ namespace KMS
                 SOCKET_OPTION, SOCKET_RECEIVE, SOCKET_SEND, SOCKET_STARTUP,
             STATE,
             TEST,
+            TEXT_FORMAT, TEXT_TOO_SHORT,
+            TIMEOUT,
             TODO,
             THREAD_START,
             VERSION_FILE, VERSION_FORMAT, VERSION_NUMBER,
@@ -132,6 +135,12 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
 
 #define KMS_EXCEPTION(C, M) \
     throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::C, M)
+
+#define KMS_EXCEPTION_ASSERT(A, C, M) \
+    if (!(A))                         \
+    {                                 \
+        KMS_EXCEPTION(C, (M));        \
+    }
 
 #define KMS_EXCEPTION_WITH_INFO(C, M, I) \
     throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::C, M, I)

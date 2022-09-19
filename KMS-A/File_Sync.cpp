@@ -291,17 +291,11 @@ namespace KMS
 
         void Sync::VerifyConfig() const
         {
-            if (mDestinations.size() != mSources.size())
-            {
-                KMS_EXCEPTION(CONFIG, "Number of sources does not match the number of destinations");
-            }
+            KMS_EXCEPTION_ASSERT(mDestinations.size() == mSources.size(), CONFIG, "Number of sources does not match the number of destinations");
 
             for (GroupMap::value_type lP : mGroups)
             {
-                if (1 == lP.second->size())
-                {
-                    KMS_EXCEPTION(CONFIG, "Number of folders cannot be one");
-                }
+                KMS_EXCEPTION_ASSERT(1 != lP.second->size(), CONFIG, "Number of folders cannot be one");
             }
         }
 

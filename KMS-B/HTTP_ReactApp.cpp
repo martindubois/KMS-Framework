@@ -100,14 +100,9 @@ namespace KMS
                 else
                 {
                     File::Folder lC(lExec, "front-end" SLASH "build");
-                    if (lC.DoesExist())
-                    {
-                        mFileServer.SetRoot(lB);
-                    }
-                    else
-                    {
-                        KMS_EXCEPTION(INSTALLATION, "The front-end files are not available");
-                    }
+                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), INSTALLATION, "The front-end files are not available")
+
+                    mFileServer.SetRoot(lB);
                 }
             }
         }
