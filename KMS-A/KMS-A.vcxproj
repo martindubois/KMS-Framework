@@ -53,6 +53,13 @@
     <ClCompile Include="DAQ_Dummy.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="Dbg_LogFile.cpp" />
+    <ClCompile Include="DI_Container.cpp" />
+    <ClCompile Include="DI_MetaData.cpp" />
+    <ClCompile Include="DI_Object.cpp" />
+    <ClCompile Include="DI_String.cpp" />
+    <ClCompile Include="DI_UInt32.cpp" />
+    <ClCompile Include="DI_Value.cpp" />
+    <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="JSON_Array.cpp" />
     <ClCompile Include="JSON_Dictionary.cpp" />
@@ -80,7 +87,9 @@
     <ClCompile Include="RefCount.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
+    <ClCompile Include="Text_ReadPtr.cpp" />
     <ClCompile Include="Text_TextFile.cpp" />
+    <ClCompile Include="Text_WritePtr.cpp" />
     <ClCompile Include="Thread_Gate.cpp" />
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Thread_Thread.cpp" />

@@ -268,7 +268,10 @@
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
+    <ClCompile Include="DI_Container.cpp" />
     <ClCompile Include="File_Sync.cpp" />
+    <ClCompile Include="HTTP.cpp" />
+    <ClCompile Include="JSON.cpp" />
     <ClCompile Include="JSON_Dictionary.cpp" />
     <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />

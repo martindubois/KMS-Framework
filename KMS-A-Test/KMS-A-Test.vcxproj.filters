@@ -48,6 +48,15 @@
     <ClCompile Include="JSON_Value.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DI_Container.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JSON.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

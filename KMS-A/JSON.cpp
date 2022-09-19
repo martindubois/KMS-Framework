@@ -8,12 +8,36 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Container.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
+#include <KMS/DI/UInt32.h>
 #include <KMS/JSON/Array.h>
 #include <KMS/JSON/Dictionary.h>
 #include <KMS/JSON/String.h>
 #include <KMS/JSON/Value.h>
+#include <KMS/Text/ReadPtr.h>
+#include <KMS/Text/WritePtr.h>
 
 #include <KMS/JSON/JSON.h>
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static void Decode(KMS::DI::Object * aObject, KMS::Text::ReadPtr* aPtr);
+static void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr);
+
+static void Decode_Array     (KMS::DI::Array     * aArray     , KMS::Text::ReadPtr* aPtr);
+static void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPtr);
+
+static void Decode_String(KMS::DI::String* aString, KMS::Text::ReadPtr* aPtr);
+static void Decode_Value (KMS::DI::Value * aString, KMS::Text::ReadPtr* aPtr);
+
+static void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr);
+
+static void Encode_Array     (const KMS::DI::Array     * aArray     , KMS::Text::WritePtr* aPtr);
+static void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WritePtr* aPtr);
+static void Encode_String    (const KMS::DI::String    * aString    , KMS::Text::WritePtr* aPtr);
 
 namespace KMS
 {
@@ -50,10 +74,7 @@ namespace KMS
                 lResult_byte++;
             }
 
-            if (NULL == lObj)
-            {
-                KMS_EXCEPTION(HTTP_FORMAT, "Invalid HTTP format");
-            }
+            KMS_EXCEPTION_ASSERT(NULL != lObj, HTTP_FORMAT, "Invalid HTTP format");
 
             lResult_byte += lObj->HTTP_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
 
@@ -104,5 +125,421 @@ namespace KMS
             return lResult_byte;
         }
 
+        unsigned int Decode(DI::Object* aObject, const char* aIn, unsigned int aInSize_byte)
+        {
+            Text::ReadPtr lPtr(aIn, aInSize_byte);
+
+            ::Decode(aObject, &lPtr);
+
+            return lPtr.GetIndex();
+        }
+
+        unsigned int Decode(DI::Object** aObject, const char* aIn, unsigned int aInSize_byte)
+        {
+            Text::ReadPtr lPtr(aIn, aInSize_byte);
+
+            ::Decode(aObject, &lPtr);
+
+            return lPtr.GetIndex();
+        }
+
+        unsigned int Encode(const DI::Object* aObject, char* aOut, unsigned int aOutSize_byte)
+        {
+            assert(NULL != aObject);
+
+            Text::WritePtr lPtr(aOut, aOutSize_byte);
+
+            ::Encode(aObject, &lPtr);
+
+            return lPtr.GetIndex();
+        }
+
     }
+}
+
+// Static functions
+// //////////////////////////////////////////////////////////////////////////
+
+void Decode(KMS::DI::Object* aObject, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aObject);
+
+    KMS::DI::Array* lArray = dynamic_cast<KMS::DI::Array*>(aObject);
+    if (NULL != lArray)
+    {
+        Decode_Array(lArray, aPtr);
+    }
+    else
+    {
+        KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(aObject);
+        if (NULL != lDictionary)
+        {
+            Decode_Dictionary(lDictionary, aPtr);
+        }
+        else
+        {
+            // String must be tested before Value because String is a Value
+            KMS::DI::String* lString = dynamic_cast<KMS::DI::String*>(aObject);
+            if (NULL != lString)
+            {
+                Decode_String(lString, aPtr);
+            }
+            else
+            {
+                KMS::DI::Value* lValue = dynamic_cast<KMS::DI::Value*>(aObject);
+                if (NULL != lValue)
+                {
+                    Decode_Value(lValue, aPtr);
+                }
+                else
+                {
+                    KMS_EXCEPTION(NOT_IMPLEMENTED, "JSON do not suppoert this data type");
+                }
+            }
+        }
+    }
+}
+
+void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aObject);
+    assert(NULL != aPtr);
+
+    KMS::Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    KMS::DI::Array     * lArray;
+    KMS::DI::Dictionary* lDictionary;
+    KMS::DI::String    * lString;
+    KMS::DI::UInt32    * lUInt32;
+
+    switch (*lPtr)
+    {
+    case '[':
+        lArray = new KMS::DI::Array();
+        lArray->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        Decode_Array(lArray, &lPtr);
+        *aObject = lArray;
+        break;
+
+    case '{':
+        lDictionary = new KMS::DI::Dictionary();
+        lDictionary->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        Decode_Dictionary(lDictionary, &lPtr);
+        *aObject = lDictionary;
+        break;
+
+    case '"':
+        lString = new KMS::DI::String();
+        lString->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        Decode_String(lString, &lPtr);
+        *aObject = lString;
+        break;
+
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+        lUInt32 = new KMS::DI::UInt32();
+        lUInt32->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        Decode_Value(lUInt32, &lPtr);
+        *aObject = lUInt32;
+        break;
+
+    default: KMS_EXCEPTION(JSON_FORMAT, "Invalid JSON format");
+    }
+
+    *aPtr = lPtr;
+}
+
+void Decode_Array(KMS::DI::Array* aArray, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aArray);
+    assert(NULL != aPtr);
+
+    KMS::Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    lPtr.Test('[');
+
+    lPtr.SkipBlank();
+
+    if (']' != *lPtr)
+    {
+        unsigned int lIndex = 0;
+
+        for (;;)
+        {
+            KMS::DI::Object* lObject = (*aArray)[lIndex];
+            if (NULL != lObject)
+            {
+                Decode(lObject, &lPtr);
+            }
+            else
+            {
+                Decode(&lObject, &lPtr);
+                assert(NULL != lObject);
+
+                if (aArray->TestFlag(KMS::DI::MetaData::FLAG_DYNAMIC))
+                {
+                    (*aArray) += lObject;
+                }
+                else
+                {
+                    delete lObject;
+                }
+            }
+
+            lIndex++;
+
+            lPtr.SkipBlank();
+            if (']' == *lPtr)
+            {
+                break;
+            }
+
+            lPtr.Test(',');
+
+            lPtr.SkipBlank();
+        }
+    }
+
+    lPtr.Test(']');
+
+    *aPtr = lPtr;
+}
+
+void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aDictionary);
+    assert(NULL != aPtr);
+
+    KMS::Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    lPtr.Test('{');
+
+    lPtr.SkipBlank();
+
+    if ('}' != *lPtr)
+    {
+        char lName[NAME_LENGTH];
+
+        for (;;)
+        {
+            lPtr.Test('"');
+            lPtr.ExtractUntil('"', lName, sizeof(lName));
+            lPtr.Test('"');
+
+            lPtr.SkipBlank();
+
+            lPtr.Test(':');
+
+            lPtr.SkipBlank();
+
+            KMS::DI::Object* lObject = (*aDictionary)[lName];
+            if (NULL != lObject)
+            {
+                Decode(lObject, &lPtr);
+            }
+            else
+            {
+                Decode(&lObject, &lPtr);
+                assert(NULL != lObject);
+
+                if (aDictionary->TestFlag(KMS::DI::MetaData::FLAG_DYNAMIC))
+                {
+                    unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_DYNAMIC | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
+                    lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
+                    (*aDictionary) += lObject;
+                }
+                else
+                {
+                    delete lObject;
+                }
+            }
+
+            lPtr.SkipBlank();
+            if ('}' == *lPtr)
+            {
+                break;
+            }
+
+            lPtr.Test(',');
+
+            lPtr.SkipBlank();
+        }
+    }
+
+    lPtr.Test('}');
+
+    *aPtr = lPtr;
+}
+
+void Decode_String(KMS::DI::String* aString, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aString);
+    assert(NULL != aPtr);
+
+    KMS::Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    char lStr[LINE_LENGTH];
+
+    lPtr.Test('"');
+    lPtr.ExtractUntil('"', lStr, sizeof(lStr));
+    lPtr.Test('"');
+
+    aString->Set(lStr);
+
+    *aPtr = lPtr;
+}
+
+void Decode_Value(KMS::DI::Value* aValue, KMS::Text::ReadPtr* aPtr)
+{
+    assert(NULL != aValue);
+    assert(NULL != aPtr);
+
+    KMS::Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    char lStr[LINE_LENGTH];
+
+    lPtr.ExtractUntil(" \n\r\t,]}", lStr, sizeof(lStr));
+
+    aValue->Set(lStr);
+
+    *aPtr = lPtr;
+}
+
+void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr)
+{
+    assert(NULL != aObject);
+    assert(NULL != aPtr);
+
+    KMS::Text::WritePtr lPtr(*aPtr);
+
+    const KMS::DI::Array* lArray = dynamic_cast<const KMS::DI::Array*>(aObject);
+    if (NULL != lArray)
+    {
+        Encode_Array(lArray, &lPtr);
+    }
+    else
+    {
+        const KMS::DI::Dictionary* lDictionary = dynamic_cast<const KMS::DI::Dictionary*>(aObject);
+        if (NULL != lDictionary)
+        {
+            Encode_Dictionary(lDictionary, &lPtr);
+        }
+        else
+        {
+            // String must be tested before Value because String is a Value
+            const KMS::DI::String* lString = dynamic_cast<const KMS::DI::String*>(aObject);
+            if (NULL != lString)
+            {
+                Encode_String(lString, &lPtr);
+            }
+            else
+            {
+                const KMS::DI::Value* lValue = dynamic_cast<const KMS::DI::Value*>(aObject);
+                if (NULL != lValue)
+                {
+                    lPtr += lValue->Get(lPtr, lPtr.GetRemainingSize());
+                }
+                else
+                {
+                    KMS_EXCEPTION(NOT_IMPLEMENTED, "JSON do not support this data type");
+                }
+            }
+        }
+    }
+
+    *aPtr = lPtr;
+}
+
+void Encode_Array(const KMS::DI::Array* aArray, KMS::Text::WritePtr* aPtr)
+{
+    assert(NULL != aArray);
+    assert(NULL != aPtr);
+
+    KMS::Text::WritePtr lPtr(*aPtr);
+
+    lPtr.Write('[');
+
+    unsigned int lCount = aArray->GetCount();
+    for (unsigned int i = 0; i < lCount; i++)
+    {
+        const KMS::DI::Object* lObject = (*aArray)[i];
+        assert(NULL != lObject);
+
+        if (0 < i)
+        {
+            lPtr.Write(',');
+        }
+
+        Encode(lObject, &lPtr);
+    }
+
+    lPtr.Write(']');
+
+    *aPtr = lPtr;
+}
+
+void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WritePtr* aPtr)
+{
+    assert(NULL != aDictionary);
+    assert(NULL != aPtr);
+
+    KMS::Text::WritePtr lPtr(*aPtr);
+
+    lPtr.Write('{');
+
+    unsigned int lCount = aDictionary->GetCount();
+    for (unsigned int i = 0; i < lCount; i++)
+    {
+        const KMS::DI::Object* lObject = (*aDictionary)[i];
+        assert(NULL != lObject);
+
+        if (0 < i)
+        {
+            lPtr.Write(',');
+        }
+
+        lPtr.Write('"');
+        lPtr += lObject->GetName(lPtr, lPtr.GetRemainingSize());
+        lPtr.Write('"');
+
+        lPtr.Write(':');
+
+        ::Encode(lObject, &lPtr);
+    }
+
+    lPtr.Write('}');
+
+    *aPtr = lPtr;
+}
+
+void Encode_String(const KMS::DI::String* aString, KMS::Text::WritePtr* aPtr)
+{
+    assert(NULL != aString);
+    assert(NULL != aPtr);
+
+    KMS::Text::WritePtr lPtr(*aPtr);
+
+    lPtr.Write('"');
+    lPtr += aString->Get(lPtr, lPtr.GetRemainingSize());
+    lPtr.Write('"');
+
+    *aPtr = lPtr;
 }
