@@ -13,6 +13,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     * AnalogOutputConverter
     - AnalogConverter
 * KMS::DI
+* KMS::JSON
+    * Object - Removed
 * KMS::Text
     * ReadPtr
     * WritePtr

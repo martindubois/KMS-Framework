@@ -24,9 +24,7 @@ namespace KMS
 
         public:
 
-            UInt32();
-
-            UInt32(uint32_t aIn);
+            UInt32(uint32_t aIn = 0, const MetaData* aMD = NULL);
 
             const UInt32& operator = (uint32_t aIn);
 

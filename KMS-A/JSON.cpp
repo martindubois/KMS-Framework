@@ -12,10 +12,6 @@
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt32.h>
-#include <KMS/JSON/Array.h>
-#include <KMS/JSON/Dictionary.h>
-#include <KMS/JSON/String.h>
-#include <KMS/JSON/Value.h>
 #include <KMS/Text/ReadPtr.h>
 #include <KMS/Text/WritePtr.h>
 
@@ -47,84 +43,6 @@ namespace KMS
         // Functions
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int CreateFromHTTP(const char* aIn, unsigned int aInSize_byte, Object** aOut)
-        {
-            assert(NULL != aIn);
-
-            Object* lObj = NULL;
-
-            unsigned int lResult_byte = 0;
-            while (aInSize_byte > lResult_byte)
-            {
-                switch (aIn[lResult_byte])
-                {
-                case ' ':
-                case '\n':
-                case '\r':
-                case '\t': break;
-
-                default: lObj = new String(); break;
-                }
-
-                if (NULL != lObj)
-                {
-                    break;
-                }
-
-                lResult_byte++;
-            }
-
-            KMS_EXCEPTION_ASSERT(NULL != lObj, HTTP_FORMAT, "Invalid HTTP format");
-
-            lResult_byte += lObj->HTTP_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
-
-            *aOut = lObj;
-
-            return lResult_byte;
-        }
-
-        unsigned int CreateFromJSON(const char* aIn, unsigned int aInSize_byte, Object** aOut)
-        {
-            assert(NULL != aIn);
-
-            Object* lObj = NULL;
-
-            unsigned int lResult_byte = 0;
-            while (aInSize_byte < lResult_byte)
-            {
-                switch (aIn[lResult_byte])
-                {
-                case ' ':
-                case '\n':
-                case '\r':
-                case '\t': break;
-
-                case '[': lObj = new Array     (); break;
-                case '{': lObj = new Dictionary(); break;
-                case '"': lObj = new String    (); break;
-                default : lObj = new Value     (); break;
-                }
-
-                if (NULL != lObj)
-                {
-                    break;
-                }
-
-                lResult_byte++;
-            }
-
-            if (NULL == lObj)
-            {
-                KMS_EXCEPTION(JSON_FORMAT, "Invalid JSON format");
-            }
-
-            lResult_byte += lObj->JSON_Set(aIn + lResult_byte, aInSize_byte - lResult_byte);
-
-            *aOut = lObj;
-
-            return lResult_byte;
-        }
-
         unsigned int Decode(DI::Object* aObject, const char* aIn, unsigned int aInSize_byte)
         {
             Text::ReadPtr lPtr(aIn, aInSize_byte);
@@ -145,11 +63,18 @@ namespace KMS
 
         unsigned int Encode(const DI::Object* aObject, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aObject);
-
             Text::WritePtr lPtr(aOut, aOutSize_byte);
 
             ::Encode(aObject, &lPtr);
+
+            return lPtr.GetIndex();
+        }
+
+        unsigned int Encode_Dictionary(const DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte)
+        {
+            Text::WritePtr lPtr(aOut, aOutSize_byte);
+
+            ::Encode_Dictionary(aDictionary, &lPtr);
 
             return lPtr.GetIndex();
         }
@@ -164,17 +89,18 @@ void Decode(KMS::DI::Object* aObject, KMS::Text::ReadPtr* aPtr)
 {
     assert(NULL != aObject);
 
-    KMS::DI::Array* lArray = dynamic_cast<KMS::DI::Array*>(aObject);
-    if (NULL != lArray)
+    // Dictionary must be tested before Array because Dictionary is an Array
+    KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(aObject);
+    if (NULL != lDictionary)
     {
-        Decode_Array(lArray, aPtr);
+        Decode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(aObject);
-        if (NULL != lDictionary)
+        KMS::DI::Array* lArray = dynamic_cast<KMS::DI::Array*>(aObject);
+        if (NULL != lArray)
         {
-            Decode_Dictionary(lDictionary, aPtr);
+            Decode_Array(lArray, aPtr);
         }
         else
         {
@@ -217,22 +143,19 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     switch (*lPtr)
     {
     case '[':
-        lArray = new KMS::DI::Array();
-        lArray->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        lArray = new KMS::DI::Array(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
         Decode_Array(lArray, &lPtr);
         *aObject = lArray;
         break;
 
     case '{':
-        lDictionary = new KMS::DI::Dictionary();
-        lDictionary->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        lDictionary = new KMS::DI::Dictionary(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
         Decode_Dictionary(lDictionary, &lPtr);
         *aObject = lDictionary;
         break;
 
     case '"':
-        lString = new KMS::DI::String();
-        lString->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        lString = new KMS::DI::String("", &KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_String(lString, &lPtr);
         *aObject = lString;
         break;
@@ -247,8 +170,7 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt32();
-        lUInt32->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        lUInt32 = new KMS::DI::UInt32(0, &KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;
@@ -430,17 +352,18 @@ void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr)
 
     KMS::Text::WritePtr lPtr(*aPtr);
 
-    const KMS::DI::Array* lArray = dynamic_cast<const KMS::DI::Array*>(aObject);
-    if (NULL != lArray)
+    // Dictionary must be tested before Array because Dictionary is an Array
+    const KMS::DI::Dictionary* lDictionary = dynamic_cast<const KMS::DI::Dictionary*>(aObject);
+    if (NULL != lDictionary)
     {
-        Encode_Array(lArray, &lPtr);
+        Encode_Dictionary(lDictionary, &lPtr);
     }
     else
     {
-        const KMS::DI::Dictionary* lDictionary = dynamic_cast<const KMS::DI::Dictionary*>(aObject);
-        if (NULL != lDictionary)
+        const KMS::DI::Array* lArray = dynamic_cast<const KMS::DI::Array*>(aObject);
+        if (NULL != lArray)
         {
-            Encode_Dictionary(lDictionary, &lPtr);
+            Encode_Array(lArray, &lPtr);
         }
         else
         {

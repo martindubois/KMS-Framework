@@ -80,7 +80,7 @@ void Decode(KMS::DI::Object* aObject, KMS::Text::ReadPtr* aPtr)
         }
         else
         {
-            KMS_EXCEPTION(NOT_IMPLEMENTED, "JSON do not suppoert this data type");
+            KMS_EXCEPTION(NOT_IMPLEMENTED, "HTTP do not suppoert this data type");
         }
     }
 }
@@ -109,15 +109,13 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt32();
-        lUInt32->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        lUInt32 = new KMS::DI::UInt32(0, &KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;
 
     default:
-        lString = new KMS::DI::String();
-        lString->SetMetaData(&KMS::DI::META_DATA_DELETE_OBJECT);
+        lString = new KMS::DI::String("", &KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_Value(lString, &lPtr);
         *aObject = lString;
     }
@@ -138,8 +136,7 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
     {
         char lName[NAME_LENGTH];
 
-        lPtr.ExtractUntil(": \n\r\t", lName, sizeof(lName));
-        lPtr.SkipBlank();
+        lPtr.ExtractUntil(":", lName, sizeof(lName));
         lPtr.Test(':');
 
         lPtr.SkipBlank();
@@ -183,9 +180,11 @@ void Decode_Value(KMS::DI::Value* aValue, KMS::Text::ReadPtr* aPtr)
 
     char lStr[LINE_LENGTH];
 
-    lPtr.ExtractUntil(" \n\r\t,]}", lStr, sizeof(lStr));
+    lPtr.ExtractUntil("\n\r", lStr, sizeof(lStr));
 
     aValue->Set(lStr);
+
+    lPtr.SkipBlank();
 
     *aPtr = lPtr;
 }
@@ -227,13 +226,16 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
         const KMS::DI::Object* lO = (*aDictionary)[i];
         assert(NULL != lO);
 
-        if (0 < i)
-        {
-            lPtr.Write("\r\n", 2);
-        }
+        lPtr += lO->GetName(lPtr, lPtr.GetRemainingSize());
+
+        lPtr.Write(": ", 2);
 
         Encode(lO, &lPtr);
+
+        lPtr.Write("\r\n", 2);
     }
+
+    lPtr.Write("\r\n", 2);
 
     *aPtr = lPtr;
 }

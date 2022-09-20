@@ -23,9 +23,7 @@ namespace KMS
 
         public:
 
-            String();
-
-            String(const char* aIn);
+            String(const char* aIn = "", const MetaData* aMD = NULL);
 
             const String& operator = (const char* aIn);
 

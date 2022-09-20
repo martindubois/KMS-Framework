@@ -11,8 +11,9 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
 #include <KMS/HTTP/Request.h>
-#include <KMS/JSON/String.h>
 
 #include <KMS/HTTP/Server.h>
 
@@ -20,6 +21,13 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_LOCAL_PORT (80)
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_SERVER("Server", NULL);
+
+static const KMS::DI::String SERVER("KMS-Framework", &MD_SERVER);
 
 namespace KMS
 {
@@ -31,7 +39,7 @@ namespace KMS
 
         Server::Server()
         {
-            mResponseHeader.SetEntry("Server", new JSON::String("KMS-Framework"));
+            mResponseHeader += const_cast<DI::String*>(&SERVER);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }

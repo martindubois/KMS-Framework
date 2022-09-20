@@ -8,7 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/Dictionary.h>
+#include <KMS/DI/Container.h>
 #include <KMS/Msg/Destination.h>
 #include <KMS/Net/Server.h>
 
@@ -24,7 +24,7 @@ namespace KMS
 
             Server();
 
-            JSON::Dictionary mResponseHeader;
+            DI::Dictionary mResponseHeader;
 
             Msg::Destination mOnRequest;
 

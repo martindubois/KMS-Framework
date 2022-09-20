@@ -37,7 +37,7 @@ namespace KMS
 
         protected:
 
-            Object();
+            Object(const MetaData* aMD);
 
         private:
 

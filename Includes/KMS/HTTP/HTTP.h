@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/JSON/JSON.h
+// File      Includes/KMS/HTTP/HTTP.h
 
 #pragma once
 
@@ -12,15 +12,10 @@
 
 namespace KMS
 {
-    namespace JSON
+    namespace HTTP
     {
 
-        extern unsigned int Decode(DI::Object*  aObject, const char* aIn , unsigned int aInSize_byte);
-        extern unsigned int Decode(DI::Object** aObject, const char* aIn , unsigned int aInSize_byte);
-
         extern unsigned int Decode_Dictionary(DI::Dictionary* aDictionary, const char* aIn, unsigned int aInSize_byte);
-
-        extern unsigned int Encode(const DI::Object* aObject, char* aOut, unsigned int aOutSize_byte);
 
         extern unsigned int Encode_Dictionary(const DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte);
 

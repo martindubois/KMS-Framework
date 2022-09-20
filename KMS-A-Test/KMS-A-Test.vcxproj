@@ -272,8 +272,6 @@
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="JSON.cpp" />
-    <ClCompile Include="JSON_Dictionary.cpp" />
-    <ClCompile Include="JSON_Value.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />

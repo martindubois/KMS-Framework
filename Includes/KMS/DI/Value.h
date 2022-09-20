@@ -15,6 +15,8 @@ namespace KMS
     namespace DI
     {
 
+        class MetaData;
+
         class Value : public Object
         {
 
@@ -29,7 +31,7 @@ namespace KMS
 
         protected:
 
-            Value();
+            Value(const MetaData* aMD);
 
         };
 

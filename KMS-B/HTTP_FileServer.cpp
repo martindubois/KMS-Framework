@@ -10,17 +10,18 @@
 // ===== C++ ================================================================
 #include <iostream>
 
-// ===== Includes ===========================================================
+// ===== Windows ============================================================
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
+#include <KMS/DI/UInt32.h>
 #include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
-#include <KMS/JSON/String.h>
-#include <KMS/JSON/Value.h>
 
 #include <KMS/HTTP/FileServer.h>
 
@@ -36,6 +37,19 @@
 
 #define MSG_ON_REQUEST (1)
 
+static const KMS::DI::MetaData MD_CONTENT_DISPOSITION("content-disposition", NULL);
+static const KMS::DI::MetaData MD_CONTENT_LENGTH     ("content-length"     , NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
+static const KMS::DI::MetaData MD_CONTENT_TYPE       ("content-type"       , NULL);
+
+static const KMS::DI::String APPLICATION_JAVASCRIPT("application/javascript"   , &MD_CONTENT_TYPE);
+static const KMS::DI::String IMAGE_X_ICON          ("image/x-icon"             , &MD_CONTENT_TYPE);
+static const KMS::DI::String TEXT_CSS              ("text/css"                 , &MD_CONTENT_TYPE);
+static const KMS::DI::String TEXT_HTML             ("text/html; charset=utf-8" , &MD_CONTENT_TYPE);
+static const KMS::DI::String TEXT_PLAIN            ("text/plain; charset=utf-8", &MD_CONTENT_TYPE);
+
+static const KMS::DI::String INLINE("inline", &MD_CONTENT_DISPOSITION);
+
+
 namespace KMS
 {
     namespace HTTP
@@ -48,36 +62,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("application/javascript"));
+            aRequest->mResponseHeader += const_cast<DI::String*>(&APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("image/x-icon"));
+            aRequest->mResponseHeader += const_cast<DI::String*>(&IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("text/css"));
+            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Type", new JSON::String("text/html; charset=utf-8"));
+            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.SetEntry("Content-Disposition", new JSON::String("inline"));
-            aRequest->mResponseHeader.SetEntry("Content-Type"       , new JSON::String("text/plain; charset=utf-8"));
+            aRequest->mResponseHeader += const_cast<DI::String*>(&INLINE);
+            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -207,7 +221,8 @@ namespace KMS
             File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            aR->mResponseHeader.SetEntry("Content-Length", new JSON::Value(lFile->GetSize()));
+            DI::UInt32* lValue = new DI::UInt32(lFile->GetSize(), &MD_CONTENT_LENGTH);
+            aR->mResponseHeader += lValue;
 
             aR->SetFile(lFile);
         }

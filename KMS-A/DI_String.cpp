@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        String::String() {}
+        String::String(const char* aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn) {}
 
         // ===== Value ======================================================
 

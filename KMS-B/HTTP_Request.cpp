@@ -11,10 +11,21 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/JSON/String.h>
-#include <KMS/JSON/Value.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
+#include <KMS/DI/UInt32.h>
+#include <KMS/HTTP/HTTP.h>
+#include <KMS/JSON/JSON.h>
 
 #include <KMS/HTTP/Request.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_CONTENT_LENGTH("content-length", NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
+static const KMS::DI::MetaData MD_CONTENT_TYPE  ("content-type"  , NULL);
+
+static const KMS::DI::String APPLICATION_JSON("application/json", &MD_CONTENT_TYPE);
 
 namespace KMS
 {
@@ -24,9 +35,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        Request::Request()
+        {
+            mRequestHeader.SetMetaData(&DI::META_DATA_DYNAMIC);
+        }
+
         const char* Request::GetPath() const { return mPath.c_str(); }
 
-        const JSON::Dictionary& Request::GetRequestHeader() const { return mRequestHeader; }
+        const DI::Dictionary& Request::GetRequestHeader() const { return mRequestHeader; }
 
         Request::Type Request::GetType() const { return mType; }
 
@@ -130,10 +146,10 @@ namespace KMS
 
             if (!mResponseData.IsEmpty())
             {
-                unsigned int lSize_byte = mResponseData.JSON_Get(lData, sizeof(lData));
+                unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
-                mResponseHeader.SetEntry("Content-Length", new JSON::Value(lSize_byte));
-                mResponseHeader.SetEntry("Content-Type"  , new JSON::String("application/json"));
+                mResponseHeader += new DI::UInt32(lSize_byte, &MD_CONTENT_LENGTH);
+                mResponseHeader += const_cast<DI::String*>(&APPLICATION_JSON);
 
                 SetData(lData, lSize_byte);
             }
@@ -148,9 +164,7 @@ namespace KMS
                 mResult, GetResultName(),
                 DAY_NAMES[lST.wDayOfWeek], lST.wDay, MONTH_NAMES[lST.wMonth], lST.wYear, lST.wHour, lST.wMinute, lST.wSecond);
 
-            lSize_byte += mResponseHeader.HTTP_Get(mBuffer + lSize_byte, sizeof(mBuffer) - lSize_byte);
-
-            lSize_byte += sprintf_s(mBuffer + lSize_byte, sizeof(mBuffer) - lSize_byte, "\r\n");
+            lSize_byte += HTTP::Encode_Dictionary(&mResponseHeader, mBuffer + lSize_byte, sizeof(mBuffer) - lSize_byte);
 
             mSocket->Send(mBuffer, lSize_byte);
 
@@ -194,7 +208,7 @@ namespace KMS
 
             unsigned int lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
 
-            mRequestHeader.HTTP_Set(mBuffer + lIndex, sizeof(mBuffer) - lIndex);
+            HTTP::Decode_Dictionary(&mRequestHeader, mBuffer + lIndex, sizeof(mBuffer) - lIndex);
 
             return true;
         }
@@ -206,9 +220,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request& aR)
 {
     aOut << std::endl;
     aOut << aR.GetTypeName() << " " << aR.GetPath() << std::endl;
-    aOut << aR.GetRequestHeader();
     aOut << aR.GetResultName() << std::endl;
-    aOut << aR.mResponseHeader;
     aOut << std::endl;
 
     return aOut;

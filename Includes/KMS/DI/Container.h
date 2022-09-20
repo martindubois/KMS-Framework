@@ -18,10 +18,12 @@ namespace KMS
     namespace DI
     {
 
-        class Container : public Object
+        class Array : public Object
         {
 
         public:
+
+            Array(const MetaData* aMD = NULL);
 
             void operator += (Object* aIn);
 
@@ -37,8 +39,10 @@ namespace KMS
 
             unsigned int GetCount() const;
 
+            bool IsEmpty() const;
+
             // ===== Object =================================================
-            virtual ~Container();
+            virtual ~Array();
 
         private:
 
@@ -48,20 +52,12 @@ namespace KMS
 
         };
 
-        class Array : public Container
+        class Dictionary : public Array
         {
 
         public:
 
-            // ===== Object =================================================
-            virtual ~Array();
-
-        };
-
-        class Dictionary : public Container
-        {
-
-        public:
+            Dictionary(const MetaData* aMD = NULL);
 
             // ===== Object =================================================
             virtual ~Dictionary();

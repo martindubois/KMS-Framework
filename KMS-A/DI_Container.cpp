@@ -20,9 +20,13 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Container::operator += (Object* aO) { assert(NULL != aO); mObjects.push_back(aO); }
+        Array::Array(const MetaData* aMD) : Object(aMD) {}
 
-        Object* Container::operator [] (int aIndex)
+        Dictionary::Dictionary(const MetaData* aMD) : Array(aMD) {}
+
+        void Array::operator += (Object* aO) { assert(NULL != aO); mObjects.push_back(aO); }
+
+        Object* Array::operator [] (int aIndex)
         {
             if (mObjects.size() <= aIndex)
             {
@@ -34,7 +38,7 @@ namespace KMS
             return mObjects[aIndex];
         }
 
-        const Object* Container::operator [] (int aIndex) const
+        const Object* Array::operator [] (int aIndex) const
         {
             if (mObjects.size() <= aIndex)
             {
@@ -46,7 +50,7 @@ namespace KMS
             return mObjects[aIndex];
         }
 
-        Object* Container::operator [] (const char* aKey)
+        Object* Array::operator [] (const char* aKey)
         {
             assert(NULL != aKey);
 
@@ -63,7 +67,7 @@ namespace KMS
             return NULL;
         }
 
-        const Object* Container::operator [] (const char* aKey) const
+        const Object* Array::operator [] (const char* aKey) const
         {
             assert(NULL != aKey);
 
@@ -80,25 +84,28 @@ namespace KMS
             return NULL;
         }
 
-        unsigned int Container::GetCount() const { return static_cast<unsigned int>(mObjects.size()); }
-
-        // ===== Object =====================================================
-
-        Container::~Container()
+        void Array::Clear()
         {
             for (Object* lO : mObjects)
             {
                 assert(NULL != lO);
 
-                const MetaData* lMD = lO->GetMetaData();
-                if ((NULL != lMD) && lMD->TestFlag(MetaData::FLAG_DELETE_OBJECT))
+                if (lO->TestFlag(MetaData::FLAG_DELETE_OBJECT))
                 {
                     delete lO;
                 }
             }
+
+            mObjects.clear();
         }
 
-        Array::~Array() {}
+        unsigned int Array::GetCount() const { return static_cast<unsigned int>(mObjects.size()); }
+
+        bool Array::IsEmpty() const { return mObjects.empty(); }
+
+        // ===== Object =====================================================
+
+        Array::~Array() { Clear(); }
 
         Dictionary::~Dictionary() {}
 
