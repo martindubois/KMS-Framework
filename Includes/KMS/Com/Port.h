@@ -8,6 +8,9 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Boolean.h>
+#include <KMS/DI/Enum.h>
+
 #include <KMS/Dev/Device.h>
 
 namespace KMS
@@ -31,7 +34,11 @@ namespace KMS
                 NONE,
                 ODD,
                 SPACE,
+
+                QTY
             };
+
+            static const char* PARITY_NAMES[];
 
             Port();
 
@@ -54,10 +61,6 @@ namespace KMS
             // ===== Dev::Device ============================================
             virtual void Connect(unsigned int aFlags);
 
-            // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aN, const char* aV);
-
         protected:
 
             // ===== Dev::Device ============================================
@@ -74,12 +77,12 @@ namespace KMS
             void ApplyTimeouts();
 
             // ===== Configurable attributes ================================
-            bool         mDTR;
-            Parity       mParity;
-            unsigned int mReadTimeout_ms;
-            bool         mRTS;
-            unsigned int mSpeed_bps;
-            unsigned int mWriteTimeout_ms;
+            DI::Boolean                    mDTR;
+            DI::Enum<Parity, PARITY_NAMES> mParity;
+            DI::UInt32                     mReadTimeout_ms;
+            DI::Boolean                    mRTS;
+            DI::UInt32                     mSpeed_bps;
+            DI::UInt32                     mWriteTimeout_ms;
 
         };
 

@@ -12,9 +12,17 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
 #include <KMS/Console/Color.h>
 
 #include <KMS/Test/TestManager.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_GROUPS("Groups", "Groups+={Name}");
+static const KMS::DI::MetaData MD_TESTS ("Tests" , "Tests+={Name}" );
 
 namespace KMS
 {
@@ -36,12 +44,13 @@ namespace KMS
                 KMS::Cfg::Configurator lC;
                 KMS::Test::TestManager lTM;
 
-                lTM.InitConfigurator(&lC);
+                lC.AddConfigurable(&lTM);
 
-                Dbg::gLog.InitConfigurator(&lC);
+                lC.AddConfigurable(&Dbg::gLog);
 
-                lC.Init();
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 lResult = lTM.Run();
 
@@ -52,7 +61,18 @@ namespace KMS
             return lResult;
         }
 
-        TestManager::TestManager() : mErrorCount(0) {}
+        TestManager::TestManager()
+            : DI::Dictionary(NULL)
+            , mGroups(&MD_GROUPS)
+            , mTests (&MD_TESTS)
+            , mErrorCount(0)
+        {
+            mGroups.SetCreator(DI::String::Create);
+            mTests .SetCreator(DI::String::Create);
+
+            AddEntry(&mGroups);
+            AddEntry(&mTests);
+        }
 
         void TestManager::AddGroup(const char * aGroup)
         {
@@ -65,7 +85,7 @@ namespace KMS
                 {
                     if (lT->IsGroup(aGroup))
                     {
-                        mTests.push_back(lT);
+                        AddTest(lT);
                     }
                 }
             }
@@ -82,7 +102,7 @@ namespace KMS
                 {
                     if (lT->IsName(aTest))
                     {
-                        mTests.push_back(lT);
+                        AddTest(lT);
                     }
                 }
             }
@@ -92,7 +112,9 @@ namespace KMS
 
         int TestManager::Run()
         {
-            for (Test* lT : mTests)
+            UpdateTestList();
+
+            for (Test* lT : mTestList)
             {
                 lT->CallRun();
 
@@ -102,44 +124,66 @@ namespace KMS
             return (0 >= mErrorCount) ? 0 : 98;
         }
 
-        // ===== Cfg::Configurable ==========================================
-
-        bool TestManager::AddAttribute(const char* aA, const char* aV)
-        {
-            assert(NULL != aA);
-
-            CFG_CALL("Group", AddGroup);
-            CFG_CALL("Test" , AddTest );
-
-            return false;
-        }
-
-        void TestManager::DisplayHelp(FILE* aOut) const
-        {
-            fprintf(aOut,
-                "===== KMS::Test::TestManager =====\n"
-                "Group += {Name}\n"
-                "    Add the test of the group to the tests to run\n"
-                "Test += {Name}\n"
-                "    Add the test to the tests to run\n");
-
-            Configurable::DisplayHelp(aOut);
-        }
-
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        const Test::TestList* TestManager::GetTests() const { return &mTests; }
+        const Test::TestList* TestManager::GetTestList() const { return &mTestList; }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        void TestManager::AddTest(Test* aTest)
+        {
+            assert(NULL != aTest);
+
+            for (Test* lTest : mTestList)
+            {
+                assert(NULL != lTest);
+
+                if (aTest == lTest)
+                {
+                    return;
+                }
+            }
+
+            mTestList.push_back(aTest);
+        }
+
+        void TestManager::UpdateTestList()
+        {
+            const DI::Array::Internal& lInternalG = mGroups.GetInternal();
+            for (const DI::Object* lObj : lInternalG)
+            {
+                assert(NULL != lObj);
+
+                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lString);
+
+                AddGroup(*lString);
+            }
+
+            const DI::Array::Internal& lInternalT = mTests.GetInternal();
+            for (const DI::Object* lObj : lInternalT)
+            {
+                assert(NULL != lObj);
+
+                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lString);
+
+                AddTest(*lString);
+            }
+        }
+
     }
 }
 
 std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM)
 {
-    const KMS::Test::Test::TestList* lTests = aTM.GetTests();
+    const KMS::Test::Test::TestList* lTestList = aTM.GetTestList();
 
     unsigned int lIndex = 0;
 
-    for (const KMS::Test::Test* lT : *lTests)
+    for (const KMS::Test::Test* lT : *lTestList)
     {
         aOut << "Test " << lIndex << std::endl;
         aOut << *lT;
@@ -158,8 +202,8 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
         aOut << KMS::Console::Color::GREEN;
     }
 
-    aOut << "Test count        : " << lTests->size() << std::endl;
-    aOut << "Total error count : " << lErrorCount    << std::endl;
+    aOut << "Test count        : " << lTestList->size() << std::endl;
+    aOut << "Total error count : " << lErrorCount       << std::endl;
 
     if (0 < lErrorCount)
     {

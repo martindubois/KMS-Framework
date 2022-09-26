@@ -42,7 +42,7 @@
     <ClCompile Include="Dbg_Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_Container.cpp">
+    <ClCompile Include="DI_Array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JSON.cpp">

@@ -4,11 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Import.h
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Alias.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 
@@ -17,7 +19,7 @@ namespace KMS
     namespace Build
     {
         
-        class Import : public Cfg::Configurable
+        class Import : public DI::Dictionary
         {
 
         public:
@@ -28,21 +30,22 @@ namespace KMS
 
             ~Import();
 
+            // aD  The dependecy format is {Product} ; {Version}
+            //     (Ex: KMS-framework;0.0.14-front-end)
             void AddDependency       (const char* aD);
             void AddOSIndependentDeps(const char* aD);
-            void AddRepository       (const char* aR);
 
+            // aR  Complete repositorty path
+            //     (can include environment variable)
+            void AddRepository(const char* aR);
+
+            // aDependency  The dependecy format is {Product} ; {Version}
+            //              (Ex: KMS-framework;0.0.14-front-end)
             void ImportDependency(const char* aDependency, bool aOSIndependent);
 
             int Run();
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-
         private:
-
-            typedef std::list<File::Folder> FolderList;
 
             Import(const Import &);
 
@@ -51,9 +54,11 @@ namespace KMS
             File::Folder mImport;
 
             // ===== Configurable attributes ================================
-            StringSet  mDependencies;
-            StringSet  mOSIndependentDeps;
-            FolderList mRepositories;
+            DI::Array mDependencies;
+            DI::Array mOSIndependentDeps;
+            DI::Array mRepositories;
+
+            DI::Alias mOSDependencies;
 
         };
 

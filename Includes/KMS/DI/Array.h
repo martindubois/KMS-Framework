@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/DI/Object.h
+// File      Includes/KMS/DI/Array.h
 
 #pragma once
 
@@ -23,9 +23,11 @@ namespace KMS
 
         public:
 
-            Array(const MetaData* aMD = NULL);
+            typedef DI::Object* (*Creator)(const KMS::DI::MetaData* aMD);
 
-            void operator += (Object* aIn);
+            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+
+            Array(const MetaData* aMD);
 
             Object* operator [] (int aIndex);
 
@@ -41,26 +43,31 @@ namespace KMS
 
             bool IsEmpty() const;
 
+            void SetCreator(Creator aCreator);
+
+            void AddEntry(      Object* aE);
+            void AddEntry(const Object* aE);
+
+            DI::Object* CreateEntry(const KMS::DI::MetaData* aMD);
+
+            DI::Object* CreateEntry(const char* aName, const char* aLabel, unsigned int aFlags = 0);
+
             // ===== Object =================================================
             virtual ~Array();
 
+        // Internal
+
+            typedef std::vector<Object*> Internal;
+
+            const Internal& GetInternal() const;
+
+            Internal& GetInternal();
+
         private:
 
-            typedef std::vector<Object *> ObjectArray;
+            Creator mCreator;
 
-            ObjectArray mObjects;
-
-        };
-
-        class Dictionary : public Array
-        {
-
-        public:
-
-            Dictionary(const MetaData* aMD = NULL);
-
-            // ===== Object =================================================
-            virtual ~Dictionary();
+            Internal mInternal;
 
         };
 

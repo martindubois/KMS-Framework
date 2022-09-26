@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/DI/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
@@ -25,15 +26,21 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mProcessors.insert(aP); }
+        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mOSProcessors.AddEntry(new DI::String(aP, &DI::META_DATA_DELETE_OBJECT)); }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
         void Build::Compile(const char* aC)
         {
-            for (std::string lP : mProcessors)
+            const DI::Array::Internal& lInternal = mOSProcessors.GetInternal();
+            for (const DI::Object* lObj : lInternal)
             {
+                assert(NULL != lObj);
+
+                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lP);
+
                 File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
                 File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
 
@@ -43,7 +50,7 @@ namespace KMS
                 lProcess.AddArgument("/target:rebuild");
 
                 lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
-                lProcess.AddArgument(("/property:Platform="      + lP).c_str());
+                lProcess.AddArgument(("/property:Platform=" + std::string(lP->Get())).c_str());
 
                 lProcess.Run(1000 * 60 * 5);
 
@@ -59,46 +66,76 @@ namespace KMS
             File::Folder lBinaries(mTempFolder, "Binaries");
             File::Folder lLibraries(mTempFolder, "Libraries");
 
-            for (std::string lP : mProcessors)
+            const DI::Array::Internal& lInternal = mOSProcessors.GetInternal();
+            for (const DI::Object* lObj : lInternal)
             {
+                assert(NULL != lObj);
+
+                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lP);
+
                 std::string lCfg = aC;
 
                 lCfg += "_";
-                lCfg += lP;
+                lCfg += lP->Get();
 
                 File::Folder lBin(lBinaries, lCfg.c_str());
                 File::Folder lLib(lLibraries, lCfg.c_str());
 
-                std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + aC;
+                std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
 
                 File::Folder lOut_Src(lOutDir.c_str());
 
                 lBin.Create();
                 lLib.Create();
 
-                for (std::string lB : mBinaries)
+                const DI::Array::Internal& lInternalB = mBinaries.GetInternal();
+                for (const DI::Object* lObj : lInternalB)
                 {
-                    lOut_Src.Copy(lBin, (lB + ".exe").c_str());
-                    lOut_Src.Copy(lBin, (lB + ".pdb").c_str());
+                    assert(NULL != lObj);
+
+                    const DI::String* lB = dynamic_cast<const DI::String*>(lObj);
+                    assert(NULL != lB);
+
+                    lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
+                    lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
                 }
 
-                for (std::string lB : mLibraries)
+                const DI::Array::Internal& lInternalL = mLibraries.GetInternal();
+                for (const DI::Object* lObj : lInternalL)
                 {
-                    lOut_Src.Copy(lLib, (lB + ".lib").c_str());
-                    lOut_Src.Copy(lLib, (lB + ".pdb").c_str());
+                    assert(NULL != lObj);
+
+                    const DI::String* lL = dynamic_cast<const DI::String*>(lObj);
+                    assert(NULL != lL);
+
+                    lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
+                    lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
                 }
             }
         }
 
         void Build::Test(const char* aC)
         {
-            for (std::string lP : mProcessors)
+            const DI::Array::Internal& lInternalP = mOSProcessors.GetInternal();
+            for (const DI::Object* lObj : lInternalP)
             {
-                for (std::string lT : mTests)
-                {
-                    std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + aC;
+                assert(NULL != lObj);
 
-                    Proc::Process lProcess(lOutDir.c_str(), (lT + ".exe").c_str());
+                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lP);
+
+                const DI::Array::Internal& lInternalT = mTests.GetInternal();
+                for (const DI::Object* lObj : lInternalT)
+                {
+                    assert(NULL != lObj);
+
+                    const DI::String* lT = dynamic_cast<const DI::String*>(lObj);
+                    assert(NULL != lT);
+
+                    std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
+
+                    Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + ".exe").c_str());
 
                     lProcess.AddArgument("Group=Auto");
 

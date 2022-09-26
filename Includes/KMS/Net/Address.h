@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Address.h
+// Library   KMS-B
 
 #pragma once
 
@@ -52,7 +53,7 @@ namespace KMS
             Address(const char* aA);
 
             // aA  See the constructor
-            const Address& operator = (const char* aA);
+            void operator = (const char* aA);
 
             bool operator == (const Address& aA);
 

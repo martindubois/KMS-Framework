@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt32.h>
@@ -151,16 +151,9 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
             Decode(&lObject, &lPtr);
             assert(NULL != lObject);
 
-            if (aDictionary->TestFlag(KMS::DI::MetaData::FLAG_DYNAMIC))
-            {
-                unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_DYNAMIC | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
-                lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
-                (*aDictionary) += lObject;
-            }
-            else
-            {
-                delete lObject;
-            }
+            unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
+            lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
+            aDictionary->AddEntry(lObject);
         }
 
         lPtr.SkipBlank();
@@ -220,17 +213,16 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
 
     KMS::Text::WritePtr lPtr(*aPtr);
 
-    unsigned int lCount = aDictionary->GetCount();
-    for (unsigned int i = 0; i < lCount; i++)
+    const KMS::DI::Dictionary::Internal& lInternal = aDictionary->GetInternal();
+    for (const KMS::DI::Object* lObj : lInternal)
     {
-        const KMS::DI::Object* lO = (*aDictionary)[i];
-        assert(NULL != lO);
+        assert(NULL != lObj);
 
-        lPtr += lO->GetName(lPtr, lPtr.GetRemainingSize());
+        lPtr += lObj->GetName(lPtr, lPtr.GetRemainingSize());
 
         lPtr.Write(": ", 2);
 
-        Encode(lO, &lPtr);
+        Encode(lObj, &lPtr);
 
         lPtr.Write("\r\n", 2);
     }

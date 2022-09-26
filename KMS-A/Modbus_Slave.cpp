@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
 
 #include <KMS/Modbus/Slave.h>
 
@@ -19,6 +19,8 @@
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_DEVICE_ADDRESS("DeviceAddress", "DeviceAddress = {Address}");
 
 #define MSG_ITERATE (1)
 
@@ -65,46 +67,16 @@ namespace KMS
             return lResult;
         }
 
-        // ===== Cfg::Configurable ==========================================
-
-        void Slave::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Modbus::Link =====\n"
-                "DeviceAddress\n"
-                "    Set the device address to the default value\n"
-                "    Default: %u\n"
-                "DeviceAddress = {Addr}\n"
-                "    Device address\n",
-                DEFAULT_DEVICE_ADDRESS);
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
-        bool Slave::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("DeviceAddress") { SetDeviceAddress(DEFAULT_DEVICE_ADDRESS); return true; }
-            }
-            else
-            {
-                CFG_CONVERT("DeviceAddress", SetDeviceAddress, Convert::ToUInt8);
-            }
-
-            return Cfg::Configurable::SetAttribute(aA, aV);
-        }
-
         // Protected
         // //////////////////////////////////////////////////////////////////
 
         Slave::Slave()
-            : ON_ITERATE(this, MSG_ITERATE)
-            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
+            : DI::Dictionary(NULL)
+            , ON_ITERATE(this, MSG_ITERATE)
+            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS, &MD_DEVICE_ADDRESS)
             , mStopped(false)
         {
+            AddEntry(&mDeviceAddress);
         }
 
         DeviceAddress Slave::GetDeviceAddress() const { return mDeviceAddress; }

@@ -24,13 +24,13 @@ namespace KMS
 
         public:
 
-            UInt32(uint32_t aIn = 0, const MetaData* aMD = NULL);
+            static DI::Object* Create(KMS::DI::MetaData* aMD);
 
-            const UInt32& operator = (uint32_t aIn);
+            UInt32(uint32_t aIn, const MetaData* aMD);
+
+            void operator = (uint32_t aIn);
 
             operator uint32_t () const;
-
-            void operator += (uint32_t aIn);
 
             bool operator == (uint32_t aIn);
 

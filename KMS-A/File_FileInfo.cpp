@@ -52,10 +52,7 @@ namespace KMS
             SetData(aFI.GetData());
         }
 
-        void FileInfo::operator = (const FileInfo& aA)
-        {
-            SetData(aA.GetData());
-        }
+        void FileInfo::operator = (const FileInfo& aA) { SetData(aA.GetData()); }
 
         const void* FileInfo::GetData() const { assert(NULL != mData); return mData; }
 

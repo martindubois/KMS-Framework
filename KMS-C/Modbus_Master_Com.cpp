@@ -30,6 +30,8 @@ namespace KMS
 
         // ===== Master =====================================================
 
+        Master_Com::Master_Com() { AddEntry(&mPort); }
+
         void Master_Com::Connect()
         {
             mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS);
@@ -123,15 +125,6 @@ namespace KMS
             // TODO
             assert(false);
             return 0;
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        void Master_Com::InitConfigurator(Cfg::Configurator* aC)
-        {
-            mPort.InitConfigurator(aC);
-
-            Master::InitConfigurator(aC);
         }
 
         // Private

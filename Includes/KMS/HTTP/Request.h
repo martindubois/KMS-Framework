@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Request.h
+// Library   KMS-B
 
 #pragma once
 
@@ -11,7 +12,7 @@
 #include <ostream>
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/File/Binary.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Net/Socket.h>
@@ -90,6 +91,8 @@ namespace KMS
             Request(const Request&);
 
             const Request& operator = (const Request&);
+
+            void Construct();
 
             bool Parse();
 

@@ -23,17 +23,21 @@ namespace KMS
 
         public:
 
-            String(const char* aIn = "", const MetaData* aMD = NULL);
+            static DI::Object* Create(const KMS::DI::MetaData* aMD);
 
-            const String& operator = (const char* aIn);
+            String(const char* aIn, const MetaData* aMD);
+
+            void operator = (const char* aIn);
 
             operator const char* () const;
 
             void operator += (const char* aIn);
 
-            bool operator == (const char* aIn);
+            bool operator == (const char* aIn) const;
 
             void Clear();
+
+            const char* Get() const;
 
             unsigned int GetLength() const;
 

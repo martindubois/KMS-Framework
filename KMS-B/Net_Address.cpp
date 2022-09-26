@@ -32,6 +32,8 @@ namespace KMS
             Set(aA);
         }
 
+        void Address::operator = (const char* aA) { Set(aA); }
+
         void Address::Clear()
         {
             mSize_byte = 0;

@@ -22,28 +22,27 @@ namespace KMS
 
         public:
 
-            static const unsigned int FLAG_DELETE_OBJECT;
-            static const unsigned int FLAG_DYNAMIC;
-
             static const unsigned int FLAG_COPY_NAME;
             static const unsigned int FLAG_COPY_LABEL;
             static const unsigned int FLAG_DELETE_META_DATA;
+            static const unsigned int FLAG_DELETE_OBJECT;
 
             MetaData(const char* aName, const char* aLabel, unsigned int aFlags = 0);
 
             ~MetaData();
 
-            const char* GetName() const;
+            const char * GetLabel() const;
+            unsigned int GetLabel(char* aOut, unsigned int aOutSize_byte) const;
 
+            const char * GetName() const;
             unsigned int GetName(char* aOut, unsigned int aOutSize_byte) const;
 
-            const char* GetLabel() const;
+            bool IsLabeled() const;
+            bool IsNamed  () const;
 
         // Internal
 
             bool Is(const char* aName) const;
-
-            const MetaData* Copy() const;
 
             bool TestFlag(unsigned int aFlag) const;
 
@@ -57,8 +56,6 @@ namespace KMS
         };
 
         extern const MetaData META_DATA_DELETE_OBJECT;
-        extern const MetaData META_DATA_DELETE_OBJECT_AND_DYNAMIC;
-        extern const MetaData META_DATA_DYNAMIC;
 
     }
 }

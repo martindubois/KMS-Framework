@@ -4,11 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Proc/Browser.h
+// Library   KMS-B
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Enum.h>
 #include <KMS/File/Folder.h>
 #include <KMS/HTTP/Server.h>
 
@@ -19,7 +21,7 @@ namespace KMS
 
         class Process;
 
-        class Browser : public Cfg::Configurable
+        class Browser : public DI::Dictionary
         {
 
         public:
@@ -33,6 +35,8 @@ namespace KMS
 
                 QTY
             };
+
+            static const char* TYPE_NAMES[];
 
             Browser();
 
@@ -61,9 +65,10 @@ namespace KMS
 
             void Start(const File::Folder& aFolder, const char* aFile);
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut);
+            void Wait(unsigned int aTimeout_ms);
+
+            // ===== Configurable attribute =================================
+            DI::Enum<Type, TYPE_NAMES> mPrefered;
 
         private:
 
@@ -91,9 +96,6 @@ namespace KMS
             Type mType;
 
             uint64_t mWindow;
-
-            // ===== Configurable attribute =================================
-            Type mPrefered;
 
         };
 

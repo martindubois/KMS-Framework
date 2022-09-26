@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/DI/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
 #include <KMS/Modbus/Slave_Com.h>
@@ -25,6 +26,11 @@
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_COILS            ("Coils"           , "Coils[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::DI::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs"  , "DiscreteInputs[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::DI::MetaData MD_HOLDING_REGISTERS("HoldingRegisters", "HoldingRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::DI::MetaData MD_INPUT_REGISTERS  ("InputRegisters"  , "InputRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
 
 #define MSG_READ_COILS             (1)
 #define MSG_READ_DISCRETE_INPUTS   (2)
@@ -46,7 +52,7 @@ extern "C"
     static void OnCtrlC(int aSignal);
 }
 
-static void AddItem(KMS::Modbus::Simulator::ItemMap * aMap, const char* aV);
+static KMS::DI::Object* CreateItem(const KMS::DI::MetaData* aMD);
 
 static KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn);
 
@@ -71,7 +77,6 @@ namespace KMS
         {
             assert(1 <= aCount);
             assert(NULL != aVector);
-            assert(NULL != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -83,18 +88,19 @@ namespace KMS
                 Slave_Com lSl;
                 Simulator lSi;
 
-                lSl.InitConfigurator(&lC);
-                lSi.InitConfigurator(&lC);
-
-                Dbg::gLog.InitConfigurator(&lC);
-
                 lSi.InitSlave(&lSl);
 
-                lC.Init();
+                lC.AddConfigurable(&lSl);
+                lC.AddConfigurable(&lSi);
+
+                lC.AddConfigurable(&Dbg::gLog);
+
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 sSimulator = &lSi;
 
@@ -114,7 +120,24 @@ namespace KMS
             return lResult;
         }
 
-        Simulator::Simulator() : mSlave(NULL) {}
+        Simulator::Simulator()
+            : DI::Dictionary(NULL)
+            , mCoils           (&MD_COILS)
+            , mDiscreteInputs  (&MD_DISCRETE_INPUTS)
+            , mHoldingRegisters(&MD_HOLDING_REGISTERS)
+            , mInputRegisters  (&MD_INPUT_REGISTERS)
+            , mSlave(NULL)
+        {
+            mCoils           .SetCreator(CreateItem);
+            mDiscreteInputs  .SetCreator(CreateItem);
+            mHoldingRegisters.SetCreator(CreateItem);
+            mInputRegisters  .SetCreator(CreateItem);
+
+            AddEntry(&mCoils);
+            AddEntry(&mDiscreteInputs);
+            AddEntry(&mHoldingRegisters);
+            AddEntry(&mInputRegisters);
+        }
 
         void Simulator::InitSlave(Slave* aSlave)
         {
@@ -167,63 +190,49 @@ namespace KMS
             return lResult;
         }
 
-        // ====== Cfg::Configurable =========================================
-
-        bool Simulator::AddAttribute(const char* aA, const char* aV)
-        {
-            CFG_IF("Coils"           ) { AddItem(&mCoils           , aV); return true; }
-            CFG_IF("DiscreteInputs"  ) { AddItem(&mDiscreteInputs  , aV); return true; }
-            CFG_IF("HoldingRegisters") { AddItem(&mHoldingRegisters, aV); return true; }
-            CFG_IF("InputRegisters"  ) { AddItem(&mInputRegisters  , aV); return true; }
-
-            return Cfg::Configurable::AddAttribute(aA, aV);
-        }
-
-        void Simulator::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Modbus::Simulator =====\n"
-                "Coils\n"
-                "    Clear the coils list\n"
-                "Coils += {Address};{Name}[;{Value}[;{Flags}]]\n"
-                "    Add a coil\n"
-                "DiscreteInputs\n"
-                "    Clear the discrete input list\n"
-                "DiscreteInputs += {Address};{Name}[;{Value}[;{Flags}]]\n"
-                "    Add a discret input\n"
-                "HoldingRegisters\n"
-                "    Clear the holding register list\n"
-                "HoldingRegisters += {Address};{Name}[;{Value}[;{Flags}]]\n"
-                "    Add a holding register\n"
-                "InputRegisters\n"
-                "    Clear the input register list\n"
-                "InputRegisters += {Address};{Name}[;{Value}[;{Flags}]]\n"
-                "    Add an input register\n");
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
-        bool Simulator::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("Coils"           ) { mCoils           .clear(); return true; }
-                CFG_IF("DiscreteInputs"  ) { mDiscreteInputs  .clear(); return true; }
-                CFG_IF("HoldingRegisters") { mHoldingRegisters.clear(); return true; }
-                CFG_IF("InputRegisters"  ) { mInputRegisters  .clear(); return true; }
-            }
-
-            return Cfg::Configurable::SetAttribute(aA, aV);
-        }
-
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Simulator::Item::Item(const char* aN, RegisterValue aV, unsigned int aF) : mFlags(aF), mName(aN), mValue(aV)
+        Simulator::Item::Item(const DI::MetaData* aMD) : DI::Value(aMD), mFlags(0), mValue(0) {}
+
+        // ===== DI::Value ==================================================
+
+        unsigned int Simulator::Item::Get(char* aOut, unsigned int aOutSize_byte) const
         {
+            assert(NULL != aOut);
+
+            // TODO Validate aOutSize_byte
+
+            return sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s;%u;%u", mName.c_str(), mValue, mFlags);
         }
+
+        void Simulator::Item::Set(const char* aIn)
+        {
+            assert(NULL != aIn);
+
+            char lN[64];
+            char lV[64];
+            char lF[64];
+
+            unsigned int               lFlags = 0;
+            KMS::Modbus::RegisterValue lValue = 0;
+
+            switch (sscanf_s(aIn, "%[^;];%[^;];%[^\n\r\t]", lN SizeInfo(lN), lV SizeInfo(lV), lF SizeInfo(lF)))
+            {
+            case 3: lFlags = KMS::Convert::ToUInt32(lF);
+            case 2: lValue = ToRegisterValue(lV);
+            case 1: break;
+
+            default: KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid bit information", aIn);
+            }
+
+            mFlags = lFlags;
+            mName  = lN;
+            mValue = lValue;
+        }
+
+        // ===== DI::Object =================================================
+        Simulator::Item::~Item() {}
 
         // Private
         // //////////////////////////////////////////////////////////////////
@@ -238,16 +247,19 @@ namespace KMS
             {
                 bool lValue = false;
 
-                ItemMap::iterator lIt = mCoils.find(aData->mStartAddr + i);
-                if (mCoils.end() == lIt)
+                const DI::Object* lObject = mCoils[aData->mStartAddr + i];
+                if (NULL == lObject)
                 {
                     TraceUnknown("Read Coil", aData->mStartAddr + i, OFF);
                 }
                 else
                 {
-                    TraceKnown("Read Coil", aData->mStartAddr + i, lIt->second, FLAG_VERBOSE_READ);
+                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    assert(NULL != lItem);
 
-                    lValue = lIt->second.mValue;
+                    TraceKnown("Read Coil", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+
+                    lValue = lItem->mValue;
                 }
 
                 WriteBit(aData->mBuffer, 0, i, lValue);
@@ -264,16 +276,19 @@ namespace KMS
             {
                 bool lValue = false;
 
-                ItemMap::iterator lIt = mDiscreteInputs.find(aData->mStartAddr + i);
-                if (mDiscreteInputs.end() == lIt)
+                const DI::Object* lObject = mDiscreteInputs[aData->mStartAddr + i];
+                if (NULL == lObject)
                 {
                     TraceUnknown("Read Discrete Input", aData->mStartAddr + i, OFF);
                 }
                 else
                 {
-                    TraceKnown("Read Discrete Input", aData->mStartAddr + i, lIt->second, FLAG_VERBOSE_READ);
+                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    assert(NULL != lItem);
 
-                    lValue = lIt->second.mValue;
+                    TraceKnown("Read Discrete Input", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+
+                    lValue = lItem->mValue;
                 }
 
                 WriteBit(aData->mBuffer, 0, i, lValue);
@@ -290,16 +305,19 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                ItemMap::iterator lIt = mHoldingRegisters.find(aData->mStartAddr + i);
-                if (mHoldingRegisters.end() == lIt)
+                const DI::Object* lObject = mHoldingRegisters[aData->mStartAddr + i];
+                if (NULL == lObject)
                 {
                     TraceUnknown("Read Holding Register", aData->mStartAddr + i, 0);
                 }
                 else
                 {
-                    TraceKnown("Read Holding Register", aData->mStartAddr + i, lIt->second, FLAG_VERBOSE_READ);
+                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    assert(NULL != lItem);
 
-                    lValue = lIt->second.mValue;
+                    TraceKnown("Read Holding Register", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+
+                    lValue = lItem->mValue;
                 }
 
                 WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
@@ -316,16 +334,19 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                ItemMap::iterator lIt = mInputRegisters.find(aData->mStartAddr + i);
-                if (mHoldingRegisters.end() == lIt)
+                const DI::Object* lObject = mInputRegisters[aData->mStartAddr + i];
+                if (NULL == lObject)
                 {
                     TraceUnknown("Read Input Register", aData->mStartAddr + i, 0);
                 }
                 else
                 {
-                    TraceKnown("Read Input Register", aData->mStartAddr, lIt->second, FLAG_VERBOSE_READ);
+                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    assert(NULL != lItem);
 
-                    lValue = lIt->second.mValue;
+                    TraceKnown("Read Input Register", aData->mStartAddr, *lItem, FLAG_VERBOSE_READ);
+
+                    lValue = lItem->mValue;
                 }
 
                 WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
@@ -340,8 +361,8 @@ namespace KMS
 
             RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
 
-            ItemMap::iterator lIt = mCoils.find(aData->mStartAddr);
-            if (mCoils.end() == lIt)
+            DI::Object* lObject = mCoils[aData->mStartAddr];
+            if (NULL == lObject)
             {
                 TraceUnknown("Write Single Coil", aData->mStartAddr, lValue);
             }
@@ -350,13 +371,16 @@ namespace KMS
                 bool lBool = ON == lValue;
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
-                if ((0 != lIt->second.mValue) != lBool)
+                Item* lItem = dynamic_cast<Item*>(lObject);
+                assert(NULL != lItem);
+
+                if ((0 != lItem->mValue) != lBool)
                 {
-                    lIt->second.mValue = lBool;
+                    lItem->mValue = lBool;
                     lFlags |= FLAG_VERBOSE_CHANGE;
                 }
 
-                TraceKnown("Write Single Coil", aData->mStartAddr, lIt->second, lFlags);
+                TraceKnown("Write Single Coil", aData->mStartAddr, *lItem, lFlags);
             }
 
             return 0;
@@ -368,8 +392,8 @@ namespace KMS
 
             RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
 
-            ItemMap::iterator lIt = mCoils.find(aData->mStartAddr);
-            if (mCoils.end() == lIt)
+            DI::Object* lObject = mHoldingRegisters[aData->mStartAddr];
+            if (NULL == lObject)
             {
                 TraceUnknown("Write Single Register", aData->mStartAddr, lValue);
             }
@@ -377,13 +401,16 @@ namespace KMS
             {
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
-                if (lIt->second.mValue != lValue)
+                Item* lItem = dynamic_cast<Item*>(lObject);
+                assert(NULL != lItem);
+
+                if (lItem->mValue != lValue)
                 {
-                    lIt->second.mValue = lValue;
+                    lItem->mValue = lValue;
                     lFlags |= FLAG_VERBOSE_CHANGE;
                 }
 
-                TraceKnown("Write Single Register", aData->mStartAddr, lIt->second, lFlags);
+                TraceKnown("Write Single Register", aData->mStartAddr, *lItem, lFlags);
             }
 
             return 0;
@@ -406,34 +433,12 @@ void OnCtrlC(int aSignal)
     sSimulator->Stop();
 }
 
-void AddItem(KMS::Modbus::Simulator::ItemMap* aMap, const char* aV)
-{
-    char lA[64];
-    char lN[64];
-    char lV[64];
-    char lF[64];
-
-    unsigned int               lFlags = 0;
-    KMS::Modbus::RegisterValue lValue = 0;
-
-    switch (sscanf_s(aV, "%[^;];%[^;];%[^;];%[^\n\r\t]", lA SizeInfo(lA), lN SizeInfo(lN), lV SizeInfo(lV), lF SizeInfo(lF)))
-    {
-    case 4: lFlags = KMS::Convert::ToUInt32(lF);
-    case 3: lValue = ToRegisterValue(lV);
-    case 2: break;
-
-    default: KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid bit information", aV);
-    }
-
-    KMS::Modbus::Address lAddr = KMS::Convert::ToUInt16(lA);
-
-    KMS::Modbus::Simulator::Item lItem(lN, lValue, lFlags);
-
-    aMap->insert(KMS::Modbus::Simulator::ItemMap::value_type(lAddr, lItem));
-}
+KMS::DI::Object* CreateItem(const KMS::DI::MetaData* aMD) { return new KMS::Modbus::Simulator::Item(aMD); }
 
 KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn)
 {
+    assert(NULL != aIn);
+    
     if (0 == _stricmp("false", aIn)) { return 0; }
     if (0 == _stricmp("true" , aIn)) { return 1; }
 
@@ -449,7 +454,7 @@ void TraceKnown(const char* aOp, KMS::Modbus::Address aA, const KMS::Modbus::Sim
 
     if (0 != (aItem.mFlags & aFlags))
     {
-        std::cout << aOp << " " << aItem.mName.c_str() << " (" << aA << ") = " << aItem.mValue << std::endl;
+        std::cout << aOp << " " << aItem.GetName() << " (" << aA << ") = " << aItem.mValue << std::endl;
     }
 }
 

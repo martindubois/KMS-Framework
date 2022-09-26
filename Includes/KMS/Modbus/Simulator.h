@@ -12,7 +12,9 @@
 #include <string>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Array_Sparse.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Value.h>
 #include <KMS/Modbus/Slave.h>
 #include <KMS/Msg/IReceiver.h>
 
@@ -21,7 +23,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Simulator : public Cfg::Configurable, public Msg::IReceiver
+        class Simulator : public DI::Dictionary, public Msg::IReceiver
         {
 
         public:
@@ -55,27 +57,27 @@ namespace KMS
             // ===== Msg::IReceiver =============================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
-            // ===== Cfg::Configurable ==========================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aA, const char* aV);
-
         // Internal
 
-            class Item
+            class Item : public DI::Value
             {
 
             public:
 
-                Item(const char* aN, RegisterValue aV, unsigned int aF);
+                Item(const DI::MetaData* aMD);
+
+                // ===== DI::Value ==========================================
+                virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
+                virtual void Set(const char* aIn);
+
+                // ===== DI::Object =========================================
+                virtual ~Item();
 
                 unsigned int  mFlags;
                 std::string   mName;
                 RegisterValue mValue;
 
             };
-
-            typedef std::map<Address, Item> ItemMap;
 
         private:
 
@@ -90,10 +92,10 @@ namespace KMS
             Slave* mSlave;
 
             // ===== Configurable attributes ================================
-            ItemMap mCoils;
-            ItemMap mDiscreteInputs;
-            ItemMap mHoldingRegisters;
-            ItemMap mInputRegisters;
+            DI::Array_Sparse mCoils;
+            DI::Array_Sparse mDiscreteInputs;
+            DI::Array_Sparse mHoldingRegisters;
+            DI::Array_Sparse mInputRegisters;
 
         };
 

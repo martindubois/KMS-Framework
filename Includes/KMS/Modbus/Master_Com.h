@@ -21,6 +21,8 @@ namespace KMS
 
         public:
 
+            Master_Com();
+
             // ===== Master =================================================
             virtual void         Connect();
             virtual void         Disconnect();
@@ -31,9 +33,6 @@ namespace KMS
             virtual unsigned int Request_E(Function aFunction, void* aOut, unsigned int aOutSize_byte);
             virtual void         Request_F(Function aFunction, uint16_t aAddr, uint16_t aCount, const void* aIn, unsigned int aInSize_byte);
             virtual unsigned int Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte);
-
-            // ===== Cfg::Configurable ======================================
-            virtual void InitConfigurator(Cfg::Configurator* aC);
 
         private:
 

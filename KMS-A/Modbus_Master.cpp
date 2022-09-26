@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
 
 #include <KMS/Modbus/Master.h>
 
@@ -16,6 +16,11 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_DEVICE_ADDRESS (BROADCAST)
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_DEVICE_ADDRESS("DeviceAddress", "DeviceAddress = {Address}");
 
 namespace KMS
 {
@@ -125,41 +130,16 @@ namespace KMS
             assert(aAddr == ReadUInt16(lBuffer, 0));
         }
 
-        // ===== Cfg::Configurable ==========================================
-
-        void Master::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Modbus::Link =====\n"
-                "DeviceAddress\n"
-                "    Set the device address to the default value\n"
-                "    Default: 0 (Broadcast)\n"
-                "DeviceAddress = {Addr}\n"
-                "    Device address\n");
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
-        bool Master::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("DeviceAddress") { SetDeviceAddress(DEFAULT_DEVICE_ADDRESS); return true; }
-            }
-            else
-            {
-                CFG_CONVERT("DeviceAddress", SetDeviceAddress, Convert::ToUInt8);
-            }
-
-            return Cfg::Configurable::SetAttribute(aA, aV);
-        }
-
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Master::Master() : mDeviceAddress(DEFAULT_DEVICE_ADDRESS), mLastException(Exception::NO_EXCEPTION) {}
+        Master::Master()
+            : DI::Dictionary(NULL)
+            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS, &MD_DEVICE_ADDRESS)
+            , mLastException(Exception::NO_EXCEPTION)
+        {
+            AddEntry(&mDeviceAddress);
+        }
 
         uint8_t Master::GetDeviceAddress() const { return mDeviceAddress; }
 

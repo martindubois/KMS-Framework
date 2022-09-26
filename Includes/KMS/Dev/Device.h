@@ -18,14 +18,17 @@
 #endif
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/GUID.h>
+#include <KMS/DI/String.h>
+#include <KMS/DI/UInt32.h>
 
 namespace KMS
 {
     namespace Dev
     {
 
-        class Device : public Cfg::Configurable
+        class Device : public DI::Dictionary
         {
 
         public:
@@ -55,10 +58,6 @@ namespace KMS
             unsigned int Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
 
             void Write(const void* aIn, unsigned int aInSize_byte);
-
-            // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aN, const char* aV);
 
             #ifdef _KMS_WINDOWS_
 
@@ -97,20 +96,20 @@ namespace KMS
             const Device& operator = (const Device&);
 
             // ===== Configurable attributes ================================
-            unsigned int mIndex;
-            std::string  mLink;
+            DI::UInt32 mIndex;
+            DI::String mLink;
 
             #ifdef _KMS_WINDOWS_
 
                 static GUID ToGUID(const char* aG);
 
                 HANDLE mHandle;
+                bool   mInterface_Valid;
 
                 // ===== Configurable attributes ============================
-                std::string mHardwareId;
-                GUID        mInterface;
-                bool        mInterface_Valid;
-                std::string mLocation;
+                DI::String mHardwareId;
+                DI::GUID   mInterface;
+                DI::String mLocation;
 
             #endif
 

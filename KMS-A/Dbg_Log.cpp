@@ -11,16 +11,22 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
+#include <KMS/DI/MetaData.h>
 #include <KMS/Environment.h>
 #include <KMS/OS.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Dbg/Log.h>
 
-// Static function declarations
+// Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Dbg::LogFile::Level ToLevel(const char* aIn);
+static const KMS::DI::MetaData MD_CONSOLE_LEVEL("ConsoleLevel", "ConsoleLevel = NOISE | INFO | WARNING | ERROR | NONE");
+static const KMS::DI::MetaData MD_FILE_LEVEL   ("FileLevel"   , "FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
+static const KMS::DI::MetaData MD_FOLDER       ("Folder"      , "Folder = {Path}");
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
 
 namespace KMS
 {
@@ -30,37 +36,36 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Log::Log() : mCounter(0), mEntryLevel(LogFile::Level::LEVEL_NOISE), mProcessId(OS::GetProcessId())
+        Log::Log()
+            : DI::Dictionary(NULL)
+            , mConsoleLevel(LogFile::Level::LEVEL_WARNING, &MD_CONSOLE_LEVEL)
+            , mFileLevel   (LogFile::Level::LEVEL_INFO   , &MD_FILE_LEVEL)
+            , mFolder      ("KMS-Framework"              , &MD_FOLDER)
+            , mCounter(0)
+            , mEntryLevel(LogFile::Level::LEVEL_NOISE)
+            , mProcessId(OS::GetProcessId())
         {
-            ResetConsoleLevel();
-            ResetFileLevel   ();
-            ResetFolder      ();
+            AddEntry(&mConsoleLevel);
+            AddEntry(&mFileLevel);
+            AddEntry(&mFolder);
+
+            CloseLogFiles();
         }
 
         Log::~Log() { CloseLogFiles(); }
 
         bool Log::IsFileEnabled() const { return mEnabled; }
 
-        void Log::ResetConsoleLevel() { SetConsoleLevel(LogFile::Level::LEVEL_WARNING); }
-        void Log::ResetFileLevel   () { SetFileLevel   (LogFile::Level::LEVEL_INFO   ); }
-
-        void Log::ResetFolder()
+        void Log::CloseLogFiles()
         {
-            File::Folder lHome(File::Folder::Id::HOME);
+            for (const FileMap::value_type& lVT : mFiles)
+            {
+                delete lVT.second;
+            }
 
-            SetFolder(File::Folder(lHome, "KMS-Framework"));
-        }
+            mFiles.clear();
 
-        void Log::SetConsoleLevel(LogFile::Level aL) { mConsoleLevel = aL; }
-        void Log::SetFileLevel   (LogFile::Level aL) { mFileLevel    = aL; }
-
-        void Log::SetFolder(const File::Folder& aF)
-        {
-            mFolder = aF;
-
-            mEnabled = mFolder.DoesExist();
-
-            CloseLogFiles();
+            mEnabled = mFolder.Get().DoesExist();
         }
 
         #define IF_FILE    if (mEnabled && (mFileLevel >= mEntryLevel))
@@ -189,7 +194,7 @@ namespace KMS
                 default: assert(false);
                 }
             }
-            }
+        }
 
         void Log::WriteMessage(const char* aMsg)
         {
@@ -230,66 +235,8 @@ namespace KMS
 
         Log gLog;
 
-        // ===== Cfg::Configurables =========================================
-
-        void Log::DisplayHelp(FILE* aOut)
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Dbg::Log =====\n"
-                "ConsoleLevel\n"
-                "    Set the console level to the default value\n"
-                "    Default: WARNING\n"
-                "ConsoleLevel = NONE|ERROR|WARNING|INFO|NOISE\n"
-                "    Set the level\n"
-                "FileLevel\n"
-                "    Set the file level to the default value\n"
-                "    Default: INFO\n"
-                "FileLevel = NONE|ERROR|WARNING|INFO|NOISE\n"
-                "    Set the level\n"
-                "Folder\n"
-                "    Set the folde to the default value\n"
-                "    Default: ~/KMS-Framework\n"
-                "Folder = {Value}\n"
-                "    Set the folder\n");
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
-        bool Log::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("ConsoleLevel") { ResetConsoleLevel(); return true; }
-                CFG_IF("FileLevel"   ) { ResetFileLevel   (); return true; }
-                CFG_IF("Folder"      ) { ResetFolder      (); return true; }
-            }
-            else
-            {
-                char lE[PATH_LENGTH];
-
-                CFG_CONVERT("ConsoleLevel", SetConsoleLevel, ToLevel);
-                CFG_CONVERT("FileLevel"   , SetFileLevel   , ToLevel);
-
-                CFG_EXPAND("Folder", SetFolder);
-            }
-
-            return Cfg::Configurable::SetAttribute(aA, aV);
-        }
-
         // Private
         // //////////////////////////////////////////////////////////////////
-
-        void Log::CloseLogFiles()
-        {
-            for (const FileMap::value_type& lVT : mFiles)
-            {
-                delete lVT.second;
-            }
-
-            mFiles.clear();
-        }
 
         LogFile* Log::FindLogFile()
         {
@@ -314,18 +261,4 @@ namespace KMS
         }
 
     }
-}
-
-// Static function declarations
-// //////////////////////////////////////////////////////////////////////////
-
-KMS::Dbg::LogFile::Level ToLevel(const char* aIn)
-{
-    if (0 == _stricmp("NONE"   , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_NONE   ; }
-    if (0 == _stricmp("ERROR"  , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_ERROR  ; }
-    if (0 == _stricmp("WARNING", aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_WARNING; }
-    if (0 == _stricmp("INFO"   , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_INFO   ; }
-    if (0 == _stricmp("NOISE"  , aIn)) { return KMS::Dbg::LogFile::Level::LEVEL_NOISE  ; }
-
-    KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid level name", aIn);
 }

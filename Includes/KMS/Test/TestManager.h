@@ -4,11 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Test/TestManager.h
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Array.h>
 #include <KMS/Test/Test.h>
 
 namespace KMS
@@ -16,7 +17,7 @@ namespace KMS
     namespace Test
     {
 
-        class TestManager : public Cfg::Configurable
+        class TestManager : public DI::Dictionary
         {
 
         public:
@@ -32,24 +33,27 @@ namespace KMS
 
             int Run();
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aValue);
-            virtual void DisplayHelp(FILE* aOut) const;
-
         // internal
 
-            const Test::TestList* GetTests() const;
+            const Test::TestList* GetTestList() const;
 
         private:
 
             TestManager(const TestManager&);
 
-            const TestManager& operator = (const TestManager&);
+            void AddTest(Test* aTest);
+
+            void UpdateTestList();
+
+            void operator = (const TestManager&);
 
             unsigned int mErrorCount;
 
+            Test::TestList mTestList;
+
             // ===== Configurable attributes ================================
-            Test::TestList mTests;
+            DI::Array mGroups;
+            DI::Array mTests;
 
         };
 

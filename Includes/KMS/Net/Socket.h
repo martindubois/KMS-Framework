@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Socket.h
+// Library   KMS-B
 
 #pragma once
 
@@ -14,9 +15,10 @@
 #include <winsock2.h>
 
 // ===== Includes ========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/NetAddress.h>
+#include <KMS/DI/UInt32.h>
 #include <KMS/File/Binary.h>
-#include <KMS/Net/Address.h>
 #include <KMS/Net/AddressRangeList.h>
 
 namespace KMS
@@ -27,7 +29,7 @@ namespace KMS
         extern void Thread_Startup();
         extern void Thread_Cleanup();
 
-        class Socket : public Cfg::Configurable
+        class Socket : public DI::Dictionary
         {
 
         public:
@@ -78,13 +80,11 @@ namespace KMS
 
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-
             // ===== Configurable attributes ================================
-            AddressRangeList mAllow;
+            DI::Array      mAllowedRanges;
+            DI::NetAddress mLocalAddress;
+            DI::UInt32     mReceiveTimeout_ms;
+            DI::UInt32     mSendTimeout_ms;
 
         // Internal
 
@@ -119,6 +119,8 @@ namespace KMS
 
             void SetOption(int aOptName, DWORD aValue);
 
+            bool IsInAllowedRanges(const Address& aA) const;
+
             void VerifyState(State aS);
 
             void VerifyState_CLOSED   (State aS);
@@ -133,11 +135,6 @@ namespace KMS
             State mState;
 
             Type mType;
-
-            // ===== Configurable attributes ================================
-            Address      mLocalAddress;
-            unsigned int mReceiveTimeout_ms;
-            unsigned int mSendTimeout_ms;
 
         };
 

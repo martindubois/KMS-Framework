@@ -20,6 +20,10 @@ namespace KMS
 
         UInt32::UInt32(uint32_t aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
 
+        void UInt32::operator = (uint32_t aIn) { mInternal = aIn; }
+
+        UInt32::operator uint32_t () const { return mInternal; }
+
         // ===== Value ======================================================
 
         unsigned int UInt32::Get(char* aOut, unsigned int aOutSize_byte) const

@@ -18,7 +18,19 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        DI::Object* String::Create(const MetaData* aMD) { return new String("", aMD); }
+
         String::String(const char* aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn) {}
+
+        void String::operator = (const char* aIn) { mInternal = aIn; }
+
+        bool String::operator == (const char* aIn) const { return mInternal == aIn; }
+
+        String::operator const char* () const { return mInternal.c_str(); }
+
+        const char* String::Get() const { return mInternal.c_str(); }
+
+        unsigned int String::GetLength() const { return static_cast<unsigned int>(mInternal.size()); }
 
         // ===== Value ======================================================
 

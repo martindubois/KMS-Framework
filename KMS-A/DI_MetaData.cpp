@@ -23,16 +23,12 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const MetaData META_DATA_DELETE_OBJECT            (NULL, NULL, MetaData::FLAG_DELETE_OBJECT);
-        const MetaData META_DATA_DELETE_OBJECT_AND_DYNAMIC(NULL, NULL, MetaData::FLAG_DELETE_OBJECT | MetaData::FLAG_DYNAMIC);
-        const MetaData META_DATA_DYNAMIC                  (NULL, NULL, MetaData::FLAG_DYNAMIC);
+        const MetaData META_DATA_DELETE_OBJECT(NULL, NULL, MetaData::FLAG_DELETE_OBJECT);
 
-        const unsigned int MetaData::FLAG_DELETE_OBJECT = 0x00000001;
-        const unsigned int MetaData::FLAG_DYNAMIC       = 0x00000002;
-
-        const unsigned int MetaData::FLAG_COPY_LABEL       = 0x00000010;
-        const unsigned int MetaData::FLAG_COPY_NAME        = 0x00000020;
-        const unsigned int MetaData::FLAG_DELETE_META_DATA = 0x00000040;
+        const unsigned int MetaData::FLAG_COPY_LABEL       = 0x00000001;
+        const unsigned int MetaData::FLAG_COPY_NAME        = 0x00000002;
+        const unsigned int MetaData::FLAG_DELETE_META_DATA = 0x00000004;
+        const unsigned int MetaData::FLAG_DELETE_OBJECT    = 0x00000008;
 
         MetaData::MetaData(const char* aName, const char* aLabel, unsigned int aFlags) : mFlags(aFlags), mLabel(aLabel), mName(aName)
         {
@@ -60,6 +56,9 @@ namespace KMS
             }
         }
 
+        const char* MetaData::GetLabel() const { return mLabel; }
+        const char* MetaData::GetName () const { return mName ; }
+
         unsigned int MetaData::GetName(char* aOut, unsigned int aOutSize_byte) const
         {
             if (NULL == mName)
@@ -76,6 +75,9 @@ namespace KMS
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mName);
             return lResult_byte;
         }
+
+        bool MetaData::IsLabeled() const { return NULL != mLabel; }
+        bool MetaData::IsNamed  () const { return NULL != mName ; }
 
         // Internal
         // //////////////////////////////////////////////////////////////////

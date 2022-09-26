@@ -9,6 +9,9 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/String.h>
+#include <KMS/DI/UInt16.h>
 #include <KMS/Convert.h>
 #include <KMS/Modbus/Master_Com.h>
 
@@ -19,12 +22,21 @@
 
 #define CONFIG_FILE ("KMS-ModbusTool.cfg")
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_COILS            ("Coils"           , "Coils[{Name}] = {Address}");
+static const KMS::DI::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs"  , "DiscreteInputs[{Name}] = {Address}");
+static const KMS::DI::MetaData MD_HOLDING_REGISTERS("HoldingRegisters", "HoldingRegisters[{Name}] = {Address}");
+static const KMS::DI::MetaData MD_INPUT_REGISTERS  ("InputRegisters"  , "InputRegisters[{Name}] = {Address}");
+static const KMS::DI::MetaData MD_OPERATIONS       ("Operations"      , "Operations[{Name}] = {Address}");
+
+static const unsigned int FLAGS = KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static uint16_t ToAddress(const KMS::Modbus::Tool::AddressMap& aMap, const char* aName);
-
-static uint16_t ToNameAndAddress(const char* aIn, char* aName, unsigned int aNameSize_byte);
+static uint16_t ToAddress(const KMS::DI::Array& aMap, const char* aName);
 
 namespace KMS
 {
@@ -39,7 +51,6 @@ namespace KMS
         {
             assert(1 <= aCount);
             assert(NULL != aVector);
-            assert(NULL != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -49,18 +60,19 @@ namespace KMS
                 KMS::Modbus::Master_Com lM;
                 KMS::Modbus::Tool       lT;
 
-                lM.InitConfigurator(&lC);
-                lT.InitConfigurator(&lC);
+                lC.AddConfigurable(&lM);
+                lC.AddConfigurable(&lT);
 
-                Dbg::gLog.InitConfigurator(&lC);
+                lC.AddConfigurable(&Dbg::gLog);
 
                 lT.InitMaster(&lM);
 
-                lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 lResult = lT.Run();
             }
@@ -69,16 +81,36 @@ namespace KMS
             return lResult;
         }
 
-        Tool::Tool() : mMaster(NULL) {}
+        Tool::Tool()
+            : DI::Dictionary(NULL)
+            , mCoils           (&MD_COILS)
+            , mDiscreteInputs  (&MD_DISCRETE_INPUTS)
+            , mHoldingRegisters(&MD_HOLDING_REGISTERS)
+            , mInputRegisters  (&MD_INPUT_REGISTERS)
+            , mOperations      (&MD_OPERATIONS)
+            , mMaster(NULL)
+        {
+            mCoils           .SetCreator(DI::UInt16::Create);
+            mDiscreteInputs  .SetCreator(DI::UInt16::Create);
+            mHoldingRegisters.SetCreator(DI::UInt16::Create);
+            mInputRegisters  .SetCreator(DI::UInt16::Create);
+            mOperations      .SetCreator(DI::String::Create);
+
+            AddEntry(&mCoils);
+            AddEntry(&mDiscreteInputs);
+            AddEntry(&mHoldingRegisters);
+            AddEntry(&mInputRegisters);
+            AddEntry(&mOperations);
+        }
 
         void Tool::InitMaster(Master* aMaster) { assert(NULL != aMaster); mMaster = aMaster; }
 
-        void Tool::AddCoil           (const char* aN, uint16_t aA) { assert(NULL != aN); mCoils           .insert(AddressMap::value_type(aN, aA)); }
-        void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { assert(NULL != aN); mDiscreteInputs  .insert(AddressMap::value_type(aN, aA)); }
-        void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { assert(NULL != aN); mHoldingRegisters.insert(AddressMap::value_type(aN, aA)); }
-        void Tool::AddInputRegister  (const char* aN, uint16_t aA) { assert(NULL != aN); mInputRegisters  .insert(AddressMap::value_type(aN, aA)); }
+        void Tool::AddCoil           (const char* aN, uint16_t aA) { mCoils           .AddEntry(new DI::UInt16(aA, new DI::MetaData(aN, NULL, FLAGS))); }
+        void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(new DI::UInt16(aA, new DI::MetaData(aN, NULL, FLAGS))); }
+        void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { mHoldingRegisters.AddEntry(new DI::UInt16(aA, new DI::MetaData(aN, NULL, FLAGS))); }
+        void Tool::AddInputRegister  (const char* aN, uint16_t aA) { mInputRegisters  .AddEntry(new DI::UInt16(aA, new DI::MetaData(aN, NULL, FLAGS))); }
 
-        void Tool::AddOperation(const char* aO) { assert(NULL != aO); mOperations.push_back(aO); }
+        void Tool::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO, &DI::META_DATA_DELETE_OBJECT)); }
 
         void Tool::Connect   () { assert(NULL != mMaster); mMaster->Connect   (); }
         void Tool::Disconnect() { assert(NULL != mMaster); mMaster->Disconnect(); }
@@ -89,28 +121,54 @@ namespace KMS
 
             assert(NULL != mMaster);
 
+            const DI::UInt16* lAddr;
+
             fprintf(aOut, "Coils\n");
-            for (AddressMap::value_type& lP : mCoils)
+            const DI::Array::Internal& lInternalC = mCoils.GetInternal();
+            for (const DI::Object* lObj : lInternalC)
             {
-                fprintf(aOut, "    %s\t(%u)\t%s\n", lP.first.c_str(), lP.second, mMaster->ReadCoil(lP.second) ? "true" : "false");
+                assert(NULL != lObj);
+
+                lAddr = dynamic_cast<const DI::UInt16*>(lObj);
+                assert(NULL != lAddr);
+
+                fprintf(aOut, "    %s\t(%u)\t%s\n", lAddr->GetName(), lAddr->Get(), mMaster->ReadCoil(*lAddr) ? "true" : "false");
             }
 
             fprintf(aOut, "Discrete inputs\n");
-            for (AddressMap::value_type& lP : mDiscreteInputs)
+            const DI::Array::Internal& lInternalDI = mDiscreteInputs.GetInternal();
+            for (const DI::Object* lObj : lInternalDI)
             {
-                fprintf(aOut, "    %s\t(%u)\t%s\n", lP.first.c_str(), lP.second, mMaster->ReadDiscreteInput(lP.second) ? "true" : "false");
+                assert(NULL != lObj);
+
+                lAddr = dynamic_cast<const DI::UInt16*>(lObj);
+                assert(NULL != lAddr);
+
+                fprintf(aOut, "    %s\t(%u)\t%s\n", lAddr->GetName(), lAddr->Get(), mMaster->ReadDiscreteInput(*lAddr) ? "true" : "false");
             }
 
             fprintf(aOut, "Holding registers\n");
-            for (AddressMap::value_type& lP : mHoldingRegisters)
+            const DI::Array::Internal& lInternalHR = mHoldingRegisters.GetInternal();
+            for (const DI::Object* lObj : lInternalHR)
             {
-                fprintf(aOut, "    %s\t(%u)\t%u\n", lP.first.c_str(), lP.second, mMaster->ReadHoldingRegister(lP.second));
+                assert(NULL != lObj);
+
+                lAddr = dynamic_cast<const DI::UInt16*>(lObj);
+                assert(NULL != lAddr);
+
+                fprintf(aOut, "    %s\t(%u)\t%u\n", lAddr->GetName(), lAddr->Get(), mMaster->ReadHoldingRegister(*lAddr));
             }
 
             fprintf(aOut, "Input registers\n");
-            for (AddressMap::value_type& lP : mInputRegisters)
+            const DI::Array::Internal& lInternalIR = mInputRegisters.GetInternal();
+            for (const DI::Object* lObj : lInternalIR)
             {
-                fprintf(aOut, "    %s\t(%u)\t%u\n", lP.first.c_str(), lP.second, mMaster->ReadInputRegister(lP.second));
+                assert(NULL != lObj);
+
+                lAddr = dynamic_cast<const DI::UInt16*>(lObj);
+                assert(NULL != lAddr);
+
+                fprintf(aOut, "    %s\t(%u)\t%u\n", lAddr->GetName(), lAddr->Get(), mMaster->ReadInputRegister(*lAddr));
             }
         }
 
@@ -169,11 +227,17 @@ namespace KMS
         {
             Connect();
 
-            for (const std::string& lO : mOperations)
+            const DI::Array::Internal& lInternal = mOperations.GetInternal();
+            for (const DI::Object* lObj : lInternal)
             {
+                assert(NULL != lObj);
+
+                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lString);
+
                 try
                 {
-                    ExecuteOperation(lO.c_str());
+                    ExecuteOperation(*lString);
                 }
                 KMS_CATCH
             }
@@ -197,82 +261,29 @@ namespace KMS
 
         void Tool::WriteSingleRegister(const char* aName, uint16_t aValue) { assert(NULL != mMaster); mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue); }
 
-        // ===== Cfg::Configurable ==========================================
-
-        bool Tool::AddAttribute(const char* aA, const char* aV)
-        {
-            char lName[NAME_LENGTH];
-
-            CFG_IF("Coils"           ) { AddCoil           (lName, ToNameAndAddress(aV, lName, sizeof(lName))); return true; }
-            CFG_IF("DiscreteInputs"  ) { AddDiscreteInput  (lName, ToNameAndAddress(aV, lName, sizeof(lName))); return true; }
-            CFG_IF("HoldingRegisters") { AddHoldingRegister(lName, ToNameAndAddress(aV, lName, sizeof(lName))); return true; }
-            CFG_IF("InputRegisters"  ) { AddInputRegister  (lName, ToNameAndAddress(aV, lName, sizeof(lName))); return true; }
-
-            CFG_CALL("Operations", AddOperation);
-
-            return Cfg::Configurable::AddAttribute(aA, aV);
-        }
-
-        void Tool::DisplayHelp(FILE* aOut) const
-        {
-            fprintf(aOut,
-                "===== KMS::Modbus::Tool =====\n"
-                "Coils += {Name}:{Addr}\n"
-                "    Associate a name to and address\n"
-                "DiscreteInputs += {Name}:{Addr}\n"
-                "    Associate a name to and address\n"
-                "HoldingRegisters += {Name}:{Addr}\n"
-                "    Associate a name to and address\n"
-                "InputRegisters += {Name}:{Addr}\n"
-                "    Associate a name to and address\n"
-                "Operations += {Operation} {Args...}\n"
-                "    Operation to execute\n");
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
     }
 }
 
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-uint16_t ToAddress(const KMS::Modbus::Tool::AddressMap& aMap, const char* aName)
+uint16_t ToAddress(const KMS::DI::Array& aMap, const char* aName)
 {
     assert(NULL != aName);
 
     uint16_t lResult;
 
-    KMS::Modbus::Tool::AddressMap::const_iterator lIt = aMap.find(aName);
-    if (aMap.end() == lIt)
+    const KMS::DI::Object* lObject = aMap[aName];
+    if (NULL == lObject)
     {
         lResult = KMS::Convert::ToUInt16(aName);
     }
     else
     {
-        lResult = lIt->second;
-    }
+        const KMS::DI::UInt16* lAddr = dynamic_cast<const KMS::DI::UInt16*>(lObject);
+        assert(NULL != lAddr);
 
-    return lResult;
-}
-
-uint16_t ToNameAndAddress(const char* aIn, char* aName, unsigned int aNameSize_byte)
-{
-    assert(NULL != aIn);
-    assert(NULL != aName);
-    assert(0 < aNameSize_byte);
-
-    unsigned int lResult;
-
-    if (   (2 != sscanf_s(aIn, "%[^;];0x%x", aName SizeInfoV(aNameSize_byte), &lResult))
-        && (2 != sscanf_s(aIn, "%[^;];%u"  , aName SizeInfoV(aNameSize_byte), &lResult)))
-    {
-        KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid Modbus name and address pair", aIn);
-    }
-
-    if (0xffff < lResult)
-    {
-        KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid Modbus address", lResult);
+        lResult = *lAddr;
     }
 
     return lResult;

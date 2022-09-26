@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
 
 #include <KMS/Dev/Device.h>
 
@@ -16,6 +16,15 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_INDEX (0)
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_INDEX      ("Index"    , "Index = {Numeber}");
+static const KMS::DI::MetaData MD_INTERFACE  ("Interface", "Interface = {GUID}");
+static const KMS::DI::MetaData MD_LINK       ("Link"     , "Link = {Link}");
+static const KMS::DI::MetaData MD_HARDWARE_ID("Link"     , "HardwareId = {Id}");
+static const KMS::DI::MetaData MD_LOCATION   ("Location" , "Location = {Location}");
 
 namespace KMS
 {
@@ -30,12 +39,24 @@ namespace KMS
         const unsigned int Device::FLAG_WRITE_ACCESS = 0x00000004;
 
         Device::Device()
-            : mIndex(DEFAULT_INDEX)
+            : DI::Dictionary(NULL)
+            , mIndex(DEFAULT_INDEX, &MD_INDEX)
+            , mLink("", &MD_LINK)
             #ifdef _KMS_WINDOWS_
+                , mHardwareId("", &MD_HARDWARE_ID)
+                , mInterface(&MD_INTERFACE)
+                , mLocation("", &MD_LOCATION)
                 , mHandle(INVALID_HANDLE_VALUE)
             #endif
         {
+            AddEntry(&mIndex);
+            AddEntry(&mLink);
+
             #ifdef _KMS_WINDOWS_
+                AddEntry(&mHardwareId);
+                AddEntry(&mInterface);
+                AddEntry(&mLocation);
+
                 ResetInterface();
             #endif
         }
@@ -50,72 +71,6 @@ namespace KMS
 
         void Device::SetIndex(unsigned int aI) { mIndex = aI; }
         void Device::SetLink (const char * aL) { assert(NULL != aL); mLink = aL; }
-
-        // ===== Cfg::Configurable ==========================================
-
-        void Device::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Dev::Device =====\n"
-                "Index\n"
-                "    Set the index to the default value\n"
-                "    Default: %u\n"
-                "Index = {Value}\n"
-                "    Device index\n"
-                "Link\n"
-                "    Clear the link\n"
-                "Link = {Value}\n"
-                "    Connection link\n",
-                DEFAULT_INDEX);
-
-            #ifdef _KMS_WINDOWS_
-                fprintf(aOut,
-                    "HardwareId\n"
-                    "    Clear the hardware id\n"
-                    "HardwareId = {Value}\n"
-                    "    Hardware indentifiant\n"
-                    "Interface\n"
-                    "    Clear the interface"
-                    "Interface = {GUID}\n"
-                    "    Interface GUID\n"
-                    "Location\n"
-                    "    Clear the location\n"
-                    "Location = {Value}\n"
-                    "    Device location\n");
-            #endif
-        }
-
-        bool Device::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("Index") { SetIndex(DEFAULT_INDEX); return true; }
-                CFG_IF("Link" ) { mLink.clear(); return true; }
-
-                #ifdef _KMS_WINDOWS_
-                    CFG_IF("HardwareId") { mHardwareId.clear(); return true; }
-                    CFG_IF("Interface" ) { ResetInterface(); return true; }
-                    CFG_IF("Location"  ) { mLocation.clear(); return true; }
-                #endif
-            }
-            else
-            {
-                CFG_CONVERT("Index", SetIndex, Convert::ToUInt32);
-
-                CFG_CALL("Link", SetLink);
-
-                #ifdef _KMS_WINDOWS_
-                    CFG_CALL("HardwareId", SetHardwareId);
-                    CFG_CALL("Location"  , SetLocation  );
-
-                    CFG_CONVERT("Interface", SetInterface, ToGUID);
-                #endif
-            }
-
-            return Cfg::Configurable::SetAttribute(aA, aV);
-        }
 
         // Protected
         // //////////////////////////////////////////////////////////////////

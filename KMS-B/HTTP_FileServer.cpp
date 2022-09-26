@@ -37,6 +37,9 @@
 
 #define MSG_ON_REQUEST (1)
 
+static const KMS::DI::MetaData MD_ROOT   ("Root"   , "Root = {Path}");
+static const KMS::DI::MetaData MD_VERBOSE("Verbose", "Verbose = false | true");
+
 static const KMS::DI::MetaData MD_CONTENT_DISPOSITION("content-disposition", NULL);
 static const KMS::DI::MetaData MD_CONTENT_LENGTH     ("content-length"     , NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
 static const KMS::DI::MetaData MD_CONTENT_TYPE       ("content-type"       , NULL);
@@ -62,36 +65,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader += const_cast<DI::String*>(&APPLICATION_JAVASCRIPT);
+            aRequest->mResponseHeader.AddEntry(&APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader += const_cast<DI::String*>(&IMAGE_X_ICON);
+            aRequest->mResponseHeader.AddEntry(&IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_CSS);
+            aRequest->mResponseHeader.AddEntry(&TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_HTML);
+            aRequest->mResponseHeader.AddEntry(&TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader += const_cast<DI::String*>(&INLINE);
-            aRequest->mResponseHeader += const_cast<DI::String*>(&TEXT_PLAIN);
+            aRequest->mResponseHeader.AddEntry(&INLINE);
+            aRequest->mResponseHeader.AddEntry(&TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -112,16 +115,17 @@ namespace KMS
 
                 lS.mOnRequest = lFS.ON_REQUEST;
 
-                lFS.InitConfigurator(&lC);
-                lS.mSocket.InitConfigurator(&lC);
+                lC.AddConfigurable(&lFS);
+                lC.AddConfigurable(&lS.mSocket);
 
-                Dbg::gLog.InitConfigurator(&lC);
+                lC.AddConfigurable(&Dbg::gLog);
 
-                lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 lS.mThread.Start();
 
@@ -142,8 +146,15 @@ namespace KMS
             return lResult;
         }
 
-        FileServer::FileServer() : ON_REQUEST(this, MSG_ON_REQUEST), mRoot(DEFAULT_ROOT), mVerbose(false)
+        FileServer::FileServer()
+            : DI::Dictionary(NULL)
+            , ON_REQUEST(this, MSG_ON_REQUEST)
+            , mRoot   (DEFAULT_ROOT, &MD_ROOT)
+            , mVerbose(false       , &MD_VERBOSE)
         {
+            AddEntry(&mRoot);
+            AddEntry(&mVerbose);
+
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
             SetFileType("html", FileType_Text_HTML);
@@ -210,7 +221,7 @@ namespace KMS
                 return;
             }
 
-            if (!mRoot.DoesFileExist(lPath + 1))
+            if (!mRoot.Get().DoesFileExist(lPath + 1))
             {
                 aR->SetResult(Request::Result::NOT_FOUND);
                 return;
@@ -222,48 +233,9 @@ namespace KMS
             assert(NULL != lFile);
 
             DI::UInt32* lValue = new DI::UInt32(lFile->GetSize(), &MD_CONTENT_LENGTH);
-            aR->mResponseHeader += lValue;
+            aR->mResponseHeader.AddEntry(lValue);
 
             aR->SetFile(lFile);
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        bool FileServer::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("Root") { SetRoot(DEFAULT_ROOT); return true; }
-
-                CFG_IF("Verbose") { SetVerbose(); return true; }
-            }
-            else
-            {
-                char lE[LINE_LENGTH];
-
-                CFG_IF("Root") { Env::Expand(aV, lE, sizeof(lE)); SetRoot(File::Folder(lE)); return true; }
-
-                CFG_CONVERT("Verbose", SetVerbose, Convert::ToBool);
-            }
-
-            return Configurable::SetAttribute(aA, aV);
-        }
-
-        void FileServer::DisplayHelp(FILE* aOut) const
-        {
-            fprintf(aOut,
-                "===== KMS::HTTP::FileServer =====\n"
-                "Root\n"
-                "    Default: %s\n"
-                "Root = {Path}\n"
-                "    Set the root\n"
-                "Verbose\n"
-                "    Set the verbose flag\n"
-                "Verbose = {Boolean}\n"
-                "    Set or clear the verbose flag\n",
-                DEFAULT_ROOT);
-
-            Configurable::DisplayHelp(aOut);
         }
 
         // ===== Msg::IReceiver =============================================

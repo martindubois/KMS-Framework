@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/MetaData.h>
+#include <KMS/DI/NetAddressRange.h>
 #include <KMS/DI/String.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/Msg/IReceiver.h>
@@ -51,7 +52,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     KMS::HTTP::ReactApp lRA;
     TestApp lTA;
 
-    lRA.mServer.mSocket.mAllow.Add("127.0.0.1");
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1", &KMS::DI::META_DATA_DELETE_OBJECT));
 
     lRA.AddRoute("/");
 
@@ -106,9 +107,9 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         VERSION.GetString(lVersion, sizeof(lVersion));
 
-        lRequest->mResponseHeader += const_cast<KMS::DI::String*>(&ACCESS_CONTROL_ALLOW_ORIGIN);
+        lRequest->mResponseHeader.AddEntry(&ACCESS_CONTROL_ALLOW_ORIGIN);
 
-        lRequest->mResponseData += new KMS::DI::String(lVersion, &MD_VERSION);
+        lRequest->mResponseData.AddEntry(new KMS::DI::String(lVersion, &MD_VERSION));
         break;
 
     default:

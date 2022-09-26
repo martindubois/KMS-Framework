@@ -37,9 +37,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Server::Server()
+        Server::Server() : mResponseHeader(NULL)
         {
-            mResponseHeader += const_cast<DI::String*>(&SERVER);
+            mResponseHeader.AddEntry(&SERVER);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }

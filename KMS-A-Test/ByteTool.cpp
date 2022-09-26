@@ -15,24 +15,25 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
     static const char* VECTOR[] =
     {
         "Source=KMS-A-Test" SLASH "ByteTool.cpp",
-        "Destination=KMS-A-Test" SLASH "ByteTool.cpp.bak",
-        "ByteTable[0]=0",
         "DoesNotExist=Ignored",
         "DoesNotExist+=Ignored",
+        "OptionalConfigFile+=DoesNotExist.cfg",
         "DoesNotExist[0]=Ignored",
+        "DoesNotExist",
+        "SaveConfig=Test.txt",
     };
 
     KMS::ByteTool          lBT;
     KMS::Cfg::Configurator lC;
 
-    lBT.InitConfigurator(&lC);
+    lC.AddConfigurable(&lBT);
 
-    lC.Init();
+    lC.Help();
 
-    KMS_TEST_EXPECTED_WARNINGS(3);
-    lC.ParseArguments(6, VECTOR);
+    KMS_TEST_EXPECTED_WARNINGS(4);
+    lC.ParseArguments(7, VECTOR);
 
-    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 3U);
+    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 4U);
 
     KMS_TEST_COMPARE(lBT.Run(), 0);
 
@@ -40,36 +41,6 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(NULL != lH);
 
     KMS_TEST_COMPARE(lH[0], 0U);
-}
-
-KMS_TEST(ByteTool_Fail, "ByteTool_Fail", "Auto", sTest_Fail)
-{
-    static const char* VECTOR[] =
-    {
-        "Source=KMS-A-Test" SLASH "ByteTool.cpp",
-        "Destination=KMS-A-Test" SLASH "ByteTool.cpp.bak",
-        "ByteTable[0]=0",
-        "DoesNotExist=Ignored",
-        "DoesNotExist+=Ignored",
-        "DoesNotExist[0]=Ignored",
-        "ByteTable[256]=0",
-    };
-
-    KMS::ByteTool          lBT;
-    KMS::Cfg::Configurator lC;
-
-    lBT.InitConfigurator(&lC);
-
-    lC.Init();
-
-    try
-    {
-        KMS_TEST_EXPECTED_WARNINGS(3);
-        KMS_TEST_EXPECTED_EXCEPTION();
-        lC.ParseArguments(7, VECTOR);
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(CONVERT_TYPE);
 }
 
 KMS_TEST(ByteTool_Main, "ByteTool_Main", "Auto", sTest_Main)

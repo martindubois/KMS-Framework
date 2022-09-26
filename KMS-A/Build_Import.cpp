@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/DI/MetaData.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
@@ -17,6 +18,25 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define CONFIG_FILE ("KMS-Import.cfg")
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_DEPENDENCIES       ("Dependencies"     , "Dependencies += {Product};{Version}");
+static const KMS::DI::MetaData MD_OS_INDEPENDENT_DEPS("OSIndependentDeps", "OSIndependentDeps += {Product};{Version}");
+static const KMS::DI::MetaData MD_REPOSITORIES       ("Repositories"     , "Repositories += {Path}");
+
+#ifdef _KMS_DARWIN_
+    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("DarwinDependencies", "DarwinDependencies += {Product};{Version}");
+#endif
+
+#ifdef _KMS_LINUX_
+    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("LinuxDependencies", "LinuxDependencies += {Product};{Version}");
+#endif
+
+#ifdef _KMS_WINDOWS_
+    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("WindowsDependencies", "WindowsDependencies += {Product};{Version}");
+#endif
 
 namespace KMS
 {
@@ -39,14 +59,15 @@ namespace KMS
                 KMS::Build::Import     lI;
                 KMS::Cfg::Configurator lC;
 
-                lI.InitConfigurator(&lC);
+                lC.AddConfigurable(&lI);
 
-                Dbg::gLog.InitConfigurator(&lC);
+                lC.AddConfigurable(&Dbg::gLog);
 
-                lC.Init();
                 lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 lResult = lI.Run();
             }
@@ -55,8 +76,24 @@ namespace KMS
             return lResult;
         }
 
-        Import::Import() : mImport("Import")
+        Import::Import()
+            : DI::Dictionary(NULL)
+            , mDependencies     (&MD_DEPENDENCIES)
+            , mOSIndependentDeps(&MD_OS_INDEPENDENT_DEPS)
+            , mRepositories     (&MD_REPOSITORIES)
+            , mOSDependencies(&mDependencies, &MD_OS_DEPENDENCIES)
+            , mImport("Import")
         {
+            mDependencies     .SetCreator(DI::String::Create);
+            mOSIndependentDeps.SetCreator(DI::String::Create);
+            mRepositories     .SetCreator(DI::Folder::Create);
+
+            AddEntry(&mDependencies);
+            AddEntry(&mOSIndependentDeps);
+            AddEntry(&mRepositories);
+
+            AddEntry(&mOSDependencies);
+
             #ifdef _KMS_LINUX_
                 File::Folder lExport(File::Folder::Id::HOME, "Export");
             #endif
@@ -65,14 +102,14 @@ namespace KMS
                 File::Folder lExport("K:\\Export");
             #endif
 
-            mRepositories.push_back(lExport);
+            mRepositories.AddEntry(new DI::Folder(lExport, &DI::META_DATA_DELETE_OBJECT));
         }
 
         Import::~Import() {}
 
-        void Import::AddDependency       (const char* aD) { mDependencies     .insert(aD); }
-        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.insert(aD); }
-        void Import::AddRepository       (const char* aR) { mRepositories.push_back(File::Folder(aR)); }
+        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD, &DI::META_DATA_DELETE_OBJECT)); }
+        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD, &DI::META_DATA_DELETE_OBJECT)); }
+        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR, &DI::META_DATA_DELETE_OBJECT)); }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)
         {
@@ -92,11 +129,17 @@ namespace KMS
 
             lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
 
-            for (File::Folder& lR : mRepositories)
+            const DI::Array::Internal& lInternal = mRepositories.GetInternal();
+            for (DI::Object* lObj : lInternal)
             {
-                if (lR.DoesFolderExist(lProduct))
+                assert(NULL != lObj);
+
+                const DI::Folder* lR = dynamic_cast<const DI::Folder*>(lObj);
+                assert(NULL != lR);
+
+                if (lR->Get().DoesFolderExist(lProduct))
                 {
-                    File::Folder lProductFolder(lR, lProduct);
+                    File::Folder lProductFolder(*lR, lProduct);
 
                     if (lProductFolder.DoesFileExist(lPackage))
                     {
@@ -118,83 +161,29 @@ namespace KMS
                 mImport.Create();
             }
 
-            for (std::string lD : mDependencies)
+            const DI::Array::Internal& lInternalD = mDependencies.GetInternal();
+            for (DI::Object* lObj : lInternalD)
             {
-                ImportDependency(lD.c_str(), false);
+                assert(NULL != lObj);
+
+                const DI::String* lD = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lD);
+
+                ImportDependency(*lD, false);
             }
 
-            for (std::string lD : mOSIndependentDeps)
+            const DI::Array::Internal& lInternalO = mOSIndependentDeps.GetInternal();
+            for (DI::Object* lObj : lInternalO)
             {
-                ImportDependency(lD.c_str(), true);
+                assert(NULL != lObj);
+
+                const DI::String* lD = dynamic_cast<const DI::String*>(lObj);
+                assert(NULL != lD);
+
+                ImportDependency(*lD, true);
             }
 
             return 0;
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        bool Import::AddAttribute(const char* aA, const char* aV)
-        {
-            assert(NULL != aA);
-
-            CFG_CALL("Dependencies"     , AddDependency       );
-            CFG_CALL("OSIndependentDeps", AddOSIndependentDeps);
-            CFG_CALL("Repositories"     , AddRepository       );
-
-            #ifdef _KMS_DARWIN_
-                CFG_CALL("DarwinDependencies", AddDependency);
-                CFG_CALL("DarwinRepositories", AddRepository);
-            #endif
-
-            #ifdef _KMS_LINUX_
-                CFG_CALL("LinuxDependencies", AddDependency);
-                CFG_CALL("LinuxRepositories", AddRepository);
-            #endif
-
-            #ifdef _KMS_WINDOWS_
-                CFG_CALL("WindowsDependencies", AddDependency);
-                CFG_CALL("WindowsRepositories", AddRepository);
-            #endif
-
-            return Configurable::AddAttribute(aA, aV);
-        }
-
-        void Import::DisplayHelp(FILE* aOut) const
-        {
-            fprintf(aOut,
-                "===== KMS::Build::Import =====\n"
-                "Dependencies += {Product};{Version}\n"
-                "    Add a dependency\n"
-                "OSIndependentDeps += {Product};{Version}\n"
-                "    Add an OS independent dependency\n"
-                "Repositories += {Path}\n"
-                "    Add a repository\n");
-
-            #ifdef _KMS_DARWIN_
-                fprintf(aOut,
-                    "DarawinDependencies += {Product};{Version}\n"
-                    "    See Dependencies\n"
-                    "DarwinRepositories += {Path}\n"
-                    "    See repositories\n");
-            #endif
-
-            #ifdef _KMS_LINUX_
-                fprintf(aOut,
-                    "LinuxDependencies += {Product};{Version}\n"
-                    "    See Dependencies\n"
-                    "LinuxRepositories += {Path}\n"
-                    "    See repositories\n");
-            #endif
-
-            #ifdef _KMS_WINDOWS_
-                fprintf(aOut,
-                    "WindowsDependencies += {Product};{Version}\n"
-                    "    See Dependencies\n"
-                    "WindowsRepositories += {Path}\n"
-                    "    See repositories\n");
-            #endif
-
-            Configurable::DisplayHelp(aOut);
         }
 
     }

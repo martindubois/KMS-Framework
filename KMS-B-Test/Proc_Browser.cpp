@@ -61,16 +61,10 @@ KMS_TEST(Proc_Browser_Config, "Proc_Browser_Config", "Auto", sTest_Config)
 {
     KMS::Proc::Browser lB;
 
-    KMS_TEST_ASSERT(lB.SetAttribute("Prefered", NULL));
-
-    KMS_TEST_ASSERT(lB.SetAttribute("Prefered", "CHROME"));
-    KMS_TEST_ASSERT(lB.SetAttribute("Prefered", "DEFAULT"));
-    KMS_TEST_ASSERT(lB.SetAttribute("Prefered", "EDGE"));
-    KMS_TEST_ASSERT(lB.SetAttribute("Prefered", "NONE"));
-
-    KMS_TEST_ASSERT(!lB.SetAttribute("Ignored", "Ignored"));
-
-    lB.DisplayHelp(stdout);
+    lB.mPrefered.Set("CHROME");
+    lB.mPrefered.Set("DEFAULT");
+    lB.mPrefered.Set("EDGE");
+    lB.mPrefered.Set("NONE");
 }
 
 KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
@@ -80,7 +74,7 @@ KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
     try
     {
         KMS_TEST_EXPECTED_EXCEPTION();
-        lB.SetAttribute("Prefered", "INVALID");
+        lB.mPrefered.Set("INVALID");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONFIG_VALUE);

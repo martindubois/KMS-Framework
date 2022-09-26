@@ -8,7 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
+#include <KMS/DI/Dictionary.h>
 
 namespace KMS
 {

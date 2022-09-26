@@ -12,7 +12,7 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
 
 namespace KMS
 {
@@ -21,7 +21,7 @@ namespace KMS
 
         class FileInfoList;
 
-        class Sync : public Cfg::Configurable
+        class Sync : public DI::Dictionary
         {
 
         public:
@@ -32,35 +32,9 @@ namespace KMS
 
             ~Sync();
 
-            void AddDestination(const char *aD);
-            void AddSource(const char* aS);
-
-            void AddFolder(const char* aG, const char* aF);
-
-            void ClearDestinations();
-            void ClearSources();
-
-            void ClearFolders(const char* aG);
-
-            void SetDestination(const char* aD);
-            void SetSource     (const char* aS);
-
             int Run();
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool AddAttribute_Indexed(const char* aA, const char* aI, const char* aV);
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute_Indexed(const char* aA, const char* aI, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-
-        // internal
-
-            typedef std::list<FileInfoList*> FolderList;
-
         private:
-
-            typedef std::map<std::string, FolderList*> GroupMap;
 
             Sync(const Sync &);
 
@@ -69,14 +43,14 @@ namespace KMS
             void Run_Bidirectional();
             void Run_Unidirectional();
 
+            void Run_Bidirectional(const DI::Array& aGroup);
             void Run_Bidirectional(FileInfoList * aA, FileInfoList * aB);
 
             void VerifyConfig() const;
 
             // ===== Configurable attributes ================================
-            FolderList mDestinations;
-            GroupMap   mGroups;
-            FolderList mSources;
+            DI::Dictionary mBidirectional;
+            DI::Array      mUnidirectional;
 
         };
 

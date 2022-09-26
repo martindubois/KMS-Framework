@@ -28,8 +28,10 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        ReactApp::ReactApp()
+        ReactApp::ReactApp() : DI::Dictionary(NULL)
         {
+            AddEntry(&mFileServer);
+
             LocateFrontEnd();
 
             mServer.mOnRequest.Set(this, MSG_ON_REQUEST);
@@ -45,13 +47,6 @@ namespace KMS
             assert(NULL != aPath);
 
             mRoutes.insert(aPath);
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        void ReactApp::InitConfigurator(Cfg::Configurator* aC)
-        {
-            mServer.mSocket.InitConfigurator(aC);
         }
 
         // ===== Msg::IReceiver =============================================

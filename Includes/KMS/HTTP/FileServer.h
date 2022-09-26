@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
+// Library   KMS-B
 
 #pragma once
 
@@ -11,8 +12,9 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
-#include <KMS/File/Folder.h>
+#include <KMS/DI/Boolean.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Folder.h>
 #include <KMS/Msg/Destination.h>
 #include <KMS/Msg/IReceiver.h>
 
@@ -22,7 +24,7 @@ namespace KMS
     {
         class Request;
 
-        class FileServer : public Cfg::Configurable, public Msg::IReceiver
+        class FileServer : public DI::Dictionary, public Msg::IReceiver
         {
 
         public:
@@ -53,12 +55,12 @@ namespace KMS
 
             void ProcessRequest_GET(Request* aR, const char* aPath = NULL);
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-
             // ===== Msg::IReceived =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+
+            // ===== Configurable attributes ================================
+            DI::Folder  mRoot;
+            DI::Boolean mVerbose;
 
         private:
 
@@ -67,10 +69,6 @@ namespace KMS
             unsigned int OnRequest(void* aData);
 
             FileTypeMap mFileTypes;
-
-            // ===== Configurable attributes ================================
-            File::Folder mRoot;
-            bool mVerbose;
 
         };
 

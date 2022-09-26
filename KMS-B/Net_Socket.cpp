@@ -8,7 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
+#include <KMS/DI/NetAddressRange.h>
 
 #include <KMS/Net/Socket.h>
 
@@ -19,6 +20,14 @@
 #define DEFAULT_LOCAL_PORT         (0)
 #define DEFAULT_RECEIVE_TIMEOUT_ms (1000)
 #define DEFAULT_SEND_TIMEOUT_ms    (1000)
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_ALLOWED_RANGES  ("AllowedRanges"  , "AllowedRanges += {Address}");
+static const KMS::DI::MetaData MD_LOCAL_ADDRESS   ("LocalAddress"   , "LocalAddress = {Address}");
+static const KMS::DI::MetaData MD_RECEIVER_TIMEOUT("ReceiverTimeout", "ReceiverTimeout = {ms}");
+static const KMS::DI::MetaData MD_SEND_TIMEOUT    ("SendTimeout"    , "SendTimeout = {ms}");
 
 namespace KMS
 {
@@ -49,26 +58,34 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Socket::Socket(Type aType)
-            : mBroadcastReceive(false)
-            , mLocalAddress     (DEFAULT_LOCAL_ADDRESS)
-            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms)
-            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms)
+            : DI::Dictionary(NULL)
+            , mAllowedRanges    (                            &MD_ALLOWED_RANGES)
+            , mLocalAddress     (DEFAULT_LOCAL_ADDRESS     , &MD_LOCAL_ADDRESS)
+            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms, &MD_RECEIVER_TIMEOUT)
+            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms   , &MD_SEND_TIMEOUT)
+            , mBroadcastReceive(false)
             , mSocket(INVALID_SOCKET)
             , mState(State::CLOSED)
             , mType(aType)
         {
+            mAllowedRanges.SetCreator(DI::NetAddressRange::Create);
+
+            AddEntry(&mAllowedRanges);
+            AddEntry(&mLocalAddress);
+            AddEntry(&mReceiveTimeout_ms);
+            AddEntry(&mSendTimeout_ms);
         }
 
         Socket::~Socket() { VerifyState(State::CLOSED); }
 
-        uint16_t Socket::GetLocalPort() const { return mLocalAddress.GetPortNumber(); }
+        uint16_t Socket::GetLocalPort() const { return mLocalAddress.Get().GetPortNumber(); }
 
         void Socket::SetLocalAddress(const Address& aA) { mLocalAddress = aA; }
 
-        void Socket::SetLocalPort(uint16_t aP) { mLocalAddress.SetPortNumber(aP); }
+        void Socket::SetLocalPort(uint16_t aP) { mLocalAddress.Get().SetPortNumber(aP); }
 
         void Socket::SetReceiveTimeout(unsigned int aRT_ms) { mReceiveTimeout_ms = aRT_ms; }
-        void Socket::SetSendTimeout   (unsigned int aST_ms) { mSendTimeout_ms    = aST_ms; }
+        void Socket::SetSendTimeout(unsigned int aST_ms) { mSendTimeout_ms = aST_ms; }
 
         Socket* Socket::Accept(unsigned int aTimeout_ms, Address* aFrom)
         {
@@ -90,7 +107,7 @@ namespace KMS
                 {
                     aFrom->SetInternalSize(lSize_byte);
 
-                    if (mAllow.IsInRanges(*aFrom))
+                    if (IsInAllowedRanges(*aFrom))
                     {
                         lResult = new Socket(Socket::Type::STREAM);
 
@@ -126,7 +143,7 @@ namespace KMS
             default: assert(false);
             }
 
-            mSocket = socket(mLocalAddress.GetInternalFamily(), lType, lProt);
+            mSocket = socket(mLocalAddress.Get().GetInternalFamily(), lType, lProt);
             KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, SOCKET, "socket failed");
 
             SetOption(SO_RCVTIMEO, mReceiveTimeout_ms);
@@ -182,75 +199,6 @@ namespace KMS
             while (sizeof(lBuffer) == lSize_byte);
         }
 
-        // ===== Cfg::Configurable ==========================================
-
-        bool Socket::AddAttribute(const char* aA, const char* aV)
-        {
-            assert(NULL != aA);
-
-            CFG_IF("Allow") { mAllow.Add(AddressRange(aV)); return true; }
-
-            return Configurable::AddAttribute(aA, aV);
-        }
-
-        bool Socket::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("Allow"         ) { mAllow.Clear(); return true; }
-                CFG_IF("LocalAddress"  ) { SetLocalAddress  (DEFAULT_LOCAL_ADDRESS     ); return true; }
-                CFG_IF("LocalPort"     ) { SetLocalPort     (DEFAULT_LOCAL_PORT        ); return true; }
-                CFG_IF("ReceiveTimeout") { SetReceiveTimeout(DEFAULT_RECEIVE_TIMEOUT_ms); return true; }
-                CFG_IF("SendTimeout"   ) { SetSendTimeout   (DEFAULT_SEND_TIMEOUT_ms   ); return true; }
-            }
-            else
-            {
-                CFG_CALL("LocalAddress", SetLocalAddress);
-
-                CFG_CONVERT("LocalPort"     , SetLocalPort     , Convert::ToUInt16);
-                CFG_CONVERT("ReceiveTimeout", SetReceiveTimeout, Convert::ToUInt32);
-                CFG_CONVERT("SendTimeout"   , SetSendTimeout   , Convert::ToUInt32);
-
-                CFG_IF("Allow") { mAllow.Clear(); mAllow.Add(AddressRange(aV)); return true; }
-            }
-
-            return Configurable::SetAttribute(aA, aV);
-        }
-
-        void Socket::DisplayHelp(FILE* aOut) const
-        {
-            fprintf(aOut,
-                "===== KMS::Net::Socket =====\n"
-                "Allow\n"
-                "    Clear the allower address range list\n"
-                "Allow = {AddressRange}\n"
-                "    Set the allowed address range\n"
-                "Allow += {AddressRange}\n"
-                "    Add an allower address range\n"
-                "LocalAddress\n"
-                "    Default: %s\n"
-                "LocalAddress = {Address}\n"
-                "    Set the local address\n"
-                "LocalPort\n"
-                "    Default: %u\n"
-                "LocalPort = {Port}\n"
-                "    Set the local port\n"
-                "ReceiveTimeout\n"
-                "    Default: %u ms\n"
-                "ReceiveTimeout = {Timeout}\n"
-                "    Set the receive timeout (in ms)\n"
-                "SendTimeout\n"
-                "    Default: %u ms\n"
-                "SendTimeout = {Timeout}\n"
-                "    Set the send timeout (in ms)\n",
-                DEFAULT_LOCAL_ADDRESS,
-                DEFAULT_LOCAL_PORT,
-                DEFAULT_RECEIVE_TIMEOUT_ms,
-                DEFAULT_SEND_TIMEOUT_ms);
-
-            Configurable::DisplayHelp(aOut);
-        }
-
         // Internal
         // //////////////////////////////////////////////////////////////////
 
@@ -272,7 +220,7 @@ namespace KMS
         {
             assert(INVALID_SOCKET != mSocket);
 
-            if (0 != bind(mSocket, mLocalAddress, mLocalAddress.GetInternalSize()))
+            if (0 != bind(mSocket, mLocalAddress.Get(), mLocalAddress.Get().GetInternalSize()))
             {
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
@@ -325,6 +273,25 @@ namespace KMS
 
             int lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
             KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_OPTION, "setsockopt failed");
+        }
+
+        bool Socket::IsInAllowedRanges(const Address& aA) const
+        {
+            const DI::Array::Internal& lInternal = mAllowedRanges.GetInternal();
+            for (const DI::Object* lObj : lInternal)
+            {
+                assert(NULL != lObj);
+
+                const DI::NetAddressRange* lAR = dynamic_cast<const DI::NetAddressRange*>(lObj);
+                assert(NULL != lAR);
+
+                if (lAR->Get() == aA)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         void Socket::VerifyState(State aS)

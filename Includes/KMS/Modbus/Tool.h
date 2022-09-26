@@ -4,14 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Tool.h
+// Library   KMS-C
 
 #pragma once
 
-// ===== C++ ================================================================
-#include <map>
-
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Types.h>
 
@@ -22,7 +20,7 @@ namespace KMS
 
         class Master;
         
-        class Tool : public Cfg::Configurable
+        class Tool : public DI::Dictionary
         {
 
         public:
@@ -64,14 +62,6 @@ namespace KMS
 
             void WriteSingleRegister(const char* aName, RegisterValue aValue);
 
-            // ===== Cfg::Configurable ==========================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-            
-        // Internal
-
-            typedef std::map<std::string, uint16_t> AddressMap;
-
         private:
 
             Tool(const Tool&);
@@ -81,11 +71,11 @@ namespace KMS
             Master* mMaster;
 
             // ===== Configurable attributes ====================================
-            AddressMap mCoils;
-            AddressMap mDiscreteInputs;
-            AddressMap mHoldingRegisters;
-            AddressMap mInputRegisters;
-            StringList mOperations;
+            DI::Array mCoils;
+            DI::Array mDiscreteInputs;
+            DI::Array mHoldingRegisters;
+            DI::Array mInputRegisters;
+            DI::Array mOperations;
 
         };
 

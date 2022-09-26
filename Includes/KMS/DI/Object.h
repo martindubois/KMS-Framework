@@ -25,13 +25,20 @@ namespace KMS
 
             void SetMetaData(const MetaData* aIn);
 
-            const char* GetName() const;
+            const char * GetLabel() const;
+            unsigned int GetLabel(char* aOut, unsigned int aOutSize_byte) const;
 
+            const char * GetName() const;
             unsigned int GetName(char* aOut, unsigned int aOutSize_byte) const;
+
+            bool IsLabeled() const;
+            bool IsNamed  () const;
 
         // Internal
 
             bool Is(const char* aName) const;
+
+            void Release();
 
             bool TestFlag(unsigned int aFlag) const;
 

@@ -5,12 +5,9 @@
 // Product   KMS-Framework
 // File      KMS-A-Test/Dbg_Log.cpp
 
-// TEST COVERAGE 2022-08-15 KMS - Martin Dubois, P. Eng.
-
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Console/Color.h>
 #include <KMS/Dbg/Log.h>
 
 KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
@@ -19,9 +16,9 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     KMS::Exception lE(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::TEST, "Test");
     KMS::Dbg::Log  lL;
 
-    lL.DisplayHelp(stdout);
+    lL.mFolder.Set("DoesNotExist");
 
-    lL.SetAttribute("Folder", "DoesNotExist");
+    lL.CloseLogFiles();
 
     KMS_TEST_ASSERT(!lL.IsFileEnabled());
 
@@ -39,37 +36,18 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     lL.WriteException(lE);
     lL.WriteMessage("Test");
 
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "NONE"));
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "ERROR"));
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "WARNING"));
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "INFO"));
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", "NOISE"));
+    lL.mConsoleLevel.Set("NONE");
+    lL.mConsoleLevel.Set("ERROR");
+    lL.mConsoleLevel.Set("WARNING");
+    lL.mConsoleLevel.Set("INFO");
+    lL.mConsoleLevel.Set("NOISE");
 
-    KMS_TEST_ASSERT(lL.SetAttribute("ConsoleLevel", NULL));
-
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "NONE"   ));
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "ERROR"  ));
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "WARNING"));
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "INFO"   ));
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", "NOISE"  ));
-
-    KMS_TEST_ASSERT(lL.SetAttribute("FileLevel", NULL));
-
-    KMS_TEST_ASSERT(!lL.SetAttribute("Invalid", NULL));
+    lL.mFileLevel.Set("NONE");
+    lL.mFileLevel.Set("ERROR");
+    lL.mFileLevel.Set("WARNING");
+    lL.mFileLevel.Set("INFO");
+    lL.mFileLevel.Set("NOISE");
 
     KMS_DBG_LOG_INFO();
     KMS::Dbg::gLog.WriteData(&lL, sizeof(lL));
-}
-
-KMS_TEST(Dbg_Log_Exception, "Dbg_Log_Exception", "Auto", sTest_Exception)
-{
-    KMS::Dbg::Log  lL;
-
-    try
-    {
-        KMS_TEST_EXPECTED_EXCEPTION();
-        lL.SetAttribute("FileLevel", "INVALID");
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(CONFIG_VALUE);
 }

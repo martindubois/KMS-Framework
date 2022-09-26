@@ -27,9 +27,6 @@ namespace KMS
             // ===== Slave ==================================================
             virtual void Connect();
 
-            // ===== Cfg::Configurable ======================================
-            virtual void InitConfigurator(Cfg::Configurator* aC);
-
         protected:
 
             // ===== Slave ==================================================

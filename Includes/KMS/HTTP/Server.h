@@ -4,11 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
+// Library   KMS-B
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/Msg/Destination.h>
 #include <KMS/Net/Server.h>
 

@@ -25,6 +25,15 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* LogFile::LEVEL_NAMES[] =
+        {
+            "NONE",
+            "ERROR",
+            "WARNING",
+            "INFO",
+            "NOISE",
+        };
+
         LogFile::LogFile(const File::Folder& aFolder, unsigned int aProcessId, unsigned int aThreadId)
         {
             char lFileName[PATH_LENGTH];

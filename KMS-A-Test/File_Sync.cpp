@@ -17,33 +17,25 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
     static const char* VECTOR_A[] =
     {
         "KMS-Test.exe",
-        "Destinations",
-        "Sources",
-        "Folders+=DoesNotExist_A",
-        "Folders+=DoesNotExist_B",
+        "Bidirectional[Default]+=DoesNotExist_A",
+        "Bidirectional[Default]+=DoesNotExist_B",
         "Unknown+=1",
         "Unknown=1",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), 0);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_A), 0);
 
     KMS_TEST_EXPECTED_WARNINGS(2);
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(7, VECTOR_A), 0);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(5, VECTOR_A), 0);
 
     static const char* VECTOR_B[] =
     {
         "KMS-Test.exe",
-        "Destinations",
-        "Sources",
-        "Destination=DoesNotExist",
-        "Destination=DoesNotExist",
-        "Source=DoesNotExist",
-        "Source=DoesNotExist",
+        "Unidirectional+=DoesNotExist;DoesNotExist",
+        "Unidirectional+=DoesNotExist;DoesNotExist",
     };
 
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_B), 0);
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(7, VECTOR_B), 0);
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_B), 0);
 }
 
 KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
@@ -51,45 +43,10 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
     static const char* VECTOR_A[] =
     {
         "KMS-Test.exe",
-        "Destinations",
-        "Sources",
-        "Folders+=DoesNotExist_A",
+        "Bidirectional[Default]+=DoesNotExist_A",
     };
 
     KMS_TEST_EXPECTED_EXCEPTION();
     KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_A), static_cast<int>(KMS::Exception::Code::CONFIG));
-
-    static const char* VECTOR_B[] =
-    {
-        "KMS-Test.exe",
-        "Destinations",
-        "Sources",
-        "Destination=DoesNotExist",
-        "Destination=DoesNotExist",
-    };
-
-    KMS_TEST_EXPECTED_EXCEPTION();
-    KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
-    KMS_TEST_EXPECTED_EXCEPTION();
-    KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(5, VECTOR_B), static_cast<int>(KMS::Exception::Code::CONFIG));
-
-    static const char* VECTOR_C[] =
-    {
-        "KMS-Test.exe",
-        "Destinations",
-        "Sources",
-        "Source=DoesNotExist",
-        "Destination=DoesNotExist",
-        "Folders+=DoesNotExist",
-    };
-
-    KMS_TEST_EXPECTED_EXCEPTION();
-    KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(4, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
-    KMS_TEST_EXPECTED_EXCEPTION();
-    KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_C), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), static_cast<int>(KMS::Exception::Code::CONFIG));
 }

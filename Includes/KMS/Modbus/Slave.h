@@ -4,11 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Slave.h
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/Di/Dictionary.h>
+#include <KMS/DI/UInt8.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Msg/Destination.h>
@@ -18,7 +20,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Slave : public Cfg::Configurable, public Msg::IReceiver
+        class Slave : public DI::Dictionary, public Msg::IReceiver
         {
 
         public:
@@ -55,10 +57,6 @@ namespace KMS
             // ===== Msg::IReceiver =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
-            // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aA, const char* aV);
-
         protected:
 
             Slave();
@@ -82,7 +80,7 @@ namespace KMS
             bool mStopped;
 
             // ===== Configurable attributes ================================
-            DeviceAddress mDeviceAddress;
+            DI::UInt8 mDeviceAddress;
 
         };
 

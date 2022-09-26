@@ -14,6 +14,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/DI/MetaData.h>
 #include <KMS/Convert.h>
 #include <KMS/Environment.h>
 
@@ -33,6 +34,8 @@ static const char* LABELS[16] =
 {
     "x0_", "x1_", "x2_", "x3_", "x4_", "x5_", "x6_", "x7_", "x8_", "x9_", "xA_", "xB_", "xC_", "xD_", "xE_", "xF_"
 };
+
+static const KMS::DI::MetaData MD_SOURCE("Source", "Source={FileName}");
 
 // Static function declaration
 // //////////////////////////////////////////////////////////////////////////
@@ -58,13 +61,14 @@ namespace KMS
             KMS::ByteTool          lBT;
             KMS::Cfg::Configurator lC;
 
-            lBT.InitConfigurator(&lC);
+            lC.AddConfigurable(&lBT);
 
-            Dbg::gLog.InitConfigurator(&lC);
+            lC.AddConfigurable(&Dbg::gLog);
 
-            lC.Init();
             lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), CONFIG_FILE);
             lC.ParseArguments(aCount - 1, aVector + 1);
+
+            Dbg::gLog.CloseLogFiles();
 
             lResult = lBT.Run();
 
@@ -75,139 +79,29 @@ namespace KMS
         return lResult;
     }
 
-    ByteTool::ByteTool() : mDestination(NULL), mSource(stdout)
+    ByteTool::ByteTool() : Dictionary(NULL), mSource(stdin, "stdin", &MD_SOURCE)
     {
-        for (unsigned int i = 0; i < BYTE_QTY; i++)
-        {
-            mByteTable[i] = static_cast<uint8_t>(i);
-            mHistogram[i] = 0;
-        }
+        memset(&mHistogram, 0, sizeof(mHistogram));
+
+        AddEntry(&mSource);
     }
 
-    ByteTool::~ByteTool()
-    {
-        CloseFile(mDestination);
-        CloseFile(mSource);
-    }
+    ByteTool::~ByteTool() {}
 
     const unsigned int* ByteTool::GetHistrogram() const { return mHistogram; }
 
     int ByteTool::Run()
     {
-        assert(NULL != mSource);
-
         uint8_t lByte;
 
         while (1 == fread(&lByte, sizeof(lByte), 1, mSource))
         {
             mHistogram[lByte] ++;
-
-            if (NULL != mDestination)
-            {
-                lByte = mByteTable[lByte];
-
-                size_t lRet = fwrite(&lByte, sizeof(lByte), 1, mDestination);
-                if (1 != lRet)
-                {
-                    // NOT TESTED
-                    KMS_EXCEPTION_WITH_INFO(FILE_WRITE, "fwrite failed", lRet);
-                }
-            }
         }
 
         return 0;
     }
 
-    void ByteTool::SetByteTable(unsigned int aIndex, uint8_t aValue)
-    {
-        if (BYTE_QTY <= aIndex)
-        {
-            // NOT TESTED
-            KMS_EXCEPTION_WITH_INFO(CONFIG_INDEX, "The index into the ByteTable must be between 0 and 255", aIndex);
-        }
-
-        mByteTable[aIndex] = aValue;
-    }
-
-    void ByteTool::SetDestination(FILE * aFile)
-    {
-        assert(NULL != aFile);
-
-        CloseFile(mDestination);
-        
-        mDestination = aFile;
-    }
-
-    void ByteTool::SetSource(FILE* aFile)
-    {
-        assert(NULL != aFile);
-
-        CloseFile(mSource);
-
-        mSource = aFile;
-    }
-
-    // ===== Cfg::Configurable ==============================================
-
-    bool ByteTool::SetAttribute(const char* aA, const char* aV)
-    {
-        if (NULL != aV)
-        {
-            char lE[LINE_LENGTH];
-
-            CFG_IF("Destination") { Env::Expand(aV, lE, sizeof(lE)); SetDestination(Convert::ToFile(lE, "wb")); return true; }
-            CFG_IF("Source"     ) { Env::Expand(aV, lE, sizeof(lE)); SetSource     (Convert::ToFile(lE, "rb")); return true; }
-        }
-
-        return Configurable::SetAttribute(aA, aV);
-    }
-
-    bool ByteTool::SetAttribute_Indexed(const char* aA, const char* aI, const char* aV)
-    {
-        if (NULL == aV)
-        {
-            CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aI)); return true; }
-        }
-        else
-        {
-            CFG_IF("ByteTable") { SetByteTable(Convert::ToUInt8(aI), Convert::ToUInt8(aV)); return true; }
-        }
-
-        return Configurable::SetAttribute_Indexed(aA, aI, aV);
-    }
-
-    void ByteTool::DisplayHelp(FILE* aOut) const
-    {
-        fprintf(aOut,
-            "===== KMS::ByteTool =====\n"
-            "ByteTable[{Index}]\n"
-            "    Set an entry into the byte table to the default value\n"
-            "    0 <= Index <= 255\n"
-            "    Default: The index\n"
-            "ByteTable[{Index}] = {Value}\n"
-            "    Set an entry into the byte table\n"
-            "    0 <= Index <= 255\n"
-            "    0 <= Value <= 255\n"
-            "Destination = {Path}\n"
-            "    Set the destination\n"
-            "Source = {Path}\n"
-            "    Set the source\n"
-            "    Mandatory\n");
-
-        Configurable::DisplayHelp(aOut);
-    }
-
-    // Private
-    // //////////////////////////////////////////////////////////////////////
-
-    void ByteTool::CloseFile(FILE* aFile)
-    {
-        if ((NULL != aFile) && (stderr != aFile) && (stdin != aFile) && (stdout != aFile))
-        {
-            int lRet = fclose(aFile);
-            assert(0 == lRet);
-        }
-    }
 }
 
 std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT)

@@ -8,7 +8,11 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Alias.h>
+#include <KMS/DI/Boolean.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Folder.h>
+#include <KMS/DI/String.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 
@@ -19,7 +23,7 @@ namespace KMS
     namespace Build
     {
         
-        class Build : public Cfg::Configurable
+        class Build : public DI::Dictionary
         {
 
         public:
@@ -54,11 +58,6 @@ namespace KMS
                 void AddProcessor(const char * aP);
             #endif
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-
         private:
 
             Build(const Build &);
@@ -68,7 +67,7 @@ namespace KMS
             void Compile();
             void Compile(const char* aC);
             void Edit(const Version& aVersion);
-            void ExecuteCommands(const StringSet& aCommands);
+            void ExecuteCommands(const DI::Array& aCommands);
             void Export(const Version & aVersion);
             void Package();
             void Package_Component();
@@ -82,24 +81,32 @@ namespace KMS
             File::Folder mTempFolder;
 
             // ===== Configurable attributes ================================
-            StringSet    mBinaries;
-            StringSet    mConfigurations;
-            bool         mDoNotCompile;
-            bool         mDoNotExport;
-            bool         mDoNotPackage;
-            StringSet    mEditOperations;
-            File::Folder mExportFolder;
-            StringSet    mFiles;
-            StringSet    mFolders;
-            StringSet    mLibraries;
-            bool         mOSIndependent;
-            StringSet    mPreBuildCmds;
-            std::string  mProduct;
-            StringSet    mTests;
-            std::string  mVersionFile;
+            DI::Array    mBinaries;
+            DI::Array    mConfigurations;
+            DI::Boolean  mDoNotCompile;
+            DI::Boolean  mDoNotExport;
+            DI::Boolean  mDoNotPackage;
+            DI::Array    mEditOperations;
+            DI::Folder   mExportFolder;
+            DI::Array    mFiles;
+            DI::Array    mFolders;
+            DI::Array    mLibraries;
+            DI::Boolean  mOSIndependent;
+            DI::Array    mPreBuildCmds;
+            DI::String   mProduct;
+            DI::Array    mTests;
+            DI::String   mVersionFile;
+
+            DI::Alias mOSBinaries;
+            DI::Alias mOSConfigurations;
+            DI::Alias mOSFiles;
+            DI::Alias mOSFolders;
+            DI::Alias mOSLibraries;
+            DI::Alias mOSPreBuildCmds;
+            DI::Alias mOSTests;
 
             #ifdef _KMS_WINDOWS_
-                StringSet mProcessors;
+                DI::Array mOSProcessors;
             #endif
 
         };

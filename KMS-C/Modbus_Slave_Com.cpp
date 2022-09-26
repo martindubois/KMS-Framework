@@ -49,22 +49,18 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Slave_Com::Slave_Com() { Reset(); }
+        Slave_Com::Slave_Com()
+        {
+            AddEntry(&mPort);
+
+            Reset();
+        }
 
         // ===== Slave ======================================================
 
         void Slave_Com::Connect()
         {
             mPort.Connect(Com::Port::FLAG_READ_ACCESS | Com::Port::FLAG_WRITE_ACCESS);
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        void Slave_Com::InitConfigurator(Cfg::Configurator* aC)
-        {
-            mPort.InitConfigurator(aC);
-
-            Slave::InitConfigurator(aC);
         }
 
         // Protected
@@ -116,6 +112,8 @@ namespace KMS
 
         void Slave_Com::SendResponse_A(Function aFunction, uint8_t aSize_byte, const void* aData)
         {
+            assert(NULL != aData);
+
             uint8_t lBuffer[260];
 
             WriteUInt8(lBuffer, 0, GetDeviceAddress());
@@ -135,6 +133,8 @@ namespace KMS
 
         void Slave_Com::SendResponse_B(Function aFunction, Address aAddress, const void* aData)
         {
+            assert(NULL != aData);
+
             uint8_t lBuffer[7];
 
             WriteUInt8(lBuffer, 0, GetDeviceAddress());

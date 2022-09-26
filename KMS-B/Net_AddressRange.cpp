@@ -20,6 +20,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        AddressRange::AddressRange() { Construct(); }
+
         AddressRange::AddressRange(const char* aAR)
         {
             Construct();
@@ -27,15 +29,15 @@ namespace KMS
             Set(aAR);
         }
 
-        const AddressRange& AddressRange::operator = (const Address& aA)
+        void AddressRange::operator = (const char* aAR) { Set(aAR); }
+
+        void AddressRange::operator = (const Address& aA)
         {
             mType = aA.GetType();
 
             memcpy(mData, aA.GetBinary(), GetSize());
 
             ResetMask();
-
-            return *this;
         }
 
         bool AddressRange::operator == (const Address& aA) const

@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/AddressRange.h
+// Library   KMS-B
 
 #pragma once
 
@@ -37,8 +38,8 @@ namespace KMS
             AddressRange(const Address& aAR);
 
             // aAR  See the constructor
-            const AddressRange& operator = (const char* aAR);
-            const AddressRange& operator = (const Address& aA);
+            void operator = (const char* aAR);
+            void operator = (const Address& aA);
 
             bool operator == (const Address& aA) const;
             bool operator == (const AddressRange& aAR) const;

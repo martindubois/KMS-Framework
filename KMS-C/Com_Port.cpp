@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
+#include <KMS/DI/MetaData.h>
 
 #include <KMS/Com/Port.h>
 
@@ -21,6 +21,16 @@
 #define DEFAULT_RTS              (false)
 #define DEFAULT_SPEED_bps        (115200)
 #define DEFAULT_WRITE_TIMEOUT_ms (1000)
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::DI::MetaData MD_DTR          ("DTR"         , "DTR = false | true");
+static const KMS::DI::MetaData MD_PARITY       ("Parity"      , "Parity = EVEN | INORED_EVEN | IGNORED_MARK | IGNORED_ODD | IGNORED_SPACE | MARK | NONE | ODD | SPACE");
+static const KMS::DI::MetaData MD_READ_TIMEOUT ("ReadTimeout" , "ReadTimeout = {ms}");
+static const KMS::DI::MetaData MD_RTS          ("RTS"         , "DTR = false | true");
+static const KMS::DI::MetaData MD_SPEED        ("Speed"       , "Speed = {bps}");
+static const KMS::DI::MetaData MD_WRITE_TIMEOUT("WriteTimeout", "WriteTimeout = {ms}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -35,12 +45,34 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Port::PARITY_NAMES[] =
+        {
+            "EVEN",
+            "IGNORED_EVEN",
+            "IGNORED_MARK",
+            "IGNORED_ODD",
+            "IGNORED_SPACE",
+            "MARK",
+            "NONE",
+            "ODD",
+            "SPACE",
+        };
+
         Port::Port()
-            : mParity         (DEFAULT_PARITY)
-            , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms)
-            , mSpeed_bps      (DEFAULT_SPEED_bps)
-            , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms)
-        {}
+            : mDTR            (false, &MD_DTR)
+            , mParity         (DEFAULT_PARITY, &MD_PARITY)
+            , mRTS            (false, &MD_RTS)
+            , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms, &MD_READ_TIMEOUT)
+            , mSpeed_bps      (DEFAULT_SPEED_bps, &MD_SPEED)
+            , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms, &MD_WRITE_TIMEOUT)
+        {
+            AddEntry(&mDTR);
+            AddEntry(&mParity);
+            AddEntry(&mRTS);
+            AddEntry(&mReadTimeout_ms);
+            AddEntry(&mSpeed_bps);
+            AddEntry(&mWriteTimeout_ms);
+        }
 
         void Port::SetDTR(bool aDTR) { mDTR = aDTR; if (IsConnected()) { ApplySignals(); } }
         void Port::SetRTS(bool aRTS) { mRTS = aRTS; if (IsConnected()) { ApplySignals(); } }
@@ -59,77 +91,6 @@ namespace KMS
             ApplyConfig();
             ApplySignals();
             ApplyTimeouts();
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        void Port::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Com::Port =====\n"
-                "DTR\n"
-                "    Set the DTR signal to the default value\n"
-                "    Default: %s\n"
-                "DTR = false|true\n"
-                "    Set the DTR signal\n"
-                "Parity\n"
-                "    Set the parity to the default value\n"
-                "    Default: NONE\n"
-                "Parity = EVEN|IGNORED_EVEN|IGNORED_MARK|IGNORED_ODD|IGNORED_SPACE|MARK|NONE|ODD|SPACE\n"
-                "    Parity\n"
-                "ReadTimeout\n"
-                "    Set the receive timeout to the default value\n"
-                "    Default: %u ms\n"
-                "ReadTimeout = {Value_ms}\n"
-                "    Read timeout in ms\n"
-                "RTS\n"
-                "    Set the RTS signal to the default value\n"
-                "    Default: %s\n"
-                "RTS = false|true\n"
-                "    Set the RTS signal\n"
-                "Speed\n"
-                "    Set the speed to the default value\n"
-                "    Default: %u bps\n"
-                "Speed = {Value_bps}"
-                "    Speed in bps\n"
-                "WriteTimeout\n"
-                "    Set the transmit timeout to the default value\n"
-                "    Default: %u ms\n"
-                "WriteTimeout = {Value_ms}\n"
-                "    Transmit timeout in ms\n",
-                DEFAULT_DTR ? "true" : "false",
-                DEFAULT_READ_TIMEOUT_ms,
-                DEFAULT_RTS ? "true" : "false",
-                DEFAULT_SPEED_bps,
-                DEFAULT_WRITE_TIMEOUT_ms);
-
-            Dev::Device::DisplayHelp(aOut);
-        }
-
-        bool Port::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("DTR"         ) { SetDTR         (DEFAULT_DTR             ); return true; }
-                CFG_IF("Parity"      ) { SetParity      (DEFAULT_PARITY          ); return true; }
-                CFG_IF("ReadTimeout" ) { SetReadTimeout (DEFAULT_READ_TIMEOUT_ms ); return true; }
-                CFG_IF("RTS"         ) { SetRTS         (DEFAULT_RTS             ); return true; }
-                CFG_IF("Speed"       ) { SetSpeed       (DEFAULT_SPEED_bps       ); return true; }
-                CFG_IF("WriteTimeout") { SetWriteTimeout(DEFAULT_WRITE_TIMEOUT_ms); return true; }
-            }
-            else
-            {
-                CFG_CONVERT("DTR"         , SetDTR         , Convert::ToBool  );
-                CFG_CONVERT("Parity"      , SetParity      , ToParity         );
-                CFG_CONVERT("ReadTimeout" , SetReadTimeout , Convert::ToUInt32);
-                CFG_CONVERT("RTS"         , SetRTS         , Convert::ToBool  );
-                CFG_CONVERT("Speed"       , SetSpeed       , Convert::ToUInt32);
-                CFG_CONVERT("WriteTimeout", SetWriteTimeout, Convert::ToUInt32);
-            }
-
-            return Dev::Device::SetAttribute(aA, aV);
         }
 
     }

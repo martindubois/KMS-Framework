@@ -19,16 +19,14 @@ KMS_TEST(Test_TestManager_Fail, "Test_TestManager_Fail", "Auto", sTest_Fail)
     KMS::Cfg::Configurator lC;
     KMS::Test::TestManager lTM;
 
-    lTM.InitConfigurator(&lC);
-
-    lC.Init();
+    lC.AddConfigurable(&lTM);
 
     const char* lVector[5] =
     {
-        "Test+=Test_TestManager_Fail0",
-        "Test+=Test_TestManager_Fail1",
-        "Test+=Test_TestManager_Fail2",
-        "Test+=Test_TestManager_Fail3",
+        "Tests+=Test_TestManager_Fail0",
+        "Tests+=Test_TestManager_Fail1",
+        "Tests+=Test_TestManager_Fail2",
+        "Tests+=Test_TestManager_Fail3",
         "Unknown+=0"
     };
 

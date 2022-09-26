@@ -11,25 +11,27 @@
 #include <stdio.h>
 
 // ===== Includes ===========================================================
-#include <KMS/DI/String.h>
+#include <KMS/DI/String_Expand.h>
 
 namespace KMS
 {
     namespace DI
     {
 
-        class File : public String
+        class File : public String_Expand
         {
 
         public:
 
-            File();
+            static DI::Object* Create(KMS::DI::MetaData* aMD);
+
+            File(FILE* aFile, const char* aIn, const MetaData* aMD);
 
             operator FILE * ();
 
-            void Close();
-
             void SetMode(const char* aMode);
+
+            void Close();
 
             // ===== Value ==================================================
             virtual void Set(const char* aIn);
@@ -39,7 +41,7 @@ namespace KMS
 
         private:
 
-            FILE* mFile;
+            FILE* mInternal;
 
             const char* mMode;
 

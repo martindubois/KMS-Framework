@@ -11,7 +11,7 @@
 #include <list>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/File/Folder.h>
 
 namespace KMS
@@ -19,14 +19,14 @@ namespace KMS
     namespace Cfg
     {
 
-        class Configurator : public Configurable
+        class Configurator
         {
 
         public:
 
             Configurator();
 
-            void AddConfigurable(Configurable * aInterface);
+            void AddConfigurable(DI::Dictionary* aC);
 
             void AddConfigFile(const char* aPath);
 
@@ -36,34 +36,35 @@ namespace KMS
 
             void Help(FILE* aOut = NULL) const;
 
-            void Init();
-
             void ParseArguments(int aCount, const char ** aVector);
 
             void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = false);
 
-            // ===== Configurable ===========================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual bool SetAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
+            void Save(const char* aPath);
 
         private:
 
-            typedef std::list<Configurable *> ConfigurableList;
+            typedef std::list<DI::Dictionary *> ConfigurableList;
 
             Configurator(const Configurator &);
 
             const Configurator & operator = (const Configurator &);
 
+            void AddValueToArray(const char* aA, const char* aV);
+
+            void AddValueToArray(const char* aA, const char* aI, const char* aV);
+
+            DI::Object* FindObject(const char* aA);
+
             void ParseLine(const char * aLine);
 
-            void CallAddAttribute(const char * aA, const char * aV);
+            void SetBoolean(const char* aA);
 
-            void CallAddAttribute_Indexed(const char* aA, const char* aI, const char* aV);
+            void SetValue(const char* aA, const char* aV);
 
-            void CallSetAttribute(const char * aA, const char * aV);
+            void SetArrayValue(const char* aA, const char* aI, const char* aV);
 
-            void CallSetAttribute_Indexed(const char * aA, const char* aI, const char * aV);
+            void SetArrayValue(const char* aA, unsigned int aI, const char* aV);
 
             ConfigurableList mConfigurables;
 

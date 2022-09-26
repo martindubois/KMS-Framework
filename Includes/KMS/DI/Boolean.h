@@ -20,11 +20,11 @@ namespace KMS
 
         public:
 
-            Boolean();
+            static DI::Object* Create(KMS::DI::MetaData* aMD);
 
-            Boolean(bool aIn);
+            Boolean(bool aIn, const MetaData* aMD);
 
-            const Boolean& operator = (bool aIn);
+            void operator = (bool aIn);
 
             operator bool () const;
 
@@ -33,7 +33,7 @@ namespace KMS
             void Set(bool aIn = true);
 
             // ===== Value ==================================================
-            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte);
+            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void Set(const char* aIn);
 
             // ===== Object =================================================

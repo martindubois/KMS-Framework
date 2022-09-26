@@ -8,7 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt32.h>
@@ -143,13 +142,13 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     switch (*lPtr)
     {
     case '[':
-        lArray = new KMS::DI::Array(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        lArray = new KMS::DI::Array(&KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_Array(lArray, &lPtr);
         *aObject = lArray;
         break;
 
     case '{':
-        lDictionary = new KMS::DI::Dictionary(&KMS::DI::META_DATA_DELETE_OBJECT_AND_DYNAMIC);
+        lDictionary = new KMS::DI::Dictionary(&KMS::DI::META_DATA_DELETE_OBJECT);
         Decode_Dictionary(lDictionary, &lPtr);
         *aObject = lDictionary;
         break;
@@ -210,14 +209,7 @@ void Decode_Array(KMS::DI::Array* aArray, KMS::Text::ReadPtr* aPtr)
                 Decode(&lObject, &lPtr);
                 assert(NULL != lObject);
 
-                if (aArray->TestFlag(KMS::DI::MetaData::FLAG_DYNAMIC))
-                {
-                    (*aArray) += lObject;
-                }
-                else
-                {
-                    delete lObject;
-                }
+                aArray->AddEntry(lObject);
             }
 
             lIndex++;
@@ -278,16 +270,9 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
                 Decode(&lObject, &lPtr);
                 assert(NULL != lObject);
 
-                if (aDictionary->TestFlag(KMS::DI::MetaData::FLAG_DYNAMIC))
-                {
-                    unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_DYNAMIC | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
-                    lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
-                    (*aDictionary) += lObject;
-                }
-                else
-                {
-                    delete lObject;
-                }
+                unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
+                lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
+                aDictionary->AddEntry(lObject);
             }
 
             lPtr.SkipBlank();
@@ -400,18 +385,23 @@ void Encode_Array(const KMS::DI::Array* aArray, KMS::Text::WritePtr* aPtr)
 
     lPtr.Write('[');
 
-    unsigned int lCount = aArray->GetCount();
-    for (unsigned int i = 0; i < lCount; i++)
-    {
-        const KMS::DI::Object* lObject = (*aArray)[i];
-        assert(NULL != lObject);
+    bool lFirst = true;
 
-        if (0 < i)
+    const KMS::DI::Array::Internal& lInternal = aArray->GetInternal();
+    for (const KMS::DI::Object* lObj : lInternal)
+    {
+        assert(NULL != lObj);
+
+        if (lFirst)
+        {
+            lFirst = false;
+        }
+        else
         {
             lPtr.Write(',');
         }
 
-        Encode(lObject, &lPtr);
+        Encode(lObj, &lPtr);
     }
 
     lPtr.Write(']');
@@ -428,24 +418,29 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
 
     lPtr.Write('{');
 
-    unsigned int lCount = aDictionary->GetCount();
-    for (unsigned int i = 0; i < lCount; i++)
-    {
-        const KMS::DI::Object* lObject = (*aDictionary)[i];
-        assert(NULL != lObject);
+    bool lFirst = true;
 
-        if (0 < i)
+    const KMS::DI::Dictionary::Internal& lInternal = aDictionary->GetInternal();
+    for (const KMS::DI::Object* lObj : lInternal)
+    {
+        assert(NULL != lObj);
+
+        if (lFirst)
+        {
+            lFirst = false;
+        }
+        else
         {
             lPtr.Write(',');
         }
 
         lPtr.Write('"');
-        lPtr += lObject->GetName(lPtr, lPtr.GetRemainingSize());
+        lPtr += lObj->GetName(lPtr, lPtr.GetRemainingSize());
         lPtr.Write('"');
 
         lPtr.Write(':');
 
-        ::Encode(lObject, &lPtr);
+        ::Encode(lObj, &lPtr);
     }
 
     lPtr.Write('}');

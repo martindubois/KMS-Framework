@@ -8,18 +8,16 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Container.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/MetaData.h>
 #include <KMS/HTTP/HTTP.h>
 
 KMS_TEST(HTTP_Base, "HTTP_Base", "Auto", sTest_Base)
 {
     char                lBuffer[1024];
-    KMS::DI::Dictionary lD0;
+    KMS::DI::Dictionary lD0(NULL);
     const char        * lIn;
     unsigned int        lSize_byte;
-
-    lD0.SetMetaData(&KMS::DI::META_DATA_DYNAMIC);
 
     // Dictionary - Empty
     lIn = "\r\n";
@@ -44,7 +42,7 @@ KMS_TEST(HTTP_Base, "HTTP_Base", "Auto", sTest_Base)
           "Accept-Encoding: gzip, deflate, br\r\n"
           "Accept-Language: en-US,en;q=0.9\r\n"
           "\r\n";
-    lSize_byte = strlen(lIn);
+    lSize_byte = static_cast<unsigned int>(strlen(lIn));
     KMS_TEST_COMPARE(KMS::HTTP::Decode_Dictionary(&lD0, lIn, lSize_byte), lSize_byte);
     KMS_TEST_COMPARE(KMS::HTTP::Encode_Dictionary(&lD0, lBuffer, sizeof(lBuffer)), lSize_byte);
     KMS_TEST_ASSERT(0 == strcmp(lIn, lBuffer));

@@ -36,8 +36,12 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Request::Request()
+            : mRequestHeader(NULL)
+            , mResponseData(NULL)
+            , mResponseHeader(NULL)
+            , mSocket(NULL)
         {
-            mRequestHeader.SetMetaData(&DI::META_DATA_DYNAMIC);
+            Construct();
         }
 
         const char* Request::GetPath() const { return mPath.c_str(); }
@@ -76,17 +80,14 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Request::Request(Net::Socket* aSocket)
-            : mData(NULL)
-            , mDataSize_byte(0)
-            , mFile(NULL)
-            , mMajor(0)
-            , mMinor(0)
-            , mResult(Result::OK)
+            : mRequestHeader(NULL)
+            , mResponseData(NULL)
+            , mResponseHeader(NULL)
             , mSocket(aSocket)
         {
             assert(NULL != aSocket);
 
-            memset(&mBuffer, 0, sizeof(mBuffer));
+            Construct();
         }
 
         Request::~Request()
@@ -99,6 +100,20 @@ namespace KMS
             }
 
             delete mSocket;
+        }
+
+        void Request::Construct()
+        {
+            memset(&mBuffer, 0, sizeof(mBuffer));
+
+            mData          = NULL;
+            mDataSize_byte = 0;
+            mFile          = NULL;
+            mMajor         = 0;
+            mMinor         = 0;
+            mResult        = Result::OK;
+
+            mRequestHeader.SetCreator(DI::String::Create);
         }
 
         const char* Request::GetResultName() const
@@ -148,8 +163,8 @@ namespace KMS
             {
                 unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
-                mResponseHeader += new DI::UInt32(lSize_byte, &MD_CONTENT_LENGTH);
-                mResponseHeader += const_cast<DI::String*>(&APPLICATION_JSON);
+                mResponseHeader.AddEntry(new DI::UInt32(lSize_byte, &MD_CONTENT_LENGTH));
+                mResponseHeader.AddEntry(&APPLICATION_JSON);
 
                 SetData(lData, lSize_byte);
             }

@@ -4,11 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Master.h
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/UInt8.h>
 #include <KMS/Modbus/Modbus.h>
 
 namespace KMS
@@ -16,7 +18,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Master : public Cfg::Configurable
+        class Master : public DI::Dictionary
         {
 
         public:
@@ -74,10 +76,6 @@ namespace KMS
             // aFunction     READ_FIFO_QUEUE
             virtual unsigned int Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
 
-            // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aN, const char* aV);
-
         protected:
 
             Master();
@@ -95,7 +93,7 @@ namespace KMS
             Exception mLastException;
 
             // ===== Configurable attributes ================================
-            DeviceAddress mDeviceAddress;
+            DI::UInt8 mDeviceAddress;
 
         };
 

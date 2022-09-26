@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
+// Library   KMS-B
 
 #pragma once
 
@@ -12,7 +13,7 @@
 #include <string>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
 #include <KMS/Msg/Destination.h>
@@ -23,7 +24,7 @@ namespace KMS
     namespace HTTP
     {
 
-        class ReactApp : public Cfg::Configurable, public Msg::IReceiver
+        class ReactApp : public DI::Dictionary, public Msg::IReceiver
         {
 
         public:
@@ -32,9 +33,6 @@ namespace KMS
 
             void AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode);
             void AddRoute   (const char* aPath);
-
-            // ===== Cfg::Configurable ======================================
-            virtual void InitConfigurator(Cfg::Configurator* aC);
 
             // ===== Msg::IReceiver =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);

@@ -37,6 +37,8 @@ namespace KMS
                 LEVEL_WARNING,
                 LEVEL_INFO   ,
                 LEVEL_NOISE  ,
+
+                QTY
             };
 
             enum class EntryType
@@ -51,6 +53,8 @@ namespace KMS
 
                 TYPE_END_OF_FILE = 'Z'
             };
+
+            static const char* LEVEL_NAMES[];
 
             LogFile(const File::Folder& aFolder, unsigned int aProcessId, unsigned int aThreadId);
 

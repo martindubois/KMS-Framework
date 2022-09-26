@@ -10,6 +10,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/DI/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Proc/Browser.h>
@@ -19,10 +20,10 @@
 
 #define DEFAULT_PREFERED (Type::CHROME)
 
-// Static function declarations
+// Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Proc::Browser::Type ToBrowserType(const char* aBT);
+static const KMS::DI::MetaData MD_PREFERED("Prefered", "Prefered = CHROME | DEFAULT | EDGE | NONE");
 
 namespace KMS
 {
@@ -32,14 +33,18 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Browser::TYPE_NAMES[] = { "CHROME", "DEFAULT", "EDGE", "NONE" };
+
         Browser::Browser()
-            : mAppMode(false)
+            : DI::Dictionary(NULL)
+            , mPrefered(DEFAULT_PREFERED, const_cast<DI::MetaData*>(&MD_PREFERED))
+            , mAppMode(false)
             , mKioskMode(false)
             , mProcess(NULL)
-            , mPrefered(DEFAULT_PREFERED)
             , mType(Type::NONE)
             , mWindow(0)
         {
+            AddEntry(&mPrefered);
         }
 
         Browser::~Browser()
@@ -140,31 +145,22 @@ namespace KMS
             Detach();
         }
 
-        // ===== Cfg::Configurable ==========================================
-
-        bool Browser::SetAttribute(const char* aA, const char* aV)
+        void Browser::Wait(unsigned int aTimeout_ms)
         {
-            if (NULL == aV)
+            unsigned int lTime_ms = 0;
+
+            while (aTimeout_ms >= lTime_ms)
             {
-                CFG_IF("Prefered") { SetPrefered(DEFAULT_PREFERED); return true; }
+                if (!IsOpen())
+                {
+                    return;
+                }
+
+                Sleep(100); // ms
+                lTime_ms += 100;
             }
-            else
-            {
-                CFG_CONVERT("Prefered", SetPrefered, ToBrowserType);
-            }
 
-            return Configurable::SetAttribute(aA, aV);
-        }
-
-        void Browser::DisplayHelp(FILE* aOut)
-        {
-            fprintf(aOut,
-                "===== KMS::Process::Browser =====\n"
-                "Prefered\n"
-                "    Default: CHROME\n"
-                "Prefered = CHROME|DEFAULT|EDGE|NONE\n");
-
-            Configurable::DisplayHelp(aOut);
+            KMS_EXCEPTION(TIMEOUT, "The browser dit not close in allowed time");
         }
 
         // Private
@@ -325,7 +321,7 @@ namespace KMS
 
             for (unsigned int i = 0; i < static_cast<unsigned int>(Type::NONE) - 1; i++)
             {
-                mType = ORDER[static_cast<unsigned int>(mPrefered)][i];
+                mType = ORDER[static_cast<unsigned int>(static_cast<Type>(mPrefered))][i];
 
                 Create(aURL);
                 if (NULL == mProcess)
@@ -370,19 +366,4 @@ namespace KMS
         }
 
     }
-}
-
-// Static functions
-// //////////////////////////////////////////////////////////////////////////
-
-KMS::Proc::Browser::Type ToBrowserType(const char* aBT)
-{
-    assert(NULL != aBT);
-
-    if (0 == strcmp(aBT, "CHROME" )) { return KMS::Proc::Browser::Type::CHROME ; }
-    if (0 == strcmp(aBT, "DEFAULT")) { return KMS::Proc::Browser::Type::DEFAULT; }
-    if (0 == strcmp(aBT, "EDGE"   )) { return KMS::Proc::Browser::Type::EDGE   ; }
-    if (0 == strcmp(aBT, "NONE"   )) { return KMS::Proc::Browser::Type::NONE   ; }
-
-    KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid browser type", aBT);
 }

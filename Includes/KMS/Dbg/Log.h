@@ -11,8 +11,10 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
 #include <KMS/Dbg/LogFile.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Enum.h>
+#include <KMS/DI/Folder.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Version.h>
 
@@ -21,7 +23,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log : public Cfg::Configurable
+        class Log : public DI::Dictionary
         {
 
         public:
@@ -32,17 +34,7 @@ namespace KMS
 
             bool IsFileEnabled() const;
 
-            void ResetConsoleLevel();
-
-            void ResetFileLevel();
-
-            void ResetFolder();
-
-            void SetConsoleLevel(LogFile::Level aL);
-
-            void SetFileLevel(LogFile::Level aL);
-
-            void SetFolder(const File::Folder& aF);
+            void CloseLogFiles();
 
             void WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, LogFile::Level aLevel);
 
@@ -54,9 +46,10 @@ namespace KMS
 
             void WriteVersion(const char* aProduct, const Version& aVersion);
 
-            // ===== Cfg::Configurable ======================================
-            virtual void DisplayHelp(FILE* aOut);
-            virtual bool SetAttribute(const char* aN, const char* aV);
+            // ===== Configurable attributes ================================
+            DI::Enum<LogFile::Level, LogFile::LEVEL_NAMES> mConsoleLevel;
+            DI::Enum<LogFile::Level, LogFile::LEVEL_NAMES> mFileLevel;
+            DI::Folder                                     mFolder;
 
         private:
 
@@ -66,8 +59,6 @@ namespace KMS
 
             const Log& operator = (const Log&);
 
-            void CloseLogFiles();
-
             LogFile* FindLogFile();
 
             unsigned int   mCounter;
@@ -75,11 +66,6 @@ namespace KMS
             LogFile::Level mEntryLevel;
             FileMap        mFiles;
             unsigned int   mProcessId;
-
-            // ===== Configurable attributes ================================
-            LogFile::Level mConsoleLevel;
-            LogFile::Level mFileLevel;
-            File::Folder   mFolder;
 
         };
 
