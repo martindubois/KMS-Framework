@@ -4,11 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Build.h
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Alias.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Folder.h>
@@ -97,16 +98,8 @@ namespace KMS
             DI::Array    mTests;
             DI::String   mVersionFile;
 
-            DI::Alias mOSBinaries;
-            DI::Alias mOSConfigurations;
-            DI::Alias mOSFiles;
-            DI::Alias mOSFolders;
-            DI::Alias mOSLibraries;
-            DI::Alias mOSPreBuildCmds;
-            DI::Alias mOSTests;
-
             #ifdef _KMS_WINDOWS_
-                DI::Array mOSProcessors;
+                DI::Array mWindowsProcessors;
             #endif
 
         };

@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/NetAddressRange.h>
 
 #include <KMS/Net/Socket.h>
@@ -24,10 +24,10 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_ALLOWED_RANGES  ("AllowedRanges"  , "AllowedRanges += {Address}");
-static const KMS::DI::MetaData MD_LOCAL_ADDRESS   ("LocalAddress"   , "LocalAddress = {Address}");
-static const KMS::DI::MetaData MD_RECEIVER_TIMEOUT("ReceiverTimeout", "ReceiverTimeout = {ms}");
-static const KMS::DI::MetaData MD_SEND_TIMEOUT    ("SendTimeout"    , "SendTimeout = {ms}");
+static const KMS::Cfg::MetaData MD_ALLOWED_RANGES  ("AllowedRanges += {Address}");
+static const KMS::Cfg::MetaData MD_LOCAL_ADDRESS   ("LocalAddress = {Address}");
+static const KMS::Cfg::MetaData MD_RECEIVER_TIMEOUT("ReceiverTimeout = {ms}");
+static const KMS::Cfg::MetaData MD_SEND_TIMEOUT    ("SendTimeout = {ms}");
 
 namespace KMS
 {
@@ -58,11 +58,9 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Socket::Socket(Type aType)
-            : DI::Dictionary(NULL)
-            , mAllowedRanges    (                            &MD_ALLOWED_RANGES)
-            , mLocalAddress     (DEFAULT_LOCAL_ADDRESS     , &MD_LOCAL_ADDRESS)
-            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms, &MD_RECEIVER_TIMEOUT)
-            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms   , &MD_SEND_TIMEOUT)
+            : mLocalAddress     (DEFAULT_LOCAL_ADDRESS)
+            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms)
+            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms)
             , mBroadcastReceive(false)
             , mSocket(INVALID_SOCKET)
             , mState(State::CLOSED)
@@ -70,10 +68,10 @@ namespace KMS
         {
             mAllowedRanges.SetCreator(DI::NetAddressRange::Create);
 
-            AddEntry(&mAllowedRanges);
-            AddEntry(&mLocalAddress);
-            AddEntry(&mReceiveTimeout_ms);
-            AddEntry(&mSendTimeout_ms);
+            AddEntry("AllowedRanges" , &mAllowedRanges    , false, &MD_ALLOWED_RANGES);
+            AddEntry("LocalAddress"  , &mLocalAddress     , false, &MD_LOCAL_ADDRESS);
+            AddEntry("ReceiveTimeout", &mReceiveTimeout_ms, false, &MD_RECEIVER_TIMEOUT);
+            AddEntry("SendTimeout"   , &mSendTimeout_ms   , false, &MD_SEND_TIMEOUT);
         }
 
         Socket::~Socket() { VerifyState(State::CLOSED); }

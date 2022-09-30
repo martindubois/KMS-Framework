@@ -14,8 +14,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/DI/MetaData.h>
-#include <KMS/Convert.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Environment.h>
 
 #include <KMS/ByteTool.h>
@@ -35,7 +34,7 @@ static const char* LABELS[16] =
     "x0_", "x1_", "x2_", "x3_", "x4_", "x5_", "x6_", "x7_", "x8_", "x9_", "xA_", "xB_", "xC_", "xD_", "xE_", "xF_"
 };
 
-static const KMS::DI::MetaData MD_SOURCE("Source", "Source={FileName}");
+static const KMS::Cfg::MetaData MD_SOURCE("Source = {FileName}");
 
 // Static function declaration
 // //////////////////////////////////////////////////////////////////////////
@@ -79,11 +78,11 @@ namespace KMS
         return lResult;
     }
 
-    ByteTool::ByteTool() : Dictionary(NULL), mSource(stdin, "stdin", &MD_SOURCE)
+    ByteTool::ByteTool() : mSource(stdin, "stdin")
     {
-        memset(&mHistogram, 0, sizeof(mHistogram));
+        AddEntry("Source", &mSource, false, &MD_SOURCE);
 
-        AddEntry(&mSource);
+        memset(&mHistogram, 0, sizeof(mHistogram));
     }
 
     ByteTool::~ByteTool() {}

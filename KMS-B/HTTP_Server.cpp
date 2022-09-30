@@ -25,9 +25,9 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_SERVER("Server", NULL);
+#define NAME_SERVER "Server"
 
-static const KMS::DI::String SERVER("KMS-Framework", &MD_SERVER);
+static const KMS::DI::String SERVER("KMS-Framework");
 
 namespace KMS
 {
@@ -37,9 +37,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Server::Server() : mResponseHeader(NULL)
+        Server::Server()
         {
-            mResponseHeader.AddEntry(&SERVER);
+            mResponseHeader.AddEntry(NAME_SERVER, &SERVER);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }

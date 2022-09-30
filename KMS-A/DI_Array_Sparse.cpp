@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
-
 #include <KMS/DI/Array_Sparse.h>
 
 namespace KMS
@@ -20,9 +18,71 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Array_Sparse::Array_Sparse(const MetaData* aMD) : Object(aMD), mCreator(NULL) {}
+        void Array_Sparse::Clear()
+        {
+            for (Internal::value_type lVT : mInternal)
+            {
+                lVT.second.Release();
+            }
 
-        Object* Array_Sparse::operator [] (int aIndex)
+            mInternal.clear();
+        }
+
+        void Array_Sparse::AddEntry(int aIndex, const Object* aO)
+        {
+            assert(NULL != aO);
+
+            Internal::iterator lIt = mInternal.find(aIndex);
+            if (mInternal.end() == lIt)
+            {
+                mInternal.insert(Internal::value_type(aIndex, Entry(aO)));
+            }
+            else
+            {
+                lIt->second.Set(aO);
+            }
+        }
+
+        void Array_Sparse::AddEntry(int aIndex, Object* aO, bool aDelete)
+        {
+            assert(NULL != aO);
+
+            Internal::iterator lIt = mInternal.find(aIndex);
+            if (mInternal.end() == lIt)
+            {
+                mInternal.insert(Internal::value_type(aIndex, Entry(aO, aDelete)));
+            }
+            else
+            {
+                lIt->second.Set(aO, aDelete);
+            }
+        }
+
+        DI::Object* Array_Sparse::CreateEntry(int aIndex)
+        {
+            DI::Object* lResult = CallCreator();
+            assert(NULL != lResult);
+
+            AddEntry(aIndex, lResult);
+
+            return lResult;
+        }
+
+        const Object* Array_Sparse::GetEntry_R(int aIndex) const
+        {
+            const Object* lResult = NULL;
+
+            Internal::const_iterator lIt = mInternal.find(aIndex);
+            if (mInternal.end() != lIt)
+            {
+                lResult = lIt->second;
+                assert(NULL != lResult);
+            }
+
+            return lResult;
+        }
+
+        Object* Array_Sparse::GetEntry_RW(int aIndex)
         {
             Object* lResult = NULL;
 
@@ -36,50 +96,11 @@ namespace KMS
             return lResult;
         }
 
-        void Array_Sparse::Clear()
-        {
-            for (Internal::value_type lVT : mInternal)
-            {
-                Object* lObject = lVT.second;
-                assert(NULL != lObject);
+        // ===== Container ==================================================
 
-                lObject->Release();
-            }
+        unsigned int Array_Sparse::GetCount() const { return static_cast<unsigned int>(mInternal.size()); }
 
-            mInternal.clear();
-        }
-
-        void Array_Sparse::SetCreator(Creator aC) { mCreator = aC; }
-
-        void Array_Sparse::AddEntry(int aIndex, Object* aO)
-        {
-            assert(NULL != aO);
-
-            Internal::iterator lIt = mInternal.find(aIndex);
-            if (mInternal.end() == lIt)
-            {
-                mInternal.insert(Internal::value_type(aIndex, aO));
-            }
-            else
-            {
-                DI::Object* lObject = lIt->second;
-                assert(NULL != lObject);
-
-                lObject->Release();
-
-                lIt->second = aO;
-            }
-        }
-
-        DI::Object* Array_Sparse::CreateEntry(int aIndex, const MetaData* aMD)
-        {
-            DI::Object* lResult = mCreator(aMD);
-            assert(NULL != lResult);
-
-            AddEntry(aIndex, lResult);
-
-            return lResult;
-        }
+        bool Array_Sparse::IsEmpty() const { return mInternal.empty(); }
 
         // ===== Object =====================================================
 

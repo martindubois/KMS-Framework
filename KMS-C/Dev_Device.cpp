@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 
 #include <KMS/Dev/Device.h>
 
@@ -20,11 +20,11 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_INDEX      ("Index"    , "Index = {Numeber}");
-static const KMS::DI::MetaData MD_INTERFACE  ("Interface", "Interface = {GUID}");
-static const KMS::DI::MetaData MD_LINK       ("Link"     , "Link = {Link}");
-static const KMS::DI::MetaData MD_HARDWARE_ID("Link"     , "HardwareId = {Id}");
-static const KMS::DI::MetaData MD_LOCATION   ("Location" , "Location = {Location}");
+static const KMS::Cfg::MetaData MD_INDEX      ("Index = {Numeber}");
+static const KMS::Cfg::MetaData MD_INTERFACE  ("Interface = {GUID}");
+static const KMS::Cfg::MetaData MD_LINK       ("Link = {Link}");
+static const KMS::Cfg::MetaData MD_HARDWARE_ID("HardwareId = {Id}");
+static const KMS::Cfg::MetaData MD_LOCATION   ("Location = {Location}");
 
 namespace KMS
 {
@@ -39,23 +39,18 @@ namespace KMS
         const unsigned int Device::FLAG_WRITE_ACCESS = 0x00000004;
 
         Device::Device()
-            : DI::Dictionary(NULL)
-            , mIndex(DEFAULT_INDEX, &MD_INDEX)
-            , mLink("", &MD_LINK)
+            : mIndex(DEFAULT_INDEX)
             #ifdef _KMS_WINDOWS_
-                , mHardwareId("", &MD_HARDWARE_ID)
-                , mInterface(&MD_INTERFACE)
-                , mLocation("", &MD_LOCATION)
                 , mHandle(INVALID_HANDLE_VALUE)
             #endif
         {
-            AddEntry(&mIndex);
-            AddEntry(&mLink);
+            AddEntry("Index", &mIndex, false, &MD_INDEX);
+            AddEntry("Link" , &mLink , false, &MD_LINK);
 
             #ifdef _KMS_WINDOWS_
-                AddEntry(&mHardwareId);
-                AddEntry(&mInterface);
-                AddEntry(&mLocation);
+                AddEntry("HardwareId", &mHardwareId, false, &MD_HARDWARE_ID);
+                AddEntry("Interface" , &mInterface , false, &MD_INTERFACE);
+                AddEntry("Location"  , &mLocation  , false, &MD_LOCATION);
 
                 ResetInterface();
             #endif

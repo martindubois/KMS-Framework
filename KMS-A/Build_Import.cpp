@@ -9,7 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
@@ -22,20 +22,26 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_DEPENDENCIES       ("Dependencies"     , "Dependencies += {Product};{Version}");
-static const KMS::DI::MetaData MD_OS_INDEPENDENT_DEPS("OSIndependentDeps", "OSIndependentDeps += {Product};{Version}");
-static const KMS::DI::MetaData MD_REPOSITORIES       ("Repositories"     , "Repositories += {Path}");
+static const KMS::Cfg::MetaData MD_DEPENDENCIES       ("Dependencies += {Product};{Version}");
+static const KMS::Cfg::MetaData MD_OS_INDEPENDENT_DEPS("OSIndependentDeps += {Product};{Version}");
+static const KMS::Cfg::MetaData MD_REPOSITORIES       ("Repositories += {Path}");
 
 #ifdef _KMS_DARWIN_
-    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("DarwinDependencies", "DarwinDependencies += {Product};{Version}");
+    #define NAME_OS "Darwin"
+
+    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("DarwinDependencies += {Product};{Version}");
 #endif
 
 #ifdef _KMS_LINUX_
-    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("LinuxDependencies", "LinuxDependencies += {Product};{Version}");
+    #define NAME_OS "Linux"
+
+    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("LinuxDependencies += {Product};{Version}");
 #endif
 
 #ifdef _KMS_WINDOWS_
-    static const KMS::DI::MetaData MD_OS_DEPENDENCIES("WindowsDependencies", "WindowsDependencies += {Product};{Version}");
+    #define NAME_OS "Windows"
+
+    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("WindowsDependencies += {Product};{Version}");
 #endif
 
 namespace KMS
@@ -76,23 +82,17 @@ namespace KMS
             return lResult;
         }
 
-        Import::Import()
-            : DI::Dictionary(NULL)
-            , mDependencies     (&MD_DEPENDENCIES)
-            , mOSIndependentDeps(&MD_OS_INDEPENDENT_DEPS)
-            , mRepositories     (&MD_REPOSITORIES)
-            , mOSDependencies(&mDependencies, &MD_OS_DEPENDENCIES)
-            , mImport("Import")
+        Import::Import() : mImport("Import")
         {
             mDependencies     .SetCreator(DI::String::Create);
             mOSIndependentDeps.SetCreator(DI::String::Create);
             mRepositories     .SetCreator(DI::Folder::Create);
 
-            AddEntry(&mDependencies);
-            AddEntry(&mOSIndependentDeps);
-            AddEntry(&mRepositories);
+            AddEntry("Dependencies"     , &mDependencies     , false, &MD_DEPENDENCIES);
+            AddEntry("OSIndependentDeps", &mOSIndependentDeps, false, &MD_OS_INDEPENDENT_DEPS);
+            AddEntry("Repositories"     , &mRepositories     , false, &MD_REPOSITORIES);
 
-            AddEntry(&mOSDependencies);
+            AddEntry(NAME_OS "Dependencies", &mDependencies, false, &MD_OS_DEPENDENCIES);
 
             #ifdef _KMS_LINUX_
                 File::Folder lExport(File::Folder::Id::HOME, "Export");
@@ -102,14 +102,14 @@ namespace KMS
                 File::Folder lExport("K:\\Export");
             #endif
 
-            mRepositories.AddEntry(new DI::Folder(lExport, &DI::META_DATA_DELETE_OBJECT));
+            mRepositories.AddEntry(new DI::Folder(lExport));
         }
 
         Import::~Import() {}
 
-        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD, &DI::META_DATA_DELETE_OBJECT)); }
-        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD, &DI::META_DATA_DELETE_OBJECT)); }
-        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR, &DI::META_DATA_DELETE_OBJECT)); }
+        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD)); }
+        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD)); }
+        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR)); }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)
         {
@@ -130,11 +130,11 @@ namespace KMS
             lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
 
             const DI::Array::Internal& lInternal = mRepositories.GetInternal();
-            for (DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::Folder* lR = dynamic_cast<const DI::Folder*>(lObj);
+                const DI::Folder* lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
                 assert(NULL != lR);
 
                 if (lR->Get().DoesFolderExist(lProduct))
@@ -162,22 +162,22 @@ namespace KMS
             }
 
             const DI::Array::Internal& lInternalD = mDependencies.GetInternal();
-            for (DI::Object* lObj : lInternalD)
+            for (const DI::Container::Entry& lEntry : lInternalD)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lD = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, false);
             }
 
             const DI::Array::Internal& lInternalO = mOSIndependentDeps.GetInternal();
-            for (DI::Object* lObj : lInternalO)
+            for (const DI::Container::Entry& lEntry : lInternalO)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lD = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, true);

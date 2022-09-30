@@ -12,7 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
 #include <KMS/Modbus/Slave_Com.h>
@@ -27,10 +27,10 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_COILS            ("Coils"           , "Coils[{Address}] = {Name}[;{Value}][;{Flags}]");
-static const KMS::DI::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs"  , "DiscreteInputs[{Address}] = {Name}[;{Value}][;{Flags}]");
-static const KMS::DI::MetaData MD_HOLDING_REGISTERS("HoldingRegisters", "HoldingRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
-static const KMS::DI::MetaData MD_INPUT_REGISTERS  ("InputRegisters"  , "InputRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::Cfg::MetaData MD_COILS            ("Coils[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::Cfg::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::Cfg::MetaData MD_HOLDING_REGISTERS("HoldingRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
+static const KMS::Cfg::MetaData MD_INPUT_REGISTERS  ("InputRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
 
 #define MSG_READ_COILS             (1)
 #define MSG_READ_DISCRETE_INPUTS   (2)
@@ -52,7 +52,7 @@ extern "C"
     static void OnCtrlC(int aSignal);
 }
 
-static KMS::DI::Object* CreateItem(const KMS::DI::MetaData* aMD);
+static KMS::DI::Object* CreateItem();
 
 static KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn);
 
@@ -120,23 +120,17 @@ namespace KMS
             return lResult;
         }
 
-        Simulator::Simulator()
-            : DI::Dictionary(NULL)
-            , mCoils           (&MD_COILS)
-            , mDiscreteInputs  (&MD_DISCRETE_INPUTS)
-            , mHoldingRegisters(&MD_HOLDING_REGISTERS)
-            , mInputRegisters  (&MD_INPUT_REGISTERS)
-            , mSlave(NULL)
+        Simulator::Simulator() : mSlave(NULL)
         {
             mCoils           .SetCreator(CreateItem);
             mDiscreteInputs  .SetCreator(CreateItem);
             mHoldingRegisters.SetCreator(CreateItem);
             mInputRegisters  .SetCreator(CreateItem);
 
-            AddEntry(&mCoils);
-            AddEntry(&mDiscreteInputs);
-            AddEntry(&mHoldingRegisters);
-            AddEntry(&mInputRegisters);
+            AddEntry("Coils"           , &mCoils           , false, &MD_COILS);
+            AddEntry("DiscreteInputs"  , &mDiscreteInputs  , false, &MD_DISCRETE_INPUTS);
+            AddEntry("HoldingRegisters", &mHoldingRegisters, false, &MD_HOLDING_REGISTERS);
+            AddEntry("InputRegisters"  , &mInputRegisters  , false, &MD_INPUT_REGISTERS);
         }
 
         void Simulator::InitSlave(Slave* aSlave)
@@ -193,7 +187,7 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Simulator::Item::Item(const DI::MetaData* aMD) : DI::Value(aMD), mFlags(0), mValue(0) {}
+        Simulator::Item::Item() : mFlags(0), mValue(0) {}
 
         // ===== DI::Value ==================================================
 
@@ -247,7 +241,7 @@ namespace KMS
             {
                 bool lValue = false;
 
-                const DI::Object* lObject = mCoils[aData->mStartAddr + i];
+                const DI::Object* lObject = mCoils.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Coil", aData->mStartAddr + i, OFF);
@@ -276,7 +270,7 @@ namespace KMS
             {
                 bool lValue = false;
 
-                const DI::Object* lObject = mDiscreteInputs[aData->mStartAddr + i];
+                const DI::Object* lObject = mDiscreteInputs.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Discrete Input", aData->mStartAddr + i, OFF);
@@ -305,7 +299,7 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                const DI::Object* lObject = mHoldingRegisters[aData->mStartAddr + i];
+                const DI::Object* lObject = mHoldingRegisters.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Holding Register", aData->mStartAddr + i, 0);
@@ -334,7 +328,7 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                const DI::Object* lObject = mInputRegisters[aData->mStartAddr + i];
+                const DI::Object* lObject = mInputRegisters.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Input Register", aData->mStartAddr + i, 0);
@@ -361,7 +355,7 @@ namespace KMS
 
             RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
 
-            DI::Object* lObject = mCoils[aData->mStartAddr];
+            DI::Object* lObject = mCoils.GetEntry_RW(aData->mStartAddr);
             if (NULL == lObject)
             {
                 TraceUnknown("Write Single Coil", aData->mStartAddr, lValue);
@@ -392,7 +386,7 @@ namespace KMS
 
             RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
 
-            DI::Object* lObject = mHoldingRegisters[aData->mStartAddr];
+            DI::Object* lObject = mHoldingRegisters.GetEntry_RW(aData->mStartAddr);
             if (NULL == lObject)
             {
                 TraceUnknown("Write Single Register", aData->mStartAddr, lValue);
@@ -433,7 +427,7 @@ void OnCtrlC(int aSignal)
     sSimulator->Stop();
 }
 
-KMS::DI::Object* CreateItem(const KMS::DI::MetaData* aMD) { return new KMS::Modbus::Simulator::Item(aMD); }
+KMS::DI::Object* CreateItem() { return new KMS::Modbus::Simulator::Item(); }
 
 KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn)
 {
@@ -454,7 +448,7 @@ void TraceKnown(const char* aOp, KMS::Modbus::Address aA, const KMS::Modbus::Sim
 
     if (0 != (aItem.mFlags & aFlags))
     {
-        std::cout << aOp << " " << aItem.GetName() << " (" << aA << ") = " << aItem.mValue << std::endl;
+        std::cout << aOp << " " << aItem.mName.c_str() << " (" << aA << ") = " << aItem.mValue << std::endl;
     }
 }
 

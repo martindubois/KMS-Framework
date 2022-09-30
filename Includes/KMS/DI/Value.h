@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Value.h
+// Library   KMS-A
 
 #pragma once
 
@@ -14,8 +15,6 @@ namespace KMS
 {
     namespace DI
     {
-
-        class MetaData;
 
         class Value : public Object
         {
@@ -31,7 +30,7 @@ namespace KMS
 
         protected:
 
-            Value(const MetaData* aMD);
+            Value();
 
         };
 

@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Types.h>
@@ -71,11 +72,11 @@ namespace KMS
             Master* mMaster;
 
             // ===== Configurable attributes ====================================
-            DI::Array mCoils;
-            DI::Array mDiscreteInputs;
-            DI::Array mHoldingRegisters;
-            DI::Array mInputRegisters;
-            DI::Array mOperations;
+            DI::Dictionary mCoils;
+            DI::Dictionary mDiscreteInputs;
+            DI::Dictionary mHoldingRegisters;
+            DI::Dictionary mInputRegisters;
+            DI::Array      mOperations;
 
         };
 

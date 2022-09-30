@@ -9,7 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Alias.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
@@ -57,8 +57,6 @@ namespace KMS
             DI::Array mDependencies;
             DI::Array mOSIndependentDeps;
             DI::Array mRepositories;
-
-            DI::Alias mOSDependencies;
 
         };
 

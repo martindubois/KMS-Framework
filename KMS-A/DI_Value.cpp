@@ -25,7 +25,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Value::Value(const MetaData* aMD) : Object(aMD) {}
+        Value::Value() {}
 
     }
 }

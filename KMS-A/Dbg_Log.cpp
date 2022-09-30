@@ -11,8 +11,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
-#include <KMS/DI/MetaData.h>
-#include <KMS/Environment.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/OS.h>
 #include <KMS/Proc/Process.h>
 
@@ -21,9 +20,9 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_CONSOLE_LEVEL("ConsoleLevel", "ConsoleLevel = NOISE | INFO | WARNING | ERROR | NONE");
-static const KMS::DI::MetaData MD_FILE_LEVEL   ("FileLevel"   , "FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
-static const KMS::DI::MetaData MD_FOLDER       ("Folder"      , "Folder = {Path}");
+static const KMS::Cfg::MetaData MD_CONSOLE_LEVEL("ConsoleLevel = NOISE | INFO | WARNING | ERROR | NONE");
+static const KMS::Cfg::MetaData MD_FILE_LEVEL   ("FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
+static const KMS::Cfg::MetaData MD_FOLDER       ("Folder = {Path}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -37,17 +36,16 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Log::Log()
-            : DI::Dictionary(NULL)
-            , mConsoleLevel(LogFile::Level::LEVEL_WARNING, &MD_CONSOLE_LEVEL)
-            , mFileLevel   (LogFile::Level::LEVEL_INFO   , &MD_FILE_LEVEL)
-            , mFolder      ("KMS-Framework"              , &MD_FOLDER)
+            : mConsoleLevel(LogFile::Level::LEVEL_WARNING)
+            , mFileLevel   (LogFile::Level::LEVEL_INFO)
+            , mFolder      ("KMS-Framework")
             , mCounter(0)
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
         {
-            AddEntry(&mConsoleLevel);
-            AddEntry(&mFileLevel);
-            AddEntry(&mFolder);
+            AddEntry("ConsoleLevel", &mConsoleLevel, false, &MD_CONSOLE_LEVEL);
+            AddEntry("FileLevel"   , &mFileLevel   , false, &MD_FILE_LEVEL);
+            AddEntry("Folder"      , &mFolder      , false, &MD_FOLDER);
 
             CloseLogFiles();
         }

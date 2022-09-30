@@ -12,7 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/Console/Color.h>
 
@@ -21,8 +21,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_GROUPS("Groups", "Groups+={Name}");
-static const KMS::DI::MetaData MD_TESTS ("Tests" , "Tests+={Name}" );
+static const KMS::Cfg::MetaData MD_GROUPS("Groups+={Name}");
+static const KMS::Cfg::MetaData MD_TESTS ("Tests+={Name}" );
 
 namespace KMS
 {
@@ -61,17 +61,13 @@ namespace KMS
             return lResult;
         }
 
-        TestManager::TestManager()
-            : DI::Dictionary(NULL)
-            , mGroups(&MD_GROUPS)
-            , mTests (&MD_TESTS)
-            , mErrorCount(0)
+        TestManager::TestManager() : mErrorCount(0)
         {
             mGroups.SetCreator(DI::String::Create);
             mTests .SetCreator(DI::String::Create);
 
-            AddEntry(&mGroups);
-            AddEntry(&mTests);
+            AddEntry("Groups", &mGroups, false, &MD_GROUPS);
+            AddEntry("Tests" , &mTests , false, &MD_TESTS);
         }
 
         void TestManager::AddGroup(const char * aGroup)

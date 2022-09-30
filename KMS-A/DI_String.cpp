@@ -18,9 +18,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DI::Object* String::Create(const MetaData* aMD) { return new String("", aMD); }
+        DI::Object* String::Create() { return new String(); }
 
-        String::String(const char* aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn) {}
+        String::String(const char* aIn) : mInternal(aIn) {}
 
         void String::operator = (const char* aIn) { mInternal = aIn; }
 

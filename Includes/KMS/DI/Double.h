@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Double.h
+// Library   KMS-A
 
 #pragma once
 
@@ -24,9 +25,9 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            Double(double aIn, const MetaData* aMD);
+            Double(double aIn = 0.0);
 
             const Double& operator = (double aIn);
 

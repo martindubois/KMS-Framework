@@ -22,17 +22,17 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            Enum(T aIn, const MetaData* aMD);
+            Enum(T aIn);
 
             void operator = (T aIn);
 
             operator T () const;
 
             // ===== Value ==================================================
-            unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
-            void Set(const char* aIn);
+            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
+            virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
             virtual ~Enum();
@@ -47,7 +47,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T, const char** N>
-        inline Enum<T, N>::Enum(T aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn) {}
+        inline Enum<T, N>::Enum(T aIn) : mInternal(aIn) {}
 
         template <typename T, const char** N>
         inline void Enum<T, N>::operator = (T aIn) { mInternal = aIn; }

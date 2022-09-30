@@ -52,7 +52,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     KMS::HTTP::ReactApp lRA;
     TestApp lTA;
 
-    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1", &KMS::DI::META_DATA_DELETE_OBJECT));
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1"));
 
     lRA.AddRoute("/");
 
@@ -87,10 +87,10 @@ bool TestApp::GetResult() const
 
 // ===== KMS::Msg::Receiver =================================================
 
-static const KMS::DI::MetaData MD_ACCESS_CONTROL_ALLOW_ORIGIN("Access-Control-Allow-Origin", NULL);
-static const KMS::DI::MetaData MD_VERSION                    ("Version", NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
+#define NAME_ACCESS_CONTROL_ALLOW_ORIGIN "Access-Control-Allow-Origin"
+#define NAME_VERSION                     "Version"
 
-static const KMS::DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*", &MD_ACCESS_CONTROL_ALLOW_ORIGIN);
+static const KMS::DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
 
 unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 {
@@ -107,9 +107,9 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         VERSION.GetString(lVersion, sizeof(lVersion));
 
-        lRequest->mResponseHeader.AddEntry(&ACCESS_CONTROL_ALLOW_ORIGIN);
+        lRequest->mResponseHeader.AddEntry(NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
 
-        lRequest->mResponseData.AddEntry(new KMS::DI::String(lVersion, &MD_VERSION));
+        lRequest->mResponseData.AddEntry(NAME_VERSION, new KMS::DI::String(lVersion));
         break;
 
     default:

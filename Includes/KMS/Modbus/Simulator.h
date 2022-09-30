@@ -4,11 +4,11 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Simulator.h
+// Library   KMS-C
 
 #pragma once
 
 // ===== C++ ================================================================
-#include <map>
 #include <string>
 
 // ===== Includes ===========================================================
@@ -64,7 +64,7 @@ namespace KMS
 
             public:
 
-                Item(const DI::MetaData* aMD);
+                Item();
 
                 // ===== DI::Value ==========================================
                 virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;

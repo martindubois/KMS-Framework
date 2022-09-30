@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Cfg/Configurator.h
+// Library   KMS-A
 
 #pragma once
 
@@ -60,11 +61,11 @@ namespace KMS
 
             void SetBoolean(const char* aA);
 
-            void SetValue(const char* aA, const char* aV);
-
-            void SetArrayValue(const char* aA, const char* aI, const char* aV);
-
             void SetArrayValue(const char* aA, unsigned int aI, const char* aV);
+
+            void SetDictionaryValue(const char* aA, const char* aI, const char* aV);
+
+            void SetValue(const char* aA, const char* aV);
 
             ConfigurableList mConfigurables;
 

@@ -18,11 +18,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Object* Folder::Create(const MetaData* aMD) { return new Folder(aMD); }
+        Object* Folder::Create() { return new Folder(); }
 
-        Folder::Folder(const MetaData* aMD) : String_Expand("", aMD) {}
+        Folder::Folder() {}
 
-        Folder::Folder(const File::Folder& aIn, const MetaData* aMD) : String_Expand(aIn.GetPath(), aMD), mInternal(aIn) {}
+        Folder::Folder(const File::Folder& aIn) : String_Expand(aIn.GetPath()), mInternal(aIn) {}
 
         void Folder::operator = (const File::Folder& aIn)
         {

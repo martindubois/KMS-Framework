@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/GUID.h
+// Library   KMS-A
 
 #pragma once
 
@@ -23,11 +24,11 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            GUID(const MetaData* aMD);
+            GUID();
 
-            GUID(const ::GUID& aG, const char* aIn, const MetaData* aMD);
+            GUID(const ::GUID& aG, const char* aIn);
 
             void Set(const ::GUID& aIn);
 

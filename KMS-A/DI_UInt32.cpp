@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        UInt32::UInt32(uint32_t aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
+        UInt32::UInt32(uint32_t aIn) : mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
 
         void UInt32::operator = (uint32_t aIn) { mInternal = aIn; }
 

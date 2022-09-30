@@ -22,11 +22,11 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            NetAddressRange(const MetaData* aMD);
+            NetAddressRange();
 
-            NetAddressRange(const char* aIn, const MetaData* aMD);
+            NetAddressRange(const char* aIn);
 
             void operator = (const Net::AddressRange& aIn);
 

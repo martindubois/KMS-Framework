@@ -8,7 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
@@ -26,19 +25,19 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mOSProcessors.AddEntry(new DI::String(aP, &DI::META_DATA_DELETE_OBJECT)); }
+        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mWindowsProcessors.AddEntry(new DI::String(aP)); }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
         void Build::Compile(const char* aC)
         {
-            const DI::Array::Internal& lInternal = mOSProcessors.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            const DI::Array::Internal& lInternal = mWindowsProcessors.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
                 File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
@@ -66,12 +65,12 @@ namespace KMS
             File::Folder lBinaries(mTempFolder, "Binaries");
             File::Folder lLibraries(mTempFolder, "Libraries");
 
-            const DI::Array::Internal& lInternal = mOSProcessors.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            const DI::Array::Internal& lInternal = mWindowsProcessors.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
                 std::string lCfg = aC;
@@ -90,11 +89,11 @@ namespace KMS
                 lLib.Create();
 
                 const DI::Array::Internal& lInternalB = mBinaries.GetInternal();
-                for (const DI::Object* lObj : lInternalB)
+                for (const DI::Container::Entry& lEntry : lInternalB)
                 {
-                    assert(NULL != lObj);
+                    assert(NULL != lEntry);
 
-                    const DI::String* lB = dynamic_cast<const DI::String*>(lObj);
+                    const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lB);
 
                     lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
@@ -102,11 +101,11 @@ namespace KMS
                 }
 
                 const DI::Array::Internal& lInternalL = mLibraries.GetInternal();
-                for (const DI::Object* lObj : lInternalL)
+                for (const DI::Container::Entry& lEntry : lInternalL)
                 {
-                    assert(NULL != lObj);
+                    assert(NULL != lEntry);
 
-                    const DI::String* lL = dynamic_cast<const DI::String*>(lObj);
+                    const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lL);
 
                     lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
@@ -117,20 +116,20 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            const DI::Array::Internal& lInternalP = mOSProcessors.GetInternal();
-            for (const DI::Object* lObj : lInternalP)
+            const DI::Array::Internal& lInternalP = mWindowsProcessors.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternalP)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
                 const DI::Array::Internal& lInternalT = mTests.GetInternal();
-                for (const DI::Object* lObj : lInternalT)
+                for (const DI::Container::Entry& lEntry : lInternalT)
                 {
-                    assert(NULL != lObj);
+                    assert(NULL != lEntry);
 
-                    const DI::String* lT = dynamic_cast<const DI::String*>(lObj);
+                    const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lT);
 
                     std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;

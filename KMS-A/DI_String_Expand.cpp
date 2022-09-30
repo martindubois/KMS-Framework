@@ -20,7 +20,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        String_Expand::String_Expand(const char* aIn, const MetaData* aMD) : String(aIn, aMD) {}
+        String_Expand::String_Expand(const char* aIn) : String(aIn) {}
 
         // ===== Value ======================================================
 

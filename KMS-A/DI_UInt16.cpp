@@ -18,9 +18,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Object* UInt16::Create(const MetaData* aMD) { return new UInt16(0, aMD); }
+        Object* UInt16::Create() { return new UInt16(); }
 
-        UInt16::UInt16(uint16_t aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
+        UInt16::UInt16(uint16_t aIn) : mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
 
         UInt16::operator uint16_t () const { return mInternal; }
 

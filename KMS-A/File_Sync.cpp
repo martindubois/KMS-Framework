@@ -11,8 +11,8 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/DI/MetaData.h>
-#include <KMS/Environment.h>
+#include <KMS/Cfg/MetaData.h>
+#include <KMS/DI/Array.h>
 #include <KMS/File/FileInfoList.h>
 
 #include <KMS/File/Sync.h>
@@ -25,13 +25,13 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_BIDIRECTIONAL ("Bidirectional" , "Bidirectional[{Group}] += {Path}");
-static const KMS::DI::MetaData MD_UNIDIRECTIONAL("Unidirectional", "Unidirectional += {Path};{Path}");
+static const KMS::Cfg::MetaData MD_BIDIRECTIONAL ("Bidirectional[{Group}] += {Path}");
+static const KMS::Cfg::MetaData MD_UNIDIRECTIONAL("Unidirectional += {Path};{Path}");
 
 // Static fonction desclarations
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::DI::Object* CreateGroup(const KMS::DI::MetaData* aMD);
+static KMS::DI::Object* CreateGroup();
 
 static KMS::File::FileInfoList* ToFileInfoList(const char* aFolder);
 
@@ -75,15 +75,12 @@ namespace KMS
         }
 
         Sync::Sync()
-            : DI::Dictionary(NULL)
-            , mBidirectional (&MD_BIDIRECTIONAL)
-            , mUnidirectional(&MD_UNIDIRECTIONAL)
         {
             mBidirectional .SetCreator(CreateGroup);
             mUnidirectional.SetCreator(DI::String::Create);
 
-            AddEntry(&mBidirectional);
-            AddEntry(&mUnidirectional);
+            AddEntry("Bidirectional" , &mBidirectional , false, &MD_BIDIRECTIONAL);
+            AddEntry("Unidirectional", &mUnidirectional, false, &MD_UNIDIRECTIONAL);
         }
 
         Sync::~Sync()
@@ -106,11 +103,11 @@ namespace KMS
         void Sync::Run_Bidirectional()
         {
             const DI::Dictionary::Internal& lInternal = mBidirectional.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Dictionary::Internal::value_type lVT : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lVT.second);
 
-                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lObj);
+                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
                 assert(NULL != lGroup);
 
                 Run_Bidirectional(*lGroup);
@@ -192,16 +189,14 @@ namespace KMS
             aB->Copy(aA, lFlags);
         }
 
-
-
         void Sync::VerifyConfig() const
         {
             const DI::Dictionary::Internal& lInternal = mBidirectional.GetInternal();
-            for (DI::Object* lObj : lInternal)
+            for (const DI::Dictionary::Internal::value_type lVT : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lVT.second);
 
-                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lObj);
+                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
                 assert(NULL != lGroup);
 
                 KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), CONFIG, "Number of folders cannot be one");
@@ -214,9 +209,9 @@ namespace KMS
 // Static fonctions
 // //////////////////////////////////////////////////////////////////////////
 
-KMS::DI::Object* CreateGroup(const KMS::DI::MetaData* aMD)
+KMS::DI::Object* CreateGroup()
 {
-    KMS::DI::Array* lResult = new KMS::DI::Array(aMD);
+    KMS::DI::Array* lResult = new KMS::DI::Array();
 
     lResult->SetCreator(KMS::DI::String::Create);
 

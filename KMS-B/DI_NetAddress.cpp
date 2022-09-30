@@ -18,11 +18,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DI::Object* NetAddress::Create(const MetaData* aMD) { return new NetAddress(aMD); }
+        DI::Object* NetAddress::Create() { return new NetAddress(); }
 
-        NetAddress::NetAddress(const MetaData* aMD) : String_Expand("", aMD) {}
+        NetAddress::NetAddress() {}
 
-        NetAddress::NetAddress(const char* aIn, const MetaData* aMD) : String_Expand(aIn, aMD), mInternal(aIn) {}
+        NetAddress::NetAddress(const char* aIn) : String_Expand(aIn), mInternal(aIn) {}
 
         void NetAddress::operator = (const Net::Address& aA) { mInternal = aA; }
 

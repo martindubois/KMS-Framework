@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 
 #include <KMS/Modbus/Master.h>
 
@@ -20,7 +20,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_DEVICE_ADDRESS("DeviceAddress", "DeviceAddress = {Address}");
+static const KMS::Cfg::MetaData MD_DEVICE_ADDRESS("DeviceAddress = {Address}");
 
 namespace KMS
 {
@@ -133,12 +133,9 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Master::Master()
-            : DI::Dictionary(NULL)
-            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS, &MD_DEVICE_ADDRESS)
-            , mLastException(Exception::NO_EXCEPTION)
+        Master::Master() : mLastException(Exception::NO_EXCEPTION)
         {
-            AddEntry(&mDeviceAddress);
+            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
         }
 
         uint8_t Master::GetDeviceAddress() const { return mDeviceAddress; }

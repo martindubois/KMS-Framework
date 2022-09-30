@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        File::File(FILE* aFile, const char* aIn, const MetaData* aMD) : String_Expand(aIn, aMD), mInternal(aFile), mMode("rb") {}
+        File::File(FILE* aFile, const char* aIn) : String_Expand(aIn), mInternal(aFile), mMode("rb") {}
 
         File::operator FILE* () { return mInternal; }
 

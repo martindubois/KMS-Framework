@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Array.h
+// Library   KMS-A
 
 #pragma once
 
@@ -11,61 +12,46 @@
 #include <vector>
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Object.h>
+#include <KMS/DI/Container.h>
 
 namespace KMS
 {
     namespace DI
     {
 
-        class Array : public Object
+        class Array : public Container
         {
 
         public:
 
-            typedef DI::Object* (*Creator)(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
-
-            Array(const MetaData* aMD);
-
-            Object* operator [] (int aIndex);
-
-            const Object* operator [] (int aIndex) const;
-
-            Object* operator [] (const char* aName);
-
-            const Object* operator [] (const char* aName) const;
-
-            void Clear();
-
-            unsigned int GetCount() const;
-
-            bool IsEmpty() const;
-
-            void SetCreator(Creator aCreator);
-
-            void AddEntry(      Object* aE);
+            void AddEntry(      Object* aE, bool aDelete);
             void AddEntry(const Object* aE);
 
-            DI::Object* CreateEntry(const KMS::DI::MetaData* aMD);
+            DI::Object* CreateEntry();
 
-            DI::Object* CreateEntry(const char* aName, const char* aLabel, unsigned int aFlags = 0);
+            const Object* GetEntry_R(int aIndex) const;
+
+            Object* GetEntry_RW(int aIndex);
+
+            // ===== Container ==============================================
+            virtual void         Clear();
+            virtual unsigned int GetCount() const;
+            virtual bool         IsEmpty() const;
 
             // ===== Object =================================================
             virtual ~Array();
 
         // Internal
 
-            typedef std::vector<Object*> Internal;
+            typedef std::vector<Container::Entry> Internal;
 
             const Internal& GetInternal() const;
 
             Internal& GetInternal();
 
         private:
-
-            Creator mCreator;
 
             Internal mInternal;
 

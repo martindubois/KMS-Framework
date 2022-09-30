@@ -51,7 +51,7 @@ namespace KMS
 
         Slave_Com::Slave_Com()
         {
-            AddEntry(&mPort);
+            AddEntry("Port", &mPort);
 
             Reset();
         }

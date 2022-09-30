@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Array.h>
-#include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt32.h>
 #include <KMS/Text/ReadPtr.h>
@@ -109,13 +107,13 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt32(0, &KMS::DI::META_DATA_DELETE_OBJECT);
+        lUInt32 = new KMS::DI::UInt32();
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;
 
     default:
-        lString = new KMS::DI::String("", &KMS::DI::META_DATA_DELETE_OBJECT);
+        lString = new KMS::DI::String();
         Decode_Value(lString, &lPtr);
         *aObject = lString;
     }
@@ -141,7 +139,7 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
 
         lPtr.SkipBlank();
 
-        KMS::DI::Object* lObject = (*aDictionary)[lName];
+        KMS::DI::Object* lObject = aDictionary->GetEntry_RW(lName);
         if (NULL != lObject)
         {
             Decode(lObject, &lPtr);
@@ -151,9 +149,7 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
             Decode(&lObject, &lPtr);
             assert(NULL != lObject);
 
-            unsigned int lFlags = KMS::DI::MetaData::FLAG_DELETE_OBJECT | KMS::DI::MetaData::FLAG_COPY_NAME | KMS::DI::MetaData::FLAG_DELETE_META_DATA;
-            lObject->SetMetaData(new KMS::DI::MetaData(lName, NULL, lFlags));
-            aDictionary->AddEntry(lObject);
+            aDictionary->AddEntry(lName, lObject);
         }
 
         lPtr.SkipBlank();
@@ -214,15 +210,15 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
     KMS::Text::WritePtr lPtr(*aPtr);
 
     const KMS::DI::Dictionary::Internal& lInternal = aDictionary->GetInternal();
-    for (const KMS::DI::Object* lObj : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
     {
-        assert(NULL != lObj);
+        assert(NULL != lVT.second);
 
-        lPtr += lObj->GetName(lPtr, lPtr.GetRemainingSize());
+        lPtr.Write(lVT.first.c_str(), static_cast<unsigned int>(lVT.first.size()));
 
         lPtr.Write(": ", 2);
 
-        Encode(lObj, &lPtr);
+        Encode(lVT.second, &lPtr);
 
         lPtr.Write("\r\n", 2);
     }

@@ -3,27 +3,27 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/DI_Alias.cpp
+// File      KMS-A/Cfg_MetaData.cpp
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Alias.h>
+#include <KMS/Cfg/MetaData.h>
 
 namespace KMS
 {
-    namespace DI
+    namespace Cfg
     {
 
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Alias::Alias(Object* aObj, const MetaData* aMD) : Object(aMD), mInternal(aObj) {}
+        MetaData::MetaData(const char* aHelp) : mHelp(aHelp) {}
 
-        Object* Alias::Get() { return mInternal; }
+        const char* MetaData::GetHelp() const { return mHelp; }
 
-        // ===== Object =====================================================
-        Alias::~Alias() {}
+        // ===== DI::MetaData ===============================================
+        MetaData::~MetaData() {}
 
     }
 }

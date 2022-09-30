@@ -7,10 +7,10 @@
 
 DeviceAddress = 0
 
-DTR = true
-Index = 3
-RTS = true
-Speed = 9600
+Port.DTR = true
+Port.Index = 3
+Port.RTS = true
+Port.Speed = 9600
 
 Operations += Dump
 

@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
-
 #include <KMS/DI/Array.h>
 
 namespace KMS
@@ -20,73 +18,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Array::Array(const MetaData* aMD) : Object(aMD), mCreator(NULL) {}
-
-        Object* Array::operator [] (int aIndex)
-        {
-            if (mInternal.size() <= aIndex)
-            {
-                return NULL;
-            }
-
-            assert(NULL != mInternal[aIndex]);
-
-            return mInternal[aIndex];
-        }
-
-        const Object* Array::operator [] (int aIndex) const
-        {
-            if (mInternal.size() <= aIndex)
-            {
-                return NULL;
-            }
-
-            assert(NULL != mInternal[aIndex]);
-
-            return mInternal[aIndex];
-        }
-
-        Object* Array::operator [] (const char* aKey)
-        {
-            assert(NULL != aKey);
-
-            for (Object* lObject : mInternal)
-            {
-                assert(NULL != lObject);
-
-                if (lObject->Is(aKey))
-                {
-                    return lObject;
-                }
-            }
-
-            return NULL;
-        }
-
-        const Object* Array::operator [] (const char* aKey) const
-        {
-            assert(NULL != aKey);
-
-            for (Object* lObject : mInternal)
-            {
-                assert(NULL != lObject);
-
-                if (lObject->Is(aKey))
-                {
-                    return lObject;
-                }
-            }
-
-            return NULL;
-        }
-
         void Array::Clear()
         {
-            for (Object* lO : mInternal)
+            for (Container::Entry& lEntry : mInternal)
             {
-                assert(NULL != lO);
-
-                lO->Release();
+                lEntry.Release();
             }
 
             mInternal.clear();
@@ -96,47 +32,41 @@ namespace KMS
 
         bool Array::IsEmpty() const { return mInternal.empty(); }
 
-        void Array::SetCreator(Creator aC) { mCreator = aC; }
-
-        void Array::AddEntry(Object* aO) { assert(NULL != aO); mInternal.push_back(aO); }
+        void Array::AddEntry(Object* aO, bool aDelete) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
 
         void Array::AddEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(const_cast<Object*>(aO)); }
 
-        DI::Object* Array::CreateEntry(const DI::MetaData* aMD)
+        DI::Object* Array::CreateEntry()
         {
-            DI::Object* lResult = NULL;
+            DI::Object* lResult = CallCreator();
 
-            if (NULL != mCreator)
-            {
-                if (NULL == aMD)
-                {
-                    lResult = mCreator(&META_DATA_DELETE_OBJECT);
-                }
-                else
-                {
-                    lResult = mCreator(aMD);
-                }
-
-                AddEntry(lResult);
-            }
+            AddEntry(lResult);
 
             return lResult;
         }
 
-        DI::Object* Array::CreateEntry(const char* aName, const char* aLabel, unsigned int aFlags)
+        const Object* Array::GetEntry_R(int aIndex) const
         {
-            DI::Object* lResult = NULL;
-
-            if (NULL != mCreator)
+            if (mInternal.size() <= aIndex)
             {
-                unsigned int lFlags = aFlags | MetaData::FLAG_DELETE_META_DATA | MetaData::FLAG_DELETE_OBJECT;
-
-                lResult = mCreator(new MetaData(aName, aLabel, lFlags));
-
-                AddEntry(lResult);
+                return NULL;
             }
 
-            return lResult;
+            assert(NULL != mInternal[aIndex]);
+
+            return mInternal[aIndex];
+        }
+
+        Object* Array::GetEntry_RW(int aIndex)
+        {
+            if (mInternal.size() <= aIndex)
+            {
+                return NULL;
+            }
+
+            assert(NULL != mInternal[aIndex]);
+
+            return mInternal[aIndex];
         }
 
         // ===== Object =====================================================

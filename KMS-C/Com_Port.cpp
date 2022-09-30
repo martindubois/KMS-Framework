@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 
 #include <KMS/Com/Port.h>
 
@@ -25,12 +25,12 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_DTR          ("DTR"         , "DTR = false | true");
-static const KMS::DI::MetaData MD_PARITY       ("Parity"      , "Parity = EVEN | INORED_EVEN | IGNORED_MARK | IGNORED_ODD | IGNORED_SPACE | MARK | NONE | ODD | SPACE");
-static const KMS::DI::MetaData MD_READ_TIMEOUT ("ReadTimeout" , "ReadTimeout = {ms}");
-static const KMS::DI::MetaData MD_RTS          ("RTS"         , "DTR = false | true");
-static const KMS::DI::MetaData MD_SPEED        ("Speed"       , "Speed = {bps}");
-static const KMS::DI::MetaData MD_WRITE_TIMEOUT("WriteTimeout", "WriteTimeout = {ms}");
+static const KMS::Cfg::MetaData MD_DTR          ("DTR = false | true");
+static const KMS::Cfg::MetaData MD_PARITY       ("Parity = EVEN | INORED_EVEN | IGNORED_MARK | IGNORED_ODD | IGNORED_SPACE | MARK | NONE | ODD | SPACE");
+static const KMS::Cfg::MetaData MD_READ_TIMEOUT ("ReadTimeout = {ms}");
+static const KMS::Cfg::MetaData MD_RTS          ("DTR = false | true");
+static const KMS::Cfg::MetaData MD_SPEED        ("Speed = {bps}");
+static const KMS::Cfg::MetaData MD_WRITE_TIMEOUT("WriteTimeout = {ms}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -59,19 +59,19 @@ namespace KMS
         };
 
         Port::Port()
-            : mDTR            (false, &MD_DTR)
-            , mParity         (DEFAULT_PARITY, &MD_PARITY)
-            , mRTS            (false, &MD_RTS)
-            , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms, &MD_READ_TIMEOUT)
-            , mSpeed_bps      (DEFAULT_SPEED_bps, &MD_SPEED)
-            , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms, &MD_WRITE_TIMEOUT)
+            : mDTR            (DEFAULT_DTR)
+            , mParity         (DEFAULT_PARITY)
+            , mRTS            (DEFAULT_RTS)
+            , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms)
+            , mSpeed_bps      (DEFAULT_SPEED_bps)
+            , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms)
         {
-            AddEntry(&mDTR);
-            AddEntry(&mParity);
-            AddEntry(&mRTS);
-            AddEntry(&mReadTimeout_ms);
-            AddEntry(&mSpeed_bps);
-            AddEntry(&mWriteTimeout_ms);
+            AddEntry("DTR"         , &mDTR            , false, &MD_DTR);
+            AddEntry("Parity"      , &mParity         , false, &MD_PARITY);
+            AddEntry("RTS"         , &mRTS            , false, &MD_RTS);
+            AddEntry("ReadTimeout" , &mReadTimeout_ms , false, &MD_READ_TIMEOUT);
+            AddEntry("Speed"       , &mSpeed_bps      , false, &MD_SPEED);
+            AddEntry("WriteTimeout", &mWriteTimeout_ms, false, &MD_WRITE_TIMEOUT);
         }
 
         void Port::SetDTR(bool aDTR) { mDTR = aDTR; if (IsConnected()) { ApplySignals(); } }

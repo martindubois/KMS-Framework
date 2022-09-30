@@ -15,11 +15,9 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/Convert.h>
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt32.h>
-#include <KMS/Environment.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
 
@@ -37,20 +35,23 @@
 
 #define MSG_ON_REQUEST (1)
 
-static const KMS::DI::MetaData MD_ROOT   ("Root"   , "Root = {Path}");
-static const KMS::DI::MetaData MD_VERBOSE("Verbose", "Verbose = false | true");
+static const KMS::Cfg::MetaData MD_ROOT   ("Root = {Path}");
+static const KMS::Cfg::MetaData MD_VERBOSE("Verbose = false | true");
 
-static const KMS::DI::MetaData MD_CONTENT_DISPOSITION("content-disposition", NULL);
-static const KMS::DI::MetaData MD_CONTENT_LENGTH     ("content-length"     , NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
-static const KMS::DI::MetaData MD_CONTENT_TYPE       ("content-type"       , NULL);
+#define NAME_CONTENT_DISPOSITION "content-disposition"
 
-static const KMS::DI::String APPLICATION_JAVASCRIPT("application/javascript"   , &MD_CONTENT_TYPE);
-static const KMS::DI::String IMAGE_X_ICON          ("image/x-icon"             , &MD_CONTENT_TYPE);
-static const KMS::DI::String TEXT_CSS              ("text/css"                 , &MD_CONTENT_TYPE);
-static const KMS::DI::String TEXT_HTML             ("text/html; charset=utf-8" , &MD_CONTENT_TYPE);
-static const KMS::DI::String TEXT_PLAIN            ("text/plain; charset=utf-8", &MD_CONTENT_TYPE);
+static const KMS::DI::String INLINE("inline");
 
-static const KMS::DI::String INLINE("inline", &MD_CONTENT_DISPOSITION);
+#define NAME_CONTENT_LENGTH "content-length"
+
+#define NAME_CONTENT_TYPE "content-type"
+
+static const KMS::DI::String APPLICATION_JAVASCRIPT("application/javascript");
+static const KMS::DI::String IMAGE_X_ICON          ("image/x-icon");
+static const KMS::DI::String TEXT_CSS              ("text/css");
+static const KMS::DI::String TEXT_HTML             ("text/html; charset=utf-8");
+static const KMS::DI::String TEXT_PLAIN            ("text/plain; charset=utf-8");
+
 
 
 namespace KMS
@@ -65,36 +66,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(&APPLICATION_JAVASCRIPT);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(&IMAGE_X_ICON);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(&TEXT_CSS);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(&TEXT_HTML);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(&INLINE);
-            aRequest->mResponseHeader.AddEntry(&TEXT_PLAIN);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &INLINE);
+            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -147,13 +148,12 @@ namespace KMS
         }
 
         FileServer::FileServer()
-            : DI::Dictionary(NULL)
-            , ON_REQUEST(this, MSG_ON_REQUEST)
-            , mRoot   (DEFAULT_ROOT, &MD_ROOT)
-            , mVerbose(false       , &MD_VERBOSE)
+            : ON_REQUEST(this, MSG_ON_REQUEST)
+            , mRoot   (DEFAULT_ROOT)
+            , mVerbose(false)
         {
-            AddEntry(&mRoot);
-            AddEntry(&mVerbose);
+            AddEntry("Root"   , &mRoot   , false, &MD_ROOT);
+            AddEntry("Verbose", &mVerbose, false, &MD_VERBOSE);
 
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
@@ -232,8 +232,8 @@ namespace KMS
             File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            DI::UInt32* lValue = new DI::UInt32(lFile->GetSize(), &MD_CONTENT_LENGTH);
-            aR->mResponseHeader.AddEntry(lValue);
+            DI::UInt32* lValue = new DI::UInt32(lFile->GetSize());
+            aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue);
 
             aR->SetFile(lFile);
         }

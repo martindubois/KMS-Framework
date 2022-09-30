@@ -15,6 +15,7 @@
 #include <winsock2.h>
 
 // ===== Includes ========================================================
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/NetAddress.h>
 #include <KMS/DI/UInt32.h>

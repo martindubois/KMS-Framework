@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/UInt16.h
+// Library   KMS-A
 
 #pragma once
 
@@ -24,9 +25,9 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            UInt16(uint16_t aIn, const MetaData* aMD);
+            UInt16(uint16_t aIn = 0);
 
             const UInt16& operator = (uint16_t aIn);
 

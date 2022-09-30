@@ -10,7 +10,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Proc/Browser.h>
@@ -23,7 +23,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_PREFERED("Prefered", "Prefered = CHROME | DEFAULT | EDGE | NONE");
+static const KMS::Cfg::MetaData MD_PREFERED("Prefered = CHROME | DEFAULT | EDGE | NONE");
 
 namespace KMS
 {
@@ -36,15 +36,14 @@ namespace KMS
         const char* Browser::TYPE_NAMES[] = { "CHROME", "DEFAULT", "EDGE", "NONE" };
 
         Browser::Browser()
-            : DI::Dictionary(NULL)
-            , mPrefered(DEFAULT_PREFERED, const_cast<DI::MetaData*>(&MD_PREFERED))
+            : mPrefered(DEFAULT_PREFERED)
             , mAppMode(false)
             , mKioskMode(false)
             , mProcess(NULL)
             , mType(Type::NONE)
             , mWindow(0)
         {
-            AddEntry(&mPrefered);
+            AddEntry("Prefered", &mPrefered, false, &MD_PREFERED);
         }
 
         Browser::~Browser()

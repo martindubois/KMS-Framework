@@ -4,14 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/File/Sync.h
+// Library   KMS-A
 
 #pragma once
 
-// ===== C++ ================================================================
-#include <list>
-#include <map>
-
 // ===== Includes ===========================================================
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 
 namespace KMS
@@ -30,9 +28,10 @@ namespace KMS
 
             Sync();
 
-            ~Sync();
-
             int Run();
+
+            // ===== DI::Object =============================================
+            ~Sync();
 
         private:
 

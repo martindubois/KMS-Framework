@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/String.h
+// Library   KMS-A
 
 #pragma once
 
@@ -23,15 +24,13 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            String(const char* aIn, const MetaData* aMD);
+            String(const char* aIn = "");
 
             void operator = (const char* aIn);
 
             operator const char* () const;
-
-            void operator += (const char* aIn);
 
             bool operator == (const char* aIn) const;
 
@@ -43,7 +42,7 @@ namespace KMS
 
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
-            virtual void Set(const char* aIn);
+            virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
             virtual ~String();

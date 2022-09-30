@@ -20,7 +20,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Boolean::Boolean(bool aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn) {}
+        Boolean::Boolean(bool aIn) : mInternal(aIn) {}
 
         void Boolean::operator = (bool aIn) { mInternal = aIn; }
 

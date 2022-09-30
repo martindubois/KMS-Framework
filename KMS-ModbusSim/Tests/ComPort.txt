@@ -5,8 +5,8 @@
 # Product   KMS-Framework
 # File      KMS-ModbusSim/Tests/ComPort.txt
 
-Index = 3
-Speed = 38400
+Port.Index = 3
+Port.Speed = 38400
 
 Coils[1247] = C_1247;false;1
 

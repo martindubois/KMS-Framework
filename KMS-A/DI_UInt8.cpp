@@ -18,9 +18,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Object* UInt8::Create(const MetaData* aMD) { return new UInt8(0, aMD); }
+        Object* UInt8::Create() { return new UInt8(); }
 
-        UInt8::UInt8(uint8_t aIn, const MetaData* aMD) : Value(aMD), mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
+        UInt8::UInt8(uint8_t aIn) : mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
 
         void UInt8::operator = (uint8_t aIn) { mInternal = aIn; }
 

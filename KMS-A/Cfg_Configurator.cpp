@@ -10,13 +10,11 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Convert.h>
-#include <KMS/DI/Alias.h>
+#include <KMS/Cfg/MetaData.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Array_Sparse.h>
 #include <KMS/DI/Boolean.h>
-#include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
-#include <KMS/Environment.h>
 #include <KMS/Text/TextFile.h>
 
 #include <KMS/Cfg/Configurator.h>
@@ -24,7 +22,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define FMT_ATT "%[A-Za-z0-9_]"
+#define FMT_ATT "%[A-Za-z0-9_.]"
+#define FMT_IDX "%[A-Za-z0-9_]"
 #define FMT_VAL "%[^\n\r\t]"
 
 // Static function declarations
@@ -32,13 +31,13 @@
 
 static KMS::DI::Object* FindObject_Dictionary(KMS::DI::Dictionary* aD, const char* aA);
 
-static void Help_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, unsigned int aLevel);
-static void Help_Object    (FILE* aOut, const KMS::DI::Object    * aO, unsigned int aLevel);
+static void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, const KMS::DI::Dictionary* aD, unsigned int aLevel);
+static void Help_Object    (FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD,                                unsigned int aLevel);
 
-static void Save_Array     (FILE* aOut, const KMS::DI::Array     * aA, const char* aPrefix);
-static void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aPrefix);
-static void Save_Object    (FILE* aOut, const KMS::DI::Object    * aO, const char* aPrefix);
-static void Save_Value     (FILE* aOut, const KMS::DI::Value     * aV, const char* aPrefix);
+static void Save_Array     (FILE* aOut, const KMS::DI::Array     * aA, const char* aName);
+static void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aName);
+static void Save_Object    (FILE* aOut, const KMS::DI::Object    * aO, const char* aName);
+static void Save_Value     (FILE* aOut, const KMS::DI::Value     * aV, const char* aName);
 
 namespace KMS
 {
@@ -70,15 +69,15 @@ namespace KMS
 
             for (DI::Dictionary* lD : mConfigurables)
             {
-                Help_Dictionary(lOut, lD, 0);
+                Help_Dictionary(lOut, NULL, NULL, lD, 0);
             }
 
             fprintf(lOut,
                 "===== KMS::Cfg::Configurator =====\n"
-                "  ConfigFile\t\tConfigFile += {FileName}\n"
-                "  Help\t\t\tHelp\n"
-                "  OptionalConfigFile\tOptionalConfigFile += {FileName}\n"
-                "  SaveConfig\t\tSaveConfig = {FileName}\n");
+                "  ConfigFile += {FileName}\n"
+                "  Help\n"
+                "  OptionalConfigFile += {FileName}\n"
+                "  SaveConfig = {FileName}\n");
         }
 
         void Configurator::ParseArguments(int aCount, const char** aVector)
@@ -123,7 +122,7 @@ namespace KMS
 
             for (DI::Dictionary* lD : mConfigurables)
             {
-                Save_Dictionary(lFile, lD, "");
+                Save_Dictionary(lFile, lD, NULL);
             }
 
             int lRet = fclose(lFile);
@@ -164,8 +163,8 @@ namespace KMS
                     goto Ignored;
                 }
 
-                lObject = lArray->CreateEntry(&DI::META_DATA_DELETE_OBJECT);
-                KMS_EXCEPTION_ASSERT(NULL != lObject, CONFIG_FORMAT, "The Array is not dynamic");
+                lObject = lArray->CreateEntry();
+                assert(NULL != lObject);
 
                 DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
                 KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array element type is not supported");
@@ -190,29 +189,31 @@ namespace KMS
                 goto Ignored;
             }
 
-            DI::Array* lArray;
-            lArray = dynamic_cast<DI::Array*>(lObject);
-            if (NULL == lArray)
+            DI::Dictionary* lDictionary;
+            lDictionary = dynamic_cast<DI::Dictionary*>(lObject);
+            if (NULL == lDictionary)
             {
-                // The Object is not an Array
+                // The Object is not a Dictionary
                 // TODO Should we throw an exception?
                 KMS_DBG_LOG_WARNING();
                 goto Ignored;
             }
 
-            lObject = (*lArray)[aI];
+            lObject = lDictionary->GetEntry_RW(aI);
             if (NULL == lObject)
             {
-                lObject = lArray->CreateEntry(aI, NULL, DI::MetaData::FLAG_COPY_NAME);
-                KMS_EXCEPTION_ASSERT(NULL != lObject, CONFIG_FORMAT, "The Array is not dynamic");
+                lObject = lDictionary->CreateEntry(aI);
+                assert(NULL != lObject);
             }
 
+            DI::Array* lArray;
             lArray = dynamic_cast<DI::Array*>(lObject);
             KMS_EXCEPTION_ASSERT(NULL != lArray, CONFIG_FORMAT, "The Object is not an Array");
 
-            lObject = lArray->CreateEntry(&DI::META_DATA_DELETE_OBJECT);
+            lObject = lArray->CreateEntry();
             DI::Value* lValue;
             lValue = dynamic_cast<DI::Value*>(lObject);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The created Object is not a Value");
 
             lValue->Set(aV);
 
@@ -235,7 +236,7 @@ namespace KMS
 
             unsigned int lIndex;
 
-            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ] += " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
+            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_IDX " ] += " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
             {
                 AddValueToArray(lA, lI, lV); return;
             }
@@ -245,9 +246,9 @@ namespace KMS
                 SetArrayValue(lA, lIndex, lV); return;
             }
 
-            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_ATT " ] = " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
+            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_IDX " ] = " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
             {
-                SetArrayValue(lA, lI, lV); return;
+                SetDictionaryValue(lA, lI, lV); return;
             }
 
             if (2 == sscanf_s(aLine, FMT_ATT " += " FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { AddValueToArray(lA, lV); return; }
@@ -268,12 +269,6 @@ namespace KMS
                 lResult = FindObject_Dictionary(lD, aA);
                 if (NULL != lResult)
                 {
-                    DI::Alias* lAlias = dynamic_cast<DI::Alias*>(lResult);
-                    if (NULL != lAlias)
-                    {
-                        lResult = lAlias->Get();
-                    }
-
                     break;
                 }
             }
@@ -319,66 +314,6 @@ namespace KMS
             mIgnoredCount++;
         }
 
-        void Configurator::SetArrayValue(const char* aA, const char* aI, const char* aV)
-        {
-            DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            DI::Array* lArray;
-            
-            lArray = dynamic_cast<DI::Array*>(lObject);
-            if (NULL == lArray)
-            {
-                // The Object is not an Array
-                // TODO Should we throw an exception?
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            lObject = (*lArray)[aI];
-            if (NULL == lObject)
-            {
-                lObject = (*lArray)[aI];
-            }
-
-            if (NULL == lObject)
-            {
-                lObject = lArray->CreateEntry(aI, NULL, DI::MetaData::FLAG_COPY_NAME);
-                KMS_EXCEPTION_ASSERT(NULL != lObject, CONFIG_FORMAT, "The Array is not dynamic");
-
-                DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array entry type is not supported");
-
-                lValue->Set(aV);
-            }
-            else
-            {
-                DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
-                if (NULL == lValue)
-                {
-                    // The Object is not a Value
-                    // TODO Should we throw an exception?
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-
-                lValue->Set(aV);
-            }
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aI);
-            Dbg::gLog.WriteMessage(aV);
-            mIgnoredCount++;
-        }
-
         void Configurator::SetArrayValue(const char* aA, unsigned int aI, const char* aV)
         {
             DI::Object* lObject = FindObject(aA);
@@ -390,7 +325,6 @@ namespace KMS
             }
 
             DI::Array* lArray;
-
             lArray = dynamic_cast<DI::Array*>(lObject);
             if (NULL == lArray)
             {
@@ -403,25 +337,24 @@ namespace KMS
                     goto Ignored;
                 }
 
-                lObject = (*lArrayS)[aI];
+                lObject = lArrayS->GetEntry_RW(aI);
                 if (NULL == lObject)
                 {
-                    lObject = lArrayS->CreateEntry(aI, &DI::META_DATA_DELETE_OBJECT);
-                    KMS_EXCEPTION_ASSERT(NULL != lObject, CONFIG_FORMAT, "The Array is not dynamic");
+                    lObject = lArrayS->CreateEntry(aI);
                 }
             }
             else
             {
-                lObject = (*lArray)[aI];
+                lObject = lArray->GetEntry_RW(aI);
                 if (NULL == lObject)
                 {
-                    lObject = lArray->CreateEntry(&DI::META_DATA_DELETE_OBJECT);
-                    KMS_EXCEPTION_ASSERT(NULL != lObject, CONFIG_FORMAT, "The Array is not dynamic");
+                    lObject = lArray->CreateEntry();
                 }
             }
 
+            assert(NULL != lArray);
+
             DI::Value* lValue;
-            
             lValue = dynamic_cast<DI::Value*>(lObject);
             KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array entry type is not supported");
 
@@ -431,6 +364,50 @@ namespace KMS
 
         Ignored:
             Dbg::gLog.WriteMessage(aA);
+            Dbg::gLog.WriteMessage(aV);
+            mIgnoredCount++;
+        }
+
+        void Configurator::SetDictionaryValue(const char* aA, const char* aI, const char* aV)
+        {
+            DI::Object* lObject = FindObject(aA);
+            if (NULL == lObject)
+            {
+                // The name does not exist
+                KMS_DBG_LOG_WARNING();
+                goto Ignored;
+            }
+
+            DI::Dictionary* lDictionary;
+
+            lDictionary = dynamic_cast<DI::Dictionary*>(lObject);
+            if (NULL == lDictionary)
+            {
+                // The Object is not an Array
+                // TODO Should we throw an exception?
+                KMS_DBG_LOG_WARNING();
+                goto Ignored;
+            }
+
+
+            lObject = lDictionary->GetEntry_RW(aI);
+            if (NULL == lObject)
+            {
+                lObject = lDictionary->CreateEntry(aI);
+                assert(NULL != lObject);
+            }
+
+            DI::Value* lValue;
+            lValue = dynamic_cast<DI::Value*>(lObject);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array entry type is not supported");
+
+            lValue->Set(aV);
+
+            return;
+
+        Ignored:
+            Dbg::gLog.WriteMessage(aA);
+            Dbg::gLog.WriteMessage(aI);
             Dbg::gLog.WriteMessage(aV);
             mIgnoredCount++;
         }
@@ -483,147 +460,120 @@ KMS::DI::Object* FindObject_Dictionary(KMS::DI::Dictionary* aD, const char* aA)
 {
     assert(NULL != aD);
 
+    char lA[NAME_LENGTH];
     char lB[NAME_LENGTH];
 
-    const char* lEntryName = aA;
+    KMS::DI::Object* lResult = NULL;
 
-    if (aD->IsNamed())
+    int lRet = sscanf_s(aA, "%[^.].%s", lA SizeInfo(lA), lB SizeInfo(lB));
+    switch (lRet)
     {
-        char lA[NAME_LENGTH];
+    case 1: lResult = aD->GetEntry_RW(aA); break;
 
-        if (2 == sscanf_s(aA, "%[^.].%s", lA SizeInfo(lA), lB SizeInfo(lB)))
+    case 2:
+        KMS::DI::Object * lObject;
+        lObject = aD->GetEntry_RW(lA);
+        if (NULL != lObject)
         {
-            if (!aD->Is(lA))
-            {
-                return NULL;
-            }
+            KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(lObject);
+            KMS_EXCEPTION_ASSERT(NULL != lDictionary, CONFIG_FORMAT, "The object is not a dictionary");
 
-            lEntryName = lB;
+            lResult = FindObject_Dictionary(lDictionary, lB);
         }
+        break;
+
+    default: KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid attribute name", aA);
     }
 
-    KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
-    for (KMS::DI::Object* lObj : lInternal)
-    {
-        assert(NULL != lObj);
-
-        if (lObj->Is(lEntryName))
-        {
-            return lObj;
-        }
-
-        KMS::DI::Dictionary* lD = dynamic_cast<KMS::DI::Dictionary*>(lObj);
-        if (NULL != lD)
-        {
-            KMS::DI::Object* lResult = FindObject_Dictionary(lD, lEntryName);
-            if (NULL != lResult)
-            {
-                return lResult;
-            }
-        }
-    }
-
-    return NULL;
+    return lResult;
 }
 
-void Help_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, unsigned int aLevel)
+void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, const KMS::DI::Dictionary* aD, unsigned int aLevel)
 {
     assert(NULL != aOut);
     assert(NULL != aD);
 
-    Help_Object(aOut, aD, aLevel);
+    Help_Object(aOut, aName, aMD, aLevel);
 
     const KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
-    for (const KMS::DI::Object* lObj : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
     {
-        assert(NULL != lObj);
+        assert(NULL != lVT.second);
 
-        const KMS::DI::Dictionary* lD = dynamic_cast<const KMS::DI::Dictionary*>(lObj);
+        const KMS::Cfg::MetaData * lMD = dynamic_cast<const KMS::Cfg::MetaData *>(lVT.second.mMetaData);
+        const KMS::DI::Dictionary* lD  = dynamic_cast<const KMS::DI::Dictionary*>(lVT.second.Get());
         if (NULL == lD)
         {
-            Help_Object(aOut, lObj, aLevel + 1);
+            Help_Object(aOut, lVT.first.c_str(), lMD, aLevel + 1);
         }
         else
         {
-            Help_Dictionary(aOut, lD, aLevel + 1);
+            Help_Dictionary(aOut, lVT.first.c_str(), lMD, lD, aLevel + 1);
         }
     }
 }
 
-void Help_Object(FILE* aOut, const KMS::DI::Object* aO, unsigned int aLevel)
+void Help_Object(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, unsigned int aLevel)
 {
     assert(NULL != aOut);
-    assert(NULL != aO);
 
-    if (aO->IsNamed())
+    if (NULL != aMD)
     {
-        if (aO->IsLabeled())
-        {
-            fprintf(aOut, "%*c%s\t%s\n", aLevel * 2, ' ', aO->GetName(), aO->GetLabel());
-        }
-        else
-        {
-            fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aO->GetName());
-        }
+        fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aMD->GetHelp());
     }
-    else
+    else if (NULL != aName)
     {
-        if (aO->IsLabeled())
-        {
-            fprintf(aOut, "%*c===== %s =====\n", aLevel * 2, ' ', aO->GetLabel());
-        }
+        fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aName);
     }
 }
 
-void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aPrefix)
+void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aName)
 {
     assert(NULL != aOut);
     assert(NULL != aA);
-    assert(NULL != aPrefix);
+    assert(NULL != aName);
 
-    if (aA->IsNamed())
+    const KMS::DI::Array::Internal& lInternal = aA->GetInternal();
+    for (const KMS::DI::Container::Entry& lEntry : lInternal)
     {
-        const KMS::DI::Array::Internal& lInternal = aA->GetInternal();
-        for (const KMS::DI::Object* lObj : lInternal)
+        assert(NULL != lEntry);
+
+        const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(lEntry.Get());
+        KMS_EXCEPTION_ASSERT(NULL != lV, CONFIG_FORMAT, "Can't save part of the configuration");
+
+        char lData[LINE_LENGTH];
+
+        lV->Get(lData, sizeof(lData));
+
+        fprintf(aOut, "%s += %s", aName, lData);
+    }
+}
+
+void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aName)
+{
+    assert(NULL != aD);
+
+    const KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
+    {
+        assert(NULL != lVT.second);
+
+        if (NULL == aName)
         {
-            assert(NULL != lObj);
+            Save_Object(aOut, lVT.second.Get(), lVT.first.c_str());
+        }
+        else
+        {
+            char lName[NAME_LENGTH];
 
-            const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(lObj);
-            KMS_EXCEPTION_ASSERT(NULL != lV, CONFIG_FORMAT, "Can't save part of the configuration");
+            sprintf_s(lName, "%s.%s", aName, lVT.first.c_str());
 
-            char lData[LINE_LENGTH];
-
-            lV->Get(lData, sizeof(lData));
-
-            fprintf(aOut, "%s%s += %s", aPrefix, aA->GetName(), lData);
+            Save_Object(aOut, lVT.second.Get(), lName);
         }
     }
 }
 
-void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aPrefix)
-{
-    assert(NULL != aD);
-    assert(NULL != aPrefix);
-
-    char lPrefix[LINE_LENGTH];
-
-    if (aD->IsNamed())
-    {
-        sprintf_s(lPrefix, "%s%s.", aPrefix, aD->GetName());
-    }
-    else
-    {
-        sprintf_s(lPrefix, "%s", aPrefix);
-    }
-
-    const KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
-    for (const KMS::DI::Object* lObj : lInternal)
-    {
-        Save_Object(aOut, lObj, lPrefix);
-    }
-}
-
-void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aPrefix)
+void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aName)
 {
     assert(NULL != aO);
 
@@ -636,29 +586,27 @@ void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aPrefix)
             const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(aO);
             KMS_EXCEPTION_ASSERT(NULL != lV, CONFIG_FORMAT, "Can't save part of the configuration");
 
-            Save_Value(aOut, lV, aPrefix);
+            Save_Value(aOut, lV, aName);
         }
         else
         {
-            Save_Array(aOut, lA, aPrefix);
+            Save_Array(aOut, lA, aName);
         }
     }
     else
     {
-        Save_Dictionary(aOut, lD, aPrefix);
+        Save_Dictionary(aOut, lD, aName);
     }
 }
 
-void Save_Value(FILE* aOut, const KMS::DI::Value* aV, const char* aPrefix)
+void Save_Value(FILE* aOut, const KMS::DI::Value* aV, const char* aName)
 {
     assert(NULL != aV);
+    assert(NULL != aName);
 
-    if (aV->IsNamed())
-    {
-        char lData[LINE_LENGTH];
+    char lData[LINE_LENGTH];
 
-        aV->Get(lData, sizeof(lData));
+    aV->Get(lData, sizeof(lData));
 
-        fprintf(aOut, "%s%s = %s\n", aPrefix, aV->GetName(), lData);
-    }
+    fprintf(aOut, "%s = %s\n", aName, lData);
 }

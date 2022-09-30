@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/String_Expand.h
+// Library   KMS-A
 
 #pragma once
 
@@ -20,9 +21,9 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            String_Expand(const char* aIn, const MetaData* aMD);
+            String_Expand(const char* aIn = "");
 
             // ===== Value ==================================================
             virtual void Set(const char* aIn);

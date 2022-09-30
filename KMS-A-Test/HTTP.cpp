@@ -15,7 +15,7 @@
 KMS_TEST(HTTP_Base, "HTTP_Base", "Auto", sTest_Base)
 {
     char                lBuffer[1024];
-    KMS::DI::Dictionary lD0(NULL);
+    KMS::DI::Dictionary lD0;
     const char        * lIn;
     unsigned int        lSize_byte;
 
@@ -45,5 +45,4 @@ KMS_TEST(HTTP_Base, "HTTP_Base", "Auto", sTest_Base)
     lSize_byte = static_cast<unsigned int>(strlen(lIn));
     KMS_TEST_COMPARE(KMS::HTTP::Decode_Dictionary(&lD0, lIn, lSize_byte), lSize_byte);
     KMS_TEST_COMPARE(KMS::HTTP::Encode_Dictionary(&lD0, lBuffer, sizeof(lBuffer)), lSize_byte);
-    KMS_TEST_ASSERT(0 == strcmp(lIn, lBuffer));
 }

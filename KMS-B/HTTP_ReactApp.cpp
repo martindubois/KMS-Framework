@@ -28,9 +28,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        ReactApp::ReactApp() : DI::Dictionary(NULL)
+        ReactApp::ReactApp()
         {
-            AddEntry(&mFileServer);
+            AddEntry("FileServer", &mFileServer);
 
             LocateFrontEnd();
 

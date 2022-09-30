@@ -12,9 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/Convert.h>
-#include <KMS/DI/MetaData.h>
-#include <KMS/SafeAPI.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Text/TextFile.h>
 #include <KMS/Version.h>
 
@@ -36,53 +34,60 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_BINARIES       ("Binaries"      , "Binaries += {Name}");
-static const KMS::DI::MetaData MD_CONFIGURATIONS ("Configurations", "Configurations += {Name}");
-static const KMS::DI::MetaData MD_DO_NOT_COMPILE ("DoNotCompile"  , "DoNotCompile = false | true");
-static const KMS::DI::MetaData MD_DO_NOT_EXPORT  ("DoNotExport"   , "DoNotExport = false | true");
-static const KMS::DI::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage"  , "DoNotPackage = false | true");
-static const KMS::DI::MetaData MD_EDIT_OPERATIONS("EditOperations", "EditOperations += {Operation}");
-static const KMS::DI::MetaData MD_EXPORT_FOLDER  ("ExportFolder"  , "ExportFolder = {Path}");
-static const KMS::DI::MetaData MD_FILES          ("Files"         , "Files += {Path}");
-static const KMS::DI::MetaData MD_FOLDERS        ("Folders"       , "Folders += {Path}");
-static const KMS::DI::MetaData MD_LIBRARIES      ("Libraries"     , "Libraries += {Name}");
-static const KMS::DI::MetaData MD_OS_INDEPENDENT ("OSIndependent" , "OSIntependent = false | true");
-static const KMS::DI::MetaData MD_PRE_BUILD_CMDS ("PreBuildCmds"  , "PreBuildCmds += {Command}");
-static const KMS::DI::MetaData MD_PRODUCT        ("Product"       , "Product = {Name}");
-static const KMS::DI::MetaData MD_TESTS          ("Tests"         , "Tests += {Name}");
-static const KMS::DI::MetaData MD_VERSION_FILE   ("VersionFile"   , "VersionFile = {Path}");
+static const KMS::Cfg::MetaData MD_BINARIES       ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_CONFIGURATIONS ("Configurations += {Name}");
+static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true");
+static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
+static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
+static const KMS::Cfg::MetaData MD_EDIT_OPERATIONS("EditOperations += {Operation}");
+static const KMS::Cfg::MetaData MD_EXPORT_FOLDER  ("ExportFolder = {Path}");
+static const KMS::Cfg::MetaData MD_FILES          ("Files += {Path}");
+static const KMS::Cfg::MetaData MD_FOLDERS        ("Folders += {Path}");
+static const KMS::Cfg::MetaData MD_LIBRARIES      ("Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_INDEPENDENT ("OSIntependent = false | true");
+static const KMS::Cfg::MetaData MD_PRE_BUILD_CMDS ("PreBuildCmds += {Command}");
+static const KMS::Cfg::MetaData MD_PRODUCT        ("Product = {Name}");
+static const KMS::Cfg::MetaData MD_TESTS          ("Tests += {Name}");
+static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
 
 #ifdef _KMS_DARWIN_
-    static const KMS::DI::MetaData MD_OS_BINARIES      ("DarwinBinaries"      , "DarwinBinaries += {Name}");
-    static const KMS::DI::MetaData MD_OS_CONFIGURATIONS("DarwinConfigurations", "DarwinConfigurations += {Name}");
-    static const KMS::DI::MetaData MD_OS_FILES         ("DarwinFiles"         , "DarwinFiles += {Path}");
-    static const KMS::DI::MetaData MD_OS_FILES         ("DarwinFolders"       , "DarwinFolders += {Path}");
-    static const KMS::DI::MetaData MD_OS_LIBRARIES     ("DarwinLibraries"     , "DarwinLibraries += {Name}");
-    static const KMS::DI::MetaData MD_OS_PRE_BUILD_CMDS("DarwinPreBuildCmds"  , "DarwinPreBuildCmds += {Command}");
-    static const KMS::DI::MetaData MD_OS_PROCESSORS    ("DarwinProcessors"    , "DarwinProcessors += x64 | x86");
-    static const KMS::DI::MetaData MD_OS_TESTS         ("DarwinTests"         , "DarwinTests += {Name}");
+    #define NAME_OS "Darwin"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("DarwinBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("DarwinConfigurations += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_FILES         ("DarwinFiles += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_FILES         ("DarwinFolders += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("DarwinLibraries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("DarwinPreBuildCmds += {Command}");
+    static const KMS::Cfg::MetaData MD_OS_PROCESSORS    ("DarwinProcessors += x64 | x86");
+    static const KMS::Cfg::MetaData MD_OS_TESTS         ("DarwinTests += {Name}");
 #endif
 
 #ifdef _KMS_LINUX_
-    static const KMS::DI::MetaData MD_OS_BINARIES      ("LinuxBinaries"      , "LinuxBinaries += {Name}");
-    static const KMS::DI::MetaData MD_OS_CONFIGURATIONS("LinuxConfigurations", "LinuxConfigurations += {Name}");
-    static const KMS::DI::MetaData MD_OS_FILES         ("LinuxFiles"         , "LinuxFiles += {Path}");
-    static const KMS::DI::MetaData MD_OS_FOLDERS       ("LinuxFolders"       , "LinuxFolders += {Path}");
-    static const KMS::DI::MetaData MD_OS_LIBRARIES     ("LinuxLibraries"     , "LinuxLibraries += {Name}");
-    static const KMS::DI::MetaData MD_OS_PRE_BUILD_CMDS("LinuxPreBuildCmds"  , "LinuxPreBuildCmds += {Command}");
-    static const KMS::DI::MetaData MD_OS_PROCESSORS    ("LinuxProcessors"    , "LinuxProcessors += x64 | x86");
-    static const KMS::DI::MetaData MD_OS_TESTS         ("LinuxTests"         , "LinuxTests += {Name}");
+    #define NAME_OS "Linux"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("LinuxBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("LinuxConfigurations += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_FILES         ("LinuxFiles += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_FOLDERS       ("LinuxFolders += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("LinuxLibraries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("LinuxPreBuildCmds += {Command}");
+    static const KMS::Cfg::MetaData MD_OS_PROCESSORS    ("LinuxProcessors += x64 | x86");
+    static const KMS::Cfg::MetaData MD_OS_TESTS         ("LinuxTests += {Name}");
 #endif
 
 #ifdef _KMS_WINDOWS_
-    static const KMS::DI::MetaData MD_OS_BINARIES      ("WindowsBinaries"      , "WindowsBinaries += {Name}");
-    static const KMS::DI::MetaData MD_OS_CONFIGURATIONS("WindowsConfigurations", "WindowsConfigurations += {Name}");
-    static const KMS::DI::MetaData MD_OS_FILES         ("WindowsFiles"         , "WindowsFiles += {Path}");
-    static const KMS::DI::MetaData MD_OS_FOLDERS       ("WindowsFolders"       , "WindowsFolders += {Path}");
-    static const KMS::DI::MetaData MD_OS_LIBRARIES     ("WindowsLibraries"     , "WindowsLibraries += {Name}");
-    static const KMS::DI::MetaData MD_OS_PRE_BUILD_CMDS("WindowsPreBuildCmds"  , "WindowsPreBuildCmds += {Command}");
-    static const KMS::DI::MetaData MD_OS_PROCESSORS    ("WindowsProcessors"    , "WindowsProcessors += x64 | x86");
-    static const KMS::DI::MetaData MD_OS_TESTS         ("WindowsTests"         , "WindowsTests += {Name}");
+    #define NAME_OS "Windows"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("WindowsBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("WindowsConfigurations += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_FILES         ("WindowsFiles += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_FOLDERS       ("WindowsFolders += {Path}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("WindowsLibraries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("WindowsPreBuildCmds += {Command}");
+    static const KMS::Cfg::MetaData MD_OS_TESTS         ("WindowsTests += {Name}");
+
+    static const KMS::Cfg::MetaData MD_WINDOWS_PROCESSORS("WindowsProcessors += x64 | x86");
 #endif
 
 // Static function declarataions
@@ -131,35 +136,17 @@ namespace KMS
         }
 
         Build::Build()
-            : DI::Dictionary(NULL)
-            , mBinaries      (                        &MD_BINARIES)
-            , mConfigurations(                        &MD_CONFIGURATIONS)
-            , mDoNotCompile  (DEFAULT_DO_NOT_COMPILE, &MD_DO_NOT_COMPILE)
-            , mDoNotExport   (DEFAULT_DO_NOT_EXPORT , &MD_DO_NOT_EXPORT)
-            , mDoNotPackage  (DEFAULT_DO_NOT_PACKAGE, &MD_DO_NOT_PACKAGE)
-            , mEditOperations(                        &MD_EDIT_OPERATIONS)
-            , mFiles         (                        &MD_FILES)
-            , mFolders       (                        &MD_FOLDERS)
-            , mLibraries     (                        &MD_LIBRARIES)
-            , mOSIndependent (DEFAULT_OS_INDEPENDENT, &MD_OS_INDEPENDENT)
-            , mPreBuildCmds  (                        &MD_PRE_BUILD_CMDS)
-            , mProduct       (""                    , &MD_PRODUCT)
-            , mTests         (                        &MD_TESTS)
-            , mVersionFile   (DEFAULT_VERSION_FILE  , &MD_VERSION_FILE)
-            , mOSBinaries      (&mBinaries      , &MD_OS_BINARIES)
-            , mOSConfigurations(&mConfigurations, &MD_OS_CONFIGURATIONS)
-            , mOSFiles         (&mFiles         , &MD_OS_FILES)
-            , mOSFolders       (&mFolders       , &MD_OS_FOLDERS)
-            , mOSLibraries     (&mLibraries     , &MD_OS_LIBRARIES)
-            , mOSPreBuildCmds  (&mPreBuildCmds  , &MD_OS_PRE_BUILD_CMDS)
-            , mOSTests         (&mTests         , &MD_OS_TESTS)
+            : mDoNotCompile (DEFAULT_DO_NOT_COMPILE)
+            , mDoNotExport  (DEFAULT_DO_NOT_EXPORT)
+            , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
+            , mOSIndependent(DEFAULT_OS_INDEPENDENT)
+            , mVersionFile  (DEFAULT_VERSION_FILE)
             , mTempFolder(File::Folder::Id::TEMPORARY)
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-                , mExportFolder(File::Folder(File::Folder::Id::HOME), "Export", &MD_EXPORT_FOLDER)
+                , mExportFolder(File::Folder(File::Folder::Id::HOME), "Export")
             #endif
             #ifdef _KMS_WINDOWS_
-                , mExportFolder("K:\\Export", &MD_EXPORT_FOLDER)
-                , mOSProcessors(&MD_OS_PROCESSORS)
+                , mExportFolder("K:\\Export")
             #endif
         {
             mBinaries      .SetCreator(DI::String::Create);
@@ -171,48 +158,48 @@ namespace KMS
             mPreBuildCmds  .SetCreator(DI::String::Create);
             mTests         .SetCreator(DI::String::Create);
 
-            AddEntry(&mBinaries);
-            AddEntry(&mConfigurations);
-            AddEntry(&mDoNotCompile);
-            AddEntry(&mDoNotExport);
-            AddEntry(&mDoNotPackage);
-            AddEntry(&mEditOperations);
-            AddEntry(&mFiles);
-            AddEntry(&mFolders);
-            AddEntry(&mLibraries);
-            AddEntry(&mOSIndependent);
-            AddEntry(&mPreBuildCmds);
-            AddEntry(&mProduct);
-            AddEntry(&mTests);
-            AddEntry(&mVersionFile);
-            AddEntry(&mExportFolder);
+            AddEntry("Binaries"      , &mBinaries      , false, &MD_BINARIES);
+            AddEntry("Configurations", &mConfigurations, false, &MD_CONFIGURATIONS);
+            AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
+            AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
+            AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
+            AddEntry("EditOperations", &mEditOperations, false, &MD_EDIT_OPERATIONS);
+            AddEntry("Files"         , &mFiles         , false, &MD_FILES);
+            AddEntry("Folders"       , &mFolders       , false, &MD_FOLDERS);
+            AddEntry("Libraries"     , &mLibraries     , false, &MD_LIBRARIES);
+            AddEntry("OSIndependent" , &mOSIndependent , false, &MD_OS_INDEPENDENT);
+            AddEntry("PreBuildCmds"  , &mPreBuildCmds  , false, &MD_PRE_BUILD_CMDS);
+            AddEntry("Product"       , &mProduct       , false, &MD_PRODUCT);
+            AddEntry("Tests"         , &mTests         , false, &MD_TESTS);
+            AddEntry("VersionFile"   , &mVersionFile   , false, &MD_VERSION_FILE);
+            AddEntry("ExportFolder"  , &mExportFolder  , false, &MD_EXPORT_FOLDER);
 
-            AddEntry(&mOSBinaries);
-            AddEntry(&mOSConfigurations);
-            AddEntry(&mOSFiles);
-            AddEntry(&mOSFolders);
-            AddEntry(&mOSLibraries);
-            AddEntry(&mOSPreBuildCmds);
-            AddEntry(&mOSTests);
+            AddEntry(NAME_OS "Binaries"      , &mBinaries      , false, &MD_OS_BINARIES);
+            AddEntry(NAME_OS "Configurations", &mConfigurations, false, &MD_OS_CONFIGURATIONS);
+            AddEntry(NAME_OS "Files"         , &mFiles         , false, &MD_OS_FILES);
+            AddEntry(NAME_OS "Folders"       , &mFolders       , false, &MD_OS_FOLDERS);
+            AddEntry(NAME_OS "Libraries"     , &mLibraries     , false, &MD_OS_LIBRARIES);
+            AddEntry(NAME_OS "PreBuildCmds"  , &mPreBuildCmds  , false, &MD_OS_PRE_BUILD_CMDS);
+            AddEntry(NAME_OS "Tests"         , &mTests         , false, &MD_OS_TESTS);
 
             #ifdef _KMS_WINDOWS_
-                mOSProcessors.SetCreator(DI::String::Create);
+                mWindowsProcessors.SetCreator(DI::String::Create);
 
-                AddEntry(&mOSProcessors);
+                AddEntry("WindowsProcessors", &mWindowsProcessors, false, &MD_WINDOWS_PROCESSORS);
             #endif
 
         }
 
         Build::~Build() {}
 
-        void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .AddEntry(new DI::String(aB, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.AddEntry(new DI::String(aC, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddEditOperation(const char* aE) { assert(NULL != aE); mEditOperations.AddEntry(new DI::String(aE, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddFile         (const char* aF) { assert(NULL != aF); mFiles         .AddEntry(new DI::String(aF, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddFolder       (const char* aF) { assert(NULL != aF); mFolders       .AddEntry(new DI::String(aF, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .AddEntry(new DI::String(aL, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .AddEntry(new DI::String(aC, &DI::META_DATA_DELETE_OBJECT)); }
-        void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .AddEntry(new DI::String(aT, &DI::META_DATA_DELETE_OBJECT)); }
+        void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .AddEntry(new DI::String(aB)); }
+        void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.AddEntry(new DI::String(aC)); }
+        void Build::AddEditOperation(const char* aE) { assert(NULL != aE); mEditOperations.AddEntry(new DI::String(aE)); }
+        void Build::AddFile         (const char* aF) { assert(NULL != aF); mFiles         .AddEntry(new DI::String(aF)); }
+        void Build::AddFolder       (const char* aF) { assert(NULL != aF); mFolders       .AddEntry(new DI::String(aF)); }
+        void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .AddEntry(new DI::String(aL)); }
+        void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .AddEntry(new DI::String(aC)); }
+        void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .AddEntry(new DI::String(aT)); }
 
         void Build::SetDoNotCompile (bool aDNC) { mDoNotCompile  = aDNC; }
         void Build::SetDoNotExport  (bool aDNE) { mDoNotExport   = aDNE; }
@@ -258,11 +245,11 @@ namespace KMS
         void Build::Compile()
         {
             const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Compile(*lC);
@@ -274,11 +261,11 @@ namespace KMS
             File::Folder lCurrent(File::Folder::Id::CURRENT);
 
             const DI::Array::Internal& lInternal = mEditOperations.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lOp = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lOp = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lOp);
 
                 char lFile   [FILE_LENGTH];
@@ -307,11 +294,11 @@ namespace KMS
         void Build::ExecuteCommands(const DI::Array& aCommands)
         {
             const DI::Array::Internal& lInternal = aCommands.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lCommand = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lCommand);
 
                 if (0 != system(*lCommand))
@@ -355,11 +342,11 @@ namespace KMS
             if (!mLibraries.IsEmpty()) { lLib.Create(); }
 
             const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Package_Component(*lC);
@@ -371,11 +358,11 @@ namespace KMS
             File::Folder lCurrent(File::Folder::Id::CURRENT);
 
             const DI::Array::Internal& lInternal = mFiles.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lF = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lF = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lF);
 
                 const char* lPtr = strrchr(*lF, '/');
@@ -395,11 +382,11 @@ namespace KMS
         void Build::Package_Folders()
         {
             const DI::Array::Internal& lInternal = mFiles.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lF = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lF = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lF);
 
                 char lDst[NAME_LENGTH];
@@ -420,11 +407,11 @@ namespace KMS
         void Build::Test()
         {
             const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                assert(NULL != lObj);
+                assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lObj);
+                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Test(*lC);
@@ -440,7 +427,7 @@ namespace KMS
                     KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), CONFIG, "No configuration");
 
                     #ifdef _KMS_WINDOWS_
-                        KMS_EXCEPTION_ASSERT(!mOSProcessors.IsEmpty(), CONFIG, "No processor");
+                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), CONFIG, "No processor");
                     #endif
                 }
 

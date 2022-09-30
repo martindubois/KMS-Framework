@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Folder.h
+// Library   KMS-A
 
 #pragma once
 
@@ -21,11 +22,11 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(const KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            Folder(const MetaData* aMD);
+            Folder();
 
-            Folder(const File::Folder& aFolder, const MetaData* aMD);
+            Folder(const File::Folder& aFolder);
 
             void operator = (const File::Folder& aIn);
 

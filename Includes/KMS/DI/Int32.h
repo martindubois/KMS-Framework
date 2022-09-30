@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Int32.h
+// Library   KMS-A
 
 #pragma once
 
@@ -24,9 +25,9 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            Int32(int32_t aIn, const MetaData* aMD);
+            Int32(int32_t aIn = 0);
 
             const Int32& operator = (int32_t aIn);
 

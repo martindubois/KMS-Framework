@@ -26,10 +26,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        GUID::GUID(const MetaData* aMD) : String("", aMD)
-        {
-            memset(&mInternal, 0, sizeof(mInternal));
-        }
+        GUID::GUID() { memset(&mInternal, 0, sizeof(mInternal)); }
 
         void GUID::Set(const ::_GUID& aIn) { mInternal = aIn; }
 

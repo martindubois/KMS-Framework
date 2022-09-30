@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/File.h
+// Library   KMS-A
 
 #pragma once
 
@@ -23,9 +24,9 @@ namespace KMS
 
         public:
 
-            static DI::Object* Create(KMS::DI::MetaData* aMD);
+            static DI::Object* Create();
 
-            File(FILE* aFile, const char* aIn, const MetaData* aMD);
+            File(FILE* aFile, const char* aIn);
 
             operator FILE * ();
 

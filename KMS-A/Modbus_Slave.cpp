@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/DI/MetaData.h>
+#include <KMS/Cfg/MetaData.h>
 
 #include <KMS/Modbus/Slave.h>
 
@@ -20,7 +20,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_DEVICE_ADDRESS("DeviceAddress", "DeviceAddress = {Address}");
+static const KMS::Cfg::MetaData MD_DEVICE_ADDRESS("DeviceAddress = {Address}");
 
 #define MSG_ITERATE (1)
 
@@ -70,13 +70,9 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Slave::Slave()
-            : DI::Dictionary(NULL)
-            , ON_ITERATE(this, MSG_ITERATE)
-            , mDeviceAddress(DEFAULT_DEVICE_ADDRESS, &MD_DEVICE_ADDRESS)
-            , mStopped(false)
+        Slave::Slave() : mStopped(false)
         {
-            AddEntry(&mDeviceAddress);
+            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
         }
 
         DeviceAddress Slave::GetDeviceAddress() const { return mDeviceAddress; }

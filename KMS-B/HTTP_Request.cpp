@@ -22,10 +22,10 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::MetaData MD_CONTENT_LENGTH("content-length", NULL, KMS::DI::MetaData::FLAG_DELETE_OBJECT);
-static const KMS::DI::MetaData MD_CONTENT_TYPE  ("content-type"  , NULL);
+#define NAME_CONTENT_LENGTH "content-length"
+#define NAME_CONTENT_TYPE   "content-type"
 
-static const KMS::DI::String APPLICATION_JSON("application/json", &MD_CONTENT_TYPE);
+static const KMS::DI::String APPLICATION_JSON("application/json");
 
 namespace KMS
 {
@@ -35,14 +35,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Request::Request()
-            : mRequestHeader(NULL)
-            , mResponseData(NULL)
-            , mResponseHeader(NULL)
-            , mSocket(NULL)
-        {
-            Construct();
-        }
+        Request::Request() : mSocket(NULL) { Construct(); }
 
         const char* Request::GetPath() const { return mPath.c_str(); }
 
@@ -79,11 +72,7 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Request::Request(Net::Socket* aSocket)
-            : mRequestHeader(NULL)
-            , mResponseData(NULL)
-            , mResponseHeader(NULL)
-            , mSocket(aSocket)
+        Request::Request(Net::Socket* aSocket) : mSocket(aSocket)
         {
             assert(NULL != aSocket);
 
@@ -163,8 +152,8 @@ namespace KMS
             {
                 unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
-                mResponseHeader.AddEntry(new DI::UInt32(lSize_byte, &MD_CONTENT_LENGTH));
-                mResponseHeader.AddEntry(&APPLICATION_JSON);
+                mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt32(lSize_byte));
+                mResponseHeader.AddEntry(NAME_CONTENT_TYPE  , &APPLICATION_JSON);
 
                 SetData(lData, lSize_byte);
             }
