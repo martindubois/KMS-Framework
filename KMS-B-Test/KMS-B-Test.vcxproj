@@ -265,6 +265,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GUI_DynamicForm.cpp" />
     <ClCompile Include="HTTP_ReactApp.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />
     <ClCompile Include="KMS-B-Test.cpp" />
