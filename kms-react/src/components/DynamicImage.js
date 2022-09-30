@@ -39,7 +39,7 @@ const DynamicImage = ( aProps ) =>
         setTimeout( OnTick, aProps.Period_ms )
     }
 
-    const OnError = () => { SetMessage( 'ERROR' ); }
+    const OnError = () => { SetMessage( 'ERROR' ) }
     const OnLoad  = () => { setTimeout( OnTick, aProps.Period_ms ) }
 
     useEffect( OnLoad )

@@ -18,7 +18,7 @@ Version             ______ . ______ . ______ . ______ - _____________________
 
 [ ] File "front-end/_DocUser/KMS.ReadMe.txt"
 [ ] Tools "Terminal" - In the front-end sub folder
-        ..\Binaries\Debug\KMS-Build.exe
+        ../Binaries/Debug/KMS-Build
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] as message
     - Push the servers
