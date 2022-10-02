@@ -39,9 +39,6 @@
     <ClCompile Include="Proc_Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Text_TextFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="File_FileInfoList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -208,6 +205,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_MetaData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_File_ASCII.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_File_UTF16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

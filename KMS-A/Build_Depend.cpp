@@ -8,14 +8,14 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Text/TextFile.h>
+#include <KMS/Text/File_ASCII.h>
 
 #include <KMS/Build/Depend.h>
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static void InsertStringSet(KMS::StringSet* aInOut, const KMS::StringSet* aIn);
+static void InsertStringSet(KMS::StringSet_ASCII* aInOut, const KMS::StringSet_ASCII* aIn);
 
 namespace KMS
 {
@@ -25,7 +25,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Depend::Depend(const StringSet& aIncludes, const File::Folder& aFolder) : mFolder(aFolder), mIncludes(aIncludes)
+        Depend::Depend(const StringSet_ASCII& aIncludes, const File::Folder& aFolder) : mFolder(aFolder), mIncludes(aIncludes)
         {
         }
 
@@ -47,13 +47,13 @@ namespace KMS
 
         // ASSUMPTION All #include using "" includes local files.
 
-        StringSet* Depend::ParseFile(const char* aFile)
+        StringSet_ASCII* Depend::ParseFile(const char* aFile)
         {
             printf("%s( \"%s\" )\n", __FUNCTION__, aFile);
 
             assert(NULL != aFile);
 
-            StringSet* lResult;
+            StringSet_ASCII* lResult;
 
             FileMap::iterator lIt = mCache.find(aFile);
             if (mCache.end() != lIt)
@@ -64,13 +64,13 @@ namespace KMS
             }
             else
             {
-                lResult = new StringSet;
+                lResult = new StringSet_ASCII;
 
                 // Important to add it to the cache before filling the set to
                 // avoid infinit recursivity.
                 mCache.insert(FileMap::value_type(aFile, lResult));
 
-                Text::TextFile lFile;
+                Text::File_ASCII lFile;
 
                 lFile.Read(mFolder, aFile);
 
@@ -107,7 +107,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         // Only add the dependency if it is not already in the list.
-        void Depend::AddDependency(StringSet* aInOut, const char* aFile)
+        void Depend::AddDependency(StringSet_ASCII* aInOut, const char* aFile)
         {
             assert(NULL != aInOut);
             assert(NULL != aFile);
@@ -116,7 +116,7 @@ namespace KMS
             {
                 aInOut->insert(aFile);
 
-                StringSet* lRet = ParseFile(aFile);
+                StringSet_ASCII* lRet = ParseFile(aFile);
                 assert(NULL != lRet);
 
                 InsertStringSet(aInOut, lRet);
@@ -129,7 +129,7 @@ namespace KMS
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-void InsertStringSet(KMS::StringSet* aInOut, const KMS::StringSet* aIn)
+void InsertStringSet(KMS::StringSet_ASCII* aInOut, const KMS::StringSet_ASCII* aIn)
 {
     assert(NULL != aInOut);
     assert(NULL != aIn);

@@ -21,8 +21,12 @@ namespace KMS
         HEXADECIMAL = 16,
     };
 
-    typedef std::list<std::string> StringList;
+    // Internal
+
+    typedef std::list<std::string>  StringList_ASCII;
+    typedef std::list<std::wstring> StringList_UTF16;
     
-    typedef std::set<std::string> StringSet;
+    typedef std::set<std::string>  StringSet_ASCII;
+    typedef std::set<std::wstring> StringSet_UTF16;
 
 }

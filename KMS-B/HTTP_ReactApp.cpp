@@ -95,7 +95,7 @@ namespace KMS
                 else
                 {
                     File::Folder lC(lExec, "front-end" SLASH "build");
-                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), INSTALLATION, "The front-end files are not available")
+                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), INSTALLATION, "The front-end files are not available", lC.GetPath());
 
                     mFileServer.SetRoot(lB);
                 }
@@ -133,7 +133,7 @@ namespace KMS
 
             const char* lPath = lRequest->GetPath();
 
-            StringSet::iterator lIt = mRoutes.find(lPath);
+            StringSet_ASCII::iterator lIt = mRoutes.find(lPath);
             if (mRoutes.end() == lIt)
             {
                 OnFunction(lRequest);

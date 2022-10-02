@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Text/TextFile.h
+// File      Includes/KMS/Text/File_UTF16.h
 
 #pragma once
 
@@ -19,32 +19,35 @@ namespace KMS
     namespace Text
     {
 
-        class TextFile
+        class File_UTF16
         {
 
         public:
 
-            TextFile();
+            File_UTF16();
 
             void Read (const File::Folder& aFolder, const char* aFileName);
             void Write(const File::Folder& aFolder, const char* aFileName);
 
-            void RemoveComments_CPP   ();
-            void RemoveComments_Script();
-
             void RemoveEmptyLines();
 
-            void ReplaceLines(const char* aRegEx, const char* aReplace);
+            void ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
 
-            StringList mLines;
+            void SwapByteOrder();
+
+            unsigned int CountOccurrence(const wchar_t* aStr) const;
+
+        // Internal
+
+            StringList_UTF16 mLines;
 
         private:
 
-            TextFile(const TextFile&);
+            File_UTF16(const File_UTF16&);
 
-            const TextFile& operator = (const TextFile&);
+            const File_UTF16& operator = (const File_UTF16&);
 
-            void RemoveLines(const std::regex& aRegEx);
+            void RemoveLines(const std::wregex& aRegEx);
 
         };
 

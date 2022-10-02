@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Text_TextFile.cpp
+// File      KMS-A/Text_File_ASCII.cpp
 
 #include "Component.h"
 
@@ -11,7 +11,7 @@
 #include <fstream>
 
 // ===== Includes ===========================================================
-#include <KMS/Text/TextFile.h>
+#include <KMS/Text/File_ASCII.h>
 
 namespace KMS
 {
@@ -21,9 +21,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        TextFile::TextFile() {}
+        File_ASCII::File_ASCII() {}
 
-        void TextFile::Read(const File::Folder& aFolder, const char* aFile)
+        void File_ASCII::Read(const File::Folder& aFolder, const char* aFile)
         {
             assert(NULL != aFile);
 
@@ -32,10 +32,7 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ifstream lStream(lPath);
-            if (!lStream.is_open())
-            {
-                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open text file for reading", lPath);
-            }
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for reading", lPath);
 
             std::string lLine;
 
@@ -45,17 +42,14 @@ namespace KMS
             }
         }
 
-        void TextFile::Write(const File::Folder& aFolder, const char* aFile)
+        void File_ASCII::Write(const File::Folder& aFolder, const char* aFile)
         {
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ofstream lStream(lPath);
-            if (!lStream.is_open())
-            {
-                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "Cannot open text file for writing", lPath);
-            }
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for writing", lPath);
 
             for (std::string lLine : mLines)
             {
@@ -63,19 +57,19 @@ namespace KMS
             }
         }
 
-        void TextFile::RemoveComments_CPP   () { RemoveLines(std::regex("[ \t]*//.*")); }
-        void TextFile::RemoveComments_Script() { RemoveLines(std::regex("[ \t]*#.*")); }
+        void File_ASCII::RemoveComments_CPP   () { RemoveLines(std::regex("[ \t]*//.*")); }
+        void File_ASCII::RemoveComments_Script() { RemoveLines(std::regex("[ \t]*#.*")); }
 
-        void TextFile::RemoveEmptyLines() { RemoveLines(std::regex("[ \t]*$")); }
+        void File_ASCII::RemoveEmptyLines() { RemoveLines(std::regex("[ \t]*$")); }
 
-        void TextFile::ReplaceLines(const char* aRegEx, const char* aReplace)
+        void File_ASCII::ReplaceLines(const char* aRegEx, const char* aReplace)
         {
             assert(NULL != aRegEx);
             assert(NULL != aReplace);
 
             std::regex lRegEx(aRegEx);
 
-            StringList::iterator lIt = mLines.begin();
+            StringList_ASCII::iterator lIt = mLines.begin();
             while (lIt != mLines.end())
             {
                 if (std::regex_match(*lIt, lRegEx))
@@ -90,9 +84,9 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void TextFile::RemoveLines(const std::regex& aRegEx)
+        void File_ASCII::RemoveLines(const std::regex& aRegEx)
         {
-            StringList::iterator lIt = mLines.begin();
+            StringList_ASCII::iterator lIt = mLines.begin();
             while (lIt != mLines.end())
             {
                 if (std::regex_match(*lIt, aRegEx))

@@ -52,9 +52,9 @@ namespace KMS
             unsigned int OnFunction(Request* aRequest);
             unsigned int OnRequest (void   * aData   );
 
-            FileServer  mFileServer;
-            FunctionMap mFunctions;
-            StringSet   mRoutes;
+            FileServer      mFileServer;
+            FunctionMap     mFunctions;
+            StringSet_ASCII mRoutes;
 
         };
 

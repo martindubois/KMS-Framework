@@ -21,11 +21,11 @@ namespace KMS
 
         public:
 
-            Depend(const StringSet& aIncludes, const File::Folder& aFolder);
+            Depend(const StringSet_ASCII& aIncludes, const File::Folder& aFolder);
 
             ~Depend();
 
-            StringSet* ParseFile(const char* aFile);
+            StringSet_ASCII* ParseFile(const char* aFile);
 
         private:
 
@@ -33,15 +33,15 @@ namespace KMS
 
             const Depend& operator = (const Depend&);
 
-            void AddDependency(StringSet* aInOut, const char* aFile);
+            void AddDependency(StringSet_ASCII* aInOut, const char* aFile);
 
-            typedef std::map<std::string, StringSet*> FileMap;
+            typedef std::map<std::string, StringSet_ASCII*> FileMap;
 
             FileMap mCache;
 
             const File::Folder& mFolder;
 
-            const StringSet& mIncludes;
+            const StringSet_ASCII& mIncludes;
 
         };
 

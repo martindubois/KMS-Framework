@@ -10,7 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurable.h>
 #include <KMS/File/Folder.h>
-#include <KMS/Text/TextFile.h>
+#include <KMS/Text/File_ASCII.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -76,12 +76,12 @@ namespace KMS
             void Clean_Tests();
 
             void Depend_Component(const char* aC);
-            void Depend_Components(const StringSet& aComponents);
-            void Depend_ParseMakeFile(Text::TextFile* aMF, StringSet* aSources);
-            void Depend_ParseSource(Depend* aDepend, const char* aSource, Text::TextFile* aMakeFile);
+            void Depend_Components(const StringSet_ASCII& aComponents);
+            void Depend_ParseMakeFile(Text::File_ASCII* aMF, StringSet_ASCII* aSources);
+            void Depend_ParseSource(Depend* aDepend, const char* aSource, Text::File_ASCII* aMakeFile);
 
             void Make_Component(const char* aC);
-            void Make_Components(const StringSet& aComponents);
+            void Make_Components(const StringSet_ASCII& aComponents);
 
             void Prepare();
 
@@ -98,14 +98,14 @@ namespace KMS
             File::Folder mF_Libraries;
 
             // ===== Configurable attributes ================================
-            StringSet     mBinaries;
-            std::string   mComponent;
-            ComponentType mComponentType;
-            std::string   mConfiguration;
-            StringSet     mIncludes;
-            StringSet     mLibraries;
-            StringSet     mOperations;
-            StringSet     mTests;
+            StringSet_ASCII mBinaries;
+            std::string     mComponent;
+            ComponentType   mComponentType;
+            std::string     mConfiguration;
+            StringSet_ASCII mIncludes;
+            StringSet_ASCII mLibraries;
+            StringSet_ASCII mOperations;
+            StringSet_ASCII mTests;
 
         };
 

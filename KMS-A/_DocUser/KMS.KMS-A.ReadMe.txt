@@ -8,6 +8,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS_EXCEPTION_ASSERT
 * KMS::Build::Import
     * Use ~/Export as default repository on Linux
+* KMS::Convert
+    * ToASCII
+    * ToUTF16
 * KMS::DAQ
     * AnalogInputConverter
     * AnalogOutputConverter
@@ -16,8 +19,15 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS::JSON
     * Object - Removed
 * KMS::Text
+    * File_ASCII replace TextFile
+    * File_UTF16
     * ReadPtr
     * WritePtr
+- KMS
+    - StringList_ASCII replace StringList
+    - StringList_UTF16
+    - StringSet_ASCII replace StringSet
+    - StringSet_UTF16
 
 0.0.13-Dev Windows 2022-09-12
 * KMS::RefCount

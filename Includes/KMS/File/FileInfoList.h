@@ -60,8 +60,8 @@ namespace KMS
 
             FileInfoMap mFiles;
            
-            StringSet mFolders;
-            Folder    mRoot;
+            StringSet_ASCII mFolders;
+            Folder          mRoot;
 
         };
 

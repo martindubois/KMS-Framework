@@ -15,12 +15,15 @@ namespace KMS
     namespace Convert
     {
 
-        extern bool     ToBool  (const char* aValue);
-        extern double   ToDouble(const char* aValue);
-        extern FILE   * ToFile  (const char* aValue, const char * aMode = "rb");
-        extern uint16_t ToUInt16(const char* aValue, Radix aRadix = Radix::DECIMAL);
-        extern uint32_t ToUInt32(const char* aValue, Radix aRadix = Radix::DECIMAL);
-        extern uint8_t  ToUInt8 (const char* aValue, Radix aRadix = Radix::DECIMAL);
+        extern bool     ToBool  (const char* aASCII);
+        extern double   ToDouble(const char* aASCII);
+        extern FILE   * ToFile  (const char* aASCII, const char * aMode = "rb");
+        extern uint16_t ToUInt16(const char* aASCII, Radix aRadix = Radix::DECIMAL);
+        extern uint32_t ToUInt32(const char* aASCII, Radix aRadix = Radix::DECIMAL);
+        extern uint8_t  ToUInt8 (const char* aASCII, Radix aRadix = Radix::DECIMAL);
+
+        extern unsigned int ToASCII(const wchar_t* aUTF16, char   * aOut, unsigned int aOutSize_byte);
+        extern unsigned int ToUTF16(const char   * aASCII, wchar_t* aOut, unsigned int aOutSize_byte);
 
     }
 }

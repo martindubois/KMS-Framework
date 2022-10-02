@@ -67,14 +67,14 @@ namespace KMS
 
             void Start_Internal();
 
-            StringList   mArguments;
-            char       * mCmdLine;
-            std::string  mExecutable;
-            int          mExitCode;
-            File::Folder mFolder;
-            uint64_t     mHandle;
-            std::string  mVerb;
-            std::string  mWorkingDirectory;
+            StringList_ASCII mArguments;
+            char           * mCmdLine;
+            std::string      mExecutable;
+            int              mExitCode;
+            File::Folder     mFolder;
+            uint64_t         mHandle;
+            std::string      mVerb;
+            std::string      mWorkingDirectory;
 
         };
 
