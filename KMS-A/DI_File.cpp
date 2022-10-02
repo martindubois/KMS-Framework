@@ -54,7 +54,7 @@ namespace KMS
             else
             {
                 errno_t lRet = fopen_s(&mInternal, *this, mMode);
-                KMS_EXCEPTION_ASSERT(0 == lRet, FILE_OPEN, "Cannot open file");
+                KMS_EXCEPTION_ASSERT(0 == lRet, FILE_OPEN, "Cannot open file", aIn);
             }
 
             assert(NULL != mInternal);

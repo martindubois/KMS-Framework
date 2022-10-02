@@ -60,10 +60,7 @@ namespace KMS
 
             CRC::Verify(lBuffer, MIN_SIZE_byte + lBuffer[2] + CRC_SIZE_byte);
 
-            if (lBuffer[2] > aOutSize_byte)
-            {
-                KMS_EXCEPTION_WITH_INFO(OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
-            }
+            KMS_EXCEPTION_ASSERT(lBuffer[2] <= aOutSize_byte, OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
 
             memcpy(aOut, lBuffer + MIN_SIZE_byte, lBuffer[1]);
 
@@ -154,10 +151,7 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            if (GetDeviceAddress() != aData[0])
-            {
-                KMS_EXCEPTION_WITH_INFO(MODBUS_MASTER, "Invalid slave address", aData[0]);
-            }
+            KMS_EXCEPTION_ASSERT(GetDeviceAddress() == aData[0], MODBUS_MASTER, "Invalid slave address", aData[0]);
         }
 
     }

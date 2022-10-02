@@ -163,10 +163,7 @@ namespace KMS
 
             for (unsigned int i = 0; i < 4; i++)
             {
-                if (0xff < aA[i])
-                {
-                    KMS_EXCEPTION_WITH_INFO(NETWORK_ADDRESS, "Invalid IPv4 address", aA[i]);
-                }
+                KMS_EXCEPTION_ASSERT(0xff >= aA[i], NETWORK_ADDRESS, "Invalid IPv4 address", aA[i]);
             }
 
             mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1 = aA[0];
@@ -188,10 +185,7 @@ namespace KMS
             addrinfo* lAddr;
 
             int lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION_WITH_INFO(NETWORK_ADDRESS, "Cannot resolve the network address", aN);
-            }
+            KMS_EXCEPTION_ASSERT(0 == lRet, NETWORK_ADDRESS, "Cannot resolve the network address", aN);
 
             assert(NULL != lAddr);
 
@@ -215,15 +209,12 @@ namespace KMS
 
             freeaddrinfo(lAddr);
 
-            KMS_EXCEPTION_WITH_INFO(NETWORK_ADDRESS, "Cannot resolve the network address", aN);
+            KMS_EXCEPTION(NETWORK_ADDRESS, "Cannot resolve the network address", aN);
         }
 
         void Address::SetPortNumber(unsigned int aP)
         {
-            if (0xffff < aP)
-            {
-                KMS_EXCEPTION_WITH_INFO(NETWORK_PORT, "Invalid port number", aP);
-            }
+            KMS_EXCEPTION_ASSERT(0xffff >= aP, NETWORK_PORT, "Invalid port number", aP);
 
             SetPortNumber(static_cast<uint16_t>(aP));
         }

@@ -109,5 +109,5 @@ KMS::Com::Port::Parity ToParity(const char* aIn)
     if (strcmp("NONE"        , aIn)) { return KMS::Com::Port::Parity::NONE        ; }
     if (strcmp("ODD"         , aIn)) { return KMS::Com::Port::Parity::ODD         ; }
 
-    KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid parity", aIn);
+    KMS_EXCEPTION(CONFIG_VALUE, "Invalid parity", aIn);
 }

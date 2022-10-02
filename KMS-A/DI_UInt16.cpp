@@ -61,7 +61,7 @@ namespace KMS
             default: assert(false);
             }
 
-            KMS_EXCEPTION_ASSERT(0xffff >= lIn, CONFIG_VALUE, "The value is above the limit for a 16 bits value");
+            KMS_EXCEPTION_ASSERT(0xffff >= lIn, CONFIG_VALUE, "The value is above the limit for a 16 bits value", aIn);
 
             mInternal = lIn;
 

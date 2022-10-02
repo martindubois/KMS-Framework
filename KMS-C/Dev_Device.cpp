@@ -74,7 +74,7 @@ namespace KMS
 
         void Device::LinkFromIndex()
         {
-            KMS_EXCEPTION(CONFIG_VALUE, "Invalid device configuration");
+            KMS_EXCEPTION(CONFIG_VALUE, "Invalid device configuration", "");
         }
 
     }

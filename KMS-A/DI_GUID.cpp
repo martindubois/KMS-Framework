@@ -90,7 +90,7 @@ GUID ToGUID(const char* aIn)
 
         case '-': break;
 
-        default: KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid GUID format", aIn);
+        default: KMS_EXCEPTION(CONFIG_FORMAT, "Invalid GUID format", aIn);
         }
 
         switch (i)

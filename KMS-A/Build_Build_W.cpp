@@ -55,7 +55,7 @@ namespace KMS
 
                 if (0 != lProcess.GetExitCode())
                 {
-                    KMS_EXCEPTION_WITH_INFO(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
+                    KMS_EXCEPTION(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
                 }
             }
         }
@@ -142,7 +142,7 @@ namespace KMS
 
                     if (0 != lProcess.GetExitCode())
                     {
-                        KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
+                        KMS_EXCEPTION(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
                     }
                 }
             }

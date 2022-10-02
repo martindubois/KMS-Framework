@@ -133,14 +133,11 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
         R = __LINE__;                                                      \
     }
 
-#define KMS_EXCEPTION(C, M) \
-    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::C, M)
+#define KMS_EXCEPTION(C, M, I) \
+    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::C, (M), (I))
 
-#define KMS_EXCEPTION_ASSERT(A, C, M) \
-    if (!(A))                         \
-    {                                 \
-        KMS_EXCEPTION(C, (M));        \
+#define KMS_EXCEPTION_ASSERT(A, C, M, I) \
+    if (!(A))                            \
+    {                                    \
+        KMS_EXCEPTION(C, (M), (I));      \
     }
-
-#define KMS_EXCEPTION_WITH_INFO(C, M, I) \
-    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::C, M, I)

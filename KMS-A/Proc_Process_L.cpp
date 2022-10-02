@@ -38,7 +38,7 @@ namespace KMS
             {
                 if (NULL == getcwd(lDir, sizeof(lDir)))
                 {
-                    KMS_EXCEPTION(FOLDER_ACCESS, "getcwd failed");
+                    KMS_EXCEPTION(FOLDER_ACCESS, "Cannot retrive the current workding directory");
                 }
 
                 ChangeDirectory(mWorkingDirectory.c_str());

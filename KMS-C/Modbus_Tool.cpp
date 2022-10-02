@@ -208,10 +208,10 @@ namespace KMS
                 if (0 == strcmp("WriteSingleCoil"    , lA)) { WriteSingleCoil    (lB, Convert::ToBool  (lC)); return; }
                 if (0 == strcmp("WriteSingleRegister", lA)) { WriteSingleRegister(lB, Convert::ToUInt16(lC)); return; }
 
-            default: KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid operation format", aO);
+            default: KMS_EXCEPTION(CONFIG_FORMAT, "Invalid operation format", aO);
             }
 
-            KMS_EXCEPTION_WITH_INFO(CONFIG_VALUE, "Invalid operation name", aO);
+            KMS_EXCEPTION(CONFIG_VALUE, "Invalid operation name", aO);
         }
 
         int Tool::Run()

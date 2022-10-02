@@ -130,10 +130,7 @@ namespace KMS
                 }
             }
 
-            if (0 < lBits)
-            {
-                KMS_EXCEPTION_WITH_INFO(NETWORK_ADDRESS_RANGE, "Invalid mask length", aBits);
-            }
+            KMS_EXCEPTION_ASSERT(0 >= lBits, NETWORK_ADDRESS_RANGE, "Invalid mask length", aBits);
         }
 
     }

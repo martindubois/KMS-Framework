@@ -272,11 +272,11 @@ namespace KMS
         {
             File::Folder lF_Component(mF_Product, aC);
 
-            Text::TextFile lMakeFile;
+            Text::File_ASCII lMakeFile;
 
             lMakeFile.Read(lF_Component, MAKE_FILE_NAME);
 
-            StringSet lSources;
+            StringSet_ASCII lSources;
 
             Depend_ParseMakeFile(&lMakeFile, &lSources);
 
@@ -295,7 +295,7 @@ namespace KMS
             lMakeFile.Write(lF_Component, MAKE_FILE_NAME);
         }
 
-        void Make::Depend_Components(const StringSet& aComponents)
+        void Make::Depend_Components(const StringSet_ASCII& aComponents)
         {
             for (std::string lC : aComponents)
             {
@@ -311,14 +311,14 @@ namespace KMS
 
         // ASSUMPTION No comment break the definition of the SOURCES.
 
-        void Make::Depend_ParseMakeFile(Text::TextFile* aMF, StringSet* aSources)
+        void Make::Depend_ParseMakeFile(Text::File_ASCII* aMF, StringSet_ASCII* aSources)
         {
             assert(NULL != aMF);
             assert(NULL != aSources);
 
             char lSource[PATH_LENGTH];
 
-            StringList::iterator lIt;
+            StringList_ASCII::iterator lIt;
 
             for (lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
             {
@@ -355,11 +355,11 @@ namespace KMS
         // ASSUMPTION The source file listed in the makefile always have an
         //            extension.
 
-        void Make::Depend_ParseSource(Depend* aDepend, const char* aSource, Text::TextFile* aMakeFile)
+        void Make::Depend_ParseSource(Depend* aDepend, const char* aSource, Text::File_ASCII* aMakeFile)
         {
             printf("%s( , \"%s\",  )\n", __FUNCTION__, aSource);
 
-            KMS::StringSet* lHeaders = aDepend->ParseFile(aSource);
+            KMS::StringSet_ASCII* lHeaders = aDepend->ParseFile(aSource);
             if (0 < lHeaders->size())
             {
                 char lLongLine[8192];
@@ -397,7 +397,7 @@ namespace KMS
             }
         }
 
-        void Make::Make_Components(const StringSet& aComponents)
+        void Make::Make_Components(const StringSet_ASCII& aComponents)
         {
             for (std::string lC : aComponents)
             {
@@ -495,7 +495,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mConfiguration.size(), CONFIG, "Empty configuration");
+            KMS_EXCEPTION_ASSERT(0 < mConfiguration.size(), CONFIG, "Empty configuration", "");
         }
 
     }

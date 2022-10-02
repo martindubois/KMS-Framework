@@ -42,10 +42,7 @@ namespace KMS
             WSADATA lData;
 
             int lRet = WSAStartup(MAKEWORD(2, 2), &lData);
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION_WITH_INFO(SOCKET_STARTUP, "WSAStartup failed", lRet);
-            }
+            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_STARTUP, "WSAStartup failed", lRet);
         }
 
         void Thread_Cleanup()
@@ -142,7 +139,7 @@ namespace KMS
             }
 
             mSocket = socket(mLocalAddress.Get().GetInternalFamily(), lType, lProt);
-            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, SOCKET, "socket failed");
+            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, SOCKET, "socket failed", "");
 
             SetOption(SO_RCVTIMEO, mReceiveTimeout_ms);
             SetOption(SO_SNDTIMEO, mSendTimeout_ms);
@@ -159,10 +156,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             int lResult = recv(mSocket, reinterpret_cast<char*>(aOut), aOutSize_byte, 0);
-            if ((0 > lResult) || (aOutSize_byte < static_cast<unsigned int>(lResult)))
-            {
-                KMS_EXCEPTION_WITH_INFO(SOCKET_RECEIVE, "recv failed", lResult);
-            }
+            KMS_EXCEPTION_ASSERT((0 <= lResult) && (aOutSize_byte >= static_cast<unsigned int>(lResult)), SOCKET_RECEIVE, "recv failed", lResult);
 
             return lResult;
         }
@@ -174,10 +168,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             int lRet = send(mSocket, reinterpret_cast<const char*>(aIn), aInSize_byte, 0);
-            if (aInSize_byte != lRet)
-            {
-                KMS_EXCEPTION_WITH_INFO(SOCKET_SEND, "send failed", lRet);
-            }
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lRet, SOCKET_SEND, "send failed", lRet);
         }
 
         void Socket::Send(File::Binary* aFile)
@@ -223,7 +214,7 @@ namespace KMS
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
 
-                KMS_EXCEPTION(SOCKET_BIND, "bind failed");
+                KMS_EXCEPTION(SOCKET_BIND, "Cannot bind the socket", "");
             }
         }
 
@@ -244,7 +235,7 @@ namespace KMS
             assert(State::OPEN == mState);
 
             int lRet = listen(mSocket, 1);
-            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_LISTEN, "listen failed");
+            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_LISTEN, "listen failed", lRet);
 
             mState = State::LISTEN;
         }
@@ -270,7 +261,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             int lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_OPTION, "setsockopt failed");
+            KMS_EXCEPTION_ASSERT(0 == lRet, SOCKET_OPTION, "setsockopt failed", lRet);
         }
 
         bool Socket::IsInAllowedRanges(const Address& aA) const
@@ -310,7 +301,7 @@ namespace KMS
             switch (aS)
             {
             case State::CLOSED   : break;
-            case State::CONNECTED: KMS_EXCEPTION_WITH_INFO(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+            case State::CONNECTED: KMS_EXCEPTION(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
             case State::LISTEN   : Open(); Listen(); break;
             case State::OPEN     : Open(); break;
 
@@ -327,7 +318,7 @@ namespace KMS
 
             case State::LISTEN:
             case State::OPEN  :
-                KMS_EXCEPTION_WITH_INFO(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+                KMS_EXCEPTION(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
 
             default: assert(false);
             }
@@ -342,7 +333,7 @@ namespace KMS
 
             case State::CONNECTED:
             case State::OPEN     :
-                KMS_EXCEPTION_WITH_INFO(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+                KMS_EXCEPTION(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
 
             default: assert(false);
             }
@@ -353,7 +344,7 @@ namespace KMS
             switch (aS)
             {
             case State::CLOSED   : CloseSocket(); break;
-            case State::CONNECTED: KMS_EXCEPTION_WITH_INFO(STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+            case State::CONNECTED: KMS_EXCEPTION(STATE, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
             case State::LISTEN   : Listen(); break;
             case State::OPEN     : break;
 

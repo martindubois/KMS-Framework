@@ -13,7 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Text/TextFile.h>
+#include <KMS/Text/File_ASCII.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Build.h>
@@ -274,12 +274,12 @@ namespace KMS
 
                 if (3 != sscanf_s(*lOp, "%[^;];%[^;];%[^\n\r]", lFile SizeInfo(lFile), lRegEx SizeInfo(lRegEx), lReplace SizeInfo(lReplace)))
                 {
-                    KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid edit operation", *lOp);
+                    KMS_EXCEPTION(CONFIG_FORMAT, "Invalid edit operation", *lOp);
                 }
 
                 std::string lReplaceStr = ProcessReplaceLine(lReplace, aVersion);
 
-                Text::TextFile lText;
+                Text::File_ASCII lText;
 
                 lText.Read(lCurrent, lFile);
 
@@ -303,7 +303,7 @@ namespace KMS
 
                 if (0 != system(*lCommand))
                 {
-                    KMS_EXCEPTION_WITH_INFO(BUILD_COMMAND, "The command failed", *lCommand);
+                    KMS_EXCEPTION(BUILD_COMMAND, "The command failed", *lCommand);
                 }
             }
         }
@@ -394,7 +394,7 @@ namespace KMS
 
                 if (2 != sscanf_s(*lF, "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
                 {
-                    KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid folder operation", *lF);
+                    KMS_EXCEPTION(CONFIG_FORMAT, "Invalid folder copy operation", *lF);
                 }
 
                 File::Folder lFD(mTempFolder, lDst);
@@ -424,25 +424,22 @@ namespace KMS
             {
                 if (!mDoNotCompile)
                 {
-                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), CONFIG, "No configuration");
+                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), CONFIG, "No configuration", "");
 
                     #ifdef _KMS_WINDOWS_
-                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), CONFIG, "No processor");
+                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), CONFIG, "No processor", "");
                     #endif
                 }
 
                 if (!mDoNotExport)
                 {
-                    if (!mExportFolder.Get().DoesExist())
-                    {
-                        KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid export folder", *mExportFolder);
-                    }
+                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), CONFIG, "Invalid export folder", *mExportFolder);
 
-                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), CONFIG, "Invalid product name");
+                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), CONFIG, "Invalid product name", "");
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), CONFIG, "Invalid version file");
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), CONFIG, "Invalid version file", "");
         }
 
     }
@@ -496,7 +493,7 @@ std::string ProcessReplaceLine(const char * aIn, const KMS::Version & aVersion)
         case STATE_PROCESS:
             switch (*lIn)
             {
-            case '\0': KMS_EXCEPTION_WITH_INFO(CONFIG_FORMAT, "Invalid edition operation", aIn);
+            case '\0': KMS_EXCEPTION(CONFIG_FORMAT, "Invalid edition operation", aIn);
             case '}': lState = STATE_INIT; break;
             case 'M': lResult += aVersion.GetMajor(); break;
             case 'm': lResult += aVersion.GetMinor(); break;

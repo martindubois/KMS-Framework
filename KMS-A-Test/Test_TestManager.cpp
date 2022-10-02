@@ -59,7 +59,7 @@ KMS_TEST(Test_TestManager_Fail1, "Test_TestManager_Fail1", "Fail", sTest_Fail1)
 {
     KMS_TEST_EXPECTED_EXCEPTION();
     KMS_TEST_EXPECTED_ERROR();
-    KMS_EXCEPTION(TEST, "Test");
+    KMS_EXCEPTION(TEST, "Test", "");
 }
 
 KMS_TEST(Test_TestManager_Fail2, "Test_TestManager_Fail2", "Fai2", sTest_Fail2)

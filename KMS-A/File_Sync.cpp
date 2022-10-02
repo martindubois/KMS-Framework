@@ -128,7 +128,7 @@ namespace KMS
                 char lSrcName[PATH_LENGTH];
 
                 int lRet = sscanf_s(*lStr, "%[^;];%s", lSrcName SizeInfo(lSrcName), lDstName SizeInfo(lDstName));
-                KMS_EXCEPTION_ASSERT(2 == lRet, CONFIG_FORMAT, "Invalid unidirectional entry");
+                KMS_EXCEPTION_ASSERT(2 == lRet, CONFIG_FORMAT, "Invalid unidirectional entry", lRet);
 
                 FileInfoList* lDst = ToFileInfoList(lDstName);
                 FileInfoList* lSrc = ToFileInfoList(lSrcName);
@@ -199,7 +199,7 @@ namespace KMS
                 const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
                 assert(NULL != lGroup);
 
-                KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), CONFIG, "Number of folders cannot be one");
+                KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), CONFIG, "Number of folders cannot be one", lVT.first.c_str());
             }
         }
 

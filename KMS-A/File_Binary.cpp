@@ -38,7 +38,7 @@ namespace KMS
             mHandle = CreateFile(lPath, lAccess, 0, NULL, lDispo, 0, NULL);
             if (INVALID_HANDLE_VALUE == mHandle)
             {
-                KMS_EXCEPTION_WITH_INFO(FILE_OPEN, "CreateFile failed", lPath);
+                KMS_EXCEPTION(FILE_OPEN, "Cannot open binary file", lPath);
             }
         }
 
@@ -58,7 +58,7 @@ namespace KMS
 
             if (!GetFileSizeEx(mHandle, &lResult_byte))
             {
-                KMS_EXCEPTION(FILE_ACCESS, "GetFileSizeEx failed");
+                KMS_EXCEPTION(FILE_ACCESS, "Cannot retrieve the size of the binary file", "");
             }
 
             assert(0 == lResult_byte.HighPart);
@@ -76,7 +76,7 @@ namespace KMS
 
             if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL))
             {
-                KMS_EXCEPTION(FILE_READ, "ReadFile failed");
+                KMS_EXCEPTION(FILE_READ, "Cannot read the binary file", aOutSize_byte);
             }
 
             return lResult_byte;

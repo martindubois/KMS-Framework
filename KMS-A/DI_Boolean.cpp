@@ -30,7 +30,7 @@ namespace KMS
 
         unsigned int Boolean::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            KMS_EXCEPTION_ASSERT(7 <= aOutSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short");
+            KMS_EXCEPTION_ASSERT(7 <= aOutSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
 
             unsigned int lResult_byte;
 

@@ -33,7 +33,7 @@ namespace KMS
             if (!GetExitCodeProcess(lHandle, &lExitCode))
             {
                 mExitCode = EXIT_CODE_ERROR;
-                KMS_EXCEPTION_WITH_INFO(PROCESS_EXIT_CODE, "GetExitCodeProcess failed", mCmdLine);
+                KMS_EXCEPTION(PROCESS_EXIT_CODE, "Cannot retrieve the process's exit code", mCmdLine);
             }
 
             if (STILL_ACTIVE == lExitCode)
@@ -69,7 +69,7 @@ namespace KMS
             if (!TerminateProcess(lHandle, 0))
             {
                 mExitCode = EXIT_CODE_ERROR;
-                KMS_EXCEPTION(PROCESS_KILL, "TerminateProcess failed");
+                KMS_EXCEPTION(PROCESS_KILL, "Cannot terminat the process", "");
             }
 
             Detach();
@@ -85,7 +85,7 @@ namespace KMS
 
             if (WAIT_OBJECT_0 != WaitForSingleObject(lHandle, aTimeout_ms))
             {
-                KMS_EXCEPTION(PROCESS_WAIT, "The process did not complete in the allowed time");
+                KMS_EXCEPTION(PROCESS_WAIT, "The process did not complete in the allowed time", aTimeout_ms);
             }
 
             DWORD lExitCode;
@@ -93,7 +93,7 @@ namespace KMS
             if (!GetExitCodeProcess(lHandle, &lExitCode))
             {
                 mExitCode = EXIT_CODE_ERROR;
-                KMS_EXCEPTION(PROCESS_EXIT_CODE, "GetExitCode failed");
+                KMS_EXCEPTION(PROCESS_EXIT_CODE, "Cannot retrive the process's exit code", aTimeout_ms);
             }
 
             Detach();
@@ -136,7 +136,7 @@ namespace KMS
                 if (!lRetB)
                 {
                     mExitCode = EXIT_CODE_ERROR;
-                    KMS_EXCEPTION_WITH_INFO(PROCESS_START, "CreateProcess failed", mCmdLine);
+                    KMS_EXCEPTION(PROCESS_START, "Cannot create the process", mCmdLine);
                 }
 
                 lRetB = CloseHandle(lInfo.hThread);
@@ -164,7 +164,7 @@ namespace KMS
                 if (!ShellExecuteEx(&lInfo))
                 {
                     mExitCode = EXIT_CODE_ERROR;
-                    KMS_EXCEPTION_WITH_INFO(PROCESS_START, "ShellExecute failed", lPath);
+                    KMS_EXCEPTION(PROCESS_START, "Cannot execute the shell operation", lPath);
                 }
 
                 mHandle = reinterpret_cast<uint64_t>(lInfo.hProcess);
