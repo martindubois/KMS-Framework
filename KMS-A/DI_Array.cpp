@@ -47,7 +47,7 @@ namespace KMS
 
         const Object* Array::GetEntry_R(int aIndex) const
         {
-            if (mInternal.size() <= aIndex)
+            if (static_cast<int>(mInternal.size()) <= aIndex)
             {
                 return NULL;
             }
@@ -59,7 +59,7 @@ namespace KMS
 
         Object* Array::GetEntry_RW(int aIndex)
         {
-            if (mInternal.size() <= aIndex)
+            if (static_cast<int>(mInternal.size()) <= aIndex)
             {
                 return NULL;
             }
