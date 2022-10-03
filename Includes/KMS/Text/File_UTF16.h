@@ -9,6 +9,8 @@
 
 // ===== C++ ================================================================
 #include <regex>
+#include <string>
+#include <vector>
 
 // ===== Includes ===========================================================
 #include <KMS/File/Folder.h>
@@ -26,20 +28,36 @@ namespace KMS
 
             File_UTF16();
 
+            void AddLine(const wchar_t* aLine);
+
+            void Clear();
+
+            const wchar_t* GetLine(unsigned int aNo) const;
+
+            unsigned int GetLineCount() const;
+
+            void InsertLine(unsigned int aNo, const wchar_t* aLine);
+
+            unsigned int RemoveEmptyLines();
+
+            void RemoveLines(unsigned int aNo, unsigned int aCount);
+
+            void ReplaceLine(unsigned int aNo, const wchar_t* aLine);
+
+            unsigned int ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
+
             void Read (const File::Folder& aFolder, const char* aFileName);
             void Write(const File::Folder& aFolder, const char* aFileName);
-
-            void RemoveEmptyLines();
-
-            void ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
-
-            void SwapByteOrder();
 
             unsigned int CountOccurrence(const wchar_t* aStr) const;
 
         // Internal
 
-            StringList_UTF16 mLines;
+            typedef std::vector<std::wstring> Internal;
+
+            const Internal& GetInternal() const;
+
+            Internal& GetInternal();
 
         private:
 
@@ -47,7 +65,9 @@ namespace KMS
 
             const File_UTF16& operator = (const File_UTF16&);
 
-            void RemoveLines(const std::wregex& aRegEx);
+            unsigned int RemoveLines(const std::wregex& aRegEx);
+
+            Internal mInternal;
 
         };
 

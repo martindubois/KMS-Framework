@@ -146,6 +146,7 @@ const char* ToCodeName(KMS::Exception::Code aCode)
     static const char* CODE_NAMES[static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY)] =
     {
         "APPLICATION",
+        "ARGUMENT",
         "BROWSER_START",
         "BUILD_COMMAND", "BUILD_COMPILE", "BUILD_TEST",
         "COM_CONFIG", "COM_CONNECT", "COM_CONTROL",

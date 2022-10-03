@@ -25,6 +25,7 @@ namespace KMS
         enum class Code
         {
             APPLICATION = 0,
+            ARGUMENT,
             BROWSER_START,
             BUILD_COMMAND, BUILD_COMPILE, BUILD_TEST,
             COM_CONFIG, COM_CONNECT, COM_CONTROL,

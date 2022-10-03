@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Text_File_UTF16.cpp
 
+// TEST COVERAGE 2022-10-02 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C++ ================================================================
@@ -24,6 +26,82 @@ namespace KMS
 
         File_UTF16::File_UTF16() {}
 
+        void File_UTF16::AddLine(const wchar_t* aLine)
+        {
+            assert(NULL != aLine);
+
+            mInternal.push_back(aLine);
+        }
+
+        void File_UTF16::Clear() { mInternal.clear(); }
+
+        const wchar_t* File_UTF16::GetLine(unsigned int aNo) const
+        {
+            KMS_EXCEPTION_ASSERT(mInternal.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+
+            return mInternal[aNo].c_str();
+        }
+
+        unsigned int File_UTF16::GetLineCount() const { return static_cast<unsigned int>(mInternal.size()); }
+
+        void File_UTF16::InsertLine(unsigned int aNo, const wchar_t* aLine)
+        {
+            assert(NULL != aLine);
+
+            KMS_EXCEPTION_ASSERT(mInternal.size() >= aNo, ARGUMENT, "Invalide line number", aNo);
+
+            Internal::const_iterator lIt = mInternal.begin();
+
+            lIt += aNo;
+
+            mInternal.insert(lIt, aLine);
+        }
+
+        unsigned int File_UTF16::RemoveEmptyLines() { return RemoveLines(std::wregex(L"[ \t]*$")); }
+
+        void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
+        {
+            KMS_EXCEPTION_ASSERT(mInternal.size() >= aNo + aCount, ARGUMENT, "Invalide line number", aNo);
+
+            Internal::const_iterator lFirst = mInternal.begin() + aNo;
+            Internal::const_iterator lLast  = lFirst + aCount;
+
+            mInternal.erase(lFirst, lLast);
+        }
+
+        void File_UTF16::ReplaceLine(unsigned int aNo, const wchar_t* aLine)
+        {
+            assert(NULL != aLine);
+
+            KMS_EXCEPTION_ASSERT(mInternal.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+
+            mInternal[aNo] = aLine;
+        }
+
+        unsigned int File_UTF16::ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace)
+        {
+            assert(NULL != aRegEx);
+            assert(NULL != aReplace);
+
+            unsigned int lResult = 0;
+
+            std::wregex lRegEx(aRegEx);
+
+            Internal::iterator lIt = mInternal.begin();
+            while (mInternal.end() != lIt)
+            {
+                if (std::regex_match(*lIt, lRegEx))
+                {
+                    (*lIt) = aReplace;
+                    lResult++;
+                }
+
+                lIt++;
+            }
+
+            return lResult;
+        }
+
         void File_UTF16::Read(const File::Folder& aFolder, const char* aFile)
         {
             assert(NULL != aFile);
@@ -41,7 +119,7 @@ namespace KMS
 
             while (getline(lStream, lLine))
             {
-                mLines.push_back(lLine);
+                mInternal.push_back(lLine);
             }
         }
 
@@ -56,38 +134,19 @@ namespace KMS
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 
-            for (std::wstring lLine : mLines)
+            for (std::wstring lLine : mInternal)
             {
                 lStream << lLine << std::endl;
             }
         }
 
-        void File_UTF16::RemoveEmptyLines() { RemoveLines(std::wregex(L"[ \t]*$")); }
-
-        void File_UTF16::ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace)
-        {
-            assert(NULL != aRegEx);
-            assert(NULL != aReplace);
-
-            std::wregex lRegEx(aRegEx);
-
-            StringList_UTF16::iterator lIt = mLines.begin();
-            while (lIt != mLines.end())
-            {
-                if (std::regex_match(*lIt, lRegEx))
-                {
-                    (*lIt) = aReplace;
-                }
-
-                lIt++;
-            }
-        }
-
         unsigned int File_UTF16::CountOccurrence(const wchar_t* aStr) const
         {
+            assert(NULL != aStr);
+
             unsigned int lResult = 0;
 
-            for (const std::wstring& lLine : mLines)
+            for (const std::wstring& lLine : mInternal)
             {
                 if (lLine.npos != lLine.find(aStr))
                 {
@@ -101,20 +160,26 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void File_UTF16::RemoveLines(const std::wregex& aRegEx)
+        unsigned int File_UTF16::RemoveLines(const std::wregex& aRegEx)
         {
-            StringList_UTF16::iterator lIt = mLines.begin();
-            while (lIt != mLines.end())
+            unsigned int lResult = 0;
+
+            Internal::iterator lIt = mInternal.begin();
+            while (mInternal.end() != lIt)
             {
                 if (std::regex_match(*lIt, aRegEx))
                 {
-                    lIt = mLines.erase(lIt);
+                    // NOT TESTED
+                    lIt = mInternal.erase(lIt);
+                    lResult++;
                 }
                 else
                 {
                     lIt++;
                 }
             }
+
+            return lResult;
         }
 
     }
