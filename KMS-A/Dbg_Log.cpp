@@ -38,7 +38,7 @@ namespace KMS
         Log::Log()
             : mConsoleLevel(LogFile::Level::LEVEL_WARNING)
             , mFileLevel   (LogFile::Level::LEVEL_INFO)
-            , mFolder      ("KMS-Framework")
+            , mFolder      (File::Folder(File::Folder::Id::HOME, "KMS-Framework"))
             , mCounter(0)
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())

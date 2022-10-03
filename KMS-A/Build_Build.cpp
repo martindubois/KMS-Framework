@@ -153,7 +153,7 @@ namespace KMS
             mConfigurations.SetCreator(DI::String::Create);
             mEditOperations.SetCreator(DI::String::Create);
             mFiles         .SetCreator(DI::String::Create);
-            mFolders       .SetCreator(DI::Folder::Create);
+            mFolders       .SetCreator(DI::String::Create);
             mLibraries     .SetCreator(DI::String::Create);
             mPreBuildCmds  .SetCreator(DI::String::Create);
             mTests         .SetCreator(DI::String::Create);
@@ -381,7 +381,7 @@ namespace KMS
 
         void Build::Package_Folders()
         {
-            const DI::Array::Internal& lInternal = mFiles.GetInternal();
+            const DI::Array::Internal& lInternal = mFolders.GetInternal();
             for (const DI::Container::Entry& lEntry : lInternal)
             {
                 assert(NULL != lEntry);
@@ -392,7 +392,7 @@ namespace KMS
                 char lDst[NAME_LENGTH];
                 char lSrc[NAME_LENGTH];
 
-                if (2 != sscanf_s(*lF, "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
+                if (2 != sscanf_s(lF->Get(), "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
                 {
                     KMS_EXCEPTION(CONFIG_FORMAT, "Invalid folder copy operation", *lF);
                 }

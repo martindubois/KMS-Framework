@@ -19,4 +19,4 @@
 #define KMS_BANNER(P,C)                                                     \
     std::cerr << KMS::Console::Color::BLUE << P << " - " << C << std::endl; \
     std::cerr << "Version " << VERSION << std::endl;                        \
-    std::cerr << std::endl << KMS::Console::Color::WHITE;
+    std::cerr << KMS::Console::Color::WHITE << std::endl;

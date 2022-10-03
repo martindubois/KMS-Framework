@@ -88,7 +88,7 @@ namespace KMS
 
                 Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());
 
-                lP.AddArgument("Group=Auto");
+                lP.AddArgument("Groups+=Auto");
 
                 lP.Run(1000 * 60 * 5);
 

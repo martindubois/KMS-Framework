@@ -77,6 +77,7 @@ namespace KMS
         {
             try
             {
+                std::cout << "Executing " << mName << " ..." << std::endl;
                 Run();
                 Cleanup();
             }

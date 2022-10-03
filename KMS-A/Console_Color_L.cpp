@@ -16,7 +16,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const char* CODES[static_cast<unsigned int>(KMS::Console::Color::COLOR_QTY)] = { "\x1B[34m", "\x1B[32m", "\x1B[31m", "\x1B[37m" };
+static const char* CODES[static_cast<unsigned int>(KMS::Console::Color::COLOR_QTY)] = { "\x1B[34m", "\x1B[32m", "\x1B[31m", "\x1B[33m", "\x1B[37m" };
 
 // Public
 // //////////////////////////////////////////////////////////////////////////

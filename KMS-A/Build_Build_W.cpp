@@ -136,7 +136,7 @@ namespace KMS
 
                     Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + ".exe").c_str());
 
-                    lProcess.AddArgument("Group=Auto");
+                    lProcess.AddArgument("Groups+=Auto");
 
                     lProcess.Run(1000 * 60 * 5);
 

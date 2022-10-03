@@ -11,8 +11,11 @@ OUTPUT = ../Binaries/$(CONFIG)/KMS-A-Test
 
 LIBRARIES = $(KMS_A_A)
 
-SOURCES = KMS-A-Test.cpp       \
-		  Test_TestManager.cpp
+SOURCES = Convert.cpp          \
+          Dbg_Log.cpp          \
+          DI_Array.cpp         \
+          KMS-A-Test.cpp       \
+          Test_TestManager.cpp
 
 # ===== Rules ===============================================================
 
