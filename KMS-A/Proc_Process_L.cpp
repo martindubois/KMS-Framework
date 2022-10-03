@@ -38,7 +38,7 @@ namespace KMS
             {
                 if (NULL == getcwd(lDir, sizeof(lDir)))
                 {
-                    KMS_EXCEPTION(FOLDER_ACCESS, "Cannot retrive the current workding directory");
+                    KMS_EXCEPTION(FOLDER_ACCESS, "Cannot retrive the current workding directory", mCmdLine);
                 }
 
                 ChangeDirectory(mWorkingDirectory.c_str());
@@ -57,7 +57,7 @@ namespace KMS
             pid_t lPId = fork();
             switch (lPId)
             {
-            case -1: KMS_EXCEPTION_WITH_INFO(PROCESS_START, "fork failed", mCmdLine);
+            case -1: KMS_EXCEPTION(PROCESS_START, "fork failed", mCmdLine);
 
             case 0:
                 int lResult;
@@ -83,14 +83,14 @@ namespace KMS
                     {
                         if (0 != chdir(mWorkingDirectory.c_str()))
                         {
-                            KMS_EXCEPTION_WITH_INFO(FOLDER_ACCESS, "chdir failed", mWorkingDirectory.c_str());
+                            KMS_EXCEPTION(FOLDER_ACCESS, "chdir failed", mWorkingDirectory.c_str());
                         }
                     }
 
                     int lRet = execv(lPath, const_cast<char **>(lVector));
                     assert(-1 == lRet);
 
-                    KMS_EXCEPTION_WITH_INFO(PROCESS_START, "execv failed", mCmdLine);
+                    KMS_EXCEPTION(PROCESS_START, "execv failed", mCmdLine);
                 }
                 KMS_CATCH_RESULT(lResult);
 
@@ -113,6 +113,6 @@ void ChangeDirectory(const char* aD)
 
     if (0 != chdir(aD))
     {
-        KMS_EXCEPTION_WITH_INFO(FOLDER_ACCESS, "chdir failed", aD);
+        KMS_EXCEPTION(FOLDER_ACCESS, "chdir failed", aD);
     }
 }

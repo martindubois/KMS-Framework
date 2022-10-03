@@ -20,6 +20,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        Object* String_Expand::Create() { return new String_Expand; }
+
         String_Expand::String_Expand(const char* aIn) : String(aIn) {}
 
         // ===== Value ======================================================

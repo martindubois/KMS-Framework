@@ -13,6 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Build/Depend.h>
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Make.h>
@@ -29,6 +30,20 @@
 
 #define MAKE_FILE_NAME "makefile"
 
+static const KMS::Cfg::MetaData MD_BINARIES      ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_COMPONENT     ("Component = {Name}");
+static const KMS::Cfg::MetaData MD_COMPONENT_TYPE("ComponentType = BINARY | LIBRARY | NONE | TEST");
+static const KMS::Cfg::MetaData MD_CONFIGURATION ("Configuration = {Name}");
+static const KMS::Cfg::MetaData MD_INCLUDES      ("Includes += {Name}");
+static const KMS::Cfg::MetaData MD_LIBRARIES     ("Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OPERATIONS    ("Operations += {Name}");
+static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name};");
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static bool DoesContain(const KMS::DI::Array& aArray, const char* aStr);
+
 namespace KMS
 {
     namespace Build
@@ -36,6 +51,8 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* Make::COMPONENT_TYPE_NAMES[] = { "BINARY", "LIBRARY", "NONE", "TEST" };
 
         int Make::Main(int aCount, const char ** aVector)
         {
@@ -50,11 +67,15 @@ namespace KMS
                 KMS::Cfg::Configurator lC;
                 KMS::Build::Make       lM;
 
-                lM.InitConfigurator(&lC);
+                lC.AddConfigurable(&lM);
 
-                lC.Init();
+                lC.AddConfigurable(&Dbg::gLog);
+
                 lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), "KMS-Build.cfg");
+
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                Dbg::gLog.CloseLogFiles();
 
                 lResult = lM.Run();
             }
@@ -68,26 +89,41 @@ namespace KMS
             , mConfiguration(DEFAULT_CONFIGURATION)
             , mF_Product(File::Folder::Id::CURRENT)
         {
+            mBinaries  .SetCreator(DI::String::Create);
+            mIncludes  .SetCreator(DI::String_Expand::Create);
+            mLibraries .SetCreator(DI::String::Create);
+            mOperations.SetCreator(DI::String::Create);
+            mTests     .SetCreator(DI::String::Create);
+
+            AddEntry("Binaries"     , &mBinaries     , false, &MD_BINARIES);
+            AddEntry("Componentn"   , &mComponent    , false, &MD_COMPONENT);
+            AddEntry("ComponentType", &mComponentType, false, &MD_COMPONENT_TYPE);
+            AddEntry("Configuration", &mConfiguration, false, &MD_CONFIGURATION);
+            AddEntry("Includes"     , &mIncludes     , false, &MD_INCLUDES);
+            AddEntry("Libraries"    , &mLibraries    , false, &MD_LIBRARIES);
+            AddEntry("Operations"   , &mOperations   , false, &MD_OPERATIONS);
+            AddEntry("Tests"        , &mTests        , false, &MD_TESTS);
+
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
 
-            mIncludes.insert(DEFAULT_INCLUDE);
+            mIncludes.AddEntry(new DI::String(DEFAULT_INCLUDE), true);
         }
 
         Make::~Make() {}
 
-        void Make::AddBinary   (const char* aB) { assert(NULL != aB); mBinaries  .insert(aB); }
-        void Make::AddInclude  (const char* aI) { assert(NULL != aI); mIncludes  .insert(aI); }
-        void Make::AddLibrary  (const char* aL) { assert(NULL != aL); mLibraries .insert(aL); }
-        void Make::AddOperation(const char* aO) { assert(NULL != aO); mOperations.insert(aO); }
-        void Make::AddTest     (const char* aT) { assert(NULL != aT); mTests     .insert(aT); }
+        void Make::AddBinary   (const char* aB) { mBinaries  .AddEntry(new DI::String(aB), true); }
+        void Make::AddInclude  (const char* aI) { mIncludes  .AddEntry(new DI::String_Expand(aI), true); }
+        void Make::AddLibrary  (const char* aL) { mLibraries .AddEntry(new DI::String(aL), true); }
+        void Make::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO), true); }
+        void Make::AddTest     (const char* aT) { mTests     .AddEntry(new DI::String(aT), true); }
 
-        void Make::ResetBinaries  () { mBinaries  .clear(); }
-        void Make::ResetComponent () { mComponent .clear(); }
-        void Make::ResetIncludes  () { mIncludes  .clear(); }
-        void Make::ResetLibraries () { mLibraries .clear(); }
-        void Make::ResetOperations() { mOperations.clear(); }
-        void Make::ResetTests     () { mTests     .clear(); }
+        void Make::ResetBinaries  () { mBinaries  .Clear(); }
+        void Make::ResetComponent () { mComponent .Clear(); }
+        void Make::ResetIncludes  () { mIncludes  .Clear(); }
+        void Make::ResetLibraries () { mLibraries .Clear(); }
+        void Make::ResetOperations() { mOperations.Clear(); }
+        void Make::ResetTests     () { mTests     .Clear(); }
 
         void Make::SetComponent    (const char* aC) { assert(NULL != aC); mComponent     = aC; }
         void Make::SetConfiguration(const char* aC) { assert(NULL != aC); mConfiguration = aC; }
@@ -96,113 +132,27 @@ namespace KMS
         {
             VerifyConfig();
 
-            mF_Bin_Cfg = File::Folder(mF_Binaries , mConfiguration.c_str());
-            mF_Lib_Cfg = File::Folder(mF_Libraries, mConfiguration.c_str());
+            mF_Bin_Cfg = File::Folder(mF_Binaries , mConfiguration.Get());
+            mF_Lib_Cfg = File::Folder(mF_Libraries, mConfiguration.Get());
 
             Prepare();
 
-            for (std::string lO : mOperations)
+            const DI::Array::Internal& lInternal = mOperations.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                if      (lO == "Clean" ) { Run_Clean (); }
-                else if (lO == "Depend") { Run_Depend(); }
-                else if (lO == "Make"  ) { Run_Make  (); }
+                const DI::String* lO = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lO);
+
+                if      (*lO == "Clean" ) { Run_Clean (); }
+                else if (*lO == "Depend") { Run_Depend(); }
+                else if (*lO == "Make"  ) { Run_Make  (); }
                 else
                 {
-                    KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid operation", lO.c_str());
+                    KMS_EXCEPTION(CONFIG, "Invalid operation", lO->Get());
                 }
             }
 
             return 0;
-        }
-
-        // ===== Cfg::Configurable ==========================================
-
-        bool Make::AddAttribute(const char* aA, const char* aV)
-        {
-            CFG_CALL("Binaries"  , AddBinary);
-            CFG_CALL("Includes"  , AddInclude);
-            CFG_CALL("Libraries" , AddLibrary);
-            CFG_CALL("Operations", AddOperation);
-            CFG_CALL("Tests"     , AddTest);
-
-            CFG_CALL("LinuxBinaries" , AddBinary);
-            CFG_CALL("LinuxLibraries", AddLibrary);
-            CFG_CALL("LinuxTests"    , AddTest);
-
-            return Configurable::AddAttribute(aA, aV);
-        }
-
-        void Make::DisplayHelp(FILE* aOut) const
-        {
-            assert(NULL != aOut);
-
-            fprintf(aOut,
-                "===== KMS::Build::Make =====\n"
-                "Binaries\n"
-                "    Reset the list of binary components\n"
-                "Binaries += {Value}\n"
-                "    Add a binary component to the list\n"
-                "Binary = {Value}\n"
-                "    Replace the list of binarie components\n"
-                "Component\n"
-                "    Unselect the selected component\n"
-                "Component = {Value}\n"
-                "    Select a component\n"
-                "Include = {Value}\n"
-                "    Replace the list of include folder\n"
-                "Includes\n"
-                "    Reset the list of include folder\n"
-                "Includes += {Value}\n"
-                "    Add a folder to the list\n"
-                "Libraries\n"
-                "    Reset the list of library components\n"
-                "Libraries += {Value}\n"
-                "    Add a library component to the list\n"
-                "LinuxBinaries += {Value}\n"
-                "    Add a binary component to the list\n"
-                "LinuxLibraries += {Value}\n"
-                "    Add a library component to the list\n"
-                "LinuxTests += {Value}\n"
-                "    Add a test componentn to the list\n"
-                "Operation = {Value}\n"
-                "    Replace the list of operations\n"
-                "Operations\n"
-                "    Reset the list of operations\n"
-                "Operations += {Value}\n"
-                "    Add an operation to the list\n"
-                "Test = {Value}\n"
-                "    Replace the list of test components\n"
-                "Tests\n"
-                "    Reset the list of test components\n"
-                "Tests += {Value}\n"
-                "    Add a test component to the list\n");
-
-            Cfg::Configurable::DisplayHelp(aOut);
-        }
-
-        bool Make::SetAttribute(const char* aA, const char* aV)
-        {
-            if (NULL == aV)
-            {
-                CFG_IF("Binaries"  ) { ResetBinaries  (); return true; }
-                CFG_IF("Component" ) { ResetComponent (); return true; }
-                CFG_IF("Includes"  ) { ResetIncludes  (); return true; }
-                CFG_IF("Libraries" ) { ResetLibraries (); return true; }
-                CFG_IF("Operations") { ResetOperations(); return true; }
-                CFG_IF("Tests"     ) { ResetTests     (); return true; }
-            }
-            else
-            {
-                CFG_CALL("Component"    , SetComponent);
-                CFG_CALL("Configuration", SetConfiguration);
-
-                CFG_IF("Binary"   ) { ResetBinaries  (); AddBinary   (aV); return true; }
-                CFG_IF("Include"  ) { ResetIncludes  (); AddInclude  (aV); return true; }
-                CFG_IF("Library"  ) { ResetLibraries (); AddLibrary  (aV); return true; }
-                CFG_IF("Operation") { ResetOperations(); AddOperation(aV); return true; }
-            }
-
-            return Configurable::SetAttribute(aA, aV);
         }
 
         // Private
@@ -210,10 +160,14 @@ namespace KMS
 
         void Make::Clean_Binaries()
         {
-            for (std::string lL : mBinaries)
+            const DI::Array::Internal& lInternal = mBinaries.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                Clean_Component(lL.c_str());
-                Clean_Binary(lL.c_str());
+                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lB);
+
+                Clean_Component(lB->Get());
+                Clean_Binary   (lB->Get());
             }
         }
 
@@ -252,19 +206,27 @@ namespace KMS
 
         void Make::Clean_Libraries()
         {
-            for (std::string lL : mLibraries)
+            const DI::Array::Internal& lInternal = mLibraries.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                Clean_Component(lL.c_str());
-                Clean_Library(lL.c_str());
+                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lL);
+
+                Clean_Component(lL->Get());
+                Clean_Library  (lL->Get());
             }
         }
 
         void Make::Clean_Tests()
         {
-            for (std::string lT : mTests)
+            const DI::Array::Internal& lInternal = mTests.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                Clean_Component(lT.c_str());
-                Clean_Binary(lT.c_str());
+                const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lT);
+
+                Clean_Component(lT->Get());
+                Clean_Binary   (lT->Get());
             }
         }
 
@@ -295,11 +257,15 @@ namespace KMS
             lMakeFile.Write(lF_Component, MAKE_FILE_NAME);
         }
 
-        void Make::Depend_Components(const StringSet_ASCII& aComponents)
+        void Make::Depend_Components(const DI::Array& aComponents)
         {
-            for (std::string lC : aComponents)
+            const DI::Array::Internal& lInternal = aComponents.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                Depend_Component(lC.c_str());
+                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lC);
+
+                Depend_Component(lC->Get());
             }
         }
 
@@ -387,21 +353,25 @@ namespace KMS
 
             lP.SetWorkingDirectory(aC);
 
-            lP.AddArgument(("CONFIG=" + mConfiguration).c_str());
+            lP.AddArgument(("CONFIG=" + mConfiguration.GetInternal()).c_str());
 
             lP.Run(1000 * 60 * 5);
 
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION_WITH_INFO(MAKE_MAKE, "Cannot make", lP.GetCmdLine());
+                KMS_EXCEPTION(MAKE_MAKE, "Cannot make", lP.GetCmdLine());
             }
         }
 
-        void Make::Make_Components(const StringSet_ASCII& aComponents)
+        void Make::Make_Components(const DI::Array& aComponents)
         {
-            for (std::string lC : aComponents)
+            const DI::Array::Internal& lInternal = aComponents.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternal)
             {
-                Make_Component(lC.c_str());
+                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lC);
+
+                Make_Component(lC->Get());
             }
         }
 
@@ -420,14 +390,14 @@ namespace KMS
             {
             case ComponentType::BINARY:
             case ComponentType::TEST:
-                Clean_Binary(mComponent.c_str());
+                Clean_Binary(mComponent.Get());
                 Clean_Libraries();
-                Clean_Component(mComponent.c_str());
+                Clean_Component(mComponent.Get());
                 break;
 
             case ComponentType::LIBRARY:
-                Clean_Library(mComponent.c_str());
-                Clean_Component(mComponent.c_str());
+                Clean_Library(mComponent.Get());
+                Clean_Component(mComponent.Get());
                 break;
 
             case ComponentType::NONE:
@@ -446,7 +416,7 @@ namespace KMS
             {
             case ComponentType::BINARY:
             case ComponentType::LIBRARY:
-            case ComponentType::TEST: Depend_Component(mComponent.c_str()); break;
+            case ComponentType::TEST: Depend_Component(mComponent.Get()); break;
 
             case ComponentType::NONE:
                 Depend_Components(mBinaries);
@@ -465,11 +435,11 @@ namespace KMS
             case ComponentType::BINARY:
             case ComponentType::TEST:
                 Make_Components(mLibraries);
-                Make_Component(mComponent.c_str());
+                Make_Component(mComponent.Get());
                 break;
 
             case ComponentType::LIBRARY:
-                Make_Component(mComponent.c_str());
+                Make_Component(mComponent.Get());
                 break;
 
             case ComponentType::NONE:
@@ -484,19 +454,41 @@ namespace KMS
 
         void Make::VerifyConfig()
         {
-            if (0 < mComponent.size())
+            if (0 < mComponent.GetLength())
             {
-                if (mBinaries .end() != mBinaries .find(mComponent)) { mComponentType = ComponentType::BINARY ; }
-                if (mLibraries.end() != mLibraries.find(mComponent)) { mComponentType = ComponentType::LIBRARY; }
-                if (mTests    .end() != mTests    .find(mComponent)) { mComponentType = ComponentType::TEST   ; }
+                const char* lComponent = mComponent.Get();
+
+                if      (DoesContain(mBinaries , lComponent)) { mComponentType = ComponentType::BINARY ; }
+                else if (DoesContain(mLibraries, lComponent)) { mComponentType = ComponentType::LIBRARY; }
+                else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else
                 {
-                    KMS_EXCEPTION_WITH_INFO(CONFIG, "Invalid component", mComponent.c_str());
+                    KMS_EXCEPTION(CONFIG, "Invalid component", lComponent);
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mConfiguration.size(), CONFIG, "Empty configuration", "");
+            KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), CONFIG, "Empty configuration", "");
         }
 
     }
+}
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+bool DoesContain(const KMS::DI::Array& aArray, const char* aStr)
+{
+    const KMS::DI::Array::Internal& lInternal = aArray.GetInternal();
+    for (const KMS::DI::Container::Entry& lEntry : lInternal)
+    {
+        const KMS::DI::String* lStr = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
+        assert(NULL != lStr);
+
+        if (*lStr == aStr)
+        {
+            return true;
+        }
+    }
+
+    return false;
 }

@@ -7,9 +7,10 @@
 
 #pragma once
 
+#include <KMS/Base.h>
+
 // ===== Includes ===========================================================
 #include <KMS/DI/Value.h>
-#include <KMS/Exception.h>
 
 namespace KMS
 {
@@ -42,6 +43,17 @@ namespace KMS
             T mInternal;
 
         };
+    }
+}
+
+// ===== Includes ===========================================================
+// The KMS/Exception.h header file use the Enum template.
+#include <KMS/Exception.h>
+
+namespace KMS
+{
+    namespace DI
+    {
 
         // Public
         // //////////////////////////////////////////////////////////////////

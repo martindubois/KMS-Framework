@@ -13,11 +13,14 @@
 // Macros
 // //////////////////////////////////////////////////////////////////////////
 
-// ===== ..._s ==============================================================
+#define errno_t int
 
 #define _stricmp strcasecmp
 
+// ===== ..._s ==============================================================
+
 #define sprintf_s sprintf
 #define sscanf_s  sscanf
+#define strcpy_s  strcpy
 
 #define fopen_s(F,N,M) ((NULL != (*(F) = fopen((N), (M)))) ? 0 : -1)

@@ -25,7 +25,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Depend::Depend(const StringSet_ASCII& aIncludes, const File::Folder& aFolder) : mFolder(aFolder), mIncludes(aIncludes)
+        Depend::Depend(const DI::Array& aIncludes, const File::Folder& aFolder) : mFolder(aFolder), mIncludes(aIncludes)
         {
         }
 
@@ -80,11 +80,15 @@ namespace KMS
 
                     if (1 == sscanf(lLine.c_str(), "#include <%[^>]>", lInclude))
                     {
-                        for (const std::string& lF_Include : mIncludes)
+                        const DI::Array::Internal& lInternal = mIncludes.GetInternal();
+                        for (const DI::Container::Entry& lEntry : lInternal)
                         {
+                            const DI::String* lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
+                            assert(NULL != lF_Include);
+
                             char lHeader[PATH_LENGTH];
 
-                            sprintf(lHeader, "../%s/%s", lF_Include.c_str(), lInclude);
+                            sprintf(lHeader, "../%s/%s", lF_Include->Get(), lInclude);
 
                             if (mFolder.DoesFileExist(lHeader))
                             {

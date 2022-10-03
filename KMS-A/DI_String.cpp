@@ -28,6 +28,8 @@ namespace KMS
 
         String::operator const char* () const { return mInternal.c_str(); }
 
+        void String::Clear() { mInternal.clear(); }
+
         const char* String::Get() const { return mInternal.c_str(); }
 
         unsigned int String::GetLength() const { return static_cast<unsigned int>(mInternal.size()); }
@@ -49,6 +51,11 @@ namespace KMS
         // ===== Object =====================================================
 
         String::~String() {};
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        const std::string& String::GetInternal() const { return mInternal; };
 
     }
 }

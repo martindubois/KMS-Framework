@@ -11,9 +11,6 @@
 #include <exception>
 #include <iostream>
 
-// ===== Includes ===========================================================
-#include <KMS/Dbg/Log.h>
-
 namespace KMS
 {
 
@@ -96,6 +93,10 @@ namespace KMS
     };
 
 }
+
+// ===== Includes ===========================================================
+// The KMS/Dbg/Log.h header file use the Exception class.
+#include <KMS/Dbg/Log.h>
 
 std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE);
 

@@ -47,6 +47,10 @@ namespace KMS
             // ===== Object =================================================
             virtual ~String();
 
+        // Internal
+
+            const std::string& GetInternal() const;
+
         private:
 
             std::string mInternal;

@@ -15,9 +15,9 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define VERSION_RC  0,0,14,0
-#define VERSION_STR "0.0.14.0"
+#define VERSION_RC  0,1,0,0
+#define VERSION_STR "0.1.0.0"
 
 #ifdef __cplusplus
-    KMS_VERSION("front-end");
+    KMS_VERSION("dev");
 #endif

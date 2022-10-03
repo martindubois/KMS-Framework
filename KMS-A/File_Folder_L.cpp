@@ -71,10 +71,7 @@ namespace KMS
 
             lP.Run(1000 * 60 * 5);
 
-            if (0 != lP.GetExitCode())
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_COMPRESS, "Cannot compress the folder's elements", lP.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FOLDER_COMPRESS, "Cannot compress the folder's elements", lP.GetCmdLine());
         }
 
         void Folder::Uncompress(const Folder& aFolder, const char* aFile)
@@ -91,10 +88,7 @@ namespace KMS
 
             lP.Run(1000 * 60 * 5);
 
-            if (0 != lP.GetExitCode())
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lP.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FOLDER_UNCOMPRESS, "Cannot uncompress the elements", lP.GetCmdLine());
         }
 
         void Folder::Copy(const Folder& aDst) const
@@ -107,17 +101,14 @@ namespace KMS
 
             lP.Run(1000 * 60 * 2);
 
-            if (0 != lP.GetExitCode())
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot copy folder", lP.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FOLDER_UNCOMPRESS, "Cannot copy folder", lP.GetCmdLine());
         }
 
         void Folder::Create()
         {
             if (0 != mkdir(mPath.c_str(), S_IRWXU))
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_CREATE, "mkdir failed", mPath.c_str());
+                KMS_EXCEPTION(FOLDER_CREATE, "mkdir failed", mPath.c_str());
             }
         }
 
@@ -125,7 +116,7 @@ namespace KMS
         {
             if (0 != rmdir(mPath.c_str()))
             {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_REMOVE, "rmdir failed", mPath.c_str());
+                KMS_EXCEPTION(FOLDER_REMOVE, "rmdir failed", mPath.c_str());
             }
         }
 
@@ -137,7 +128,7 @@ namespace KMS
 
             if (0 != unlink(lPath))
             {
-                KMS_EXCEPTION_WITH_INFO(FILE_DELETE, "unlink failed", lPath);
+                KMS_EXCEPTION(FILE_DELETE, "unlink failed", lPath);
             }
         }
 
@@ -154,10 +145,7 @@ namespace KMS
 
             lP.Run(1000 * 60 * 2);
 
-            if (0 != lP.GetExitCode())
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_UNCOMPRESS, "Cannot delete files", lP.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FOLDER_UNCOMPRESS, "Cannot delete files", lP.GetCmdLine());
         }
 
         void Folder::Rename(const char* aSrc, const char* aDst, unsigned int aFlags) const
@@ -178,7 +166,7 @@ namespace KMS
             {
                 Verbose(lSrc, "not renamed to", lDst, aFlags | FLAG_RED);
 
-                KMS_EXCEPTION_WITH_INFO(FILE_RENAME, "rename failed", lSrc);
+                KMS_EXCEPTION(FILE_RENAME, "rename failed", lSrc);
             }
         }
 
@@ -202,10 +190,7 @@ namespace KMS
 
             lP.Run(1000 * 60 * 2);
 
-            if (0 != lP.GetExitCode())
-            {
-                KMS_EXCEPTION_WITH_INFO(FILE_COPY, "Cannot copy the file", lP.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COPY, "Cannot copy the file", lP.GetCmdLine());
         }
 
         void Folder::Init_Current()
@@ -223,16 +208,10 @@ namespace KMS
             char lModule[PATH_LENGTH];
 
             ssize_t lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
-            if ((0 >= lRet) || (sizeof(lModule) <= lRet))
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_INIT, "readlink failed", lRet);
-            }
+            KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FOLDER_INIT, "readlink failed", lRet);
 
             char* lPtr = strrchr(lModule, '/');
-            if (NULL == lPtr)
-            {
-                KMS_EXCEPTION_WITH_INFO(FOLDER_INIT, "Invalid executable name", lModule);
-            }
+            KMS_EXCEPTION_ASSERT(NULL != lPtr, FOLDER_INIT, "Invalid executable name", lModule);
 
             *lPtr = '\0';
 

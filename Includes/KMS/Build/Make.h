@@ -8,10 +8,11 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurable.h>
+#include <KMS/DI/Array.h>
+#include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Enum.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Text/File_ASCII.h>
-#include <KMS/Types.h>
 
 namespace KMS
 {
@@ -20,7 +21,7 @@ namespace KMS
 
         class Depend;
 
-        class Make : public Cfg::Configurable
+        class Make : public DI::Dictionary
         {
 
         public:
@@ -49,11 +50,6 @@ namespace KMS
 
             int Run();
 
-            // ===== Cfg::Configurable ======================================
-            virtual bool AddAttribute(const char* aA, const char* aV);
-            virtual void DisplayHelp(FILE* aOut) const;
-            virtual bool SetAttribute(const char* aA, const char* aV);
-
         private:
 
             enum class ComponentType
@@ -62,7 +58,11 @@ namespace KMS
                 LIBRARY,
                 NONE,
                 TEST,
+
+                QTY
             };
+
+            static const char* COMPONENT_TYPE_NAMES[];
 
             Make(const Make&);
 
@@ -76,12 +76,12 @@ namespace KMS
             void Clean_Tests();
 
             void Depend_Component(const char* aC);
-            void Depend_Components(const StringSet_ASCII& aComponents);
+            void Depend_Components(const DI::Array& aComponents);
             void Depend_ParseMakeFile(Text::File_ASCII* aMF, StringSet_ASCII* aSources);
             void Depend_ParseSource(Depend* aDepend, const char* aSource, Text::File_ASCII* aMakeFile);
 
             void Make_Component(const char* aC);
-            void Make_Components(const StringSet_ASCII& aComponents);
+            void Make_Components(const DI::Array& aComponents);
 
             void Prepare();
 
@@ -98,14 +98,14 @@ namespace KMS
             File::Folder mF_Libraries;
 
             // ===== Configurable attributes ================================
-            StringSet_ASCII mBinaries;
-            std::string     mComponent;
-            ComponentType   mComponentType;
-            std::string     mConfiguration;
-            StringSet_ASCII mIncludes;
-            StringSet_ASCII mLibraries;
-            StringSet_ASCII mOperations;
-            StringSet_ASCII mTests;
+            DI::Array                                     mBinaries;
+            DI::String                                    mComponent;
+            DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;
+            DI::String                                    mConfiguration;
+            DI::Array                                     mIncludes;
+            DI::Array                                     mLibraries;
+            DI::Array                                     mOperations;
+            DI::Array                                     mTests;
 
         };
 

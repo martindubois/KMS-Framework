@@ -143,7 +143,7 @@ namespace KMS
             , mVersionFile  (DEFAULT_VERSION_FILE)
             , mTempFolder(File::Folder::Id::TEMPORARY)
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-                , mExportFolder(File::Folder(File::Folder::Id::HOME), "Export")
+                , mExportFolder(File::Folder(File::Folder::Id::HOME, "Export"))
             #endif
             #ifdef _KMS_WINDOWS_
                 , mExportFolder("K:\\Export")

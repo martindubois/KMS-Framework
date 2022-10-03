@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Array.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 
@@ -21,7 +22,7 @@ namespace KMS
 
         public:
 
-            Depend(const StringSet_ASCII& aIncludes, const File::Folder& aFolder);
+            Depend(const DI::Array& aIncludes, const File::Folder& aFolder);
 
             ~Depend();
 
@@ -41,7 +42,7 @@ namespace KMS
 
             const File::Folder& mFolder;
 
-            const StringSet_ASCII& mIncludes;
+            const DI::Array& mIncludes;
 
         };
 

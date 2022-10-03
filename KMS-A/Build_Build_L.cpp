@@ -27,9 +27,10 @@ namespace KMS
             Cfg::Configurator lC;
             Make lM;
 
-            lM.InitConfigurator(&lC);
+            lC.AddConfigurable(&lM);
 
-            lC.Init();
+            lC.AddConfigurable(&Dbg::gLog);
+
             lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), "KMS-Build.cfg");
 
             lM.SetConfiguration(aC);
@@ -40,7 +41,7 @@ namespace KMS
             int lRet = lM.Run();
             if (0 != lRet)
             {
-                KMS_EXCEPTION_WITH_INFO(BUILD_COMPILE, "KMS::Build::Make::Run failed", lRet);
+                KMS_EXCEPTION(BUILD_COMPILE, "KMS::Build::Make::Run failed", lRet);
             }
         }
 
@@ -58,33 +59,43 @@ namespace KMS
             lBin.Create();
             lLib.Create();
 
-            for (std::string lB : mBinaries)
+            const DI::Array::Internal& lInternalB = mBinaries.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternalB)
             {
-                lBin_Src.Copy(lBin, lB.c_str());
+                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lB);
+
+                lBin_Src.Copy(lBin, lB->Get());
             }
 
-            for (std::string lB : mLibraries)
+            const DI::Array::Internal& lInternalL = mLibraries.GetInternal();
+            for (const DI::Container::Entry& lEntry : lInternalL)
             {
-                lLib_Src.Copy(lLib, (lB + ".a").c_str());
+                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lL);
+
+                lLib_Src.Copy(lLib, (lL->GetInternal() + ".a").c_str());
             }
         }
 
         void Build::Test(const char* aC)
         {
-            for (std::string lT : mTests)
+            const KMS::DI::Array::Internal& lInternal = mTests.GetInternal();
+            for (const KMS::DI::Container::Entry& lEntry : lInternal)
             {
-                Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT.c_str());
+                const KMS::DI::String* lT = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
+                assert(NULL != lT);
+
+                Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());
 
                 lP.AddArgument("Group=Auto");
 
                 lP.Run(1000 * 60 * 5);
 
-                if (0 != lP.GetExitCode())
-                {
-                    KMS_EXCEPTION_WITH_INFO(BUILD_TEST, "The test failed", lP.GetCmdLine());
-                }
+                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST, "The test failed", lP.GetCmdLine());
             }
         }
+
     }
 }
 

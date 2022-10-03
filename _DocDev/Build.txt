@@ -23,8 +23,9 @@ Version             ______ . ______ . ______ . ______ - _____________________
 [ ] File "KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt"
 
 ===== Linux only ============================================================
+[ ] File "KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt"
 [ ] Tool "Terminal" - Un the product folder
-        Binaries/Debug/KMS-Make Config=Debug Operation=Make
+        Binaries/Debug/KMS-Make Config=Debug Operation+=Make
         Binaries/Debug/KMS-Build
 [ ] Copy the exported file to the server
 
