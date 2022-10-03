@@ -203,14 +203,14 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
 
     if (0 < lErrorCount)
     {
-        aOut << "Some tests FAILED" << std::endl;
+        aOut << "Some tests FAILED";
     }
     else
     {
-        aOut << "All tests PASSED" << std::endl;
+        aOut << "All tests PASSED";
     }
 
-    aOut << KMS::Console::Color::WHITE;
+    aOut << KMS::Console::Color::WHITE << std::endl;
 
     return aOut;
 }

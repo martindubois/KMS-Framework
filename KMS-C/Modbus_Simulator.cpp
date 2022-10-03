@@ -457,6 +457,6 @@ void TraceUnknown(const char* aOp, KMS::Modbus::Address aA, KMS::Modbus::Registe
     assert(NULL != aOp);
 
     std::cout << KMS::Console::Color::RED;
-    std::cout << aOp << " at " << aA << " = " << aV << std::endl;
-    std::cout << KMS::Console::Color::WHITE;
+    std::cout << aOp << " at " << aA << " = " << aV;
+    std::cout << KMS::Console::Color::WHITE << std::endl;
 }

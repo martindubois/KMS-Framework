@@ -193,12 +193,14 @@ namespace KMS
                     std::cout << Console::Color::RED;
                 }
 
-                std::cout << aSrc << " " << aOp << " " << aDst << std::endl;
+                std::cout << aSrc << " " << aOp << " " << aDst;
 
                 if (lRed)
                 {
                     std::cout << Console::Color::WHITE;
                 }
+
+                std::cout << std::endl;
             }
         }
 

@@ -36,7 +36,7 @@ namespace KMS
             if (!aCondition)
             {
                 DisplayTestName();
-                std::cerr << "Assert failure at line " << aLine << " of " << aFileName << std::endl << Console::Color::WHITE;
+                std::cerr << "Assert failure at line " << aLine << " of " << aFileName << Console::Color::WHITE << std::endl;
                 mErrorCount++;
             }
 
@@ -53,7 +53,7 @@ namespace KMS
                 {                                                                                      \
                     std::cerr << Console::Color::RED;                                                  \
                     std::cerr << "    Value    : " << aValue    << std::endl;                          \
-                    std::cerr << "    Expected : " << aExpected << std::endl << Console::Color::WHITE; \
+                    std::cerr << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
                 }                                                                                      \
                 return lResult;                                                                        \
             }
@@ -86,7 +86,7 @@ namespace KMS
                 DisplayTestName();
                 std::cerr << "EXCEPTION" << std::endl;
                 std::cerr << eE;
-                std::cerr << std::endl << Console::Color::WHITE;
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
@@ -95,7 +95,7 @@ namespace KMS
                 DisplayTestName();
                 std::cerr << "EXCEPTION" << std::endl;
                 std::cerr << eE.what() << std::endl;
-                std::cerr << std::endl << Console::Color::WHITE;
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
@@ -103,7 +103,7 @@ namespace KMS
             {
                 DisplayTestName();
                 std::cerr << "UNKNOWN EXCEPTION" << std::endl;
-                std::cerr << std::endl << Console::Color::WHITE;
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
@@ -149,14 +149,14 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT)
     
     if (0 < lErrorCount)
     {
-        aOut << "    FAILED" << std::endl;
+        aOut << "    FAILED";
     }
     else
     {
-        aOut << "    PASSED" << std::endl;
+        aOut << "    PASSED";
     }
 
-    aOut << KMS::Console::Color::WHITE;
+    aOut << KMS::Console::Color::WHITE << std::endl;
 
     return aOut;
 }
