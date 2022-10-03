@@ -16,7 +16,7 @@
 // Macros
 // //////////////////////////////////////////////////////////////////////////
 
-#define KMS_BANNER(P,C)                                                     \
-    std::cerr << KMS::Console::Color::BLUE << P << " - " << C << std::endl; \
-    std::cerr << "Version " << VERSION << std::endl;                        \
+#define KMS_BANNER(P,C)                                                \
+    std::cerr << KMS::Console::Color::BLUE << P << " - " << C << "\n"; \
+    std::cerr << "Version " << VERSION << "\n";                        \
     std::cerr << KMS::Console::Color::WHITE << std::endl;

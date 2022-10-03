@@ -136,7 +136,7 @@ namespace KMS
 
             for (std::wstring lLine : mInternal)
             {
-                lStream << lLine << std::endl;
+                lStream << lLine << "\n";
             }
         }
 

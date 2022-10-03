@@ -168,20 +168,22 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << KMS::Console::Color::RED;
-                    std::cerr << "X";
+                    std::cerr << "X" << "\n";
+                    std::cerr << aException;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << KMS::Console::Color::YELLOW;
-                    std::cerr << "X";
+                    std::cerr << "X" << "\n";
+                    std::cerr << aException;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "X" << std::endl;
+                    std::cerr << "X" << "\n";
                     std::cerr << aException << std::endl;
                     break;
 

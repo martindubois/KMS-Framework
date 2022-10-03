@@ -181,9 +181,9 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
 
     for (const KMS::Test::Test* lT : *lTestList)
     {
-        aOut << "Test " << lIndex << std::endl;
+        aOut << "Test " << lIndex << "\n";
         aOut << *lT;
-        aOut << std::endl;
+        aOut << "\n";
 
         lIndex++;
     }
@@ -198,8 +198,8 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
         aOut << KMS::Console::Color::GREEN;
     }
 
-    aOut << "Test count        : " << lTestList->size() << std::endl;
-    aOut << "Total error count : " << lErrorCount       << std::endl;
+    aOut << "Test count        : " << lTestList->size() << "\n";
+    aOut << "Total error count : " << lErrorCount       << "\n";
 
     if (0 < lErrorCount)
     {

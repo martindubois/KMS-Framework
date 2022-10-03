@@ -52,7 +52,7 @@ namespace KMS
                 if (!lResult)                                                                          \
                 {                                                                                      \
                     std::cerr << Console::Color::RED;                                                  \
-                    std::cerr << "    Value    : " << aValue    << std::endl;                          \
+                    std::cerr << "    Value    : " << aValue    << "\n";                               \
                     std::cerr << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
                 }                                                                                      \
                 return lResult;                                                                        \
@@ -84,7 +84,7 @@ namespace KMS
             catch (KMS::Exception eE)
             {
                 DisplayTestName();
-                std::cerr << "EXCEPTION" << std::endl;
+                std::cerr << "EXCEPTION" << "\n";
                 std::cerr << eE;
                 std::cerr << Console::Color::WHITE << std::endl;
 
@@ -93,8 +93,8 @@ namespace KMS
             catch (std::exception eE)
             {
                 DisplayTestName();
-                std::cerr << "EXCEPTION" << std::endl;
-                std::cerr << eE.what() << std::endl;
+                std::cerr << "EXCEPTION" << "\n";
+                std::cerr << eE.what() << "\n";
                 std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
@@ -102,7 +102,7 @@ namespace KMS
             catch (...)
             {
                 DisplayTestName();
-                std::cerr << "UNKNOWN EXCEPTION" << std::endl;
+                std::cerr << "UNKNOWN EXCEPTION" << "\n";
                 std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
@@ -145,7 +145,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT)
         aOut << KMS::Console::Color::GREEN;
     }
 
-    aOut << "    " << aT.GetName() << " - " << lErrorCount << " error(s)" << std::endl;
+    aOut << "    " << aT.GetName() << " - " << lErrorCount << " error(s)" << "\n";
     
     if (0 < lErrorCount)
     {

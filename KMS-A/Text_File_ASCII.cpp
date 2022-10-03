@@ -53,7 +53,7 @@ namespace KMS
 
             for (std::string lLine : mLines)
             {
-                lStream << lLine << std::endl;
+                lStream << lLine << "\n";
             }
         }
 

@@ -108,15 +108,15 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE)
     const char * lInfo      = aE.GetInfo();
     unsigned int lLastError = aE.GetLastError();
 
-    aOut << aE.what() << std::endl;
-    aOut << "Code     : " << aE.GetCode    () << std::endl;
-    aOut << "File     : " << aE.GetFile    () << std::endl;
-    aOut << "Function : " << aE.GetFunction() << std::endl;
-    aOut << "Line     : " << aE.GetLine    () << std::endl;
+    aOut << aE.what() << "\n";
+    aOut << "Code     : " << aE.GetCode    () << "\n";
+    aOut << "File     : " << aE.GetFile    () << "\n";
+    aOut << "Function : " << aE.GetFunction() << "\n";
+    aOut << "Line     : " << aE.GetLine    () << "\n";
 
     if (0 < strlen(lInfo))
     {
-        aOut << "Info     : " << aE.GetInfo() << std::endl;
+        aOut << "Info     : " << aE.GetInfo() << "\n";
     }
 
     if (0 != lLastError)
@@ -125,8 +125,10 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE)
 
         sprintf_s(lLastErrorHex, " (0x%08x)", lLastError);
 
-        aOut << "Last err.: " << lLastError << lLastErrorHex << std::endl;
+        aOut << "Last err.: " << lLastError << lLastErrorHex << "\n";
     }
+
+    aOut << std::flush;
 
     return aOut;
 }

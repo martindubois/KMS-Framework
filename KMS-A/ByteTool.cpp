@@ -112,7 +112,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT)
     unsigned int lMin = lH[0];
     unsigned int lSum = lH[0];
 
-    aOut << "      x_0   x_1   x_2   x_3   x_4   x_5   x_6   x_7   x_8   x_9   x_A   x_B   x_C   x_D   x_E   x_F" << std::endl;
+    aOut << "      x_0   x_1   x_2   x_3   x_4   x_5   x_6   x_7   x_8   x_9   x_A   x_B   x_C   x_D   x_E   x_F" << "\n";
     aOut << LABELS[0];
 
     DisplayValue(aOut, lH[0]);
@@ -121,7 +121,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT)
     {
         if (0 == i % 16)
         {
-            aOut << std::endl << LABELS[i / 16];
+            aOut << "\n" << LABELS[i / 16];
         }
 
         if (lMax < lH[i]) { lMax = lH[i]; }
@@ -132,10 +132,10 @@ std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT)
         DisplayValue(aOut, lH[i]);
     }
 
-    aOut << std::endl;
-    aOut << "Min : " << lMin << std::endl;
-    aOut << "Avg : " << lSum / 256.0 << std::endl;
-    aOut << "Max : " << lMax << std::endl;
+    aOut << "\n";
+    aOut << "Min : " << lMin << "\n";
+    aOut << "Avg : " << lSum / 256.0 << "\n";
+    aOut << "Max : " << lMax << "\n";
     aOut << "Sum : " << lSum << std::endl;
 
     return aOut;

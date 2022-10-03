@@ -222,9 +222,9 @@ namespace KMS
 
 std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request& aR)
 {
-    aOut << std::endl;
-    aOut << aR.GetTypeName() << " " << aR.GetPath() << std::endl;
-    aOut << aR.GetResultName() << std::endl;
+    aOut << "\n";
+    aOut << aR.GetTypeName() << " " << aR.GetPath() << "\n";
+    aOut << aR.GetResultName() << "\n";
     aOut << std::endl;
 
     return aOut;
