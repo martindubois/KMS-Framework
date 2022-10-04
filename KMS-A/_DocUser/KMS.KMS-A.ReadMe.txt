@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+0.1.1-dev Windows 2022-10-04
+
 0.1.1-dev Linux x86_64 2022-10-03
 * KMS_EXCEPTION_ASSERT
 * KMS::Build::Import
@@ -30,20 +32,20 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     - StringSet_ASCII replace StringSet
     - StringSet_UTF16
 
-0.0.13-Dev Windows 2022-09-12
+0.0.13-dev Windows 2022-09-12
 * KMS::RefCount
 
-0.0.12-Dev Windows 2022-09-07
+0.0.12-dev Windows 2022-09-07
 * KMS::Console::Color::YELLOW
 * KMS::Dbg::Log - ConsoleLevel and FileLevel configurable attributes
 * KMS::JSON
     * String
     - Object - Default implementation for Copy, HTTP_Get and HTTP_Set
 
-0.0.11-Dev Windows 2022-09-06
+0.0.11-dev Windows 2022-09-06
 * KMS::Msg::Sender - Removed
 
-0.0.10-Dev Linux x86_64 2022-08-24
+0.0.10-dev Linux x86_64 2022-08-24
 * KMS::Build::Depend
 * KMS::Dbg
     * Log
@@ -58,16 +60,16 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 - KMS::Cfg::Configurator - Log ignored attribute
 - KMS::Exception - Log throw and catch
 
-0.0.9-Dev Windows 2022-07-30
+0.0.9-dev Windows 2022-07-30
 * KMS::Convert::ToDouble
 
-0.0.8-Dev Windows 2022-07-29
+0.0.8-dev Windows 2022-07-29
 * KMS::DAQ::Dummy
 - KMS::DAQ::DigitalOutput::Get and Set - Fixed
 
-0.0.7-Dev Windows 2022-07-27
+0.0.7-dev Windows 2022-07-27
 
-0.0.6-Dev Windows 2022-07-27
+0.0.6-dev Windows 2022-07-27
 * KMS::Build::Build
     * Compiled on Linux
     * Files
@@ -100,5 +102,5 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 * KMS::File::FileInfo
 * KMS::File::Sync
 
-0.0.1-Dev Windows 2022-05-20
+0.0.1-dev Windows 2022-05-20
 * KMS::Build::Import * Fix attribute's names

@@ -5,23 +5,24 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocUser/KMS.ReadMe.txt
 
+0.1.1-dev Windows 2022-10-04
 - Use 0.0.14-front-end
 - Use 0.0.13-front-end
 
 0.1.1-dev Linux x86_64 2022-10-03
 
-0.0.13-Dev Windows 2022-09-12
+0.0.13-dev Windows 2022-09-12
 
-0.0.11-Dev Windows 2022-09-06
+0.0.11-dev Windows 2022-09-06
 
-0.0.10-Dev Linux x86_64 2022-08-24
+0.0.10-dev Linux x86_64 2022-08-24
 
-0.0.9-Dev Windows 2022-07-30
+0.0.9-dev Windows 2022-07-30
 
-0.0.7-Dev Windows 2022-07-27
+0.0.7-dev Windows 2022-07-27
 * Include x86 binaries
 
-0.0.6-Dev Windows 2022-07-27
+0.0.6-dev Windows 2022-07-27
 * KMS-FileServer
 * KMS-Make (Linux only)
 * KMS-ModbusSim

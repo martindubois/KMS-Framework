@@ -5,9 +5,11 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 
-0.0.13-Dev Windows 2022-09-07
+0.1.1-dev Windows 2022-10-04
 
-0.0.6-Dev Windows 2022-07-26
+0.0.13-dev Windows 2022-09-07
+
+0.0.6-dev Windows 2022-07-26
 - Create folder structure
 
 0.0.3 Windows 2022-06-02
