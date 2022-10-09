@@ -40,7 +40,7 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
     KMS_TEST_COMPARE(lF0.GetLineCount(), 9737L);
 
     // Write
-    lF0.Write(KMS::File::Folder(KMS::File::Folder::Id::CURRENT), "Test.txt");
+    lF0.Write(KMS::File::Folder::CURRENT, "Test.txt");
 
     // CountOccurrence
     KMS_TEST_COMPARE(lF0.CountOccurrence(L"Start"), 22L);
@@ -91,7 +91,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     try
     {
         KMS_TEST_EXPECTED_EXCEPTION();
-        lF0.Read(KMS::File::Folder(KMS::File::Folder::Id::CURRENT), "DoesNotExist");
+        lF0.Read(KMS::File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(FILE_OPEN);

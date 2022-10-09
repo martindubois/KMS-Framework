@@ -31,6 +31,12 @@ namespace KMS
                 TEMPORARY,
             };
 
+            static const Folder CURRENT;
+            static const Folder EXECUTABLE;
+            static const Folder HOME;
+            static const Folder PROGRAM_FILES;
+            static const Folder PROGRAM_FILES_X86;
+
             static const unsigned int FLAG_BACKUP;
             static const unsigned int FLAG_BACKUP_RENAME;
             static const unsigned int FLAG_IGNORE_ERROR;

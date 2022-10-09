@@ -31,7 +31,7 @@ namespace KMS
 
             lC.AddConfigurable(&Dbg::gLog);
 
-            lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), "KMS-Build.cfg");
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
 
             lM.SetConfiguration(aC);
 

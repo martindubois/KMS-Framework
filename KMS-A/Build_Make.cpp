@@ -71,7 +71,7 @@ namespace KMS
 
                 lC.AddConfigurable(&Dbg::gLog);
 
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT), "KMS-Build.cfg");
+                lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 

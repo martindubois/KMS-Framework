@@ -122,8 +122,8 @@ namespace KMS
 
                 lC.AddConfigurable(&Dbg::gLog);
 
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE, true);
+                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
@@ -213,7 +213,7 @@ namespace KMS
         {
             VerifyConfig();
 
-            Version lVersion(File::Folder(File::Folder::Id::CURRENT), mVersionFile);
+            Version lVersion(File::Folder::CURRENT, mVersionFile);
 
             Edit(lVersion);
 
@@ -258,8 +258,6 @@ namespace KMS
 
         void Build::Edit(const Version& aVersion)
         {
-            File::Folder lCurrent(File::Folder::Id::CURRENT);
-
             const DI::Array::Internal& lInternal = mEditOperations.GetInternal();
             for (const DI::Container::Entry& lEntry : lInternal)
             {
@@ -281,13 +279,13 @@ namespace KMS
 
                 Text::File_ASCII lText;
 
-                lText.Read(lCurrent, lFile);
+                lText.Read(File::Folder::CURRENT, lFile);
 
                 lText.ReplaceLines(lRegEx, lReplaceStr.c_str());
 
-                lCurrent.Backup(lFile);
+                File::Folder::CURRENT.Backup(lFile);
 
-                lText.Write(lCurrent, lFile);
+                lText.Write(File::Folder::CURRENT, lFile);
             }
         }
 
@@ -355,8 +353,6 @@ namespace KMS
 
         void Build::Package_Files()
         {
-            File::Folder lCurrent(File::Folder::Id::CURRENT);
-
             const DI::Array::Internal& lInternal = mFiles.GetInternal();
             for (const DI::Container::Entry& lEntry : lInternal)
             {
@@ -375,7 +371,7 @@ namespace KMS
                     lPtr++;
                 }
 
-                lCurrent.Copy(mTempFolder, *lF, lPtr);
+                File::Folder::CURRENT.Copy(mTempFolder, *lF, lPtr);
             }
         }
 

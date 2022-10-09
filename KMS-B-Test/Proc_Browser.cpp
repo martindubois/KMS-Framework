@@ -13,8 +13,6 @@
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::File::Folder sCurrent(KMS::File::Folder::Id::CURRENT);
-
 KMS_TEST(Proc_Browser_Base, "Proc_Browser_Base", "Auto", sTest_Base)
 {
     KMS::Proc::Browser lB;
@@ -25,14 +23,14 @@ KMS_TEST(Proc_Browser_Base, "Proc_Browser_Base", "Auto", sTest_Base)
     lB.SetKioskMode(false);
     lB.SetPrefered(KMS::Proc::Browser::Type::NONE);
 
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     lB.Close();
 
     lB.SetPrefered(KMS::Proc::Browser::Type::DEFAULT);
 
     lB.Detach();
 
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
 
     KMS_TEST_ASSERT(lB.IsOpen());
 }
@@ -43,17 +41,17 @@ KMS_TEST(Proc_Browser_Chrome, "Proc_Browser_Chrome", "Chrome", sTest_Chrome)
 
     lB.SetPrefered(KMS::Proc::Browser::Type::CHROME);
 
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
 
     KMS_TEST_ASSERT(lB.IsOpen());
 
     lB.Close();
 
     lB.SetAppMode(true);
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     lB.Close();
 
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", NULL);
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", NULL);
     lB.Close();
 }
 
@@ -86,10 +84,10 @@ KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sT
 
     lB.SetPrefered(KMS::Proc::Browser::Type::DEFAULT);
 
-    lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html", "KMS-B-Test/Tests/Test1.html");
+    lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html", "KMS-B-Test/Tests/Test1.html");
     lB.Detach();
 
-    lB.Start(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html");
+    lB.Start(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html");
 }
 
 #ifdef _KMS_WINDOWS_
@@ -99,7 +97,7 @@ KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sT
         KMS::Proc::Browser lB;
 
         lB.SetPrefered(KMS::Proc::Browser::Type::EDGE);
-        lB.Open(sCurrent, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
+        lB.Open(KMS::File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     }
 
 #endif

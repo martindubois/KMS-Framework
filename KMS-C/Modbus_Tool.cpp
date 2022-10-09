@@ -65,9 +65,9 @@ namespace KMS
 
                 lT.InitMaster(&lM);
 
-                lC.ParseFile(File::Folder(File::Folder::Id::EXECUTABLE), CONFIG_FILE);
-                lC.ParseFile(File::Folder(File::Folder::Id::HOME      ), CONFIG_FILE);
-                lC.ParseFile(File::Folder(File::Folder::Id::CURRENT   ), CONFIG_FILE);
+                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
+                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();

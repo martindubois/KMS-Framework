@@ -32,6 +32,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const Folder PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
+        const Folder PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
+
         bool Folder::DoesExist() const
         {
             DWORD lAttributes = GetFileAttributes(mPath.c_str());

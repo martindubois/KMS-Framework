@@ -14,7 +14,7 @@ KMS_TEST(Version_Base, "Version_Base", "Auto", sTest_Base)
 {
     KMS::Version lV0("0.0");
     KMS::Version lV1("0.0-Test");
-    KMS::Version lV2(KMS::File::Folder(KMS::File::Folder::Id::CURRENT), "Common" SLASH "Version.h");
+    KMS::Version lV2(KMS::File::Folder::CURRENT, "Common" SLASH "Version.h");
 
     char lPackage[FILE_LENGTH];
 

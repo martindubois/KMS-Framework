@@ -21,6 +21,10 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const Folder Folder::CURRENT   (Folder::Id::CURRENT);
+        const Folder Folder::EXECUTABLE(Folder::Id::EXECUTABLE);
+        const Folder Folder::HOME      (Folder::Id::HOME);
+
         // The flag must be differenent than the one defined in
         // File_FileInfoList.cpp.
         const unsigned int Folder::FLAG_BACKUP        = 0x01000000;
