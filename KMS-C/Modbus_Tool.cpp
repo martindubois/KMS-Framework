@@ -13,6 +13,7 @@
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt16.h>
 #include <KMS/Convert.h>
+#include <KMS/Installer.h>
 #include <KMS/Modbus/Master_Com.h>
 
 #include <KMS/Modbus/Tool.h>
@@ -55,9 +56,11 @@ namespace KMS
             try
             {
                 KMS::Cfg::Configurator  lC;
+                KMS::Installer          lInstaller;
                 KMS::Modbus::Master_Com lM;
                 KMS::Modbus::Tool       lT;
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lM);
                 lC.AddConfigurable(&lT);
 
@@ -71,6 +74,8 @@ namespace KMS
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
+
+                lInstaller.Run();
 
                 lResult = lT.Run();
             }

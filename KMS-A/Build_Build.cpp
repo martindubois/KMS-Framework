@@ -13,6 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Installer.h>
 #include <KMS/Text/File_ASCII.h>
 #include <KMS/Version.h>
 
@@ -117,8 +118,10 @@ namespace KMS
             {
                 KMS::Build::Build      lB;
                 KMS::Cfg::Configurator lC;
+                KMS::Installer         lInstaller;
 
                 lC.AddConfigurable(&lB);
+                lC.AddConfigurable(&lInstaller);
 
                 lC.AddConfigurable(&Dbg::gLog);
 
@@ -127,6 +130,8 @@ namespace KMS
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
+
+                lInstaller.Run();
 
                 lResult = lB.Run();
             }

@@ -15,6 +15,7 @@
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
+#include <KMS/Installer.h>
 #include <KMS/Modbus/Slave_Com.h>
 
 #include <KMS/Modbus/Simulator.h>
@@ -85,11 +86,13 @@ namespace KMS
             try
             {
                 KMS::Cfg::Configurator lC;
+                KMS::Installer         lInstaller;
                 Slave_Com lSl;
                 Simulator lSi;
 
                 lSi.InitSlave(&lSl);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lSl);
                 lC.AddConfigurable(&lSi);
 
@@ -101,6 +104,8 @@ namespace KMS
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
+
+                lInstaller.Run();
 
                 sSimulator = &lSi;
 

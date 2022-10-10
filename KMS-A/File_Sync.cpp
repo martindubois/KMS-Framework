@@ -14,6 +14,7 @@
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/Array.h>
 #include <KMS/File/FileInfoList.h>
+#include <KMS/Installer.h>
 
 #include <KMS/File/Sync.h>
 
@@ -54,8 +55,10 @@ namespace KMS
             try
             {
                 KMS::Cfg::Configurator lC;
+                KMS::Installer         lInstaller;
                 KMS::File::Sync        lS;
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS);
 
                 lC.AddConfigurable(&Dbg::gLog);
@@ -66,6 +69,8 @@ namespace KMS
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
+
+                lInstaller.Run();
 
                 lResult = lS.Run();
             }

@@ -171,6 +171,7 @@ const char* ToCodeName(KMS::Exception::Code aCode)
         "OUTPUT_TOO_SHORT",
         "PROCESS_EXIT_CODE", "PROCESS_KILL", "PROCESS_START", "PROCESS_TIMEOUT",
             "PROCESS_WAIT",
+        "REG_OPEN", "REG_QUERY", "REG_SET",
         "SOCKET", "SOCKET_ACCEPT", "SOCKET_BIND", "SOCKET_LISTEN",
             "SOCKET_OPTION", "SOCKET_RECEIVE", "SOCKET_SEND", "SOCKET_STARTUP",
         "STATE",

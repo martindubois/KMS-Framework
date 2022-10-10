@@ -15,7 +15,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Environment.h>
+#include <KMS/Installer.h>
 
 #include <KMS/ByteTool.h>
 
@@ -59,8 +59,11 @@ namespace KMS
         {
             KMS::ByteTool          lBT;
             KMS::Cfg::Configurator lC;
+            KMS::Installer         lInstaller;
+
 
             lC.AddConfigurable(&lBT);
+            lC.AddConfigurable(&lInstaller);
 
             lC.AddConfigurable(&Dbg::gLog);
 
@@ -68,6 +71,8 @@ namespace KMS
             lC.ParseArguments(aCount - 1, aVector + 1);
 
             Dbg::gLog.CloseLogFiles();
+
+            lInstaller.Run();
 
             lResult = lBT.Run();
 

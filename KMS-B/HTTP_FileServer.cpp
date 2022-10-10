@@ -20,6 +20,7 @@
 #include <KMS/DI/UInt32.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
+#include <KMS/Installer.h>
 
 #include <KMS/HTTP/FileServer.h>
 
@@ -112,11 +113,13 @@ namespace KMS
             {
                 KMS::Cfg::Configurator lC;
                 KMS::HTTP::FileServer  lFS;
+                KMS::Installer         lInstaller;
                 KMS::HTTP::Server      lS;
 
                 lS.mOnRequest = lFS.ON_REQUEST;
 
                 lC.AddConfigurable(&lFS);
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS.mSocket);
 
                 lC.AddConfigurable(&Dbg::gLog);
@@ -127,6 +130,8 @@ namespace KMS
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
                 Dbg::gLog.CloseLogFiles();
+
+                lInstaller.Run();
 
                 lS.mThread.Start();
 
