@@ -51,13 +51,14 @@ namespace KMS
 
             unsigned int CountOccurrence(const wchar_t* aStr) const;
 
+            unsigned int RemoveComments_CPP   ();
+            unsigned int RemoveComments_Script();
+
         // Internal
 
             typedef std::vector<std::wstring> Internal;
 
-            const Internal& GetInternal() const;
-
-            Internal& GetInternal();
+            Internal mLines;
 
         private:
 
@@ -66,8 +67,6 @@ namespace KMS
             const File_UTF16& operator = (const File_UTF16&);
 
             unsigned int RemoveLines(const std::wregex& aRegEx);
-
-            Internal mInternal;
 
         };
 

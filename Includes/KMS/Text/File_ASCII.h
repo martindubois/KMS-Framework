@@ -26,19 +26,37 @@ namespace KMS
 
             File_ASCII();
 
+            void AddLine(const char* aLine);
+
+            void Clear();
+
+            const char* GetLine(unsigned int aNo) const;
+
+            unsigned int GetLineCount() const;
+
+            void InsertLine(unsigned int aNo, const char* aLine);
+
+            unsigned int RemoveEmptyLines();
+
+            void RemoveLines(unsigned int aNo, unsigned int aCount);
+
+            void ReplaceLine(unsigned int aNo, const char* aLine);
+
+            unsigned int ReplaceLines(const char* aRegEx, const char* aReplace);
+
             void Read (const File::Folder& aFolder, const char* aFileName);
             void Write(const File::Folder& aFolder, const char* aFileName);
 
-            void RemoveComments_CPP   ();
-            void RemoveComments_Script();
+            unsigned int CountOccurrence(const char* aStr) const;
 
-            void RemoveEmptyLines();
-
-            void ReplaceLines(const char* aRegEx, const char* aReplace);
+            unsigned int RemoveComments_CPP   ();
+            unsigned int RemoveComments_Script();
 
         // Internal
 
-            StringList_ASCII mLines;
+            typedef std::vector<std::string> Internal;
+
+            Internal mLines;
 
         private:
 
@@ -46,7 +64,7 @@ namespace KMS
 
             const File_ASCII& operator = (const File_ASCII&);
 
-            void RemoveLines(const std::regex& aRegEx);
+            unsigned int RemoveLines(const std::regex& aRegEx);
 
         };
 

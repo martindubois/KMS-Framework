@@ -23,6 +23,79 @@ namespace KMS
 
         File_ASCII::File_ASCII() {}
 
+        void File_ASCII::AddLine(const char* aLine)
+        {
+            assert(NULL != aLine);
+
+            mLines.push_back(aLine);
+        }
+
+        void File_ASCII::Clear() { mLines.clear(); }
+
+        const char* File_ASCII::GetLine(unsigned int aNo) const
+        {
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+
+            return mLines[aNo].c_str();
+        }
+
+        unsigned int File_ASCII::GetLineCount() const { return static_cast<unsigned int>(mLines.size()); }
+
+        void File_ASCII::InsertLine(unsigned int aNo, const char* aLine)
+        {
+            assert(NULL != aLine);
+
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, ARGUMENT, "Invalide line number", aNo);
+
+            Internal::const_iterator lIt = mLines.begin();
+
+            lIt += aNo;
+
+            mLines.insert(lIt, aLine);
+        }
+
+        unsigned int File_ASCII::RemoveEmptyLines() { return RemoveLines(std::regex("[ \t]*$")); }
+
+        void File_ASCII::RemoveLines(unsigned int aNo, unsigned int aCount)
+        {
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, ARGUMENT, "Invalide line number", aNo);
+
+            Internal::const_iterator lFirst = mLines.begin() + aNo;
+            Internal::const_iterator lLast = lFirst + aCount;
+
+            mLines.erase(lFirst, lLast);
+        }
+
+        void File_ASCII::ReplaceLine(unsigned int aNo, const char* aLine)
+        {
+            assert(NULL != aLine);
+
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+
+            mLines[aNo] = aLine;
+        }
+
+        unsigned int File_ASCII::ReplaceLines(const char* aRegEx, const char* aReplace)
+        {
+            assert(NULL != aRegEx);
+            assert(NULL != aReplace);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (std::string& lLine : mLines)
+            {
+                if (std::regex_match(lLine, lRegEx))
+                {
+                    lLine = aReplace;
+                    lResult++;
+                }
+            }
+
+            return lResult;
+        }
+
         void File_ASCII::Read(const File::Folder& aFolder, const char* aFile)
         {
             assert(NULL != aFile);
@@ -57,47 +130,48 @@ namespace KMS
             }
         }
 
-        void File_ASCII::RemoveComments_CPP   () { RemoveLines(std::regex("[ \t]*//.*")); }
-        void File_ASCII::RemoveComments_Script() { RemoveLines(std::regex("[ \t]*#.*")); }
-
-        void File_ASCII::RemoveEmptyLines() { RemoveLines(std::regex("[ \t]*$")); }
-
-        void File_ASCII::ReplaceLines(const char* aRegEx, const char* aReplace)
+        unsigned int File_ASCII::CountOccurrence(const char* aStr) const
         {
-            assert(NULL != aRegEx);
-            assert(NULL != aReplace);
+            assert(NULL != aStr);
 
-            std::regex lRegEx(aRegEx);
+            unsigned int lResult = 0;
 
-            StringList_ASCII::iterator lIt = mLines.begin();
-            while (lIt != mLines.end())
+            for (const std::string& lLine : mLines)
             {
-                if (std::regex_match(*lIt, lRegEx))
+                if (lLine.npos != lLine.find(aStr))
                 {
-                    (*lIt) = aReplace;
+                    lResult++;
                 }
-
-                lIt++;
             }
+
+            return lResult;
         }
+
+        unsigned int File_ASCII::RemoveComments_CPP   () { return RemoveLines(std::regex("[ \t]*//.*")); }
+        unsigned int File_ASCII::RemoveComments_Script() { return RemoveLines(std::regex("[ \t]*#.*" )); }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void File_ASCII::RemoveLines(const std::regex& aRegEx)
+        unsigned int File_ASCII::RemoveLines(const std::regex& aRegEx)
         {
-            StringList_ASCII::iterator lIt = mLines.begin();
+            unsigned int lResult = 0;
+
+            Internal::iterator lIt = mLines.begin();
             while (lIt != mLines.end())
             {
                 if (std::regex_match(*lIt, aRegEx))
                 {
                     lIt = mLines.erase(lIt);
+                    lResult++;
                 }
                 else
                 {
                     lIt++;
                 }
             }
+
+            return lResult;
         }
 
     }
