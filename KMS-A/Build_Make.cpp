@@ -180,7 +180,7 @@ namespace KMS
 
             if (mF_Bin_Cfg.DoesFileExist(aB))
             {
-                mF_Bin_Cfg.DeleteFile(aB);
+                mF_Bin_Cfg.Delete(aB);
             }
         }
 
@@ -199,7 +199,7 @@ namespace KMS
 
             if (mF_Lib_Cfg.DoesFileExist(lL))
             {
-                mF_Lib_Cfg.DeleteFile(lL);
+                mF_Lib_Cfg.Delete(lL);
             }
 
         }

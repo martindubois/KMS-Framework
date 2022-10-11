@@ -150,6 +150,18 @@ namespace KMS
             }
         }
 
+        void Folder::Delete(const char* aFile)
+        {
+            char lPath[PATH_LENGTH];
+
+            GetPath(aFile, lPath, sizeof(lPath));
+
+            if (!DeleteFile(aFile))
+            {
+                KMS_EXCEPTION(FILE_DELETE, "Cannot delete file", lPath);
+            }
+        }
+
         void Folder::Rename(const char* aSrc, const char* aDst, unsigned int aFlags) const
         {
             BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
@@ -237,7 +249,7 @@ namespace KMS
                 KMS_EXCEPTION(FOLDER_INIT, "GetTempFileName failed", lRoot);
             }
 
-            BOOL lRetB = ::DeleteFile(lFolder);
+            BOOL lRetB = DeleteFile(lFolder);
             assert(lRetB);
 
             mPath = lFolder;

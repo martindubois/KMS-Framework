@@ -79,7 +79,7 @@ namespace KMS
 
             void Delete();
 
-            void DeleteFile(const char* aFile);
+            void Delete(const char* aFile);
 
             void DeleteFiles(const char* aPattern);
 

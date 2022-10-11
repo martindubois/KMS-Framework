@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocUser/KMS.ReadMe.txt
 
+0.1.3-dev Windows 2022-10-11
+
 0.1.2-dev Windows 2022-10-10
 
 0.1.1-dev Windows 2022-10-04

@@ -120,7 +120,7 @@ namespace KMS
             }
         }
 
-        void Folder::DeleteFile(const char* aFile)
+        void Folder::Delete(const char* aFile)
         {
             char lPath[PATH_LENGTH];
 
