@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/JSON.cpp
+// File      KMS-A/HTTP.cpp
 
 #include "Component.h"
 
