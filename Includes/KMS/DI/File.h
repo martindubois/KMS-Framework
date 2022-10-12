@@ -40,9 +40,11 @@ namespace KMS
             // ===== Object =================================================
             virtual ~File();
 
-        private:
+        // Internal
 
             FILE* mInternal;
+
+        private:
 
             const char* mMode;
 

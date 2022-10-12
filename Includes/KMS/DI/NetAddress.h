@@ -42,7 +42,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~NetAddress();
 
-        private:
+        // Internal
 
             Net::Address mInternal;
 

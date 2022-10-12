@@ -49,10 +49,6 @@ namespace KMS
 
         // Internal
 
-            const std::string& GetInternal() const;
-
-        private:
-
             std::string mInternal;
 
         };

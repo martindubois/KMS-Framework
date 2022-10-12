@@ -47,12 +47,6 @@ namespace KMS
 
             typedef std::vector<Container::Entry> Internal;
 
-            const Internal& GetInternal() const;
-
-            Internal& GetInternal();
-
-        private:
-
             Internal mInternal;
 
         };

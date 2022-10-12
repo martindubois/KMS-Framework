@@ -42,7 +42,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~NetAddressRange();
 
-        private:
+        // Internal
 
             Net::AddressRange mInternal;
 

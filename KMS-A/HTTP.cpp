@@ -204,8 +204,7 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
 
     KMS::Text::WritePtr lPtr(*aPtr);
 
-    const KMS::DI::Dictionary::Internal& lInternal = aDictionary->GetInternal();
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
     {
         assert(NULL != lVT.second);
 

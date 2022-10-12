@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/AddressRangeList.h
+// Library   KMS-B
 
 #pragma once
 
@@ -40,13 +41,7 @@ namespace KMS
 
             typedef std::vector<AddressRange> Internal;
 
-            const Internal& GetInternal();
-
-        private:
-
-            typedef std::vector<AddressRange> Internal;
-
-            Internal mRanges;
+            Internal mInternal;
 
         };
 

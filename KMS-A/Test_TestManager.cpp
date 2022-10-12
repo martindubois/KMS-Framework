@@ -147,8 +147,7 @@ namespace KMS
 
         void TestManager::UpdateTestList()
         {
-            const DI::Array::Internal& lInternalG = mGroups.GetInternal();
-            for (const DI::Object* lObj : lInternalG)
+            for (const DI::Object* lObj : mGroups.mInternal)
             {
                 assert(NULL != lObj);
 
@@ -158,8 +157,7 @@ namespace KMS
                 AddGroup(*lString);
             }
 
-            const DI::Array::Internal& lInternalT = mTests.GetInternal();
-            for (const DI::Object* lObj : lInternalT)
+            for (const DI::Object* lObj : mTests.mInternal)
             {
                 assert(NULL != lObj);
 

@@ -137,8 +137,7 @@ namespace KMS
 
             Prepare();
 
-            const DI::Array::Internal& lInternal = mOperations.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mOperations.mInternal)
             {
                 const DI::String* lO = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lO);
@@ -160,8 +159,7 @@ namespace KMS
 
         void Make::Clean_Binaries()
         {
-            const DI::Array::Internal& lInternal = mBinaries.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
             {
                 const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
@@ -206,8 +204,7 @@ namespace KMS
 
         void Make::Clean_Libraries()
         {
-            const DI::Array::Internal& lInternal = mLibraries.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
             {
                 const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lL);
@@ -219,8 +216,7 @@ namespace KMS
 
         void Make::Clean_Tests()
         {
-            const DI::Array::Internal& lInternal = mTests.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mTests.mInternal)
             {
                 const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lT);
@@ -259,8 +255,7 @@ namespace KMS
 
         void Make::Depend_Components(const DI::Array& aComponents)
         {
-            const DI::Array::Internal& lInternal = aComponents.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : aComponents.mInternal)
             {
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
@@ -353,7 +348,7 @@ namespace KMS
 
             lP.SetWorkingDirectory(aC);
 
-            lP.AddArgument(("CONFIG=" + mConfiguration.GetInternal()).c_str());
+            lP.AddArgument(("CONFIG=" + mConfiguration.mInternal).c_str());
 
             lP.Run(1000 * 60 * 5);
 
@@ -365,8 +360,7 @@ namespace KMS
 
         void Make::Make_Components(const DI::Array& aComponents)
         {
-            const DI::Array::Internal& lInternal = aComponents.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : aComponents.mInternal)
             {
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
@@ -478,8 +472,7 @@ namespace KMS
 
 bool DoesContain(const KMS::DI::Array& aArray, const char* aStr)
 {
-    const KMS::DI::Array::Internal& lInternal = aArray.GetInternal();
-    for (const KMS::DI::Container::Entry& lEntry : lInternal)
+    for (const KMS::DI::Container::Entry& lEntry : aArray.mInternal)
     {
         const KMS::DI::String* lStr = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
         assert(NULL != lStr);

@@ -46,9 +46,11 @@ namespace KMS
             // ===== Object =================================================
             virtual ~UInt32();
 
-        private:
+        // Internal
 
             uint32_t mInternal;
+
+        private:
 
             Radix mRadix;
 

@@ -107,8 +107,7 @@ namespace KMS
 
         void Sync::Run_Bidirectional()
         {
-            const DI::Dictionary::Internal& lInternal = mBidirectional.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternal)
+            for (const DI::Dictionary::Internal::value_type lVT : mBidirectional.mInternal)
             {
                 assert(NULL != lVT.second);
 
@@ -121,8 +120,7 @@ namespace KMS
 
         void Sync::Run_Unidirectional()
         {
-            const DI::Array::Internal& lInternal = mUnidirectional.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Object* lObj : mUnidirectional.mInternal)
             {
                 assert(NULL != lObj);
 
@@ -153,8 +151,7 @@ namespace KMS
         {
             std::list<FileInfoList*> lLists;
 
-            const DI::Array::Internal& lInternal = aGroup.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Object* lObj : aGroup.mInternal)
             {
                 assert(NULL != lObj);
 
@@ -196,8 +193,7 @@ namespace KMS
 
         void Sync::VerifyConfig() const
         {
-            const DI::Dictionary::Internal& lInternal = mBidirectional.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternal)
+            for (const DI::Dictionary::Internal::value_type lVT : mBidirectional.mInternal)
             {
                 assert(NULL != lVT.second);
 

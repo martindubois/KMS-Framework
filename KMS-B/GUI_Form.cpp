@@ -49,8 +49,7 @@ namespace KMS
             {
                 unsigned int lCount = 0;
 
-                const DI::Dictionary::Internal& lInternal = mDictionary->GetInternal();
-                for (const DI::Dictionary::Internal::value_type lVT : lInternal)
+                for (const DI::Dictionary::Internal::value_type lVT : mDictionary->mInternal)
                 {
                     const GUI::MetaData* lMD = dynamic_cast<const GUI::MetaData*>(lVT.second.mMetaData);
 

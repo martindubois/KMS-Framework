@@ -73,12 +73,5 @@ namespace KMS
 
         Array::~Array() { Clear(); }
 
-        // Internal
-        // //////////////////////////////////////////////////////////////////
-
-        const Array::Internal& Array::GetInternal() const { return mInternal; }
-
-        Array::Internal& Array::GetInternal() { return mInternal; }
-
     }
 }

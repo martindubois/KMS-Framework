@@ -80,8 +80,7 @@ namespace KMS
 
                     if (1 == sscanf(lLine.c_str(), "#include <%[^>]>", lInclude))
                     {
-                        const DI::Array::Internal& lInternal = mIncludes.GetInternal();
-                        for (const DI::Container::Entry& lEntry : lInternal)
+                        for (const DI::Container::Entry& lEntry : mIncludes.mInternal)
                         {
                             const DI::String* lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
                             assert(NULL != lF_Include);

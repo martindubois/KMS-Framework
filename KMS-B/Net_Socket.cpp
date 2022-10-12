@@ -266,8 +266,7 @@ namespace KMS
 
         bool Socket::IsInAllowedRanges(const Address& aA) const
         {
-            const DI::Array::Internal& lInternal = mAllowedRanges.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Object* lObj : mAllowedRanges.mInternal)
             {
                 assert(NULL != lObj);
 

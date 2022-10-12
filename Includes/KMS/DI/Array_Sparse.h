@@ -47,8 +47,6 @@ namespace KMS
 
             typedef std::map<int, Container::Entry> Internal;
 
-        private:
-
             Internal mInternal;
 
         };

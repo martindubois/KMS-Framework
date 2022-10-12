@@ -375,8 +375,7 @@ void Encode_Array(const KMS::DI::Array* aArray, KMS::Text::WritePtr* aPtr)
 
     bool lFirst = true;
 
-    const KMS::DI::Array::Internal& lInternal = aArray->GetInternal();
-    for (const KMS::DI::Object* lObj : lInternal)
+    for (const KMS::DI::Object* lObj : aArray->mInternal)
     {
         assert(NULL != lObj);
 
@@ -408,8 +407,7 @@ void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WriteP
 
     bool lFirst = true;
 
-    const KMS::DI::Dictionary::Internal& lInternal = aDictionary->GetInternal();
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
     {
         assert(NULL != lVT.second);
 

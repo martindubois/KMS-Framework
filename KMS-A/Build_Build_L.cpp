@@ -59,8 +59,7 @@ namespace KMS
             lBin.Create();
             lLib.Create();
 
-            const DI::Array::Internal& lInternalB = mBinaries.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternalB)
+            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
             {
                 const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
@@ -68,20 +67,18 @@ namespace KMS
                 lBin_Src.Copy(lBin, lB->Get());
             }
 
-            const DI::Array::Internal& lInternalL = mLibraries.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternalL)
+            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
             {
                 const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lL);
 
-                lLib_Src.Copy(lLib, (lL->GetInternal() + ".a").c_str());
+                lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
             }
         }
 
         void Build::Test(const char* aC)
         {
-            const KMS::DI::Array::Internal& lInternal = mTests.GetInternal();
-            for (const KMS::DI::Container::Entry& lEntry : lInternal)
+            for (const KMS::DI::Container::Entry& lEntry : mTests.mInternal)
             {
                 const KMS::DI::String* lT = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
                 assert(NULL != lT);

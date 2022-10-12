@@ -42,7 +42,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~Double();
 
-        private:
+        // Internal
 
             double mInternal;
 

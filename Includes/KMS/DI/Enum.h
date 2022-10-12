@@ -38,7 +38,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~Enum();
 
-        private:
+        // Internal
 
             T mInternal;
 

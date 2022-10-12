@@ -52,10 +52,5 @@ namespace KMS
 
         String::~String() {};
 
-        // Internal
-        // //////////////////////////////////////////////////////////////////
-
-        const std::string& String::GetInternal() const { return mInternal; };
-
     }
 }

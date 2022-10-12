@@ -62,12 +62,6 @@ namespace KMS
 
             typedef std::map<std::string, Entry> Internal;
 
-            const Internal& GetInternal() const;
-
-            Internal& GetInternal();
-
-        private:
-
             Internal mInternal;
 
         };

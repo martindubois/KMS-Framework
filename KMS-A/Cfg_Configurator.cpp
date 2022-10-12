@@ -495,8 +495,7 @@ void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aM
 
     Help_Object(aOut, aName, aMD, aLevel);
 
-    const KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 
@@ -533,8 +532,7 @@ void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aName)
     assert(NULL != aA);
     assert(NULL != aName);
 
-    const KMS::DI::Array::Internal& lInternal = aA->GetInternal();
-    for (const KMS::DI::Container::Entry& lEntry : lInternal)
+    for (const KMS::DI::Container::Entry& lEntry : aA->mInternal)
     {
         assert(NULL != lEntry);
 
@@ -553,8 +551,7 @@ void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aNam
 {
     assert(NULL != aD);
 
-    const KMS::DI::Dictionary::Internal& lInternal = aD->GetInternal();
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : lInternal)
+    for (const KMS::DI::Dictionary::Internal::value_type lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 

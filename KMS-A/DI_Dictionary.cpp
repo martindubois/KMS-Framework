@@ -114,10 +114,6 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        const Dictionary::Internal& Dictionary::GetInternal() const { return mInternal; }
-
-        Dictionary::Internal& Dictionary::GetInternal() { return mInternal; }
-
         Dictionary::Entry::Entry(const Object* aObject, const MetaData* aMD) : Container::Entry(aObject), mMetaData(aMD)
         {
         }

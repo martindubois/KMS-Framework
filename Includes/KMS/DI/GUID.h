@@ -38,7 +38,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~GUID();
 
-        private:
+        // Internal
 
             ::GUID mInternal;
 

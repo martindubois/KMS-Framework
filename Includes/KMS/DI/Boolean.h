@@ -40,7 +40,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~Boolean();
 
-        private:
+        // Internal
 
             bool mInternal;
 

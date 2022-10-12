@@ -40,7 +40,7 @@ namespace KMS
             // ===== Object =================================================
             virtual ~Folder();
 
-        private:
+        // Internal
 
             File::Folder mInternal;
 

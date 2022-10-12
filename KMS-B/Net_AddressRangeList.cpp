@@ -18,13 +18,13 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void AddressRangeList::Add(const AddressRange& aAR) { mRanges.push_back(aAR); }
+        void AddressRangeList::Add(const AddressRange& aAR) { mInternal.push_back(aAR); }
 
-        void AddressRangeList::Clear() { mRanges.clear(); }
+        void AddressRangeList::Clear() { mInternal.clear(); }
 
         bool AddressRangeList::IsInRanges(const Address& aA) const
         {
-            for (const AddressRange& lAR : mRanges)
+            for (const AddressRange& lAR : mInternal)
             {
                 if (lAR == aA)
                 {

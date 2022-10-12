@@ -134,8 +134,7 @@ namespace KMS
 
             lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
 
-            const DI::Array::Internal& lInternal = mRepositories.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mRepositories.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -166,8 +165,7 @@ namespace KMS
                 mImport.Create();
             }
 
-            const DI::Array::Internal& lInternalD = mDependencies.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternalD)
+            for (const DI::Container::Entry& lEntry : mDependencies.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -177,8 +175,7 @@ namespace KMS
                 ImportDependency(*lD, false);
             }
 
-            const DI::Array::Internal& lInternalO = mOSIndependentDeps.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternalO)
+            for (const DI::Container::Entry& lEntry : mOSIndependentDeps.mInternal)
             {
                 assert(NULL != lEntry);
 

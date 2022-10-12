@@ -120,8 +120,7 @@ namespace KMS
             const DI::UInt16* lAddr;
 
             fprintf(aOut, "Coils\n");
-            const DI::Dictionary::Internal& lInternalC = mCoils.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternalC)
+            for (const DI::Dictionary::Internal::value_type lVT : mCoils.mInternal)
             {
                 assert(NULL != lVT.second);
 
@@ -132,8 +131,7 @@ namespace KMS
             }
 
             fprintf(aOut, "Discrete inputs\n");
-            const DI::Dictionary::Internal& lInternalDI = mDiscreteInputs.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternalDI)
+            for (const DI::Dictionary::Internal::value_type lVT : mDiscreteInputs.mInternal)
             {
                 assert(NULL != lVT.second);
 
@@ -144,8 +142,7 @@ namespace KMS
             }
 
             fprintf(aOut, "Holding registers\n");
-            const DI::Dictionary::Internal& lInternalHR = mHoldingRegisters.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternalHR)
+            for (const DI::Dictionary::Internal::value_type lVT : mHoldingRegisters.mInternal)
             {
                 assert(NULL != lVT.second);
 
@@ -156,8 +153,7 @@ namespace KMS
             }
 
             fprintf(aOut, "Input registers\n");
-            const DI::Dictionary::Internal& lInternalIR = mInputRegisters.GetInternal();
-            for (const DI::Dictionary::Internal::value_type lVT : lInternalIR)
+            for (const DI::Dictionary::Internal::value_type lVT : mInputRegisters.mInternal)
             {
                 assert(NULL != lVT.second);
 
@@ -223,8 +219,7 @@ namespace KMS
         {
             Connect();
 
-            const DI::Array::Internal& lInternal = mOperations.GetInternal();
-            for (const DI::Object* lObj : lInternal)
+            for (const DI::Object* lObj : mOperations.mInternal)
             {
                 assert(NULL != lObj);
 
