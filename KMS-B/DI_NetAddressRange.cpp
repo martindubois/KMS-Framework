@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DI::Object* NetAddressRange::Create() { return new NetAddressRange(); }
+        DI::Object* NetAddressRange::Create() { return new NetAddressRange; }
 
         NetAddressRange::NetAddressRange() {}
 

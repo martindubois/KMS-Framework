@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DI::Object* String::Create() { return new String(); }
+        DI::Object* String::Create() { return new String; }
 
         String::String(const char* aIn) : mInternal(aIn) {}
 

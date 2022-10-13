@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DI::Object* NetAddress::Create() { return new NetAddress(); }
+        DI::Object* NetAddress::Create() { return new NetAddress; }
 
         NetAddress::NetAddress() {}
 

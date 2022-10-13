@@ -212,7 +212,7 @@ namespace KMS
 
 KMS::DI::Object* CreateGroup()
 {
-    KMS::DI::Array* lResult = new KMS::DI::Array();
+    KMS::DI::Array* lResult = new KMS::DI::Array;
 
     lResult->SetCreator(KMS::DI::String::Create);
 

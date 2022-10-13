@@ -432,7 +432,7 @@ void OnCtrlC(int aSignal)
     sSimulator->Stop();
 }
 
-KMS::DI::Object* CreateItem() { return new KMS::Modbus::Simulator::Item(); }
+KMS::DI::Object* CreateItem() { return new KMS::Modbus::Simulator::Item; }
 
 KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn)
 {

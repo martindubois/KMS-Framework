@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Object* Dictionary::Create() { return new Dictionary(); }
+        Object* Dictionary::Create() { return new Dictionary; }
 
         void Dictionary::AddEntry(const char* aName, const Object* aObject, const MetaData* aMD)
         {

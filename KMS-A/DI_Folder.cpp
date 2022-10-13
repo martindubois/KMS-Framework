@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Object* Folder::Create() { return new Folder(); }
+        Object* Folder::Create() { return new Folder; }
 
         Folder::Folder() {}
 
