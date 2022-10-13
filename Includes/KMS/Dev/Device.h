@@ -21,7 +21,7 @@
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/GUID.h>
 #include <KMS/DI/String.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 
 namespace KMS
 {
@@ -96,8 +96,8 @@ namespace KMS
             const Device& operator = (const Device&);
 
             // ===== Configurable attributes ================================
-            DI::UInt32 mIndex;
-            DI::String mLink;
+            DI::UInt<uint32_t> mIndex;
+            DI::String         mLink;
 
             #ifdef _KMS_WINDOWS_
 

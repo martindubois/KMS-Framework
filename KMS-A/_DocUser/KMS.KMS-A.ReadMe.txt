@@ -5,7 +5,11 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
-- KMS::DI - Remove GetInternal methods
+- KMS::DI
+    - Float - Replace Double
+    - Int - Replace Int32
+    - UInt - Replace UInt8, UInt16 and UInt32
+    - Remove GetInternal methods
 
 0.1.3-dev Windows 2022-10-11
 - KMS::File::Folder::Delete

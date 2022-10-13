@@ -13,7 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/HTTP/HTTP.h>
 #include <KMS/JSON/JSON.h>
 
@@ -152,7 +152,7 @@ namespace KMS
             {
                 unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
-                mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt32(lSize_byte));
+                mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte));
                 mResponseHeader.AddEntry(NAME_CONTENT_TYPE  , &APPLICATION_JSON);
 
                 SetData(lData, lSize_byte);

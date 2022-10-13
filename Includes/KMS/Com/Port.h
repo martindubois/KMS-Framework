@@ -79,10 +79,10 @@ namespace KMS
             // ===== Configurable attributes ================================
             DI::Boolean                    mDTR;
             DI::Enum<Parity, PARITY_NAMES> mParity;
-            DI::UInt32                     mReadTimeout_ms;
+            DI::UInt<uint32_t>             mReadTimeout_ms;
             DI::Boolean                    mRTS;
-            DI::UInt32                     mSpeed_bps;
-            DI::UInt32                     mWriteTimeout_ms;
+            DI::UInt<uint32_t>             mSpeed_bps;
+            DI::UInt<uint32_t>             mWriteTimeout_ms;
 
         };
 

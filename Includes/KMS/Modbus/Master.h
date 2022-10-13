@@ -10,7 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Dictionary.h>
-#include <KMS/DI/UInt8.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Modbus.h>
 
 namespace KMS
@@ -93,7 +93,7 @@ namespace KMS
             Exception mLastException;
 
             // ===== Configurable attributes ================================
-            DI::UInt8 mDeviceAddress;
+            DI::UInt<uint8_t> mDeviceAddress;
 
         };
 

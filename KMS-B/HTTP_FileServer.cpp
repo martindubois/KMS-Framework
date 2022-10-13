@@ -17,7 +17,7 @@
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/String.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
 #include <KMS/Installer.h>
@@ -237,7 +237,7 @@ namespace KMS
             File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            DI::UInt32* lValue = new DI::UInt32(lFile->GetSize());
+            DI::UInt<uint32_t>* lValue = new DI::UInt<uint32_t>(lFile->GetSize());
             aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue);
 
             aR->SetFile(lFile);

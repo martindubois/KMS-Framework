@@ -10,7 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
 #include <KMS/DI/String.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/Text/ReadPtr.h>
 #include <KMS/Text/WritePtr.h>
 
@@ -129,27 +129,27 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
 
     lPtr.SkipBlank();
 
-    KMS::DI::Array     * lArray;
-    KMS::DI::Dictionary* lDictionary;
-    KMS::DI::String    * lString;
-    KMS::DI::UInt32    * lUInt32;
+    KMS::DI::Array         * lArray;
+    KMS::DI::Dictionary    * lDictionary;
+    KMS::DI::String        * lString;
+    KMS::DI::UInt<uint32_t>* lUInt32;
 
     switch (*lPtr)
     {
     case '[':
-        lArray = new KMS::DI::Array();
+        lArray = new KMS::DI::Array;
         Decode_Array(lArray, &lPtr);
         *aObject = lArray;
         break;
 
     case '{':
-        lDictionary = new KMS::DI::Dictionary();
+        lDictionary = new KMS::DI::Dictionary;
         Decode_Dictionary(lDictionary, &lPtr);
         *aObject = lDictionary;
         break;
 
     case '"':
-        lString = new KMS::DI::String();
+        lString = new KMS::DI::String;
         Decode_String(lString, &lPtr);
         *aObject = lString;
         break;
@@ -164,7 +164,7 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt32();
+        lUInt32 = new KMS::DI::UInt<uint32_t>;
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;

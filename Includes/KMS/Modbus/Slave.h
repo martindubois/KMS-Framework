@@ -10,7 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Di/Dictionary.h>
-#include <KMS/DI/UInt8.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Msg/Destination.h>
@@ -80,7 +80,7 @@ namespace KMS
             bool mStopped;
 
             // ===== Configurable attributes ================================
-            DI::UInt8 mDeviceAddress;
+            DI::UInt<uint8_t> mDeviceAddress;
 
         };
 

@@ -11,7 +11,7 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/GUI/MetaData.h>
 #include <KMS/HTTP/Request.h>
 
@@ -20,7 +20,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI::UInt32 ZERO(0);
+static const KMS::DI::UInt<uint32_t> ZERO(0);
 
 #define MSG_ON_GET_DATA      (1)
 #define MSG_ON_GET_META_DATA (2)
@@ -55,7 +55,7 @@ namespace KMS
 
                     DI::Dictionary* lD = dynamic_cast<DI::Dictionary*>(mFields.CreateEntry());
 
-                    lD->AddEntry("Index"   , new DI::UInt32(lCount           ), true);
+                    lD->AddEntry("Index"   , new DI::UInt<uint32_t>(lCount   ), true);
                     lD->AddEntry("Label"   , new DI::String(lMD->GetLabel()  ), true);
                     lD->AddEntry("Name"    , new DI::String(lVT.first.c_str()), true);
                     lD->AddEntry("ReadOnly", &ZERO);

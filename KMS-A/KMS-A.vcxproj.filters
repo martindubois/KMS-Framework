@@ -159,9 +159,6 @@
     <ClCompile Include="Text_ReadPtr.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_UInt32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HTTP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,12 +172,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DI_Boolean.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_UInt16.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_UInt8.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DI_Dictionary.cpp">

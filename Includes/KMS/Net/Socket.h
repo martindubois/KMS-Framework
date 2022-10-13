@@ -18,7 +18,7 @@
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/NetAddress.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/File/Binary.h>
 #include <KMS/Net/AddressRangeList.h>
 
@@ -82,10 +82,10 @@ namespace KMS
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
             // ===== Configurable attributes ================================
-            DI::Array      mAllowedRanges;
-            DI::NetAddress mLocalAddress;
-            DI::UInt32     mReceiveTimeout_ms;
-            DI::UInt32     mSendTimeout_ms;
+            DI::Array          mAllowedRanges;
+            DI::NetAddress     mLocalAddress;
+            DI::UInt<uint32_t> mReceiveTimeout_ms;
+            DI::UInt<uint32_t> mSendTimeout_ms;
 
         // Internal
 

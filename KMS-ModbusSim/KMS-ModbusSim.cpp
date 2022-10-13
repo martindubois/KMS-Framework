@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Banner.h>
+#include <KMS/Exception.h>
 #include <KMS/Modbus/Simulator.h>
 
 // ===== KMS-ByteTool =======================================================

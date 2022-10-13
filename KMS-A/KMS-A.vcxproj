@@ -65,9 +65,6 @@
     <ClCompile Include="DI_Object.cpp" />
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
-    <ClCompile Include="DI_UInt16.cpp" />
-    <ClCompile Include="DI_UInt32.cpp" />
-    <ClCompile Include="DI_UInt8.cpp" />
     <ClCompile Include="DI_Value.cpp" />
     <ClCompile Include="GUI_MetaData.cpp" />
     <ClCompile Include="HTTP.cpp" />

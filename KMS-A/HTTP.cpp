@@ -9,7 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/String.h>
-#include <KMS/DI/UInt32.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/Text/ReadPtr.h>
 #include <KMS/Text/WritePtr.h>
 
@@ -87,8 +87,8 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
 
     lPtr.SkipBlank();
 
-    KMS::DI::String* lString;
-    KMS::DI::UInt32* lUInt32;
+    KMS::DI::String        * lString;
+    KMS::DI::UInt<uint32_t>* lUInt32;
 
     switch (*lPtr)
     {
@@ -102,13 +102,13 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt32();
+        lUInt32 = new KMS::DI::UInt<uint32_t>;
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;
 
     default:
-        lString = new KMS::DI::String();
+        lString = new KMS::DI::String;
         Decode_Value(lString, &lPtr);
         *aObject = lString;
     }
