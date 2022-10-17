@@ -30,7 +30,7 @@ namespace KMS
 
         // ===== Master =====================================================
 
-        Master_Com::Master_Com() { AddEntry("Port", &mPort); }
+        Master_Com::Master_Com() { AddEntry("Port", &mPort, false); }
 
         void Master_Com::Connect()
         {

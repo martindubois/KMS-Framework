@@ -25,7 +25,7 @@ KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
     KMS::DI::String lS0;
 
     // Container:: +=
-    lA0.AddEntry(&lS0);
+    lA0.AddEntry(&lS0, false);
 
     // String::Get
     KMS_TEST_COMPARE(lS0.Get(lBuffer, sizeof(lBuffer)), 0UL);

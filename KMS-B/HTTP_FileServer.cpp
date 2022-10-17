@@ -67,36 +67,36 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &APPLICATION_JAVASCRIPT);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &IMAGE_X_ICON);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_CSS);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_HTML);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(NULL != aRequest);
 
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &INLINE);
-            aRequest->mResponseHeader.AddEntry(NAME_CONTENT_TYPE, &TEXT_PLAIN);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &INLINE);
+            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -238,7 +238,7 @@ namespace KMS
             assert(NULL != lFile);
 
             DI::UInt<uint32_t>* lValue = new DI::UInt<uint32_t>(lFile->GetSize());
-            aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue);
+            aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);
 
             aR->SetFile(lFile);
         }

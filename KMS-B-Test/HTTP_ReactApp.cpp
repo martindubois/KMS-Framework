@@ -52,7 +52,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     KMS::HTTP::ReactApp lRA;
     TestApp lTA;
 
-    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1"));
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1"), true);
 
     lRA.AddRoute("/");
 
@@ -107,9 +107,9 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         VERSION.GetString(lVersion, sizeof(lVersion));
 
-        lRequest->mResponseHeader.AddEntry(NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
+        lRequest->mResponseHeader.AddConstEntry(NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
 
-        lRequest->mResponseData.AddEntry(NAME_VERSION, new KMS::DI::String(lVersion));
+        lRequest->mResponseData.AddEntry(NAME_VERSION, new KMS::DI::String(lVersion), true);
         break;
 
     default:

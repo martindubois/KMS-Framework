@@ -107,14 +107,14 @@ namespace KMS
                 File::Folder lExport("K:\\Export");
             #endif
 
-            mRepositories.AddEntry(new DI::Folder(lExport));
+            mRepositories.AddEntry(new DI::Folder(lExport), true);
         }
 
         Import::~Import() {}
 
-        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD)); }
-        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD)); }
-        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR)); }
+        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD), true); }
+        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD), true); }
+        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR), true); }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)
         {

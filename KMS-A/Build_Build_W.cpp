@@ -25,7 +25,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mWindowsProcessors.AddEntry(new DI::String(aP)); }
+        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mWindowsProcessors.AddEntry(new DI::String(aP), true); }
 
         // Private
         // //////////////////////////////////////////////////////////////////

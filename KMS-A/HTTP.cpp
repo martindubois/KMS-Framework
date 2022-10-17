@@ -144,7 +144,7 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
             Decode(&lObject, &lPtr);
             assert(NULL != lObject);
 
-            aDictionary->AddEntry(lName, lObject);
+            aDictionary->AddEntry(lName, lObject, true);
         }
 
         lPtr.SkipBlank();

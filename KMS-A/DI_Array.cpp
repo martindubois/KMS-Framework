@@ -32,15 +32,15 @@ namespace KMS
 
         bool Array::IsEmpty() const { return mInternal.empty(); }
 
-        void Array::AddEntry(Object* aO, bool aDelete) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
+        void Array::AddConstEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(const_cast<Object*>(aO)); }
 
-        void Array::AddEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(const_cast<Object*>(aO)); }
+        void Array::AddEntry(Object* aO, bool aDelete) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
 
         DI::Object* Array::CreateEntry()
         {
             DI::Object* lResult = CallCreator();
 
-            AddEntry(lResult);
+            AddEntry(lResult, true);
 
             return lResult;
         }

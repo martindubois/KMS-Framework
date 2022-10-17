@@ -101,12 +101,12 @@ namespace KMS
 
         void Tool::InitMaster(Master* aMaster) { assert(NULL != aMaster); mMaster = aMaster; }
 
-        void Tool::AddCoil           (const char* aN, uint16_t aA) { mCoils           .AddEntry(aN, new DI::UInt<uint16_t>(aA)); }
-        void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(aN, new DI::UInt<uint16_t>(aA)); }
-        void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { mHoldingRegisters.AddEntry(aN, new DI::UInt<uint16_t>(aA)); }
-        void Tool::AddInputRegister  (const char* aN, uint16_t aA) { mInputRegisters  .AddEntry(aN, new DI::UInt<uint16_t>(aA)); }
+        void Tool::AddCoil           (const char* aN, uint16_t aA) { mCoils           .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
+        void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
+        void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { mHoldingRegisters.AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
+        void Tool::AddInputRegister  (const char* aN, uint16_t aA) { mInputRegisters  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
 
-        void Tool::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO)); }
+        void Tool::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO), true); }
 
         void Tool::Connect   () { assert(NULL != mMaster); mMaster->Connect   (); }
         void Tool::Disconnect() { assert(NULL != mMaster); mMaster->Disconnect(); }

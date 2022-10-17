@@ -39,7 +39,7 @@ namespace KMS
 
         Server::Server()
         {
-            mResponseHeader.AddEntry(NAME_SERVER, &SERVER);
+            mResponseHeader.AddConstEntry(NAME_SERVER, &SERVER);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }

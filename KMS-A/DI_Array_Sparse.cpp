@@ -63,7 +63,7 @@ namespace KMS
             DI::Object* lResult = CallCreator();
             assert(NULL != lResult);
 
-            AddEntry(aIndex, lResult);
+            AddEntry(aIndex, lResult, true);
 
             return lResult;
         }

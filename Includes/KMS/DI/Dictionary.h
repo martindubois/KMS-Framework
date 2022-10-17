@@ -28,8 +28,9 @@ namespace KMS
 
             static DI::Object* Create();
 
-            void AddEntry(const char* aName, const Object* aE,               const MetaData* aMD = NULL);
-            void AddEntry(const char* aName,       Object* aE, bool aDelete, const MetaData* aMD = NULL);
+            void AddConstEntry(const char* aName, const Object* aE, const MetaData* aMD = NULL);
+
+            void AddEntry(const char* aName, Object* aE, bool aDelete, const MetaData* aMD = NULL);
 
             DI::Object* CreateEntry(const char* aName, const MetaData* aMD = NULL);
 

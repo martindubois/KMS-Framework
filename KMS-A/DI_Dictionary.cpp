@@ -20,7 +20,7 @@ namespace KMS
 
         Object* Dictionary::Create() { return new Dictionary; }
 
-        void Dictionary::AddEntry(const char* aName, const Object* aObject, const MetaData* aMD)
+        void Dictionary::AddConstEntry(const char* aName, const Object* aObject, const MetaData* aMD)
         {
             assert(NULL != aName);
 

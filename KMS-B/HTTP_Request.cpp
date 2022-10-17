@@ -152,8 +152,9 @@ namespace KMS
             {
                 unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
-                mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte));
-                mResponseHeader.AddEntry(NAME_CONTENT_TYPE  , &APPLICATION_JSON);
+                mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte), true);
+
+                mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &APPLICATION_JSON);
 
                 SetData(lData, lSize_byte);
             }

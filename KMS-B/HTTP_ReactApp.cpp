@@ -30,7 +30,7 @@ namespace KMS
 
         ReactApp::ReactApp()
         {
-            AddEntry("FileServer", &mFileServer);
+            AddEntry("FileServer", &mFileServer, false);
 
             LocateFrontEnd();
 
