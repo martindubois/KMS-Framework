@@ -88,6 +88,7 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("WindowsPreBuildCmds += {Command}");
     static const KMS::Cfg::MetaData MD_OS_TESTS         ("WindowsTests += {Name}");
 
+    static const KMS::Cfg::MetaData MD_WINDOWS_FILE_MSI  ("WindowsFile_MSI = {Path}");
     static const KMS::Cfg::MetaData MD_WINDOWS_PROCESSORS("WindowsProcessors += x64 | x86");
 #endif
 
@@ -190,6 +191,7 @@ namespace KMS
             #ifdef _KMS_WINDOWS_
                 mWindowsProcessors.SetCreator(DI::String::Create);
 
+                AddEntry("WindowsFile_MSI"  , &mWindowsFile_MSI  , false, &MD_WINDOWS_FILE_MSI);
                 AddEntry("WindowsProcessors", &mWindowsProcessors, false, &MD_WINDOWS_PROCESSORS);
             #endif
 
@@ -218,9 +220,9 @@ namespace KMS
         {
             VerifyConfig();
 
-            Version lVersion(File::Folder::CURRENT, mVersionFile);
+            mVersion = Version(File::Folder::CURRENT, mVersionFile);
 
-            Edit(lVersion);
+            Edit();
 
             ExecuteCommands(mPreBuildCmds);
 
@@ -238,7 +240,7 @@ namespace KMS
 
             if (!mDoNotExport)
             {
-                Export(lVersion);
+                Export();
             }
 
             return 0;
@@ -249,8 +251,7 @@ namespace KMS
 
         void Build::Compile()
         {
-            const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -261,10 +262,9 @@ namespace KMS
             }
         }
 
-        void Build::Edit(const Version& aVersion)
+        void Build::Edit()
         {
-            const DI::Array::Internal& lInternal = mEditOperations.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mEditOperations.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -277,10 +277,10 @@ namespace KMS
 
                 if (3 != sscanf_s(*lOp, "%[^;];%[^;];%[^\n\r]", lFile SizeInfo(lFile), lRegEx SizeInfo(lRegEx), lReplace SizeInfo(lReplace)))
                 {
-                    KMS_EXCEPTION(CONFIG_FORMAT, "Invalid edit operation", *lOp);
+                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid edit operation", *lOp);
                 }
 
-                std::string lReplaceStr = ProcessReplaceLine(lReplace, aVersion);
+                std::string lReplaceStr = ProcessReplaceLine(lReplace, mVersion);
 
                 Text::File_ASCII lText;
 
@@ -296,8 +296,7 @@ namespace KMS
 
         void Build::ExecuteCommands(const DI::Array& aCommands)
         {
-            const DI::Array::Internal& lInternal = aCommands.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : aCommands.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -306,27 +305,30 @@ namespace KMS
 
                 if (0 != system(*lCommand))
                 {
-                    KMS_EXCEPTION(BUILD_COMMAND, "The command failed", *lCommand);
+                    KMS_EXCEPTION(BUILD_COMMAND_FAILED, "The command failed", *lCommand);
                 }
             }
         }
 
-        void Build::Export(const Version& aVersion)
+        void Build::Export()
         {
-            File::Folder lProduct(mExportFolder, mProduct);
-
-            if (!lProduct.DoesExist())
+            mProductFolder = File::Folder(mExportFolder, mProduct);
+            if (!mProductFolder.DoesExist())
             {
-                lProduct.Create();
+                mProductFolder.Create();
             }
 
             unsigned int lFlags = mOSIndependent ? Version::FLAG_OS_INDEPENDENT : 0;
 
             char lPackage[FILE_LENGTH];
 
-            aVersion.GetPackageName(mProduct, lPackage, sizeof(lPackage), lFlags);
+            mVersion.GetPackageName(mProduct, lPackage, sizeof(lPackage), lFlags);
 
-            mTempFolder.Compress(lProduct, lPackage);
+            mTempFolder.Compress(mProductFolder, lPackage);
+
+            #ifdef _KMS_WINDOWS_
+                Export_WindowsFile_MSI();
+            #endif
         }
 
         void Build::Package()
@@ -344,8 +346,7 @@ namespace KMS
             if (!mBinaries .IsEmpty()) { lBin.Create(); }
             if (!mLibraries.IsEmpty()) { lLib.Create(); }
 
-            const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -358,8 +359,7 @@ namespace KMS
 
         void Build::Package_Files()
         {
-            const DI::Array::Internal& lInternal = mFiles.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mFiles.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -382,8 +382,7 @@ namespace KMS
 
         void Build::Package_Folders()
         {
-            const DI::Array::Internal& lInternal = mFolders.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mFolders.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -395,7 +394,7 @@ namespace KMS
 
                 if (2 != sscanf_s(lF->Get(), "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
                 {
-                    KMS_EXCEPTION(CONFIG_FORMAT, "Invalid folder copy operation", *lF);
+                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid folder copy operation", *lF);
                 }
 
                 File::Folder lFD(mTempFolder, lDst);
@@ -407,8 +406,7 @@ namespace KMS
 
         void Build::Test()
         {
-            const DI::Array::Internal& lInternal = mConfigurations.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -425,22 +423,22 @@ namespace KMS
             {
                 if (!mDoNotCompile)
                 {
-                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), CONFIG, "No configuration", "");
+                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), BUILD_CONFIG_INVALID, "No configuration", "");
 
                     #ifdef _KMS_WINDOWS_
-                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), CONFIG, "No processor", "");
+                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), BUILD_CONFIG_INVALID, "No processor", "");
                     #endif
                 }
 
                 if (!mDoNotExport)
                 {
-                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), CONFIG, "Invalid export folder", *mExportFolder);
+                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, "Invalid export folder", *mExportFolder);
 
-                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), CONFIG, "Invalid product name", "");
+                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), BUILD_CONFIG_INVALID, "Invalid product name", "");
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), CONFIG, "Invalid version file", "");
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), BUILD_CONFIG_INVALID, "Invalid version file", "");
         }
 
     }
@@ -494,7 +492,7 @@ std::string ProcessReplaceLine(const char * aIn, const KMS::Version & aVersion)
         case STATE_PROCESS:
             switch (*lIn)
             {
-            case '\0': KMS_EXCEPTION(CONFIG_FORMAT, "Invalid edition operation", aIn);
+            case '\0': KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid edition operation", aIn);
             case '}': lState = STATE_INIT; break;
             case 'M': lResult += aVersion.GetMajor(); break;
             case 'm': lResult += aVersion.GetMinor(); break;

@@ -16,10 +16,10 @@
 #include <KMS/DI/String.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
+#include <KMS/Version.h>
 
 namespace KMS
 {
-    class Version;
 
     namespace Build
     {
@@ -67,9 +67,9 @@ namespace KMS
 
             void Compile();
             void Compile(const char* aC);
-            void Edit(const Version& aVersion);
+            void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
-            void Export(const Version & aVersion);
+            void Export();
             void Package();
             void Package_Component();
             void Package_Component(const char* aC);
@@ -79,7 +79,13 @@ namespace KMS
             void Test(const char* aC);
             void VerifyConfig();
 
+            #ifdef _KMS_WINDOWS_
+                void Export_WindowsFile_MSI();
+            #endif
+
+            File::Folder mProductFolder;
             File::Folder mTempFolder;
+            Version      mVersion;
 
             // ===== Configurable attributes ================================
             DI::Array    mBinaries;
@@ -99,7 +105,8 @@ namespace KMS
             DI::String   mVersionFile;
 
             #ifdef _KMS_WINDOWS_
-                DI::Array mWindowsProcessors;
+                DI::String mWindowsFile_MSI;
+                DI::Array  mWindowsProcessors;
             #endif
 
         };

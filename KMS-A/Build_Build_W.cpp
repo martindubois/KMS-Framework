@@ -32,8 +32,7 @@ namespace KMS
 
         void Build::Compile(const char* aC)
         {
-            const DI::Array::Internal& lInternal = mWindowsProcessors.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -55,7 +54,7 @@ namespace KMS
 
                 if (0 != lProcess.GetExitCode())
                 {
-                    KMS_EXCEPTION(BUILD_COMPILE, "The compilation failed", lProcess.GetCmdLine());
+                    KMS_EXCEPTION(BUILD_COMPILE_FAILED, "The compilation failed", lProcess.GetCmdLine());
                 }
             }
         }
@@ -65,8 +64,7 @@ namespace KMS
             File::Folder lBinaries(mTempFolder, "Binaries");
             File::Folder lLibraries(mTempFolder, "Libraries");
 
-            const DI::Array::Internal& lInternal = mWindowsProcessors.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternal)
+            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -88,8 +86,7 @@ namespace KMS
                 lBin.Create();
                 lLib.Create();
 
-                const DI::Array::Internal& lInternalB = mBinaries.GetInternal();
-                for (const DI::Container::Entry& lEntry : lInternalB)
+                for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
                 {
                     assert(NULL != lEntry);
 
@@ -100,8 +97,7 @@ namespace KMS
                     lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
                 }
 
-                const DI::Array::Internal& lInternalL = mLibraries.GetInternal();
-                for (const DI::Container::Entry& lEntry : lInternalL)
+                for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
                 {
                     assert(NULL != lEntry);
 
@@ -116,16 +112,14 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            const DI::Array::Internal& lInternalP = mWindowsProcessors.GetInternal();
-            for (const DI::Container::Entry& lEntry : lInternalP)
+            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
                 const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
-                const DI::Array::Internal& lInternalT = mTests.GetInternal();
-                for (const DI::Container::Entry& lEntry : lInternalT)
+                for (const DI::Container::Entry& lEntry : mTests.mInternal)
                 {
                     assert(NULL != lEntry);
 
@@ -142,9 +136,24 @@ namespace KMS
 
                     if (0 != lProcess.GetExitCode())
                     {
-                        KMS_EXCEPTION(BUILD_TEST, "The test failed", lProcess.GetCmdLine());
+                        KMS_EXCEPTION(BUILD_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
                     }
                 }
+            }
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        void Build::Export_WindowsFile_MSI()
+        {
+            if (0 < mWindowsFile_MSI.GetLength())
+            {
+                char lDstName[PATH_LENGTH];
+
+                sprintf_s(lDstName, "%s_%u.%u.%u.msi", mProduct.Get(), mVersion.GetMajor(), mVersion.GetMinor(), mVersion.GetBuild());
+
+                File::Folder::CURRENT.Copy(mProductFolder, mWindowsFile_MSI.Get(), lDstName);
             }
         }
 

@@ -11,8 +11,9 @@
 
 // ===== Includes ===========================================================
 #include <KMS/SafeAPI.h>
-#include <KMS/Version.h>
 #include <KMS/Text/File_ASCII.h>
+
+#include <KMS/Version.h>
 
 namespace KMS
 {
@@ -21,6 +22,8 @@ namespace KMS
     // //////////////////////////////////////////////////////////////////////
 
     const unsigned int Version::FLAG_OS_INDEPENDENT = 0x00000001;
+
+    Version::Version() : mMajor(0), mMinor(0), mBuild(0), mCompat(0), mDebug(false) {}
 
     Version::Version(const char* aVersion)
     {
@@ -40,7 +43,7 @@ namespace KMS
             && (3 != sscanf_s(aVersion, "%u.%u.%u"      , &lMajor, &lMinor, &lBuild                                 ))
             && (2 != sscanf_s(aVersion, "%u.%u"         , &lMajor, &lMinor                                          )))
         {
-            KMS_EXCEPTION(VERSION_FORMAT, "Invalid version format", aVersion);
+            KMS_EXCEPTION(VERSION_FORMAT_INVALID, "Invalid version format", aVersion);
         }
 
         SetNumbers(lMajor, lMinor, lBuild, lCompat);
@@ -81,7 +84,7 @@ namespace KMS
                     if (!Verify(lMajor, lMinor, lBuild, lCompat))
                     {
                         // NOT TESTED
-                        KMS_EXCEPTION(VERSION_FILE, "Incoherent version file", aFile);
+                        KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incoherent version file", aFile);
                     }
                     lState++;
                 }
@@ -105,7 +108,7 @@ namespace KMS
         }
 
         // NOT TESTED
-        KMS_EXCEPTION(VERSION_FILE, "Incomplet version file", aFile);
+        KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incomplet version file", aFile);
     }
 
     Version::Version(uint8_t aMajor, uint8_t aMinor, uint8_t aBuild, uint8_t aCompat, bool aDebug, const char * aDate, const char* aType)
@@ -178,10 +181,10 @@ namespace KMS
 
     void Version::SetNumbers(unsigned int aMajor, unsigned int aMinor, unsigned int aBuild, unsigned int aCompat)
     {
-        KMS_EXCEPTION_ASSERT(256 > aMajor , VERSION_NUMBER, "Invalid major number", aMajor);
-        KMS_EXCEPTION_ASSERT(256 > aMinor , VERSION_NUMBER, "Invalid minor number", aMinor);
-        KMS_EXCEPTION_ASSERT(256 > aBuild , VERSION_NUMBER, "Invalid build number", aBuild);
-        KMS_EXCEPTION_ASSERT(256 > aCompat, VERSION_NUMBER, "Invalid compatibility number", aCompat);
+        KMS_EXCEPTION_ASSERT(256 > aMajor , VERSION_NUMBER_INVALID, "Invalid major number", aMajor);
+        KMS_EXCEPTION_ASSERT(256 > aMinor , VERSION_NUMBER_INVALID, "Invalid minor number", aMinor);
+        KMS_EXCEPTION_ASSERT(256 > aBuild , VERSION_NUMBER_INVALID, "Invalid build number", aBuild);
+        KMS_EXCEPTION_ASSERT(256 > aCompat, VERSION_NUMBER_INVALID, "Invalid compatibility number", aCompat);
 
         mMajor = aMajor;
         mMinor = aMinor;

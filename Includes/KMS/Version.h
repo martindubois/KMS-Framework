@@ -26,6 +26,8 @@ namespace KMS
 
         static const unsigned int FLAG_OS_INDEPENDENT;
 
+        Version();
+
         Version(const char* aVersion);
 
         Version(const File::Folder& aFolder, const char * aFile);
