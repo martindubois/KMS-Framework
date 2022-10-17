@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI/NetAddressRange.h>
 
 namespace KMS
@@ -22,7 +23,7 @@ namespace KMS
 
         NetAddressRange::NetAddressRange() {}
 
-        NetAddressRange::NetAddressRange(const char* aIn) : String_Expand(aIn), mInternal(aIn) {}
+        NetAddressRange::NetAddressRange(const char* aIn) { Set(aIn); }
 
         void NetAddressRange::operator = (const Net::AddressRange& aIn) { mInternal = aIn; }
 
@@ -30,7 +31,7 @@ namespace KMS
 
         // ===== Value ======================================================
         
-        void NetAddressRange::Set(const char* aIn) { mInternal = aIn; };
+        void NetAddressRange::Set(const char* aIn) { mInternal = Convert::ToNetAddressRange(aIn); };
         
         // ===== Object =====================================================
 

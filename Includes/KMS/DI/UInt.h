@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI/Value.h>
 #include <KMS/Types.h>
 
@@ -100,37 +101,20 @@ namespace KMS
         template <typename T>
         void UInt<T>::Set(const char* aIn)
         {
-            assert(NULL != aIn);
-
-            int lRet;
-
-            unsigned int lValue;
-
-            switch (mRadix)
-            {
-            case KMS::Radix::DECIMAL    : lRet = sscanf_s(aIn, "%u", &lValue); break;
-            case KMS::Radix::HEXADECIMAL: lRet = sscanf_s(aIn, "%x", &lValue); break;
-
-            default: assert(false);
-            }
-
-            if (1 != lRet)
-            {
-                throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_FORMAT, "Invalid unsigned integer format", aIn);
-            }
+            uint32_t lValue = Convert::ToUInt32(aIn, mRadix);
 
             switch (sizeof(T))
             {
             case 1:
                 if (0xff < lValue)
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_VALUE, "Invalid uint8_t value" , aIn);
+                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint8_t value" , aIn);
                 }
                 break;
             case 2:
                 if (0xffff < lValue)
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_VALUE, "Invalid uint16_t value", aIn);
+                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint16_t value", aIn);
                 }
                 break;
             case 4: break;

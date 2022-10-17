@@ -9,18 +9,12 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 0.1.3-dev Windows 2022-10-11
 
-0.1.2-dev Windows 2022-10-10
-
 0.1.1-dev Windows 2022-10-04
 * KMS::DI
-
-0.0.13-dev Windows 2022-09-07
 
 0.0.11-dev Windows 2022-09-06
 - KMS::HTTP::ReactApp
     - Fix the location of the front-end in 32 bits debug on Windows
-
-0.0.9-dev Windows 2022-07-30
 
 0.0.6-dev Windows 2022-07-27
 * KMS::HTTP::FileServer - File type list

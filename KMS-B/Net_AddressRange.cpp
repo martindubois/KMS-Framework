@@ -22,15 +22,6 @@ namespace KMS
 
         AddressRange::AddressRange() { Construct(); }
 
-        AddressRange::AddressRange(const char* aAR)
-        {
-            Construct();
-
-            Set(aAR);
-        }
-
-        void AddressRange::operator = (const char* aAR) { Set(aAR); }
-
         void AddressRange::operator = (const Address& aA)
         {
             mType = aA.GetType();
@@ -64,6 +55,29 @@ namespace KMS
             return lResult;
         }
 
+        void AddressRange::SetMask(unsigned int aBits)
+        {
+            unsigned int lBits = aBits;
+
+            for (unsigned int i = 0; i < sizeof(mMask) / sizeof(mMask[1]); i++)
+            {
+                if (8 < lBits)
+                {
+                    mMask[i] = 0xff;
+                    lBits -= 8;
+                }
+                else
+                {
+                    static const uint8_t MASKS[8] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe };
+
+                    mMask[i] = MASKS[lBits];
+                    lBits = 0;
+                }
+            }
+
+            KMS_EXCEPTION_ASSERT(0 >= lBits, NET_ADDRESS_RANGE_INVALID, "Invalid mask length", aBits);
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
 
@@ -92,46 +106,6 @@ namespace KMS
         }
 
         void AddressRange::ResetMask() { memset(&mMask, 0xff, sizeof(mMask)); }
-
-        void AddressRange::Set(const char* aAR)
-        {
-            assert(NULL != aAR);
-
-            char lA[LINE_LENGTH];
-            unsigned int lM;
-
-            if (2 == sscanf_s(aAR, "%[^/]/%u", lA SizeInfo(lA), &lM))
-            {
-                *this = Address(lA);
-                SetMask(lM);
-                return;
-            }
-
-            *this = Address(aAR);
-        }
-
-        void AddressRange::SetMask(unsigned int aBits)
-        {
-            unsigned int lBits = aBits;
-
-            for (unsigned int i = 0; i < sizeof(mMask) / sizeof(mMask[1]); i++)
-            {
-                if (8 < lBits)
-                {
-                    mMask[i] = 0xff;
-                    lBits -= 8;
-                }
-                else
-                {
-                    static const uint8_t MASKS[8] = { 0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe };
-
-                    mMask[i] = MASKS[lBits];
-                    lBits = 0;
-                }
-            }
-
-            KMS_EXCEPTION_ASSERT(0 >= lBits, NETWORK_ADDRESS_RANGE, "Invalid mask length", aBits);
-        }
 
     }
 }

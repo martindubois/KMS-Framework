@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI/Value.h>
 
 namespace KMS
@@ -78,20 +79,7 @@ namespace KMS
         }
 
         template <typename T>
-        void Float<T>::Set(const char* aIn)
-        {
-            assert(NULL != aIn);
-
-            double lValue;
-
-            int lRet = sscanf_s(aIn, "%f", &lValue); break;
-            if (1 != lRet)
-            {
-                throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_FORMAT, "Invalid floating point format", aIn);
-            }
-
-            mInternal = lValue;
-        }
+        void Float<T>::Set(const char* aIn) { mInternal = Convert::ToDouble(aIn); }
 
         // ===== Object =====================================================
 

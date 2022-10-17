@@ -29,26 +29,18 @@ namespace KMS
 
             AddressRange();
 
-            // aAR  Format  A.B.C.D
-            //              A.B.C.D/M
-            //              A.B.C.D.E.F.G.H
-            //              A.B.C.D.E.F.G.H/M
-            AddressRange(const char* aAR);
-
             AddressRange(const Address& aAR);
 
-            // aAR  See the constructor
-            void operator = (const char* aAR);
             void operator = (const Address& aA);
 
             bool operator == (const Address& aA) const;
             bool operator == (const AddressRange& aAR) const;
 
-            void Get(char* aOut, unsigned int aOutSize_byte) const;
-
             Address::Type GetType() const;
 
             void Set(const Address& aA, unsigned int aMask);
+
+            void SetMask(unsigned int aBits);
 
             void SetType(Address::Type aType);
 
@@ -60,16 +52,23 @@ namespace KMS
 
             void ResetMask();
 
-            void Set(const char* aAR);
-
-            void SetMask(unsigned int aBits);
-
             uint8_t mData[8];
             uint8_t mMask[8];
 
             Address::Type mType;
 
         };
+
+    }
+
+    namespace Convert
+    {
+
+        // {A}.{B}.{C}.{D}
+        // {A}.{B}.{C}.{D}/{M}
+        // {A}:{B}:{C}:{D}:{E}:{F}:{G}:{H}
+        // {A}:{B}:{C}:{D}:{E}:{F}:{G}:{H}/{M}
+        extern Net::AddressRange ToNetAddressRange(const char* aASCII);
 
     }
 }

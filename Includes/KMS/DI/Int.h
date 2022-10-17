@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI/Value.h>
 #include <KMS/Types.h>
 
@@ -100,24 +101,7 @@ namespace KMS
         template <typename T>
         void Int<T>::Set(const char* aIn)
         {
-            assert(NULL != aIn);
-
-            int lRet;
-
-            int lValue;
-
-            switch (mRadix)
-            {
-            case KMS::Radix::DECIMAL    : lRet = sscanf_s(aIn, "%d", &lValue); break;
-            case KMS::Radix::HEXADECIMAL: lRet = sscanf_s(aIn, "%x", &lValue); break;
-
-            default: assert(false);
-            }
-
-            if (1 != lRet)
-            {
-                throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_FORMAT, "Invalid integer format", aIn);
-            }
+            int32_t lValue = Convert::ToInt32(aIn, mRadix);
 
             switch (sizeof(T))
             {

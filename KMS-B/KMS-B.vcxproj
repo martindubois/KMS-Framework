@@ -35,6 +35,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Convert.cpp" />
     <ClCompile Include="DI_NetAddress.cpp" />
     <ClCompile Include="DI_NetAddressRange.cpp" />
     <ClCompile Include="GUI_Form.cpp" />

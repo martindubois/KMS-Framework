@@ -25,15 +25,6 @@ namespace KMS
 
         Address::Address() { Clear(); }
 
-        Address::Address(const char* aA)
-        {
-            Clear();
-
-            Set(aA);
-        }
-
-        void Address::operator = (const char* aA) { Set(aA); }
-
         void Address::Clear()
         {
             mSize_byte = 0;
@@ -97,6 +88,17 @@ namespace KMS
 
         int Address::GetInternalSize() const { return mSize_byte; }
 
+        void Address::SetAddress(const char* aA)
+        {
+            assert(NULL != aA);
+
+            unsigned int lB[4];
+
+            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3)) { SetIPv4(lB); return; }
+
+            SetName(aA);
+        }
+
         void Address::SetInternal(const struct sockaddr* aAddr, unsigned int aAddrSize_byte)
         {
             assert(NULL != aAddr);
@@ -123,39 +125,15 @@ namespace KMS
             UpdateName();
         }
 
+        void Address::SetPortNumber(unsigned int aP)
+        {
+            KMS_EXCEPTION_ASSERT(0xffff >= aP, NET_PORT_INVALID, "Invalid port number", aP);
+
+            SetPortNumber(static_cast<uint16_t>(aP));
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
-
-        void Address::Set(const char* aA)
-        {
-            assert(NULL != aA);
-
-            if (0 == _stricmp(aA, "IPv4")) { SetType(Type::IPv4); return; }
-            if (0 == _stricmp(aA, "IPv6")) { SetType(Type::IPv6); return; }
-
-            const char* lA = aA;
-
-            if      (0 == _strnicmp(aA, "IPv4:", 5)) { SetType(Type::IPv4); lA += 5; }
-            else if (0 == _strnicmp(aA, "IPv6:", 5)) { SetType(Type::IPv6); lA += 5; }
-
-            char lN[LINE_LENGTH];
-            unsigned int lP;
-
-            if (2 == sscanf_s(lA, "%[^:]:%u", lN SizeInfo(lN), &lP)) { SetAddress(lN); SetPortNumber(lP); return; }
-
-            SetAddress(lA);
-        }
-
-        void Address::SetAddress(const char* aA)
-        {
-            assert(NULL != aA);
-
-            unsigned int lB[4];
-
-            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3)) { SetIPv4(lB); return; }
-
-            SetName(aA);
-        }
 
         void Address::SetIPv4(const unsigned int* aA)
         {
@@ -163,7 +141,7 @@ namespace KMS
 
             for (unsigned int i = 0; i < 4; i++)
             {
-                KMS_EXCEPTION_ASSERT(0xff >= aA[i], NETWORK_ADDRESS, "Invalid IPv4 address", aA[i]);
+                KMS_EXCEPTION_ASSERT(0xff >= aA[i], NET_ADDRESS_INVALID, "Invalid IPv4 address", aA[i]);
             }
 
             mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1 = aA[0];
@@ -185,7 +163,7 @@ namespace KMS
             addrinfo* lAddr;
 
             int lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
-            KMS_EXCEPTION_ASSERT(0 == lRet, NETWORK_ADDRESS, "Cannot resolve the network address", aN);
+            KMS_EXCEPTION_ASSERT(0 == lRet, NET_ADDRESS_RESOLUTION_FAILED, "Cannot resolve the network address", aN);
 
             assert(NULL != lAddr);
 
@@ -209,14 +187,7 @@ namespace KMS
 
             freeaddrinfo(lAddr);
 
-            KMS_EXCEPTION(NETWORK_ADDRESS, "Cannot resolve the network address", aN);
-        }
-
-        void Address::SetPortNumber(unsigned int aP)
-        {
-            KMS_EXCEPTION_ASSERT(0xffff >= aP, NETWORK_PORT, "Invalid port number", aP);
-
-            SetPortNumber(static_cast<uint16_t>(aP));
+            KMS_EXCEPTION(NET_ADDRESS_RESOLUTION_FAILED, "Cannot resolve the network address", aN);
         }
 
         void Address::UpdateName()

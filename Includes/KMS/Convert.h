@@ -4,6 +4,20 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Convert.h
+// Library   KMS-A
+
+// bool
+//      0
+//      1
+//      false
+//      true
+
+// double
+//      {9}[.{9}]
+
+// UInt16, UInt32, UInt8
+//      0x{9}
+//      {9}
 
 #pragma once
 
@@ -15,9 +29,13 @@ namespace KMS
     namespace Convert
     {
 
+        // Functions
+        // //////////////////////////////////////////////////////////////////
+
         extern bool     ToBool  (const char* aASCII);
         extern double   ToDouble(const char* aASCII);
         extern FILE   * ToFile  (const char* aASCII, const char * aMode = "rb");
+        extern int32_t  ToInt32 (const char* aASCII, Radix aRadix = Radix::DECIMAL);
         extern uint16_t ToUInt16(const char* aASCII, Radix aRadix = Radix::DECIMAL);
         extern uint32_t ToUInt32(const char* aASCII, Radix aRadix = Radix::DECIMAL);
         extern uint8_t  ToUInt8 (const char* aASCII, Radix aRadix = Radix::DECIMAL);

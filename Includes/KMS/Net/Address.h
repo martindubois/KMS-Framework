@@ -41,28 +41,9 @@ namespace KMS
 
             Address();
 
-            // aA  Format  A.B.C.D
-            //             A.B.C.D:Port
-            //             IPv4
-            //             IPv4:Name
-            //             IPv4:Name:Port
-            //             IPv6:Name
-            //             IPv6:Name:Port
-            //             Name
-            //             Name:Port
-            Address(const char* aA);
-
-            // aA  See the constructor
-            void operator = (const char* aA);
-
             bool operator == (const Address& aA);
 
             void Clear();
-
-            // Format Name:Port
-            //        A.B.C.D:Port
-            //        A:B:C:D:E:F:G:H:Port
-            void Get(char* aOut, unsigned int aOutSize_byte) const;
 
             const char* GetName      () const;
             uint16_t    GetPortNumber() const;
@@ -97,19 +78,20 @@ namespace KMS
 
             int GetInternalSize() const;
 
+            void SetAddress(const char* aA);
+
             void SetBinary(const void* aIn, unsigned int aInSize_byte);
 
             void SetInternal(const struct sockaddr* aAddr, unsigned int aAddrSize_byte);
 
             void SetInternalSize(unsigned int aAddrSize_byte);
 
+            void SetPortNumber(unsigned int aP);
+
         private:
 
-            void Set(const char* aA);
-            void SetAddress(const char* aA);
             void SetIPv4(const unsigned int* aA);
             void SetName(const char* aN);
-            void SetPortNumber(unsigned int aP);
 
             void UpdateName();
 
@@ -128,6 +110,25 @@ namespace KMS
             Type mType;
 
         };
+
+    }
+
+    namespace Convert
+    {
+
+        // {A}.{B}.{C}.{D}
+        // {A}.{B}.{C}.{D}:{Port}
+        // {A}:{B}:{C}:{D}:{E}:{F}:{G}:{H}
+        // {A}:{B}:{C}:{D}:{E}:{F}:{G}:{H}:{Port}
+        // IPv4
+        // IPv4:{Name}
+        // IPv4:{Name}:{Port}
+        // IPv6
+        // IPv6:{Name}
+        // IPv6:{Name}:{Port}
+        // {Name}
+        // {Name}:{Port}
+        extern Net::Address ToNetAddress(const char* aASCII);
 
     }
 }
