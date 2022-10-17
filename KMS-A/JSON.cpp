@@ -112,7 +112,7 @@ void Decode(KMS::DI::Object* aObject, KMS::Text::ReadPtr* aPtr)
             else
             {
                 KMS::DI::Value* lValue = dynamic_cast<KMS::DI::Value*>(aObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, NOT_IMPLEMENTED, "JSON do not suppoert this data type", "");
+                KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not suppoert this data type", "");
 
                 Decode_Value(lValue, aPtr);
             }
@@ -169,7 +169,7 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
         *aObject = lUInt32;
         break;
 
-    default: KMS_EXCEPTION(JSON_FORMAT, "Invalid JSON format", "");
+    default: KMS_EXCEPTION(JSON_FORMAT_INVALID, "Invalid JSON format", "");
     }
 
     *aPtr = lPtr;
@@ -354,7 +354,7 @@ void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr)
             else
             {
                 const KMS::DI::Value* lValue = dynamic_cast<const KMS::DI::Value*>(aObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, NOT_IMPLEMENTED, "JSON do not support this data type", "");
+                KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not support this data type", "");
 
                 lPtr += lValue->Get(lPtr, lPtr.GetRemainingSize());
             }

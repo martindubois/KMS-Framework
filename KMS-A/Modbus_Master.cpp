@@ -42,7 +42,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_COILS, lBuffer, 4, lBuffer, 1);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
         }
@@ -55,7 +55,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_DISCRETE_INPUTS, lBuffer, 4, lBuffer, 1);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
         }
@@ -68,7 +68,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_HOLDING_REGISTERS, lBuffer, 4, lBuffer, 2);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadUInt16(lBuffer, 0);
         }
@@ -81,7 +81,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_INPUT_REGISTERS, lBuffer, 4, lBuffer, 2);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadUInt16(lBuffer, 0);
         }
@@ -94,7 +94,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, aValue ? ON : OFF);
 
             unsigned int lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, lBuffer, 4);
-            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             assert(aAddr == ReadUInt16(lBuffer, 0));
         }
@@ -107,7 +107,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, aValue);
 
             unsigned int lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, lBuffer, 4);
-            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_MASTER, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             assert(aAddr == ReadUInt16(lBuffer, 0));
         }
@@ -135,7 +135,7 @@ namespace KMS
                 KMS_EXCEPTION(MODBUS_EXCEPTION, "Modbus exception", aData[1]);
             }
 
-            KMS_EXCEPTION_ASSERT(lFunction == aData[0], MODBUS_MASTER, "Invalid function code", aData[0]);
+            KMS_EXCEPTION_ASSERT(lFunction == aData[0], MODBUS_ERROR, "Invalid function code", aData[0]);
         }
 
     }

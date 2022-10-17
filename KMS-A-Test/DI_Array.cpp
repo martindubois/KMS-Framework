@@ -49,6 +49,6 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
             lS0.Get(lBuffer, lSize_byte);
             KMS_TEST_ASSERT(false);
         }
-        KMS_TEST_CATCH(OUTPUT_TOO_SHORT);
+        KMS_TEST_CATCH(DI_OUTPUT_TOO_SHORT);
     }
 }

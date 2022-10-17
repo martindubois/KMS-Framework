@@ -36,7 +36,7 @@ namespace KMS
         HKEY lKey;
 
         LSTATUS lRet = RegOpenKeyEx(HKEY_CURRENT_USER, "Environment", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &lKey);
-        KMS_EXCEPTION_ASSERT(ERROR_SUCCESS == lRet, REG_OPEN, "Cannot open HKCU\\Environment", lRet);
+        KMS_EXCEPTION_ASSERT(ERROR_SUCCESS == lRet, REG_OPEN_FAILED, "Cannot open HKCU\\Environment", lRet);
 
         char  lData[4096];
         char  lPath[4096 + PATH_LENGTH];
@@ -60,11 +60,11 @@ namespace KMS
             break;
 
         default:
-            KMS_EXCEPTION(REG_QUERY, "Cannot query HKCU\\Environment\\PATH", lRet);
+            KMS_EXCEPTION(REG_QUERY_FAILED, "Cannot query HKCU\\Environment\\PATH", lRet);
         }
 
         lRet = RegSetValueEx(lKey, "PATH", NULL, lType, reinterpret_cast<const BYTE*>(lPath), static_cast<DWORD>(strlen(lPath) + 1));
-        KMS_EXCEPTION_ASSERT(ERROR_SUCCESS == lRet, REG_SET, "Cannot set HKCU\\Environment\\PATH", lRet);
+        KMS_EXCEPTION_ASSERT(ERROR_SUCCESS == lRet, REG_SET_FAILED, "Cannot set HKCU\\Environment\\PATH", lRet);
     }
 
     void Installer::Run()

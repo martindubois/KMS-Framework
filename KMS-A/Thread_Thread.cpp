@@ -55,7 +55,7 @@ namespace KMS
 
         void Thread::Start()
         {
-            KMS_EXCEPTION_ASSERT(State::STOPPED == mState, STATE, "The thread is not stopped", static_cast<unsigned int>(mState));
+            KMS_EXCEPTION_ASSERT(State::STOPPED == mState, THREAD_STATE_INVALID, "The thread is not stopped", static_cast<unsigned int>(mState));
 
             CloseIfNeeded();
 
@@ -67,7 +67,7 @@ namespace KMS
             if (NULL == mHandle)
             {
                 mState = State::STOPPED;
-                KMS_EXCEPTION(THREAD_START, "Cannot create the thread", "");
+                KMS_EXCEPTION(THREAD_START_FAILED, "Cannot create the thread", "");
             }
         }
 

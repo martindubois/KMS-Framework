@@ -37,7 +37,7 @@ namespace KMS
 
         const wchar_t* File_UTF16::GetLine(unsigned int aNo) const
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             return mLines[aNo].c_str();
         }
@@ -48,7 +48,7 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             Internal::const_iterator lIt = mLines.begin();
 
@@ -61,7 +61,7 @@ namespace KMS
 
         void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             Internal::const_iterator lFirst = mLines.begin() + aNo;
             Internal::const_iterator lLast  = lFirst + aCount;
@@ -73,7 +73,7 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             mLines[aNo] = aLine;
         }
@@ -108,7 +108,7 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wifstream lStream(lPath, std::ios::binary);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for reading", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for reading", lPath);
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
 
@@ -127,7 +127,7 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wofstream lStream(lPath, std::ios::binary);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for writing", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 

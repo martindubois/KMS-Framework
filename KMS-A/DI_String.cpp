@@ -39,7 +39,7 @@ namespace KMS
         unsigned int String::Get(char* aOut, unsigned int aOutSize_byte) const
         {
             unsigned int lResult_byte = static_cast<unsigned int>(mInternal.size());
-            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, OUTPUT_TOO_SHORT, "The output buffer is too short", lResult_byte);
+            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, DI_OUTPUT_TOO_SHORT, "The output buffer is too short", lResult_byte);
 
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mInternal.c_str());
 

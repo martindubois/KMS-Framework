@@ -54,7 +54,7 @@ namespace KMS
 
             while (mSize_byte > mIndex_byte)
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, OUTPUT_TOO_SHORT, "The output buffer is too short", aC);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aC);
 
                 if (aC == mBase[mIndex_byte])
                 {
@@ -81,7 +81,7 @@ namespace KMS
 
             while (mSize_byte > mIndex_byte)
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, OUTPUT_TOO_SHORT, "The output buffer is too short", aStr);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aStr);
 
                 if (NULL != strchr(aStr, mBase[mIndex_byte]))
                 {
@@ -108,7 +108,7 @@ namespace KMS
 
             while (mSize_byte > mIndex_byte)
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, OUTPUT_TOO_SHORT, "The output buffer is too short", aStr);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aStr);
 
                 if (NULL == strchr(aStr, mBase[mIndex_byte]))
                 {
@@ -150,7 +150,7 @@ namespace KMS
 
             KMS_EXCEPTION_ASSERT(mSize_byte > mIndex_byte, TEXT_TOO_SHORT, "Incomplete text", aC);
 
-            KMS_EXCEPTION_ASSERT(aC == mBase[mIndex_byte], TEXT_FORMAT, "Invalid text format", aC);
+            KMS_EXCEPTION_ASSERT(aC == mBase[mIndex_byte], TEXT_FORMAT_INVALID, "Invalid text format", aC);
 
             mIndex_byte++;
         }
@@ -166,7 +166,7 @@ namespace KMS
 
             if (NULL == strchr(aStr, mBase[mIndex_byte]))
             {
-                KMS_EXCEPTION(TEXT_FORMAT, "Invalid text format", aStr);
+                KMS_EXCEPTION(TEXT_FORMAT_INVALID, "Invalid text format", aStr);
             }
 
             mIndex_byte++;

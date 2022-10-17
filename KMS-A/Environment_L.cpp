@@ -24,10 +24,10 @@ namespace KMS
             assert(NULL != aOut);
 
             const char* lValue = getenv(aName);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_EXPAND, "getenv failed", aName);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, ENV_EXPAND_FAILED, "getenv failed", aName);
 
             unsigned int lResult = strlen(lValue);
-            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), CONFIG_EXPAND, "Invalid environment variable value", aName);
+            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, "Invalid environment variable value", aName);
 
             strcpy(aOut, lValue);
 

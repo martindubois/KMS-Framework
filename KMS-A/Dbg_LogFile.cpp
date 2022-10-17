@@ -45,7 +45,7 @@ namespace KMS
             aFolder.GetPath(lFileName, lPath, sizeof(lPath));
 
             int lRet = fopen_s(&mFile, lPath, "ab");
-            KMS_EXCEPTION_ASSERT(0 == lRet, FILE_OPEN, "Cannot open log file", lPath);
+            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, "Cannot open log file", lPath);
 
             WriteEntry(0, __FILE__, __FUNCTION__, __LINE__, Level::LEVEL_INFO);
             WriteVersion(VERSION);

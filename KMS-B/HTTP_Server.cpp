@@ -68,7 +68,7 @@ namespace KMS
             {
                 switch (eE.GetCode())
                 {
-                case Exception::Code::SOCKET_RECEIVE: break;
+                case Exception::Code::HTTP_RECEIVE_ERROR: break;
 
                 default: throw eE;
                 }

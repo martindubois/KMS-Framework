@@ -108,7 +108,7 @@ KMS_TEST(JSON_Exception, "JSON_Exception", "Auto", sTest_Exception)
         KMS::JSON::Decode(&lO0, "", 0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(JSON_FORMAT);
+    KMS_TEST_CATCH(JSON_FORMAT_INVALID);
 
     try
     {

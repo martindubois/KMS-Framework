@@ -81,7 +81,7 @@ namespace KMS
 
                 }
 
-                KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
+                KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, ENV_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
                 lIn++;
             }

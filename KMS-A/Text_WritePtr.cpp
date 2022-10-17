@@ -45,7 +45,7 @@ namespace KMS
         {
             assert(mIndex_byte <= mSize_byte);
 
-            KMS_EXCEPTION_ASSERT(mIndex_byte + aInc + 2 <= mSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short", aInc);
+            KMS_EXCEPTION_ASSERT(mIndex_byte + aInc + 2 <= mSize_byte, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aInc);
 
             mIndex_byte += aInc;
         }
@@ -64,7 +64,7 @@ namespace KMS
             assert(NULL != mBase);
             assert(mIndex_byte <= mSize_byte);
 
-            KMS_EXCEPTION_ASSERT(mIndex_byte + 1 + 2 <= mSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
+            KMS_EXCEPTION_ASSERT(mIndex_byte + 1 + 2 <= mSize_byte, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
             mBase[mIndex_byte] = aIn;
 
@@ -78,7 +78,7 @@ namespace KMS
             assert(NULL != mBase);
             assert(mIndex_byte <= mSize_byte);
 
-            KMS_EXCEPTION_ASSERT(mIndex_byte + aInSize_byte + 2 <= mSize_byte, OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
+            KMS_EXCEPTION_ASSERT(mIndex_byte + aInSize_byte + 2 <= mSize_byte, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
             memcpy(mBase + mIndex_byte, aIn, aInSize_byte);
 

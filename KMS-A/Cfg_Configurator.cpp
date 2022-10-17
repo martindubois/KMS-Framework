@@ -113,7 +113,7 @@ namespace KMS
             FILE* lFile;
 
             errno_t lErr = fopen_s(&lFile, aFileName, "wb");
-            KMS_EXCEPTION_ASSERT(0 == lErr, FILE_OPEN, "Cannot open the file to save the configuration", aFileName);
+            KMS_EXCEPTION_ASSERT(0 == lErr, CFG_OPEN_FAILED, "Cannot open the file to save the configuration", aFileName);
 
             fprintf(lFile,
                 "\n"
@@ -167,7 +167,7 @@ namespace KMS
                 assert(NULL != lObject);
 
                 DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array element type is not supported", aA);
+                KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array element type is not supported", aA);
 
                 lValue->Set(aV);
             }
@@ -208,12 +208,12 @@ namespace KMS
 
             DI::Array* lArray;
             lArray = dynamic_cast<DI::Array*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lArray, CONFIG_FORMAT, "The Object is not an Array", aI);
+            KMS_EXCEPTION_ASSERT(NULL != lArray, CFG_FORMAT_INVALID, "The Object is not an Array", aI);
 
             lObject = lArray->CreateEntry();
             DI::Value* lValue;
             lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The created Object is not a Value", aI);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The created Object is not a Value", aI);
 
             lValue->Set(aV);
 
@@ -257,7 +257,7 @@ namespace KMS
 
             if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { SetBoolean(aLine); return; }
 
-            KMS_EXCEPTION(CONFIG_FORMAT, "Invalid configuration format", aLine);
+            KMS_EXCEPTION(CFG_FORMAT_INVALID, "Invalid configuration format", aLine);
         }
 
         DI::Object* Configurator::FindObject(const char* aA)
@@ -356,7 +356,7 @@ namespace KMS
 
             DI::Value* lValue;
             lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array entry type is not supported", aI);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array entry type is not supported", aI);
 
             lValue->Set(aV);
 
@@ -399,7 +399,7 @@ namespace KMS
 
             DI::Value* lValue;
             lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CONFIG_FORMAT, "The Array entry type is not supported", aI);
+            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array entry type is not supported", aI);
 
             lValue->Set(aV);
 
@@ -476,13 +476,13 @@ KMS::DI::Object* FindObject_Dictionary(KMS::DI::Dictionary* aD, const char* aA)
         if (NULL != lObject)
         {
             KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lDictionary, CONFIG_FORMAT, "The object is not a dictionary", aA);
+            KMS_EXCEPTION_ASSERT(NULL != lDictionary, CFG_FORMAT_INVALID, "The object is not a dictionary", aA);
 
             lResult = FindObject_Dictionary(lDictionary, lB);
         }
         break;
 
-    default: KMS_EXCEPTION(CONFIG_FORMAT, "Invalid attribute name format", aA);
+    default: KMS_EXCEPTION(CFG_FORMAT_INVALID, "Invalid attribute name format", aA);
     }
 
     return lResult;
@@ -537,7 +537,7 @@ void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aName)
         assert(NULL != lEntry);
 
         const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(lEntry.Get());
-        KMS_EXCEPTION_ASSERT(NULL != lV, CONFIG_FORMAT, "Can't save part of the configuration", aName);
+        KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
         char lData[LINE_LENGTH];
 
@@ -581,7 +581,7 @@ void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aName)
         if (NULL == lA)
         {
             const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(aO);
-            KMS_EXCEPTION_ASSERT(NULL != lV, CONFIG_FORMAT, "Can't save part of the configuration", aName);
+            KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
             Save_Value(aOut, lV, aName);
         }

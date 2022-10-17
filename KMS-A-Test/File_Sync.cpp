@@ -48,5 +48,5 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
 
     KMS_TEST_EXPECTED_EXCEPTION();
     KMS_TEST_EXPECTED_ERROR();
-    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), static_cast<int>(KMS::Exception::Code::CONFIG));
+    KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), static_cast<int>(KMS::Exception::Code::FILE_CONFIG_INVALID));
 }

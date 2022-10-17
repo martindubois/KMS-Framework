@@ -55,7 +55,7 @@ namespace KMS
         {
             assert(NULL != mObject);
 
-            KMS_EXCEPTION_ASSERT(!mFlags.mConst, CONFIG_FORMAT, "Trying to modify a constant Object", "");
+            KMS_EXCEPTION_ASSERT(!mFlags.mConst, DI_DENIED, "Trying to modify a constant Object", "");
 
             return mObject;
         }
@@ -99,7 +99,7 @@ namespace KMS
 
         Object* Container::CallCreator()
         {
-            KMS_EXCEPTION_ASSERT(NULL != mCreator, CONFIG_FORMAT, "The container is not dynamic", "");
+            KMS_EXCEPTION_ASSERT(NULL != mCreator, DI_NOT_DYNAMIC, "The container is not dynamic", "");
 
             return mCreator();
         }

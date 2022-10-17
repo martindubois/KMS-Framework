@@ -147,7 +147,7 @@ namespace KMS
                 else if (*lO == "Make"  ) { Run_Make  (); }
                 else
                 {
-                    KMS_EXCEPTION(CONFIG, "Invalid operation", lO->Get());
+                    KMS_EXCEPTION(BUILD_COMMAND_INVALID, "Invalid operation", lO->Get());
                 }
             }
 
@@ -354,7 +354,7 @@ namespace KMS
 
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION(MAKE_MAKE, "Cannot make", lP.GetCmdLine());
+                KMS_EXCEPTION(BUILD_MAKE_FAILED, "Cannot make", lP.GetCmdLine());
             }
         }
 
@@ -457,11 +457,11 @@ namespace KMS
                 else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else
                 {
-                    KMS_EXCEPTION(CONFIG, "Invalid component", lComponent);
+                    KMS_EXCEPTION(BUILD_VALUE_INVALID, "Invalid component", lComponent);
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), CONFIG, "Empty configuration", "");
+            KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
         }
 
     }

@@ -70,7 +70,7 @@ namespace KMS
             if (0 != (aFlags & FLAG_WRITE_ACCESS)) { lAccess |= GENERIC_WRITE; }
 
             mHandle = CreateFile(mLink, lAccess, 0, NULL, OPEN_EXISTING, 0, NULL);
-            KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, COM_CONNECT, "CreateFile failed", mLink);
+            KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, DEV_CONNECT_FAILED, "CreateFile failed", mLink);
         }
 
         void Device::Disconnect()
@@ -95,12 +95,12 @@ namespace KMS
 
             if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL))
             {
-                KMS_EXCEPTION(DEVICE, "Cannot read from the device", aOutSize_byte);
+                KMS_EXCEPTION(DEV_READ_FAILED, "Cannot read from the device", aOutSize_byte);
             }
 
             if (0 != (aFlags && FLAG_READ_ALL))
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte == lResult_byte, DEVICE, "The device did not return the expected amount of data", lResult_byte);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte == lResult_byte, DEV_READ_FAILED, "The device did not return the expected amount of data", lResult_byte);
             }
 
             return lResult_byte;
@@ -117,10 +117,10 @@ namespace KMS
 
             if (!WriteFile(mHandle, aIn, aInSize_byte, &lInfo_byte, NULL))
             {
-                KMS_EXCEPTION(DEVICE, "Cannot write to the device", aInSize_byte);
+                KMS_EXCEPTION(DEV_WRITE_FAILED, "Cannot write to the device", aInSize_byte);
             }
 
-            KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, DEVICE, "The device did not acceps the expected amount of data", lInfo_byte);
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, DEV_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
         }
 
         // Protected

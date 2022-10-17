@@ -41,7 +41,7 @@ namespace KMS
             int lRet = lM.Run();
             if (0 != lRet)
             {
-                KMS_EXCEPTION(BUILD_COMPILE, "KMS::Build::Make::Run failed", lRet);
+                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
             }
         }
 
@@ -89,7 +89,7 @@ namespace KMS
 
                 lP.Run(1000 * 60 * 5);
 
-                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST, "The test failed", lP.GetCmdLine());
+                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, "The test failed", lP.GetCmdLine());
             }
         }
 

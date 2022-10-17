@@ -34,7 +34,7 @@ namespace KMS
 
         const char* File_ASCII::GetLine(unsigned int aNo) const
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             return mLines[aNo].c_str();
         }
@@ -45,7 +45,7 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             Internal::const_iterator lIt = mLines.begin();
 
@@ -58,7 +58,7 @@ namespace KMS
 
         void File_ASCII::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             Internal::const_iterator lFirst = mLines.begin() + aNo;
             Internal::const_iterator lLast = lFirst + aCount;
@@ -70,7 +70,7 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, ARGUMENT, "Invalide line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
 
             mLines[aNo] = aLine;
         }
@@ -105,7 +105,7 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ifstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for reading", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for reading", lPath);
 
             std::string lLine;
 
@@ -122,7 +122,7 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ofstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), FILE_OPEN, "Cannot open text file for writing", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
 
             for (std::string lLine : mLines)
             {

@@ -27,7 +27,7 @@ namespace KMS
             assert(NULL != aOut);
 
             unsigned int lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
-            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), CONFIG_EXPAND, "GetEnvironmentVariable failed", aName);
+            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, "GetEnvironmentVariable failed", aName);
 
             return lResult;
         }

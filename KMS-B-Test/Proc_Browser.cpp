@@ -75,7 +75,7 @@ KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
         lB.mPrefered.Set("INVALID");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONFIG_VALUE);
+    KMS_TEST_CATCH(TEST);
 }
 
 KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sTest_Interactive)

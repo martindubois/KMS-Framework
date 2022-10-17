@@ -123,7 +123,7 @@ namespace KMS
 
             if (2 != sscanf_s(aDependency, "%[^;] ; %[^\n\r]", lProduct SizeInfo(lProduct), lVersion SizeInfo(lVersion)))
             {
-                KMS_EXCEPTION(CONFIG_FORMAT, "Invalid dependency", aDependency);
+                KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid dependency", aDependency);
             }
 
             Version lV(lVersion);
@@ -153,7 +153,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION(DEPENDENCY, "Dependency not found", aDependency);
+            KMS_EXCEPTION(BUILD_DEPENDENCY_NOT_FOUND, "Dependency not found", aDependency);
         }
 
         int Import::Run()

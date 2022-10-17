@@ -40,7 +40,7 @@ namespace KMS
 
             if (!GetCommState(*this, &lDCB))
             {
-                KMS_EXCEPTION(COM_CONFIG, "Cannot retrieve the configuration of the port", "");
+                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot retrieve the configuration of the port", "");
             }
 
             lDCB.BaudRate          = mSpeed_bps;
@@ -75,7 +75,7 @@ namespace KMS
 
             if (!SetCommState(*this, &lDCB))
             {
-                KMS_EXCEPTION(COM_CONFIG, "Cannot set the configuration of the port", "");
+                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot set the configuration of the port", "");
             }
         }
 
@@ -83,12 +83,12 @@ namespace KMS
         {
             if (!EscapeCommFunction(*this, mDTR ? SETDTR : CLRDTR))
             {
-                KMS_EXCEPTION(COM_CONTROL, "Cannot update DTR signal", "");
+                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot update DTR signal", "");
             }
 
             if (!EscapeCommFunction(*this, mRTS ? SETRTS : CLRRTS))
             {
-                KMS_EXCEPTION(COM_CONTROL, "Cannot update RTS signal", "");
+                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot update RTS signal", "");
             }
         }
 
@@ -104,7 +104,7 @@ namespace KMS
 
             if (!SetCommTimeouts(*this, &lCT))
             {
-                KMS_EXCEPTION(COM_CONFIG, "Cannot set the communication timeouts", "");
+                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot set the communication timeouts", "");
             }
         }
 

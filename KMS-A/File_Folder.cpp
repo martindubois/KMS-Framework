@@ -119,7 +119,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION(FILE_BACKUP, "Too many backup", aFile);
+            KMS_EXCEPTION(FILE_BACKUP_FAILED, "Too many backup", aFile);
         }
 
         void Folder::Copy(const char* aSrc, const char* aDst, unsigned int aFlags) const

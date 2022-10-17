@@ -159,7 +159,7 @@ namespace KMS
                 lTime_ms += 100;
             }
 
-            KMS_EXCEPTION(TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
+            KMS_EXCEPTION(PROC_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
         }
 
         // Private
@@ -337,7 +337,7 @@ namespace KMS
             }
 
             // NOT TESTED
-            KMS_EXCEPTION(BROWSER_START, "Cannot open a browser", aURL);
+            KMS_EXCEPTION(PROC_START_FAILED, "Cannot open a browser", aURL);
         }
 
         void Browser::Open()
@@ -357,7 +357,7 @@ namespace KMS
 
                 switch (eE.GetCode())
                 {
-                case Exception::Code::PROCESS_START: break;
+                case Exception::Code::PROC_START_FAILED: break;
 
                 default: throw eE;
                 }
