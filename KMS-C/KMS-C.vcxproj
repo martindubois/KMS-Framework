@@ -37,6 +37,7 @@
   <ItemGroup>
     <ClCompile Include="Com_Port.cpp" />
     <ClCompile Include="Com_Port_W.cpp" />
+    <ClCompile Include="Com_Tool.cpp" />
     <ClCompile Include="Dev_Device_W.cpp" />
     <ClCompile Include="Dev_Device.cpp" />
     <ClCompile Include="Modbus_Master_Com.cpp" />
