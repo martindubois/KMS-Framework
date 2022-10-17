@@ -41,6 +41,7 @@
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
+    <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="DAQ_AnalogConverter.cpp" />

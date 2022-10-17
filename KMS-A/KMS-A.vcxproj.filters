@@ -207,6 +207,9 @@
     <ClCompile Include="Installer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CLI_Tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
