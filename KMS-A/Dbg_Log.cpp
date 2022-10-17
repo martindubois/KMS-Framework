@@ -85,20 +85,20 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << KMS::Console::Color::RED;
-                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << "Data\t" << aSize_byte << " bytes";
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << KMS::Console::Color::YELLOW;
-                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << "Data\t" << aSize_byte << " bytes";
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "D\t" << aSize_byte << "\t";
+                    std::cerr << "Data\t" << aSize_byte << "bytes";
                     std::cerr << std::endl;
                     break;
 
@@ -127,24 +127,36 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << KMS::Console::Color::RED;
-                    std::cerr << "E\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile;
+                    std::cerr << "ERROR\n";
+                    std::cerr << "    Counter  : " << mCounter << "\n";
+                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
+                    std::cerr << "    Function : " << aFunction;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << KMS::Console::Color::YELLOW;
-                    std::cerr << "W\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile;
+                    std::cerr << "WARNING\n";
+                    std::cerr << "    Counter  : " << mCounter << "\n";
+                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
+                    std::cerr << "    Function : " << aFunction;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                     // NOT TESTED
-                    std::cerr << "I\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    std::cerr << "INFO\n";
+                    std::cerr << "    Counter  : " << mCounter << "\n";
+                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
+                    std::cerr << "    Function : " << aFunction << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "N\t" << mCounter << "\t" << aLine << "\t" << aFunction << "\t" << aFile << std::endl;
+                    std::cerr << "NOISE\n";
+                    std::cerr << "    Counter  : " << mCounter << "\n";
+                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
+                    std::cerr << "    Function : " << aFunction << std::endl;
                     break;
 
                 default: assert(false);
@@ -168,14 +180,14 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << KMS::Console::Color::RED;
-                    std::cerr << "X" << "\n";
+                    std::cerr << "Exception\n";
                     std::cerr << aException;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << KMS::Console::Color::YELLOW;
-                    std::cerr << "X" << "\n";
+                    std::cerr << "Exception\n";
                     std::cerr << aException;
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
@@ -183,7 +195,7 @@ namespace KMS
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "X" << "\n";
+                    std::cerr << "Exception\n";
                     std::cerr << aException << std::endl;
                     break;
 
@@ -208,20 +220,20 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << KMS::Console::Color::RED;
-                    std::cerr << "M\t\"" << aMsg << "\"";
+                    std::cerr << "Message\t\"" << aMsg << "\"";
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << KMS::Console::Color::YELLOW;
-                    std::cerr << "M\t\"" << aMsg << "\"";
+                    std::cerr << "Message\t\"" << aMsg << "\"";
                     std::cerr << KMS::Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "M\t\"" << aMsg << "\"" << std::endl;
+                    std::cerr << "Message\t\"" << aMsg << "\"" << std::endl;
                     break;
 
                 default: assert(false);
