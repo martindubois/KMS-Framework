@@ -9,8 +9,8 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/Tool.h>
 #include <KMS/DI/Array.h>
-#include <KMS/DI/Dictionary.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Types.h>
 
@@ -21,7 +21,7 @@ namespace KMS
 
         class Master;
         
-        class Tool : public DI::Dictionary
+        class Tool : public CLI::Tool
         {
 
         public:
@@ -37,17 +37,11 @@ namespace KMS
             void AddHoldingRegister(const char* aN, uint16_t aA);
             void AddInputRegister  (const char* aN, uint16_t aA);
 
-            void AddOperation(const char* aO);
-
             void Connect();
 
             void Disconnect();
 
             void Dump(FILE* aOut);
-
-            void ExecuteOperation(const char* aO);
-
-            int Run();
 
             // ===== Modbus functions ===========================================
 
@@ -63,6 +57,14 @@ namespace KMS
 
             void WriteSingleRegister(const char* aName, RegisterValue aValue);
 
+            // ===== CLI::Tool ==============================================
+
+            virtual void DisplayHelp(FILE* aOut) const;
+
+            virtual void ExecuteCommand(const char* aC);
+
+            virtual int Run();
+
         private:
 
             Tool(const Tool&);
@@ -76,7 +78,6 @@ namespace KMS
             DI::Dictionary mDiscreteInputs;
             DI::Dictionary mHoldingRegisters;
             DI::Dictionary mInputRegisters;
-            DI::Array      mOperations;
 
         };
 

@@ -90,13 +90,11 @@ namespace KMS
             mDiscreteInputs  .SetCreator(DI::UInt<uint16_t>::Create);
             mHoldingRegisters.SetCreator(DI::UInt<uint16_t>::Create);
             mInputRegisters  .SetCreator(DI::UInt<uint16_t>::Create);
-            mOperations      .SetCreator(DI::String::Create);
 
             AddEntry("Coils"           , &mCoils           , false, &MD_COILS);
             AddEntry("DiscreteInputs"  , &mDiscreteInputs  , false, &MD_DISCRETE_INPUTS);
             AddEntry("HoldingRegisters", &mHoldingRegisters, false, &MD_HOLDING_REGISTERS);
             AddEntry("InputRegisters"  , &mInputRegisters  , false, &MD_INPUT_REGISTERS);
-            AddEntry("Operations"      , &mOperations      , false, &MD_OPERATIONS);
         }
 
         void Tool::InitMaster(Master* aMaster) { assert(NULL != aMaster); mMaster = aMaster; }
@@ -105,8 +103,6 @@ namespace KMS
         void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { mHoldingRegisters.AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddInputRegister  (const char* aN, uint16_t aA) { mInputRegisters  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
-
-        void Tool::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO), true); }
 
         void Tool::Connect   () { assert(NULL != mMaster); mMaster->Connect   (); }
         void Tool::Disconnect() { assert(NULL != mMaster); mMaster->Disconnect(); }
@@ -164,15 +160,45 @@ namespace KMS
             }
         }
 
-        void Tool::ExecuteOperation(const char* aO)
+        // ===== Modbus functions ===========================================
+
+        bool Tool::ReadCoil(const char* aName) { assert(NULL != mMaster); return mMaster->ReadCoil(ToAddress(mCoils, aName)); }
+
+        bool Tool::ReadDiscreteInput(const char* aName) { assert(NULL != mMaster); return mMaster->ReadDiscreteInput(ToAddress(mDiscreteInputs, aName)); }
+
+        uint16_t Tool::ReadHoldingRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadHoldingRegister(ToAddress(mHoldingRegisters, aName)); }
+
+        uint16_t Tool::ReadInputRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadInputRegister(ToAddress(mInputRegisters, aName)); }
+
+        void Tool::WriteSingleCoil(const char* aName, bool aValue) { assert(NULL != mMaster); mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue); }
+
+        void Tool::WriteSingleRegister(const char* aName, uint16_t aValue) { assert(NULL != mMaster); mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue); }
+
+        // ===== CLI::Tool ==================================================
+
+        void Tool::DisplayHelp(FILE* aOut) const
+        {
+            assert(NULL != aOut);
+
+            fprintf(aOut,
+                "Dump\n"
+                "ReadCoil {AddrOrNAme}\n"
+                "ReadDiscreteInput {AddrOrName}\n"
+                "ReadHoldingRegister {AddrOrName}\n"
+                "ReadInputRegister {AddrOrName}\n"
+                "WriteSingleCoil {AddrOrName} {false|true}\n"
+                "WriteSingleRegister {AddrOrName} {Value}\n");
+
+            CLI::Tool::DisplayHelp(aOut);
+        }
+
+        void Tool::ExecuteCommand(const char* aC)
         {
             char lA[NAME_LENGTH];
             char lB[NAME_LENGTH];
             char lC[NAME_LENGTH];
 
-            std::cout << "Operation: " << aO << std::endl;
-
-            switch (sscanf_s(aO, "%[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t]", lA SizeInfo(lA), lB SizeInfo(lB), lC SizeInfo(lC)))
+            switch (sscanf_s(aC, "%[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t]", lA SizeInfo(lA), lB SizeInfo(lB), lC SizeInfo(lC)))
             {
             case 1:
                 if (0 == strcmp("Dump", lA)) { Dump(stdout); return; }
@@ -208,49 +234,21 @@ namespace KMS
             case 3:
                 if (0 == strcmp("WriteSingleCoil"    , lA)) { WriteSingleCoil    (lB, Convert::ToBool  (lC)); return; }
                 if (0 == strcmp("WriteSingleRegister", lA)) { WriteSingleRegister(lB, Convert::ToUInt16(lC)); return; }
-
-            default: KMS_EXCEPTION(MODBUS_CONFIG_INVALID, "Invalid operation format", aO);
             }
 
-            KMS_EXCEPTION(MODBUS_CONFIG_INVALID, "Invalid operation name", aO);
+            CLI::Tool::ExecuteCommand(aC);
         }
 
         int Tool::Run()
         {
             Connect();
 
-            for (const DI::Object* lObj : mOperations.mInternal)
-            {
-                assert(NULL != lObj);
-
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
-                assert(NULL != lString);
-
-                try
-                {
-                    ExecuteOperation(*lString);
-                }
-                KMS_CATCH
-            }
+            int lRet = CLI::Tool::Run();
 
             Disconnect();
 
-            return 0;
+            return lRet;
         }
-
-        // ===== Modbus functions ===========================================
-
-        bool Tool::ReadCoil(const char* aName) { assert(NULL != mMaster); return mMaster->ReadCoil(ToAddress(mCoils, aName)); }
-
-        bool Tool::ReadDiscreteInput(const char* aName) { assert(NULL != mMaster); return mMaster->ReadDiscreteInput(ToAddress(mDiscreteInputs, aName)); }
-
-        uint16_t Tool::ReadHoldingRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadHoldingRegister(ToAddress(mHoldingRegisters, aName)); }
-
-        uint16_t Tool::ReadInputRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadInputRegister(ToAddress(mInputRegisters, aName)); }
-
-        void Tool::WriteSingleCoil(const char* aName, bool aValue) { assert(NULL != mMaster); mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue); }
-
-        void Tool::WriteSingleRegister(const char* aName, uint16_t aValue) { assert(NULL != mMaster); mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue); }
 
     }
 }
