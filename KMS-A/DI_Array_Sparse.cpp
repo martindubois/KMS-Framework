@@ -28,7 +28,7 @@ namespace KMS
             mInternal.clear();
         }
 
-        void Array_Sparse::AddEntry(int aIndex, const Object* aO)
+        void Array_Sparse::AddConstEntry(int aIndex, const Object* aO)
         {
             assert(NULL != aO);
 

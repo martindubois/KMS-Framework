@@ -5,13 +5,10 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
-0.1.3-dev Windows 2022-10-11
-
-0.0.13-dev Windows 2022-09-07
+0.1.4-dev Windows 2022-10-11
 
 0.0.6-dev Windows 2022-07-27
-* Com::Port
-* Dev::Device
-* Modbus::CRC
-* Modbus::Simulator
-* Modbus::Slave_Com
+* KMS::Com::Port
+* KMS::Dev::Device
+* KMS::Modbus::CRC
+* KMS::Modbus::Slave_Com

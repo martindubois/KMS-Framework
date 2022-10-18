@@ -5,8 +5,12 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
+0.1.4-dev Windows 2022-11-17
 * KMS::CLI
 - KMS::DI
+    - Array::AddConstEntry
+    - Array_Sparse::AddConstEntry
+    - Dictionary::AddConstEntry
     - Float - Replace Double
     - Int - Replace Int32
     - UInt - Replace UInt8, UInt16 and UInt32

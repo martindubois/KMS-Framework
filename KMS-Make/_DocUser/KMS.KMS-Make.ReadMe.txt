@@ -6,3 +6,9 @@ Product   KMS-Framework
 File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 0.1.1-dev Linux x86_64 2022-10-03
+
+0.0.10-dev Linux x86_64 2022-08-24
+* KMS::Build::Depend
+
+0.0.6-dev Windows 2022-07-27
+* KMS::Build::Make (Linux only)

@@ -66,7 +66,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         KMS::Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
+    KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
 
     try
     {
