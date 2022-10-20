@@ -5,8 +5,7 @@
 # Product   KMS-Framework
 # File      KMS-ComTool/Tests/Test0.txt
 
-Send_Hex DUMP|FRAME_T|TIMESTAMP 00 0a 30 14 00 00
-Receive DUMP
+Echo Testing Send
 
 Send DISPLAY Hello!
 Receive DISPLAY|DUMP
@@ -17,10 +16,17 @@ Receive DISPLAY|TIMESTAMP 6
 Send 0 Hello!
 ReceiveAndVerify DISPLAY Hello!
 
-Send_Hex DUMP|FRAME_T 00 0A 30 14 00 00
-ReceiveAndVerify_Hex DUMP|FRAME_T 00 0a 30 14 00 00
-
 Send 0 Martin
 ReceiveAndVerify WRITE Dubois
+
+Echo Testing Send_Hex
+
+Send_Hex DUMP|FRAME_T|TIMESTAMP 00 0a 30 14 00 00
+Receive DUMP
+
+Send_Hex DUMP|FRAME_T 00 0A 30 14 00 00
+ReceiveAndVerify_Hex DISPLAY|DUMP|FRAME_T 00 0a 30 14 00 00
+
+Echo Testing Help
 
 Help

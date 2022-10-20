@@ -32,8 +32,6 @@ static void CreateTimestamp(char* aOut, unsigned int aOutSize_byte);
 
 static void Dump(FILE* aOut, const void* aIn, unsigned int aInSize_byte);
 
-static unsigned int ToData(const char* aIn, void* aOut, unsigned int aOutSize_byte);
-
 static unsigned int ToFlags(const char* aIn);
 
 static unsigned int ToFrameT(const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
@@ -217,7 +215,11 @@ namespace KMS
             {
                 if (0 != (aFlags & FLAG_TIMESTAMP)) { std::cout << aOp << " " << lNow << "\n"; }
 
-                std::cout << reinterpret_cast<const char*>(aIn) << "\n";
+                char lDisplay[LINE_LENGTH];
+
+                Convert::ToDisplay(reinterpret_cast<const char*>(aIn), aInSize_byte, lDisplay, sizeof(lDisplay));
+
+                std::cout << lDisplay << "\n";
             }
 
             if (0 != (aFlags & FLAG_DUMP))
@@ -306,7 +308,7 @@ namespace KMS
         {
             uint8_t lData[LINE_LENGTH];
 
-            unsigned int lSize_byte = ToData(aIn, lData, sizeof(lData));
+            unsigned int lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
 
             ReceiveAndVerify(lData, lSize_byte, aFlags);
         }
@@ -315,7 +317,7 @@ namespace KMS
         {
             uint8_t lData[LINE_LENGTH];
 
-            unsigned int lSize_byte = ToData(aIn, lData, sizeof(lData));
+            unsigned int lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
 
             Send(lData, lSize_byte, aFlags);
         }
@@ -351,55 +353,6 @@ void Dump(FILE* aOut, const void* aIn, unsigned int aInSize_byte)
     }
 
     fprintf(aOut, "\n");
-}
-
-unsigned int ToData(const char* aIn, void* aOut, unsigned int aOutSize_byte)
-{
-    unsigned int lResult_byte = 0;
-
-    const char* lIn  = aIn;
-    uint8_t   * lOut = reinterpret_cast<uint8_t*>(aOut);
-
-    uint8_t lByte = 0;
-
-    for (;;)
-    {
-        switch (*lIn)
-        {
-        case '\0': lOut[lResult_byte] = lByte; lResult_byte++; return lResult_byte;
-
-        case 'A':
-        case 'B':
-        case 'C':
-        case 'D':
-        case 'E':
-        case 'F': lByte <<= 4; lByte |= *lIn - 'A' + 10; break;
-
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'e':
-        case 'f': lByte <<= 4; lByte |= *lIn - 'a' + 10; break;
-
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9': lByte <<= 4; lByte |= *lIn - '0'; break;
-
-        case ' ': lOut[lResult_byte] = lByte; lByte = 0; lResult_byte++; break;
-
-        default: KMS_EXCEPTION(COM_DATA_INVALID, "Invalid data format", aIn);
-        }
-
-        lIn++;
-    }
 }
 
 unsigned int ToFrameT(const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)

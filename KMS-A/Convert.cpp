@@ -12,6 +12,11 @@
 // ===== Includes ===========================================================
 #include <KMS/Convert.h>
 
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static uint8_t ToDigitValue(char aC);
+
 namespace KMS
 {
     namespace Convert
@@ -191,5 +196,144 @@ namespace KMS
             return lResult_word * sizeof(wchar_t);
         }
 
+        unsigned int ToDisplay(const char* aASCII, unsigned int aInSize_byte, char* aOut, unsigned aOutSize_byte)
+        {
+            KMS_EXCEPTION_ASSERT(aInSize_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
+
+            for (unsigned int i = 0; i < aInSize_byte; i++)
+            {
+                if ((31 >= aASCII[i]) || (127 <= aASCII[i])) { aOut[i] = '.'; }
+                else
+                {
+                    aOut[i] = aASCII[i];
+                }
+            }
+
+            aOut[aInSize_byte] = '\0';
+
+            return aInSize_byte;
+        }
+
+        // --> HIGH <-------+
+        //      |           |
+        //      +--> LOW    |
+        //            |     |
+        //            +--> SEP
+        #define STATE_HIGH (0)
+        #define STATE_LOW  (1)
+        #define STATE_SEP  (2)
+
+        #define DIGITS ("0123456789ABCDEFabcdef")
+
+        extern unsigned int ToUInt8Array(const char* aASCII, const char* aSeparators, const char* aBlanks, uint8_t* aOut, unsigned aOutSize_byte)
+        {
+            const char * lASCII       = aASCII;
+            uint8_t      lByte;
+            unsigned int lResult_byte = 0;
+            unsigned int lState       = STATE_HIGH;
+
+            for (;;)
+            {
+                switch (lState)
+                {
+                case STATE_HIGH:
+                    if ('\0' == *lASCII) { return lResult_byte; }
+
+                    if      (NULL != strchr(aBlanks, *lASCII)) {}
+                    else if (NULL != strchr(DIGITS, *lASCII)) { lByte = ToDigitValue(*lASCII); lState = STATE_LOW; }
+                    else if (NULL != strchr(aSeparators, *lASCII))
+                    {
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = 0; lResult_byte++;
+                    }
+                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
+                    break;
+
+                case STATE_LOW:
+                    if ('\0' == *lASCII)
+                    {
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = lByte; lResult_byte++;
+                        return lResult_byte;
+                    }
+
+                    if (NULL != strchr(aBlanks, *lASCII))
+                    {
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = lByte; lResult_byte++;
+                        lState = STATE_SEP;
+                    }
+                    else if (NULL != strchr(DIGITS, *lASCII))
+                    {
+                        lByte <<= 4;
+                        lByte |= ToDigitValue(*lASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = lByte; lResult_byte++;
+                        lState = STATE_SEP;
+                    }
+                    else if (NULL != strchr(aSeparators, *lASCII))
+                    {
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = lByte; lResult_byte++;
+                        lState = STATE_HIGH;
+                    }
+                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
+                    break;
+
+                case STATE_SEP:
+                    if ('\0' == *lASCII) { return lResult_byte; }
+
+                    if (NULL != strchr(aBlanks, *lASCII)) {}
+                    else if (NULL != strchr(aSeparators, *lASCII)) { lState = STATE_HIGH; }
+                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
+                    break;
+
+                default: assert(false);
+                }
+
+                lASCII++;
+            }
+        }
+
     }
+}
+
+// Static functions
+// //////////////////////////////////////////////////////////////////////////
+
+uint8_t ToDigitValue(char aC)
+{
+    uint8_t lResult;
+
+    switch (aC)
+    {
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9': lResult = aC - '0'; break;
+
+    case 'A':
+    case 'B':
+    case 'C':
+    case 'D':
+    case 'E':
+    case 'F': lResult = aC - 'A' + 10; break;
+
+    case 'a':
+    case 'b':
+    case 'c':
+    case 'd':
+    case 'e':
+    case 'f': lResult = aC - 'a' + 10; break;
+
+    default: KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid digit", aC);
+    }
+
+    return lResult;
 }

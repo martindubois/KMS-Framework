@@ -43,5 +43,9 @@ namespace KMS
         extern unsigned int ToASCII(const wchar_t* aUTF16, char   * aOut, unsigned int aOutSize_byte);
         extern unsigned int ToUTF16(const char   * aASCII, wchar_t* aOut, unsigned int aOutSize_byte);
 
+        extern unsigned int ToDisplay(const char* aASCII, unsigned int aInSize_byte, char* aOut, unsigned aOutSize_byte);
+
+        extern unsigned int ToUInt8Array(const char* aASCII, const char* aSeparators, const char* aBlank, uint8_t* aOut, unsigned aOutSize_byte);
+
     }
 }
