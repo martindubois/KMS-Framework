@@ -5,7 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
-0.1.4-dev Windows 2022-11-17
+0.1.5-dev Linux x86_64 2022-10-19
+
+0.1.4-dev Windows 2022-10-17
 * KMS::CLI
 - KMS::DI
     - Array::AddConstEntry

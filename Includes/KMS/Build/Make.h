@@ -8,8 +8,8 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/Tool.h>
 #include <KMS/DI/Array.h>
-#include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Enum.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Text/File_ASCII.h>
@@ -21,7 +21,7 @@ namespace KMS
 
         class Depend;
 
-        class Make : public DI::Dictionary
+        class Make : public CLI::Tool
         {
 
         public:
@@ -32,23 +32,24 @@ namespace KMS
 
             ~Make();
 
-            void AddBinary   (const char* aB);
-            void AddInclude  (const char* aI);
-            void AddLibrary  (const char* aL);
-            void AddOperation(const char* aO);
-            void AddTest     (const char* aT);
+            void AddBinary (const char* aB);
+            void AddInclude(const char* aI);
+            void AddLibrary(const char* aL);
+            void AddTest   (const char* aT);
 
-            void ResetBinaries  ();
-            void ResetComponent ();
-            void ResetIncludes  ();
-            void ResetLibraries ();
-            void ResetOperations();
-            void ResetTests     ();
+            void ResetBinaries ();
+            void ResetComponent();
+            void ResetIncludes ();
+            void ResetLibraries();
+            void ResetTests    ();
 
             void SetComponent    (const char* aC);
             void SetConfiguration(const char* aC);
 
-            int Run();
+            // ===== CLI::Tool ==============================================
+            virtual void DisplayHelp(FILE* aFile);
+            virtual void ExecuteCommand(const char* aC);
+            virtual int  Run();
 
         private:
 
@@ -104,7 +105,6 @@ namespace KMS
             DI::String                                    mConfiguration;
             DI::Array                                     mIncludes;
             DI::Array                                     mLibraries;
-            DI::Array                                     mOperations;
             DI::Array                                     mTests;
 
         };

@@ -36,8 +36,21 @@ static const KMS::Cfg::MetaData MD_COMPONENT_TYPE("ComponentType = BINARY | LIBR
 static const KMS::Cfg::MetaData MD_CONFIGURATION ("Configuration = {Name}");
 static const KMS::Cfg::MetaData MD_INCLUDES      ("Includes += {Name}");
 static const KMS::Cfg::MetaData MD_LIBRARIES     ("Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_OPERATIONS    ("Operations += {Name}");
 static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name};");
+
+#ifdef _KMS_DARWIN_
+    #define NAME_OS "Darwin"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("DarwinBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("DarwinLibraries += {Name}");
+#endif
+
+#ifdef _KMS_LINUX_
+    #define NAME_OS "Linux"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("LinuxBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("LinuxLibraries += {Name}");
+#endif
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -92,7 +105,6 @@ namespace KMS
             mBinaries  .SetCreator(DI::String::Create);
             mIncludes  .SetCreator(DI::String_Expand::Create);
             mLibraries .SetCreator(DI::String::Create);
-            mOperations.SetCreator(DI::String::Create);
             mTests     .SetCreator(DI::String::Create);
 
             AddEntry("Binaries"     , &mBinaries     , false, &MD_BINARIES);
@@ -101,8 +113,10 @@ namespace KMS
             AddEntry("Configuration", &mConfiguration, false, &MD_CONFIGURATION);
             AddEntry("Includes"     , &mIncludes     , false, &MD_INCLUDES);
             AddEntry("Libraries"    , &mLibraries    , false, &MD_LIBRARIES);
-            AddEntry("Operations"   , &mOperations   , false, &MD_OPERATIONS);
             AddEntry("Tests"        , &mTests        , false, &MD_TESTS);
+
+            AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
+            AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
@@ -115,18 +129,43 @@ namespace KMS
         void Make::AddBinary   (const char* aB) { mBinaries  .AddEntry(new DI::String(aB), true); }
         void Make::AddInclude  (const char* aI) { mIncludes  .AddEntry(new DI::String_Expand(aI), true); }
         void Make::AddLibrary  (const char* aL) { mLibraries .AddEntry(new DI::String(aL), true); }
-        void Make::AddOperation(const char* aO) { mOperations.AddEntry(new DI::String(aO), true); }
         void Make::AddTest     (const char* aT) { mTests     .AddEntry(new DI::String(aT), true); }
 
         void Make::ResetBinaries  () { mBinaries  .Clear(); }
         void Make::ResetComponent () { mComponent .Clear(); }
         void Make::ResetIncludes  () { mIncludes  .Clear(); }
         void Make::ResetLibraries () { mLibraries .Clear(); }
-        void Make::ResetOperations() { mOperations.Clear(); }
         void Make::ResetTests     () { mTests     .Clear(); }
 
         void Make::SetComponent    (const char* aC) { assert(NULL != aC); mComponent     = aC; }
         void Make::SetConfiguration(const char* aC) { assert(NULL != aC); mConfiguration = aC; }
+
+        // ===== CLI::Tool ==================================================
+
+        void Make::DisplayHelp(FILE* aOut)
+        {
+            assert(NULL != aOut);
+
+            fprintf(aOut,
+                "Clean\n"
+                "Depend\n"
+                "Make\n");
+
+            CLI::Tool::DisplayHelp(aOut);
+        }
+
+        void Make::ExecuteCommand(const char* aC)
+        {
+            assert(NULL != aC);
+
+            if      (0 == strcmp("Clean" , aC)) { Run_Clean (); }
+            else if (0 == strcmp("Depend", aC)) { Run_Depend(); }
+            else if (0 == strcmp("Make"  , aC)) { Run_Make  (); }
+            else
+            {
+                CLI::Tool::ExecuteCommand(aC);
+            }
+        }
 
         int Make::Run()
         {
@@ -137,21 +176,7 @@ namespace KMS
 
             Prepare();
 
-            for (const DI::Container::Entry& lEntry : mOperations.mInternal)
-            {
-                const DI::String* lO = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lO);
-
-                if      (*lO == "Clean" ) { Run_Clean (); }
-                else if (*lO == "Depend") { Run_Depend(); }
-                else if (*lO == "Make"  ) { Run_Make  (); }
-                else
-                {
-                    KMS_EXCEPTION(BUILD_COMMAND_INVALID, "Invalid operation", lO->Get());
-                }
-            }
-
-            return 0;
+            return CLI::Tool::Run();
         }
 
         // Private
@@ -279,7 +304,7 @@ namespace KMS
 
             char lSource[PATH_LENGTH];
 
-            StringList_ASCII::iterator lIt;
+            Text::File_ASCII::Internal::iterator lIt;
 
             for (lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
             {
@@ -354,7 +379,7 @@ namespace KMS
 
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION(BUILD_MAKE_FAILED, "Cannot make", lP.GetCmdLine());
+                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "Cannot make", lP.GetCmdLine());
             }
         }
 
@@ -457,7 +482,7 @@ namespace KMS
                 else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else
                 {
-                    KMS_EXCEPTION(BUILD_VALUE_INVALID, "Invalid component", lComponent);
+                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid component", lComponent);
                 }
             }
 

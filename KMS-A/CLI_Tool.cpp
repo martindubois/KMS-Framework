@@ -10,8 +10,10 @@
 // ===== C ==================================================================
 #include <signal.h>
 
-// ===== Windows ============================================================
-#include <Windows.h>
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
@@ -44,6 +46,11 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        void Tool::AddCommand(const char* aC)
+        {
+            mCommands.AddEntry(new DI::String(aC), true);
+        }
 
         void Tool::ExecuteCommands(FILE* aFile)
         {
@@ -137,7 +144,16 @@ namespace KMS
             {
                 Config(lName, lValue);
             }
-            else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms)) { Sleep(lDelay_ms); }
+            else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms))
+            {
+                #ifdef _KMS_LINUX_
+                    sleep(1 + lDelay_ms / 1000);
+                #endif
+
+                #ifdef _KMS_WINDOWS_
+                    Sleep(lDelay_ms);
+                #endif
+            }
             else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { std::cout << lValue << std::endl; }
             else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lName SizeInfo(lName)))
             {
@@ -147,7 +163,7 @@ namespace KMS
             {
                 Repeat(lCount, lValue);
             }
-            else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", &lValue SizeInfo(lValue))) { UntilCtrlC(lValue); }
+            else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", lValue SizeInfo(lValue))) { UntilCtrlC(lValue); }
             else
             {
                 KMS_EXCEPTION(CLI_COMMAND_INVALID, "Invalid command", aC);

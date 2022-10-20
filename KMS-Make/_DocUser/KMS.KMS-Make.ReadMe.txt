@@ -5,6 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
+0.1.5-dev Linux x86_64 2022-10-19
+- KMS::Build::Make - Use KMS::CLI::Tool
+
 0.1.1-dev Linux x86_64 2022-10-03
 
 0.0.10-dev Linux x86_64 2022-08-24

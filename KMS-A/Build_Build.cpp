@@ -60,7 +60,6 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     static const KMS::Cfg::MetaData MD_OS_FILES         ("DarwinFolders += {Path}");
     static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("DarwinLibraries += {Name}");
     static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("DarwinPreBuildCmds += {Command}");
-    static const KMS::Cfg::MetaData MD_OS_PROCESSORS    ("DarwinProcessors += x64 | x86");
     static const KMS::Cfg::MetaData MD_OS_TESTS         ("DarwinTests += {Name}");
 #endif
 
@@ -73,7 +72,6 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     static const KMS::Cfg::MetaData MD_OS_FOLDERS       ("LinuxFolders += {Path}");
     static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("LinuxLibraries += {Name}");
     static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("LinuxPreBuildCmds += {Command}");
-    static const KMS::Cfg::MetaData MD_OS_PROCESSORS    ("LinuxProcessors += x64 | x86");
     static const KMS::Cfg::MetaData MD_OS_TESTS         ("LinuxTests += {Name}");
 #endif
 

@@ -48,9 +48,6 @@ Version             ______ . ______ . ______ . ______ - _____________________
 
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as message
-[ ] Tool "GIT Bash" - In the product folder
-        git tag {Ma}.{Mi}.{Bu}[-{Type}]_Linux|Windows
-[ ] Tools "GIT GUI"
     - Push the servers
 [ ] If needed, upload the release on GitHub.com
 

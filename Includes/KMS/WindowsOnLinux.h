@@ -15,6 +15,8 @@
 
 #define errno_t int
 
+#define _crt_signal_t sighandler_t
+
 #define _stricmp strcasecmp
 
 // ===== ..._s ==============================================================

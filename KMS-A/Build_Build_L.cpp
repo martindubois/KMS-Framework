@@ -35,8 +35,8 @@ namespace KMS
 
             lM.SetConfiguration(aC);
 
-            lM.AddOperation("Clean");
-            lM.AddOperation("Make");
+            lM.AddCommand("Clean");
+            lM.AddCommand("Make");
 
             int lRet = lM.Run();
             if (0 != lRet)

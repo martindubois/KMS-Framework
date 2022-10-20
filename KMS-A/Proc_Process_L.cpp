@@ -38,7 +38,7 @@ namespace KMS
             {
                 if (NULL == getcwd(lDir, sizeof(lDir)))
                 {
-                    KMS_EXCEPTION(PROC_FOLDER_ACCESS_FAILED, "Cannot retrive the current workding directory", mCmdLine);
+                    KMS_EXCEPTION(PROC_ACCESS_FAILED, "Cannot retrive the current workding directory", mCmdLine);
                 }
 
                 ChangeDirectory(mWorkingDirectory.c_str());
@@ -83,7 +83,7 @@ namespace KMS
                     {
                         if (0 != chdir(mWorkingDirectory.c_str()))
                         {
-                            KMS_EXCEPTION(PROC_FOLDER_ACCESS_FAILED, "chdir failed", mWorkingDirectory.c_str());
+                            KMS_EXCEPTION(PROC_ACCESS_FAILED, "chdir failed", mWorkingDirectory.c_str());
                         }
                     }
 
@@ -113,6 +113,6 @@ void ChangeDirectory(const char* aD)
 
     if (0 != chdir(aD))
     {
-        KMS_EXCEPTION(PROC_FOLDER_ACCESS_FAILED, "chdir failed", aD);
+        KMS_EXCEPTION(PROC_ACCESS_FAILED, "chdir failed", aD);
     }
 }
