@@ -371,12 +371,16 @@ unsigned int ToData(const char* aIn, void* aOut, unsigned int aOutSize_byte)
         case 'A':
         case 'B':
         case 'C':
-        case 'D': lByte <<= 4; lByte |= *lIn - 'A' + 10; break;
+        case 'D':
+        case 'E':
+        case 'F': lByte <<= 4; lByte |= *lIn - 'A' + 10; break;
 
         case 'a':
         case 'b':
         case 'c':
-        case 'd': lByte <<= 4; lByte |= *lIn - 'a' + 10; break;
+        case 'd':
+        case 'e':
+        case 'f': lByte <<= 4; lByte |= *lIn - 'a' + 10; break;
 
         case '0':
         case '1':

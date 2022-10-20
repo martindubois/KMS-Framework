@@ -5,9 +5,9 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt
 
-0.1.5-dev Linux x86_64
+0.1.6-dev Windows 2022-10-20
 
-0.1.4-dev Windows 2022-10-17
+0.1.5-dev Linux x86_64
 
 0.1.1-dev Linux x86_64 2022-10-03
 * KMS::Build::Import * Use ~/Export as default repository on Linux
