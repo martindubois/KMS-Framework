@@ -75,6 +75,12 @@ namespace KMS
 
             #endif
 
+        // Internal
+
+            // ===== Configurable attributes ================================
+            DI::UInt<uint32_t> mIndex;
+            DI::String         mLink;
+
         protected:
 
             unsigned int GetIndex() const;
@@ -94,10 +100,6 @@ namespace KMS
             Device(const Device&);
 
             const Device& operator = (const Device&);
-
-            // ===== Configurable attributes ================================
-            DI::UInt<uint32_t> mIndex;
-            DI::String         mLink;
 
             #ifdef _KMS_WINDOWS_
 

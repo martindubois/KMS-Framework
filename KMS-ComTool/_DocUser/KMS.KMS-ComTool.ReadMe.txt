@@ -5,5 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-ComTool.ReadMe.txt
 
+* KMS::Com::Tool - Connect and Disconnect command
+
 0.1.6-dev Windows 2022-10-20
 * KMS::Com::Tool

@@ -61,6 +61,16 @@ namespace KMS
             // ===== Dev::Device ============================================
             virtual void Connect(unsigned int aFlags);
 
+        // Internal
+
+            // ===== Configurable attributes ================================
+            DI::Boolean                    mDTR;
+            DI::Enum<Parity, PARITY_NAMES> mParity;
+            DI::UInt<uint32_t>             mReadTimeout_ms;
+            DI::Boolean                    mRTS;
+            DI::UInt<uint32_t>             mSpeed_bps;
+            DI::UInt<uint32_t>             mWriteTimeout_ms;
+
         protected:
 
             // ===== Dev::Device ============================================
@@ -76,15 +86,14 @@ namespace KMS
             void ApplySignals ();
             void ApplyTimeouts();
 
-            // ===== Configurable attributes ================================
-            DI::Boolean                    mDTR;
-            DI::Enum<Parity, PARITY_NAMES> mParity;
-            DI::UInt<uint32_t>             mReadTimeout_ms;
-            DI::Boolean                    mRTS;
-            DI::UInt<uint32_t>             mSpeed_bps;
-            DI::UInt<uint32_t>             mWriteTimeout_ms;
+            void UpdateSignals() const;
+
+            mutable bool mCTS;
+            mutable bool mDSR;
 
         };
 
     }
 }
+
+std::ostream& operator << (std::ostream& aOut, const KMS::Com::Port& aP);

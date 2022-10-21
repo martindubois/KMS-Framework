@@ -65,6 +65,8 @@ namespace KMS
             , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms)
             , mSpeed_bps      (DEFAULT_SPEED_bps)
             , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms)
+            , mCTS(false)
+            , mDSR(false)
         {
             AddEntry("DTR"         , &mDTR            , false, &MD_DTR);
             AddEntry("Parity"      , &mParity         , false, &MD_PARITY);
@@ -73,6 +75,9 @@ namespace KMS
             AddEntry("Speed"       , &mSpeed_bps      , false, &MD_SPEED);
             AddEntry("WriteTimeout", &mWriteTimeout_ms, false, &MD_WRITE_TIMEOUT);
         }
+
+        bool Port::GetCTS() const { if (IsConnected()) { UpdateSignals(); } return mCTS; }
+        bool Port::GetDSR() const { if (IsConnected()) { UpdateSignals(); } return mDSR; }
 
         void Port::SetDTR(bool aDTR) { mDTR = aDTR; if (IsConnected()) { ApplySignals(); } }
         void Port::SetRTS(bool aRTS) { mRTS = aRTS; if (IsConnected()) { ApplySignals(); } }
@@ -94,6 +99,31 @@ namespace KMS
         }
 
     }
+}
+
+std::ostream& operator << (std::ostream& aOut, const KMS::Com::Port& aP)
+{
+    if (aP.IsConnected())
+    {
+        aOut << "Connected\n";
+    }
+    else
+    {
+        aOut << "Not connected\n";
+    }
+
+    aOut << "Link         : " << aP.mLink << "\n";
+    aOut << "Speed        : " << aP.mSpeed_bps << " bps\n";
+    aOut << "Parity       : " << aP.mParity << "\n";
+    aOut << "ReadTimeout  : " << aP.mReadTimeout_ms << " ms\n";
+    aOut << "WriteTimeout : " << aP.mWriteTimeout_ms << " ms\n";
+
+    aOut << "CTS          : " << (aP.GetCTS() ? "1" : "0") << "\n";
+    aOut << "DSR          : " << (aP.GetDSR() ? "1" : "0") << "\n";
+    aOut << "DTR          : " << aP.mDTR << "\n";
+    aOut << "RTS          : " << aP.mRTS << "\n";
+
+    return aOut;
 }
 
 // Static functions

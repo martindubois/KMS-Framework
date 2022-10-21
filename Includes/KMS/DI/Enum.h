@@ -105,3 +105,11 @@ namespace KMS
 
     }
 }
+
+template <typename T, const char** N>
+std::ostream& operator << (std::ostream& aOut, const KMS::DI::Enum<T, N>& aE)
+{
+    aOut << N[static_cast<int>(static_cast<T>(aE))];
+
+    return aOut;
+}

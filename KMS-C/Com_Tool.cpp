@@ -244,15 +244,17 @@ namespace KMS
             fprintf(aFile,
                 "ClearDTR\n"
                 "ClearRTS\n"
+                "Connect\n"
+                "Disconnect\n"
                 "Receive [Flags] [Size_byte]\n"
                 "ReceiveAndVerify {Flags} {Expected}\n"
                 "ReceiveAndVerify_Hex {Flags} {Expected}\n"
-                "ResetDataFile\n"
                 "Send {Flags} {Data}\n"
                 "Send_Hex {Flags} {Data}\n"
                 "SetDTR\n"
                 "SetRTS\n"
-                "StartReceive [Flags]\n");
+                "StartReceive [Flags]\n"
+                "Status\n");
 
             CLI::Tool::DisplayHelp(aFile);
         }
@@ -263,11 +265,14 @@ namespace KMS
             char lFlags[LINE_LENGTH];
             unsigned int lSize_byte = 0;
 
-            if      (0 == strcmp(aC, "ClearDTR")) { mPort.SetDTR(false); }
-            else if (0 == strcmp(aC, "ClearRTS")) { mPort.SetRTS(false); }
-            else if (0 == strcmp(aC, "Receive" )) { Receive(0, 0); }
-            else if (0 == strcmp(aC, "SetDTR"  )) { mPort.SetDTR(true); }
-            else if (0 == strcmp(aC, "SetRTS"  )) { mPort.SetRTS(true); }
+            if      (0 == strcmp(aC, "ClearDTR"  )) { mPort.SetDTR(false); }
+            else if (0 == strcmp(aC, "ClearRTS"  )) { mPort.SetRTS(false); }
+            else if (0 == strcmp(aC, "Connect"   )) { mPort.Connect(KMS::Dev::Device::FLAG_READ_ACCESS | KMS::Dev::Device::FLAG_WRITE_ACCESS); }
+            else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
+            else if (0 == strcmp(aC, "Receive"   )) { Receive(0, 0); }
+            else if (0 == strcmp(aC, "SetDTR"    )) { mPort.SetDTR(true); }
+            else if (0 == strcmp(aC, "SetRTS"    )) { mPort.SetRTS(true); }
+            else if (0 == strcmp(aC, "Status"    )) { std::cout << mPort << std::endl; }
             else if (2 == sscanf_s(aC, "ReceiveAndVerify_Hex %[0A-Z_|] %[^\n\r\t]", lFlags SizeInfo(lFlags), &lData SizeInfo(lData)))
             {
                 ReceiveAndVerify_Hex(lData, ToFlags(lFlags));

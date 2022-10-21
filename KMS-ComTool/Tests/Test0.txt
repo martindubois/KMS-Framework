@@ -5,6 +5,18 @@
 # Product   KMS-Framework
 # File      KMS-ComTool/Tests/Test0.txt
 
+Echo Testing ClearDTR
+
+ClearDTR
+
+Echo Testing ClearRTS
+
+ClearRTS
+
+Echo Testing Help
+
+Help
+
 Echo Testing Send
 
 Send DISPLAY Hello!
@@ -27,6 +39,22 @@ Receive DUMP
 Send_Hex DUMP|FRAME_T 00 0A 30 14 00 00
 ReceiveAndVerify_Hex DISPLAY|DUMP|FRAME_T 00 0a 30 14 00 00
 
-Echo Testing Help
+Echo Testing SetDTR
 
-Help
+SetDTR
+
+Echo Testing SetRTS
+
+SetRTS
+
+Echo Testing Status
+
+Status
+
+Echo Testing Disconnect
+
+Disconnect
+
+Echo Testing Connect
+
+Connect

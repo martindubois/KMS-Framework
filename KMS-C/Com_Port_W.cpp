@@ -108,5 +108,20 @@ namespace KMS
             }
         }
 
+        void Port::UpdateSignals() const
+        {
+            DWORD lBits;
+
+            Port* lThis = const_cast<Port*>(this);
+
+            if (!GetCommModemStatus(*lThis, &lBits))
+            {
+                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot read signals", "");
+            }
+
+            mCTS = (0 != (lBits & MS_CTS_ON));
+            mDSR = (0 != (lBits & MS_DSR_ON));
+        }
+
     }
 }
