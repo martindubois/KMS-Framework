@@ -49,6 +49,8 @@ namespace KMS
             void Read (const File::Folder& aFolder, const char* aFileName);
             void Write(const File::Folder& aFolder, const char* aFileName);
 
+            void Write_ASCII(const File::Folder& aFolder, const char* aFileName);
+
             unsigned int CountOccurrence(const wchar_t* aStr) const;
 
             unsigned int RemoveComments_CPP   ();

@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Text_File_UTF16.cpp
 
-// TEST COVERAGE 2022-10-02 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2022-10-24 KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -131,10 +131,30 @@ namespace KMS
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 
-            for (std::wstring lLine : mLines)
+            for (const std::wstring& lLine : mLines)
             {
                 lStream << lLine << "\n";
             }
+        }
+
+        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile)
+        {
+            char lPath[PATH_LENGTH];
+
+            aFolder.GetPath(aFile, lPath, sizeof(lPath));
+
+            FILE* lFile;
+
+            errno_t lErr = fopen_s(&lFile, lPath, "wb");
+            KMS_EXCEPTION_ASSERT(0 == lErr, TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
+
+            for (const std::wstring& lLine : mLines)
+            {
+                fprintf(lFile, "%S\n", lLine.c_str());
+            }
+
+            int lRet = fclose(lFile);
+            assert(0 == lRet);
         }
 
         unsigned int File_UTF16::CountOccurrence(const wchar_t* aStr) const

@@ -21,35 +21,45 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
     lF0.Clear();
 
     // GetLineCount
-    KMS_TEST_COMPARE(lF0.GetLineCount(), 0L);
+    KMS_TEST_COMPARE(lF0.GetLineCount(), 0U);
 
     // InsertLine
     lF0.InsertLine(0, L"0");
     KMS_TEST_ASSERT(NULL != lF0.GetLine(0));
-    KMS_TEST_COMPARE(lF0.GetLineCount(), 1L);
+    KMS_TEST_COMPARE(lF0.GetLineCount(), 1U);
 
     // RemoveEmptyLines
-    KMS_TEST_COMPARE(lF0.RemoveEmptyLines(), 0L);
+    KMS_TEST_COMPARE(lF0.RemoveEmptyLines(), 0U);
 
     // RemoveLines
     lF0.RemoveLines(0, 1);
-    KMS_TEST_COMPARE(lF0.GetLineCount(), 0L);
+    KMS_TEST_COMPARE(lF0.GetLineCount(), 0U);
 
     // Read
     lF0.Read(KMS::File::Folder(KMS::File::Folder::Id::CURRENT, "KMS-A-Test" SLASH "Tests"), "Test0.txt");
-    KMS_TEST_COMPARE(lF0.GetLineCount(), 9737L);
+    KMS_TEST_COMPARE(lF0.GetLineCount(), 29U);
 
     // Write
     lF0.Write(KMS::File::Folder::CURRENT, "Test.txt");
 
+    // Write_ASCII
+    lF0.Write_ASCII(KMS::File::Folder::CURRENT, "Test.txt");
+
     // CountOccurrence
-    KMS_TEST_COMPARE(lF0.CountOccurrence(L"Start"), 22L);
+    KMS_TEST_COMPARE(lF0.CountOccurrence(L"Start"), 1U);
+
+    // RemoveComments_CPP
+    KMS_TEST_COMPARE(lF0.RemoveComments_CPP(), 1U);
+    KMS_TEST_COMPARE(lF0.RemoveComments_CPP(), 0U);
+
+    // RemoveComments_Script
+    KMS_TEST_COMPARE(lF0.RemoveComments_Script(), 0U);
 
     // ReplaceLine *
     lF0.ReplaceLine(1, L"Test");
 
     // ReplaceLines *
-    KMS_TEST_COMPARE(lF0.ReplaceLines(L"^Test$", L"Replaced"), 1L);
+    KMS_TEST_COMPARE(lF0.ReplaceLines(L"^Test$", L"Replaced"), 1U);
 }
 
 KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Exception)
