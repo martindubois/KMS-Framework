@@ -266,6 +266,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ByteTool.cpp" />
+    <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="DI_Array.cpp" />
