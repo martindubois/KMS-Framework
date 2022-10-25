@@ -64,7 +64,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lB.Open(lRA.mServer, "", "KMS-Framework");
 
-    Sleep(2000);
+    Sleep(3000);
 
     lB.Close();
 
