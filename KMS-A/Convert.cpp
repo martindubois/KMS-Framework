@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Convert.cpp
 
-// TEST COVERAGE 2022-07-30 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2022-10-24 KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -223,8 +223,6 @@ namespace KMS
         #define STATE_LOW  (1)
         #define STATE_SEP  (2)
 
-        #define DIGITS ("0123456789ABCDEFabcdef")
-
         extern unsigned int ToUInt8Array(const char* aASCII, const char* aSeparators, const char* aBlanks, uint8_t* aOut, unsigned aOutSize_byte)
         {
             const char * lASCII       = aASCII;
@@ -240,13 +238,16 @@ namespace KMS
                     if ('\0' == *lASCII) { return lResult_byte; }
 
                     if      (NULL != strchr(aBlanks, *lASCII)) {}
-                    else if (NULL != strchr(DIGITS, *lASCII)) { lByte = ToDigitValue(*lASCII); lState = STATE_LOW; }
                     else if (NULL != strchr(aSeparators, *lASCII))
                     {
                         KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = 0; lResult_byte++;
                     }
-                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
+                    else
+                    {
+                        lByte = ToDigitValue(*lASCII);
+                        lState = STATE_LOW;
+                    }
                     break;
 
                 case STATE_LOW:
@@ -263,7 +264,13 @@ namespace KMS
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_SEP;
                     }
-                    else if (NULL != strchr(DIGITS, *lASCII))
+                    else if (NULL != strchr(aSeparators, *lASCII))
+                    {
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        aOut[lResult_byte] = lByte; lResult_byte++;
+                        lState = STATE_HIGH;
+                    }
+                    else
                     {
                         lByte <<= 4;
                         lByte |= ToDigitValue(*lASCII);
@@ -271,13 +278,6 @@ namespace KMS
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_SEP;
                     }
-                    else if (NULL != strchr(aSeparators, *lASCII))
-                    {
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
-                        aOut[lResult_byte] = lByte; lResult_byte++;
-                        lState = STATE_HIGH;
-                    }
-                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
                     break;
 
                 case STATE_SEP:
