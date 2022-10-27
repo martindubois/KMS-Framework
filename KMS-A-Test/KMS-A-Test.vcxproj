@@ -270,6 +270,8 @@
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="DI_Array.cpp" />
+    <ClCompile Include="DI_Folder.cpp" />
+    <ClCompile Include="File_Folder.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="JSON.cpp" />

@@ -57,6 +57,12 @@
     <ClCompile Include="Cfg_Configurator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DI_Folder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Folder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

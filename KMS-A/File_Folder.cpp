@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/File_Folder.cpp
 
+// TEST COVERAGE 2022-10-26 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -21,9 +23,12 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const Folder Folder::CURRENT   (Folder::Id::CURRENT);
-        const Folder Folder::EXECUTABLE(Folder::Id::EXECUTABLE);
-        const Folder Folder::HOME      (Folder::Id::HOME);
+        const Folder Folder::CURRENT          (Folder::Id::CURRENT);
+        const Folder Folder::EXECUTABLE       (Folder::Id::EXECUTABLE);
+        const Folder Folder::HOME             (Folder::Id::HOME);
+        const Folder Folder::NONE             (Folder::Id::NONE);
+        const Folder Folder::PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
+        const Folder Folder::PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
 
         // The flag must be differenent than the one defined in
         // File_FileInfoList.cpp.
@@ -119,6 +124,7 @@ namespace KMS
                 }
             }
 
+            // NOT TESTED
             KMS_EXCEPTION(FILE_BACKUP_FAILED, "Too many backup", aFile);
         }
 

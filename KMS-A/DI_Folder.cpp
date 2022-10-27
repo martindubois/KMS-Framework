@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Folder.cpp
 
+// TEST COVERAGE 2022-10-26 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -41,7 +43,16 @@ namespace KMS
         {
             String_Expand::Set(aIn);
 
-            mInternal = String_Expand::Get();
+            const char* lStr = String_Expand::Get();
+
+            if      (0 == strncmp("EXECUTABLE:"       , lStr, 11)) { mInternal = File::Folder(File::Folder::EXECUTABLE       , lStr + 11); }
+            else if (0 == strncmp("HOME:"             , lStr,  5)) { mInternal = File::Folder(File::Folder::HOME             , lStr +  5); }
+            else if (0 == strncmp("PROGRAM_FILES:"    , lStr, 14)) { mInternal = File::Folder(File::Folder::PROGRAM_FILES    , lStr + 14); }
+            else if (0 == strncmp("PROGRAM_FILES_X86:", lStr, 19)) { mInternal = File::Folder(File::Folder::PROGRAM_FILES_X86, lStr + 19); }
+            else
+            {
+                mInternal = File::Folder(lStr);
+            }
         }
 
         // ===== Object =====================================================

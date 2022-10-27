@@ -34,6 +34,7 @@ namespace KMS
             static const Folder CURRENT;
             static const Folder EXECUTABLE;
             static const Folder HOME;
+            static const Folder NONE;
             static const Folder PROGRAM_FILES;
             static const Folder PROGRAM_FILES_X86;
 
