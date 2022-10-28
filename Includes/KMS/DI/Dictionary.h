@@ -42,6 +42,7 @@ namespace KMS
             virtual void         Clear();
             virtual unsigned int GetCount() const;
             virtual bool         IsEmpty() const;
+            virtual Object     * FindObject_RW(const char* aName);
 
             // ===== Object =================================================
             virtual ~Dictionary();

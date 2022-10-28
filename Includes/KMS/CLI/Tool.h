@@ -43,7 +43,7 @@ namespace KMS
 
             const Tool& operator = (const Tool&);
 
-            void Config(const char* aName, const char* aValue);
+            void Config(const char* aOperation);
 
             void Repeat(unsigned int aCount, const char* aC);
 

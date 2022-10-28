@@ -17,6 +17,8 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Console/Color.h>
+#include <KMS/DI/Functions.h>
 #include <KMS/Text/File_ASCII.h>
 
 #include <KMS/CLI/Tool.h>
@@ -119,7 +121,7 @@ namespace KMS
             assert(NULL != aOut);
 
             fprintf(aOut,
-                "Config {Name} {Value}\n"
+                "Config {Name} [Op] [Value]\n"
                 "Delay {Delay_ms}\n"
                 "Echo {Message}\n"
                 "Exit\n"
@@ -134,15 +136,14 @@ namespace KMS
         {
             unsigned int lCount;
             unsigned int lDelay_ms;
-            char lName[PATH_LENGTH];
             char lValue[LINE_LENGTH];
 
             if      (0 == strcmp(aC, "Exit")) { mExit++; }
             else if (0 == strcmp(aC, "Help")) { DisplayHelp(stdout); }
             else if (0 == strcmp(aC, "Shell")) { ExecuteCommands(stdin); }
-            else if (2 == sscanf_s(aC, "Config %[^ \n\r\t] %[^\n\r\t]", lName SizeInfo(lName), lValue SizeInfo(lValue)))
+            else if (1 == sscanf_s(aC, "Config %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
-                Config(lName, lValue);
+                Config(lValue);
             }
             else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms))
             {
@@ -155,9 +156,9 @@ namespace KMS
                 #endif
             }
             else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { std::cout << lValue << std::endl; }
-            else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lName SizeInfo(lName)))
+            else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
-                ExecuteScript(lName);
+                ExecuteScript(lValue);
             }
             else if (2 == sscanf_s(aC, "Repeat %u %[^\n\r\t]", &lCount, lValue SizeInfo(lValue)))
             {
@@ -206,15 +207,13 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Tool::Config(const char* aName, const char* aValue)
+        void Tool::Config(const char* aOperation)
         {
-            DI::Object* lObject = GetEntry_RW(aName);
-            KMS_EXCEPTION_ASSERT(NULL != lObject, CLI_NAME_INVALID, "Invalid attribute name", aName);
-
-            DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CLI_NAME_INVALID, "The name is not associated to a value", aName);
-
-            lValue->Set(aValue);
+            if (DI::Execute_Operation(this, aOperation))
+            {
+                std::cout << Console::Color::YELLOW;
+                std::cout << "WARNING  Ignored operation" << Console::Color::WHITE << std::endl;
+            }
         }
 
         void Tool::Repeat(unsigned int aCount, const char* aC)

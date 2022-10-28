@@ -10,9 +10,6 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Folder.h>
 
-// Tests
-// //////////////////////////////////////////////////////////////////////////
-
 KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
 {
     // Create

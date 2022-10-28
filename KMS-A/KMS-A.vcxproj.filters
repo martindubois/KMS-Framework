@@ -213,6 +213,9 @@
     <ClCompile Include="Installer_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DI_Functions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

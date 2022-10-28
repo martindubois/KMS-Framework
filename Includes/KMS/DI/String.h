@@ -34,8 +34,6 @@ namespace KMS
 
             bool operator == (const char* aIn) const;
 
-            void Clear();
-
             const char* Get() const;
 
             unsigned int GetLength() const;
@@ -46,6 +44,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~String();
+            virtual void Clear();
 
         // Internal
 

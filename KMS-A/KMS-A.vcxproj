@@ -61,6 +61,7 @@
     <ClCompile Include="DI_Dictionary.cpp" />
     <ClCompile Include="DI_File.cpp" />
     <ClCompile Include="DI_Folder.cpp" />
+    <ClCompile Include="DI_Functions.cpp" />
     <ClCompile Include="DI_GUID.cpp" />
     <ClCompile Include="DI_MetaData.cpp" />
     <ClCompile Include="DI_Object.cpp" />

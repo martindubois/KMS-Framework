@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
 
+// TEST COVERAGE 2022-10-28 KMS - Martin Dubois, P. Eng.
+
 // TODO Do not read the same configuration file twice.
 
 #include "Component.h"
@@ -14,6 +16,7 @@
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Array_Sparse.h>
 #include <KMS/DI/Boolean.h>
+#include <KMS/DI/Functions.h>
 #include <KMS/DI/String.h>
 #include <KMS/Text/File_ASCII.h>
 
@@ -28,8 +31,6 @@
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
-
-static KMS::DI::Object* FindObject_Dictionary(KMS::DI::Dictionary* aD, const char* aA);
 
 static void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, const KMS::DI::Dictionary* aD, unsigned int aLevel);
 static void Help_Object    (FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD,                                unsigned int aLevel);
@@ -132,321 +133,30 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Configurator::AddValueToArray(const char* aA, const char* aV)
-        {
-            KMS::DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                if (0 == strcmp("ConfigFile", aA))
-                {
-                    AddConfigFile(aV);
-                }
-                else if (0 == strcmp("OptionalConfigFile", aA))
-                {
-                    AddOptionalConfigFile(aV);
-                }
-                else
-                {
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-            }
-            else
-            {
-                DI::Array* lArray = dynamic_cast<DI::Array*>(lObject);
-                if (NULL == lArray)
-                {
-                    // The Object is not an Array
-                    // TODO Should we throw an exception?
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-
-                lObject = lArray->CreateEntry();
-                assert(NULL != lObject);
-
-                DI::Value* lValue = dynamic_cast<DI::Value*>(lObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array element type is not supported", aA);
-
-                lValue->Set(aV);
-            }
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aV);
-            mIgnoredCount++;
-        }
-
-        void Configurator::AddValueToArray(const char* aA, const char* aI, const char* aV)
-        {
-            KMS::DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            DI::Dictionary* lDictionary;
-            lDictionary = dynamic_cast<DI::Dictionary*>(lObject);
-            if (NULL == lDictionary)
-            {
-                // The Object is not a Dictionary
-                // TODO Should we throw an exception?
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            lObject = lDictionary->GetEntry_RW(aI);
-            if (NULL == lObject)
-            {
-                lObject = lDictionary->CreateEntry(aI);
-                assert(NULL != lObject);
-            }
-
-            DI::Array* lArray;
-            lArray = dynamic_cast<DI::Array*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lArray, CFG_FORMAT_INVALID, "The Object is not an Array", aI);
-
-            lObject = lArray->CreateEntry();
-            DI::Value* lValue;
-            lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The created Object is not a Value", aI);
-
-            lValue->Set(aV);
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aI);
-            Dbg::gLog.WriteMessage(aV);
-            mIgnoredCount++;
-        }
-
         void Configurator::ParseLine(const char* aLine)
         {
             assert(NULL != aLine);
 
-            char lA[NAME_LENGTH];
-            char lI[NAME_LENGTH];
-            char lV[LINE_LENGTH];
-
-            unsigned int lIndex;
-
-            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_IDX " ] += " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
-            {
-                AddValueToArray(lA, lI, lV); return;
-            }
-
-            if (3 == sscanf_s(aLine, FMT_ATT "[ %u ] = " FMT_VAL, lA SizeInfo(lA), &lIndex, lV SizeInfo(lV)))
-            {
-                SetArrayValue(lA, lIndex, lV); return;
-            }
-
-            if (3 == sscanf_s(aLine, FMT_ATT "[ " FMT_IDX " ] = " FMT_VAL, lA SizeInfo(lA), lI SizeInfo(lI), lV SizeInfo(lV)))
-            {
-                SetDictionaryValue(lA, lI, lV); return;
-            }
-
-            if (2 == sscanf_s(aLine, FMT_ATT " += " FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { AddValueToArray(lA, lV); return; }
-
-            if (2 == sscanf_s(aLine, FMT_ATT " = "  FMT_VAL, lA SizeInfo(lA), lV SizeInfo(lV))) { SetValue(lA, lV); return; }
-
-            if (1 == sscanf_s(aLine, FMT_ATT, lA SizeInfo(lA))) { SetBoolean(aLine); return; }
-
-            KMS_EXCEPTION(CFG_FORMAT_INVALID, "Invalid configuration format", aLine);
-        }
-
-        DI::Object* Configurator::FindObject(const char* aA)
-        {
-            DI::Object* lResult = NULL;
-
             for (DI::Dictionary* lD : mConfigurables)
             {
-                lResult = FindObject_Dictionary(lD, aA);
-                if (NULL != lResult)
+                if (DI::Execute_Operation(lD, aLine))
                 {
-                    break;
+                    return;
                 }
             }
 
-            return lResult;
-        }
+            if (0 == strcmp("Help", aLine)) { Help(); exit(0); }
 
-        void Configurator::SetBoolean(const char* aA)
-        {
-            assert(NULL != aA);
+            char lFileName[PATH_LENGTH];
 
-            KMS::DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                if (0 != strcmp("Help", aA))
-                {
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
+            if (1 == sscanf_s(aLine, "OptionalConfigFile += %[^ \n\r\t]", lFileName SizeInfo(lFileName))) { AddOptionalConfigFile(lFileName); return; }
+            if (1 == sscanf_s(aLine, "ConfigFile += %[^ \n\r\t]", lFileName SizeInfo(lFileName))) { AddConfigFile(lFileName); return; }
+            if (1 == sscanf_s(aLine, "SaveConfig = %[^ \n\r\t]", lFileName SizeInfo(lFileName))) { Save(lFileName); return; }
 
-                Help();
-                exit(0);
-            }
+            // TODO Execute internal commands
 
-            DI::Boolean* lBoolean;
-            
-            lBoolean = dynamic_cast<DI::Boolean*>(lObject);
-            if (NULL == lBoolean)
-            {
-                // The Object is not a Boolean
-                // TODO Should we throw an exception?
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            *lBoolean = true;
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            mIgnoredCount++;
-        }
-
-        void Configurator::SetArrayValue(const char* aA, unsigned int aI, const char* aV)
-        {
-            DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            DI::Array* lArray;
-            lArray = dynamic_cast<DI::Array*>(lObject);
-            if (NULL == lArray)
-            {
-                DI::Array_Sparse* lArrayS = dynamic_cast<DI::Array_Sparse*>(lObject);
-                if (NULL == lArrayS)
-                {
-                    // The Object is not an Array
-                    // TODO Should we throw an exception?
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-
-                lObject = lArrayS->GetEntry_RW(aI);
-                if (NULL == lObject)
-                {
-                    lObject = lArrayS->CreateEntry(aI);
-                }
-            }
-            else
-            {
-                lObject = lArray->GetEntry_RW(aI);
-                if (NULL == lObject)
-                {
-                    lObject = lArray->CreateEntry();
-                }
-            }
-
-            assert(NULL != lArray);
-
-            DI::Value* lValue;
-            lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array entry type is not supported", aI);
-
-            lValue->Set(aV);
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aV);
-            mIgnoredCount++;
-        }
-
-        void Configurator::SetDictionaryValue(const char* aA, const char* aI, const char* aV)
-        {
-            DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-            DI::Dictionary* lDictionary;
-
-            lDictionary = dynamic_cast<DI::Dictionary*>(lObject);
-            if (NULL == lDictionary)
-            {
-                // The Object is not an Array
-                // TODO Should we throw an exception?
-                KMS_DBG_LOG_WARNING();
-                goto Ignored;
-            }
-
-
-            lObject = lDictionary->GetEntry_RW(aI);
-            if (NULL == lObject)
-            {
-                lObject = lDictionary->CreateEntry(aI);
-                assert(NULL != lObject);
-            }
-
-            DI::Value* lValue;
-            lValue = dynamic_cast<DI::Value*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, CFG_FORMAT_INVALID, "The Array entry type is not supported", aI);
-
-            lValue->Set(aV);
-
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aI);
-            Dbg::gLog.WriteMessage(aV);
-            mIgnoredCount++;
-        }
-
-        void Configurator::SetValue(const char* aA, const char* aV)
-        {
-            KMS::DI::Object* lObject = FindObject(aA);
-            if (NULL == lObject)
-            {
-                // The name does not exist
-                if (0 != strcmp("SaveConfig", aA))
-                {
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-
-                Save(aV);
-            }
-            else
-            {
-                DI::Value* lValue;
-
-                lValue = dynamic_cast<DI::Value*>(lObject);
-                if (NULL == lValue)
-                {
-                    // The Object is not a Value
-                    // TODO Should we throw an exception?
-                    KMS_DBG_LOG_WARNING();
-                    goto Ignored;
-                }
-
-                lValue->Set(aV);
-            }
-            
-            return;
-
-        Ignored:
-            Dbg::gLog.WriteMessage(aA);
-            Dbg::gLog.WriteMessage(aV);
+            KMS_DBG_LOG_WARNING();
+            Dbg::gLog.WriteMessage(aLine);
             mIgnoredCount++;
         }
 
@@ -455,38 +165,6 @@ namespace KMS
 
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
-
-KMS::DI::Object* FindObject_Dictionary(KMS::DI::Dictionary* aD, const char* aA)
-{
-    assert(NULL != aD);
-
-    char lA[NAME_LENGTH];
-    char lB[NAME_LENGTH];
-
-    KMS::DI::Object* lResult = NULL;
-
-    int lRet = sscanf_s(aA, "%[^.].%s", lA SizeInfo(lA), lB SizeInfo(lB));
-    switch (lRet)
-    {
-    case 1: lResult = aD->GetEntry_RW(aA); break;
-
-    case 2:
-        KMS::DI::Object * lObject;
-        lObject = aD->GetEntry_RW(lA);
-        if (NULL != lObject)
-        {
-            KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(lObject);
-            KMS_EXCEPTION_ASSERT(NULL != lDictionary, CFG_FORMAT_INVALID, "The object is not a dictionary", aA);
-
-            lResult = FindObject_Dictionary(lDictionary, lB);
-        }
-        break;
-
-    default: KMS_EXCEPTION(CFG_FORMAT_INVALID, "Invalid attribute name format", aA);
-    }
-
-    return lResult;
-}
 
 void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, const KMS::DI::Dictionary* aD, unsigned int aLevel)
 {
@@ -507,6 +185,7 @@ void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aM
         }
         else
         {
+            // NOT TESTED
             Help_Dictionary(aOut, lVT.first.c_str(), lMD, lD, aLevel + 1);
         }
     }
@@ -522,6 +201,7 @@ void Help_Object(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, u
     }
     else if (NULL != aName)
     {
+        // NOT TESTED
         fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aName);
     }
 }
@@ -561,6 +241,8 @@ void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aNam
         }
         else
         {
+            // NOT TESTED
+
             char lName[NAME_LENGTH];
 
             sprintf_s(lName, "%s.%s", aName, lVT.first.c_str());

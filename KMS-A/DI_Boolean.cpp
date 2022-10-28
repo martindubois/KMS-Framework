@@ -26,6 +26,8 @@ namespace KMS
 
         Boolean::operator bool() const { return mInternal; }
 
+        void Boolean::Set(bool aIn) { mInternal = aIn; }
+
         // ===== Value ======================================================
 
         unsigned int Boolean::Get(char* aOut, unsigned int aOutSize_byte) const
@@ -53,6 +55,8 @@ namespace KMS
         // ===== Object =====================================================
 
         Boolean::~Boolean() {}
+
+        void Boolean::Clear() { mInternal = false; }
 
     }
 }

@@ -43,6 +43,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~Int();
+            virtual void Clear();
 
         // Internal
 
@@ -128,6 +129,9 @@ namespace KMS
 
         template <typename T>
         Int<T>::~Int() {}
+
+        template <typename T>
+        void Int<T>::Clear() { mInternal = 0; }
 
     }
 }

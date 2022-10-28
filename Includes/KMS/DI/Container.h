@@ -25,11 +25,11 @@ namespace KMS
 
             void SetCreator(Creator aCreator);
 
-            virtual void Clear() = 0;
-
             virtual unsigned int GetCount() const = 0;
 
             virtual bool IsEmpty() const = 0;
+
+            virtual Object* FindObject_RW(const char* aName) = 0;
 
             // ===== Object =================================================
             virtual ~Container();
@@ -79,6 +79,8 @@ namespace KMS
             Container();
 
             Object* CallCreator();
+
+            bool IsDynamic();
 
         private:
 

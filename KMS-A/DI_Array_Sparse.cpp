@@ -18,16 +18,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array_Sparse::Clear()
-        {
-            for (Internal::value_type lVT : mInternal)
-            {
-                lVT.second.Release();
-            }
-
-            mInternal.clear();
-        }
-
         void Array_Sparse::AddConstEntry(int aIndex, const Object* aO)
         {
             assert(NULL != aO);
@@ -102,9 +92,56 @@ namespace KMS
 
         bool Array_Sparse::IsEmpty() const { return mInternal.empty(); }
 
+        Object* Array_Sparse::FindObject_RW(const char* aName)
+        {
+            unsigned int lIndex;
+            char         lRest[NAME_LENGTH];
+
+            int lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
+            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, "Invalid name", aName);
+
+            Object * lResult;
+
+            Internal::iterator lIt = mInternal.find(lIndex);
+            if (mInternal.end() == lIt)
+            {
+                if (!IsDynamic())
+                {
+                    return NULL;
+                }
+
+                lResult = CreateEntry(lIndex);
+            }
+            else
+            {
+                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, "Denied", aName);
+                lResult = lIt->second.Get();
+            }
+
+            if (2 == lRet)
+            {
+                DI::Container* lContainer = dynamic_cast<DI::Container*>(lResult);
+                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+
+                lResult = lContainer->FindObject_RW(lRest);
+            }
+
+            return lResult;
+        }
+
         // ===== Object =====================================================
 
         Array_Sparse::~Array_Sparse() { Clear(); }
+
+        void Array_Sparse::Clear()
+        {
+            for (Internal::value_type lVT : mInternal)
+            {
+                lVT.second.Release();
+            }
+
+            mInternal.clear();
+        }
 
     }
 }

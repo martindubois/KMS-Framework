@@ -37,6 +37,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~Enum();
+            virtual void Clear();
 
         // Internal
 
@@ -102,6 +103,9 @@ namespace KMS
         // ===== Object =====================================================
         template <typename T, const char** N>
         Enum<T, N>::~Enum() {}
+
+        template <typename T, const char** N>
+        void Enum<T, N>::Clear() { mInternal = static_cast<T>(0); }
 
     }
 }

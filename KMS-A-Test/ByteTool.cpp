@@ -18,7 +18,7 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
         "DoesNotExist=Ignored",
         "DoesNotExist+=Ignored",
         "OptionalConfigFile+=DoesNotExist.cfg",
-        "DoesNotExist[0]=Ignored",
+        "DoesNotExist.0=Ignored",
         "DoesNotExist",
         "SaveConfig=Test.txt",
     };

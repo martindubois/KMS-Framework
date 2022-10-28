@@ -40,6 +40,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~Float();
+            virtual void Clear();
 
         // Internal
 
@@ -85,6 +86,9 @@ namespace KMS
 
         template <typename T>
         Float<T>::~Float() {}
+
+        template <typename T>
+        void Float<T>::Clear() { mInternal = 0.0; }
 
     }
 }

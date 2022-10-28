@@ -94,6 +94,50 @@ namespace KMS
 
         // ===== Container ==================================================
         
+        unsigned int Dictionary::GetCount() const { return static_cast<unsigned int>(mInternal.size()); }
+
+        bool Dictionary::IsEmpty() const { return mInternal.empty(); }
+
+        Object* Dictionary::FindObject_RW(const char* aName)
+        {
+            char lName[NAME_LENGTH];
+            char lRest[NAME_LENGTH];
+
+            int lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
+            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, "Invalid name", aName);
+
+            Object* lResult;
+
+            Internal::iterator lIt = mInternal.find(lName);
+            if (mInternal.end() == lIt)
+            {
+                if (!IsDynamic())
+                {
+                    return NULL;
+                }
+
+                lResult = CreateEntry(lName);
+            }
+            else
+            {
+                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, "Denied", aName);
+                lResult = lIt->second.Get();
+            }
+
+            if (2 == lRet)
+            {
+                DI::Container* lContainer = dynamic_cast<DI::Container*>(lResult);
+                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+
+                lResult = lContainer->FindObject_RW(lRest);
+            }
+
+            return lResult;
+        }
+        
+        // ===== Object =====================================================
+        Dictionary::~Dictionary() { Clear(); }
+
         void Dictionary::Clear()
         {
             for (Internal::value_type lVT : mInternal)
@@ -103,13 +147,6 @@ namespace KMS
 
             mInternal.clear();
         }
-
-        unsigned int Dictionary::GetCount() const { return static_cast<unsigned int>(mInternal.size()); }
-
-        bool Dictionary::IsEmpty() const { return mInternal.empty(); }
-        
-        // ===== Object =====================================================
-        Dictionary::~Dictionary() { Clear(); }
 
         // Internal
         // //////////////////////////////////////////////////////////////////

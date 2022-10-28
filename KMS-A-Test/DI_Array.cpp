@@ -11,9 +11,6 @@
 #include <KMS/DI/Array.h>
 #include <KMS/DI/String.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
 KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
 {
     char lBuffer[1024];

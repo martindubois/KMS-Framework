@@ -60,6 +60,8 @@ namespace KMS
             return mObject;
         }
 
+        bool Container::Entry::IsConst() const { return mFlags.mConst; }
+
         void Container::Entry::Set(const Object* aObject)
         {
             assert(NULL != aObject);
@@ -96,6 +98,8 @@ namespace KMS
 
         // Protected
         // //////////////////////////////////////////////////////////////////
+
+        bool Container::IsDynamic() { return NULL != mCreator; }
 
         Object* Container::CallCreator()
         {
