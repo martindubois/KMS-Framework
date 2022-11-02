@@ -117,6 +117,8 @@ namespace KMS
                 }
 
                 lResult = CreateEntry(lName);
+
+                Send_OnChanged(lName);
             }
             else
             {
@@ -138,14 +140,18 @@ namespace KMS
         // ===== Object =====================================================
         Dictionary::~Dictionary() { Clear(); }
 
-        void Dictionary::Clear()
+        bool Dictionary::Clear()
         {
+            bool lResult = !mInternal.empty();
+
             for (Internal::value_type lVT : mInternal)
             {
                 lVT.second.Release();
             }
 
             mInternal.clear();
+
+            return lResult;
         }
 
         // Internal

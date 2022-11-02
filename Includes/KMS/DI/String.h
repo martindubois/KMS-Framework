@@ -44,7 +44,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~String();
-            virtual void Clear();
+            virtual bool Clear();
 
         // Internal
 

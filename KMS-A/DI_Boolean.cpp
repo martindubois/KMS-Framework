@@ -26,6 +26,8 @@ namespace KMS
 
         Boolean::operator bool() const { return mInternal; }
 
+        bool Boolean::Get() const { return mInternal; }
+
         void Boolean::Set(bool aIn) { mInternal = aIn; }
 
         // ===== Value ======================================================
@@ -50,13 +52,29 @@ namespace KMS
             return lResult_byte;
         }
 
-        void Boolean::Set(const char* aIn) { mInternal = Convert::ToBool(aIn); }
+        void Boolean::Set(const char* aIn)
+        {
+            bool lIn = Convert::ToBool(aIn);
+            if (mInternal != lIn)
+            {
+                mInternal = lIn;
+
+                Send_OnChanged(const_cast<char*>(aIn));
+            }
+        }
 
         // ===== Object =====================================================
 
         Boolean::~Boolean() {}
 
-        void Boolean::Clear() { mInternal = false; }
+        bool Boolean::Clear()
+        {
+            bool lResult = !mInternal;
+
+            mInternal = false;
+
+            return lResult;
+        }
 
     }
 }

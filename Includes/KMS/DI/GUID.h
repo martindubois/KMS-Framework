@@ -32,13 +32,13 @@ namespace KMS
 
             void Set(const ::GUID& aIn);
 
-            // ===== Value ==================================================
-            virtual void Set(const char* aIn);
-
             // ===== Object =================================================
             virtual ~GUID();
 
         // Internal
+
+            // ===== Object =================================================
+            virtual void Send_OnChanged(void* aData);
 
             ::GUID mInternal;
 

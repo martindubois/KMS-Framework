@@ -14,7 +14,7 @@
 #include <KMS/DI/GUID.h>
 
 // Static function declarations
-// //////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////
 
 static ::GUID ToGUID(const char* aIn);
 
@@ -30,19 +30,26 @@ namespace KMS
 
         void GUID::Set(const ::_GUID& aIn) { mInternal = aIn; }
 
-        // ===== Value ======================================================
-        
-        void GUID::Set(const char* aIn) { mInternal = ToGUID(aIn); String::Set(aIn); }
+        // ===== Object =====================================================
+        GUID::~GUID() {}
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
 
         // ===== Object =====================================================
 
-        GUID::~GUID() {}
+        void GUID::Send_OnChanged(void* aData)
+        {
+            mInternal = ToGUID(Get());
+
+            String::Send_OnChanged(aData);
+        }
 
     }
 }
 
 // Static functions
-// //////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////
 
 GUID ToGUID(const char* aIn)
 {

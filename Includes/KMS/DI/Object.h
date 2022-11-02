@@ -8,6 +8,9 @@
 
 #pragma once
 
+// ===== Includes ===========================================================
+#include <KMS/Msg/Destination.h>
+
 namespace KMS
 {
     namespace DI
@@ -20,7 +23,13 @@ namespace KMS
 
             virtual ~Object();
 
-            virtual void Clear() = 0;
+            virtual bool Clear() = 0;
+
+            Msg::Destination mOnChanged;
+
+        // Internal
+
+            virtual void Send_OnChanged(void* aData = NULL);
 
         protected:
 

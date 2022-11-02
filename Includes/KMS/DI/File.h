@@ -34,13 +34,13 @@ namespace KMS
 
             void Close();
 
-            // ===== Value ==================================================
-            virtual void Set(const char* aIn);
-
             // ===== Object =================================================
             virtual ~File();
 
         // Internal
+
+            // ===== Object =================================================
+            virtual void Send_OnChanged(void* aData);
 
             FILE* mInternal;
 

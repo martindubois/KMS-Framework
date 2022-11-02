@@ -111,6 +111,8 @@ namespace KMS
                 }
 
                 lResult = CreateEntry(lIndex);
+
+                Send_OnChanged(lResult);
             }
             else
             {
@@ -133,14 +135,18 @@ namespace KMS
 
         Array_Sparse::~Array_Sparse() { Clear(); }
 
-        void Array_Sparse::Clear()
+        bool Array_Sparse::Clear()
         {
+            bool lResult = !mInternal.empty();
+
             for (Internal::value_type lVT : mInternal)
             {
                 lVT.second.Release();
             }
 
             mInternal.clear();
+
+            return lResult;
         }
 
     }

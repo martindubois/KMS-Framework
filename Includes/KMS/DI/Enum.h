@@ -37,7 +37,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~Enum();
-            virtual void Clear();
+            virtual bool Clear();
 
         // Internal
 
@@ -92,7 +92,12 @@ namespace KMS
             {
                 if (0 == strcmp(aIn, N[i]))
                 {
-                    mInternal = static_cast<T>(i);
+                    if (mInternal != static_cast<T>(i))
+                    {
+                        mInternal = static_cast<T>(i);
+
+                        Send_OnChanged(const_cast<char*>(aIn));
+                    }
                     return;
                 }
             }
@@ -105,7 +110,14 @@ namespace KMS
         Enum<T, N>::~Enum() {}
 
         template <typename T, const char** N>
-        void Enum<T, N>::Clear() { mInternal = static_cast<T>(0); }
+        bool Enum<T, N>::Clear()
+        {
+            bool lResult = mInternal != static_cast<T>(0);
+
+            mInternal = static_cast<T>(0);
+
+            return lResult;
+        }
 
     }
 }

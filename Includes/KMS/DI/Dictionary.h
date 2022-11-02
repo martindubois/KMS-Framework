@@ -39,7 +39,7 @@ namespace KMS
             Object* GetEntry_RW(const char* aName);
 
             // ===== Container ==============================================
-            virtual void         Clear();
+            virtual bool         Clear();
             virtual unsigned int GetCount() const;
             virtual bool         IsEmpty() const;
             virtual Object     * FindObject_RW(const char* aName);

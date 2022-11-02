@@ -34,13 +34,13 @@ namespace KMS
 
             const File::Folder& Get() const;
 
-            // ===== Value ==================================================
-            virtual void Set(const char* aIn);
-
             // ===== Object =================================================
             virtual ~Folder();
 
         // Internal
+
+            // ===== Object =================================================
+            virtual void Send_OnChanged(void* aData);
 
             File::Folder mInternal;
 

@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array::AddConstEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(const_cast<Object*>(aO)); }
+        void Array::AddConstEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO)); }
 
         void Array::AddEntry(Object* aO, bool aDelete) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
 
@@ -81,6 +81,8 @@ namespace KMS
                 }
 
                 lResult = CreateEntry();
+
+                Send_OnChanged(lResult);
             }
             else
             {
@@ -103,14 +105,18 @@ namespace KMS
 
         Array::~Array() { Clear(); }
 
-        void Array::Clear()
+        bool Array::Clear()
         {
+            bool lResult = !mInternal.empty();
+
             for (Container::Entry& lEntry : mInternal)
             {
                 lEntry.Release();
             }
 
             mInternal.clear();
+
+            return lResult;
         }
 
     }

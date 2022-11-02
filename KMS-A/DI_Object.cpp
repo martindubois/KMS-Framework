@@ -21,6 +21,11 @@ namespace KMS
 
         Object::~Object() {}
 
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void Object::Send_OnChanged(void* aData) { mOnChanged.Send(this, aData); }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 

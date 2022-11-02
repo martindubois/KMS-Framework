@@ -44,13 +44,28 @@ namespace KMS
             return lResult_byte;
         }
 
-        void String::Set(const char* aIn) { mInternal = aIn; }
+        void String::Set(const char* aIn)
+        {
+            if (mInternal != aIn)
+            {
+                mInternal = aIn;
+
+                Send_OnChanged(const_cast<char*>(aIn));
+            }
+        }
 
         // ===== Object =====================================================
 
         String::~String() {};
 
-        void String::Clear() { mInternal.clear(); }
+        bool String::Clear()
+        {
+            bool lResult = !mInternal.empty();
+
+            mInternal.clear();
+
+            return lResult;
+        }
 
     }
 }

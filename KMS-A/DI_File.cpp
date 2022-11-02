@@ -38,30 +38,35 @@ namespace KMS
             mInternal = NULL;
         }
 
-        // ===== Value ======================================================
+        // ===== Object =====================================================
+        File::~File() { Close(); }
 
-        void File::Set(const char* aIn)
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        // ===== Object =====================================================
+
+        void File::Send_OnChanged(void* aData)
         {
-            String_Expand::Set(aIn);
-
             Close();
 
             assert(NULL == mInternal);
 
-            if      (0 == strcmp("stderr", aIn)) { mInternal = stderr; }
-            else if (0 == strcmp("stdin" , aIn)) { mInternal = stdin ; }
-            else if (0 == strcmp("stdout", aIn)) { mInternal = stdout; }
+            const char* lIn = Get();
+
+            if      (0 == strcmp("stderr", lIn)) { mInternal = stderr; }
+            else if (0 == strcmp("stdin" , lIn)) { mInternal = stdin; }
+            else if (0 == strcmp("stdout", lIn)) { mInternal = stdout; }
             else
             {
-                errno_t lRet = fopen_s(&mInternal, *this, mMode);
-                KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, "Cannot open file", aIn);
+                errno_t lRet = fopen_s(&mInternal, lIn, mMode);
+                KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, "Cannot open file", lIn);
             }
 
             assert(NULL != mInternal);
-        }
 
-        // ===== Object =====================================================
-        File::~File() { Close(); }
+            Object::Send_OnChanged(aData);
+        }
 
     }
 }

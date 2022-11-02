@@ -43,7 +43,7 @@ namespace KMS
 
             // ===== Object =================================================
             virtual ~Array_Sparse();
-            virtual void Clear();
+            virtual bool Clear();
 
         // Internal
 

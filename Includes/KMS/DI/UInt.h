@@ -38,7 +38,7 @@ namespace KMS
             void SetRadix(Radix aRadix);
 
             // ===== Value ==================================================
-            virtual void         Clear();
+            virtual bool         Clear();
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
 
@@ -82,7 +82,14 @@ namespace KMS
         // ===== Value ======================================================
 
         template <typename T>
-        void UInt<T>::Clear() { mInternal = 0; }
+        bool UInt<T>::Clear()
+        {
+            bool lResult = mInternal != 0;
+
+            mInternal = 0;
+
+            return lResult;
+        }
 
         template <typename T>
         unsigned int UInt<T>::Get(char* aOut, unsigned int aOutSize_byte) const

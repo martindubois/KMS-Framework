@@ -55,7 +55,13 @@ namespace KMS
                     break;
 
                 case 2:
-                    if (0 == strcmp("=", lOperator)) { lObject->Clear(); }
+                    if (0 == strcmp("=", lOperator))
+                    {
+                        if (lObject->Clear())
+                        {
+                            lObject->Send_OnChanged();
+                        }
+                    }
                     break;
 
                 case 1: Set(lObject); break;
@@ -83,6 +89,9 @@ void Add(KMS::DI::Object* aObject, const char* aValue)
         KMS::DI::Object* lObject = lArray->CreateEntry();
 
         Assign(lObject, aValue);
+
+        lArray->Send_OnChanged();
+
         return;
     }
 
@@ -110,7 +119,12 @@ void Set(KMS::DI::Object* aObject)
     KMS::DI::Boolean* lBoolean = dynamic_cast<KMS::DI::Boolean*>(aObject);
     if (NULL != lBoolean)
     {
-        lBoolean->Set();
+        if (!lBoolean->Get())
+        {
+            lBoolean->Set();
+
+            lBoolean->Send_OnChanged();
+        }
         return;
     }
 

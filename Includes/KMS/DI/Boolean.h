@@ -29,10 +29,12 @@ namespace KMS
 
             operator bool () const;
 
+            bool Get() const;
+
             void Set(bool aIn = true);
 
             // ===== Value ==================================================
-            virtual void         Clear();
+            virtual bool         Clear();
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
 
