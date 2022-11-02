@@ -18,9 +18,13 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        File::File() : mInternal(NULL) {}
+
         File::File(FILE* aFile, const char* aIn) : String_Expand(aIn), mInternal(aFile), mMode("rb") {}
 
         File::operator FILE* () { return mInternal; }
+
+        bool File::IsOpen() const { return NULL != mInternal; }
 
         void File::SetMode(const char* aMode) { mMode = aMode; }
 

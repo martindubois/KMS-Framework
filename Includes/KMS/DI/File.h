@@ -26,9 +26,13 @@ namespace KMS
 
             static DI::Object* Create();
 
+            File();
+
             File(FILE* aFile, const char* aIn);
 
             operator FILE * ();
+
+            bool IsOpen() const;
 
             void SetMode(const char* aMode);
 

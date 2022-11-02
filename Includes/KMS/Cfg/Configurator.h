@@ -12,15 +12,19 @@
 #include <list>
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Array.h>
+#include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
+#include <KMS/DI/File.h>
 #include <KMS/File/Folder.h>
+#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
     namespace Cfg
     {
 
-        class Configurator
+        class Configurator : public Msg::IReceiver
         {
 
         public:
@@ -43,6 +47,9 @@ namespace KMS
 
             void Save(const char* aPath);
 
+            // ===== Msg::IReceived =========================================
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+
         private:
 
             typedef std::list<DI::Dictionary *> ConfigurableList;
@@ -51,25 +58,23 @@ namespace KMS
 
             const Configurator & operator = (const Configurator &);
 
-            void AddValueToArray(const char* aA, const char* aV);
-
-            void AddValueToArray(const char* aA, const char* aI, const char* aV);
-
-            DI::Object* FindObject(const char* aA);
+            unsigned int OnConfigFilesChanged();
+            unsigned int OnOptionalConfigFilesChanged();
+            unsigned int OnSaveChanged();
 
             void ParseLine(const char * aLine);
 
-            void SetBoolean(const char* aA);
-
-            void SetArrayValue(const char* aA, unsigned int aI, const char* aV);
-
-            void SetDictionaryValue(const char* aA, const char* aI, const char* aV);
-
-            void SetValue(const char* aA, const char* aV);
-
             ConfigurableList mConfigurables;
 
+            DI::Dictionary mDictionary;
+
             unsigned int mIgnoredCount;
+
+            // ===== Configurable attributes ================================
+            DI::Array   mConfigFiles;
+            DI::Boolean mHelp;
+            DI::Array   mOptionalConfigFiles;
+            DI::File    mSave;
 
         };
 

@@ -26,13 +26,13 @@ namespace KMS
 
             Folder();
 
-            Folder(const File::Folder& aFolder);
+            Folder(const KMS::File::Folder& aFolder);
 
-            void operator = (const File::Folder& aIn);
+            void operator = (const KMS::File::Folder& aIn);
 
-            operator const File::Folder& () const;
+            operator const KMS::File::Folder& () const;
 
-            const File::Folder& Get() const;
+            const KMS::File::Folder& Get() const;
 
             // ===== Object =================================================
             virtual ~Folder();
@@ -42,7 +42,7 @@ namespace KMS
             // ===== Object =================================================
             virtual void Send_OnChanged(void* aData);
 
-            File::Folder mInternal;
+            KMS::File::Folder mInternal;
 
         };
 

@@ -24,6 +24,8 @@ static const KMS::Cfg::MetaData MD_CONSOLE_LEVEL("ConsoleLevel = NOISE | INFO | 
 static const KMS::Cfg::MetaData MD_FILE_LEVEL   ("FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
 static const KMS::Cfg::MetaData MD_FOLDER       ("Folder = {Path}");
 
+#define ON_FOLDER_CHANGED (1)
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -43,6 +45,8 @@ namespace KMS
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
         {
+            mFolder.mOnChanged.Set(this, ON_FOLDER_CHANGED);
+
             AddEntry("ConsoleLevel", &mConsoleLevel, false, &MD_CONSOLE_LEVEL);
             AddEntry("FileLevel"   , &mFileLevel   , false, &MD_FILE_LEVEL);
             AddEntry("Folder"      , &mFolder      , false, &MD_FOLDER);
@@ -239,6 +243,22 @@ namespace KMS
                 default: assert(false);
                 }
             }
+        }
+
+        // ===== Msg::IReceiver =============================================
+
+        unsigned int Log::Receive(void* aSender, unsigned int aCode, void* aData)
+        {
+            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
+
+            switch (aCode)
+            {
+            case ON_FOLDER_CHANGED: CloseLogFiles(); lResult = 0; break;
+
+            default: assert(false);
+            }
+
+            return lResult;
         }
 
         Log gLog;
