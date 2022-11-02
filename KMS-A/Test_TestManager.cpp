@@ -50,8 +50,6 @@ namespace KMS
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
-                Dbg::gLog.CloseLogFiles();
-
                 lResult = lTM.Run();
 
                 std::cerr << lTM;

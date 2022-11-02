@@ -88,8 +88,6 @@ namespace KMS
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
-                Dbg::gLog.CloseLogFiles();
-
                 lResult = lM.Run();
             }
             KMS_CATCH_RESULT(lResult)

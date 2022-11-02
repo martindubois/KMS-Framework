@@ -70,8 +70,6 @@ namespace KMS
             lC.ParseFile(File::Folder::CURRENT, CONFIG_FILE);
             lC.ParseArguments(aCount - 1, aVector + 1);
 
-            Dbg::gLog.CloseLogFiles();
-
             lInstaller.Run();
 
             lResult = lBT.Run();

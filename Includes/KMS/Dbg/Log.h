@@ -16,6 +16,7 @@
 #include <KMS/DI/Enum.h>
 #include <KMS/DI/Folder.h>
 #include <KMS/File/Folder.h>
+#include <KMS/Msg/IReceiver.h>
 #include <KMS/Version.h>
 
 namespace KMS
@@ -23,7 +24,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log : public DI::Dictionary
+        class Log : public DI::Dictionary, public Msg::IReceiver
         {
 
         public:
@@ -45,6 +46,9 @@ namespace KMS
             void WriteException(const Exception& aException);
 
             void WriteVersion(const char* aProduct, const Version& aVersion);
+
+            // ===== Msg::IReceiver =========================================
+            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             // ===== Configurable attributes ================================
             DI::Enum<LogFile::Level, LogFile::LEVEL_NAMES> mConsoleLevel;
