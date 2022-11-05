@@ -229,7 +229,19 @@ namespace KMS
         }
 
         // ===== DI::Object =================================================
+
         Simulator::Item::~Item() {}
+
+        bool Simulator::Item::Clear()
+        {
+            bool lResult = !mName.empty();
+
+            mFlags = 0;
+            mName  = "";
+            mValue = 0;
+
+            return lResult;
+        }
 
         // Private
         // //////////////////////////////////////////////////////////////////

@@ -72,6 +72,7 @@ namespace KMS
 
                 // ===== DI::Object =========================================
                 virtual ~Item();
+                virtual bool Clear();
 
                 unsigned int  mFlags;
                 std::string   mName;
