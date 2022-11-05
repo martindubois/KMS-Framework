@@ -70,6 +70,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-ComTool", "KMS-ComTool\
 		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4} = {8C35FFEB-3770-497D-96EA-64DC9B36D9C4}
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "KMS-Setup", "KMS-Setup\KMS-Setup.vdproj", "{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_Static|x64 = Debug_Static|x64
@@ -305,6 +307,14 @@ Global
 		{55DBF34E-16A9-47F8-B6E5-CFB8391B9BBD}.Release|x64.Build.0 = Release|x64
 		{55DBF34E-16A9-47F8-B6E5-CFB8391B9BBD}.Release|x86.ActiveCfg = Release|Win32
 		{55DBF34E-16A9-47F8-B6E5-CFB8391B9BBD}.Release|x86.Build.0 = Release|Win32
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Debug_Static|x64.ActiveCfg = Debug
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Debug_Static|x86.ActiveCfg = Debug
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Debug|x64.ActiveCfg = Debug
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Debug|x86.ActiveCfg = Debug
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Release_Static|x64.ActiveCfg = Release
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Release_Static|x86.ActiveCfg = Release
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Release|x64.ActiveCfg = Release
+		{EF5910EB-DA74-4CC4-8ECE-FD287577AC73}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
