@@ -18,7 +18,7 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
         "Bidirectional.Default+=DoesNotExist_A",
         "Bidirectional.Default+=DoesNotExist_B",
         "Unknown+=1",
-        "Unknown=1"
+        "Unknown=1",
         "SaveConfig=Test.txt",
     };
 

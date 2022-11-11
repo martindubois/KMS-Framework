@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-ModbusTool/_DocUser/KMS.KMS-ModbusTool.ReadMe.txt
 
+0.1.8-dev Windows 2022-11-11
+
 0.1.7-dev Windows 2022-10-25
 * KMS::Modbus::Tool - Use KMS::CLI::Tool
 

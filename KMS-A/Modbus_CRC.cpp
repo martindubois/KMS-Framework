@@ -79,7 +79,6 @@ namespace KMS
                     mValue ^= 0xa001;
                 }
             }
-
         }
 
         void CRC::Compute(const uint8_t* aIn, unsigned int aInSize_byte)

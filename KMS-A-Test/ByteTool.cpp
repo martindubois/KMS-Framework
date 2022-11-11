@@ -33,7 +33,7 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
     KMS_TEST_EXPECTED_WARNINGS(4);
     lC.ParseArguments(7, VECTOR);
 
-    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 4U);
+    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 6U);
 
     KMS_TEST_COMPARE(lBT.Run(), 0);
 
