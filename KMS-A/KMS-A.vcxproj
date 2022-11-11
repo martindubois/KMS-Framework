@@ -102,6 +102,11 @@
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Thread_Thread.cpp" />
     <ClCompile Include="Version.cpp" />
+    <ClCompile Include="WOP_FrameBuffer.cpp" />
+    <ClCompile Include="WOP_Object.cpp" />
+    <ClCompile Include="WOP_Receiver.cpp" />
+    <ClCompile Include="WOP_Sender.cpp" />
+    <ClCompile Include="WOP_System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
