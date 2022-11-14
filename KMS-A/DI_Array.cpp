@@ -55,6 +55,15 @@ namespace KMS
             return mInternal[aIndex];
         }
 
+        void Array::RemoveEntry(int aIndex)
+        {
+            KMS_EXCEPTION_ASSERT(mInternal.size() > aIndex, DI_INDEX_INVALID, "Invalid index", aIndex);
+
+            Internal::const_iterator lIt = mInternal.begin() + aIndex;
+
+            mInternal.erase(lIt);
+        }
+
         void Array::SetEntry(int aIndex, Object* aE, bool aDelete)
         {
             if (mInternal.size() == aIndex)

@@ -36,6 +36,8 @@ namespace KMS
 
             Object* GetEntry_RW(int aIndex);
 
+            void RemoveEntry(int aIndex);
+
             void SetEntry(int aIndex, Object* aE, bool aDelete);
 
             // ===== Container ==============================================
