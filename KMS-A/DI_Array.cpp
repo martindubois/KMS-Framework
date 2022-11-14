@@ -55,6 +55,20 @@ namespace KMS
             return mInternal[aIndex];
         }
 
+        void Array::SetEntry(int aIndex, Object* aE, bool aDelete)
+        {
+            if (mInternal.size() == aIndex)
+            {
+                AddEntry(aE, aDelete);
+            }
+            else
+            {
+                KMS_EXCEPTION_ASSERT(mInternal.size() < aIndex, DI_INDEX_INVALID, "Invalid index", aIndex);
+
+                mInternal[aIndex].Set(aE, aDelete);
+            }
+        }
+
         // ===== Container ==================================================
 
         unsigned int Array::GetCount() const { return static_cast<unsigned int>(mInternal.size()); }

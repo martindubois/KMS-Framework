@@ -58,7 +58,12 @@ namespace KMS
         }
 
         uint8_t FrameBuffer::GetDataType() const { return mHeader.mFields.mDataType; }
+
+        unsigned int FrameBuffer::GetFrameSize_byte() const { return mFrameSize_byte; }
+
         uint8_t FrameBuffer::GetInstance() const { return mHeader.mFields.mInstance; }
+
+        const void* FrameBuffer::GetRawFrame() const { return &mHeader; }
 
         void FrameBuffer::Prepare(uint8_t aInstance, uint8_t aDataType)
         {

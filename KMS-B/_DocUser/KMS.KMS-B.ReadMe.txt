@@ -5,7 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
-0.1.8-dev Windows 2022-11-11
+0.1.9-dev Windows 2022-11-14
 
 0.1.4-dev Windows 2022-10-17
 - KMS::NET::AddressRangeList::GetInternal - Removed

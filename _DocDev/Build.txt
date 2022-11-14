@@ -47,7 +47,8 @@ Version             ______ . ______ . ______ . ______ - _____________________
 [ ] If needed, update KMS-Sync.exe in K:\
 
 [ ] Tools "GIT GUI"
-    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as message
+    - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as
+      message
     - Push the servers
 [ ] If needed, upload the release on GitHub.com
 

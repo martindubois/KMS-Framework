@@ -49,7 +49,16 @@ namespace KMS
         BitArray<T>::BitArray(T aIn) : mBits(aIn) {}
 
         template <typename T>
+        void BitArray<T>::ClearBits(T aMask) { mBits &= ~ aMask; }
+
+        template <typename T>
         T BitArray<T>::GetBits(T aMask) const { return mBits & aMask; }
+
+        template <typename T>
+        void BitArray<T>::SetBits(T aMask) { mBits |= aMask; }
+
+        template <typename T>
+        bool BitArray<T>::TestBits(T aMask) const { return 0 != (mBits & aMask); }
 
         // ===== Object =====================================================
 

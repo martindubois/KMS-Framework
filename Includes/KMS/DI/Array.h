@@ -36,6 +36,8 @@ namespace KMS
 
             Object* GetEntry_RW(int aIndex);
 
+            void SetEntry(int aIndex, Object* aE, bool aDelete);
+
             // ===== Container ==============================================
             virtual unsigned int GetCount() const;
             virtual bool         IsEmpty() const;

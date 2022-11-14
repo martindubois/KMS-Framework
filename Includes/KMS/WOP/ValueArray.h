@@ -8,7 +8,9 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/WOP/FrameBuffer.h>
 #include <KMS/WOP/Object.h>
+#include <KMS/WOP/WOP.h>
 
 namespace KMS
 {
