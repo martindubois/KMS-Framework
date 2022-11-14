@@ -78,7 +78,7 @@ namespace KMS
                 {
                     char lInclude[FILE_LENGTH];
 
-                    if (1 == sscanf(lLine.c_str(), "#include <%[^>]>", lInclude))
+                    if (1 == sscanf_s(lLine.c_str(), "#include <%[^>]>", lInclude SizeInfo(lInclude)))
                     {
                         for (const DI::Container::Entry& lEntry : mIncludes.mInternal)
                         {
@@ -87,7 +87,7 @@ namespace KMS
 
                             char lHeader[PATH_LENGTH];
 
-                            sprintf(lHeader, "../%s/%s", lF_Include->Get(), lInclude);
+                            sprintf_s(lHeader SizeInfo(lHeader), "../%s/%s", lF_Include->Get(), lInclude);
 
                             if (mFolder.DoesFileExist(lHeader))
                             {
@@ -96,7 +96,7 @@ namespace KMS
                             }
                         }
                     }
-                    else if (1 == sscanf(lLine.c_str(), "#include \"%[^\"]\"", lInclude))
+                    else if (1 == sscanf_s(lLine.c_str(), "#include \"%[^\"]\"", lInclude SizeInfo(lInclude)))
                     {
                         AddDependency(lResult, lInclude);
                     }

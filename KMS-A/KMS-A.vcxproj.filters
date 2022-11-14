@@ -13,12 +13,48 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Build">
+      <UniqueIdentifier>{0d7e5c0c-c52c-45f5-af03-a0f5303e2aec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cfg">
+      <UniqueIdentifier>{36855936-48f1-4589-bd9d-bf29692ff128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DAQ">
+      <UniqueIdentifier>{a5f5aeb9-11a0-4c78-ab9e-2a06f607fc6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Dbg">
+      <UniqueIdentifier>{7368db65-784c-4932-8fce-4cb687d95b8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\DI">
+      <UniqueIdentifier>{73c34153-c9a3-4f79-9892-9102b72c8666}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\File">
+      <UniqueIdentifier>{306ae78a-85a6-4a5c-8b4d-35f9f3d96259}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Msg">
+      <UniqueIdentifier>{c638c614-c07b-4620-b946-d7251ab67848}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modbus">
+      <UniqueIdentifier>{1b1b30f5-817d-41aa-bf47-b472e74b447a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Proc">
+      <UniqueIdentifier>{5a5ce47f-c139-45ae-87a0-79d06fce8f3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Text">
+      <UniqueIdentifier>{d5596f7e-5317-4a1e-ae0c-28f9c5991649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WOP">
+      <UniqueIdentifier>{e335f672-bb0d-44f0-b6ba-63c4d706f460}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Thread">
+      <UniqueIdentifier>{9b49c6c2-882b-465c-906e-7e7d69eada18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Test">
+      <UniqueIdentifier>{adb2df9a-d232-47b7-b4f3-d6569c23b06e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ByteTool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cfg_Configurator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Exception.cpp">
@@ -27,46 +63,7 @@
     <ClCompile Include="Version.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test_TestManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Test_Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Build_Build.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Proc_Process.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_FileInfoList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Build_Import.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_FileInfo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Sync.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Thread_Thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Convert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Binary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Thread_Gate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Thread_Lock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Console_Color_W.cpp">
@@ -75,58 +72,10 @@
     <ClCompile Include="Environment_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="File_Folder_W.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Proc_Process_W.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Build_Build_W.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Master.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Slave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_CRC.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_DigitalOutput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_DigitalInput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_AnalogInput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_AnalogOutput.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_Dummy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Msg_IReceiver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dbg_Log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dbg_LogFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="OS_W.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Msg_Destination.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="JSON.cpp">
@@ -135,73 +84,10 @@
     <ClCompile Include="RefCount.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DAQ_AnalogInputConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_AnalogOutputConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DAQ_AnalogConverter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Object.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Array.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_String.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Value.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Text_ReadPtr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HTTP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Text_WritePtr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_File.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_String_Expand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Boolean.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Dictionary.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Array_Sparse.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_GUID.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Container.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Cfg_MetaData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_MetaData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI_MetaData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Text_File_ASCII.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Text_File_UTF16.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Installer.cpp">
@@ -213,23 +99,182 @@
     <ClCompile Include="Installer_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Build_Build.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Build_W.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Depend.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Import.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Make.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Cfg_Configurator.cpp">
+      <Filter>Source Files\Cfg</Filter>
+    </ClCompile>
+    <ClCompile Include="Cfg_MetaData.cpp">
+      <Filter>Source Files\Cfg</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogConverter.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogInput.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogInputConverter.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogOutput.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogOutputConverter.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_DigitalInput.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_DigitalOutput.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_Dummy.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Log.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_LogFile.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Array.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Array_Sparse.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Boolean.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Container.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Dictionary.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_File.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Folder.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
     <ClCompile Include="DI_Functions.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Object.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DI_GUID.cpp">
+      <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_System.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DI_MetaData.cpp">
+      <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Receiver.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DI_Object.cpp">
+      <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Sender.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="DI_String.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_String_Expand.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Value.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Binary.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_FileInfo.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_FileInfoList.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Folder.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Folder_W.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Sync.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="Msg_Destination.cpp">
+      <Filter>Source Files\Msg</Filter>
+    </ClCompile>
+    <ClCompile Include="Msg_IReceiver.cpp">
+      <Filter>Source Files\Msg</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_CRC.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Master.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Slave.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Process.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Process_W.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_File_ASCII.cpp">
+      <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_File_UTF16.cpp">
+      <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_ReadPtr.cpp">
+      <Filter>Source Files\Text</Filter>
+    </ClCompile>
+    <ClCompile Include="Text_WritePtr.cpp">
+      <Filter>Source Files\Text</Filter>
     </ClCompile>
     <ClCompile Include="WOP_FrameBuffer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="WOP_Object.cpp">
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="WOP_Receiver.cpp">
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="WOP_Sender.cpp">
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="WOP_System.cpp">
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Gate.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Lock.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Thread.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Test.cpp">
+      <Filter>Source Files\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_TestManager.cpp">
+      <Filter>Source Files\Test</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

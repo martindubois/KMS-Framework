@@ -7,8 +7,10 @@
 
 #include "Component.h"
 
-// ===== C ==================================================================
-#include <unistd.h>
+#ifdef _KMS_LINUX
+    // ===== C ==============================================================
+    #include <unistd.h>
+#endif
 
 // ===== Includes ===========================================================
 #include <KMS/Build/Depend.h>
@@ -25,6 +27,8 @@
 
 #define DEFAULT_INCLUDE "Includes"
 
+#define DEFAULT_MAKE "make"
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -36,7 +40,8 @@ static const KMS::Cfg::MetaData MD_COMPONENT_TYPE("ComponentType = BINARY | LIBR
 static const KMS::Cfg::MetaData MD_CONFIGURATION ("Configuration = {Name}");
 static const KMS::Cfg::MetaData MD_INCLUDES      ("Includes += {Name}");
 static const KMS::Cfg::MetaData MD_LIBRARIES     ("Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name};");
+static const KMS::Cfg::MetaData MD_MAKE          ("Make = {Path}");
+static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
@@ -50,6 +55,13 @@ static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name};");
 
     static const KMS::Cfg::MetaData MD_OS_BINARIES  ("LinuxBinaries += {Name}");
     static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("LinuxLibraries += {Name}");
+#endif
+
+#ifdef _KMS_WINDOWS_
+    #define NAME_OS "Windows"
+
+    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("WindowsBinaries += {Name}");
+    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("WindowsLibraries += {Name}");
 #endif
 
 // Static function declarations
@@ -85,6 +97,7 @@ namespace KMS
                 lC.AddConfigurable(&Dbg::gLog);
 
                 lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
+                lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
@@ -99,6 +112,7 @@ namespace KMS
             : mComponentType(ComponentType::NONE)
             , mConfiguration(DEFAULT_CONFIGURATION)
             , mF_Product(File::Folder::Id::CURRENT)
+            , mMake(DEFAULT_MAKE)
         {
             mBinaries  .SetCreator(DI::String::Create);
             mIncludes  .SetCreator(DI::String_Expand::Create);
@@ -111,6 +125,7 @@ namespace KMS
             AddEntry("Configuration", &mConfiguration, false, &MD_CONFIGURATION);
             AddEntry("Includes"     , &mIncludes     , false, &MD_INCLUDES);
             AddEntry("Libraries"    , &mLibraries    , false, &MD_LIBRARIES);
+            AddEntry("Make"         , &mMake         , false, &MD_MAKE);
             AddEntry("Tests"        , &mTests        , false, &MD_TESTS);
 
             AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
@@ -134,9 +149,6 @@ namespace KMS
         void Make::ResetIncludes  () { mIncludes  .Clear(); }
         void Make::ResetLibraries () { mLibraries .Clear(); }
         void Make::ResetTests     () { mTests     .Clear(); }
-
-        void Make::SetComponent    (const char* aC) { assert(NULL != aC); mComponent     = aC; }
-        void Make::SetConfiguration(const char* aC) { assert(NULL != aC); mConfiguration = aC; }
 
         // ===== CLI::Tool ==================================================
 
@@ -306,7 +318,7 @@ namespace KMS
 
             for (lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
             {
-                if (1 == sscanf(lIt->c_str(), "SOURCES = %[^ \\\n\r\r]", lSource))
+                if (1 == sscanf_s(lIt->c_str(), "SOURCES = %[^ \\\n\r\r]", lSource SizeInfo(lSource)))
                 {
                     aSources->insert(lSource);
                     break;
@@ -315,7 +327,7 @@ namespace KMS
 
             for (lIt++; lIt != aMF->mLines.end(); lIt++)
             {
-                if (1 != sscanf(lIt->c_str(), " %[^ \\\n\r\t]", lSource))
+                if (1 != sscanf_s(lIt->c_str(), " %[^ \\\n\r\t]", lSource SizeInfo(lSource)))
                 {
                     break;
                 }
@@ -348,17 +360,17 @@ namespace KMS
             {
                 char lLongLine[8192];
 
-                strcpy(lLongLine, aSource);
+                strcpy_s(lLongLine, aSource);
 
                 char* lPtr = strrchr(lLongLine, '.');
                 assert(NULL != lPtr);
 
-                strcpy(lPtr, ".o:");
+                strcpy_s(lPtr SizeInfoV(lLongLine + sizeof(lLongLine) - lPtr), ".o:");
 
                 for (const std::string& lHeader : *lHeaders)
                 {
-                    strcat(lLongLine, " ");
-                    strcat(lLongLine, lHeader.c_str());
+                    strcat_s(lLongLine, " ");
+                    strcat_s(lLongLine, lHeader.c_str());
                 }
 
                 aMakeFile->mLines.push_back(lLongLine);
@@ -367,7 +379,7 @@ namespace KMS
 
         void Make::Make_Component(const char* aC)
         {
-            Proc::Process lP(File::Folder(File::Folder::Id::NONE), "make");
+            Proc::Process lP(File::Folder(File::Folder::Id::NONE), mMake.Get());
 
             lP.SetWorkingDirectory(aC);
 

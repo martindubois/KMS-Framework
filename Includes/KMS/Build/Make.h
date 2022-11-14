@@ -43,13 +43,15 @@ namespace KMS
             void ResetLibraries();
             void ResetTests    ();
 
-            void SetComponent    (const char* aC);
-            void SetConfiguration(const char* aC);
-
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile);
             virtual void ExecuteCommand(const char* aC);
             virtual int  Run();
+
+            // ===== Configurable attributes ================================
+            DI::String        mComponent;
+            DI::String        mConfiguration;
+            DI::String_Expand mMake;
 
         private:
 
@@ -100,9 +102,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             DI::Array                                     mBinaries;
-            DI::String                                    mComponent;
             DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;
-            DI::String                                    mConfiguration;
             DI::Array                                     mIncludes;
             DI::Array                                     mLibraries;
             DI::Array                                     mTests;

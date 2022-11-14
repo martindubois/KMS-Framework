@@ -37,7 +37,9 @@
   <ItemGroup>
     <ClCompile Include="Build_Build.cpp" />
     <ClCompile Include="Build_Build_W.cpp" />
+    <ClCompile Include="Build_Depend.cpp" />
     <ClCompile Include="Build_Import.cpp" />
+    <ClCompile Include="Build_Make.cpp" />
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />

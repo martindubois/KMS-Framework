@@ -162,6 +162,22 @@ namespace KMS
             }
         }
 
+        void Folder::DeleteFiles(const char* aPattern)
+        {
+            char lPattern[PATH_LENGTH];
+
+            GetPath(aPattern, lPattern, sizeof(lPattern));
+
+            Proc::Process lP(Folder(Id::NONE), "del");
+
+            lP.AddArgument("/FQ");
+            lP.AddArgument(lPattern);
+
+            lP.Run(1000 * 60 * 2);
+
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
+        }
+
         void Folder::Rename(const char* aSrc, const char* aDst, unsigned int aFlags) const
         {
             BackupIfNeeded(aDst, aFlags & ~FLAG_IGNORE_ERROR);
