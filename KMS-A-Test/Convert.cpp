@@ -88,7 +88,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToBool
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToBool("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -97,7 +97,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToDouble
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToDouble("0.0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -106,7 +106,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToFile
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToFile("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -115,7 +115,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToInt32
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToInt32("-1 ");
         KMS_TEST_ASSERT(false);
     }
@@ -124,7 +124,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt16
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
@@ -133,7 +133,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt32
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt32("0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -142,7 +142,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt8
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt8("0x100");
         KMS_TEST_ASSERT(false);
     }
@@ -151,7 +151,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToASCII
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToASCII(L"AB", lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -160,7 +160,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUTF16
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUTF16("AB", lUTF16, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -169,7 +169,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToDisplay
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToDisplay("AB", 2, lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -178,7 +178,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt8Array
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt8Array("G", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -186,7 +186,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt8Array("FG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -194,7 +194,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Convert::ToUInt8Array("EFG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }

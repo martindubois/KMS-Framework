@@ -45,7 +45,7 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
 {
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Version lV0("0");
         KMS_TEST_ASSERT(false);
     }
@@ -53,7 +53,7 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::Version lV0("0.0.0.256");
         KMS_TEST_ASSERT(false);
     }

@@ -42,7 +42,7 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
     {
         try
         {
-            KMS_TEST_EXPECTED_EXCEPTION();
+            KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
             lS0.Get(lBuffer, lSize_byte);
             KMS_TEST_ASSERT(false);
         }

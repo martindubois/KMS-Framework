@@ -71,7 +71,7 @@ KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lB.mPrefered.Set("INVALID");
         KMS_TEST_ASSERT(false);
     }
