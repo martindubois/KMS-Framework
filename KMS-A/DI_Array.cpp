@@ -33,6 +33,8 @@ namespace KMS
 
         const Object* Array::GetEntry_R(int aIndex) const
         {
+            assert(0 <= aIndex);
+
             if (static_cast<int>(mInternal.size()) <= aIndex)
             {
                 return NULL;
@@ -45,6 +47,8 @@ namespace KMS
 
         Object* Array::GetEntry_RW(int aIndex)
         {
+            assert(0 <= aIndex);
+
             if (static_cast<int>(mInternal.size()) <= aIndex)
             {
                 return NULL;
@@ -57,7 +61,9 @@ namespace KMS
 
         void Array::RemoveEntry(int aIndex)
         {
-            KMS_EXCEPTION_ASSERT(mInternal.size() > aIndex, DI_INDEX_INVALID, "Invalid index", aIndex);
+            assert(0 <= aIndex);
+
+            KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
 
             Internal::const_iterator lIt = mInternal.begin() + aIndex;
 
@@ -66,13 +72,15 @@ namespace KMS
 
         void Array::SetEntry(int aIndex, Object* aE, bool aDelete)
         {
+            assert(0 <= aIndex);
+
             if (mInternal.size() == aIndex)
             {
                 AddEntry(aE, aDelete);
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(mInternal.size() < aIndex, DI_INDEX_INVALID, "Invalid index", aIndex);
+                KMS_EXCEPTION_ASSERT(mInternal.size() < static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
 
                 mInternal[aIndex].Set(aE, aDelete);
             }
