@@ -68,7 +68,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetLine(0);
         KMS_TEST_ASSERT(false);
     }
@@ -76,7 +76,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.InsertLine(1, L"");
         KMS_TEST_ASSERT(false);
     }
@@ -84,7 +84,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.RemoveLines(0, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -92,7 +92,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.ReplaceLine(0, L"");
         KMS_TEST_ASSERT(false);
     }
@@ -100,7 +100,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Read(KMS::File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -108,7 +108,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Write(KMS::File::Folder(KMS::File::Folder::Id::CURRENT, "DoesNotExist"), "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }

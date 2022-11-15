@@ -45,7 +45,7 @@ namespace KMS
 
             void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = false);
 
-            void Save(const char* aPath);
+            void SaveConfig(const char* aPath);
 
             // ===== Msg::IReceived =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
@@ -74,7 +74,7 @@ namespace KMS
             DI::Array   mConfigFiles;
             DI::Boolean mHelp;
             DI::Array   mOptionalConfigFiles;
-            DI::File    mSave;
+            DI::File    mSaveConfig;
 
         };
 

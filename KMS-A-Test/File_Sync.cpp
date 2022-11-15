@@ -24,7 +24,7 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
 
     KMS_TEST_COMPARE(KMS::File::Sync::Main(3, VECTOR_A), 0);
 
-    KMS_TEST_EXPECTED_WARNINGS(2);
+    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 4);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(6, VECTOR_A), 0);
 
     static const char* VECTOR_B[] =
@@ -46,7 +46,6 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
         "Bidirectional.Default+=DoesNotExist_A",
     };
 
-    KMS_TEST_EXPECTED_EXCEPTION();
-    KMS_TEST_EXPECTED_ERROR();
+    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 4);
     KMS_TEST_COMPARE(KMS::File::Sync::Main(2, VECTOR_A), static_cast<int>(KMS::Exception::Code::FILE_CONFIG_INVALID));
 }

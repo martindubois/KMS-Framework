@@ -102,6 +102,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             DI::Array                                     mBinaries;
+            DI::Array                                     mCleanExtensions;
             DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;
             DI::Array                                     mIncludes;
             DI::Array                                     mLibraries;

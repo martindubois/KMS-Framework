@@ -45,6 +45,8 @@ namespace KMS
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
         {
+            memset(&mHideCounts, 0, sizeof(mHideCounts));
+
             mFolder.mOnChanged.Set(this, ON_FOLDER_CHANGED);
 
             AddEntry("ConsoleLevel", &mConsoleLevel, false, &MD_CONSOLE_LEVEL);
@@ -57,6 +59,15 @@ namespace KMS
         Log::~Log() { CloseLogFiles(); }
 
         bool Log::IsFileEnabled() const { return mEnabled; }
+
+        void Log::SetHideCount(LogFile::Level aLevel, unsigned int aIn)
+        {
+            WriteEntry(__FILE__, __FUNCTION__, __LINE__, LogFile::Level::LEVEL_INFO);
+            WriteData(&aLevel, sizeof(aLevel));
+            WriteData(&aIn, sizeof(aIn));
+
+            mHideCounts[static_cast<unsigned int>(aLevel)] = aIn;
+        }
 
         void Log::CloseLogFiles()
         {
@@ -81,6 +92,12 @@ namespace KMS
                 assert(NULL != lLF);
 
                 lLF->WriteData(aData, aSize_byte);
+            }
+
+            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
+            {
+                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
+                return;
             }
 
             IF_CONSOLE
@@ -123,6 +140,12 @@ namespace KMS
                 assert(NULL != lLF);
 
                 lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
+            }
+
+            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
+            {
+                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
+                return;
             }
 
             IF_CONSOLE
@@ -178,6 +201,12 @@ namespace KMS
                 lLF->WriteException(aException);
             }
 
+            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
+            {
+                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
+                return;
+            }
+
             IF_CONSOLE
             {
                 switch (mEntryLevel)
@@ -216,6 +245,12 @@ namespace KMS
                 assert(NULL != lLF);
 
                 lLF->WriteMessage(aMsg);
+            }
+
+            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
+            {
+                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
+                return;
             }
 
             IF_CONSOLE

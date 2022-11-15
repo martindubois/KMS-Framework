@@ -14,7 +14,6 @@ KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 {
     KMS::Cfg::Configurator lC;
 
-    KMS_TEST_EXPECTED_WARNINGS(3);
-
+    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 6);
     lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
 }

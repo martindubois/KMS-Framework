@@ -30,10 +30,10 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
 
     lC.Help();
 
-    KMS_TEST_EXPECTED_WARNINGS(4);
+    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 10);
     lC.ParseArguments(7, VECTOR);
 
-    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 6U);
+    KMS_TEST_COMPARE(lC.GetIgnoredCount(), 5U);
 
     KMS_TEST_COMPARE(lBT.Run(), 0);
 

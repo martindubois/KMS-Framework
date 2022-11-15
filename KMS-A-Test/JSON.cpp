@@ -104,7 +104,7 @@ KMS_TEST(JSON_Exception, "JSON_Exception", "Auto", sTest_Exception)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::JSON::Decode(&lO0, "", 0);
         KMS_TEST_ASSERT(false);
     }
@@ -112,7 +112,7 @@ KMS_TEST(JSON_Exception, "JSON_Exception", "Auto", sTest_Exception)
 
     try
     {
-        KMS_TEST_EXPECTED_EXCEPTION();
+        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
         KMS::JSON::Decode(&lO0, "\"", 1);
         KMS_TEST_ASSERT(false);
     }

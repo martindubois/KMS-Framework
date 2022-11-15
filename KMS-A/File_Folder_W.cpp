@@ -168,9 +168,12 @@ namespace KMS
 
             GetPath(aPattern, lPattern, sizeof(lPattern));
 
-            Proc::Process lP(Folder(Id::NONE), "del");
+            Proc::Process lP(Folder(Id::NONE), "cmd.exe");
 
-            lP.AddArgument("/FQ");
+            lP.AddArgument("/C");
+            lP.AddArgument("del");
+            lP.AddArgument("/F");
+            lP.AddArgument("/Q");
             lP.AddArgument(lPattern);
 
             lP.Run(1000 * 60 * 2);

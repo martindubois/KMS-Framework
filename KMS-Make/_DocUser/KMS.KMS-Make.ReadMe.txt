@@ -5,7 +5,10 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
-* KMS::Make - Compile on Windows
+0.1.11-dev Windows 2022-11-15
+* KMS::Make
+    * Compile on Windows
+    - mCleanExtensions
 
 0.1.5-dev Linux x86_64 2022-10-19
 - KMS::Build::Make - Use KMS::CLI::Tool

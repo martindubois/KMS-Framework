@@ -10,9 +10,12 @@
 // ===== Includes ===========================================================
 #include <KMS/Dbg/Log.h>
 
+// We could use KMS::Dbg::Log::SetHideCount to hide error message on console,
+// but doing that would not thest the code displaying error on the console.
+
 KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 {
-    KMS_TEST_EXPECTED_EXCEPTION();
+    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
     KMS::Exception lE(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::TEST, "Test");
     KMS::Dbg::Log  lL;
 
