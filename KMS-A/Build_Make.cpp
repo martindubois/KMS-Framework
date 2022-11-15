@@ -23,6 +23,8 @@
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
+#define DEFAULT_CLEAN_EXCENTION "*.o"
+
 #define DEFAULT_CONFIGURATION "Debug"
 
 #define DEFAULT_INCLUDE "Includes"
@@ -34,14 +36,15 @@
 
 #define MAKE_FILE_NAME "makefile"
 
-static const KMS::Cfg::MetaData MD_BINARIES      ("Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_COMPONENT     ("Component = {Name}");
-static const KMS::Cfg::MetaData MD_COMPONENT_TYPE("ComponentType = BINARY | LIBRARY | NONE | TEST");
-static const KMS::Cfg::MetaData MD_CONFIGURATION ("Configuration = {Name}");
-static const KMS::Cfg::MetaData MD_INCLUDES      ("Includes += {Name}");
-static const KMS::Cfg::MetaData MD_LIBRARIES     ("Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_MAKE          ("Make = {Path}");
-static const KMS::Cfg::MetaData MD_TESTS         ("Tests += {Name}");
+static const KMS::Cfg::MetaData MD_BINARIES        ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_CLEAN_EXTENSIONS("CleanExtensions += {Name}");
+static const KMS::Cfg::MetaData MD_COMPONENT       ("Component = {Name}");
+static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | LIBRARY | NONE | TEST");
+static const KMS::Cfg::MetaData MD_CONFIGURATION   ("Configuration = {Name}");
+static const KMS::Cfg::MetaData MD_INCLUDES        ("Includes += {Name}");
+static const KMS::Cfg::MetaData MD_LIBRARIES       ("Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_MAKE            ("Make = {Path}");
+static const KMS::Cfg::MetaData MD_TESTS           ("Tests += {Name}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
@@ -114,19 +117,21 @@ namespace KMS
             , mF_Product(File::Folder::Id::CURRENT)
             , mMake(DEFAULT_MAKE)
         {
-            mBinaries  .SetCreator(DI::String::Create);
-            mIncludes  .SetCreator(DI::String_Expand::Create);
-            mLibraries .SetCreator(DI::String::Create);
-            mTests     .SetCreator(DI::String::Create);
+            mBinaries       .SetCreator(DI::String::Create);
+            mCleanExtensions.SetCreator(DI::String::Create);
+            mIncludes       .SetCreator(DI::String_Expand::Create);
+            mLibraries      .SetCreator(DI::String::Create);
+            mTests          .SetCreator(DI::String::Create);
 
-            AddEntry("Binaries"     , &mBinaries     , false, &MD_BINARIES);
-            AddEntry("Componentn"   , &mComponent    , false, &MD_COMPONENT);
-            AddEntry("ComponentType", &mComponentType, false, &MD_COMPONENT_TYPE);
-            AddEntry("Configuration", &mConfiguration, false, &MD_CONFIGURATION);
-            AddEntry("Includes"     , &mIncludes     , false, &MD_INCLUDES);
-            AddEntry("Libraries"    , &mLibraries    , false, &MD_LIBRARIES);
-            AddEntry("Make"         , &mMake         , false, &MD_MAKE);
-            AddEntry("Tests"        , &mTests        , false, &MD_TESTS);
+            AddEntry("Binaries"       , &mBinaries       , false, &MD_BINARIES);
+            AddEntry("CleanExtensions", &mCleanExtensions, false, &MD_CLEAN_EXTENSIONS);
+            AddEntry("Componentn"     , &mComponent      , false, &MD_COMPONENT);
+            AddEntry("ComponentType"  , &mComponentType  , false, &MD_COMPONENT_TYPE);
+            AddEntry("Configuration"  , &mConfiguration  , false, &MD_CONFIGURATION);
+            AddEntry("Includes"       , &mIncludes       , false, &MD_INCLUDES);
+            AddEntry("Libraries"      , &mLibraries      , false, &MD_LIBRARIES);
+            AddEntry("Make"           , &mMake           , false, &MD_MAKE);
+            AddEntry("Tests"          , &mTests          , false, &MD_TESTS);
 
             AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
             AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
@@ -134,7 +139,8 @@ namespace KMS
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
 
-            mIncludes.AddEntry(new DI::String(DEFAULT_INCLUDE), true);
+            mCleanExtensions.AddEntry(new DI::String(DEFAULT_CLEAN_EXCENTION), true);
+            mIncludes       .AddEntry(new DI::String(DEFAULT_INCLUDE        ), true);
         }
 
         Make::~Make() {}
@@ -221,7 +227,12 @@ namespace KMS
         {
             File::Folder lC(mF_Product, aC);
 
-            lC.DeleteFiles("*.o");
+            for (const DI::Container::Entry& lEntry : mCleanExtensions.mInternal)
+            {
+                const DI::String* lCE = dynamic_cast<const DI::String*>(lEntry.Get());
+
+                lC.DeleteFiles(lCE->Get());
+            }
         }
 
         void Make::Clean_Library(const char* aL)

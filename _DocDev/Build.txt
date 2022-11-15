@@ -21,9 +21,9 @@ Version             ______ . ______ . ______ . ______ - _____________________
 
 [ ] File "KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt"
 [ ] File "KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt"
+[ ] File "KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt"
 
 ===== Linux only ============================================================
-[ ] File "KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt"
 [ ] Tool "Terminal" - Un the product folder
         Binaries/Debug/KMS-Make Config=Debug Operation+=Make
         Binaries/Debug/KMS-Build
