@@ -3,8 +3,11 @@
 # Copyright (C) 2022 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
-# File      KMS-Import.cfg
+# File      STM32/F373CVTx/Release.mk
 
-Dependencies += KMS-Framework;0.1.11-dev
+include ../Common.mk
 
-OSIndependentDeps += KMS-Framework;0.0.14-front-end
+CFLAGS = $(CFLAGS) -Os
+
+KMS_A_A = ../Libraries/Release/KMS-A.a
+
