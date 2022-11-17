@@ -26,6 +26,10 @@ namespace KMS
 
             void SetResult(uint8_t aIn);
 
+            #ifdef _KMS_EMBEDED_
+                void AddTrace(const char* aMsg, uint8_t aLen);
+            #endif
+
             // ===== Object =================================================
             virtual bool    PrepareFrame(FrameBuffer* aOut, uint8_t aInstance);
             virtual uint8_t WriteData(const FrameBuffer* aIn);
@@ -34,6 +38,11 @@ namespace KMS
 
             uint8_t mResult_In;
             uint8_t mResult_Out;
+
+            #ifdef _KMS_EMBEDDED_
+                char    mTrace[32];
+                uint8_t mTraceLen;
+            #endif
 
         };
 

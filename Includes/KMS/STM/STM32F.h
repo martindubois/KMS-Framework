@@ -13,30 +13,56 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DAQ/IDigitalOutputs.h>
+#include <KMS/Embedded/USART.h>
+
+#define KMS_STM_ID_PA(I) (0 * 16 + (I))
+#define KMS_STM_ID_PB(I) (1 * 16 + (I))
+#define KMS_STM_ID_PC(I) (2 * 16 + (I))
+#define KMS_STM_ID_PD(I) (3 * 16 + (I))
+#define KMS_STM_ID_PE(I) (4 * 16 + (I))
+#define KMS_STM_ID_PF(I) (5 * 16 + (I))
 
 namespace KMS
 {
     namespace STM
     {
 
-        class STM32F : public KMS::DAQ::IDigitalOutputs
+        class STM32F : public DAQ::IDigitalOutputs
         {
 
         public:
 
+            // TODO DIGITAL_INPUT, DIGITAL_OUTPUT_PUSH_PULL
             enum class IO_Mode
             {
-                DIGITAL_OUTPUT,
+                DIGITAL_OUTPUT_OPEN_DRAIN,
             };
 
-            static const DAQ::Id ID_PC0;
+            STM32F();
 
+            // Configure a 32 MHz clock using HSI and PLL
+            void Clock_Config();
+
+            // aId    See KMS_STM_ID_P...
+            // aMode
             void IO_SetMode(DAQ::Id aId, IO_Mode aMode);
 
-            // ==== KMS::DAQ::IDigitalOutputs ===============================
+            // aId  Zero based USART index
+            // aRx  Rx pin, see KMS_STM_ID_P...
+            // aTx  Tx pin, see KMS_STM_ID_P...
+            // The UART is configured for 115200 bps 8N1
+            Embedded::USART* USART_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx);
+
+            // ==== DAQ::IDigitalOutputs ====================================
             virtual void DO_Clear(DAQ::Id aId);
             virtual bool DO_Get  (DAQ::Id aId) const;
             virtual void DO_Set  (DAQ::Id aId, bool aValue = true);
+
+        private:
+
+            void IO_SetAltFunc(DAQ::Id aId, unsigned int aAltFunc);
+
+            uint32_t mClock_Hz;
 
         };
 

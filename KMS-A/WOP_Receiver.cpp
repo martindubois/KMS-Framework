@@ -25,13 +25,13 @@ namespace KMS
             , mInstanceCount(aCount)
             , mSystem(aSystem)
         {
-            assert(NULL != aInstances);
-            assert(NULL != aSystem);
+            // assert(NULL != aInstances);
+            // assert(NULL != aSystem);
         }
 
         void Receiver::AddReceivedByte(uint8_t aIn)
         {
-            assert(NULL != mSystem);
+            // assert(NULL != mSystem);
 
             uint8_t lRet = mFrameBuffer.AddReceivedByte(aIn);
             switch (lRet)
@@ -48,7 +48,7 @@ namespace KMS
 
         void Receiver::AddReceivedBytes(const uint8_t* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            // assert(NULL != aIn);
 
             for (unsigned int i = 0; i < aInSize_byte; i++)
             {
@@ -63,8 +63,8 @@ namespace KMS
 
         void Receiver::WriteData()
         {
-            assert(NULL != mInstances);
-            assert(NULL != mSystem);
+            // assert(NULL != mInstances);
+            // assert(NULL != mSystem);
 
             uint8_t lRet = KMS_WOP_RESULT_INVALID_INSTANCE;
 
@@ -75,7 +75,7 @@ namespace KMS
             }
             else if (mInstanceCount > lInstance)
             {
-                assert(NULL != mInstances[lInstance]);
+                // assert(NULL != mInstances[lInstance]);
 
                 lRet = mInstances[lInstance]->WriteData(&mFrameBuffer);
             }

@@ -13,9 +13,14 @@
 extern "C"
 {
 
-    void exit(int)
-    {
-        for (;;) {}
-    }
+    void exit(int) { for (;;) {} }
+
+    void _exit(int) { for (;;) {} }
+
+    int _getpid() {	return 1; }
+
+    int _kill(int, int) { return -1; }
+
+    void* _sbrk(ptrdiff_t) { return reinterpret_cast<void*>(-1); }
 
 }

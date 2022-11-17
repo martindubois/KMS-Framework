@@ -55,7 +55,7 @@ namespace KMS
 
         bool System::PrepareFrame(FrameBuffer* aOut, uint8_t aInstance)
         {
-            assert(NULL != aOut);
+            // assert(NULL != aOut);
 
             bool lResult = false;
 
@@ -76,7 +76,7 @@ namespace KMS
 
         uint8_t System::WriteData(const FrameBuffer* aIn)
         {
-            assert(NULL != aIn);
+            // assert(NULL != aIn);
 
             uint8_t lResult = KMS_WOP_RESULT_INVALID_DATA_TYPE;
 

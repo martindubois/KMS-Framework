@@ -9,11 +9,28 @@ include ../$(CONFIG).mk
 
 OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 
-OBJECTS = WOP_FrameBuffer.o \
-		  WOP_Object.o      \
-		  WOP_Receiver.o    \
-		  WOP_Sender.o      \
+# QUESTION Can I move OBJECTS and SOURCES in the makefile in the parent
+#          folder ?
+
+OBJECTS = Embedded_USART.o    \
+		  Embedded_WorkItem.o \
+		  Msg_Destination.o   \
+		  Msg_IReceiver.o     \
+          WOP_FrameBuffer.o   \
+		  WOP_Object.o        \
+		  WOP_Receiver.o      \
+		  WOP_Sender.o        \
 		  WOP_System.o
+
+SOURCES = ../../../KMS-A/Embedded_USART.cpp    \
+          ../../../KMS-A/Embedded_WorkItem.cpp \
+          ../../../KMS-A/Msg_Destination.cpp   \
+		  ../../../KMS-A/Msg_IReceiver.cpp     \
+          ../../../KMS-A/WOP_FrameBuffer.cpp   \
+          ../../../KMS-A/WOP_Object.cpp        \
+		  ../../../KMS-A/WOP_Receiver.cpp      \
+	      ../../../KMS-A/WOP_Sender.cpp        \
+		  ../../../KMS-A/WOP_System.cpp
 
 # ===== Rules ===============================================================
 

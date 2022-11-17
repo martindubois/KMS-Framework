@@ -9,5 +9,10 @@
 
 #include <KMS/Base.h>
 
-// ===== Includes ===========================================================
-#include <KMS/Exception.h>
+#ifdef _KMS_EMBEDDED_
+    // ===== C ==============================================================
+    #include <stdint.h>
+#else
+    // ===== Includes =======================================================
+    #include <KMS/Exception.h>
+#endif

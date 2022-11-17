@@ -26,8 +26,8 @@ namespace KMS
             , mInstanceCount(aCount)
             , mSystem(aSystem)
         {
-            assert(NULL != aInstances);
-            assert(NULL != aSystem);
+            // assert(NULL != aInstances);
+            // assert(NULL != aSystem);
         }
 
         void Sender::SetInstanceCount(uint8_t aCount) { mInstanceCount = aCount; }
@@ -47,7 +47,7 @@ namespace KMS
                     mInstance = 0;
                 }
 
-                assert(NULL != mInstances[mInstance]);
+                // assert(NULL != mInstances[mInstance]);
 
                 if (mInstances[mInstance]->PrepareFrame(&mFrameBuffer, mInstance))
                 {

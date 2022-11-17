@@ -14,8 +14,9 @@ AS   = $(BINPATH)/$(PREFIX)gcc -x assembler-with-cpp
 GPP  = $(BINPATH)/$(PREFIX)g++
 SIZE = $(BINPATH)/$(PREFIX)size
 
-CFLAGS = -mcpu=cortex-m4 -std=gnu++14 -g3 -DSTM32 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb
+CFLAGS = -mcpu=cortex-m4 -std=gnu++14 -g3 -D_KMS_EMBEDDED_ -DSTM32 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb
 
 INCLUDES = -I ../../Includes/STM -I ../../../Includes
 
+KMS_A_A     = ../Libraries/$(CONFIG)/KMS-A.a
 KMS_STM32_A = ../Libraries/$(CONFIG)/KMS-STM32.A
