@@ -45,6 +45,8 @@ namespace KMS
             return lResult;
         }
 
+        void USART::Tx_Wait() { while(!Tx_IsReady()); }
+
         // ===== WorkItem ===================================================
         void USART::Work()
         {

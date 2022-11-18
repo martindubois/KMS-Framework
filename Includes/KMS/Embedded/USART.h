@@ -23,6 +23,10 @@ namespace KMS
 
             bool Tx_IsReady();
 
+            // Busy wait until Tx_IsReady return true. Do not call this
+            // function when the interrupts are disabled.
+            void Tx_Wait();
+
             virtual void Rx_Disable() = 0;
             virtual void Rx_Enable () = 0;
 
