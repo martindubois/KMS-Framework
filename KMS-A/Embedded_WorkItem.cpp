@@ -15,6 +15,9 @@ namespace KMS
     namespace Embedded
     {
 
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
         WorkItem::WorkItem() : mNext(NULL) {}
 
     }

@@ -14,6 +14,7 @@ OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 
 OBJECTS = Embedded_USART.o    \
 		  Embedded_WorkItem.o \
+		  Embedded_WorkLoop.o \
 		  Msg_Destination.o   \
 		  Msg_IReceiver.o     \
           WOP_FrameBuffer.o   \
@@ -24,6 +25,7 @@ OBJECTS = Embedded_USART.o    \
 
 SOURCES = ../../../KMS-A/Embedded_USART.cpp    \
           ../../../KMS-A/Embedded_WorkItem.cpp \
+          ../../../KMS-A/Embedded_WorkLoop.cpp \
           ../../../KMS-A/Msg_Destination.cpp   \
 		  ../../../KMS-A/Msg_IReceiver.cpp     \
           ../../../KMS-A/WOP_FrameBuffer.cpp   \

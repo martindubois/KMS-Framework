@@ -170,7 +170,7 @@ namespace KMS
             lGPIO->MODER &= ~ (0x3 << (2 * lBit));
             lGPIO->MODER |=    0x2 << (2 * lBit);
 
-            lGPIO->AFR[lReg] &= 0xf      << (4 * lBi2);
+            lGPIO->AFR[lReg] &= ~ (0xf   << (4 * lBi2));
             lGPIO->AFR[lReg] |= aAltFunc << (4 * lBi2);
         }
 

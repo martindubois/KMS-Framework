@@ -30,16 +30,18 @@ void USART::Init(uint8_t aUSART, uint8_t aDMA, uint32_t aClock_Hz)
 
     USART_TypeDef* lUSART = sUSARTs[mUSART];
 
+    // TODO Do we need ONEBIT mode ?
     lUSART->CR1 |= USART_CR1_RXNEIE | USART_CR1_TE;
-    lUSART->CR3 |= USART_CR3_DMAT;
-    lUSART->BRR  = aClock_Hz / 115200; // bps
+    lUSART->CR3 |= USART_CR3_DMAT | USART_CR3_ONEBIT;
+    lUSART->BRR  = aClock_Hz / 115200 + 1; // bps
 
     lUSART->GTPR &= ~ USART_GTPR_PSC_Msk;
     lUSART->GTPR |= 0x1 << USART_GTPR_PSC_Pos;
 
     lUSART->CR1 |= USART_CR1_UE;
 
-    __NVIC_EnableIRQ(static_cast<IRQn_Type>(DMA1_Channel1_IRQn + mDMA));
+    NVIC_EnableIRQ(static_cast<IRQn_Type>(DMA1_Channel1_IRQn + mDMA));
+    NVIC_EnableIRQ(static_cast<IRQn_Type>(USART1_IRQn        + mUSART));
 }
 
 void USART::Rx_OnInterrupt()
@@ -47,6 +49,12 @@ void USART::Rx_OnInterrupt()
     USART_TypeDef* lUSART = sUSARTs[mUSART];
 
     uint32_t lISR = lUSART->ISR;
+
+    // QUESTION Do we need to clear the "frame error" ?
+    if (0 != (lISR & USART_ISR_FE))
+    {
+        lUSART->ICR = USART_ICR_FECF;
+    }
 
     if (0 != (lISR & USART_ISR_RXNE))
     {
@@ -80,7 +88,6 @@ void USART::Tx(const void* aData, uint16_t aSize_byte)
 {
     DMA_Channel_TypeDef* lDMA   = sDMAs  [mDMA  ];
     USART_TypeDef*       lUSART = sUSARTs[mUSART];
-
 
     lDMA->CPAR  = reinterpret_cast<uint32_t>(&lUSART->TDR);
     lDMA->CMAR  = reinterpret_cast<uint32_t>(aData);
