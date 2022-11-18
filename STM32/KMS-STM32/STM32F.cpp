@@ -17,11 +17,24 @@
 // Variables
 // //////////////////////////////////////////////////////////////////////////
 
-static GPIO_TypeDef * sGPIOs [6] = { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF };
+#define GPIO_QTY  (6)
+#define USART_QTY (3)
 
-static uint8_t sUSART_DMA[3] = { 3, 6, 1 };
+static GPIO_TypeDef * sGPIOs[GPIO_QTY] = { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF };
 
-static ::USART sUSART_Instances[3];
+static uint8_t sUSART_DMA[USART_QTY] = { 3, 6, 1 };
+
+// Putting the USART instances in a static array allow to don't leak any
+// information about the internal USART class. Any way, creating more than 1
+// instances of STM32F class make no sense.
+static ::USART sUSART_Instances[USART_QTY];
+
+static KMS::Msg::Destination sOnInterrupts[16];
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static void OnInterrupt(uint8_t aIndex);
 
 namespace KMS
 {
@@ -55,10 +68,38 @@ namespace KMS
             mClock_Hz *= 4;
         }
 
+        static const IRQn_Type EXTI_IRQ[16] =
+        {
+            EXTI0_IRQn  , EXTI1_IRQn  , EXTI2_TSC_IRQn, EXTI3_IRQn    , EXTI4_IRQn    , EXTI9_5_IRQn  , EXTI9_5_IRQn  , EXTI9_5_IRQn  ,
+            EXTI9_5_IRQn, EXTI9_5_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn,
+        };
+
+        void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, Msg::IReceiver* aReceiver, unsigned int aCode)
+        {
+            uint8_t  lBit  = aId % 16;
+            uint32_t lMask = 1 << lBit;
+            uint8_t  lReg  = lBit / 4;
+            uint8_t  lPos  = 4 * (lBit % 4);
+
+            sOnInterrupts[lBit].Set(aReceiver, aCode);
+
+            SYSCFG->EXTICR[lReg] &= ~ (SYSCFG_EXTICR1_EXTI0_Msk << lPos);
+            SYSCFG->EXTICR[lReg] |= (aId / 16) << lPos;
+
+            EXTI->IMR  |= lMask;
+            EXTI->EMR  |= lMask;
+            EXTI->RTSR |= lMask;
+            EXTI->FTSR |= lMask;
+
+            NVIC_EnableIRQ(EXTI_IRQ[lBit]);
+        }
+
         void STM32F::IO_SetMode(DAQ::Id aId, IO_Mode aMode)
         {
             unsigned int lBit  = aId % 16;
             unsigned int lPort = aId / 16;
+
+            // assert(GPIO_QTY > lPort);
 
             RCC->AHBENR |= 1 << (17 + lPort);
 
@@ -77,16 +118,17 @@ namespace KMS
             lGPIO->PUPDR &= ~ (0x3 << (lBit * 2));
         }
 
+        // All the pin we can use for USART1, 2 and 3 must be configured
+        // using the alternate function 7.
+        // USART 1 Rx: PA10 PB7 PC4 PE1
+        //         Tx: PA9 PB6 PC4 PE0
+        // USART 2 Rx: PA3 PB4 PD6
+        //         Tx: PA2 PB3 PD5
+        // USART 3 Rx: PB9 PC11 PD9 PE_15
+        //         Tx: PB8 PB10 PC10 PD8
         Embedded::USART* STM32F::USART_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx)
         {
-            // USART 1 Rx: PA10 PB7 PC4 PE1
-            //         Tx: PA9 PB6 PC4 PE0
-
-            // USART 2 Rx: PA3 PB4 PD6
-            //         Tx: PA2 PB3 PD5
-
-            // USART 3 Rx: PB9 PC11 PD9 PE_15
-            //         Tx: PB8 PB10 PC10 PD8
+            // assert(USART_QTY > aId);
 
             IO_SetAltFunc(aRx, 7);
             IO_SetAltFunc(aTx, 7);
@@ -95,6 +137,7 @@ namespace KMS
 
             uint8_t lDMA = sUSART_DMA[aId];
 
+            // TODO Simplify by using tables
             switch (aId)
             {
             case 0:
@@ -163,6 +206,8 @@ namespace KMS
             uint8_t lPort = aId / 16;
             uint8_t lReg  = lBit / 8;
 
+            // assert(GPIO_QTY > lPort);
+
             RCC->AHBENR |= 1 << (17 + lPort);
 
             GPIO_TypeDef* lGPIO = sGPIOs[lPort];
@@ -187,8 +232,39 @@ extern "C"
     void DMA1_CH4_IRQHandler() { sUSART_Instances[0].Tx_OnInterrupt(); }
     void DMA1_CH7_IRQHandler() { sUSART_Instances[1].Tx_OnInterrupt(); }
 
+    void EXTI0_IRQHandler   () { OnInterrupt(0); }
+    void EXTI1_IRQHandler   () { OnInterrupt(1); }
+    void EXTI2_TS_IRQHandler() { OnInterrupt(2); }
+    void EXTI3_IRQHandler   () { OnInterrupt(3); }
+    void EXTI4_IRQHandler   () { OnInterrupt(4); }
+
+    void EXTI5_9_IRQHandler  ()
+    {
+        for (uint8_t i = 5; i <= 9; i++)
+        {
+            OnInterrupt(i);
+        }
+    }
+
+    void EXTI15_10_IRQHandler()
+    {
+        for (uint8_t i = 10; i <= 15; i++)
+        {
+            OnInterrupt(i); 
+        }
+    }
+
     void USART1_IRQHandler() { sUSART_Instances[0].Rx_OnInterrupt(); }
     void USART2_IRQHandler() { sUSART_Instances[1].Rx_OnInterrupt(); }
     void USART3_IRQHandler() { sUSART_Instances[2].Rx_OnInterrupt(); }
 
+}
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+void OnInterrupt(uint8_t aIndex)
+{
+    sOnInterrupts[aIndex].Send(NULL);
+    EXTI->PR = 1 << aIndex; 
 }

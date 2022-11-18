@@ -16,8 +16,9 @@
 
 using namespace KMS;
 
-#define MSG_RX_BYTE      (1)
-#define MSG_TX_COMPLETED (2)
+#define MSG_KEY          (1)
+#define MSG_RX_BYTE      (2)
+#define MSG_TX_COMPLETED (3)
 
 class Test : public Msg::IReceiver
 {
@@ -32,6 +33,7 @@ public:
 private:
 
     // ===== Events =========================================================
+    unsigned int OnKey();
     unsigned int OnRxByte(void* aData);
     unsigned int OnTxCompleted();
 
@@ -48,6 +50,8 @@ int main()
     Test        lTest;
 
     lProcessor.Clock_Config();
+
+    lProcessor.IO_ConfigureInterrupt(KMS_STM_ID_PA(2), &lTest, MSG_KEY);
 
     lProcessor.IO_SetMode(KMS_STM_ID_PC(0), STM::STM32F::IO_Mode::DIGITAL_OUTPUT_OPEN_DRAIN);
 
@@ -91,6 +95,7 @@ unsigned int Test::Receive(void* aSender, unsigned int aCode, void* aData)
 
     switch (aCode)
     {
+    case MSG_KEY         : lResult = OnKey(); break;
     case MSG_RX_BYTE     : lResult = OnRxByte(aData); break;
     case MSG_TX_COMPLETED: lResult = OnTxCompleted(); break;
     }
@@ -101,6 +106,18 @@ unsigned int Test::Receive(void* aSender, unsigned int aCode, void* aData)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+unsigned int Test::OnKey()
+{
+    // assert(NULL != mUSART);
+
+    if (mUSART->Tx_IsReady())
+    {
+        mUSART->Tx("Key\r\n", 5);
+    }
+
+    return 0;
+}
+
 unsigned int Test::OnRxByte(void* aData)
 {
     // assert(NULL != aData);
@@ -109,7 +126,7 @@ unsigned int Test::OnRxByte(void* aData)
 
     mDOs->DO_Set(KMS_STM_ID_PC(0), false);
 
-    while (!mUSART->Tx_IsReady());
+    mUSART->Tx_Wait();
 
     char* lData = reinterpret_cast<char*>(aData);
 
