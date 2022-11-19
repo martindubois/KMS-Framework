@@ -12,7 +12,8 @@ OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 # QUESTION Can I move OBJECTS and SOURCES in the makefile in the parent
 #          folder ?
 
-OBJECTS = Embedded_USART.o    \
+OBJECTS = Embedded_SPI.o      \
+          Embedded_USART.o    \
 		  Embedded_WorkItem.o \
 		  Embedded_WorkLoop.o \
 		  Msg_Destination.o   \
@@ -23,7 +24,8 @@ OBJECTS = Embedded_USART.o    \
 		  WOP_Sender.o        \
 		  WOP_System.o
 
-SOURCES = ../../../KMS-A/Embedded_USART.cpp    \
+SOURCES = ../../../KMS-A/Embedded_SPI.cpp      \
+          ../../../KMS-A/Embedded_USART.cpp    \
           ../../../KMS-A/Embedded_WorkItem.cpp \
           ../../../KMS-A/Embedded_WorkLoop.cpp \
           ../../../KMS-A/Msg_Destination.cpp   \

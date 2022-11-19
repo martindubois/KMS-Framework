@@ -12,6 +12,7 @@ OUTPUT = ../Libraries/$(CONFIG)/KMS-STM32.a
 # QUESTION Can I move OBJECTS in the makefile in the parent folder ?
 
 OBJECTS = Needed.o \
+          SPI.o    \
           STM32F.o \
 		  USART.o
 

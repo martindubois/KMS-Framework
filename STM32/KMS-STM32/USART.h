@@ -7,9 +7,6 @@
 
 #pragma once
 
-// ===== STM ================================================================
-#include <stm32f3xx.h>
-
 // ===== Includes ===========================================================
 #include <KMS/Embedded/USART.h>
 
@@ -21,12 +18,11 @@ public:
     void Init(uint8_t aUSART, uint8_t aDMA, uint32_t aClock_Hz);
 
     void Rx_OnInterrupt();
-
     void Tx_OnInterrupt();
 
     // ===== KMS::Embedded::USART ===========================================
     virtual void Rx_Disable();
-    virtual void Rx_Enable();
+    virtual void Rx_Enable ();
     virtual void Tx(const void* aData, uint16_t aSize_byte);
 
 protected:

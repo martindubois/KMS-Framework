@@ -12,12 +12,14 @@
 #include <KMS/STM/STM32F.h>
 
 // ===== Local ==============================================================
+#include "SPI.h"
 #include "USART.h"
 
 // Variables
 // //////////////////////////////////////////////////////////////////////////
 
 #define GPIO_QTY  (6)
+#define SPI_QTY   (3)
 #define USART_QTY (3)
 
 static GPIO_TypeDef * sGPIOs[GPIO_QTY] = { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF };
@@ -28,6 +30,7 @@ static uint8_t sUSART_DMA[USART_QTY] = { 3, 6, 1 };
 // information about the internal USART class. Any way, creating more than 1
 // instances of STM32F class make no sense.
 static ::USART sUSART_Instances[USART_QTY];
+static ::SPI   sSPI_Instances  [SPI_QTY  ];
 
 static KMS::Msg::Destination sOnInterrupts[16];
 
@@ -116,6 +119,47 @@ namespace KMS
             lGPIO->OSPEEDR |=    0x1 << (lBit * 2);
 
             lGPIO->PUPDR &= ~ (0x3 << (lBit * 2));
+        }
+
+        // SPI 1 Rx:  PA6 5  PA13 6  PB4 5  PC8 5
+        //       Tx:  PA7 5  PB0  5  PB5 5  PC9 5  PF6 5
+        //       Clk: PA5 5  PA12 6  PB3 5  PC7 5
+        // SPI 2 Rx:  PA9  5  PB14 5  PC2  5  PD3 5
+        //       Tx:  PA10 5  PB16 5  PC3  5  PD4 5
+        //       Clk: PA8  5  PB8  5  PB10 5  PD7 5  PD8 5
+        // SPI 3 Rx:  PA2 6  PB4 6  PC11 6
+        //       Tx:  PA3 6  PB5 6  PC12 6
+        //       Clk: PA1 6  PB3 6  PC10 6
+        Embedded::SPI* STM32F::SPI_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx, DAQ::Id aClk)
+        {
+            uint8_t lAltClk = 5;
+            uint8_t lAltRx  = 5;
+            uint8_t lAltTx  = 5;
+
+            switch (aId)
+            {
+            case 0:
+                switch (aRx)
+                {
+                case KMS_STM_ID_PA(13): lAltRx = 6; break;
+                }
+                switch (aClk)
+                {
+                case KMS_STM_ID_PA(12): lAltClk = 6; break;
+                }
+                break;
+            case 2: lAltClk = 6; lAltRx = 6; lAltTx = 6; break;
+            }
+
+            IO_SetAltFunc(aClk, lAltClk);
+            IO_SetAltFunc(aRx , lAltRx );
+            IO_SetAltFunc(aTx , lAltTx );
+
+            ::SPI* lResult = sSPI_Instances + aId;
+
+            lResult->Init(aId);
+
+            return lResult;
         }
 
         // All the pin we can use for USART1, 2 and 3 must be configured
@@ -253,6 +297,10 @@ extern "C"
             OnInterrupt(i); 
         }
     }
+
+    void SPI1_IRQHandler() { sSPI_Instances[0].OnInterrupt(); }
+    void SPI2_IRQHandler() { sSPI_Instances[1].OnInterrupt(); }
+    void SPI3_IRQHandler() { sSPI_Instances[2].OnInterrupt(); }
 
     void USART1_IRQHandler() { sUSART_Instances[0].Rx_OnInterrupt(); }
     void USART2_IRQHandler() { sUSART_Instances[1].Rx_OnInterrupt(); }

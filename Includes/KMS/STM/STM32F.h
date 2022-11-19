@@ -11,8 +11,12 @@
 // ===== C ==================================================================
 #include <stdint.h>
 
+// ===== STM ================================================================
+#include <stm32f3xx.h>
+
 // ===== Includes ===========================================================
 #include <KMS/DAQ/IDigitalOutputs.h>
+#include <KMS/Embedded/SPI.h>
 #include <KMS/Embedded/USART.h>
 #include <KMS/Msg/IReceiver.h>
 
@@ -49,6 +53,11 @@ namespace KMS
             // aId    See KMS_STM_ID_P...
             // aMode
             void IO_SetMode(DAQ::Id aId, IO_Mode aMode);
+
+            // aId  Zero based SPI index
+            // aRx  Rx pin, see KMS_STM_ID_P...
+            // aTx  Tx pin, see KMS_STM_ID_P...
+            Embedded::SPI* SPI_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx, DAQ::Id aClk);
 
             // aId  Zero based USART index
             // aRx  Rx pin, see KMS_STM_ID_P...
