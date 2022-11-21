@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-ComTool.ReadMe.txt
 
+EDIT ON BUILD - Windows
+
 0.1.11-dev Windows 2022-11-15
 
 0.1.7-dev Windows 2022-10-25

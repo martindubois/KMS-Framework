@@ -11,17 +11,9 @@ Date and time       20 ______ - ______ - ______               ______ : ______
 
 Computer            _________________________________________________________
 
-[ ] File "Common/Version.h" - Edit the Version
+[ ] Search "EDIT ON BUILD" and edit found file as needed.
 
 Version             ______ . ______ . ______ . ______ - _____________________
-
-[ ] File "_DocUser/KMS.ReadMe.txt"
-
-[ ] File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"
-
-[ ] File "KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt"
-[ ] File "KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt"
-[ ] File "KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt"
 
 ===== Linux only ============================================================
 [ ] Tool "Terminal" - Un the product folder
@@ -30,14 +22,6 @@ Version             ______ . ______ . ______ . ______ - _____________________
 [ ] Copy the exported file to the server
 
 ===== Windows only ==========================================================
-[ ] File "KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt"
-[ ] File "KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt"
-[ ] File "KMS-ByteTool/_DocUser/KMS.KMS-ByteTool.ReadMe.txt"
-[ ] File "KMS-ComTool/_DocUser/KMS.KMS-ComTool.ReadMe.txt"
-[ ] File "KMS-FileServer/_DocUser/KMS.KMS-FileServer.ReadMe.txt"
-[ ] File "KMS-ModbusSim/_DocUser/KMS.KMS-ModbusSim.ReadMe.txt"
-[ ] File "KMS-ModbusTool/_DocUser/KMS.KMS-ModbusTool.ReadMe.txt"
-[ ] File "KMS-Sync/_DocUser/KMS.KMS-Import.ReadMe.txt"
 [ ] Tool "Visual Studio 2022"
         - Build KMS-Build in Debug x64
         - Close

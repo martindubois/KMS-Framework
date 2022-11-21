@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      Common/Version.h
 
+// EDIT ON BUILD
+
 #pragma once
 
 // ===== Includes ===========================================================
