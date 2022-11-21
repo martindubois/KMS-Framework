@@ -44,20 +44,21 @@ namespace KMS
             void AddPreBuildCmd  (const char* aC);
             void AddTest         (const char* aT);
 
-            void SetDoNotCompile (bool aDNC = true);
-            void SetDoNotExport  (bool aDNE = true);
-            void SetDoNotPackage (bool aDNP = true);
-            void SetOSIndependent(bool aOSI = true);
-
-            void SetProduct     (const char *aP );
-            void SetProductShort(const char *aPS);
-            void SetVersionFile (const char* aVF);
-
             int Run();
 
             #ifdef _KMS_WINDOWS_
                 void AddProcessor(const char * aP);
             #endif
+
+            // ===== Configurable attributes ================================
+            DI::Boolean mDoNotCompile;
+            DI::Boolean mDoNotExport;
+            DI::Boolean mDoNotPackage;
+            DI::String  mEmbedded;
+            DI::Folder  mExportFolder;
+            DI::Boolean mOSIndependent;
+            DI::String  mProduct;
+            DI::String  mVersionFile;
 
         private:
 
@@ -71,10 +72,12 @@ namespace KMS
             void ExecuteCommands(const DI::Array& aCommands);
             void Export();
             void Package();
-            void Package_Component();
-            void Package_Component(const char* aC);
+            void Package_Components();
+            void Package_Components(const char* aC);
+            void Package_Components_Embedded(const char* aC);
             void Package_Files();
             void Package_Folders();
+            void Package_Libraries(const char* aC, const char* aExtension);
             void Test();
             void Test(const char* aC);
             void VerifyConfig();
@@ -90,19 +93,12 @@ namespace KMS
             // ===== Configurable attributes ================================
             DI::Array    mBinaries;
             DI::Array    mConfigurations;
-            DI::Boolean  mDoNotCompile;
-            DI::Boolean  mDoNotExport;
-            DI::Boolean  mDoNotPackage;
             DI::Array    mEditOperations;
-            DI::Folder   mExportFolder;
             DI::Array    mFiles;
             DI::Array    mFolders;
             DI::Array    mLibraries;
-            DI::Boolean  mOSIndependent;
             DI::Array    mPreBuildCmds;
-            DI::String   mProduct;
             DI::Array    mTests;
-            DI::String   mVersionFile;
 
             #ifdef _KMS_WINDOWS_
                 DI::String mWindowsFile_MSI;

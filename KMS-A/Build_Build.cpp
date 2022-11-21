@@ -41,6 +41,7 @@ static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true"
 static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
 static const KMS::Cfg::MetaData MD_EDIT_OPERATIONS("EditOperations += {Operation}");
+static const KMS::Cfg::MetaData MD_EMBEDDED       ("Embedded = false | true");
 static const KMS::Cfg::MetaData MD_EXPORT_FOLDER  ("ExportFolder = {Path}");
 static const KMS::Cfg::MetaData MD_FILES          ("Files += {Path}");
 static const KMS::Cfg::MetaData MD_FOLDERS        ("Folders += {Path}");
@@ -115,9 +116,9 @@ namespace KMS
 
             try
             {
-                KMS::Build::Build      lB;
-                KMS::Cfg::Configurator lC;
-                KMS::Installer         lInstaller;
+                Build             lB;
+                Cfg::Configurator lC;
+                Installer         lInstaller;
 
                 lC.AddConfigurable(&lB);
                 lC.AddConfigurable(&lInstaller);
@@ -166,6 +167,8 @@ namespace KMS
             AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
             AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
             AddEntry("EditOperations", &mEditOperations, false, &MD_EDIT_OPERATIONS);
+            AddEntry("Embedded"      , &mEmbedded      , false, &MD_EMBEDDED);
+            AddEntry("ExportFolder"  , &mExportFolder  , false, &MD_EXPORT_FOLDER);
             AddEntry("Files"         , &mFiles         , false, &MD_FILES);
             AddEntry("Folders"       , &mFolders       , false, &MD_FOLDERS);
             AddEntry("Libraries"     , &mLibraries     , false, &MD_LIBRARIES);
@@ -174,7 +177,6 @@ namespace KMS
             AddEntry("Product"       , &mProduct       , false, &MD_PRODUCT);
             AddEntry("Tests"         , &mTests         , false, &MD_TESTS);
             AddEntry("VersionFile"   , &mVersionFile   , false, &MD_VERSION_FILE);
-            AddEntry("ExportFolder"  , &mExportFolder  , false, &MD_EXPORT_FOLDER);
 
             AddEntry(NAME_OS "Binaries"      , &mBinaries      , false, &MD_OS_BINARIES);
             AddEntry(NAME_OS "Configurations", &mConfigurations, false, &MD_OS_CONFIGURATIONS);
@@ -190,7 +192,6 @@ namespace KMS
                 AddEntry("WindowsFile_MSI"  , &mWindowsFile_MSI  , false, &MD_WINDOWS_FILE_MSI);
                 AddEntry("WindowsProcessors", &mWindowsProcessors, false, &MD_WINDOWS_PROCESSORS);
             #endif
-
         }
 
         Build::~Build() {}
@@ -203,14 +204,6 @@ namespace KMS
         void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .AddEntry(new DI::String(aL), true); }
         void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .AddEntry(new DI::String(aC), true); }
         void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .AddEntry(new DI::String(aT), true); }
-
-        void Build::SetDoNotCompile (bool aDNC) { mDoNotCompile  = aDNC; }
-        void Build::SetDoNotExport  (bool aDNE) { mDoNotExport   = aDNE; }
-        void Build::SetDoNotPackage (bool aDNP) { mDoNotPackage  = aDNP; }
-        void Build::SetOSIndependent(bool aOSI) { mOSIndependent = aOSI; }
-
-        void Build::SetProduct    (const char* aP ) { assert(NULL != aP ); mProduct      = aP ; }
-        void Build::SetVersionFile(const char* aVF) { assert(NULL != aVF); mVersionFile  = aVF; }
 
         int Build::Run()
         {
@@ -314,7 +307,7 @@ namespace KMS
                 mProductFolder.Create();
             }
 
-            unsigned int lFlags = mOSIndependent ? Version::FLAG_OS_INDEPENDENT : 0;
+            unsigned int lFlags = ((0 < mEmbedded.GetLength()) || mOSIndependent) ? Version::FLAG_OS_INDEPENDENT : 0;
 
             char lPackage[FILE_LENGTH];
 
@@ -329,12 +322,12 @@ namespace KMS
 
         void Build::Package()
         {
-            Package_Component();
+            Package_Components();
             Package_Files();
             Package_Folders();
         }
 
-        void Build::Package_Component()
+        void Build::Package_Components()
         {
             File::Folder lBin(mTempFolder, "Binaries" );
             File::Folder lLib(mTempFolder, "Libraries");
@@ -349,7 +342,45 @@ namespace KMS
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
-                Package_Component(*lC);
+                if (0 < mEmbedded.GetLength())
+                {
+                    Package_Components_Embedded(*lC);
+                }
+                else
+                {
+                    Package_Components(*lC);
+                }
+            }
+        }
+
+        void Build::Package_Components_Embedded(const char* aC)
+        {
+            File::Folder lBinaries (mTempFolder, (std::string("Binaries/" ) + mEmbedded.Get()).c_str());
+            File::Folder lLibraries(mTempFolder, (std::string("Libraries/") + mEmbedded.Get()).c_str());
+
+            File::Folder lBin(lBinaries , aC);
+            File::Folder lLib(lLibraries, aC);
+
+            File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
+            File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
+
+            lBin.Create();
+            lLib.Create();
+
+            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+            {
+                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lB);
+
+                lBin_Src.Copy(lBin, (lB->mInternal + "*.elf").c_str());
+            }
+
+            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+            {
+                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lL);
+
+                lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
             }
         }
 
@@ -440,6 +471,8 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
@@ -452,7 +485,7 @@ void operator += (std::string& aString, unsigned int aValue)
     aString += lValue;
 }
 
-std::string ProcessReplaceLine(const char * aIn, const KMS::Version & aVersion)
+std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
 {
     // --> INIT <--+
     //      |      |
