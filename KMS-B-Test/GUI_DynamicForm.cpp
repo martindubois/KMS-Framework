@@ -16,6 +16,8 @@
 #include <KMS/HTTP/Request.h>
 #include <KMS/Proc/Browser.h>
 
+using namespace KMS;
+
 // ===== KMS-B-Test =========================================================
 #include "../Common/Version.h"
 
@@ -24,9 +26,9 @@
 
 #define MSG_VERSION_GET_DATA (1)
 
-static const KMS::GUI::MetaData MD_RESULT("", "Result");
+static const GUI::MetaData MD_RESULT("", "Result");
 
-class TestApp1 : public KMS::Msg::IReceiver
+class TestApp1 : public Msg::IReceiver
 {
 
 public:
@@ -35,25 +37,25 @@ public:
 
     bool GetResult() const;
 
-    // ===== KMS::Msg::IReceiver ============================================
+    // ===== Msg::IReceiver =================================================
     virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
-    KMS::GUI::Form mForm;
+    GUI::Form mForm;
 
 private:
 
-    KMS::DI::Dictionary mDictionary;
+    DI::Dictionary mDictionary;
 
-    KMS::DI::String mResult;
+    DI::String mResult;
 
 };
 
 KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactive", sTest_Interactive)
 {
-    KMS::Proc::Browser    lB;
-    KMS::HTTP::ReactApp   lRA;
+    Proc::Browser    lB;
+    HTTP::ReactApp   lRA;
 
-    /* TODO lD.SetEntry("Result", new KMS::JSON::String("Pending")); */
+    /* TODO lD.SetEntry("Result", new JSON::String("Pending")); */
 
     TestApp1 lTA;
 
@@ -61,7 +63,7 @@ KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactiv
 
     lTA.mForm.SetObject(&lD); */
 
-    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1"), true);
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new DI::NetAddressRange("127.0.0.1"), true);
 
     lRA.AddRoute("/");
     lRA.AddRoute("/TestDynamicForm");
@@ -72,7 +74,7 @@ KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactiv
 
     lRA.mServer.mThread.Start();
 
-    lB.SetPrefered(KMS::Proc::Browser::Type::EDGE);
+    lB.SetPrefered(Proc::Browser::Type::EDGE);
 
     lB.Open(lRA.mServer, "TestDynamicForm", "KMS-Framework");
 
@@ -95,11 +97,11 @@ TestApp1::TestApp1() : mResult("Pending")
 
 bool TestApp1::GetResult() const { return "PASSED" == mResult; }
 
-// ===== KMS::Msg::Receiver =================================================
+// ===== Msg::Receiver ======================================================
 
 unsigned int TestApp1::Receive(void* aSender, unsigned int aCode, void* aData)
 {
-    KMS::HTTP::Request* lRequest = reinterpret_cast<KMS::HTTP::Request*>(aData);
+    HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
     unsigned int lResult = 0;
 
@@ -110,14 +112,14 @@ unsigned int TestApp1::Receive(void* aSender, unsigned int aCode, void* aData)
 
         VERSION.GetString(lVersion, sizeof(lVersion));
 
-        lRequest->mResponseHeader.AddEntry("Access-Control-Allow-Origin", new KMS::DI::String("*"), true);
+        lRequest->mResponseHeader.AddEntry("Access-Control-Allow-Origin", new DI::String("*"), true);
 
-        lRequest->mResponseData.AddEntry("Version", new KMS::DI::String(lVersion), true);
+        lRequest->mResponseData.AddEntry("Version", new DI::String(lVersion), true);
         break;
 
     default:
         assert(false);
-        lResult = KMS::Msg::IReceiver::MSG_IGNORED;
+        lResult = Msg::IReceiver::MSG_IGNORED;
     }
 
     return lResult;

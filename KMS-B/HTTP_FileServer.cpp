@@ -53,8 +53,6 @@ static const KMS::DI::String TEXT_CSS              ("text/css");
 static const KMS::DI::String TEXT_HTML             ("text/html; charset=utf-8");
 static const KMS::DI::String TEXT_PLAIN            ("text/plain; charset=utf-8");
 
-
-
 namespace KMS
 {
     namespace HTTP
@@ -111,10 +109,10 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator lC;
-                KMS::HTTP::FileServer  lFS;
-                KMS::Installer         lInstaller;
-                KMS::HTTP::Server      lS;
+                Cfg::Configurator lC;
+                HTTP::FileServer  lFS;
+                Installer         lInstaller;
+                HTTP::Server      lS;
 
                 lS.mOnRequest = lFS.ON_REQUEST;
 

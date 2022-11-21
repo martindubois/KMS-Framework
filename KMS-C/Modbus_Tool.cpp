@@ -55,10 +55,10 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator  lC;
-                KMS::Installer          lInstaller;
-                KMS::Modbus::Master_Com lM;
-                KMS::Modbus::Tool       lT;
+                Cfg::Configurator  lC;
+                Installer          lInstaller;
+                Modbus::Master_Com lM;
+                Modbus::Tool       lT;
 
                 lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lM);
@@ -251,23 +251,25 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-uint16_t ToAddress(const KMS::DI::Dictionary& aMap, const char* aName)
+uint16_t ToAddress(const DI::Dictionary& aMap, const char* aName)
 {
     assert(NULL != aName);
 
     uint16_t lResult;
 
-    const KMS::DI::Object* lObject = aMap.GetEntry_R(aName);
+    const DI::Object* lObject = aMap.GetEntry_R(aName);
     if (NULL == lObject)
     {
-        lResult = KMS::Convert::ToUInt16(aName);
+        lResult = Convert::ToUInt16(aName);
     }
     else
     {
-        const KMS::DI::UInt<uint16_t>* lAddr = dynamic_cast<const KMS::DI::UInt<uint16_t>*>(lObject);
+        const DI::UInt<uint16_t>* lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
         assert(NULL != lAddr);
 
         lResult = *lAddr;

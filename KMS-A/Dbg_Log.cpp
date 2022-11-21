@@ -105,15 +105,15 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << Console::Color::RED;
                     std::cerr << "Data\t" << aSize_byte << " bytes";
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << Console::Color::YELLOW;
                     std::cerr << "Data\t" << aSize_byte << " bytes";
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -153,21 +153,21 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << Console::Color::RED;
                     std::cerr << "ERROR\n";
                     std::cerr << "    Counter  : " << mCounter << "\n";
                     std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
                     std::cerr << "    Function : " << aFunction;
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << Console::Color::YELLOW;
                     std::cerr << "WARNING\n";
                     std::cerr << "    Counter  : " << mCounter << "\n";
                     std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
                     std::cerr << "    Function : " << aFunction;
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -212,17 +212,17 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << Console::Color::RED;
                     std::cerr << "Exception\n";
                     std::cerr << aException;
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << Console::Color::YELLOW;
                     std::cerr << "Exception\n";
                     std::cerr << aException;
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -258,15 +258,15 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << KMS::Console::Color::RED;
+                    std::cerr << Console::Color::RED;
                     std::cerr << "Message\t\"" << aMsg << "\"";
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << KMS::Console::Color::YELLOW;
+                    std::cerr << Console::Color::YELLOW;
                     std::cerr << "Message\t\"" << aMsg << "\"";
-                    std::cerr << KMS::Console::Color::WHITE << std::endl;
+                    std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:

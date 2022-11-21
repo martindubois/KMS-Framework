@@ -76,17 +76,19 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-void Add(KMS::DI::Object* aObject, const char* aValue)
+void Add(DI::Object* aObject, const char* aValue)
 {
     assert(NULL != aValue);
 
-    KMS::DI::Array* lArray = dynamic_cast<KMS::DI::Array*>(aObject);
+    DI::Array* lArray = dynamic_cast<DI::Array*>(aObject);
     if (NULL != lArray)
     {
-        KMS::DI::Object* lObject = lArray->CreateEntry();
+        DI::Object* lObject = lArray->CreateEntry();
 
         Assign(lObject, aValue);
 
@@ -98,11 +100,11 @@ void Add(KMS::DI::Object* aObject, const char* aValue)
     KMS_EXCEPTION(DI_FORMAT_INVALID, "Invalid add operation", aValue);
 }
 
-void Assign(KMS::DI::Object* aObject, const char* aValue)
+void Assign(DI::Object* aObject, const char* aValue)
 {
     assert(NULL != aObject);
 
-    KMS::DI::Value* lValue = dynamic_cast<KMS::DI::Value*>(aObject);
+    DI::Value* lValue = dynamic_cast<DI::Value*>(aObject);
     if (NULL != lValue)
     {
         lValue->Set(aValue);
@@ -112,11 +114,11 @@ void Assign(KMS::DI::Object* aObject, const char* aValue)
     KMS_EXCEPTION(DI_FORMAT_INVALID, "Invalid assign operation", aValue);
 }
 
-void Set(KMS::DI::Object* aObject)
+void Set(DI::Object* aObject)
 {
     assert(NULL != aObject);
 
-    KMS::DI::Boolean* lBoolean = dynamic_cast<KMS::DI::Boolean*>(aObject);
+    DI::Boolean* lBoolean = dynamic_cast<DI::Boolean*>(aObject);
     if (NULL != lBoolean)
     {
         if (!lBoolean->Get())

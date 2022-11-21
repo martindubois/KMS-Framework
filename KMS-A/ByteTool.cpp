@@ -57,9 +57,9 @@ namespace KMS
 
         try
         {
-            KMS::ByteTool          lBT;
-            KMS::Cfg::Configurator lC;
-            KMS::Installer         lInstaller;
+            ByteTool          lBT;
+            Cfg::Configurator lC;
+            Installer         lInstaller;
 
 
             lC.AddConfigurable(&lBT);
@@ -106,7 +106,9 @@ namespace KMS
 
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::ByteTool& aBT)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const ByteTool& aBT)
 {
     const unsigned int* lH = aBT.GetHistrogram();
     assert(NULL != lH);

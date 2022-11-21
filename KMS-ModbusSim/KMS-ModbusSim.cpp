@@ -12,6 +12,8 @@
 #include <KMS/Exception.h>
 #include <KMS/Modbus/Simulator.h>
 
+using namespace KMS;
+
 // ===== KMS-ByteTool =======================================================
 #include "../Common/Version.h"
 
@@ -22,5 +24,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-ModbusSim");
 
-    return KMS::Modbus::Simulator::Main(aCount, aVector);
+    return Modbus::Simulator::Main(aCount, aVector);
 }

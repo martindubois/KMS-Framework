@@ -60,9 +60,9 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator  lC;
-                KMS::Com::Tool          lT;
-                KMS::Installer          lInstaller;
+                Cfg::Configurator lC;
+                Com::Tool         lT;
+                Installer         lInstaller;
 
                 lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lT);
@@ -113,11 +113,11 @@ namespace KMS
 
             if (0 < lSize_byte)
             {
-                std::cout << KMS::Console::Color::GREEN;
+                std::cout << Console::Color::GREEN;
 
                 DisplayDumpWrite(lData, lSize_byte, aFlags, "Receive");
 
-                std::cout << KMS::Console::Color::WHITE << std::flush;
+                std::cout << Console::Color::WHITE << std::flush;
             }
         }
 
@@ -153,19 +153,19 @@ namespace KMS
 
             if (lMatch)
             {
-                std::cout << KMS::Console::Color::GREEN;
+                std::cout << Console::Color::GREEN;
 
                 DisplayDumpWrite(lData, lSize_byte, aFlags, "Receive and verify PASSED");
 
-                std::cout << KMS::Console::Color::WHITE << std::flush;
+                std::cout << Console::Color::WHITE << std::flush;
             }
             else
             {
-                std::cout << KMS::Console::Color::RED;
+                std::cout << Console::Color::RED;
 
                 DisplayDumpWrite(lData, lSize_byte, aFlags | FLAG_DUMP | FLAG_TIMESTAMP, "Receive and verify FAILED");
 
-                std::cout << KMS::Console::Color::WHITE << std::flush;
+                std::cout << Console::Color::WHITE << std::flush;
             }
         }
 
@@ -191,11 +191,11 @@ namespace KMS
 
             mPort.Write(lIn, lInSize_byte);
 
-            std::cout << KMS::Console::Color::BLUE;
+            std::cout << Console::Color::BLUE;
 
             DisplayDumpWrite(lIn, lInSize_byte, aFlags, "Send");
 
-            std::cout << KMS::Console::Color::WHITE << std::flush;
+            std::cout << Console::Color::WHITE << std::flush;
         }
 
         // ===== CLI::Tool ==================================================
@@ -265,7 +265,7 @@ namespace KMS
 
             if      (0 == strcmp(aC, "ClearDTR"  )) { mPort.SetDTR(false); }
             else if (0 == strcmp(aC, "ClearRTS"  )) { mPort.SetRTS(false); }
-            else if (0 == strcmp(aC, "Connect"   )) { mPort.Connect(KMS::Dev::Device::FLAG_READ_ACCESS | KMS::Dev::Device::FLAG_WRITE_ACCESS); }
+            else if (0 == strcmp(aC, "Connect"   )) { mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS); }
             else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
             else if (0 == strcmp(aC, "Receive"   )) { Receive(0, 0); }
             else if (0 == strcmp(aC, "SetDTR"    )) { mPort.SetDTR(true); }
@@ -299,7 +299,7 @@ namespace KMS
 
         int Tool::Run()
         {
-            mPort.Connect(KMS::Dev::Device::FLAG_READ_ACCESS | KMS::Dev::Device::FLAG_WRITE_ACCESS);
+            mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS);
 
             return CLI::Tool::Run();
         }
@@ -327,6 +327,8 @@ namespace KMS
 
     }
 }
+
+using namespace KMS;
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -393,12 +395,12 @@ unsigned int ToFlags(const char* aIn)
 {
     unsigned int lResult = 0;
 
-    if (NULL != strstr(aIn, "DISPLAY"      )) { lResult |= KMS::Com::Tool::FLAG_DISPLAY; }
-    if (NULL != strstr(aIn, "DUMP"         )) { lResult |= KMS::Com::Tool::FLAG_DUMP; }
-    if (NULL != strstr(aIn, "EXIT_ON_ERROR")) { lResult |= KMS::Com::Tool::FLAG_EXIT_ON_ERROR; }
-    if (NULL != strstr(aIn, "FRAME_T"      )) { lResult |= KMS::Com::Tool::FLAG_FRAME_T; }
-    if (NULL != strstr(aIn, "TIMESTAMP"    )) { lResult |= KMS::Com::Tool::FLAG_TIMESTAMP; }
-    if (NULL != strstr(aIn, "WRITE"        )) { lResult |= KMS::Com::Tool::FLAG_WRITE; }
+    if (NULL != strstr(aIn, "DISPLAY"      )) { lResult |= Com::Tool::FLAG_DISPLAY; }
+    if (NULL != strstr(aIn, "DUMP"         )) { lResult |= Com::Tool::FLAG_DUMP; }
+    if (NULL != strstr(aIn, "EXIT_ON_ERROR")) { lResult |= Com::Tool::FLAG_EXIT_ON_ERROR; }
+    if (NULL != strstr(aIn, "FRAME_T"      )) { lResult |= Com::Tool::FLAG_FRAME_T; }
+    if (NULL != strstr(aIn, "TIMESTAMP"    )) { lResult |= Com::Tool::FLAG_TIMESTAMP; }
+    if (NULL != strstr(aIn, "WRITE"        )) { lResult |= Com::Tool::FLAG_WRITE; }
 
     return lResult;
 }

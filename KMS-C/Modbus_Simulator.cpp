@@ -85,8 +85,8 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator lC;
-                KMS::Installer         lInstaller;
+                Cfg::Configurator lC;
+                Installer         lInstaller;
                 Slave_Com lSl;
                 Simulator lSi;
 
@@ -181,7 +181,7 @@ namespace KMS
 
             default:
                 assert(false);
-                lResult = KMS::Msg::IReceiver::MSG_IGNORED;
+                lResult = Msg::IReceiver::MSG_IGNORED;
             }
 
             return lResult;
@@ -211,12 +211,12 @@ namespace KMS
             char lV[64];
             char lF[64];
 
-            unsigned int               lFlags = 0;
-            KMS::Modbus::RegisterValue lValue = 0;
+            unsigned int          lFlags = 0;
+            Modbus::RegisterValue lValue = 0;
 
             switch (sscanf_s(aIn, "%[^;];%[^;];%[^\n\r\t]", lN SizeInfo(lN), lV SizeInfo(lV), lF SizeInfo(lF)))
             {
-            case 3: lFlags = KMS::Convert::ToUInt32(lF);
+            case 3: lFlags = Convert::ToUInt32(lF);
             case 2: lValue = ToRegisterValue(lV);
             case 1: break;
 
@@ -428,6 +428,8 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -442,22 +444,22 @@ void OnCtrlC(int aSignal)
     sSimulator->Stop();
 }
 
-KMS::DI::Object* CreateItem() { return new KMS::Modbus::Simulator::Item; }
+DI::Object* CreateItem() { return new Modbus::Simulator::Item; }
 
-KMS::Modbus::RegisterValue ToRegisterValue(const char* aIn)
+Modbus::RegisterValue ToRegisterValue(const char* aIn)
 {
     assert(NULL != aIn);
     
     if (0 == _stricmp("false", aIn)) { return 0; }
     if (0 == _stricmp("true" , aIn)) { return 1; }
 
-    if (0 == _stricmp("off", aIn)) { return KMS::Modbus::OFF; }
-    if (0 == _stricmp("on" , aIn)) { return KMS::Modbus::ON ; }
+    if (0 == _stricmp("off", aIn)) { return Modbus::OFF; }
+    if (0 == _stricmp("on" , aIn)) { return Modbus::ON ; }
 
-    return KMS::Convert::ToUInt16(aIn);
+    return Convert::ToUInt16(aIn);
 }
 
-void TraceKnown(const char* aOp, KMS::Modbus::Address aA, const KMS::Modbus::Simulator::Item& aItem, unsigned int aFlags)
+void TraceKnown(const char* aOp, Modbus::Address aA, const Modbus::Simulator::Item& aItem, unsigned int aFlags)
 {
     assert(NULL != aOp);
 
@@ -467,11 +469,11 @@ void TraceKnown(const char* aOp, KMS::Modbus::Address aA, const KMS::Modbus::Sim
     }
 }
 
-void TraceUnknown(const char* aOp, KMS::Modbus::Address aA, KMS::Modbus::RegisterValue aV)
+void TraceUnknown(const char* aOp, Modbus::Address aA, Modbus::RegisterValue aV)
 {
     assert(NULL != aOp);
 
-    std::cout << KMS::Console::Color::RED;
+    std::cout << Console::Color::RED;
     std::cout << aOp << " at " << aA << " = " << aV;
-    std::cout << KMS::Console::Color::WHITE << std::endl;
+    std::cout << Console::Color::WHITE << std::endl;
 }

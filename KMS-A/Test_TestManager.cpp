@@ -41,8 +41,8 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator lC;
-                KMS::Test::TestManager lTM;
+                Cfg::Configurator lC;
+                TestManager       lTM;
 
                 lC.AddConfigurable(&lTM);
 
@@ -169,13 +169,15 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Test::TestManager& aTM)
 {
-    const KMS::Test::Test::TestList* lTestList = aTM.GetTestList();
+    const Test::Test::TestList* lTestList = aTM.GetTestList();
 
     unsigned int lIndex = 0;
 
-    for (const KMS::Test::Test* lT : *lTestList)
+    for (const Test::Test* lT : *lTestList)
     {
         aOut << "Test " << lIndex << "\n";
         aOut << *lT;
@@ -187,11 +189,11 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
     unsigned int lErrorCount = aTM.GetErrorCount();
     if (0 < lErrorCount)
     {
-        aOut << KMS::Console::Color::RED;
+        aOut << Console::Color::RED;
     }
     else
     {
-        aOut << KMS::Console::Color::GREEN;
+        aOut << Console::Color::GREEN;
     }
 
     aOut << "Test count        : " << lTestList->size() << "\n";
@@ -206,7 +208,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::TestManager& aTM
         aOut << "All tests PASSED";
     }
 
-    aOut << KMS::Console::Color::WHITE << std::endl;
+    aOut << Console::Color::WHITE << std::endl;
 
     return aOut;
 }

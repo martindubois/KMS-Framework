@@ -14,9 +14,11 @@
 #include <KMS/Console/Color.h>
 #include <KMS/Test/TestManager.h>
 
+using namespace KMS;
+
 KMS_TEST(Test_TestManager_Fail, "Test_TestManager_Fail", "Auto", sTest_Fail)
 {
-    KMS::Cfg::Configurator lC;
+    Cfg::Configurator      lC;
     KMS::Test::TestManager lTM;
 
     lC.AddConfigurable(&lTM);
@@ -30,7 +32,7 @@ KMS_TEST(Test_TestManager_Fail, "Test_TestManager_Fail", "Auto", sTest_Fail)
         "Unknown+=0"
     };
 
-    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 2);
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 2);
     lC.ParseArguments(5, lVector);
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 1U);
@@ -58,7 +60,7 @@ KMS_TEST(Test_TestManager_Fail0, "Test_TestManager_Fail0", "Fail", sTest_Fail0)
 
 KMS_TEST(Test_TestManager_Fail1, "Test_TestManager_Fail1", "Fail", sTest_Fail1)
 {
-    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
     KMS_TEST_EXPECTED_ERROR();
     KMS_EXCEPTION(TEST, "Test", "");
 }

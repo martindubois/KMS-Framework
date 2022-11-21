@@ -92,7 +92,7 @@ namespace KMS
 
             void WriteMessage(const char* aMsg);
 
-            void WriteVersion(const KMS::Version& aV);
+            void WriteVersion(const Version& aV);
 
         private:
 

@@ -9,6 +9,8 @@
 #include <KMS/Banner.h>
 #include <KMS/Com/Tool.h>
 
+using namespace KMS;
+
 // ===== Local ==============================================================
 #include "../Common/Version.h"
 
@@ -19,5 +21,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-ComTool");
 
-    return KMS::Com::Tool::Main(aCount, aVector);
+    return Com::Tool::Main(aCount, aVector);
 }

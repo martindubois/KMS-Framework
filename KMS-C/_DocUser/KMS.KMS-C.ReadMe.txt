@@ -8,7 +8,7 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 0.1.11-dev Windows 2022-11-15
 
 0.0.6-dev Windows 2022-07-27
-* KMS::Com::Port
-* KMS::Dev::Device
-* KMS::Modbus::CRC
-* KMS::Modbus::Slave_Com
+* Com::Port
+* Dev::Device
+* Modbus::CRC
+* Modbus::Slave_Com

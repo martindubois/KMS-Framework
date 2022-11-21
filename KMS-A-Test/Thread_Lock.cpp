@@ -11,10 +11,12 @@
 #include <KMS/Thread/Gate.h>
 #include <KMS/Thread/Lock.h>
 
+using namespace KMS;
+
 KMS_TEST(Thread_Lock_Base, "Thread_Lock_Base", "Auto", sTest_Base)
 {
-    KMS::Thread::Gate lG;
-    KMS::Thread::Lock lL(&lG);
+    Thread::Gate lG;
+    Thread::Lock lL(&lG);
 
     lL.Unlock();
     lL.Relock();

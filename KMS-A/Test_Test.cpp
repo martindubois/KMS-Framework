@@ -81,7 +81,7 @@ namespace KMS
                 Run();
                 Cleanup();
             }
-            catch (KMS::Exception eE)
+            catch (Exception eE)
             {
                 DisplayTestName();
                 std::cerr << "EXCEPTION" << "\n";
@@ -133,16 +133,18 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Test::Test& aT)
 {
     unsigned int lErrorCount = aT.GetErrorCount();
     if (0 < lErrorCount)
     {
-        aOut << KMS::Console::Color::RED;
+        aOut << Console::Color::RED;
     }
     else
     {
-        aOut << KMS::Console::Color::GREEN;
+        aOut << Console::Color::GREEN;
     }
 
     aOut << "    " << aT.GetName() << " - " << lErrorCount << " error(s)" << "\n";
@@ -156,7 +158,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT)
         aOut << "    PASSED";
     }
 
-    aOut << KMS::Console::Color::WHITE << std::endl;
+    aOut << Console::Color::WHITE << std::endl;
 
     return aOut;
 }

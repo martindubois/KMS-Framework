@@ -10,18 +10,18 @@ File      KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt
 0.1.5-dev Linux x86_64 2022-10-19
 
 0.1.1-dev Linux x86_64 2022-10-03
-* KMS::Build::Import * Use ~/Export as default repository on Linux
+* Build::Import * Use ~/Export as default repository on Linux
 
 0.0.6-dev Windows 2022-07-27
-* KMS::Build::Import
+* Build::Import
     * Compiled on Linux
     * Dependency format is {Product};{Version}
     * Support dependency by OS
     * Support OS independent dependency
-    * Use KMS::Version to generate package name
+    * Use Version to generate package name
 
 0.0.2 Windows 2022-05-21
 * Fix attribute's names
 
 0.0.1-dev Windows 2022-05-20
-* KMS::Build::Import * Fix attribute's names
+* Build::Import * Fix attribute's names

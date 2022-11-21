@@ -45,7 +45,7 @@ namespace KMS
             return lPtr.GetIndex();
         }
 
-        unsigned int Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte)
+        unsigned int Encode_Dictionary(const DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte)
         {
             Text::WritePtr lPtr(aOut, aOutSize_byte);
 
@@ -57,38 +57,40 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-void Decode(KMS::DI::Object* aObject, KMS::Text::ReadPtr* aPtr)
+void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
 {
     assert(NULL != aObject);
 
-    KMS::DI::Dictionary* lDictionary = dynamic_cast<KMS::DI::Dictionary*>(aObject);
+    DI::Dictionary* lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Decode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        KMS::DI::Value* lValue = dynamic_cast<KMS::DI::Value*>(aObject);
+        DI::Value* lValue = dynamic_cast<DI::Value*>(aObject);
         KMS_EXCEPTION_ASSERT(NULL != lValue, HTTP_NOT_IMPLEMENTED, "HTTP do not suppoert this data type", "");
 
         Decode_Value(lValue, aPtr);
     }
 }
 
-void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
+void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
 {
     assert(NULL != aObject);
     assert(NULL != aPtr);
 
-    KMS::Text::ReadPtr lPtr(*aPtr);
+    Text::ReadPtr lPtr(*aPtr);
 
     lPtr.SkipBlank();
 
-    KMS::DI::String        * lString;
-    KMS::DI::UInt<uint32_t>* lUInt32;
+    DI::String        * lString;
+    DI::UInt<uint32_t>* lUInt32;
 
     switch (*lPtr)
     {
@@ -102,13 +104,13 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     case '7':
     case '8':
     case '9':
-        lUInt32 = new KMS::DI::UInt<uint32_t>;
+        lUInt32 = new DI::UInt<uint32_t>;
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
         break;
 
     default:
-        lString = new KMS::DI::String;
+        lString = new DI::String;
         Decode_Value(lString, &lPtr);
         *aObject = lString;
     }
@@ -116,12 +118,12 @@ void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr)
     *aPtr = lPtr;
 }
 
-void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPtr)
+void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
 {
     assert(NULL != aDictionary);
     assert(NULL != aPtr);
 
-    KMS::Text::ReadPtr lPtr(*aPtr);
+    Text::ReadPtr lPtr(*aPtr);
 
     lPtr.SkipBlank();
 
@@ -134,7 +136,7 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
 
         lPtr.SkipBlank();
 
-        KMS::DI::Object* lObject = aDictionary->GetEntry_RW(lName);
+        DI::Object* lObject = aDictionary->GetEntry_RW(lName);
         if (NULL != lObject)
         {
             Decode(lObject, &lPtr);
@@ -153,12 +155,12 @@ void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPt
     *aPtr = lPtr;
 }
 
-void Decode_Value(KMS::DI::Value* aValue, KMS::Text::ReadPtr* aPtr)
+void Decode_Value(DI::Value* aValue, Text::ReadPtr* aPtr)
 {
     assert(NULL != aValue);
     assert(NULL != aPtr);
 
-    KMS::Text::ReadPtr lPtr(*aPtr);
+    Text::ReadPtr lPtr(*aPtr);
 
     lPtr.SkipBlank();
 
@@ -173,19 +175,19 @@ void Decode_Value(KMS::DI::Value* aValue, KMS::Text::ReadPtr* aPtr)
     *aPtr = lPtr;
 }
 
-void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr)
+void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
 {
     assert(NULL != aObject);
     assert(NULL != aPtr);
 
-    const KMS::DI::Dictionary* lDictionary = dynamic_cast<const KMS::DI::Dictionary*>(aObject);
+    const DI::Dictionary* lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Encode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        const KMS::DI::Value* lValue = dynamic_cast<const KMS::DI::Value*>(aObject);
+        const DI::Value* lValue = dynamic_cast<const DI::Value*>(aObject);
         if (NULL != lValue)
         {
             (*aPtr) += lValue->Get(*aPtr, aPtr->GetRemainingSize());
@@ -197,14 +199,14 @@ void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr)
     }
 }
 
-void Encode_Dictionary(const KMS::DI::Dictionary* aDictionary, KMS::Text::WritePtr* aPtr)
+void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 {
     assert(NULL != aDictionary);
     assert(NULL != aPtr);
 
-    KMS::Text::WritePtr lPtr(*aPtr);
+    Text::WritePtr lPtr(*aPtr);
 
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
+    for (const DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
     {
         assert(NULL != lVT.second);
 

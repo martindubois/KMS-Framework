@@ -101,7 +101,9 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Com::Port& aP)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Com::Port& aP)
 {
     if (aP.IsConnected())
     {
@@ -129,15 +131,15 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Com::Port& aP)
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-KMS::Com::Port::Parity ToParity(const char* aIn)
+Com::Port::Parity ToParity(const char* aIn)
 {
     assert(NULL != aIn);
 
-    if (strcmp("EVEN"        , aIn)) { return KMS::Com::Port::Parity::EVEN        ; }
-    if (strcmp("IGNORED_EVEN", aIn)) { return KMS::Com::Port::Parity::IGNORED_EVEN; }
-    if (strcmp("IGNORED_ODD" , aIn)) { return KMS::Com::Port::Parity::IGNORED_ODD ; }
-    if (strcmp("NONE"        , aIn)) { return KMS::Com::Port::Parity::NONE        ; }
-    if (strcmp("ODD"         , aIn)) { return KMS::Com::Port::Parity::ODD         ; }
+    if (strcmp("EVEN"        , aIn)) { return Com::Port::Parity::EVEN        ; }
+    if (strcmp("IGNORED_EVEN", aIn)) { return Com::Port::Parity::IGNORED_EVEN; }
+    if (strcmp("IGNORED_ODD" , aIn)) { return Com::Port::Parity::IGNORED_ODD ; }
+    if (strcmp("NONE"        , aIn)) { return Com::Port::Parity::NONE        ; }
+    if (strcmp("ODD"         , aIn)) { return Com::Port::Parity::ODD         ; }
 
     KMS_EXCEPTION(COM_CONFIG_INVALID, "Invalid parity", aIn);
 }

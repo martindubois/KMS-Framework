@@ -27,7 +27,7 @@ public:
 
     int Main(Embedded::USART* aUSART, DAQ::IDigitalOutputs *aDOs);
 
-    // ===== KMS::Msg::IReceiver ============================================
+    // ===== Msg::IReceiver =================================================
     unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
 private:
@@ -87,7 +87,7 @@ int Test::Main(Embedded::USART* aUSART, DAQ::IDigitalOutputs *aDOs)
     return 0;
 }
 
-// ===== KMS::Msg::IReceiver ================================================
+// ===== Msg::IReceiver =====================================================
 
 unsigned int Test::Receive(void* aSender, unsigned int aCode, void* aData)
 {

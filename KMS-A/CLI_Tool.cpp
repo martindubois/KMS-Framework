@@ -199,7 +199,7 @@ namespace KMS
 
         Tool::Tool() : mExit(0)
         {
-            mCommands.SetCreator(KMS::DI::String_Expand::Create);
+            mCommands.SetCreator(DI::String_Expand::Create);
 
             AddEntry("Commands", &mCommands, false, &MD_COMMANDS);
         }

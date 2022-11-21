@@ -10,10 +10,12 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 
+using namespace KMS;
+
 KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 {
-    KMS::Cfg::Configurator lC;
+    Cfg::Configurator lC;
 
-    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 6);
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 6);
     lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
 }

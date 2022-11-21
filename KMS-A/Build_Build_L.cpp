@@ -78,9 +78,9 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            for (const KMS::DI::Container::Entry& lEntry : mTests.mInternal)
+            for (const DI::Container::Entry& lEntry : mTests.mInternal)
             {
-                const KMS::DI::String* lT = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
+                const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lT);
 
                 Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());

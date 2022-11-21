@@ -11,6 +11,8 @@
 #include <KMS/Banner.h>
 #include <KMS/Test/TestManager.h>
 
+using namespace KMS;
+
 // ===== KMS-A-Test =========================================================
 #include "../Common/Version.h"
 
@@ -21,5 +23,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-A-Test");
 
-    return KMS::Test::TestManager::Main(aCount, aVector);
+    return Test::TestManager::Main(aCount, aVector);
 }

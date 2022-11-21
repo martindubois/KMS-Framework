@@ -16,10 +16,12 @@
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
 
+using namespace KMS;
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const uint8_t CODES[static_cast<unsigned int>(KMS::Console::Color::COLOR_QTY)] = { 0x09, 0x0a, 0x0c, 0x0e, 0x07 };
+static const uint8_t CODES[static_cast<unsigned int>(Console::Color::COLOR_QTY)] = { 0x09, 0x0a, 0x0c, 0x0e, 0x07 };
 
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
@@ -29,7 +31,7 @@ static HANDLE sConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Console::Color& aC)
+std::ostream& operator << (std::ostream& aOut, const Console::Color& aC)
 {
     assert(INVALID_HANDLE_VALUE != sConsole);
 

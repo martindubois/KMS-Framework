@@ -92,8 +92,8 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator lC;
-                KMS::Build::Make       lM;
+                Cfg::Configurator lC;
+                Build::Make       lM;
 
                 lC.AddConfigurable(&lM);
 
@@ -366,7 +366,7 @@ namespace KMS
         {
             printf("%s( , \"%s\",  )\n", __FUNCTION__, aSource);
 
-            KMS::StringSet_ASCII* lHeaders = aDepend->ParseFile(aSource);
+            StringSet_ASCII* lHeaders = aDepend->ParseFile(aSource);
             if (0 < lHeaders->size())
             {
                 char lLongLine[8192];
@@ -513,14 +513,16 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-bool DoesContain(const KMS::DI::Array& aArray, const char* aStr)
+bool DoesContain(const DI::Array& aArray, const char* aStr)
 {
-    for (const KMS::DI::Container::Entry& lEntry : aArray.mInternal)
+    for (const DI::Container::Entry& lEntry : aArray.mInternal)
     {
-        const KMS::DI::String* lStr = dynamic_cast<const KMS::DI::String*>(lEntry.Get());
+        const DI::String* lStr = dynamic_cast<const DI::String*>(lEntry.Get());
         assert(NULL != lStr);
 
         if (*lStr == aStr)

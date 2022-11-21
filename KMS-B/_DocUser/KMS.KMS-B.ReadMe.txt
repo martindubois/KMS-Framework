@@ -8,16 +8,16 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 0.1.11-dev Windows 2022-11-15
 
 0.1.4-dev Windows 2022-10-17
-- KMS::NET::AddressRangeList::GetInternal - Removed
+- NET::AddressRangeList::GetInternal - Removed
 
 0.1.1-dev Windows 2022-10-04
-* KMS::DI
+* DI
 
 0.0.11-dev Windows 2022-09-06
-- KMS::HTTP::ReactApp
+- HTTP::ReactApp
     - Fix the location of the front-end in 32 bits debug on Windows
 
 0.0.6-dev Windows 2022-07-27
-* KMS::HTTP::FileServer - File type list
-* KMS::Net::Server
-* KMS::Proc::Browser
+* HTTP::FileServer - File type list
+* Net::Server
+* Proc::Browser

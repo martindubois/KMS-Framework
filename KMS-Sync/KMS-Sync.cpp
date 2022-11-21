@@ -9,6 +9,8 @@
 #include <KMS/Banner.h>
 #include <KMS/File/Sync.h>
 
+using namespace KMS;
+
 // ===== KMS-ByteTool =======================================================
 #include "../Common/Version.h"
 
@@ -19,5 +21,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-Sync");
 
-    return KMS::File::Sync::Main(aCount, aVector);
+    return File::Sync::Main(aCount, aVector);
 }

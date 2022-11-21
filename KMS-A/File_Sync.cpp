@@ -54,9 +54,9 @@ namespace KMS
 
             try
             {
-                KMS::Cfg::Configurator lC;
-                KMS::Installer         lInstaller;
-                KMS::File::Sync        lS;
+                Cfg::Configurator lC;
+                Installer         lInstaller;
+                File::Sync        lS;
 
                 lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS);
@@ -205,21 +205,23 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static fonctions
 // //////////////////////////////////////////////////////////////////////////
 
-KMS::DI::Object* CreateGroup()
+DI::Object* CreateGroup()
 {
-    KMS::DI::Array* lResult = new KMS::DI::Array;
+    DI::Array* lResult = new DI::Array;
 
-    lResult->SetCreator(KMS::DI::String::Create);
+    lResult->SetCreator(DI::String::Create);
 
     return lResult;
 }
 
-KMS::File::FileInfoList* ToFileInfoList(const char* aFolder)
+File::FileInfoList* ToFileInfoList(const char* aFolder)
 {
-    KMS::File::FileInfoList* lResult = new KMS::File::FileInfoList(KMS::File::Folder(aFolder), "*", true);
+    File::FileInfoList* lResult = new File::FileInfoList(File::Folder(aFolder), "*", true);
 
     return lResult;
 }

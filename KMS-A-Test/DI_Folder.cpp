@@ -10,18 +10,20 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Folder.h>
 
+using namespace KMS;
+
 KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
 {
     // Create
-    KMS::DI::Object* lO = KMS::DI::Folder::Create();
+    DI::Object* lO = DI::Folder::Create();
     KMS_TEST_ASSERT(NULL != lO);
     delete lO;
 
     // Constructors
 
     // Operator =
-    KMS::DI::Folder lF0;
-    lF0 = KMS::File::Folder::CURRENT;
+    DI::Folder lF0;
+    lF0 = File::Folder::CURRENT;
 
     // Set
     lF0.Set("EXECUTABLE:DoesNotExist");

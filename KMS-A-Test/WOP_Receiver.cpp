@@ -12,6 +12,11 @@
 #include <KMS/WOP/Receiver.h>
 #include <KMS/WOP/ValueArray.h>
 
+using namespace KMS;
+
+// ===== Local ==============================================================
+#include "../Common/Version.h"
+
 KMS_TEST(WOP_Receiver_Base, "WOP_Receiver_Base", "Auto", sTest_Base)
 {
     static const uint8_t FRAME_A[] = { 0x00, 0xff, 0x01, 0x01, 0x0a, 0xc4, 0x43 };
@@ -20,16 +25,16 @@ KMS_TEST(WOP_Receiver_Base, "WOP_Receiver_Base", "Auto", sTest_Base)
     static const uint8_t FRAME_D[] = { 0x00, 0xff, 0x00, 0x01, 0x02, 0x94, 0x45 };
     static const uint8_t FRAME_E[] = { 0x00, 0xff, 0x00, 0x01, 0x02, 0x94, 0x46 }; // Bad CRC
 
-    KMS::WOP::BitArray<uint8_t>       lBA0;
-    KMS::WOP::Object                * lInstances[2];
-    KMS::WOP::System                  lSys0;
-    KMS::WOP::ValueArray<uint16_t, 2> lVA0;
+    WOP::BitArray<uint8_t>       lBA0;
+    WOP::Object                * lInstances[2];
+    WOP::System                  lSys0(VERSION);
+    WOP::ValueArray<uint16_t, 2> lVA0;
 
     lInstances[0] = &lBA0;
     lInstances[1] = &lVA0;
 
     // Constructor
-    KMS::WOP::Receiver lR0(&lSys0, lInstances, 2);
+    WOP::Receiver lR0(&lSys0, lInstances, 2);
 
     // AddReceivedByte
     lR0.AddReceivedByte(0xff);

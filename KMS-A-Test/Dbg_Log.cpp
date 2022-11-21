@@ -10,14 +10,16 @@
 // ===== Includes ===========================================================
 #include <KMS/Dbg/Log.h>
 
-// We could use KMS::Dbg::Log::SetHideCount to hide error message on console,
-// but doing that would not thest the code displaying error on the console.
+using namespace KMS;
+
+// We could use Dbg::Log::SetHideCount to hide error message on console, but
+// doing that would not thest the code displaying error on the console.
 
 KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 {
-    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-    KMS::Exception lE(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::TEST, "Test");
-    KMS::Dbg::Log  lL;
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+    Exception lE(__FILE__, __FUNCTION__, __LINE__, Exception::Code::TEST, "Test");
+    Dbg::Log  lL;
 
     lL.mFolder.Set("DoesNotExist");
 
@@ -25,16 +27,16 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 
     KMS_TEST_ASSERT(!lL.IsFileEnabled());
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_NOISE);
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_NOISE);
     lL.WriteData(&lL, sizeof(lL));
 
     KMS_TEST_EXPECTED_WARNINGS(1);
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_WARNING);
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
     lL.WriteData(&lL, sizeof(lL));
     lL.WriteException(lE);
 
     KMS_TEST_EXPECTED_ERROR();
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, KMS::Dbg::LogFile::Level::LEVEL_ERROR);
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
     lL.WriteData(&lL, sizeof(lL));
     lL.WriteException(lE);
     lL.WriteMessage("Test");
@@ -52,5 +54,5 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     lL.mFileLevel.Set("NOISE");
 
     KMS_DBG_LOG_INFO();
-    KMS::Dbg::gLog.WriteData(&lL, sizeof(lL));
+    Dbg::gLog.WriteData(&lL, sizeof(lL));
 }

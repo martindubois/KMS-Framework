@@ -198,6 +198,8 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
@@ -205,7 +207,7 @@ DWORD WINAPI Run_Link(LPVOID aParam)
 {
     assert(NULL != aParam);
 
-    KMS::Thread::Thread* lThis = reinterpret_cast<KMS::Thread::Thread*>(aParam);
+    Thread::Thread* lThis = reinterpret_cast<Thread::Thread*>(aParam);
 
     lThis->Run();
 

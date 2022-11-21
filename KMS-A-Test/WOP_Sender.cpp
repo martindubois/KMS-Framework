@@ -12,18 +12,23 @@
 #include <KMS/WOP/Sender.h>
 #include <KMS/WOP/ValueArray.h>
 
+using namespace KMS;
+
+// ===== Local ==============================================================
+#include "../Common/Version.h"
+
 KMS_TEST(WOP_Sender_Base, "WOP_Sender_Base", "Auto", sTest_Base)
 {
-    KMS::WOP::BitArray<uint8_t>       lBA0;
-    KMS::WOP::Object                * lInstances[2];
-    KMS::WOP::System                  lSys0;
-    KMS::WOP::ValueArray<uint16_t, 2> lVA0;
+    WOP::BitArray<uint8_t>       lBA0;
+    WOP::Object                * lInstances[2];
+    WOP::System                  lSys0(VERSION);
+    WOP::ValueArray<uint16_t, 2> lVA0;
 
     lInstances[0] = &lBA0;
     lInstances[1] = &lVA0;
 
     // Constructor
-    KMS::WOP::Sender lS0(&lSys0, lInstances, 2);
+    WOP::Sender lS0(&lSys0, lInstances, 2);
 
     // SetInstanceCount
     lS0.SetInstanceCount(2);
@@ -33,7 +38,7 @@ KMS_TEST(WOP_Sender_Base, "WOP_Sender_Base", "Auto", sTest_Base)
 
     lSys0.SetResult(KMS_WOP_RESULT_TEST);
 
-    const KMS::WOP::FrameBuffer* lF0 = lS0.PrepareFrame();
+    const WOP::FrameBuffer* lF0 = lS0.PrepareFrame();
     KMS_TEST_ASSERT(NULL != lF0);
 
     KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());

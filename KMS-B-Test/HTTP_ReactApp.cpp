@@ -20,10 +20,12 @@
 
 #include <KMS/HTTP/ReactApp.h>
 
+using namespace KMS;
+
 // ===== KMS-B-Test =========================================================
 #include "../Common/Version.h"
 
-class TestApp : public KMS::Msg::IReceiver
+class TestApp : public Msg::IReceiver
 {
 
 public:
@@ -32,7 +34,7 @@ public:
 
     bool GetResult() const;
 
-    // ===== KMS::Msg::IReceiver ============================================
+    // ===== Msg::IReceiver =================================================
     virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
 private:
@@ -48,11 +50,11 @@ private:
 
 KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 {
-    KMS::Proc::Browser lB;
-    KMS::HTTP::ReactApp lRA;
+    Proc::Browser lB;
+    HTTP::ReactApp lRA;
     TestApp lTA;
 
-    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new KMS::DI::NetAddressRange("127.0.0.1"), true);
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new DI::NetAddressRange("127.0.0.1"), true);
 
     lRA.AddRoute("/");
 
@@ -60,7 +62,7 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lRA.mServer.mThread.Start();
 
-    lB.SetPrefered(KMS::Proc::Browser::Type::EDGE);
+    lB.SetPrefered(Proc::Browser::Type::EDGE);
 
     lB.Open(lRA.mServer, "", "KMS-Framework");
 
@@ -85,16 +87,16 @@ bool TestApp::GetResult() const
     return 1 <= mGetVersion;
 }
 
-// ===== KMS::Msg::Receiver =================================================
+// ===== Msg::Receiver ======================================================
 
 #define NAME_ACCESS_CONTROL_ALLOW_ORIGIN "Access-Control-Allow-Origin"
 #define NAME_VERSION                     "Version"
 
-static const KMS::DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
+static const DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
 
 unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 {
-    KMS::HTTP::Request* lRequest = reinterpret_cast<KMS::HTTP::Request*>(aData);
+    HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
     unsigned int lResult = 0;
 
@@ -109,12 +111,12 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 
         lRequest->mResponseHeader.AddConstEntry(NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
 
-        lRequest->mResponseData.AddEntry(NAME_VERSION, new KMS::DI::String(lVersion), true);
+        lRequest->mResponseData.AddEntry(NAME_VERSION, new DI::String(lVersion), true);
         break;
 
     default:
         assert(false);
-        lResult = KMS::Msg::IReceiver::MSG_IGNORED;
+        lResult = Msg::IReceiver::MSG_IGNORED;
     }
 
     return lResult;

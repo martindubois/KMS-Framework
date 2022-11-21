@@ -6,17 +6,17 @@ Product   KMS-Framework
 File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 0.1.11-dev Windows 2022-11-15
-* KMS::Make
+* Make
     * Compile on Windows
     - mCleanExtensions
 
 0.1.5-dev Linux x86_64 2022-10-19
-- KMS::Build::Make - Use KMS::CLI::Tool
+- Build::Make - Use CLI::Tool
 
 0.1.1-dev Linux x86_64 2022-10-03
 
 0.0.10-dev Linux x86_64 2022-08-24
-* KMS::Build::Depend
+* Build::Depend
 
 0.0.6-dev Windows 2022-07-27
-* KMS::Build::Make (Linux only)
+* Build::Make (Linux only)

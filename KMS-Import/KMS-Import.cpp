@@ -9,6 +9,8 @@
 #include <KMS/Banner.h>
 #include <KMS/Build/Import.h>
 
+using namespace KMS;
+
 // ===== KMS-ByteTool =======================================================
 #include "../Common/Version.h"
 
@@ -19,5 +21,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-Import");
 
-    return KMS::Build::Import::Main(aCount, aVector);
+    return Build::Import::Main(aCount, aVector);
 }

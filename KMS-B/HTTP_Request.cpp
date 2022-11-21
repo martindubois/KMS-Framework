@@ -221,7 +221,9 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request& aR)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const HTTP::Request& aR)
 {
     aOut << "\n";
     aOut << aR.GetTypeName() << " " << aR.GetPath() << "\n";

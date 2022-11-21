@@ -11,4 +11,4 @@ File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 - Create folder structure
 
 0.0.3 Windows 2022-06-02
-* KMS::File::Sync
+* File::Sync

@@ -236,22 +236,24 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, const KMS::DI::Dictionary* aD, unsigned int aLevel)
+void Help_Dictionary(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, const DI::Dictionary* aD, unsigned int aLevel)
 {
     assert(NULL != aOut);
     assert(NULL != aD);
 
     Help_Object(aOut, aName, aMD, aLevel);
 
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : aD->mInternal)
+    for (const DI::Dictionary::Internal::value_type lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 
-        const KMS::Cfg::MetaData * lMD = dynamic_cast<const KMS::Cfg::MetaData *>(lVT.second.mMetaData);
-        const KMS::DI::Dictionary* lD  = dynamic_cast<const KMS::DI::Dictionary*>(lVT.second.Get());
+        const Cfg::MetaData * lMD = dynamic_cast<const Cfg::MetaData *>(lVT.second.mMetaData);
+        const DI::Dictionary* lD  = dynamic_cast<const DI::Dictionary*>(lVT.second.Get());
         if (NULL == lD)
         {
             Help_Object(aOut, lVT.first.c_str(), lMD, aLevel + 1);
@@ -264,7 +266,7 @@ void Help_Dictionary(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aM
     }
 }
 
-void Help_Object(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, unsigned int aLevel)
+void Help_Object(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, unsigned int aLevel)
 {
     assert(NULL != aOut);
 
@@ -279,17 +281,17 @@ void Help_Object(FILE* aOut, const char* aName, const KMS::Cfg::MetaData* aMD, u
     }
 }
 
-void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aName)
+void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
 {
     assert(NULL != aOut);
     assert(NULL != aA);
     assert(NULL != aName);
 
-    for (const KMS::DI::Container::Entry& lEntry : aA->mInternal)
+    for (const DI::Container::Entry& lEntry : aA->mInternal)
     {
         assert(NULL != lEntry);
 
-        const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(lEntry.Get());
+        const DI::Value* lV = dynamic_cast<const DI::Value*>(lEntry.Get());
         KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
         char lData[LINE_LENGTH];
@@ -300,11 +302,11 @@ void Save_Array(FILE* aOut, const KMS::DI::Array* aA, const char* aName)
     }
 }
 
-void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aName)
+void Save_Dictionary(FILE* aOut, const DI::Dictionary* aD, const char* aName)
 {
     assert(NULL != aD);
 
-    for (const KMS::DI::Dictionary::Internal::value_type lVT : aD->mInternal)
+    for (const DI::Dictionary::Internal::value_type lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 
@@ -323,17 +325,17 @@ void Save_Dictionary(FILE* aOut, const KMS::DI::Dictionary* aD, const char* aNam
     }
 }
 
-void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aName)
+void Save_Object(FILE* aOut, const DI::Object* aO, const char* aName)
 {
     assert(NULL != aO);
 
-    const KMS::DI::Dictionary* lD = dynamic_cast<const KMS::DI::Dictionary*>(aO);
+    const DI::Dictionary* lD = dynamic_cast<const DI::Dictionary*>(aO);
     if (NULL == lD)
     {
-        const KMS::DI::Array* lA = dynamic_cast<const KMS::DI::Array*>(aO);
+        const DI::Array* lA = dynamic_cast<const DI::Array*>(aO);
         if (NULL == lA)
         {
-            const KMS::DI::Value* lV = dynamic_cast<const KMS::DI::Value*>(aO);
+            const DI::Value* lV = dynamic_cast<const DI::Value*>(aO);
             KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
             Save_Value(aOut, lV, aName);
@@ -349,7 +351,7 @@ void Save_Object(FILE* aOut, const KMS::DI::Object* aO, const char* aName)
     }
 }
 
-void Save_Value(FILE* aOut, const KMS::DI::Value* aV, const char* aName)
+void Save_Value(FILE* aOut, const DI::Value* aV, const char* aName)
 {
     assert(NULL != aV);
     assert(NULL != aName);

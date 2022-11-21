@@ -10,6 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Convert.h>
 
+using namespace KMS;
+
 KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
 {
     uint8_t lArray[16];
@@ -17,65 +19,65 @@ KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
     wchar_t lUTF16[LINE_LENGTH];
 
     // ToBool
-    KMS_TEST_ASSERT(!KMS::Convert::ToBool("FALSE"));
-    KMS_TEST_ASSERT(!KMS::Convert::ToBool("False"));
-    KMS_TEST_ASSERT(!KMS::Convert::ToBool("false"));
-    KMS_TEST_ASSERT(!KMS::Convert::ToBool("0"));
+    KMS_TEST_ASSERT(!Convert::ToBool("FALSE"));
+    KMS_TEST_ASSERT(!Convert::ToBool("False"));
+    KMS_TEST_ASSERT(!Convert::ToBool("false"));
+    KMS_TEST_ASSERT(!Convert::ToBool("0"));
 
-    KMS_TEST_ASSERT(KMS::Convert::ToBool("TRUE"));
-    KMS_TEST_ASSERT(KMS::Convert::ToBool("True"));
-    KMS_TEST_ASSERT(KMS::Convert::ToBool("true"));
-    KMS_TEST_ASSERT(KMS::Convert::ToBool("1"));
+    KMS_TEST_ASSERT(Convert::ToBool("TRUE"));
+    KMS_TEST_ASSERT(Convert::ToBool("True"));
+    KMS_TEST_ASSERT(Convert::ToBool("true"));
+    KMS_TEST_ASSERT(Convert::ToBool("1"));
 
     // ToDouble
-    KMS_TEST_ASSERT(0.0 == KMS::Convert::ToDouble("0.0"));
+    KMS_TEST_ASSERT(0.0 == Convert::ToDouble("0.0"));
 
     // ToFile
-    FILE* lFile = KMS::Convert::ToFile("KMS-A-Test/Tests/Test1.cfg");
+    FILE* lFile = Convert::ToFile("KMS-A-Test/Tests/Test1.cfg");
     KMS_TEST_ASSERT(NULL != lFile);
     int lRet = fclose(lFile);
     KMS_TEST_COMPARE(lRet, 0);
 
     // ToInt32
-    KMS_TEST_COMPARE(-1, KMS::Convert::ToInt32("-1"));
-    KMS_TEST_COMPARE( 1, KMS::Convert::ToInt32("0x1"));
+    KMS_TEST_COMPARE(-1, Convert::ToInt32("-1"));
+    KMS_TEST_COMPARE( 1, Convert::ToInt32("0x1"));
 
     // ToUInt16
-    KMS_TEST_COMPARE(0     , KMS::Convert::ToUInt16("0"));
-    KMS_TEST_COMPARE(0xffff, KMS::Convert::ToUInt16("0xffff"));
+    KMS_TEST_COMPARE(0     , Convert::ToUInt16("0"));
+    KMS_TEST_COMPARE(0xffff, Convert::ToUInt16("0xffff"));
 
     // ToUInt32
-    KMS_TEST_ASSERT(0          == KMS::Convert::ToUInt32("0x0"));
-    KMS_TEST_ASSERT(0xffffffff == KMS::Convert::ToUInt32("0xffffffff"));
+    KMS_TEST_ASSERT(0          == Convert::ToUInt32("0x0"));
+    KMS_TEST_ASSERT(0xffffffff == Convert::ToUInt32("0xffffffff"));
 
     // ToUInt8
-    KMS_TEST_COMPARE(0   , KMS::Convert::ToUInt8("0"));
-    KMS_TEST_COMPARE(0xff, KMS::Convert::ToUInt8("0xff"));
+    KMS_TEST_COMPARE(0   , Convert::ToUInt8("0"));
+    KMS_TEST_COMPARE(0xff, Convert::ToUInt8("0xff"));
 
     // ToASCII
-    KMS_TEST_COMPARE(sizeof(char), KMS::Convert::ToASCII(L"a", lASCII, sizeof(lASCII)));
+    KMS_TEST_COMPARE(sizeof(char), Convert::ToASCII(L"a", lASCII, sizeof(lASCII)));
 
     // ToUTF16
-    KMS_TEST_COMPARE(sizeof(wchar_t), KMS::Convert::ToUTF16("a", lUTF16, sizeof(lUTF16)));
+    KMS_TEST_COMPARE(sizeof(wchar_t), Convert::ToUTF16("a", lUTF16, sizeof(lUTF16)));
 
     // ToDisplay
-    KMS_TEST_COMPARE(sizeof(char), KMS::Convert::ToDisplay("a", sizeof(char), lASCII, sizeof(lASCII)));
+    KMS_TEST_COMPARE(sizeof(char), Convert::ToDisplay("a", sizeof(char), lASCII, sizeof(lASCII)));
 
     // ToUInt8Array
-    KMS_TEST_COMPARE(1U, KMS::Convert::ToUInt8Array("01"    , "" , "" , lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(1U, Convert::ToUInt8Array("01"    , "" , "" , lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x01);
-    KMS_TEST_COMPARE(1U, KMS::Convert::ToUInt8Array("a"     , ":", "" , lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(1U, Convert::ToUInt8Array("a"     , ":", "" , lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x0a);
-    KMS_TEST_COMPARE(2U, KMS::Convert::ToUInt8Array("02 Aa" , " ", "" , lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(2U, Convert::ToUInt8Array("02 Aa" , " ", "" , lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x02);
     KMS_TEST_COMPARE(lArray[1], 0xaa);
-    KMS_TEST_COMPARE(3U, KMS::Convert::ToUInt8Array(":03:Aa", ":", "" , lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(3U, Convert::ToUInt8Array(":03:Aa", ":", "" , lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x00);
     KMS_TEST_COMPARE(lArray[1], 0x03);
     KMS_TEST_COMPARE(lArray[2], 0xaa);
-    KMS_TEST_COMPARE(1U, KMS::Convert::ToUInt8Array("4 "    , ":", " ", lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(1U, Convert::ToUInt8Array("4 "    , ":", " ", lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x04);
-    KMS_TEST_COMPARE(1U, KMS::Convert::ToUInt8Array("5:"    , ":", " ", lArray, sizeof(lArray)));
+    KMS_TEST_COMPARE(1U, Convert::ToUInt8Array("5:"    , ":", " ", lArray, sizeof(lArray)));
     KMS_TEST_COMPARE(lArray[0], 0x05);
 }
 
@@ -88,8 +90,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToBool
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToBool("Invalid");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToBool("Invalid");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_FORMAT_INVALID);
@@ -97,8 +99,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToDouble
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToDouble("0.0 ");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToDouble("0.0 ");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_FORMAT_INVALID);
@@ -106,8 +108,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToFile
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToFile("DoesNotExist");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToFile("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_OPEN_FAILED);
@@ -115,8 +117,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToInt32
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToInt32("-1 ");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToInt32("-1 ");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
@@ -124,8 +126,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt16
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt16("0x10000");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
@@ -133,8 +135,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt32
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt32("0 ");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt32("0 ");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
@@ -142,8 +144,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt8
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt8("0x100");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt8("0x100");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
@@ -151,8 +153,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToASCII
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToASCII(L"AB", lASCII, 2);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToASCII(L"AB", lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
@@ -160,8 +162,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUTF16
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUTF16("AB", lUTF16, 2);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUTF16("AB", lUTF16, 2);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
@@ -169,8 +171,8 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToDisplay
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToDisplay("AB", 2, lASCII, 2);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToDisplay("AB", 2, lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
@@ -178,24 +180,24 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
     // ToUInt8Array
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt8Array("G", "", "", lArray, 1);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt8Array("G", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
 
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt8Array("FG", "", "", lArray, 1);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt8Array("FG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
 
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Convert::ToUInt8Array("EFG", "", "", lArray, 1);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToUInt8Array("EFG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(CONVERT_VALUE_INVALID);

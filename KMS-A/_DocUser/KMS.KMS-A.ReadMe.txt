@@ -6,29 +6,29 @@ Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 0.1.11-dev Windows 2022-11-15
-- KMS::Depend - Compile on Windows
+- Depend - Compile on Windows
 
 0.1.9-dev Windows 2022-11-14
-- KMS::WOP
+- WOP
 
 0.1.8-dev Windows 2022-11-11
-- KMS::DI::Execute_Operation
-- KMS::DI::Folder - Relative path
-- KMS::DI::Object::mOnChanged
+- DI::Execute_Operation
+- DI::Folder - Relative path
+- DI::Object::mOnChanged
 
 0.1.7-dev Windows 2022-10-25
-- KMS::Convert
+- Convert
     - ToDisplay
     - ToUInt8Array
-- KMS::Text::File_UTF16::Write_ASCII
+- Text::File_UTF16::Write_ASCII
 
 0.1.6-edv Windows 2022-10-20
 
 0.1.5-dev Linux x86_64 2022-10-19
 
 0.1.4-dev Windows 2022-10-17
-* KMS::CLI
-- KMS::DI
+* CLI
+- DI
     - Array::AddConstEntry
     - Array_Sparse::AddConstEntry
     - Dictionary::AddConstEntry
@@ -36,90 +36,89 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
     - Int - Replace Int32
     - UInt - Replace UInt8, UInt16 and UInt32
     - Remove GetInternal methods
-- KMS::Exception - Improved error codes
+- Exception - Improved error codes
 
 0.1.3-dev Windows 2022-10-11
-- KMS::File::Folder::Delete
+- File::Folder::Delete
 
 0.1.2-dev Windows 2022-10-04
-* KMS::File::Folder - Constants for well know folders
-* KMS::Installer
+* File::Folder - Constants for well know folders
+* Installer
 
 0.1.1-dev Linux x86_64 2022-10-03
 * KMS_EXCEPTION_ASSERT
-* KMS::Convert
+* Convert
     * ToASCII
     * ToUTF16
-* KMS::DAQ
+* DAQ
     * AnalogInputConverter
     * AnalogOutputConverter
     - AnalogConverter
-* KMS::DI
-* KMS::JSON
+* DI
+* JSON
     * Object - Removed
-* KMS::Text
+* Text
     * File_ASCII replace TextFile
     * File_UTF16
     * ReadPtr
     * WritePtr
-- KMS
-    - StringList_ASCII replace StringList
-    - StringList_UTF16
-    - StringSet_ASCII replace StringSet
-    - StringSet_UTF16
+- StringList_ASCII replace StringList
+- StringList_UTF16
+- StringSet_ASCII replace StringSet
+- StringSet_UTF16
 
 0.0.13-dev Windows 2022-09-12
-* KMS::RefCount
+* RefCount
 
 0.0.12-dev Windows 2022-09-07
-* KMS::Console::Color::YELLOW
-* KMS::Dbg::Log - ConsoleLevel and FileLevel configurable attributes
-* KMS::JSON
+* Console::Color::YELLOW
+* Dbg::Log - ConsoleLevel and FileLevel configurable attributes
+* JSON
     * String
     - Object - Default implementation for Copy, HTTP_Get and HTTP_Set
 
 0.0.11-dev Windows 2022-09-06
-* KMS::Msg::Sender - Removed
+* Msg::Sender - Removed
 
 0.0.10-dev Linux x86_64 2022-08-24
-* KMS::Dbg
+* Dbg
     * Log
     * LogFile
-* KMS::JSON
+* JSON
     * Dictionary
     * Object
     * Value
-* KMS::Msg
+* Msg
     * Destination
     * IReceiver::Receive - Return a bit mask
-- KMS::Cfg::Configurator - Log ignored attribute
-- KMS::Exception - Log throw and catch
+- Cfg::Configurator - Log ignored attribute
+- Exception - Log throw and catch
 
 0.0.9-dev Windows 2022-07-30
-* KMS::Convert::ToDouble
+* Convert::ToDouble
 
 0.0.8-dev Windows 2022-07-29
-* KMS::DAQ::Dummy
-- KMS::DAQ::DigitalOutput::Get and Set - Fixed
+* DAQ::Dummy
+- DAQ::DigitalOutput::Get and Set - Fixed
 
 0.0.7-dev Windows 2022-07-27
 
 0.0.6-dev Windows 2022-07-27
-* KMS::Cfg::Configurator
+* Cfg::Configurator
     * AddConfigFile and AddOptionalConfigFile
     * Help
-* KMS::Convert
-* KMS::DAQ
-* KMS::Dictionary
-* KMS::File::FileInfoList * Create folder structure on copy
-* KMS::Modbus::CRC
-* KMS::Modbus::Slave
-* KMS::Thread
-* KMS::Thread::Gate
-* KMS::Thread::Lock
-* KMS::Version * Package name contain OS name and processor information
+* Convert
+* DAQ
+* Dictionary
+* File::FileInfoList * Create folder structure on copy
+* Modbus::CRC
+* Modbus::Slave
+* Thread
+* Thread::Gate
+* Thread::Lock
+* Version * Package name contain OS name and processor information
 
 0.0.3 Windows 2022-06-01
-* KMS::File::FileInfo
+* File::FileInfo
 
 0.0.1-dev Windows 2022-05-20

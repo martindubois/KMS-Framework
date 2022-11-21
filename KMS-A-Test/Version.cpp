@@ -10,11 +10,13 @@
 // ===== Includes ===========================================================
 #include <KMS/Version.h>
 
+using namespace KMS;
+
 KMS_TEST(Version_Base, "Version_Base", "Auto", sTest_Base)
 {
-    KMS::Version lV0("0.0");
-    KMS::Version lV1("0.0-Test");
-    KMS::Version lV2(KMS::File::Folder::CURRENT, "Common" SLASH "Version.h");
+    Version lV0("0.0");
+    Version lV1("0.0-Test");
+    Version lV2(File::Folder::CURRENT, "Common" SLASH "Version.h");
 
     char lPackage[FILE_LENGTH];
 
@@ -45,16 +47,16 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
 {
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Version lV0("0");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Version lV0("0");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(VERSION_FORMAT_INVALID);
 
     try
     {
-        KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        KMS::Version lV0("0.0.0.256");
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Version lV0("0.0.0.256");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(VERSION_NUMBER_INVALID);

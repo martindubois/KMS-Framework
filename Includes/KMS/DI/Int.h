@@ -62,7 +62,7 @@ namespace KMS
         DI::Object* Int<T>::Create() { return new Int<T>; }
 
         template <typename T>
-        Int<T>::Int(T aIn) : mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
+        Int<T>::Int(T aIn) : mInternal(aIn), mRadix(Radix::DECIMAL) {}
 
         template <typename T>
         void Int<T>::operator = (T aIn) { mInternal = aIn; }
@@ -90,8 +90,8 @@ namespace KMS
 
             switch (mRadix)
             {
-            case KMS::Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%d", mInternal); break;
-            case KMS::Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", mInternal); break;
+            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%d", mInternal); break;
+            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", mInternal); break;
 
             default: assert(false);
             }
@@ -109,13 +109,13 @@ namespace KMS
             case 1:
                 if ((0x7f < lValue) || (-128 > lValue))
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_VALUE, "Invalid int8_t value" , aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::CONFIG_VALUE, "Invalid int8_t value" , aIn);
                 }
                 break;
             case 2:
                 if ((0x7fff < lValue) || (-32768 < lValue))
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::CONFIG_VALUE, "Invalid int16_t value", aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::CONFIG_VALUE, "Invalid int16_t value", aIn);
                 }
                 break;
             case 4: break;

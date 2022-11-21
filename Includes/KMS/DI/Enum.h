@@ -77,7 +77,7 @@ namespace KMS
 
             if (aOutSize_byte <= lResult_byte + 1)
             {
-                throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::DI_OUTPUT_TOO_SHORT, "The output buffer is too short");
+                throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::DI_OUTPUT_TOO_SHORT, "The output buffer is too short");
             }
 
             strcpy_s(aOut SizeInfoV(aOutSize_byte), N[static_cast<unsigned int>(mInternal)]);
@@ -102,7 +102,7 @@ namespace KMS
                 }
             }
 
-            throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::DI_FORMAT_INVALID, "Invalid enumeration value");
+            throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::DI_FORMAT_INVALID, "Invalid enumeration value");
         }
 
         // ===== Object =====================================================

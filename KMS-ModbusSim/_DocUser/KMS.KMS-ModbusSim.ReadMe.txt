@@ -8,4 +8,4 @@ File      KMS-ModbusSim/_DocUser/KMS.KMS-ModbusSim.ReadMe.txt
 0.1.11-dev Windows 2022-11-15
 
 0.0.6-dev Windows 2022-07-27
-* KMS::Modbus::Simulator
+* Modbus::Simulator

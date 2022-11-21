@@ -63,9 +63,9 @@ namespace KMS
 
             try
             {
-                KMS::Build::Import     lI;
-                KMS::Cfg::Configurator lC;
-                KMS::Installer         lInstaller;
+                Build::Import     lI;
+                Cfg::Configurator lC;
+                Installer         lInstaller;
 
                 lC.AddConfigurable(&lI);
                 lC.AddConfigurable(&lInstaller);

@@ -25,28 +25,28 @@ namespace KMS
 
             Dummy();
 
-            void AI_Simulate    (KMS::DAQ::Id aId, AnalogValue     aValue);
-            void AI_Simulate_Raw(KMS::DAQ::Id aId, AnalogValue_Raw aValue);
+            void AI_Simulate    (Id aId, AnalogValue     aValue);
+            void AI_Simulate_Raw(Id aId, AnalogValue_Raw aValue);
 
-            void DI_Simulate(KMS::DAQ::Id aId, bool aValue);
+            void DI_Simulate(Id aId, bool aValue);
 
             // ===== IAnalogInputs ==========================================
-            virtual AnalogValue     AI_Read    (KMS::DAQ::Id aId);
-            virtual AnalogValue_Raw AI_Read_Raw(KMS::DAQ::Id aId);
+            virtual AnalogValue     AI_Read    (Id aId);
+            virtual AnalogValue_Raw AI_Read_Raw(Id aId);
 
             // ===== IAnalogOutputs =========================================
-            virtual AnalogValue     AO_Get      (KMS::DAQ::Id aId);
-            virtual AnalogValue_Raw AO_Get_Raw  (KMS::DAQ::Id aId);
-            virtual void            AO_Write    (KMS::DAQ::Id aId, AnalogValue aValue);
-            virtual void            AO_Write_Raw(KMS::DAQ::Id aId, AnalogValue_Raw aValue_Raw);
+            virtual AnalogValue     AO_Get      (Id aId);
+            virtual AnalogValue_Raw AO_Get_Raw  (Id aId);
+            virtual void            AO_Write    (Id aId, AnalogValue aValue);
+            virtual void            AO_Write_Raw(Id aId, AnalogValue_Raw aValue_Raw);
 
             // ===== IDigitalInputs =========================================
-            virtual bool DI_Read(KMS::DAQ::Id aId);
+            virtual bool DI_Read(Id aId);
 
             // ===== IDigitalOutputs ========================================
-            virtual void DO_Clear(KMS::DAQ::Id aId);
-            virtual bool DO_Get  (KMS::DAQ::Id aId);
-            virtual void DO_Set  (KMS::DAQ::Id aId, bool aValue);
+            virtual void DO_Clear(DAQ::Id aId);
+            virtual bool DO_Get  (DAQ::Id aId);
+            virtual void DO_Set  (DAQ::Id aId, bool aValue);
 
         private:
 

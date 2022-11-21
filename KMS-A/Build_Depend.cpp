@@ -129,10 +129,12 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-void InsertStringSet(KMS::StringSet_ASCII* aInOut, const KMS::StringSet_ASCII* aIn)
+void InsertStringSet(StringSet_ASCII* aInOut, const StringSet_ASCII* aIn)
 {
     assert(NULL != aInOut);
     assert(NULL != aIn);

@@ -59,7 +59,7 @@ namespace KMS
             }
         }
 
-        void Build::Package_Component(const char* aC)
+        void Build::Package_Components(const char* aC)
         {
             File::Folder lBinaries(mTempFolder, "Binaries");
             File::Folder lLibraries(mTempFolder, "Libraries");

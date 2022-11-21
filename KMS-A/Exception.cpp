@@ -103,7 +103,9 @@ namespace KMS
 
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE)
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Exception& aE)
 {
     const char * lInfo      = aE.GetInfo();
     unsigned int lLastError = aE.GetLastError();
@@ -132,7 +134,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE)
     return aOut;
 }
 
-std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC)
+std::ostream& operator << (std::ostream& aOut, const Exception::Code& aC)
 {
     aOut << ToCodeName(aC);
 
@@ -142,9 +144,9 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC)
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-const char* ToCodeName(KMS::Exception::Code aCode)
+const char* ToCodeName(Exception::Code aCode)
 {
-    static const char* CODE_NAMES[static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY)] =
+    static const char* CODE_NAMES[static_cast<unsigned int>(Exception::Code::CODE_QTY)] =
     {
         "APPLICATION_ERROR",
         "APPLICATION_SYSTEM_ERROR",
@@ -213,7 +215,7 @@ const char* ToCodeName(KMS::Exception::Code aCode)
 
     unsigned int lCode = static_cast<unsigned int>(aCode);
 
-    assert(static_cast<unsigned int>(KMS::Exception::Code::CODE_QTY) > lCode);
+    assert(static_cast<unsigned int>(Exception::Code::CODE_QTY) > lCode);
 
     return CODE_NAMES[lCode];
 }

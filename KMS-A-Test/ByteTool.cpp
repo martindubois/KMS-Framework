@@ -10,6 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/ByteTool.h>
 
+using namespace KMS;
+
 KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
 {
     static const char* VECTOR[] =
@@ -23,14 +25,14 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
         "SaveConfig=Test.txt",
     };
 
-    KMS::ByteTool          lBT;
-    KMS::Cfg::Configurator lC;
+    ByteTool          lBT;
+    Cfg::Configurator lC;
 
     lC.AddConfigurable(&lBT);
 
     lC.Help();
 
-    KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_WARNING, 10);
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 10);
     lC.ParseArguments(7, VECTOR);
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 5U);
@@ -51,5 +53,5 @@ KMS_TEST(ByteTool_Main, "ByteTool_Main", "Auto", sTest_Main)
         "Source=KMS-A-Test" SLASH "ByteTool.cpp",
     };
 
-    KMS::ByteTool::Main(2, VECTOR);
+    ByteTool::Main(2, VECTOR);
 }

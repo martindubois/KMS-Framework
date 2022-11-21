@@ -11,6 +11,8 @@
 #include <KMS/Banner.h>
 #include <KMS/Modbus/Tool.h>
 
+using namespace KMS;
+
 // ===== KMS-ByteTool =======================================================
 #include "../Common/Version.h"
 
@@ -21,5 +23,5 @@ int main(int aCount, const char** aVector)
 {
     KMS_BANNER("KMS-Framework", "KMS-ModbusTool");
 
-    return KMS::Modbus::Tool::Main(aCount, aVector);
+    return Modbus::Tool::Main(aCount, aVector);
 }

@@ -10,7 +10,9 @@
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Server.h>
 
+using namespace KMS;
+
 KMS_TEST(HTTP_Server_Base, "HTTP_Server_Base", "Auto", sTest_Base)
 {
-    KMS::HTTP::Server lS;
+    HTTP::Server lS;
 }

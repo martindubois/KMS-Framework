@@ -62,7 +62,7 @@ namespace KMS
         DI::Object* UInt<T>::Create() { return new UInt<T>; }
 
         template <typename T>
-        UInt<T>::UInt(T aIn) : mInternal(aIn), mRadix(KMS::Radix::DECIMAL) {}
+        UInt<T>::UInt(T aIn) : mInternal(aIn), mRadix(Radix::DECIMAL) {}
 
         template <typename T>
         void UInt<T>::operator = (T aIn) { mInternal = aIn; }
@@ -100,8 +100,8 @@ namespace KMS
 
             switch (mRadix)
             {
-            case KMS::Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mInternal); break;
-            case KMS::Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", mInternal); break;
+            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mInternal); break;
+            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", mInternal); break;
 
             default: assert(false);
             }
@@ -119,13 +119,13 @@ namespace KMS
             case 1:
                 if (0xff < lValue)
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint8_t value" , aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint8_t value" , aIn);
                 }
                 break;
             case 2:
                 if (0xffff < lValue)
                 {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint16_t value", aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint16_t value", aIn);
                 }
                 break;
             case 4: break;

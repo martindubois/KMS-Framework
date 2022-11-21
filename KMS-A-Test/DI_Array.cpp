@@ -11,15 +11,17 @@
 #include <KMS/DI/Array.h>
 #include <KMS/DI/String.h>
 
+using namespace KMS;
+
 KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
 {
     char lBuffer[1024];
 
-    KMS::DI::Array lA0;
-    KMS::DI::Array lA1;
-    KMS::DI::Array lA2;
+    DI::Array lA0;
+    DI::Array lA1;
+    DI::Array lA2;
 
-    KMS::DI::String lS0;
+    DI::String lS0;
 
     // Container:: +=
     lA0.AddEntry(&lS0, false);
@@ -35,14 +37,14 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
 {
     char lBuffer[1024];
 
-    KMS::DI::String lS0("");
+    DI::String lS0("");
 
     // String::Get
     for (unsigned int lSize_byte = 0; lSize_byte < 2; lSize_byte++)
     {
         try
         {
-            KMS::Dbg::gLog.SetHideCount(KMS::Dbg::LogFile::Level::LEVEL_ERROR, 2);
+            Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
             lS0.Get(lBuffer, lSize_byte);
             KMS_TEST_ASSERT(false);
         }
