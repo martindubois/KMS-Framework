@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Version.h>
 #include <KMS/WOP/Object.h>
 
 namespace KMS
@@ -20,14 +21,18 @@ namespace KMS
 
         public:
 
-            System();
+            System(const Version& aVersion);
 
             uint8_t GetResult();
+
+            const Version& GetVersion() const;
 
             void SetResult(uint8_t aIn);
 
             #ifdef _KMS_EMBEDED_
                 void AddTrace(const char* aMsg, uint8_t aLen);
+            #else
+                void Dump();
             #endif
 
             // ===== Object =================================================
@@ -36,8 +41,13 @@ namespace KMS
 
         private:
 
+            uint8_t mProtocol_In;
+
             uint8_t mResult_In;
             uint8_t mResult_Out;
+
+            Version mVersion_In;
+            Version mVersion_Out;
 
             #ifdef _KMS_EMBEDDED_
                 char    mTrace[32];

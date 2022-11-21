@@ -57,6 +57,8 @@ namespace KMS
             return KMS_WOP_RESULT_OK;
         }
 
+        uint8_t FrameBuffer::GetDataSize_byte() const { return mHeader.mFields.mDataSize_byte; }
+
         uint8_t FrameBuffer::GetDataType() const { return mHeader.mFields.mDataType; }
 
         unsigned int FrameBuffer::GetFrameSize_byte() const { return mFrameSize_byte; }

@@ -28,10 +28,6 @@ namespace KMS
 
         Version();
 
-        Version(const char* aVersion);
-
-        Version(const File::Folder& aFolder, const char * aFile);
-
         Version(uint8_t aMajor, uint8_t aMinor, uint8_t aBuild, uint8_t aCompat, bool aDebug, const char * aDate, const char * aType);
 
         const char* GetDate() const;
@@ -44,32 +40,46 @@ namespace KMS
         unsigned int GetBuild() const;
         unsigned int GetCompat() const;
 
-        // aFlags FLAG_OS_INDEPENDENT
-        void GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0) const;
+        #ifndef _KMS_EMBEDDED_
 
-        void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3) const;
+            Version(const char* aVersion);
+
+            Version(const File::Folder& aFolder, const char* aFile);
+
+            // aFlags FLAG_OS_INDEPENDENT
+            void GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0) const;
+
+            void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3) const;
+
+        #endif
 
     private:
 
-        void SetNumbers(unsigned int aMajor, unsigned int aMinor, unsigned int aBuild, unsigned int aCompat);
+        void Construct();
 
         bool Verify(unsigned int aMajor, unsigned int aMinor, unsigned int aBuild, unsigned int aCompat) const;
+
+        #ifndef _KMS_EMBEDDED_
+            void SetNumbers(unsigned int aMajor, unsigned int aMinor, unsigned int aBuild, unsigned int aCompat);
+        #endif
 
         uint8_t mMajor;
         uint8_t mMinor;
         uint8_t mBuild;
         uint8_t mCompat;
 
-        bool mDebug;
+        uint8_t mDebug;
 
-        std::string mDate;
-        std::string mType;
+        char mDate[27];
+        char mType[16];
 
     };
 
 }
 
-std::ostream & operator << (std::ostream & aOut, const KMS::Version & aV);
+#ifndef _KMS_EMBEDDED_
+    std::ostream & operator << (std::ostream & aOut, const KMS::Version & aV);
+#endif
 
 #ifdef _DEBUG
     #define KMS_VERSION(T) static const KMS::Version VERSION(VERSION_RC, true, __DATE__, T);

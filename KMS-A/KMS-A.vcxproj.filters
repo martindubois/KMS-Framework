@@ -276,6 +276,9 @@
     <ClCompile Include="Test_TestManager.cpp">
       <Filter>Source Files\Test</Filter>
     </ClCompile>
+    <ClCompile Include="WOP_Object_Dynamic.cpp">
+      <Filter>Source Files\WOP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
