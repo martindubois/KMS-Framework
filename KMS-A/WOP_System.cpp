@@ -40,6 +40,9 @@ namespace KMS
             : mResult_In(KMS_WOP_RESULT_OK)
             , mResult_Out(KMS_WOP_RESULT_OK)
             , mVersion_Out(aVersion)
+            #ifdef _KMS_EMBEDDED_
+                , mTraceLen(0)
+            #endif
         {}
 
         uint8_t System::GetResult()
@@ -74,8 +77,10 @@ namespace KMS
                     mTraceLen = 1;
                 }
 
-                strcpy(mTrace + mTraceLen, aMsg, aLen);
+                memcpy(mTrace + mTraceLen, aMsg, aLen);
                 mTraceLen += aLen;
+
+                AddRequest(BIT_TRACE);
             }
 
         #else
@@ -123,7 +128,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 case BIT_TRACE:
                     aOut->Prepare(aInstance, DATA_TYPE_RESULT);
-                    aOut->AddDataTypes(mTrace, mTraceLen);
+                    aOut->AddDataBytes(mTrace, mTraceLen);
                     mTraceLen = 0;
                     lResult = true;
                     break;

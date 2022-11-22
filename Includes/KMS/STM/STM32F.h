@@ -48,7 +48,7 @@ namespace KMS
             // Configure a 32 MHz clock using HSI and PLL
             void Clock_Config();
 
-            void IO_ConfigureInterrupt(DAQ::Id aId, Msg::IReceiver* aReceiver, unsigned int aCode);
+            void IO_ConfigureInterrupt(DAQ::Id aId, const Msg::Destination& aDestination);
 
             // aId    See KMS_STM_ID_P...
             // aMode

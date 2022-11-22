@@ -12,25 +12,33 @@ OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 # QUESTION Can I move OBJECTS and SOURCES in the makefile in the parent
 #          folder ?
 
-OBJECTS = Embedded_SPI.o      \
+OBJECTS = DAQ_DigitalOutput.o \
+          Embedded_SPI.o      \
+          Embedded_Test.o     \
           Embedded_USART.o    \
 		  Embedded_WorkItem.o \
 		  Embedded_WorkLoop.o \
 		  Msg_Destination.o   \
 		  Msg_IReceiver.o     \
+		  Version.o           \
           WOP_FrameBuffer.o   \
+		  WOP_Link_USART.o    \
 		  WOP_Object.o        \
 		  WOP_Receiver.o      \
 		  WOP_Sender.o        \
 		  WOP_System.o
 
-SOURCES = ../../../KMS-A/Embedded_SPI.cpp      \
+SOURCES = ../../../KMS-A/DAQ_DigitalOutput.cpp \
+          ../../../KMS-A/Embedded_SPI.cpp      \
+          ../../../KMS-A/Embedded_Test.cpp     \
           ../../../KMS-A/Embedded_USART.cpp    \
           ../../../KMS-A/Embedded_WorkItem.cpp \
           ../../../KMS-A/Embedded_WorkLoop.cpp \
           ../../../KMS-A/Msg_Destination.cpp   \
 		  ../../../KMS-A/Msg_IReceiver.cpp     \
+		  ../../../KMS-A/Version.cpp           \
           ../../../KMS-A/WOP_FrameBuffer.cpp   \
+		  ../../../KMS-A/WOP_Link_USART.cpp    \
           ../../../KMS-A/WOP_Object.cpp        \
 		  ../../../KMS-A/WOP_Receiver.cpp      \
 	      ../../../KMS-A/WOP_Sender.cpp        \

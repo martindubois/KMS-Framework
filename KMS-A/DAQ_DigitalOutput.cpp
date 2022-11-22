@@ -22,14 +22,14 @@ namespace KMS
 
         DigitalOutput::DigitalOutput(IDigitalOutputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            // assert(NULL != aInterface);
         }
 
-        void DigitalOutput::Clear() { assert(NULL != mInterface); mInterface->DO_Clear(mId); }
+        void DigitalOutput::Clear() { mInterface->DO_Clear(mId); }
 
-        bool DigitalOutput::Get() const { assert(NULL != mInterface); return mInterface->DO_Get(mId); }
+        bool DigitalOutput::Get() const { return mInterface->DO_Get(mId); }
 
-        void DigitalOutput::Set(bool aValue) { assert(NULL != mInterface); mInterface->DO_Set(mId, aValue); }
+        void DigitalOutput::Set(bool aValue) { mInterface->DO_Set(mId, aValue); }
 
     }
 }

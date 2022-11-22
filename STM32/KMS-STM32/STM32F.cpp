@@ -77,14 +77,14 @@ namespace KMS
             EXTI9_5_IRQn, EXTI9_5_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn,
         };
 
-        void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, Msg::IReceiver* aReceiver, unsigned int aCode)
+        void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, const Msg::Destination& aDestination)
         {
             uint8_t  lBit  = aId % 16;
             uint32_t lMask = 1 << lBit;
             uint8_t  lReg  = lBit / 4;
             uint8_t  lPos  = 4 * (lBit % 4);
 
-            sOnInterrupts[lBit].Set(aReceiver, aCode);
+            sOnInterrupts[lBit] = aDestination;
 
             SYSCFG->EXTICR[lReg] &= ~ (SYSCFG_EXTICR1_EXTI0_Msk << lPos);
             SYSCFG->EXTICR[lReg] |= (aId / 16) << lPos;

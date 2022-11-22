@@ -29,7 +29,7 @@ namespace KMS
 
             void SetResult(uint8_t aIn);
 
-            #ifdef _KMS_EMBEDED_
+            #ifdef _KMS_EMBEDDED_
                 void AddTrace(const char* aMsg, uint8_t aLen);
             #else
                 void Dump();

@@ -24,5 +24,6 @@
 #define sprintf_s sprintf
 #define sscanf_s  sscanf
 #define strcpy_s  strcpy
+#define strncpy_s strncpy
 
 #define fopen_s(F,N,M) ((NULL != (*(F) = fopen((N), (M)))) ? 0 : -1)
