@@ -39,7 +39,7 @@ namespace KMS
             char lOperator[NAME_LENGTH];
             char lValue   [LINE_LENGTH];
 
-            int lRet = sscanf_s(aOperation, "%[^ +=] %[+=] %[^ \n\r\t]", lName SizeInfo(lName), lOperator SizeInfo(lOperator), lValue SizeInfo(lValue));
+            int lRet = sscanf_s(aOperation, "%[^ +=] %[+=] %[^\n\r\t]", lName SizeInfo(lName), lOperator SizeInfo(lOperator), lValue SizeInfo(lValue));
             KMS_EXCEPTION_ASSERT(1 <= lRet, DI_FORMAT_INVALID, "Invalid operation", aOperation);
 
             Object* lObject = aRoot->FindObject_RW(lName);

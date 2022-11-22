@@ -7,6 +7,7 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.12-dev Windows 2022-11-21
 * KMS-WOP
 
 0.1.11-dev Windows 2022-11-15

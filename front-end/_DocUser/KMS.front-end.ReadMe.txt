@@ -5,8 +5,6 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      front-end/_DocUser/KMS.front-end.ReadMe.txt
 
-EDIT ON BUILD - front-end
-
 0.0.14-front-end 2022-09-15
 * Page to test DynamicForm
 * Page to test DynamicImage
