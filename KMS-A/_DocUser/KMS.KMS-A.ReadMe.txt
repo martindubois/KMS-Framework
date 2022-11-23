@@ -7,9 +7,10 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-- Embedded
+- Embedded - Test
+- WOP
+    - Link_Port
     - Link_USART
-    - Test
 
 0.1.12-dev Windows 2022-11-21
 

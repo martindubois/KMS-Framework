@@ -13,37 +13,52 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Com">
+      <UniqueIdentifier>{d3456a6d-d3a6-406a-8c7f-d15dfb676759}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Dev">
+      <UniqueIdentifier>{0e104c5e-c0ea-4262-be9f-fbfe8f049c6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modbus">
+      <UniqueIdentifier>{66c2fc9f-9991-4ea9-82cb-6a2eaeecb392}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WOP">
+      <UniqueIdentifier>{b0e41837-e0a8-4660-b62a-24e212306118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Com_Port.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dev_Device.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dev_Device_W.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Com</Filter>
     </ClCompile>
     <ClCompile Include="Com_Port_W.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Master_Com.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Tool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Simulator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Slave_Com.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Com</Filter>
     </ClCompile>
     <ClCompile Include="Com_Tool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Com</Filter>
+    </ClCompile>
+    <ClCompile Include="Dev_Device.cpp">
+      <Filter>Source Files\Dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Dev_Device_W.cpp">
+      <Filter>Source Files\Dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Master_Com.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Simulator.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Slave_Com.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Tool.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="WOP_Link_Port.cpp">
+      <Filter>Source Files\WOP</Filter>
     </ClCompile>
     <ClCompile Include="WOP_Tool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\WOP</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

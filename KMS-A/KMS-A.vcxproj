@@ -107,8 +107,6 @@
     <ClCompile Include="WOP_FrameBuffer.cpp" />
     <ClCompile Include="WOP_Object.cpp" />
     <ClCompile Include="WOP_Object_Dynamic.cpp" />
-    <ClCompile Include="WOP_Receiver.cpp" />
-    <ClCompile Include="WOP_Sender.cpp" />
     <ClCompile Include="WOP_System.cpp" />
   </ItemGroup>
   <ItemGroup>

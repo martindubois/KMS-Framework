@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Version.h>
+#include <KMS/WOP/FrameBuffer.h>
 #include <KMS/WOP/Object.h>
 
 namespace KMS
@@ -16,22 +17,33 @@ namespace KMS
     namespace WOP
     {
 
+        // TODO Add a Msg::Destination for error, trace, version and
+        //      protocol
+
         class System : public Object
         {
 
         public:
 
-            System(const Version& aVersion);
+            System(const Version& aVersion, uint32_t aMagic, uint8_t aProtocolVersion);
 
             uint8_t GetResult();
 
             const Version& GetVersion() const;
 
+            void SetInstances(Object** aVector, uint8_t aCount);
+
             void SetResult(uint8_t aIn);
 
-            #ifdef _KMS_EMBEDDED_
-                void AddTrace(const char* aMsg, uint8_t aLen);
-            #else
+            void AddReceivedByte(uint8_t aIn);
+
+            void AddReceivedBytes(const uint8_t* aIn, unsigned int aInSize_byte);
+
+            void AddTrace(const char* aMsg, uint8_t aLen);
+
+            const FrameBuffer* PrepareFrame();
+
+            #ifndef _KMS_EMBEDDED_
                 void Dump();
             #endif
 
@@ -41,18 +53,45 @@ namespace KMS
 
         private:
 
-            uint8_t mProtocol_In;
+            class ProtocolInfo
+            {
+
+            public:
+
+                ProtocolInfo();
+
+                ProtocolInfo(uint32_t aMagic, uint8_t aProtocolVersion);
+
+                uint32_t mMagic;
+
+                uint8_t mInstanceCount;
+                uint8_t mVersion_Base;
+                uint8_t mVersion_System;
+                uint8_t mVersion_Application;
+
+            };
+
+            void WriteData();
+
+            Object** mInstances;
+
+            FrameBuffer mRx_FrameBuffer;
+
+            FrameBuffer mTx_FrameBuffer;
+            uint8_t     mTx_Instance;
+
+            // ===== Data ===================================================
+            ProtocolInfo mProtocol_In;
+            ProtocolInfo mProtocol_Out;
 
             uint8_t mResult_In;
             uint8_t mResult_Out;
 
+            char    mTrace[32];
+            uint8_t mTraceLen;
+
             Version mVersion_In;
             Version mVersion_Out;
-
-            #ifdef _KMS_EMBEDDED_
-                char    mTrace[32];
-                uint8_t mTraceLen;
-            #endif
 
         };
 

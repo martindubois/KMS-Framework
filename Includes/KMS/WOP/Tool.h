@@ -10,11 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/CLI/Tool.h>
 #include <KMS/Com/Port.h>
-#include <KMS/Msg/IReceiver.h>
-#include <KMS/Thread/Thread.h>
+#include <KMS/WOP/Link_Port.h>
 #include <KMS/WOP/Object_Dynamic.h>
-#include <KMS/WOP/Receiver.h>
-#include <KMS/WOP/Sender.h>
 #include <KMS/WOP/System.h>
 
 namespace KMS
@@ -22,7 +19,7 @@ namespace KMS
     namespace WOP
     {
 
-        class Tool : public CLI::Tool, public Msg::IReceiver
+        class Tool : public CLI::Tool
         {
 
         public:
@@ -31,11 +28,7 @@ namespace KMS
 
             Tool();
 
-            DI::UInt<uint8_t> mInstanceCount;
-            Com::Port         mPort;
-
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+            Com::Port mPort;
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aOut) const;
@@ -46,19 +39,12 @@ namespace KMS
             void Dump();
             void Dump(unsigned int aInstance);
 
-            unsigned int OnIterate();
-
             void SendRequest(unsigned int aInstance, unsigned int aMask);
 
-            void Receiver_Start();
-            void Receiver_Stop ();
-
+            WOP::Link_Port      mLink;
             WOP::Object       * mInstances[255];
             WOP::Object_Dynamic mDynamics[255];
-            Receiver            mReceiver;
-            Sender              mSender;
             System              mSystem;
-            Thread::Thread      mThread;
 
         };
 

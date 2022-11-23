@@ -252,12 +252,6 @@
     <ClCompile Include="WOP_Object.cpp">
       <Filter>Source Files\WOP</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Receiver.cpp">
-      <Filter>Source Files\WOP</Filter>
-    </ClCompile>
-    <ClCompile Include="WOP_Sender.cpp">
-      <Filter>Source Files\WOP</Filter>
-    </ClCompile>
     <ClCompile Include="WOP_System.cpp">
       <Filter>Source Files\WOP</Filter>
     </ClCompile>

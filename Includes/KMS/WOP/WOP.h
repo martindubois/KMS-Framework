@@ -10,25 +10,29 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define KMS_WOP_CONTROL_VALUE     (0x00)
+#define KMS_WOP_CONTROL_VALUE      (0x00)
 
-#define KMS_WOP_DATA_TYPE_REQUEST (0x0)
+#define KMS_WOP_DATA_TYPE_REQUEST  (0x00)
 
-#define KMS_WOP_BIT_REQUEST (1 << KMS_WOP_DATA_TYPE_REQUEST)
+#define KMS_WOP_BIT_REQUEST        (1 << KMS_WOP_DATA_TYPE_REQUEST)
 
-#define KMS_WOP_INSTANCE_SYSTEM   (0xff)
+#define KMS_WOP_INSTANCE_SYSTEM    (0xff)
 
-#define KMS_WOP_RESULT_OK                    (0x00)
-#define KMS_WOP_RESULT_INVALID_CRC           (0x01)
-#define KMS_WOP_RESULT_INVALID_CONTROL_VALUE (0x02)
-#define KMS_WOP_RESULT_INVALID_DATA_SIZE     (0x03)
-#define KMS_WOP_RESULT_INVALID_DATA_TYPE     (0x04)
-#define KMS_WOP_RESULT_INVALID_FRAME_SIZE    (0x05)
-#define KMS_WOP_RESULT_INVALID_INSTANCE      (0x06)
-#define KMS_WOP_RESULT_INVALID_REQUEST       (0x07)
-#define KMS_WOP_RESULT_NO_REQUEST            (0x08)
-#define KMS_WOP_RESULT_PARTIAL               (0x09)
-#define KMS_WOP_RESULT_TEST                  (0x0a)
+#define KMS_WOP_VERSION_BASE       (0x01)
+
+// ===== Results ============================================================
+#define KMS_WOP_RESULT_OK                     (0x00)
+#define KMS_WOP_RESULT_INVALID_CRC            (0x01)
+#define KMS_WOP_RESULT_INVALID_CONTROL_VALUE  (0x02)
+#define KMS_WOP_RESULT_INVALID_DATA_SIZE      (0x03)
+#define KMS_WOP_RESULT_INVALID_DATA_TYPE      (0x04)
+#define KMS_WOP_RESULT_INVALID_FRAME_SIZE     (0x05)
+#define KMS_WOP_RESULT_INVALID_INSTANCE       (0x06)
+#define KMS_WOP_RESULT_INVALID_INSTANCE_COUNT (0x07)
+#define KMS_WOP_RESULT_INVALID_REQUEST        (0x08)
+#define KMS_WOP_RESULT_NO_REQUEST             (0x09)
+#define KMS_WOP_RESULT_PARTIAL                (0x0a)
+#define KMS_WOP_RESULT_TEST                   (0x0b)
 
 // Data type
 // //////////////////////////////////////////////////////////////////////////

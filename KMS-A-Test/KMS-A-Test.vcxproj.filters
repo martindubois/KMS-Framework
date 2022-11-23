@@ -66,10 +66,7 @@
     <ClCompile Include="DI_Functions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Receiver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="WOP_Sender.cpp">
+    <ClCompile Include="WOP_System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

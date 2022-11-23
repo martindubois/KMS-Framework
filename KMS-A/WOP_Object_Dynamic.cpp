@@ -26,15 +26,28 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Object_Dynamic::Dump() const
+        unsigned int Object_Dynamic::GetDataSize_byte() const
         {
-            std::cout << "Object_Dynamic:\n";
+            unsigned int lResult_byte = 0;
 
             for (unsigned int i = 0; i < 7; i++)
             {
-                std::cout << "Data type " << static_cast<unsigned int>(i + 1) << " :";
+                lResult_byte += mBuffers[i].GetDataSize_byte();
+            }
 
-                mBuffers[i].Dump();
+            return lResult_byte;
+        }
+
+        void Object_Dynamic::Dump() const
+        {
+            for (unsigned int i = 0; i < 7; i++)
+            {
+                if (0 < mBuffers[i].GetDataSize_byte())
+                {
+                    std::cout << "Data type " << static_cast<unsigned int>(i + 1) << " :";
+
+                    mBuffers[i].Dump();
+                }
             }
         }
 
@@ -83,6 +96,8 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Object_Dynamic::Buffer::Buffer() : mSize_byte(0) {}
+
+        unsigned int Object_Dynamic::Buffer::GetDataSize_byte() const { return mSize_byte; }
 
         void Object_Dynamic::Buffer::Dump() const
         {

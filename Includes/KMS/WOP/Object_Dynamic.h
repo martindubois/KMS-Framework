@@ -20,6 +20,8 @@ namespace KMS
 
         public:
 
+            unsigned int GetDataSize_byte() const;
+
             void Dump() const;
 
             // ===== Object =================================================
@@ -34,6 +36,8 @@ namespace KMS
             public:
 
                 Buffer();
+
+                unsigned int GetDataSize_byte() const;
 
                 void Dump() const;
 

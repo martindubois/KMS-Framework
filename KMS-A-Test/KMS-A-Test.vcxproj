@@ -282,8 +282,7 @@
     <ClCompile Include="Text_File_UTF16.cpp" />
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Version.cpp" />
-    <ClCompile Include="WOP_Receiver.cpp" />
-    <ClCompile Include="WOP_Sender.cpp" />
+    <ClCompile Include="WOP_System.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

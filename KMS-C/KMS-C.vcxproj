@@ -44,6 +44,7 @@
     <ClCompile Include="Modbus_Simulator.cpp" />
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="Modbus_Tool.cpp" />
+    <ClCompile Include="WOP_Link_Port.cpp" />
     <ClCompile Include="WOP_Tool.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

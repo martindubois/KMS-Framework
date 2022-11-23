@@ -22,13 +22,6 @@
 
 #define CONFIG_FILE ("KMS-WOP.cfg")
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-static const KMS::Cfg::MetaData MD_INSTANCE_COUNT("InstanceCount = {Count}");
-
-#define MSG_ITERATE (1)
-
 namespace KMS
 {
 
@@ -68,31 +61,18 @@ namespace KMS
             return lResult;
         }
 
-        Tool::Tool() : mReceiver(&mSystem, mInstances, 0), mSender(&mSystem, mInstances, 0), mSystem(VERSION)
+        Tool::Tool()
+            : mLink(&mSystem, &mPort)
+            , mSystem(VERSION, 0xffffffff, 0xff)
         {
-            mThread.mOnIterate.Set(this, MSG_ITERATE);
-
             for (unsigned int i = 0; i < 255; i++)
             {
                 mInstances[i] = mDynamics + i;
             }
 
-            AddEntry("InstanceCount", &mInstanceCount, false, &MD_INSTANCE_COUNT);
-            AddEntry("Port"         , &mPort         , false);
-        }
+            mSystem.SetInstances(mInstances, 255);
 
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Tool::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case MSG_ITERATE: lResult = OnIterate(); break;
-            }
-
-            return lResult;
+            AddEntry("Port", &mPort, false);
         }
 
         // ===== CLI::Tool ==================================================
@@ -120,10 +100,10 @@ namespace KMS
             if      (0 == strcmp(aC, "Connect"      )) { mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS); }
             else if (0 == strcmp(aC, "Disconnect"   )) { mPort.Disconnect(); }
             else if (0 == strcmp(aC, "Dump"         )) { Dump(); }
-            else if (0 == strcmp(aC, "StartReceiver")) { Receiver_Start(); }
-            else if (0 == strcmp(aC, "StopReceiver" )) { Receiver_Stop (); }
+            else if (0 == strcmp(aC, "StartReceiver")) { mLink.Start(); }
+            else if (0 == strcmp(aC, "StopReceiver" )) { mLink.Stop (); }
             else if (1 == sscanf_s(aC, "Dump %u", &lInstance)) { Dump(lInstance); }
-            else if (2 == sscanf_s(aC, "SendReceiver %u %x", &lInstance, &lMask)) { SendRequest(lInstance, lMask); }
+            else if (2 == sscanf_s(aC, "SendRequest %u %x", &lInstance, &lMask)) { SendRequest(lInstance, lMask); }
             else
             {
                 CLI::Tool::ExecuteCommand(aC);
@@ -145,29 +125,18 @@ namespace KMS
 
         void Tool::Dump(unsigned int aInstance)
         {
-            mDynamics[aInstance].Dump();
-        }
-
-        unsigned int Tool::OnIterate()
-        {
-            uint8_t lBuffer[262];
-
-            unsigned int lSize_byte = mPort.Read(lBuffer, sizeof(lBuffer));
-            if (0 < lSize_byte)
+            if (0 < mDynamics[aInstance].GetDataSize_byte())
             {
-                mReceiver.AddReceivedBytes(lBuffer, lSize_byte);
-            }
+                std::cout << "Object_Dynamic " << aInstance << "\n";
 
-            return 0;
+                mDynamics[aInstance].Dump();
+            }
         }
 
         void Tool::SendRequest(unsigned int aInstance, unsigned int aMask)
         {
             mInstances[aInstance]->SendRequest(aMask);
         }
-
-        void Tool::Receiver_Start() { mThread.Start(); }
-        void Tool::Receiver_Stop () { mThread.StopAndWait(3000); } // 3 s
 
     }
 }
