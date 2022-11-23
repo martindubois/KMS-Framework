@@ -364,8 +364,6 @@ namespace KMS
 
         void Make::Depend_ParseSource(Depend* aDepend, const char* aSource, Text::File_ASCII* aMakeFile)
         {
-            printf("%s( , \"%s\",  )\n", __FUNCTION__, aSource);
-
             StringSet_ASCII* lHeaders = aDepend->ParseFile(aSource);
             if (0 < lHeaders->size())
             {

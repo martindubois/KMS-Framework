@@ -45,12 +45,8 @@ namespace KMS
         // ASSUMPTION All component folder are directly in the product
         //            folder.
 
-        // ASSUMPTION All #include using "" includes local files.
-
         StringSet_ASCII* Depend::ParseFile(const char* aFile)
         {
-            printf("%s( \"%s\" )\n", __FUNCTION__, aFile);
-
             assert(NULL != aFile);
 
             StringSet_ASCII* lResult;
@@ -80,25 +76,18 @@ namespace KMS
 
                     if (1 == sscanf_s(lLine.c_str(), "#include <%[^>]>", lInclude SizeInfo(lInclude)))
                     {
-                        for (const DI::Container::Entry& lEntry : mIncludes.mInternal)
-                        {
-                            const DI::String* lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
-                            assert(NULL != lF_Include);
-
-                            char lHeader[PATH_LENGTH];
-
-                            sprintf_s(lHeader SizeInfo(lHeader), "../%s/%s", lF_Include->Get(), lInclude);
-
-                            if (mFolder.DoesFileExist(lHeader))
-                            {
-                                AddDependency(lResult, lHeader);
-                                break;
-                            }
-                        }
+                        LocateDependency(lResult, lInclude);
                     }
                     else if (1 == sscanf_s(lLine.c_str(), "#include \"%[^\"]\"", lInclude SizeInfo(lInclude)))
                     {
-                        AddDependency(lResult, lInclude);
+                        if (mFolder.DoesFileExist(lInclude))
+                        {
+                            AddDependency(lResult, lInclude);
+                        }
+                        else if (!LocateLocalDependency(lResult, lInclude, aFile))
+                        {
+                            LocateDependency(lResult, lInclude);
+                        }
                     }
                 }
             }
@@ -124,6 +113,59 @@ namespace KMS
 
                 InsertStringSet(aInOut, lRet);
             }
+        }
+
+        void Depend::LocateDependency(StringSet_ASCII* aInOut, const char* aFile)
+        {
+            assert(NULL != aFile);
+
+            for (const DI::Container::Entry& lEntry : mIncludes.mInternal)
+            {
+                const DI::String* lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lF_Include);
+
+                char lHeader[PATH_LENGTH];
+
+                sprintf_s(lHeader SizeInfo(lHeader), "../%s/%s", lF_Include->Get(), aFile);
+
+                if (mFolder.DoesFileExist(lHeader))
+                {
+                    AddDependency(aInOut, lHeader);
+                    break;
+                }
+            }
+        }
+
+        bool Depend::LocateLocalDependency(StringSet_ASCII* aInOut, const char* aFile, const char* aFrom)
+        {
+            assert(NULL != aFile);
+            assert(NULL != aFrom);
+
+            bool lResult = false;
+
+            char lFrom[PATH_LENGTH];
+
+            strcpy_s(lFrom, aFrom);
+
+            char* lPtr = strrchr(lFrom, '/');
+            if (NULL != lPtr)
+            {
+                *lPtr = '\0';
+
+                File::Folder lFolder(mFolder, lFrom);
+
+                if (lFolder.DoesFileExist(aFile))
+                {
+                    char lHeader[PATH_LENGTH];
+
+                    sprintf_s(lHeader SizeInfo(lHeader), "%s/%s", lFrom, aFile);
+
+                    AddDependency(aInOut, lHeader);
+                    lResult = true;
+                }
+            }
+
+            return lResult;
         }
 
     }

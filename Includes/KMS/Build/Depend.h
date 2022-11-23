@@ -36,6 +36,10 @@ namespace KMS
 
             void AddDependency(StringSet_ASCII* aInOut, const char* aFile);
 
+            void LocateDependency(StringSet_ASCII* aInOut, const char* aFile);
+
+            bool LocateLocalDependency(StringSet_ASCII* aInOut, const char* aFile, const char* aFrom);
+
             typedef std::map<std::string, StringSet_ASCII*> FileMap;
 
             FileMap mCache;
