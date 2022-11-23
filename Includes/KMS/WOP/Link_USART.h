@@ -17,15 +17,14 @@ namespace KMS
     namespace WOP
     {
 
-        class Receiver;
-        class Sender;
+        class System;
 
         class Link_USART : public Embedded::WorkItem, public Msg::IReceiver
         {
 
         public:
 
-            Link_USART(Receiver* aReceiver, Sender* aSender, Embedded::USART* aUSART);
+            Link_USART(System* aSystem, Embedded::USART* aUSART);
 
             Embedded::USART* GetUSART();
 
@@ -39,8 +38,7 @@ namespace KMS
 
             unsigned int OnRxByte(void* aData);
 
-            Receiver       * mReceiver;
-            Sender         * mSender;
+            System         * mSystem;
             Embedded::USART* mUSART;
 
         };

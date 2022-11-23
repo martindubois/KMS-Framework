@@ -8,8 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/WOP/Receiver.h>
-#include <KMS/WOP/Sender.h>
+#include <KMS/WOP/System.h>
 
 #include <KMS/WOP/Link_USART.h>
 
@@ -26,13 +25,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Link_USART::Link_USART(Receiver* aReceiver, Sender* aSender, Embedded::USART* aUSART)
-            : mReceiver(aReceiver)
-            , mSender(aSender)
+        Link_USART::Link_USART(System* aSystem, Embedded::USART* aUSART)
+            : mSystem(aSystem)
             , mUSART(aUSART)
         {
-            // assert(NULL != aReceiver);
-            // assert(NULL != aSender);
+            // assert(NULL != aSystem);
             // assert(NULL != aUSART);
 
             mUSART->mOnRxByte.Set(this, MSG_RX_BYTE);
@@ -58,12 +55,12 @@ namespace KMS
 
         void Link_USART::Work()
         {
-            // assert(NULL != mSender);
+            // assert(NULL != mSystem);
             // assert(NULL != mUSART);
 
             if (mUSART->Tx_IsReady())
             {
-                const FrameBuffer* lFB = mSender->PrepareFrame();
+                const FrameBuffer* lFB = mSystem->PrepareFrame();
                 if (NULL != lFB)
                 {
                     mUSART->Tx(lFB->GetRawFrame(), lFB->GetFrameSize_byte());
@@ -78,11 +75,11 @@ namespace KMS
         {
             // assert(NULL != aData);
 
-            // assert(NULL != mReceiver);
+            // assert(NULL != mSystem);
 
             uint8_t* lData = reinterpret_cast<uint8_t*>(aData);
 
-            mReceiver->AddReceivedByte(*lData);
+            mSystem->AddReceivedByte(*lData);
 
             return 0;
         }

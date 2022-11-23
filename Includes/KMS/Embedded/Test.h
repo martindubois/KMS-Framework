@@ -13,8 +13,6 @@
 #include <KMS/Msg/Destination.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/WOP/Link_USART.h>
-#include <KMS/WOP/Receiver.h>
-#include <KMS/WOP/Sender.h>
 #include <KMS/WOP/System.h>
 
 namespace KMS
@@ -43,8 +41,6 @@ namespace KMS
 
             DAQ::DigitalOutput mLED;
             WOP::Link_USART    mLink;
-            WOP::Receiver      mReceiver;
-            WOP::Sender        mSender;
             WOP::System        mSystem;
 
         };

@@ -31,10 +31,8 @@ namespace KMS
         Test::Test(Embedded::USART* aUSART, const DAQ::DigitalOutput& aLED)
             : ON_KEY(this, MSG_KEY)
             , mLED(aLED)
-            , mLink(&mReceiver, &mSender, aUSART)
-            , mReceiver(&mSystem, NULL, 0)
-            , mSender(&mSystem, NULL, 0)
-            , mSystem(VERSION)
+            , mLink(&mSystem, aUSART)
+            , mSystem(VERSION, 0x74736554, 0x00)
         {
             // assert(NULL != aUSART);
         }
