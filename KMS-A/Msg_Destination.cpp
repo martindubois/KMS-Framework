@@ -88,7 +88,7 @@ namespace KMS
             else
             {
                 #ifndef _KMS_EMBEDDED_
-                    KMS_DBG_LOG_INFO();
+                    KMS_DBG_LOG_NOISE();
                 #endif
 
                 lResult = IReceiver::MSG_IGNORED;

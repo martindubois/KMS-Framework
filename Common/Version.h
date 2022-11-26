@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      Common/Version.h
 
-// EDIT ON BUILD
+// EDIT ON BUILD - Version
 
 #pragma once
 
@@ -17,8 +17,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define VERSION_RC  0,1,13,0
-#define VERSION_STR "0.1.13.0"
+#define VERSION_RC  0,1,14,0
+#define VERSION_STR "0.1.14.0"
 
 #ifdef __cplusplus
     KMS_VERSION("dev");
