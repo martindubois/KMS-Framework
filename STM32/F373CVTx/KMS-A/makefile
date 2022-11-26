@@ -9,9 +9,6 @@ include ../$(CONFIG).mk
 
 OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
 
-# QUESTION Can I move OBJECTS and SOURCES in the makefile in the parent
-#          folder ?
-
 OBJECTS = DAQ_DigitalOutput.o \
           Embedded_SPI.o      \
           Embedded_Test.o     \
@@ -62,7 +59,7 @@ $(OUTPUT) : $(OBJECTS)
 ../../../KMS-A/Msg_IReceiver.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/Msg/IReceiver.h ../../../Includes/KMS/SafeAPI.h ../../../KMS-A/Component.h
 ../../../KMS-A/Version.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/File/Folder.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/Text/File_ASCII.h ../../../Includes/KMS/Types.h ../../../Includes/KMS/Version.h ../../../KMS-A/Component.h
 ../../../KMS-A/WOP_FrameBuffer.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/WOP/FrameBuffer.h ../../../Includes/KMS/WOP/WOP.h ../../../KMS-A/Component.h
-../../../KMS-A/WOP_Link_USART.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/Embedded/USART.h ../../../Includes/KMS/Embedded/WorkItem.h ../../../Includes/KMS/Msg/Destination.h ../../../Includes/KMS/Msg/IReceiver.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/WOP/Link_USART.h ../../../KMS-A/Component.h
+../../../KMS-A/WOP_Link_USART.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/Embedded/USART.h ../../../Includes/KMS/Embedded/WorkItem.h ../../../Includes/KMS/File/Folder.h ../../../Includes/KMS/Msg/Destination.h ../../../Includes/KMS/Msg/IReceiver.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/Version.h ../../../Includes/KMS/WOP/FrameBuffer.h ../../../Includes/KMS/WOP/Link_USART.h ../../../Includes/KMS/WOP/Object.h ../../../Includes/KMS/WOP/System.h ../../../Includes/KMS/WOP/WOP.h ../../../KMS-A/Component.h
 ../../../KMS-A/WOP_Object.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/WOP/FrameBuffer.h ../../../Includes/KMS/WOP/Object.h ../../../Includes/KMS/WOP/WOP.h ../../../KMS-A/Component.h
 ../../../KMS-A/WOP_System.o: ../../../Includes/KMS/Base.h ../../../Includes/KMS/File/Folder.h ../../../Includes/KMS/SafeAPI.h ../../../Includes/KMS/Version.h ../../../Includes/KMS/WOP/FrameBuffer.h ../../../Includes/KMS/WOP/Object.h ../../../Includes/KMS/WOP/System.h ../../../Includes/KMS/WOP/WOP.h ../../../KMS-A/Component.h
 
