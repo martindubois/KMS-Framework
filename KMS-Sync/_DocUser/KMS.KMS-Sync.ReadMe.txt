@@ -7,7 +7,7 @@ File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.13-dev Windows 2022-11-23
+0.1.14-dev Windows 2022-11-23
 
 0.0.6-dev Windows 2022-07-26
 - Create folder structure

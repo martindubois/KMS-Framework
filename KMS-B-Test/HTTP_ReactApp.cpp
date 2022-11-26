@@ -66,13 +66,23 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lB.Open(lRA.mServer, "", "KMS-Framework");
 
-    Sleep(3000);
+    for (unsigned int i = 0; i < 10; i++)
+    {
+        Sleep(1000);
+
+        if (lTA.GetResult())
+        {
+            break;
+        }
+
+        std::cout << "1 second" << std::endl;
+    }
+
+    KMS_TEST_ASSERT(lTA.GetResult());
 
     lB.Close();
 
     lRA.mServer.mThread.StopAndWait(2000);
-
-    KMS_TEST_ASSERT(lTA.GetResult());
 }
 
 // Public
@@ -103,6 +113,8 @@ unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
     switch (aCode)
     {
     case MSG_GET_VERSION:
+        std::cout << "MSG_GET_VERSION" << std::endl;
+
         mGetVersion++;
 
         char lVersion[16];

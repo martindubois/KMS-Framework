@@ -228,6 +228,9 @@ namespace KMS
                 return;
             }
 
+            KMS_DBG_LOG_INFO();
+            Dbg::gLog.WriteMessage(lPath);
+
             lIt->second(aR);
 
             File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
