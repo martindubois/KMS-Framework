@@ -7,7 +7,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.14-dev Windows 2022-11-23
+0.1.15-dev Windows 2022-11-27
 - Build::Depend - Embedded project support
 - Embedded - Test
 - WOP

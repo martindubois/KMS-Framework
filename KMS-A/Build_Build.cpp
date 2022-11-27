@@ -11,6 +11,7 @@
 #include <iostream>
 
 // ===== Includes ===========================================================
+#include <KMS/Build/Make.h>
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Installer.h>
@@ -238,6 +239,8 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
+        bool Build::IsEmbedded() const { return 0 < mEmbedded.GetLength(); }
+
         void Build::Compile()
         {
             for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
@@ -247,7 +250,44 @@ namespace KMS
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
-                Compile(*lC);
+                if (IsEmbedded())
+                {
+                    Compile_Make(*lC);
+                }
+                else
+                {
+                    #ifdef _KMS_LINUX_
+                        Compile_MaKe(*lC);
+                    #endif
+
+                    #ifdef _KMS_WINDOWS_
+                        Compile_VisualStudio(*lC);
+                    #endif
+                }
+            }
+        }
+
+        void Build::Compile_Make(const char* aC)
+        {
+            Cfg::Configurator lC;
+            Make              lM;
+
+            lC.AddConfigurable(&lM);
+
+            lC.AddConfigurable(&Dbg::gLog);
+
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
+
+            lM.mConfiguration.Set(aC);
+
+            lM.AddCommand("Clean");
+            lM.AddCommand("Make");
+
+            int lRet = lM.Run();
+            if (0 != lRet)
+            {
+                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
             }
         }
 
@@ -307,7 +347,7 @@ namespace KMS
                 mProductFolder.Create();
             }
 
-            unsigned int lFlags = ((0 < mEmbedded.GetLength()) || mOSIndependent) ? Version::FLAG_OS_INDEPENDENT : 0;
+            unsigned int lFlags = (IsEmbedded() || mOSIndependent) ? Version::FLAG_OS_INDEPENDENT : 0;
 
             char lPackage[FILE_LENGTH];
 
@@ -342,7 +382,7 @@ namespace KMS
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
-                if (0 < mEmbedded.GetLength())
+                if (IsEmbedded())
                 {
                     Package_Components_Embedded(*lC);
                 }
@@ -453,7 +493,7 @@ namespace KMS
                     KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), BUILD_CONFIG_INVALID, "No configuration", "");
 
                     #ifdef _KMS_WINDOWS_
-                        KMS_EXCEPTION_ASSERT(!mWindowsProcessors.IsEmpty(), BUILD_CONFIG_INVALID, "No processor", "");
+                        KMS_EXCEPTION_ASSERT(IsEmbedded() || (!mWindowsProcessors.IsEmpty()), BUILD_CONFIG_INVALID, "No processor", "");
                     #endif
                 }
 

@@ -30,7 +30,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::Compile(const char* aC)
+        void Build::Compile_VisualStudio(const char* aC)
         {
             for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {

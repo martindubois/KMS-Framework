@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Build/Make.h>
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
@@ -21,29 +19,6 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
-
-        void Build::Compile(const char* aC)
-        {
-            Cfg::Configurator lC;
-            Make lM;
-
-            lC.AddConfigurable(&lM);
-
-            lC.AddConfigurable(&Dbg::gLog);
-
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
-
-            lM.SetConfiguration(aC);
-
-            lM.AddCommand("Clean");
-            lM.AddCommand("Make");
-
-            int lRet = lM.Run();
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
-            }
-        }
 
         void Build::Package_Component(const char* aC)
         {
