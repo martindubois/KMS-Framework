@@ -46,11 +46,11 @@ namespace KMS
 
         System::System(const Version& aVersion, uint32_t aMagic, uint8_t aProtocolVersion)
             : mInstances(NULL)
+            , mTx_Instance(0)
             , mProtocol_Out(aMagic, aProtocolVersion)
             , mResult_In(KMS_WOP_RESULT_OK)
             , mResult_Out(KMS_WOP_RESULT_OK)
             , mTraceLen(0)
-            , mTx_Instance(0)
             , mVersion_Out(aVersion)
         {}
 
@@ -239,17 +239,17 @@ namespace KMS
         System::ProtocolInfo::ProtocolInfo()
             : mMagic(MAGIC_UNKNOWN)
             , mInstanceCount(INSTANCE_COUNT_UNKNOWN)
-            , mVersion_Application(VERSION_UNKNOWN)
             , mVersion_Base(VERSION_UNKNOWN)
             , mVersion_System(VERSION_UNKNOWN)
+            , mVersion_Application(VERSION_UNKNOWN)
         {}
 
         System::ProtocolInfo::ProtocolInfo(uint32_t aMagic, uint8_t aProtcolVersion)
             : mMagic(aMagic)
             , mInstanceCount(0)
-            , mVersion_Application(aProtcolVersion)
             , mVersion_Base(KMS_WOP_VERSION_BASE)
             , mVersion_System(VERSION_SYSTEM)
+            , mVersion_Application(aProtcolVersion)
         {}
 
         void System::WriteData()
