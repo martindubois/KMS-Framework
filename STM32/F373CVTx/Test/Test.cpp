@@ -28,6 +28,8 @@ int main()
 {
     sProcessor.Clock_Config();
 
+    // The selected IOs fit the STM32373C-EVAL board.
+
     sProcessor.IO_SetMode(KMS_STM_ID_PC(0), STM::STM32F::IO_Mode::DIGITAL_OUTPUT_OPEN_DRAIN);
 
     Embedded::USART* lUSART = sProcessor.USART_Get(1, KMS_STM_ID_PD(6), KMS_STM_ID_PD(5));

@@ -3,8 +3,8 @@
 # Copyright (C) 2022 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
-# File      STM32/F373CVTx/Common.mk
+# File      STM32/Makefiles/stm32f373cvtx.mk
 
-include ../../Makefiles/stm32f373cvtx.mk
+include ../../Makefiles/stm32.mk
 
-include ../../Common.mk
+CFLAGS += -DSTM32F3 -DSTM32F373xC -DSTM32F373VCTx

@@ -1,0 +1,31 @@
+
+Author    KMS - Martin Dubois, P. Eng.
+Copyright (C) 2022 KMS
+License   http://www.apache.org/licenses/LICENSE-2.0
+Product   KMS-Framework
+File      _DocDev/Build_Embedded.txt
+
+Name                _________________________________________________________
+
+Date and time       20 ______ - ______ - ______               ______ : ______
+
+Computer            _________________________________________________________
+
+[ ] Search "EDIT ON BUILD" and edit found file as needed.
+
+Version             ______ . ______ . ______ . ______ - _____________________
+
+[ ] File "{Family}/_DocUser/KMS.{Family}.ReadMe.txt"
+[ ] File "{Family}/{Processor}/_DocUser/KMS.{Family}.{Processor}.ReadMe.txt"
+[ ] Tools "PowerShell" - In the processor folder
+        .\x64\Debug\KMS-Build.exe
+
+[ ] Tools "GIT GUI"
+    - Commit all modified File with {Ma}.{Mi}.{Bu}-{FamilyAndProcessor}] as
+      message
+    - Push the servers
+[ ] If needed, upload the release on GitHub.com
+
+Time and duration   ______ : ______           ______ hours and ______ minutes
+
+Signature           _________________________________________________________
