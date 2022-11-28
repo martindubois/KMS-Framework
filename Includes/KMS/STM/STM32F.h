@@ -15,6 +15,7 @@
 #include <stm32f3xx.h>
 
 // ===== Includes ===========================================================
+#include <KMS/DAQ/IDigitalInputs.h>
 #include <KMS/DAQ/IDigitalOutputs.h>
 #include <KMS/Embedded/SPI.h>
 #include <KMS/Embedded/USART.h>
@@ -32,7 +33,7 @@ namespace KMS
     namespace STM
     {
 
-        class STM32F : public DAQ::IDigitalOutputs
+        class STM32F : public DAQ::IDigitalInputs, public DAQ::IDigitalOutputs
         {
 
         public:
@@ -65,6 +66,9 @@ namespace KMS
             // aTx  Tx pin, see KMS_STM_ID_P...
             // The UART is configured for 115200 bps 8N1
             Embedded::USART* USART_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx);
+
+            // ==== DAQ::IDigitalInputs =====================================
+            virtual bool DI_Read(DAQ::Id aId);
 
             // ==== DAQ::IDigitalOutputs ====================================
             virtual void DO_Clear(DAQ::Id aId);

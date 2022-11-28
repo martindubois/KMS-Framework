@@ -223,6 +223,13 @@ namespace KMS
             return lResult;
         }
 
+        // ===== DAQ::IDigitalInputs ========================================
+
+        bool STM32F::DI_Read(DAQ::Id aId)
+        {
+            return 0 != (sGPIOs[aId / 16]->IDR & (1 << (aId % 16)));
+        }
+
         // ===== DAQ::IDigitalOutputs =======================================
 
         void STM32F::DO_Clear(DAQ::Id aId)
