@@ -22,11 +22,8 @@ namespace KMS
 
         void Build::Package_Component(const char* aC)
         {
-            File::Folder lBinaries(mTempFolder , "Binaries" );
-            File::Folder lLibraries(mTempFolder, "Libraries");
-
-            File::Folder lBin(lBinaries , aC);
-            File::Folder lLib(lLibraries, aC);
+            File::Folder lBin(mTmp_Binaries , aC);
+            File::Folder lLib(mTmp_Libraries, aC);
 
             File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
             File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());

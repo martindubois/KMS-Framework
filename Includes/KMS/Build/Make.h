@@ -37,21 +37,20 @@ namespace KMS
             void AddLibrary(const char* aL);
             void AddTest   (const char* aT);
 
-            void ResetBinaries ();
-            void ResetComponent();
-            void ResetIncludes ();
-            void ResetLibraries();
-            void ResetTests    ();
-
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile);
             virtual void ExecuteCommand(const char* aC);
             virtual int  Run();
 
             // ===== Configurable attributes ================================
+            DI::Array         mBinaries;
+            DI::Array         mCleanExtensions;
             DI::String        mComponent;
             DI::String        mConfiguration;
+            DI::Array         mIncludes;
+            DI::Array         mLibraries;
             DI::String_Expand mMake;
+            DI::Array         mTests;
 
         private:
 
@@ -101,12 +100,7 @@ namespace KMS
             File::Folder mF_Libraries;
 
             // ===== Configurable attributes ================================
-            DI::Array                                     mBinaries;
-            DI::Array                                     mCleanExtensions;
             DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;
-            DI::Array                                     mIncludes;
-            DI::Array                                     mLibraries;
-            DI::Array                                     mTests;
 
         };
 

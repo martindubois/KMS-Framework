@@ -157,6 +157,8 @@ namespace KMS
             GetPath(aFile, lPath, sizeof(lPath));
 
             DWORD lAttr = GetFileAttributes(lPath);
+            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, "Cannot retrieve attributes", lPath);
+
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;

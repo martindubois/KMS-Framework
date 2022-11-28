@@ -411,7 +411,7 @@ namespace KMS
                 const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
 
-                lBin_Src.Copy(lBin, (lB->mInternal + "*.elf").c_str());
+                lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
             }
 
             for (const DI::Container::Entry& lEntry : mLibraries.mInternal)

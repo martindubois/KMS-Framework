@@ -150,12 +150,6 @@ namespace KMS
         void Make::AddLibrary  (const char* aL) { mLibraries .AddEntry(new DI::String(aL), true); }
         void Make::AddTest     (const char* aT) { mTests     .AddEntry(new DI::String(aT), true); }
 
-        void Make::ResetBinaries  () { mBinaries  .Clear(); }
-        void Make::ResetComponent () { mComponent .Clear(); }
-        void Make::ResetIncludes  () { mIncludes  .Clear(); }
-        void Make::ResetLibraries () { mLibraries .Clear(); }
-        void Make::ResetTests     () { mTests     .Clear(); }
-
         // ===== CLI::Tool ==================================================
 
         void Make::DisplayHelp(FILE* aOut)
@@ -245,7 +239,6 @@ namespace KMS
             {
                 mF_Lib_Cfg.Delete(lL);
             }
-
         }
 
         void Make::Clean_Libraries()
