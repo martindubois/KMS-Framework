@@ -30,7 +30,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::Compile(const char* aC)
+        void Build::Compile_VisualStudio(const char* aC)
         {
             for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {
@@ -61,9 +61,6 @@ namespace KMS
 
         void Build::Package_Components(const char* aC)
         {
-            File::Folder lBinaries(mTempFolder, "Binaries");
-            File::Folder lLibraries(mTempFolder, "Libraries");
-
             for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
@@ -76,8 +73,8 @@ namespace KMS
                 lCfg += "_";
                 lCfg += lP->Get();
 
-                File::Folder lBin(lBinaries, lCfg.c_str());
-                File::Folder lLib(lLibraries, lCfg.c_str());
+                File::Folder lBin(mTmp_Binaries , lCfg.c_str());
+                File::Folder lLib(mTmp_Libraries, lCfg.c_str());
 
                 std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
 

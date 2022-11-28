@@ -7,9 +7,7 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.14-dev Windows 2022-11-23
-
-0.1.11-dev Windows 2022-11-15
+0.1.17-dev Windows 2022-11-28
 
 0.1.4-dev Windows 2022-10-17
 - NET::AddressRangeList::GetInternal - Removed

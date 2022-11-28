@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Build/Make.h>
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
@@ -22,36 +20,10 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::Compile(const char* aC)
-        {
-            Cfg::Configurator lC;
-            Make lM;
-
-            lC.AddConfigurable(&lM);
-
-            lC.AddConfigurable(&Dbg::gLog);
-
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
-
-            lM.SetConfiguration(aC);
-
-            lM.AddCommand("Clean");
-            lM.AddCommand("Make");
-
-            int lRet = lM.Run();
-            if (0 != lRet)
-            {
-                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
-            }
-        }
-
         void Build::Package_Component(const char* aC)
         {
-            File::Folder lBinaries(mTempFolder , "Binaries" );
-            File::Folder lLibraries(mTempFolder, "Libraries");
-
-            File::Folder lBin(lBinaries , aC);
-            File::Folder lLib(lLibraries, aC);
+            File::Folder lBin(mTmp_Binaries , aC);
+            File::Folder lLib(mTmp_Libraries, aC);
 
             File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
             File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());

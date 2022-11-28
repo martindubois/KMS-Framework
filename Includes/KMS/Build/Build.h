@@ -66,8 +66,11 @@ namespace KMS
 
             const Build & operator = (const Build &);
 
+            bool IsEmbedded() const;
+
             void Compile();
-            void Compile(const char* aC);
+            void Compile_Make(const char* aC);
+            void Compile_VisualStudio(const char* aC);
             void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
             void Export();
@@ -87,8 +90,12 @@ namespace KMS
             #endif
 
             File::Folder mProductFolder;
-            File::Folder mTempFolder;
             Version      mVersion;
+
+            // ===== Folders ================================================
+            File::Folder mTmp_Root;
+            File::Folder mTmp_Binaries;
+            File::Folder mTmp_Libraries;
 
             // ===== Configurable attributes ================================
             DI::Array    mBinaries;

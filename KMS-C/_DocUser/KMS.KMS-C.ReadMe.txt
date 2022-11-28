@@ -7,9 +7,7 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.14-dev Windows 2022-11-23
-
-0.1.11-dev Windows 2022-11-15
+0.1.17-dev Windows 2022-11-28
 
 0.0.6-dev Windows 2022-07-27
 * Com::Port
