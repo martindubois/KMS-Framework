@@ -27,6 +27,12 @@ namespace KMS
             // assert(NULL != aInterface);
         }
 
+        void AnalogInput::operator = (const AnalogInput& aIn)
+        {
+            mId        = aIn.mId;
+            mInterface = aIn.mInterface;
+        }
+
         AnalogValue AnalogInput::Read() { return mInterface->AI_Read(mId); }
 
         AnalogValue_Raw AnalogInput::Read_Raw() { return mInterface->AI_Read_Raw(mId); }

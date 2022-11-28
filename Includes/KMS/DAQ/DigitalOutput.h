@@ -25,6 +25,8 @@ namespace KMS
             DigitalOutput();
             DigitalOutput(IDigitalOutputs* aInterface, Id aId);
 
+            void operator = (const DigitalOutput& aIn);
+
             void Clear();
 
             bool Get() const;

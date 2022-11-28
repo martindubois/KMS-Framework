@@ -27,6 +27,12 @@ namespace KMS
             // assert(NULL != aInterface);
         }
 
+        void DigitalInput::operator = (const DigitalInput& aIn)
+        {
+            mId        = aIn.mId;
+            mInterface = aIn.mInterface;
+        }
+
         bool DigitalInput::Read() { return mInterface->DI_Read(mId); }
 
     }

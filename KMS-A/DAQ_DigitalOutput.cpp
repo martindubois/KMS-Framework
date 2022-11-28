@@ -27,6 +27,12 @@ namespace KMS
             // assert(NULL != aInterface);
         }
 
+        void DigitalOutput::operator = (const DigitalOutput& aIn)
+        {
+            mId        = aIn.mId;
+            mInterface = aIn.mInterface;
+        }
+
         void DigitalOutput::Clear() { mInterface->DO_Clear(mId); }
 
         bool DigitalOutput::Get() const { return mInterface->DO_Get(mId); }

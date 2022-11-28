@@ -25,6 +25,8 @@ namespace KMS
             DigitalInput();
             DigitalInput(IDigitalInputs* aInterface, Id aId);
 
+            void operator = (const DigitalInput& aIn);
+
             bool Read();
 
         private:

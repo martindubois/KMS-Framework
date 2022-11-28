@@ -25,6 +25,8 @@ namespace KMS
             AnalogInput();
             AnalogInput(IAnalogInputs* aInterface, Id aId);
 
+            void operator = (const AnalogInput& aIn);
+
             AnalogValue Read();
 
             AnalogValue_Raw Read_Raw();

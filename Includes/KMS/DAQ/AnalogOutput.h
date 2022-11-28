@@ -25,6 +25,8 @@ namespace KMS
             AnalogOutput();
             AnalogOutput(IAnalogOutputs* aInterface, Id aId);
 
+            void operator = (const AnalogOutput& aIn);
+
             AnalogValue Get() const;
 
             AnalogValue_Raw Get_Raw() const;
