@@ -84,8 +84,6 @@ namespace KMS
         template <typename T>
         uint8_t BitArray<T>::WriteData(const FrameBuffer* aIn)
         {
-            assert(NULL != aIn);
-
             uint8_t lResult = KMS_WOP_RESULT_INVALID_INSTANCE;
 
             switch (aIn->GetDataType())
