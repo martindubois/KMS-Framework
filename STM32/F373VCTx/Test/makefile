@@ -5,12 +5,9 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/Test/makefile
 
-KMS_MAKEFILES = ../../Makefiles
-KMS_STARTUP   = ../../Startup
+include ../../$(CONFIG).mk
 
 include $(KMS_MAKEFILES)/stm32f373cvtx.mk
-
-include ../../$(CONFIG).mk
 
 LIBRARIES = $(KMS_STM32_A) $(KMS_A_A)
 
@@ -30,7 +27,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 # ===== Targets =============================================================
 
 $(OUTPUT): Startup.o $(OBJECTS) $(LIBRARIES)
-	$(GPP) $(CFLAGS) -T"../../LinkerScripts/STM32F373VCTX_FLASH.ld" -Wl,-Map="Test.map" -o $@ $^
+	$(GPP) $(CFLAGS) -T"$(KMS_LINKER_SCRIPTS)/STM32F373VCTX_FLASH.ld" -Wl,-Map="Test.map" -o $@ $^
 	$(SIZE) $@
 
 # ===== Specific rules ======================================================

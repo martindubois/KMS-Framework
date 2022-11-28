@@ -3,7 +3,7 @@
 // Copyright (C) 2022 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      STM32/F373CVTx/KMS-STM32/STM32F.cpp
+// File      STM32/KMS-STM32/STM32F.cpp
 
 #include "Component.h"
 
