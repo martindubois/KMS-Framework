@@ -97,6 +97,11 @@ namespace KMS
             NVIC_EnableIRQ(EXTI_IRQ[lBit]);
         }
 
+        static uint32_t GPIO_MODER_MASK      = 0x3;
+        static uint32_t GPIO_MODER_VALUES[3] = { 0x0, 0x1, 0x1 };
+
+        // TODO Let user choose pull up, pull down and speed
+
         void STM32F::IO_SetMode(DAQ::Id aId, IO_Mode aMode)
         {
             unsigned int lBit  = aId % 16;
@@ -110,10 +115,16 @@ namespace KMS
 
             lGPIO->ODR &= ~ (1 << lBit);
 
-            lGPIO->MODER &= ~ (0x3 << (lBit * 2));
-            lGPIO->MODER |=    0x1 << (lBit * 2);
+            lGPIO->MODER &= ~ (GPIO_MODER_MASK                                     << (lBit * 2));
+            lGPIO->MODER |=    GPIO_MODER_VALUES[static_cast<unsigned int>(aMode)] << (lBit * 2);
 
-            lGPIO->OTYPER |= 1 << lBit;
+            switch (aMode)
+            {
+            case IO_Mode::DIGITAL_INPUT: break;
+
+            case IO_Mode::DIGITAL_OUTPUT_OPEN_DRAIN: lGPIO->OTYPER |=    1 << lBit ; break;
+            case IO_Mode::DIGITAL_OUTPUT_PUSH_PULL : lGPIO->OTYPER &= ~ (1 << lBit); break;
+            }
 
             lGPIO->OSPEEDR &= ~ (0x3 << (lBit * 2));
             lGPIO->OSPEEDR |=    0x1 << (lBit * 2);

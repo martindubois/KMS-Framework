@@ -37,10 +37,11 @@ namespace KMS
 
         public:
 
-            // TODO DIGITAL_INPUT, DIGITAL_OUTPUT_PUSH_PULL
             enum class IO_Mode
             {
+                DIGITAL_INPUT = 0,
                 DIGITAL_OUTPUT_OPEN_DRAIN,
+                DIGITAL_OUTPUT_PUSH_PULL,
             };
 
             STM32F();
