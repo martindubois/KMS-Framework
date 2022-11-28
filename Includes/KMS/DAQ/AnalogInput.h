@@ -22,6 +22,7 @@ namespace KMS
 
         public:
 
+            AnalogInput();
             AnalogInput(IAnalogInputs* aInterface, Id aId);
 
             AnalogValue Read();

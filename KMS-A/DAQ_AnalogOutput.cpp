@@ -20,18 +20,20 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        AnalogOutput::AnalogOutput() : mId(0), mInterface(NULL) {}
+
         AnalogOutput::AnalogOutput(IAnalogOutputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            // assert(NULL != aInterface);
         }
 
-        AnalogValue AnalogOutput::Get() const { assert(NULL != mInterface); return mInterface->AO_Get(mId); }
+        AnalogValue AnalogOutput::Get() const { return mInterface->AO_Get(mId); }
 
-        AnalogValue_Raw AnalogOutput::Get_Raw() const { assert(NULL != mInterface); return mInterface->AO_Get_Raw(mId); }
+        AnalogValue_Raw AnalogOutput::Get_Raw() const { return mInterface->AO_Get_Raw(mId); }
 
-        void AnalogOutput::Write(AnalogValue aValue) { assert(NULL != mInterface); mInterface->AO_Write(mId, aValue); }
+        void AnalogOutput::Write(AnalogValue aValue) { mInterface->AO_Write(mId, aValue); }
 
-        void AnalogOutput::Write_Raw(AnalogValue_Raw aValue) { assert(NULL != mInterface); mInterface->AO_Write_Raw(mId, aValue); }
+        void AnalogOutput::Write_Raw(AnalogValue_Raw aValue) { mInterface->AO_Write_Raw(mId, aValue); }
 
     }
 }

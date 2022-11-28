@@ -20,12 +20,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        DigitalInput::DigitalInput() : mId(0), mInterface(NULL) {}
+
         DigitalInput::DigitalInput(IDigitalInputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            // assert(NULL != aInterface);
         }
 
-        bool DigitalInput::Read() { assert(NULL != mInterface); return mInterface->DI_Read(mId); }
+        bool DigitalInput::Read() { return mInterface->DI_Read(mId); }
 
     }
 }

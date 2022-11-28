@@ -22,6 +22,7 @@ namespace KMS
 
         public:
 
+            DigitalInput();
             DigitalInput(IDigitalInputs* aInterface, Id aId);
 
             bool Read();

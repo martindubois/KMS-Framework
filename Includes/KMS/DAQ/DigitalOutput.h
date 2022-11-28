@@ -22,6 +22,7 @@ namespace KMS
 
         public:
 
+            DigitalOutput();
             DigitalOutput(IDigitalOutputs* aInterface, Id aId);
 
             void Clear();

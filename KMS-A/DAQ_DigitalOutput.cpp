@@ -20,6 +20,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        DigitalOutput::DigitalOutput() : mId(0), mInterface(NULL) {}
+
         DigitalOutput::DigitalOutput(IDigitalOutputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
             // assert(NULL != aInterface);

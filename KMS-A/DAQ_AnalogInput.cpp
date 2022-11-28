@@ -20,14 +20,16 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        AnalogInput::AnalogInput() : mId(0), mInterface(NULL) {}
+
         AnalogInput::AnalogInput(IAnalogInputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            // assert(NULL != aInterface);
         }
 
-        AnalogValue AnalogInput::Read() { assert(NULL != mInterface); return mInterface->AI_Read(mId); }
+        AnalogValue AnalogInput::Read() { return mInterface->AI_Read(mId); }
 
-        AnalogValue_Raw AnalogInput::Read_Raw() { assert(NULL != mInterface); return mInterface->AI_Read_Raw(mId); }
+        AnalogValue_Raw AnalogInput::Read_Raw() { return mInterface->AI_Read_Raw(mId); }
 
     }
 }

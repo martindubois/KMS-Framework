@@ -22,6 +22,7 @@ namespace KMS
 
         public:
 
+            AnalogOutput();
             AnalogOutput(IAnalogOutputs* aInterface, Id aId);
 
             AnalogValue Get() const;
