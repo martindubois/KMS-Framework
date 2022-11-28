@@ -5,9 +5,11 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/KMS-A/makefile
 
-include ../$(CONFIG).mk
+include ../../Makefiles/stm32f373cvtx.mk
 
-OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
+include ../../$(CONFIG).mk
+
+OUTPUT = $(KMS_A_A)
 
 OBJECTS = DAQ_DigitalOutput.o \
           Embedded_SPI.o      \

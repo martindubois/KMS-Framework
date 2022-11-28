@@ -8,4 +8,4 @@
 INCLUDES = -I ../../Includes/STM -I ../../../Includes
 
 KMS_A_A     = ../Libraries/$(CONFIG)/KMS-A.a
-KMS_STM32_A = ../Libraries/$(CONFIG)/KMS-STM32.A
+KMS_STM32_A = ../Libraries/$(CONFIG)/KMS-STM32.a

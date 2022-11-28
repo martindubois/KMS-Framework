@@ -5,9 +5,11 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/KMS-STM32/makefile
 
-include ../$(CONFIG).mk
+include ../../Makefiles/stm32f373cvtx.mk
 
-OUTPUT = ../Libraries/$(CONFIG)/KMS-STM32.a
+include ../../$(CONFIG).mk
+
+OUTPUT = $(KMS_STM32_A)
 
 OBJECTS = Needed.o \
           SPI.o    \

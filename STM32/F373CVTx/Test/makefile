@@ -5,7 +5,9 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/Test/makefile
 
-include ../$(CONFIG).mk
+include ../../Makefiles/stm32f373cvtx.mk
+
+include ../../$(CONFIG).mk
 
 LIBRARIES = $(KMS_STM32_A) $(KMS_A_A)
 
