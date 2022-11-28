@@ -7,7 +7,7 @@ File      KMS-Import/_DocUser/KMS.KMS-Import.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.15-dev Windows 2022-11-27
+0.1.16-dev Windows 2022-11-27
 
 0.1.5-dev Linux x86_64 2022-10-19
 

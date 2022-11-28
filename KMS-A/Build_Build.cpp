@@ -145,7 +145,7 @@ namespace KMS
             , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
             , mOSIndependent(DEFAULT_OS_INDEPENDENT)
             , mVersionFile  (DEFAULT_VERSION_FILE)
-            , mTempFolder(File::Folder::Id::TEMPORARY)
+            , mTmp_Root(File::Folder::Id::TEMPORARY)
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
                 , mExportFolder(File::Folder(File::Folder::Id::HOME, "Export"))
             #endif
@@ -193,6 +193,9 @@ namespace KMS
                 AddEntry("WindowsFile_MSI"  , &mWindowsFile_MSI  , false, &MD_WINDOWS_FILE_MSI);
                 AddEntry("WindowsProcessors", &mWindowsProcessors, false, &MD_WINDOWS_PROCESSORS);
             #endif
+
+            mTmp_Binaries  = File::Folder(mTmp_Root, "Binaries" );
+            mTmp_Libraries = File::Folder(mTmp_Root, "Libraries");
         }
 
         Build::~Build() {}
@@ -353,7 +356,7 @@ namespace KMS
 
             mVersion.GetPackageName(mProduct, lPackage, sizeof(lPackage), lFlags);
 
-            mTempFolder.Compress(mProductFolder, lPackage);
+            mTmp_Root.Compress(mProductFolder, lPackage);
 
             #ifdef _KMS_WINDOWS_
                 Export_WindowsFile_MSI();
@@ -369,11 +372,8 @@ namespace KMS
 
         void Build::Package_Components()
         {
-            File::Folder lBin(mTempFolder, "Binaries" );
-            File::Folder lLib(mTempFolder, "Libraries");
-
-            if (!mBinaries .IsEmpty()) { lBin.Create(); }
-            if (!mLibraries.IsEmpty()) { lLib.Create(); }
+            if (!mBinaries .IsEmpty()) { mTmp_Binaries .Create(); }
+            if (!mLibraries.IsEmpty()) { mTmp_Libraries.Create(); }
 
             for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
@@ -395,11 +395,10 @@ namespace KMS
 
         void Build::Package_Components_Embedded(const char* aC)
         {
-            File::Folder lBinaries (mTempFolder, (std::string("Binaries/" ) + mEmbedded.Get()).c_str());
-            File::Folder lLibraries(mTempFolder, (std::string("Libraries/") + mEmbedded.Get()).c_str());
+            std::string lC = std::string(aC) + mEmbedded.Get();
 
-            File::Folder lBin(lBinaries , aC);
-            File::Folder lLib(lLibraries, aC);
+            File::Folder lBin(mTmp_Binaries , lC.c_str());
+            File::Folder lLib(mTmp_Libraries, lC.c_str());
 
             File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
             File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
@@ -443,7 +442,7 @@ namespace KMS
                     lPtr++;
                 }
 
-                File::Folder::CURRENT.Copy(mTempFolder, *lF, lPtr);
+                File::Folder::CURRENT.Copy(mTmp_Root, *lF, lPtr);
             }
         }
 
@@ -464,7 +463,7 @@ namespace KMS
                     KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid folder copy operation", *lF);
                 }
 
-                File::Folder lFD(mTempFolder, lDst);
+                File::Folder lFD(mTmp_Root, lDst);
                 File::Folder lFS(lSrc);
 
                 lFS.Copy(lFD);

@@ -90,8 +90,12 @@ namespace KMS
             #endif
 
             File::Folder mProductFolder;
-            File::Folder mTempFolder;
             Version      mVersion;
+
+            // ===== Folders ================================================
+            File::Folder mTmp_Root;
+            File::Folder mTmp_Binaries;
+            File::Folder mTmp_Libraries;
 
             // ===== Configurable attributes ================================
             DI::Array    mBinaries;

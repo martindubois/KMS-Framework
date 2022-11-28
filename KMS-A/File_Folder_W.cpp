@@ -160,7 +160,10 @@ namespace KMS
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;
-                SetFileAttributes(lPath, lAttr);
+                if (!SetFileAttributes(lPath, lAttr))
+                {
+                    KMS_EXCEPTION(FILE_DELETE_FAILED, "Cannot change attributes", lPath);
+                }
             }
 
             if (!DeleteFile(aFile))
