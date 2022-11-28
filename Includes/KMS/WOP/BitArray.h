@@ -25,12 +25,12 @@ namespace KMS
 
             BitArray(T aIn = 0);
 
-            void ClearBits(T aMask = 0xff);
-            T    GetBits  (T aMask = 0xff) const;
-            void SetBits  (T aMask = 0xff);
-            bool TestBits (T aMask = 0xff) const;
+            void ClearBits(T aMask);
+            T    GetBits  (T aMask) const;
+            void SetBits  (T aMask);
+            bool TestBits (T aMask) const;
 
-            void SetData(T aValue);
+            void SetData(T aData);
 
             // ===== Object =================================================
             virtual bool    PrepareFrame(FrameBuffer* aOut, uint8_t aInstance);
@@ -49,16 +49,40 @@ namespace KMS
         BitArray<T>::BitArray(T aIn) : mBits(aIn) {}
 
         template <typename T>
-        void BitArray<T>::ClearBits(T aMask) { mBits &= ~ aMask; }
+        void BitArray<T>::ClearBits(T aMask)
+        {
+            if (0 != (mBits & aMask))
+            {
+                mBits &= ~ aMask;
+                AddRequest(0x02);
+            }
+        }
 
         template <typename T>
         T BitArray<T>::GetBits(T aMask) const { return mBits & aMask; }
 
         template <typename T>
-        void BitArray<T>::SetBits(T aMask) { mBits |= aMask; }
+        void BitArray<T>::SetBits(T aMask)
+        {
+            if (aMask != (mBits & aMask))
+            {
+                mBits |= aMask;
+                AddRequest(0x02);
+            }
+        }
 
         template <typename T>
         bool BitArray<T>::TestBits(T aMask) const { return 0 != (mBits & aMask); }
+
+        template <typename T>
+        void BitArray<T>::SetData(T aData)
+        {
+            if (mBits != aData)
+            {
+                mBits = aData;
+                AddRequest(0x02);
+            }
+        }
 
         // ===== Object =====================================================
 
