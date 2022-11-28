@@ -5,7 +5,9 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/KMS-STM32/makefile
 
-include ../../Makefiles/stm32f373cvtx.mk
+KMS_MAKEFILES = ../../Makefiles
+
+include $(KMS_MAKEFILES)/stm32f373cvtx.mk
 
 include ../../$(CONFIG).mk
 
