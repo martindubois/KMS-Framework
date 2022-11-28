@@ -18,7 +18,7 @@ Version             ______ . ______ . ______ . ______ - _____________________
 [ ] File "{Family}/_DocUser/KMS.{Family}.ReadMe.txt"
 [ ] File "{Family}/{Processor}/_DocUser/KMS.{Family}.{Processor}.ReadMe.txt"
 [ ] Tools "PowerShell" - In the processor folder
-        .\x64\Debug\KMS-Build.exe
+        ..\..\Import\Binaries\Release_Status_x64\KMS-Build.exe
 
 [ ] Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}-{FamilyAndProcessor}] as
