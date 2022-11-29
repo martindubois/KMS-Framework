@@ -395,7 +395,7 @@ namespace KMS
 
         void Build::Package_Components_Embedded(const char* aC)
         {
-            std::string lC = std::string(aC) + mEmbedded.Get();
+            std::string lC = std::string(aC) + "_" + mEmbedded.Get();
 
             File::Folder lBin(mTmp_Binaries , lC.c_str());
             File::Folder lLib(mTmp_Libraries, lC.c_str());
