@@ -50,10 +50,10 @@ namespace KMS
         void ValueArray<T, N>::Clear() { memset(&mValues, 0, sizeof(mValues)); }
 
         template <typename T, unsigned int N>
-        T ValueArray<T, N>::GetValue(unsigned int aIndex) const { assert(N > aIndex); return mValues[aIndex]; }
+        T ValueArray<T, N>::GetValue(unsigned int aIndex) const { return mValues[aIndex]; }
 
         template <typename T, unsigned int N>
-        void ValueArray<T, N>::SetValue(unsigned int aIndex, T aIn) { assert(N > aIndex); mValues[aIndex] = aIn; }
+        void ValueArray<T, N>::SetValue(unsigned int aIndex, T aIn) { mValues[aIndex] = aIn; }
 
         // ===== Object =====================================================
 
@@ -79,8 +79,6 @@ namespace KMS
         template <typename T, unsigned int N>
         uint8_t ValueArray<T, N>::WriteData(const FrameBuffer* aIn)
         {
-            assert(NULL != aIn);
-
             uint8_t lResult = KMS_WOP_RESULT_INVALID_INSTANCE;
 
             switch (aIn->GetDataType())
