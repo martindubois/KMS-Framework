@@ -80,7 +80,7 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(mInternal.size() < static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
+                KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
 
                 mInternal[aIndex].Set(aE, aDelete);
             }

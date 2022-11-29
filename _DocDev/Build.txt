@@ -11,9 +11,11 @@ Date and time       20 ______ - ______ - ______               ______ : ______
 
 Computer            _________________________________________________________
 
-[ ] Search "EDIT ON BUILD" and edit found file as needed.
+[ ] File "Common/Version.h" - Edit the Version
 
 Version             ______ . ______ . ______ . ______ - _____________________
+
+[ ] Search "EDIT ON BUILD" and edit found file as needed
 
 ===== Linux only ============================================================
 [ ] Tool "Terminal" - Un the product folder
