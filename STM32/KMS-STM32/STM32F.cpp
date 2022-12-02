@@ -84,6 +84,8 @@ namespace KMS
             uint8_t  lReg  = lBit / 4;
             uint8_t  lPos  = 4 * (lBit % 4);
 
+            RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+
             sOnInterrupts[lBit] = aDestination;
 
             SYSCFG->EXTICR[lReg] &= ~ (SYSCFG_EXTICR1_EXTI0_Msk << lPos);
