@@ -44,16 +44,29 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T, unsigned int N>
-        ValueArray<T, N>::ValueArray() { Clear(); }
+        ValueArray<T, N>::ValueArray() { memset(&mValues, 0, sizeof(mValues)); }
 
         template <typename T, unsigned int N>
-        void ValueArray<T, N>::Clear() { memset(&mValues, 0, sizeof(mValues)); }
+        void ValueArray<T, N>::Clear()
+        {
+            for (unsigned int i = 0; i < N; i++)
+            {
+                SetValue(i, 0);
+            }
+        }
 
         template <typename T, unsigned int N>
         T ValueArray<T, N>::GetValue(unsigned int aIndex) const { return mValues[aIndex]; }
 
         template <typename T, unsigned int N>
-        void ValueArray<T, N>::SetValue(unsigned int aIndex, T aIn) { mValues[aIndex] = aIn; }
+        void ValueArray<T, N>::SetValue(unsigned int aIndex, T aIn)
+        {
+            if (mValues[aIndex] != aIn)
+            {
+                mValues[aIndex] = aIn;
+                AddRequest(0x02);
+            }
+        }
 
         // ===== Object =====================================================
 
