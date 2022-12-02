@@ -44,7 +44,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T, unsigned int N>
-        ValueArray<T, N>::ValueArray() { Clear(); }
+        ValueArray<T, N>::ValueArray() { memset(&mValues, 0, sizeof(mValues)); }
 
         template <typename T, unsigned int N>
         void ValueArray<T, N>::Clear()
