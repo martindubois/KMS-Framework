@@ -20,7 +20,7 @@ using namespace KMS;
 
 #define SPI_QTY (3)
 
-static IRQn_Type    sIRQs[SPI_QTY] = { SPI1_IRQn, SPI2_IRQn, SPI1_IRQn };
+static IRQn_Type    sIRQs[SPI_QTY] = { SPI1_IRQn, SPI2_IRQn, SPI3_IRQn };
 static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 
 // Public
@@ -29,6 +29,13 @@ static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 void SPI::Init(uint8_t aSPI)
 {
     // assert(SPY_QTY > aSPI);
+
+    switch (aSPI)
+    {
+    case 0: RCC->APB2ENR |= RCC_APB2ENR_SPI1EN; break;
+    case 1: RCC->APB1ENR |= RCC_APB1ENR_SPI2EN; break;
+    case 2: RCC->APB1ENR |= RCC_APB1ENR_SPI3EN; break;
+    }
 
     mSPI = aSPI;
 
