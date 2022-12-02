@@ -44,7 +44,7 @@ void SPI::Init(uint8_t aSPI)
     lSPI->CR1 |= SPI_CR1_SSM | (7 << SPI_CR1_BR_Pos);
 
     lSPI->CR2 &= ~ SPI_CR2_DS_Msk;
-    lSPI->CR2 |= (7 << SPI_CR2_DS_Pos) | SPI_CR2_TXEIE | SPI_CR2_RXNEIE;
+    lSPI->CR2 |= (7 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
 
     lSPI->CR1 |= SPI_CR1_SPE;
 
@@ -61,6 +61,8 @@ void SPI::OnInterrupt()
 
     if (0 != (lSR & SPI_SR_TXE))
     {
+        lSPI->CR2 &= ~ SPI_CR2_TXEIE;
+
         Tx_Signal();
     }
 
@@ -81,6 +83,7 @@ void SPI::Tx(uint8_t aByte)
     Embedded::SPI::Tx();
 
     lSPI->DR = aByte;
+    lSPI->CR2 |= SPI_CR2_TXEIE;
 }
 
 void SPI::Slave_Connect(KMS::Msg::IReceiver* aReceiver, unsigned int aRx, unsigned int aTx)
@@ -92,6 +95,8 @@ void SPI::Slave_Connect(KMS::Msg::IReceiver* aReceiver, unsigned int aRx, unsign
     Embedded::SPI::Slave_Connect(aReceiver, aRx, aTx);
 
     lSPI->CR1 |= SPI_CR1_SSI;
+
+    Tx_Signal();
 }
 
 void SPI::Slave_Disconnect()
