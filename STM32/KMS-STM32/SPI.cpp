@@ -26,6 +26,8 @@ static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
+SPI::SPI() : mSPI(0xff) {}
+
 void SPI::Init(uint8_t aSPI)
 {
     // assert(SPY_QTY > aSPI);

@@ -15,6 +15,8 @@ class SPI : public KMS::Embedded::SPI
 
 public:
 
+    SPI();
+
     void Init(uint8_t aSPI);
 
     void OnInterrupt();
