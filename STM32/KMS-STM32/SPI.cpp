@@ -44,7 +44,7 @@ void SPI::Init(uint8_t aSPI)
     lSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSM;
 
     lSPI->CR2 &= ~ SPI_CR2_DS_Msk;
-    lSPI->CR2 |= (7 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
+    lSPI->CR2 |= (7 << SPI_CR2_DS_Pos) | SPI_CR2_FRXTH | SPI_CR2_RXNEIE;
 
     lSPI->CR1 |= SPI_CR1_SPE;
 
