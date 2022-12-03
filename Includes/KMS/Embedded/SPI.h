@@ -33,7 +33,7 @@ namespace KMS
 
             SPI();
 
-            void Rx_Signal(uint8_t aByte);
+            void Rx_Signal(uint16_t aWord);
 
             void Tx();
             void Tx_Signal();

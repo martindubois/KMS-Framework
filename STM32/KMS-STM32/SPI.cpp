@@ -44,7 +44,7 @@ void SPI::Init(uint8_t aSPI)
     lSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSM;
 
     lSPI->CR2 &= ~ SPI_CR2_DS_Msk;
-    lSPI->CR2 |= (7 << SPI_CR2_DS_Pos) | SPI_CR2_FRXTH | SPI_CR2_RXNEIE;
+    lSPI->CR2 |= (15 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
 
     lSPI->CR1 |= SPI_CR1_SPE;
 
@@ -74,7 +74,7 @@ void SPI::OnInterrupt()
 
 // ===== KMS::Embedded::SPI =================================================
 
-void SPI::Tx(uint8_t aByte)
+void SPI::Tx(uint16_t aWord)
 {
     // assert(SPY_QTY > mSPI);
 
@@ -82,7 +82,7 @@ void SPI::Tx(uint8_t aByte)
 
     Embedded::SPI::Tx();
 
-    lSPI->DR = aByte;
+    lSPI->DR = aWord;
     lSPI->CR2 |= SPI_CR2_TXEIE;
 }
 

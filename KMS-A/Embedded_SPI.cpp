@@ -46,7 +46,7 @@ namespace KMS
 
         SPI::SPI() : mTx_State(STATE_READY) {}
 
-        void SPI::Rx_Signal(uint8_t aByte) { mOnRxByte.Send(this, &aByte); }
+        void SPI::Rx_Signal(uint16_t aWord) { mOnRxByte.Send(this, &aWord); }
 
         void SPI::Tx() { mTx_State = STATE_PENDING; }
 
