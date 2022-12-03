@@ -13,12 +13,6 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-// --> READY <--+
-//      |       |
-//      +--> PENDING
-#define STATE_PENDING   (0)
-#define STATE_READY     (1)
-
 namespace KMS
 {
     namespace Embedded
@@ -27,33 +21,41 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        bool SPI::Tx_IsReady() { return STATE_READY == mTx_State; }
-
-        void SPI::Slave_Connect(Msg::IReceiver* aReceiver, unsigned int aRx, unsigned int aTx)
+        void SPI::Slave_Connect(IDevice* aDevice)
         {
-            mOnRxByte .Set(aReceiver, aRx);
-            mOnTxReady.Set(aReceiver, aTx);
+            // assert(NULL != aDevice);
+
+            mDevice = aDevice;
+
+            mDevice->OnConnect(this);
         }
 
         void SPI::Slave_Disconnect()
         {
-            mOnRxByte .Clear();
-            mOnTxReady.Clear();
+            // assert(NULL != mDevice);
+
+            mDevice->OnDisconnect(this);
+
+            mDevice = NULL;
         }
 
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        SPI::SPI() : mTx_State(STATE_READY) {}
+        SPI::SPI() : mDevice(NULL) {}
 
-        void SPI::Rx_Signal(uint16_t aWord) { mOnRxByte.Send(this, &aWord); }
+        void SPI::Rx_Signal(uint16_t aWord)
+        {
+            // assert(NULL != mDevice);
 
-        void SPI::Tx() { mTx_State = STATE_PENDING; }
+            mDevice->OnRxWord(this, aWord);
+        }
 
         void SPI::Tx_Signal()
         {
-            mTx_State = STATE_READY;
-            mOnTxReady.Send(this, NULL);
+            // assert(NULL != mDevice);
+
+            mDevice->OnTxReady(this);
         }
 
     }

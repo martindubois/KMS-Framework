@@ -82,23 +82,19 @@ void SPI::Tx(uint16_t aWord)
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    Embedded::SPI::Tx();
-
     lSPI->DR = aWord;
     lSPI->CR2 |= SPI_CR2_TXEIE;
 }
 
-void SPI::Slave_Connect(KMS::Msg::IReceiver* aReceiver, unsigned int aRx, unsigned int aTx)
+void SPI::Slave_Connect(IDevice* aDevice)
 {
     // assert(SPY_QTY > mSPI);
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    Embedded::SPI::Slave_Connect(aReceiver, aRx, aTx);
+    Embedded::SPI::Slave_Connect(aDevice);
 
     lSPI->CR1 |= SPI_CR1_SSI;
-
-    Tx_Signal();
 }
 
 void SPI::Slave_Disconnect()

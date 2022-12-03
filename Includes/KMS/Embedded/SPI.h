@@ -7,9 +7,6 @@
 
 #pragma once
 
-// ===== Includes ===========================================================
-#include <KMS/Msg/Destination.h>
-
 namespace KMS
 {
     namespace Embedded
@@ -20,12 +17,24 @@ namespace KMS
 
         public:
 
+            class IDevice
+            {
+
+            public:
+
+                virtual void OnConnect   (SPI* aSPI) = 0;
+                virtual void OnDisconnect(SPI* aSPI) = 0;
+                virtual void OnRxWord    (SPI* aSPI, uint16_t aWord) = 0;
+                virtual void OnTxReady   (SPI* aSPI) = 0;
+
+            };
+
             bool Tx_IsReady();
 
             virtual void Tx(uint16_t aWord) = 0;
 
             // The messages are sent at ISR level.
-            virtual void Slave_Connect(Msg::IReceiver* aReceiver, unsigned int aRx, unsigned int aTx);
+            virtual void Slave_Connect(IDevice* aDevice);
 
             virtual void Slave_Disconnect();
 
@@ -35,15 +44,11 @@ namespace KMS
 
             void Rx_Signal(uint16_t aWord);
 
-            void Tx();
             void Tx_Signal();
 
         private:
 
-            Msg::Destination mOnRxByte;
-            Msg::Destination mOnTxReady;
-
-            uint8_t mTx_State;
+            IDevice* mDevice;
 
         };
 
