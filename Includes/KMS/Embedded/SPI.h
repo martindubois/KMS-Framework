@@ -22,7 +22,7 @@ namespace KMS
 
             bool Tx_IsReady();
 
-            virtual void Tx(uint8_t aByte) = 0;
+            virtual void Tx(uint16_t aWord) = 0;
 
             // The messages are sent at ISR level.
             virtual void Slave_Connect(Msg::IReceiver* aReceiver, unsigned int aRx, unsigned int aTx);
