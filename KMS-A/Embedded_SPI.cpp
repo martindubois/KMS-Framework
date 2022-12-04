@@ -21,41 +21,43 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void SPI::Slave_Connect(IDevice* aDevice)
+        void SPI::Slave_Connect(ISlave* aSlave)
         {
-            // assert(NULL != aDevice);
+            // assert(NULL != aSlave);
 
-            mDevice = aDevice;
+            // assert(NULL == mSlave);
 
-            mDevice->OnConnect(this);
+            mSlave = aSlave;
+
+            mSlave->OnConnect(this);
         }
 
         void SPI::Slave_Disconnect()
         {
-            // assert(NULL != mDevice);
+            // assert(NULL != mSlave);
 
-            mDevice->OnDisconnect(this);
+            mSlave->OnDisconnect(this);
 
-            mDevice = NULL;
+            mSlave = NULL;
         }
 
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        SPI::SPI() : mDevice(NULL) {}
+        SPI::SPI() : mSlave(NULL) {}
 
         void SPI::Rx_Signal(uint16_t aWord)
         {
-            // assert(NULL != mDevice);
+            // assert(NULL != mSlave);
 
-            mDevice->OnRxWord(this, aWord);
+            mSlave->OnRxWord(this, aWord);
         }
 
         void SPI::Tx_Signal()
         {
-            // assert(NULL != mDevice);
+            // assert(NULL != mSlave);
 
-            mDevice->OnTxReady(this);
+            mSlave->OnTxReady(this);
         }
 
     }

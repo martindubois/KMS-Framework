@@ -43,7 +43,7 @@ void SPI::Init(uint8_t aSPI)
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    lSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSM;
+    lSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI | SPI_CR1_SSM;
 
     lSPI->CR2 &= ~ SPI_CR2_DS_Msk;
     lSPI->CR2 |= (15 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
@@ -86,15 +86,15 @@ void SPI::Tx(uint16_t aWord)
     lSPI->CR2 |= SPI_CR2_TXEIE;
 }
 
-void SPI::Slave_Connect(IDevice* aDevice)
+void SPI::Slave_Connect(ISlave* aSlave)
 {
     // assert(SPY_QTY > mSPI);
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    Embedded::SPI::Slave_Connect(aDevice);
+    Embedded::SPI::Slave_Connect(aSlave);
 
-    lSPI->CR1 |= SPI_CR1_SSI;
+    lSPI->CR1 &= ~ SPI_CR1_SSI;
 }
 
 void SPI::Slave_Disconnect()
@@ -103,7 +103,7 @@ void SPI::Slave_Disconnect()
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    lSPI->CR1 &= ~ SPI_CR1_SSI;
+    lSPI->CR1 |= SPI_CR1_SSI;
 
     Embedded::SPI::Slave_Disconnect();
 }

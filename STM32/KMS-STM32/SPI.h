@@ -23,7 +23,7 @@ public:
 
     // ===== KMS::Embedded::SPI =============================================
     virtual void Tx(uint16_t aWord);
-    virtual void Slave_Connect(IDevice* aDevice);
+    virtual void Slave_Connect(ISlave* aSlave);
     virtual void Slave_Disconnect();
 
 private:
