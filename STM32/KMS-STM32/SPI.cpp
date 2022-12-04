@@ -53,6 +53,13 @@ void SPI::Init(uint8_t aSPI)
     NVIC_EnableIRQ(sIRQs[mSPI]);
 }
 
+#define TX_WORD(S,W,F)                          \
+    (S)->DR = (W);                              \
+    if (0 == ((F) & ISlave::FLAG_TX_LAST_WORD)) \
+    {                                           \
+        (S)->CR2 |= SPI_CR2_TXEIE;              \
+    }
+
 void SPI::OnInterrupt()
 {
     // assert(SPY_QTY > mSPI);
@@ -61,49 +68,76 @@ void SPI::OnInterrupt()
 
     uint32_t lSR = lSPI->SR;
 
+    uint8_t  lFlags;
+    uint16_t lWord;
+
     if (0 != (lSR & SPI_SR_TXE))
     {
         lSPI->CR2 &= ~ SPI_CR2_TXEIE;
 
-        Tx_Signal();
+        lFlags = mSlave->OnTxReady(&lWord);
+        if (0 != (lFlags & ISlave::FLAG_TX_WORD))
+        {
+            TX_WORD(lSPI, lWord, lFlags)
+        }
     }
 
     if (0 != (lSR & SPI_SR_RXNE))
     {
-        Rx_Signal(lSPI->DR);
+        lWord = lSPI->DR;
+
+        lFlags = mSlave->OnRxWord(&lWord);
+        if (0 != (lFlags & ISlave::FLAG_TX_WORD))
+        {
+            TX_WORD(lSPI, lWord, lFlags);
+        }
     }
 }
 
 // ===== KMS::Embedded::SPI =================================================
 
-void SPI::Tx(uint16_t aWord)
+void SPI::Tx(uint16_t aWord, uint8_t aFlags)
 {
     // assert(SPY_QTY > mSPI);
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    lSPI->DR = aWord;
-    lSPI->CR2 |= SPI_CR2_TXEIE;
+    TX_WORD(lSPI, aWord, aFlags);
 }
 
 void SPI::Slave_Connect(ISlave* aSlave)
 {
+    // assert(NULL != aSlave);
+
+    // assert(NULL == mSlave);
     // assert(SPY_QTY > mSPI);
+
+    mSlave = aSlave;
+
+    uint16_t lWord;
+
+    uint8_t lFlags = mSlave->OnConnect(&lWord);
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
-    Embedded::SPI::Slave_Connect(aSlave);
+    if (0 != (lFlags & ISlave::FLAG_TX_WORD))
+    {
+        TX_WORD(lSPI, lWord, lFlags);
+    }
 
     lSPI->CR1 &= ~ SPI_CR1_SSI;
 }
 
 void SPI::Slave_Disconnect()
 {
+    // assert(NULL != mSlave);
     // assert(SPY_QTY > mSPI);
 
     SPI_TypeDef* lSPI = sSPIs[mSPI];
 
     lSPI->CR1 |= SPI_CR1_SSI;
 
-    Embedded::SPI::Slave_Disconnect();
+    mSlave->OnDisconnect();
+
+    mSlave = NULL;
 }

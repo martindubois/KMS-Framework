@@ -22,31 +22,30 @@ namespace KMS
 
             public:
 
-                virtual void OnConnect   (SPI* aSPI) = 0;
-                virtual void OnDisconnect(SPI* aSPI) = 0;
-                virtual void OnRxWord    (SPI* aSPI, uint16_t aWord) = 0;
-                virtual void OnTxReady   (SPI* aSPI) = 0;
+                enum
+                {
+                    FLAG_TX_LAST_WORD = 0x01,
+                    FLAG_TX_WORD      = 0x02,
+                };
+
+                virtual uint8_t OnConnect   (uint16_t* aWord) = 0;
+                virtual void    OnDisconnect() = 0;
+                virtual uint8_t OnRxWord    (uint16_t* aWord) = 0;
+                virtual uint8_t OnTxReady   (uint16_t* aWord) = 0;
 
             };
 
-            bool Tx_IsReady();
+            virtual void Tx(uint16_t aWord, uint8_t aFlags) = 0;
 
-            virtual void Tx(uint16_t aWord) = 0;
+            // Level: ISR
+            virtual void Slave_Connect(ISlave* aSlave) = 0;
 
-            // The messages are sent at ISR level.
-            virtual void Slave_Connect(ISlave* aSlave);
-
-            virtual void Slave_Disconnect();
+            // Level: ISR
+            virtual void Slave_Disconnect() = 0;
 
         protected:
 
             SPI();
-
-            void Rx_Signal(uint16_t aWord);
-
-            void Tx_Signal();
-
-        private:
 
             ISlave* mSlave;
 

@@ -9,9 +9,8 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DAQ/DigitalOutput.h>
+#include <KMS/Embedded/IInterruptHandler.h>
 #include <KMS/Embedded/USART.h>
-#include <KMS/Msg/Destination.h>
-#include <KMS/Msg/IReceiver.h>
 #include <KMS/WOP/Link_USART.h>
 #include <KMS/WOP/System.h>
 
@@ -20,7 +19,7 @@ namespace KMS
     namespace Embedded
     {
 
-        class Test : public Msg::IReceiver
+        class Test : public IInterruptHandler
         {
 
         public:
@@ -31,13 +30,10 @@ namespace KMS
 
             int Run();
 
-            // ===== Msg::IReceiver =================================================
-            unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+            // ===== IInterruptHandler ======================================
+            virtual void OnInterrupt(uint8_t aIndex, uint8_t aLevel);
 
         private:
-
-            // ===== Events =========================================================
-            unsigned int OnKey();
 
             DAQ::DigitalOutput mLED;
             WOP::Link_USART    mLink;

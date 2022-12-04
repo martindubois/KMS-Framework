@@ -15,6 +15,21 @@
 #include "SPI.h"
 #include "USART.h"
 
+using namespace KMS;
+
+// Data types
+// //////////////////////////////////////////////////////////////////////////
+
+class InterruptInfo
+{
+
+public:
+
+    GPIO_TypeDef               * mGPIO;
+    Embedded::IInterruptHandler* mHandler;
+
+};
+
 // Variables
 // //////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +47,7 @@ static uint8_t sUSART_DMA[USART_QTY] = { 3, 6, 1 };
 static ::USART sUSART_Instances[USART_QTY];
 static ::SPI   sSPI_Instances  [SPI_QTY  ];
 
-static KMS::Msg::Destination sOnInterrupts[16];
+static InterruptInfo sInterrupts[16];
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -77,19 +92,21 @@ namespace KMS
             EXTI9_5_IRQn, EXTI9_5_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn,
         };
 
-        void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, const Msg::Destination& aDestination)
+        void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, Embedded::IInterruptHandler* aHandler)
         {
             uint8_t  lBit  = aId % 16;
             uint32_t lMask = 1 << lBit;
+            uint32_t lPort = aId / 16;
             uint8_t  lReg  = lBit / 4;
             uint8_t  lPos  = 4 * (lBit % 4);
 
             RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 
-            sOnInterrupts[lBit] = aDestination;
+            sInterrupts[lBit].mGPIO    = sGPIOs[lPort];
+            sInterrupts[lBit].mHandler = aHandler;
 
             SYSCFG->EXTICR[lReg] &= ~ (SYSCFG_EXTICR1_EXTI0_Msk << lPos);
-            SYSCFG->EXTICR[lReg] |= (aId / 16) << lPos;
+            SYSCFG->EXTICR[lReg] |= lPort << lPos;
 
             EXTI->IMR  |= lMask;
             EXTI->EMR  |= lMask;
@@ -306,7 +323,10 @@ extern "C"
     {
         for (uint8_t i = 5; i <= 9; i++)
         {
-            OnInterrupt(i);
+            if (0 != (EXTI->PR & (1 << i)))
+            {
+                OnInterrupt(i);
+            }
         }
     }
 
@@ -314,7 +334,10 @@ extern "C"
     {
         for (uint8_t i = 10; i <= 15; i++)
         {
-            OnInterrupt(i); 
+            if (0 != (EXTI->PR & (1 << i)))
+            {
+                OnInterrupt(i);
+            }
         }
     }
 
@@ -333,6 +356,10 @@ extern "C"
 
 void OnInterrupt(uint8_t aIndex)
 {
-    sOnInterrupts[aIndex].Send(NULL);
-    EXTI->PR = 1 << aIndex; 
+    uint32_t lBit   = 1 << aIndex;
+    uint8_t  lLevel = 0 == (sInterrupts[aIndex].mGPIO->IDR & lBit) ? 0 : 1;
+
+    sInterrupts[aIndex].mHandler->OnInterrupt(aIndex, lLevel);
+
+    EXTI->PR = lBit;
 }

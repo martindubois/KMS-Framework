@@ -36,7 +36,7 @@ int main()
 
     Embedded::Test lTest(lUSART, DAQ::DigitalOutput(&sProcessor, KMS_STM_ID_PC(0)));
 
-    sProcessor.IO_ConfigureInterrupt(KMS_STM_ID_PA(2), lTest.ON_KEY);
+    sProcessor.IO_ConfigureInterrupt(KMS_STM_ID_PA(2), &lTest);
 
     return lTest.Run();
 }

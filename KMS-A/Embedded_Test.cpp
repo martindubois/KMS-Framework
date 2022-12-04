@@ -29,8 +29,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Test::Test(Embedded::USART* aUSART, const DAQ::DigitalOutput& aLED)
-            : ON_KEY(this, MSG_KEY)
-            , mLED(aLED)
+            : mLED(aLED)
             , mLink(&mSystem, aUSART)
             , mSystem(VERSION, 0x74736554, 0x00)
         {
@@ -56,30 +55,13 @@ namespace KMS
             return 0;
         }
 
-        // ===== Msg::IReceiver =============================================
+        // ===== IInterruptHandler ==========================================
 
-        unsigned int Test::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case MSG_KEY: lResult = OnKey(); break;
-            }
-
-            return lResult;
-        }
-
-        // Private
-        // //////////////////////////////////////////////////////////////////
-
-        unsigned int Test::OnKey()
+        void Test::OnInterrupt(uint8_t, uint8_t aLevel)
         {
             // assert(NULL != mUSART);
 
-            mSystem.AddTrace("Key\r\n", 5);
-
-            return 0;
+            mSystem.AddTrace(aLevel ? "Key\r\n" : "KEY\r\n", 5);
         }
 
     }

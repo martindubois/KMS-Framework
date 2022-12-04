@@ -17,9 +17,9 @@
 // ===== Includes ===========================================================
 #include <KMS/DAQ/IDigitalInputs.h>
 #include <KMS/DAQ/IDigitalOutputs.h>
+#include <KMS/Embedded/IInterruptHandler.h>
 #include <KMS/Embedded/SPI.h>
 #include <KMS/Embedded/USART.h>
-#include <KMS/Msg/IReceiver.h>
 
 #define KMS_STM_ID_PA(I) (0 * 16 + (I))
 #define KMS_STM_ID_PB(I) (1 * 16 + (I))
@@ -50,7 +50,7 @@ namespace KMS
             // Configure a 32 MHz clock using HSI and PLL
             void Clock_Config();
 
-            void IO_ConfigureInterrupt(DAQ::Id aId, const Msg::Destination& aDestination);
+            void IO_ConfigureInterrupt(DAQ::Id aId, Embedded::IInterruptHandler* aHandler);
 
             // aId    See KMS_STM_ID_P...
             // aMode
