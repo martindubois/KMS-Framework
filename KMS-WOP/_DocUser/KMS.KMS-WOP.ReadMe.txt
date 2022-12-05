@@ -7,6 +7,9 @@ File      KMS-WOP/_DocUser/KMS.KMS-WOP.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
+0.1.52-dev Windows 2022-12-05
+- WOP::Tool - Command Start/Stop
+
 0.1.29-dev Windows 2022-12-01
 
 0.1.12-dev Windows 2022-11-21
