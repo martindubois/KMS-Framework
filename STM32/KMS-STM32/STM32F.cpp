@@ -69,7 +69,7 @@ namespace KMS
             RCC->CR &= ~ RCC_CR_PLLON;
 
             RCC->CFGR &= ~ (RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk);
-            RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 | RCC_CFGR_PLLMUL8;
+            RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 | RCC_CFGR_PLLMUL16;
 
             RCC->CR |= RCC_CR_PLLON;
             while (0 == (RCC->CR & RCC_CR_PLLRDY));
@@ -78,12 +78,12 @@ namespace KMS
             RCC->CFGR |=   RCC_CFGR_HPRE_DIV1;
 
             RCC->CFGR &= ~ (RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk);
-            RCC->CFGR |= RCC_CFGR_PPRE1_DIV1 | RCC_CFGR_PPRE2_DIV1;
+            RCC->CFGR |= RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV2;
 
             RCC->CFGR &= ~ RCC_CFGR_SW_Msk;
             RCC->CFGR |=   RCC_CFGR_SW_PLL;
 
-            mClock_Hz *= 4;
+            mClock_Hz *= 8;
         }
 
         static const IRQn_Type EXTI_IRQ[16] =
