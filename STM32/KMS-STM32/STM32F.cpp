@@ -25,7 +25,7 @@ class InterruptInfo
 
 public:
 
-    GPIO_TypeDef               * mGPIO;
+    volatile uint32_t          * mDataReg;
     Embedded::IInterruptHandler* mHandler;
 
 };
@@ -102,7 +102,7 @@ namespace KMS
 
             RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
 
-            sInterrupts[lBit].mGPIO    = sGPIOs[lPort];
+            sInterrupts[lBit].mDataReg = &sGPIOs[lPort]->IDR;
             sInterrupts[lBit].mHandler = aHandler;
 
             SYSCFG->EXTICR[lReg] &= ~ (SYSCFG_EXTICR1_EXTI0_Msk << lPos);
@@ -357,7 +357,7 @@ extern "C"
 void OnInterrupt(uint8_t aIndex)
 {
     uint32_t lBit   = 1 << aIndex;
-    uint8_t  lLevel = 0 == (sInterrupts[aIndex].mGPIO->IDR & lBit) ? 0 : 1;
+    uint8_t  lLevel = 0 == (*sInterrupts[aIndex].mDataReg & lBit) ? 0 : 1;
 
     sInterrupts[aIndex].mHandler->OnInterrupt(aIndex, lLevel);
 
