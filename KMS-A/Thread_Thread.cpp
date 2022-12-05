@@ -39,16 +39,19 @@ namespace KMS
             switch (mState)
             {
             case State::RUNNING:
-            case State::STARTING: mState = State::STOPPING; // no break
+            case State::STARTING:
+                mState = State::STOPPING;
+                // no break
 
-            case State::STOPPING: Wait(2000); break;
+            case State::STOPPING:
+                lLock.Unlock();
+                Wait(2000);
+                break;
 
             case State::STOPPED: break;
 
             default: assert(false);
             }
-
-            lLock.Unlock();
 
             CloseIfNeeded();
         }
