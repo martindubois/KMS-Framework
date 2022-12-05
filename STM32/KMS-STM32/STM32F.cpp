@@ -33,9 +33,10 @@ public:
 // Variables
 // //////////////////////////////////////////////////////////////////////////
 
-#define GPIO_QTY  (6)
-#define SPI_QTY   (3)
-#define USART_QTY (3)
+#define GPIO_QTY    (6)
+#define IO_PER_PORT (16)
+#define SPI_QTY     (3)
+#define USART_QTY   (3)
 
 static GPIO_TypeDef * sGPIOs[GPIO_QTY] = { GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF };
 
@@ -47,7 +48,7 @@ static uint8_t sUSART_DMA[USART_QTY] = { 3, 6, 1 };
 static ::USART sUSART_Instances[USART_QTY];
 static ::SPI   sSPI_Instances  [SPI_QTY  ];
 
-static InterruptInfo sInterrupts[16];
+static InterruptInfo sInterrupts[IO_PER_PORT];
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -86,7 +87,7 @@ namespace KMS
             mClock_Hz *= 8;
         }
 
-        static const IRQn_Type EXTI_IRQ[16] =
+        static const IRQn_Type EXTI_IRQ[IO_PER_PORT] =
         {
             EXTI0_IRQn  , EXTI1_IRQn  , EXTI2_TSC_IRQn, EXTI3_IRQn    , EXTI4_IRQn    , EXTI9_5_IRQn  , EXTI9_5_IRQn  , EXTI9_5_IRQn  ,
             EXTI9_5_IRQn, EXTI9_5_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn, EXTI15_10_IRQn,
@@ -94,9 +95,9 @@ namespace KMS
 
         void STM32F::IO_ConfigureInterrupt(DAQ::Id aId, Embedded::IInterruptHandler* aHandler)
         {
-            uint8_t  lBit  = aId % 16;
+            uint8_t  lBit  = aId % IO_PER_PORT;
             uint32_t lMask = 1 << lBit;
-            uint32_t lPort = aId / 16;
+            uint32_t lPort = aId / IO_PER_PORT;
             uint8_t  lReg  = lBit / 4;
             uint8_t  lPos  = 4 * (lBit % 4);
 
@@ -123,8 +124,8 @@ namespace KMS
 
         void STM32F::IO_SetMode(DAQ::Id aId, IO_Mode aMode)
         {
-            unsigned int lBit  = aId % 16;
-            unsigned int lPort = aId / 16;
+            unsigned int lBit  = aId % IO_PER_PORT;
+            unsigned int lPort = aId / IO_PER_PORT;
 
             // assert(GPIO_QTY > lPort);
 
@@ -246,26 +247,26 @@ namespace KMS
 
         bool STM32F::DI_Read(DAQ::Id aId)
         {
-            return 0 != (sGPIOs[aId / 16]->IDR & (1 << (aId % 16)));
+            return 0 != (sGPIOs[aId / IO_PER_PORT]->IDR & (1 << (aId % IO_PER_PORT)));
         }
 
         // ===== DAQ::IDigitalOutputs =======================================
 
         void STM32F::DO_Clear(DAQ::Id aId)
         {
-            sGPIOs[aId / 16]->BSRR = 0x10000 << (aId % 16);
+            sGPIOs[aId / IO_PER_PORT]->BSRR = 0x10000 << (aId % IO_PER_PORT);
         }
 
         bool STM32F::DO_Get(DAQ::Id aId) const
         {
-            return 0 != (sGPIOs[aId / 16]->ODR & (1 << (aId % 16)));
+            return 0 != (sGPIOs[aId / IO_PER_PORT]->ODR & (1 << (aId % IO_PER_PORT)));
         }
 
         void STM32F::DO_Set(DAQ::Id aId, bool aValue)
         {
-            GPIO_TypeDef* lGPIO = sGPIOs[aId / 16];
+            GPIO_TypeDef* lGPIO = sGPIOs[aId / IO_PER_PORT];
 
-            uint8_t lBit = aId % 16;
+            uint8_t lBit = aId % IO_PER_PORT;
 
             if (aValue)
             {
@@ -282,9 +283,9 @@ namespace KMS
 
         void STM32F::IO_SetAltFunc(DAQ::Id aId, unsigned int aAltFunc)
         {
-            uint8_t lBit  = aId % 16;
+            uint8_t lBit  = aId % IO_PER_PORT;
             uint8_t lBi2  = lBit % 8;
-            uint8_t lPort = aId / 16;
+            uint8_t lPort = aId / IO_PER_PORT;
             uint8_t lReg  = lBit / 8;
 
             // assert(GPIO_QTY > lPort);
@@ -313,6 +314,9 @@ extern "C"
     void DMA1_CH4_IRQHandler() { sUSART_Instances[0].Tx_OnInterrupt(); }
     void DMA1_CH7_IRQHandler() { sUSART_Instances[1].Tx_OnInterrupt(); }
 
+    // EXTI..._IRQHandler
+    // CRITICAL PATH  SPI slave connexion
+
     void EXTI0_IRQHandler   () { OnInterrupt(0); }
     void EXTI1_IRQHandler   () { OnInterrupt(1); }
     void EXTI2_TS_IRQHandler() { OnInterrupt(2); }
@@ -321,9 +325,11 @@ extern "C"
 
     void EXTI5_9_IRQHandler  ()
     {
+        uint32_t lPR = EXTI->PR;
+
         for (uint8_t i = 5; i <= 9; i++)
         {
-            if (0 != (EXTI->PR & (1 << i)))
+            if (0 != (lPR & (1 << i)))
             {
                 OnInterrupt(i);
             }
@@ -332,9 +338,11 @@ extern "C"
 
     void EXTI15_10_IRQHandler()
     {
+        uint32_t lPR = EXTI->PR;
+
         for (uint8_t i = 10; i <= 15; i++)
         {
-            if (0 != (EXTI->PR & (1 << i)))
+            if (0 != (lPR & (1 << i)))
             {
                 OnInterrupt(i);
             }
@@ -354,12 +362,19 @@ extern "C"
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
+// Level: ISR
+// CRITICAL PATH  SPI slave connexion
 void OnInterrupt(uint8_t aIndex)
 {
-    uint32_t lBit   = 1 << aIndex;
-    uint8_t  lLevel = 0 == (*sInterrupts[aIndex].mDataReg & lBit) ? 0 : 1;
+    // assert(INTERRUPT_QTY > aIndex);
 
-    sInterrupts[aIndex].mHandler->OnInterrupt(aIndex, lLevel);
+    uint32_t       lBit   = 1 << aIndex;
+    InterruptInfo* lInfo  = sInterrupts + aIndex;
+    uint8_t        lLevel = 0 == (*lInfo->mDataReg & lBit) ? 0 : 1;
+
+    // assert(NULL != lInfo->mHandler);
+
+    lInfo->mHandler->OnInterrupt(aIndex, lLevel);
 
     EXTI->PR = lBit;
 }

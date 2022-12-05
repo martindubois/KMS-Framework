@@ -7,9 +7,6 @@
 
 #include "Component.h"
 
-// ===== STM ================================================================
-#include <stm32f3xx.h>
-
 // ===== Local ==============================================================
 #include "SPI.h"
 
@@ -26,70 +23,66 @@ static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-SPI::SPI() : mSPI(0xff) {}
+SPI::SPI() : mSPI(NULL) {}
 
 void SPI::Init(uint8_t aSPI)
 {
-    // assert(SPY_QTY > aSPI);
-
     switch (aSPI)
     {
     case 0: RCC->APB2ENR |= RCC_APB2ENR_SPI1EN; break;
     case 1: RCC->APB1ENR |= RCC_APB1ENR_SPI2EN; break;
     case 2: RCC->APB1ENR |= RCC_APB1ENR_SPI3EN; break;
+
+    // default: assert(false);
     }
 
-    mSPI = aSPI;
+    mSPI = sSPIs[aSPI];
 
-    SPI_TypeDef* lSPI = sSPIs[mSPI];
+    mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI | SPI_CR1_SSM;
 
-    lSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI | SPI_CR1_SSM;
+    mSPI->CR2 &= ~ SPI_CR2_DS_Msk;
+    mSPI->CR2 |= (15 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
 
-    lSPI->CR2 &= ~ SPI_CR2_DS_Msk;
-    lSPI->CR2 |= (15 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
+    mSPI->CR1 |= SPI_CR1_SPE;
 
-    lSPI->CR1 |= SPI_CR1_SPE;
-
-    NVIC_EnableIRQ(sIRQs[mSPI]);
+    NVIC_EnableIRQ(sIRQs[aSPI]);
 }
 
-#define TX_WORD(S,W,F)                          \
-    (S)->DR = (W);                              \
+#define TX_WORD(W,F)                            \
+    mSPI->DR = (W);                             \
     if (0 == ((F) & ISlave::FLAG_TX_LAST_WORD)) \
     {                                           \
-        (S)->CR2 |= SPI_CR2_TXEIE;              \
+        mSPI->CR2 |= SPI_CR2_TXEIE;             \
     }
 
 void SPI::OnInterrupt()
 {
-    // assert(SPY_QTY > mSPI);
+    // assert(NULL != mSPI);
 
-    SPI_TypeDef* lSPI = sSPIs[mSPI];
-
-    uint32_t lSR = lSPI->SR;
+    uint32_t lSR = mSPI->SR;
 
     uint8_t  lFlags;
     uint16_t lWord;
 
     if (0 != (lSR & SPI_SR_TXE))
     {
-        lSPI->CR2 &= ~ SPI_CR2_TXEIE;
+        mSPI->CR2 &= ~ SPI_CR2_TXEIE;
 
         lFlags = mSlave->OnTxReady(&lWord);
         if (0 != (lFlags & ISlave::FLAG_TX_WORD))
         {
-            TX_WORD(lSPI, lWord, lFlags)
+            TX_WORD(lWord, lFlags)
         }
     }
 
     if (0 != (lSR & SPI_SR_RXNE))
     {
-        lWord = lSPI->DR;
+        lWord = mSPI->DR;
 
         lFlags = mSlave->OnRxWord(&lWord);
         if (0 != (lFlags & ISlave::FLAG_TX_WORD))
         {
-            TX_WORD(lSPI, lWord, lFlags);
+            TX_WORD(lWord, lFlags);
         }
     }
 }
@@ -98,44 +91,42 @@ void SPI::OnInterrupt()
 
 void SPI::Tx(uint16_t aWord, uint8_t aFlags)
 {
-    // assert(SPY_QTY > mSPI);
+    // assert(NULL != mSPI);
 
-    SPI_TypeDef* lSPI = sSPIs[mSPI];
-
-    TX_WORD(lSPI, aWord, aFlags);
+    TX_WORD(aWord, aFlags);
 }
 
+// Level: ISR
+// CRITICAL PATH  SPI slave connexion
 void SPI::Slave_Connect(ISlave* aSlave)
 {
     // assert(NULL != aSlave);
 
     // assert(NULL == mSlave);
-    // assert(SPY_QTY > mSPI);
-
-    mSlave = aSlave;
+    // assert(NULL != mSPI);
 
     uint16_t lWord;
 
-    uint8_t lFlags = mSlave->OnConnect(&lWord);
+    uint8_t lFlags = aSlave->OnConnect(&lWord);
 
-    SPI_TypeDef* lSPI = sSPIs[mSPI];
+    mSPI->DR = lWord;
 
-    if (0 != (lFlags & ISlave::FLAG_TX_WORD))
+    mSPI->CR1 &= ~ SPI_CR1_SSI;
+
+    if (0 == (lFlags & ISlave::FLAG_TX_LAST_WORD))
     {
-        TX_WORD(lSPI, lWord, lFlags);
+        mSPI->CR2 |= SPI_CR2_TXEIE;
     }
 
-    lSPI->CR1 &= ~ SPI_CR1_SSI;
+    mSlave = aSlave;
 }
 
 void SPI::Slave_Disconnect()
 {
     // assert(NULL != mSlave);
-    // assert(SPY_QTY > mSPI);
+    // assert(NULL != mSPI);
 
-    SPI_TypeDef* lSPI = sSPIs[mSPI];
-
-    lSPI->CR1 |= SPI_CR1_SSI;
+    mSPI->CR1 |= SPI_CR1_SSI;
 
     mSlave->OnDisconnect();
 

@@ -7,6 +7,9 @@
 
 #pragma once
 
+// ===== STM ================================================================
+#include <stm32f3xx.h>
+
 // ===== Includes ===========================================================
 #include <KMS/Embedded/SPI.h>
 
@@ -28,6 +31,6 @@ public:
 
 private:
 
-    uint8_t mSPI;
+    SPI_TypeDef* mSPI;
 
 };
