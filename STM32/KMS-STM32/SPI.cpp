@@ -20,6 +20,13 @@ using namespace KMS;
 static IRQn_Type    sIRQs[SPI_QTY] = { SPI1_IRQn, SPI2_IRQn, SPI3_IRQn };
 static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 
+// Macros
+// //////////////////////////////////////////////////////////////////////////
+
+#define SET_WORD_SIZE(S)                        \
+    mSPI->CR2 &= ~ SPI_CR2_DS_Msk;              \
+    mSPI->CR2 |= (((S) - 1) << SPI_CR2_DS_Pos);
+
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
@@ -40,8 +47,9 @@ void SPI::Init(uint8_t aSPI)
 
     mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI | SPI_CR1_SSM;
 
-    mSPI->CR2 &= ~ SPI_CR2_DS_Msk;
-    mSPI->CR2 |= (15 << SPI_CR2_DS_Pos) | SPI_CR2_RXNEIE;
+    SET_WORD_SIZE(16)
+
+    mSPI->CR2 |= SPI_CR2_RXNEIE;
 
     mSPI->CR1 |= SPI_CR1_SPE;
 
@@ -109,6 +117,15 @@ void SPI::Slave_Connect(ISlave* aSlave)
 
     uint8_t lFlags = aSlave->OnConnect(&lWord);
 
+    switch (lFlags & (ISlave::FLAG_WORD_09 | ISlave::FLAG_WORD_16))
+    {
+    case ISlave::FLAG_WORD_09: SET_WORD_SIZE(9); break;
+
+    case ISlave::FLAG_WORD_16: break;
+
+    // default: assert(false);
+    }
+
     mSPI->DR = lWord;
 
     mSPI->CR1 &= ~ SPI_CR1_SSI;
@@ -127,6 +144,9 @@ void SPI::Slave_Disconnect()
     // assert(NULL != mSPI);
 
     mSPI->CR1 |= SPI_CR1_SSI;
+
+    // Reset to 16 bit to save time at connect
+    SET_WORD_SIZE(16);
 
     mSlave->OnDisconnect();
 

@@ -7,6 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.51-stm32f373vctx
+- Embedded::SPI::ISlave::FLAG_WORD_...
+
 0.1.29-dev Windows 2022-12-01
 
 0.1.17-dev Windows 2022-11-28

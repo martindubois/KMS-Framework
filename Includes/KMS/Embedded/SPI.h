@@ -26,6 +26,9 @@ namespace KMS
                 {
                     FLAG_TX_LAST_WORD = 0x01,
                     FLAG_TX_WORD      = 0x02,
+
+                    FLAG_WORD_09      = 0x40,
+                    FLAG_WORD_16      = 0x80,
                 };
 
                 virtual uint8_t OnConnect   (uint16_t* aWord) = 0;
