@@ -15,7 +15,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define MSG_ITERATE (1)
+#define MSG_ITERATE_RX (1)
+#define MSG_ITERATE_TX (2)
 
 namespace KMS
 {
@@ -33,11 +34,24 @@ namespace KMS
             assert(NULL != aSystem);
             assert(NULL != aPort);
 
-            mThread.mOnIterate.Set(this, MSG_ITERATE);
+            mThread_Rx.mOnIterate.Set(this, MSG_ITERATE_RX);
+            mThread_Tx.mOnIterate.Set(this, MSG_ITERATE_TX);
         }
 
-        void Link_Port::Start() { mThread.Start(); }
-        void Link_Port::Stop () { mThread.StopAndWait(3000); } // 3 s
+        void Link_Port::Start()
+        {
+            mThread_Rx.Start();
+            mThread_Tx.Start();
+        }
+
+        void Link_Port::Stop()
+        {
+            mThread_Rx.Stop();
+            mThread_Tx.Stop();
+
+            mThread_Tx.Wait(2000); // 2 s
+            mThread_Rx.Wait(2000); // 2 s
+        }
 
         // ===== Msg::IReceiver =============================================
 
@@ -47,7 +61,8 @@ namespace KMS
 
             switch (aCode)
             {
-            case MSG_ITERATE: lResult = OnIterate(); break;
+            case MSG_ITERATE_RX: lResult = OnIterate_Rx(); break;
+            case MSG_ITERATE_TX: lResult = OnIterate_Tx(); break;
             }
 
             return lResult;
@@ -56,10 +71,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        // TODO Use OVERLAPPED IO or other thread to be able to read and
-        //      write at the same time.
-
-        unsigned int Link_Port::OnIterate()
+        unsigned int Link_Port::OnIterate_Rx()
         {
             assert(NULL != mPort);
             assert(NULL != mSystem);
@@ -72,10 +84,22 @@ namespace KMS
                 mSystem->AddReceivedBytes(lBuffer, lSize_byte);
             }
 
+            return 0;
+        }
+
+        unsigned int Link_Port::OnIterate_Tx()
+        {
+            assert(NULL != mPort);
+            assert(NULL != mSystem);
+
             const FrameBuffer* lFB = mSystem->PrepareFrame();
             if (NULL != lFB)
             {
                 mPort->Write(lFB->GetRawFrame(), lFB->GetFrameSize_byte());
+            }
+            else
+            {
+                Sleep(20); // ms
             }
 
             return 0;

@@ -26,8 +26,6 @@ namespace KMS
 
             Link_Port(System* aSystem, Com::Port* aPort);
 
-            Com::Port* GetPort();
-
             void Start();
             void Stop ();
 
@@ -36,11 +34,13 @@ namespace KMS
 
         private:
 
-            unsigned int OnIterate();
+            unsigned int OnIterate_Rx();
+            unsigned int OnIterate_Tx();
 
             Com::Port    * mPort;
             System       * mSystem;
-            Thread::Thread mThread;
+            Thread::Thread mThread_Rx;
+            Thread::Thread mThread_Tx;
 
         };
 
