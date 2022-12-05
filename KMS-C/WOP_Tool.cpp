@@ -86,8 +86,8 @@ namespace KMS
                 "Disconnect\n"
                 "Dump [Instance]\n"
                 "SendRequest {Instance} {Mask_Hex}\n"
-                "StartReceiver\n"
-                "StopReceivr\n");
+                "Start\n"
+                "Stop\n");
 
             CLI::Tool::DisplayHelp(aOut);
         }
@@ -97,11 +97,11 @@ namespace KMS
             unsigned int lInstance;
             unsigned int lMask;
 
-            if      (0 == strcmp(aC, "Connect"      )) { mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS); }
-            else if (0 == strcmp(aC, "Disconnect"   )) { mPort.Disconnect(); }
-            else if (0 == strcmp(aC, "Dump"         )) { Dump(); }
-            else if (0 == strcmp(aC, "StartReceiver")) { mLink.Start(); }
-            else if (0 == strcmp(aC, "StopReceiver" )) { mLink.Stop (); }
+            if      (0 == strcmp(aC, "Connect"   )) { mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS); }
+            else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
+            else if (0 == strcmp(aC, "Dump"      )) { Dump(); }
+            else if (0 == strcmp(aC, "Start"     )) { mLink.Start(); }
+            else if (0 == strcmp(aC, "Stop"      )) { mLink.Stop (); }
             else if (1 == sscanf_s(aC, "Dump %u", &lInstance)) { Dump(lInstance); }
             else if (2 == sscanf_s(aC, "SendRequest %u %x", &lInstance, &lMask)) { SendRequest(lInstance, lMask); }
             else
@@ -135,7 +135,14 @@ namespace KMS
 
         void Tool::SendRequest(unsigned int aInstance, unsigned int aMask)
         {
-            mInstances[aInstance]->SendRequest(aMask);
+            if (0xff <= aInstance)
+            {
+                mSystem.SendRequest(aMask);
+            }
+            else
+            {
+                mInstances[aInstance]->SendRequest(aMask);
+            }
         }
 
     }
