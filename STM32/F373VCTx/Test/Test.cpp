@@ -26,7 +26,7 @@ static STM::STM32F sProcessor;
 
 int main()
 {
-    sProcessor.Clock_Config();
+    sProcessor.Clock_64_MHz();
 
     // The selected IOs fit the STM32373C-EVAL board.
 

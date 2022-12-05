@@ -53,6 +53,8 @@ static InterruptInfo sInterrupts[IO_PER_PORT];
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
+static void Clock_Config(uint32_t aPLL, uint32_t aDiv);
+
 static void OnInterrupt(uint8_t aIndex);
 
 namespace KMS
@@ -65,26 +67,27 @@ namespace KMS
 
         STM32F::STM32F() : mClock_Hz(8000000) {}
 
-        void STM32F::Clock_Config()
+        void STM32F::Clock_32_MHz()
         {
-            RCC->CR &= ~ RCC_CR_PLLON;
+            Clock_Config(RCC_CFGR_PLLMUL8, RCC_CFGR_PPRE1_DIV1 | RCC_CFGR_PPRE2_DIV1);
 
-            RCC->CFGR &= ~ (RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk);
-            RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 | RCC_CFGR_PLLMUL16;
+            mClock_Hz *= 4;
+        }
 
-            RCC->CR |= RCC_CR_PLLON;
-            while (0 == (RCC->CR & RCC_CR_PLLRDY));
+        void STM32F::Clock_48_MHz()
+        {
+            FLASH->ACR |= FLASH_ACR_LATENCY_1;
 
+            Clock_Config(RCC_CFGR_PLLMUL12, RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1);
+
+            mClock_Hz *= 6;
+        }
+
+        void STM32F::Clock_64_MHz()
+        {
             FLASH->ACR |= FLASH_ACR_LATENCY_2;
 
-            RCC->CFGR &= ~ RCC_CFGR_HPRE_Msk;
-            RCC->CFGR |=   RCC_CFGR_HPRE_DIV1;
-
-            RCC->CFGR &= ~ (RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk);
-            RCC->CFGR |= RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1;
-
-            RCC->CFGR &= ~ RCC_CFGR_SW_Msk;
-            RCC->CFGR |=   RCC_CFGR_SW_PLL;
+            Clock_Config(RCC_CFGR_PLLMUL16, RCC_CFGR_PPRE1_DIV2 | RCC_CFGR_PPRE2_DIV1);
 
             mClock_Hz *= 8;
         }
@@ -363,6 +366,26 @@ extern "C"
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
+
+void Clock_Config(uint32_t aPLL, uint32_t aDiv)
+{
+    RCC->CR &= ~ RCC_CR_PLLON;
+
+    RCC->CFGR &= ~ (RCC_CFGR_PLLSRC_Msk | RCC_CFGR_PLLMUL_Msk);
+    RCC->CFGR |= RCC_CFGR_PLLSRC_HSI_DIV2 | aPLL;
+
+    RCC->CR |= RCC_CR_PLLON;
+    while (0 == (RCC->CR & RCC_CR_PLLRDY));
+
+    RCC->CFGR &= ~ RCC_CFGR_HPRE_Msk;
+    RCC->CFGR |=   RCC_CFGR_HPRE_DIV1;
+
+    RCC->CFGR &= ~ (RCC_CFGR_PPRE1_Msk | RCC_CFGR_PPRE2_Msk);
+    RCC->CFGR |= aDiv;
+
+    RCC->CFGR &= ~ RCC_CFGR_SW_Msk;
+    RCC->CFGR |=   RCC_CFGR_SW_PLL;
+}
 
 // Level: ISR
 // CRITICAL PATH  SPI slave connexion

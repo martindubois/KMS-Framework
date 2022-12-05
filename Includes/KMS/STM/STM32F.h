@@ -45,26 +45,34 @@ namespace KMS
                 DIGITAL_OUTPUT_PUSH_PULL,
             };
 
+            // Level: INIT ONCE
             STM32F();
 
-            // Configure a 32 MHz clock using HSI and PLL
-            void Clock_Config();
+            // Configure clock using HSI and PLL
+            // Level: INIT ONCE
+            void Clock_32_MHz();
+            void Clock_48_MHz();
+            void Clock_64_MHz();
 
+            // Level: INIT
             void IO_ConfigureInterrupt(DAQ::Id aId, Embedded::IInterruptHandler* aHandler);
 
             // aId    See KMS_STM_ID_P...
-            // aMode
+            // aMode  See IO_Mode
+            // Level: INIT
             void IO_SetMode(DAQ::Id aId, IO_Mode aMode);
 
             // aId  Zero based SPI index
             // aRx  Rx pin, see KMS_STM_ID_P...
             // aTx  Tx pin, see KMS_STM_ID_P...
+            // Level: INIT
             Embedded::SPI* SPI_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx, DAQ::Id aClk);
 
+            // The UART is configured for 115200 bps 8N1
             // aId  Zero based USART index
             // aRx  Rx pin, see KMS_STM_ID_P...
             // aTx  Tx pin, see KMS_STM_ID_P...
-            // The UART is configured for 115200 bps 8N1
+            // Level: INIT
             Embedded::USART* USART_Get(uint8_t aId, DAQ::Id aRx, DAQ::Id aTx);
 
             // ==== DAQ::IDigitalInputs =====================================
