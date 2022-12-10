@@ -23,9 +23,12 @@ static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 // Macros
 // //////////////////////////////////////////////////////////////////////////
 
-#define SET_WORD_SIZE(S)                        \
-    mSPI->CR2 &= ~ SPI_CR2_DS_Msk;              \
-    mSPI->CR2 |= (((S) - 1) << SPI_CR2_DS_Pos);
+#define SET_WORD_SIZE(S)                       \
+    mSPI->CR2 &= ~ SPI_CR2_DS_Msk;             \
+    mSPI->CR2 |= (((S) - 1) << SPI_CR2_DS_Pos)
+
+#define SET_WORD_SIZE_16()               \
+    mSPI->CR2 |= (0xf << SPI_CR2_DS_Pos)
 
 // Public
 // //////////////////////////////////////////////////////////////////////////
@@ -47,7 +50,7 @@ void SPI::Init(uint8_t aSPI)
 
     mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI | SPI_CR1_SSM;
 
-    SET_WORD_SIZE(16)
+    SET_WORD_SIZE_16();
 
     mSPI->CR2 |= SPI_CR2_RXNEIE;
 
@@ -97,14 +100,6 @@ void SPI::OnInterrupt()
 
 // ===== KMS::Embedded::SPI =================================================
 
-void SPI::Tx(uint16_t aWord, uint8_t aFlags)
-{
-    // assert(NULL != mSPI);
-
-    TX_WORD(aWord, aFlags);
-}
-
-// Level: ISR
 // CRITICAL PATH  SPI slave connexion
 void SPI::Slave_Connect(ISlave* aSlave)
 {
@@ -117,13 +112,14 @@ void SPI::Slave_Connect(ISlave* aSlave)
 
     uint8_t lFlags = aSlave->OnConnect(&lWord);
 
-    switch (lFlags & (ISlave::FLAG_WORD_09 | ISlave::FLAG_WORD_16))
+    if (0 != (lFlags & (ISlave::FLAG_CLOCK_LOW)))
+    {
+        mSPI->CR1 &= ~ SPI_CR1_CPOL;
+    }
+
+    switch (lFlags & ISlave::FLAG_WORD_09)
     {
     case ISlave::FLAG_WORD_09: SET_WORD_SIZE(9); break;
-
-    case ISlave::FLAG_WORD_16: break;
-
-    // default: assert(false);
     }
 
     mSPI->DR = lWord;
@@ -138,15 +134,18 @@ void SPI::Slave_Connect(ISlave* aSlave)
     mSlave = aSlave;
 }
 
+// This method is responsible for restoring default configuration. This make
+// the Slave_Connect faster. It
+// - Reset the default clock polarity
+// - Reset the word size to 16 bits
 void SPI::Slave_Disconnect()
 {
     // assert(NULL != mSlave);
     // assert(NULL != mSPI);
 
-    mSPI->CR1 |= SPI_CR1_SSI;
+    mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI;
 
-    // Reset to 16 bit to save time at connect
-    SET_WORD_SIZE(16);
+    SET_WORD_SIZE_16();
 
     mSlave->OnDisconnect();
 

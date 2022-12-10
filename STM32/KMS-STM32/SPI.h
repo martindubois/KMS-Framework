@@ -25,7 +25,6 @@ public:
     void OnInterrupt();
 
     // ===== KMS::Embedded::SPI =============================================
-    virtual void Tx(uint16_t aWord, uint8_t aFlags);
     virtual void Slave_Connect(ISlave* aSlave);
     virtual void Slave_Disconnect();
 
