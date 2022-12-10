@@ -138,6 +138,10 @@ void SPI::Slave_Connect(ISlave* aSlave)
 // the Slave_Connect faster. It
 // - Reset the default clock polarity
 // - Reset the word size to 16 bits
+
+// This method does not return mSlave to NULL because some time a SPI
+// interrupt is processed after the processing of the chip select interrupt.
+
 void SPI::Slave_Disconnect()
 {
     // assert(NULL != mSlave);
@@ -146,8 +150,4 @@ void SPI::Slave_Disconnect()
     mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI;
 
     SET_WORD_SIZE_16();
-
-    mSlave->OnDisconnect();
-
-    mSlave = NULL;
 }

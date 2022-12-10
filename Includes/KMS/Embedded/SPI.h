@@ -43,9 +43,6 @@ namespace KMS
                 // Level  ISR
                 virtual uint8_t OnConnect(uint16_t* aWord) = 0;
 
-                // Level  ISR
-                virtual void OnDisconnect() = 0;
-
                 // aWord  The received word and the word to transmit if
                 //        needed
                 // Return  See FLAG_TX_LAST_WORD, FLAG_TX_WORD, FLAG_WORD_09

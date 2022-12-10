@@ -7,7 +7,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.53-stm32f373vctx 2022-12-08
+0.1.54-stm32f373vctx 2022-12-10
 
 0.1.52-dev Windows 2022-12-05
 
