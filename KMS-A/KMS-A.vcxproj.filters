@@ -273,6 +273,9 @@
     <ClCompile Include="WOP_Object_Dynamic.cpp">
       <Filter>Source Files\WOP</Filter>
     </ClCompile>
+    <ClCompile Include="ScaleAndOffset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
