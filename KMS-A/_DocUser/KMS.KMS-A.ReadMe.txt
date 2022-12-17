@@ -9,6 +9,8 @@ EDIT ON BUILD
 
 0.1.53-dev Windows 2022-12-16
 
+0.1.54-stm32f373vctx 2022-12-10
+
 0.1.51-stm32f373vctx
 - Embedded::SPI::ISlave::FLAG_WORD_...
 

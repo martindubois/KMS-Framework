@@ -37,6 +37,6 @@ $(OUTPUT) : $(OBJECTS)
 
 ../../KMS-STM32/Needed.o: ../../KMS-STM32/Component.h
 ../../KMS-STM32/SPI.o: ../../../Includes/KMS/Embedded/SPI.h ../../KMS-STM32/Component.h ../../KMS-STM32/SPI.h
-../../KMS-STM32/STM32F.o: ../../../Includes/KMS/DAQ/DAQ.h ../../../Includes/KMS/DAQ/IDigitalInputs.h ../../../Includes/KMS/DAQ/IDigitalOutputs.h ../../../Includes/KMS/Embedded/SPI.h ../../../Includes/KMS/Embedded/USART.h ../../../Includes/KMS/Embedded/WorkItem.h ../../../Includes/KMS/Msg/Destination.h ../../../Includes/KMS/Msg/IReceiver.h ../../../Includes/KMS/STM/STM32F.h ../../KMS-STM32/Component.h ../../KMS-STM32/SPI.h ../../KMS-STM32/USART.h
+../../KMS-STM32/STM32F.o: ../../../Includes/KMS/DAQ/DAQ.h ../../../Includes/KMS/DAQ/IDigitalInputs.h ../../../Includes/KMS/DAQ/IDigitalOutputs.h ../../../Includes/KMS/Embedded/IInterruptHandler.h ../../../Includes/KMS/Embedded/SPI.h ../../../Includes/KMS/Embedded/USART.h ../../../Includes/KMS/Embedded/WorkItem.h ../../../Includes/KMS/Msg/Destination.h ../../../Includes/KMS/STM/STM32F.h ../../KMS-STM32/Component.h ../../KMS-STM32/SPI.h ../../KMS-STM32/USART.h
 ../../KMS-STM32/USART.o: ../../../Includes/KMS/Embedded/USART.h ../../../Includes/KMS/Embedded/WorkItem.h ../../../Includes/KMS/Msg/Destination.h ../../KMS-STM32/Component.h ../../KMS-STM32/USART.h
 
