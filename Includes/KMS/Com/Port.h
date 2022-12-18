@@ -63,6 +63,8 @@ namespace KMS
 
         // Internal
 
+            void Display(std::ostream& aOut) const;
+
             // ===== Configurable attributes ================================
             DI::Boolean                    mDTR;
             DI::Enum<Parity, PARITY_NAMES> mParity;

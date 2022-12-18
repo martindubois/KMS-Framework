@@ -37,6 +37,8 @@ namespace KMS
 
             const Test::TestList* GetTestList() const;
 
+            void Display(std::ostream& aOut) const;
+
         private:
 
             TestManager(const TestManager&);

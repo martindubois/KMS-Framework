@@ -123,6 +123,43 @@ namespace KMS
 
         const Test::TestList* TestManager::GetTestList() const { return &mTestList; }
 
+        void TestManager::Display(std::ostream& aOut) const
+        {
+            unsigned int lIndex = 0;
+
+            for (const Test* lT : mTestList)
+            {
+                aOut << "Test " << lIndex << "\n";
+                aOut << *lT;
+                aOut << "\n";
+
+                lIndex++;
+            }
+
+            if (0 < mErrorCount)
+            {
+                aOut << Console::Color::RED;
+            }
+            else
+            {
+                aOut << Console::Color::GREEN;
+            }
+
+            aOut << "Test count        : " << mTestList.size() << "\n";
+            aOut << "Total error count : " << mErrorCount << "\n";
+
+            if (0 < mErrorCount)
+            {
+                aOut << "Some tests FAILED";
+            }
+            else
+            {
+                aOut << "All tests PASSED";
+            }
+
+            aOut << Console::Color::WHITE << std::endl;
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
 
@@ -173,42 +210,7 @@ using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const Test::TestManager& aTM)
 {
-    const Test::Test::TestList* lTestList = aTM.GetTestList();
-
-    unsigned int lIndex = 0;
-
-    for (const Test::Test* lT : *lTestList)
-    {
-        aOut << "Test " << lIndex << "\n";
-        aOut << *lT;
-        aOut << "\n";
-
-        lIndex++;
-    }
-
-    unsigned int lErrorCount = aTM.GetErrorCount();
-    if (0 < lErrorCount)
-    {
-        aOut << Console::Color::RED;
-    }
-    else
-    {
-        aOut << Console::Color::GREEN;
-    }
-
-    aOut << "Test count        : " << lTestList->size() << "\n";
-    aOut << "Total error count : " << lErrorCount       << "\n";
-
-    if (0 < lErrorCount)
-    {
-        aOut << "Some tests FAILED";
-    }
-    else
-    {
-        aOut << "All tests PASSED";
-    }
-
-    aOut << Console::Color::WHITE << std::endl;
+    aTM.Display(aOut);
 
     return aOut;
 }

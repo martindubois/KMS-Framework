@@ -50,6 +50,8 @@ namespace KMS
 
             void CallRun();
 
+            void Display(std::ostream& aOut) const;
+
         protected:
 
             Test(const char* aName, const char* aGroup);

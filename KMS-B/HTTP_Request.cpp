@@ -130,6 +130,14 @@ namespace KMS
             return lResult;
         }
 
+        void Request::Display(std::ostream& aOut) const
+        {
+            aOut << "\n";
+            aOut << GetTypeName() << " " << mPath.c_str() << "\n";
+            aOut << GetResultName() << "\n";
+            aOut << std::endl;
+        }
+
         bool Request::Receive()
         {
             unsigned int lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
@@ -225,10 +233,7 @@ using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const HTTP::Request& aR)
 {
-    aOut << "\n";
-    aOut << aR.GetTypeName() << " " << aR.GetPath() << "\n";
-    aOut << aR.GetResultName() << "\n";
-    aOut << std::endl;
+    aR.Display(aOut);
 
     return aOut;
 }

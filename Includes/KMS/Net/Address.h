@@ -88,6 +88,8 @@ namespace KMS
 
             void SetPortNumber(unsigned int aP);
 
+            std::ostream& Display(std::ostream& aOut) const;
+
         private:
 
             void SetIPv4(const unsigned int* aA);

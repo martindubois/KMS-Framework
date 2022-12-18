@@ -103,6 +103,10 @@ namespace KMS
         // ===== std::exception =============================================
         virtual const char* what() const throw();
 
+    // Internal
+
+        void Display(std::ostream& aOut) const;
+
     private:
 
         void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg);

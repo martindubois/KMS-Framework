@@ -82,6 +82,8 @@ namespace KMS
 
             const char* GetResultName() const;
 
+            void Display(std::ostream& aOut) const;
+
             bool Receive();
 
             void Reply();

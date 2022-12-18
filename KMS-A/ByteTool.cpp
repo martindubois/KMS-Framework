@@ -104,44 +104,51 @@ namespace KMS
         return 0;
     }
 
+    // Internal
+    // //////////////////////////////////////////////////////////////////////
+
+    void ByteTool::Display(std::ostream& aOut) const
+    {
+        assert(NULL != mHistogram);
+
+        unsigned int lMax = mHistogram[0];
+        unsigned int lMin = mHistogram[0];
+        unsigned int lSum = mHistogram[0];
+
+        aOut << "      x_0   x_1   x_2   x_3   x_4   x_5   x_6   x_7   x_8   x_9   x_A   x_B   x_C   x_D   x_E   x_F" << "\n";
+        aOut << LABELS[0];
+
+        DisplayValue(aOut, mHistogram[0]);
+
+        for (unsigned int i = 1; i < BYTE_QTY; i++)
+        {
+            if (0 == i % 16)
+            {
+                aOut << "\n" << LABELS[i / 16];
+            }
+
+            if (lMax < mHistogram[i]) { lMax = mHistogram[i]; }
+            if (lMin > mHistogram[i]) { lMin = mHistogram[i]; }
+
+            lSum += mHistogram[i];
+
+            DisplayValue(aOut, mHistogram[i]);
+        }
+
+        aOut << "\n";
+        aOut << "Min : " << lMin << "\n";
+        aOut << "Avg : " << lSum / 256.0 << "\n";
+        aOut << "Max : " << lMax << "\n";
+        aOut << "Sum : " << lSum << std::endl;
+    }
+
 }
 
 using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const ByteTool& aBT)
 {
-    const unsigned int* lH = aBT.GetHistrogram();
-    assert(NULL != lH);
-
-    unsigned int lMax = lH[0];
-    unsigned int lMin = lH[0];
-    unsigned int lSum = lH[0];
-
-    aOut << "      x_0   x_1   x_2   x_3   x_4   x_5   x_6   x_7   x_8   x_9   x_A   x_B   x_C   x_D   x_E   x_F" << "\n";
-    aOut << LABELS[0];
-
-    DisplayValue(aOut, lH[0]);
-
-    for (unsigned int i = 1; i < BYTE_QTY; i++)
-    {
-        if (0 == i % 16)
-        {
-            aOut << "\n" << LABELS[i / 16];
-        }
-
-        if (lMax < lH[i]) { lMax = lH[i]; }
-        if (lMin > lH[i]) { lMin = lH[i]; }
-
-        lSum += lH[i];
-
-        DisplayValue(aOut, lH[i]);
-    }
-
-    aOut << "\n";
-    aOut << "Min : " << lMin << "\n";
-    aOut << "Avg : " << lSum / 256.0 << "\n";
-    aOut << "Max : " << lMax << "\n";
-    aOut << "Sum : " << lSum << std::endl;
+    aBT.Display(aOut);
 
     return aOut;
 }

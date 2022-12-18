@@ -41,6 +41,8 @@ namespace KMS
 
             typedef std::vector<AddressRange> Internal;
 
+            std::ostream& Display(std::ostream& aOut) const;
+
             Internal mInternal;
 
         };

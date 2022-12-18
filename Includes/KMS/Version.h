@@ -51,6 +51,10 @@ namespace KMS
 
             void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3) const;
 
+            // Internal
+
+            void Display(std::ostream& aOut) const;
+
         #endif
 
     private:

@@ -44,6 +44,10 @@ namespace KMS
 
             void SetType(Address::Type aType);
 
+        // Internal
+
+            std::ostream& Display(std::ostream& aOut) const;
+
         private:
 
             void Construct();

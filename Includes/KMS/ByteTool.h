@@ -34,6 +34,10 @@ namespace KMS
 
         // ===== Configurable attributes ====================================
         DI::File mSource;
+
+    // Internal
+
+        void Display(std::ostream& aOut) const;
         
     private:
 

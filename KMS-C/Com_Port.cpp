@@ -98,6 +98,32 @@ namespace KMS
             ApplyTimeouts();
         }
 
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void Port::Display(std::ostream& aOut) const
+        {
+            if (IsConnected())
+            {
+                aOut << "Connected\n";
+            }
+            else
+            {
+                aOut << "Not connected\n";
+            }
+
+            aOut << "Link         : " << mLink << "\n";
+            aOut << "Speed        : " << mSpeed_bps << " bps\n";
+            aOut << "Parity       : " << mParity << "\n";
+            aOut << "ReadTimeout  : " << mReadTimeout_ms << " ms\n";
+            aOut << "WriteTimeout : " << mWriteTimeout_ms << " ms\n";
+
+            aOut << "CTS          : " << (GetCTS() ? "1" : "0") << "\n";
+            aOut << "DSR          : " << (GetDSR() ? "1" : "0") << "\n";
+            aOut << "DTR          : " << mDTR << "\n";
+            aOut << "RTS          : " << mRTS << "\n";
+        }
+
     }
 }
 
@@ -105,25 +131,7 @@ using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const Com::Port& aP)
 {
-    if (aP.IsConnected())
-    {
-        aOut << "Connected\n";
-    }
-    else
-    {
-        aOut << "Not connected\n";
-    }
-
-    aOut << "Link         : " << aP.mLink << "\n";
-    aOut << "Speed        : " << aP.mSpeed_bps << " bps\n";
-    aOut << "Parity       : " << aP.mParity << "\n";
-    aOut << "ReadTimeout  : " << aP.mReadTimeout_ms << " ms\n";
-    aOut << "WriteTimeout : " << aP.mWriteTimeout_ms << " ms\n";
-
-    aOut << "CTS          : " << (aP.GetCTS() ? "1" : "0") << "\n";
-    aOut << "DSR          : " << (aP.GetDSR() ? "1" : "0") << "\n";
-    aOut << "DTR          : " << aP.mDTR << "\n";
-    aOut << "RTS          : " << aP.mRTS << "\n";
+    aP.Display(aOut);
 
     return aOut;
 }

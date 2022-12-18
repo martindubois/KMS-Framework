@@ -109,6 +109,31 @@ namespace KMS
             }
         }
 
+        void Test::Display(std::ostream& aOut) const
+        {
+            if (0 < mErrorCount)
+            {
+                aOut << Console::Color::RED;
+            }
+            else
+            {
+                aOut << Console::Color::GREEN;
+            }
+
+            aOut << "    " << GetName() << " - " << mErrorCount << " error(s)" << "\n";
+
+            if (0 < mErrorCount)
+            {
+                aOut << "    FAILED";
+            }
+            else
+            {
+                aOut << "    PASSED";
+            }
+
+            aOut << Console::Color::WHITE << std::endl;
+        }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 
@@ -137,28 +162,7 @@ using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const Test::Test& aT)
 {
-    unsigned int lErrorCount = aT.GetErrorCount();
-    if (0 < lErrorCount)
-    {
-        aOut << Console::Color::RED;
-    }
-    else
-    {
-        aOut << Console::Color::GREEN;
-    }
-
-    aOut << "    " << aT.GetName() << " - " << lErrorCount << " error(s)" << "\n";
-    
-    if (0 < lErrorCount)
-    {
-        aOut << "    FAILED";
-    }
-    else
-    {
-        aOut << "    PASSED";
-    }
-
-    aOut << Console::Color::WHITE << std::endl;
+    aT.Display(aOut);
 
     return aOut;
 }

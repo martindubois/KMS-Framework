@@ -75,6 +75,33 @@ namespace KMS
     // ===== std::exception =============================================
     const char* Exception::what() const throw () { return mMessage.c_str(); }
 
+    // Internal
+    // //////////////////////////////////////////////////////////////////////
+
+    void Exception::Display(std::ostream& aOut) const
+    {
+        aOut << "    " << what() << "\n";
+        aOut << "    Code     : " << mCode     << "\n";
+        aOut << "    File     : " << mFile     << " (" << mLine << ")\n";
+        aOut << "    Function : " << mFunction << "\n";
+
+        if (0 < mInfo.size())
+        {
+            aOut << "    Info     : " << mInfo << "\n";
+        }
+
+        if (0 != mLastError)
+        {
+            char lLastErrorHex[16];
+
+            sprintf_s(lLastErrorHex, " (0x%08x)", mLastError);
+
+            aOut << "    Last err.: " << mLastError << lLastErrorHex << "\n";
+        }
+
+        aOut << std::endl;
+    }
+
     // Private
     // //////////////////////////////////////////////////////////////////////
 
@@ -107,29 +134,7 @@ using namespace KMS;
 
 std::ostream& operator << (std::ostream& aOut, const Exception& aE)
 {
-    const char * lInfo      = aE.GetInfo();
-    unsigned int lLastError = aE.GetLastError();
-
-    aOut << "    " << aE.what() << "\n";
-    aOut << "    Code     : " << aE.GetCode    () << "\n";
-    aOut << "    File     : " << aE.GetFile    () << " (" << aE.GetLine() << ")\n";
-    aOut << "    Function : " << aE.GetFunction() << "\n";
-
-    if (0 < strlen(lInfo))
-    {
-        aOut << "    Info     : " << aE.GetInfo() << "\n";
-    }
-
-    if (0 != lLastError)
-    {
-        char lLastErrorHex[16];
-
-        sprintf_s(lLastErrorHex, " (0x%08x)", lLastError);
-
-        aOut << "    Last err.: " << lLastError << lLastErrorHex << "\n";
-    }
-
-    aOut << std::flush;
+    aE.Display(aOut);
 
     return aOut;
 }

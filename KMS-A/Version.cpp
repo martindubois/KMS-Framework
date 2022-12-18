@@ -178,6 +178,26 @@ namespace KMS
             }
         }
 
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void Version::Display(std::ostream& aOut) const
+        {
+            aOut << GetMajor() << "." << GetMinor() << "." << GetBuild() << "." << GetCompat() << " " << GetType();
+
+            if (0 < strlen(mDate))
+            {
+                aOut << " compiled on " << mDate;
+            }
+
+            if (mDebug)
+            {
+                aOut << " (debug)";
+            }
+
+            aOut << std::endl;
+        }
+
     #endif
 
     // Private
@@ -219,20 +239,7 @@ using namespace KMS;
 
     std::ostream& operator << (std::ostream& aOut, const Version& aV)
     {
-        aOut << aV.GetMajor() << "." << aV.GetMinor() << "." << aV.GetBuild() << "." << aV.GetCompat() << " " << aV.GetType();
-
-        const char* lDate = aV.GetDate();
-        if (0 < strlen(lDate))
-        {
-            aOut << " compiled on " << lDate;
-        }
-
-        if (aV.GetDebug())
-        {
-            aOut << " (debug)";
-        }
-
-        aOut << std::endl;
+        aV.Display(aOut);
 
         return aOut;
     }
