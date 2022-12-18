@@ -28,6 +28,10 @@ namespace KMS
 
             StringSet_ASCII* ParseFile(const char* aFile);
 
+        // Internal
+
+            void Display(std::ostream& aOut) const;
+
         private:
 
             Depend(const Depend&);
@@ -44,6 +48,8 @@ namespace KMS
 
             FileMap mCache;
 
+            unsigned int mFileCount;
+
             const File::Folder& mFolder;
 
             const DI::Array& mIncludes;
@@ -52,3 +58,5 @@ namespace KMS
 
     }
 }
+
+std::ostream& operator << (std::ostream& aOut, const KMS::Build::Depend& aTM);

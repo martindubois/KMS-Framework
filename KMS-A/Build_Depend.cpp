@@ -25,7 +25,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Depend::Depend(const DI::Array& aIncludes, const File::Folder& aFolder) : mFolder(aFolder), mIncludes(aIncludes)
+        Depend::Depend(const DI::Array& aIncludes, const File::Folder& aFolder) : mFileCount(0), mFolder(aFolder), mIncludes(aIncludes)
         {
         }
 
@@ -48,6 +48,8 @@ namespace KMS
         StringSet_ASCII* Depend::ParseFile(const char* aFile)
         {
             assert(NULL != aFile);
+
+            mFileCount++;
 
             StringSet_ASCII* lResult;
 
@@ -93,6 +95,15 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void Depend::Display(std::ostream& aOut) const
+        {
+            aOut << mFolder.GetPath() << "\n";
+            aOut << "    " << mFileCount << " files\n";
         }
 
         // Private
@@ -172,6 +183,13 @@ namespace KMS
 }
 
 using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Build::Depend& aTM)
+{
+    aTM.Display(aOut);
+
+    return aOut;
+}
 
 // Static functions
 // //////////////////////////////////////////////////////////////////////////

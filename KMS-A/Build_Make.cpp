@@ -290,6 +290,9 @@ namespace KMS
             lF_Component.Backup(MAKE_FILE_NAME);
 
             lMakeFile.Write(lF_Component, MAKE_FILE_NAME);
+
+            std::cout << lDepend;
+            std::cout << std::endl;
         }
 
         void Make::Depend_Components(const DI::Array& aComponents)

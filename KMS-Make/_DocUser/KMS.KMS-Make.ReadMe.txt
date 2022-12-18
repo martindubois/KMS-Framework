@@ -7,10 +7,12 @@ File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 EDIT ON BUILD
 
+* Build::Make - The Depend command display the file count by component
+
 0.1.53-dev Windows 2022-12-16
 
 0.1.11-dev Windows 2022-11-15
-* Make
+* Build::Make
     * Compile on Windows
     - mCleanExtensions
 
