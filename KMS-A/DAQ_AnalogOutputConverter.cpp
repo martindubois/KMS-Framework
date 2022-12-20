@@ -24,14 +24,14 @@ namespace KMS
         }
 
         // ===== IAnalogOutputs =============================================
-        AnalogValue AnalogOutputConverter::AO_Get(Id aId)
+        AnalogValue AnalogOutputConverter::AO_Get(Id aId) const
         {
             assert(NULL != mInterface);
 
             return Revert(aId, mInterface->AO_Get(aId));
         }
 
-        AnalogValue_Raw AnalogOutputConverter::AO_Get_Raw(Id aId)
+        AnalogValue_Raw AnalogOutputConverter::AO_Get_Raw(Id aId) const
         {
             assert(NULL != mInterface);
 

@@ -29,21 +29,30 @@ static const KMS::Cfg::MetaData MD_REPOSITORIES       ("Repositories += {Path}")
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
-
-    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("DarwinDependencies += {Product};{Version}");
+    #define NO_OS_0 "Linux"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_LINUX_
     #define NAME_OS "Linux"
-
-    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("LinuxDependencies += {Product};{Version}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_WINDOWS_
     #define NAME_OS "Windows"
-
-    static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES("WindowsDependencies += {Product};{Version}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Linux"
 #endif
+
+static const KMS::Cfg::MetaData MD_OS_DEPENDENCIES(NAME_OS "Dependencies += {Product};{Version}");
+
+static const char* SILENCE[] =
+{
+    NO_OS_0 "Dependencies", NO_OS_1 "Dependencies",
+
+    NULL
+};
 
 namespace KMS
 {
@@ -66,6 +75,8 @@ namespace KMS
                 Build::Import     lI;
                 Cfg::Configurator lC;
                 Installer         lInstaller;
+
+                lC.SetSilence(SILENCE);
 
                 lC.AddConfigurable(&lI);
                 lC.AddConfigurable(&lInstaller);

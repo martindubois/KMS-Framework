@@ -55,42 +55,50 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("DarwinBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("DarwinConfigurations += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_FILES         ("DarwinFiles += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_FILES         ("DarwinFolders += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("DarwinLibraries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("DarwinPreBuildCmds += {Command}");
-    static const KMS::Cfg::MetaData MD_OS_TESTS         ("DarwinTests += {Name}");
+    #define NO_OS_0 "Linux"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_LINUX_
     #define NAME_OS "Linux"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("LinuxBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("LinuxConfigurations += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_FILES         ("LinuxFiles += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_FOLDERS       ("LinuxFolders += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("LinuxLibraries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("LinuxPreBuildCmds += {Command}");
-    static const KMS::Cfg::MetaData MD_OS_TESTS         ("LinuxTests += {Name}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_WINDOWS_
     #define NAME_OS "Windows"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES      ("WindowsBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS("WindowsConfigurations += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_FILES         ("WindowsFiles += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_FOLDERS       ("WindowsFolders += {Path}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES     ("WindowsLibraries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS("WindowsPreBuildCmds += {Command}");
-    static const KMS::Cfg::MetaData MD_OS_TESTS         ("WindowsTests += {Name}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Linux"
 
     static const KMS::Cfg::MetaData MD_WINDOWS_FILE_MSI  ("WindowsFile_MSI = {Path}");
     static const KMS::Cfg::MetaData MD_WINDOWS_PROCESSORS("WindowsProcessors += x64 | x86");
 #endif
+
+static const KMS::Cfg::MetaData MD_OS_BINARIES      (NAME_OS "Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS(NAME_OS "Configurations += {Name}");
+static const KMS::Cfg::MetaData MD_OS_FILES         (NAME_OS "Files += {Path}");
+static const KMS::Cfg::MetaData MD_OS_FOLDERS       (NAME_OS "Folders += {Path}");
+static const KMS::Cfg::MetaData MD_OS_LIBRARIES     (NAME_OS "Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS(NAME_OS "PreBuildCmds += {Command}");
+static const KMS::Cfg::MetaData MD_OS_TESTS         (NAME_OS "Tests += {Name}");
+
+static const char* SILENCE[] =
+{
+    NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
+    NO_OS_0 "Configurations", NO_OS_1 "Configurations",
+    NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
+    NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
+    NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
+    NO_OS_0 "PreBuildCmds"  , NO_OS_1 "PreBuildCmds"  ,
+    NO_OS_0 "Tests"         , NO_OS_1 "Tests"         ,
+
+    #if defined(_KMS_DARWIN_) || defined(_KMS_LINUX_)
+        "WindowsFile_MSI"  ,
+        "WindowsProcessors",
+    #endif
+
+    NULL
+};
 
 // Static function declarataions
 // //////////////////////////////////////////////////////////////////////////
@@ -120,6 +128,8 @@ namespace KMS
                 Build             lB;
                 Cfg::Configurator lC;
                 Installer         lInstaller;
+
+                lC.SetSilence(SILENCE);
 
                 lC.AddConfigurable(&lB);
                 lC.AddConfigurable(&lInstaller);
@@ -274,6 +284,8 @@ namespace KMS
         {
             Cfg::Configurator lC;
             Make              lM;
+
+            lC.SetSilence(Make::SILENCE);
 
             lC.AddConfigurable(&lM);
 

@@ -24,8 +24,8 @@ namespace KMS
             AnalogOutputConverter(IAnalogOutputs* aInterface);
 
             // ===== IAnalogOutputs =========================================
-            virtual AnalogValue     AO_Get      (Id aId);
-            virtual AnalogValue_Raw AO_Get_Raw  (Id aId);
+            virtual AnalogValue     AO_Get      (Id aId) const;
+            virtual AnalogValue_Raw AO_Get_Raw  (Id aId) const;
             virtual void            AO_Write    (Id aId, AnalogValue     aValue);
             virtual void            AO_Write_Raw(Id aId, AnalogValue_Raw aValue);
 

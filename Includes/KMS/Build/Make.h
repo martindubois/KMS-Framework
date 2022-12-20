@@ -26,6 +26,8 @@ namespace KMS
 
         public:
 
+            static const char* SILENCE[];
+
             static int Main(int aCount, const char** aVector);
 
             Make();

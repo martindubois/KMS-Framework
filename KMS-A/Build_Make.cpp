@@ -48,24 +48,24 @@ static const KMS::Cfg::MetaData MD_TESTS           ("Tests += {Name}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("DarwinBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("DarwinLibraries += {Name}");
+    #define NO_OS_0 "Linux"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_LINUX_
     #define NAME_OS "Linux"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("LinuxBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("LinuxLibraries += {Name}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Windows"
 #endif
 
 #ifdef _KMS_WINDOWS_
     #define NAME_OS "Windows"
-
-    static const KMS::Cfg::MetaData MD_OS_BINARIES  ("WindowsBinaries += {Name}");
-    static const KMS::Cfg::MetaData MD_OS_LIBRARIES ("WindowsLibraries += {Name}");
+    #define NO_OS_0 "Darwin"
+    #define NO_OS_1 "Linux"
 #endif
+
+static const KMS::Cfg::MetaData MD_OS_BINARIES (NAME_OS "Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_LIBRARIES(NAME_OS "Libraries += {Name}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -79,6 +79,20 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* Make::SILENCE[]
+        {
+            NO_OS_0 "Binaries" , NO_OS_1 "Binaries" ,
+            NO_OS_0 "Libraries", NO_OS_1 "Libraries",
+
+            "Configurations",
+            "Embedded"      ,
+            "Files"         ,
+            "Product"       ,
+            "VersionFile"   ,
+
+            NULL
+        };
 
         const char* Make::COMPONENT_TYPE_NAMES[] = { "BINARY", "LIBRARY", "NONE", "TEST" };
 
@@ -94,6 +108,8 @@ namespace KMS
             {
                 Cfg::Configurator lC;
                 Build::Make       lM;
+
+                lC.SetSilence(SILENCE);
 
                 lC.AddConfigurable(&lM);
 
@@ -125,7 +141,7 @@ namespace KMS
 
             AddEntry("Binaries"       , &mBinaries       , false, &MD_BINARIES);
             AddEntry("CleanExtensions", &mCleanExtensions, false, &MD_CLEAN_EXTENSIONS);
-            AddEntry("Componentn"     , &mComponent      , false, &MD_COMPONENT);
+            AddEntry("Component"      , &mComponent      , false, &MD_COMPONENT);
             AddEntry("ComponentType"  , &mComponentType  , false, &MD_COMPONENT_TYPE);
             AddEntry("Configuration"  , &mConfiguration  , false, &MD_CONFIGURATION);
             AddEntry("Includes"       , &mIncludes       , false, &MD_INCLUDES);

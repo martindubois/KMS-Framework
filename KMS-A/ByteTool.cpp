@@ -61,7 +61,6 @@ namespace KMS
             Cfg::Configurator lC;
             Installer         lInstaller;
 
-
             lC.AddConfigurable(&lBT);
             lC.AddConfigurable(&lInstaller);
 

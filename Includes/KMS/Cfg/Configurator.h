@@ -39,6 +39,8 @@ namespace KMS
 
             unsigned int GetIgnoredCount() const;
 
+            void SetSilence(const char** aSilence);
+
             void Help(FILE* aOut = NULL) const;
 
             void ParseArguments(int aCount, const char ** aVector);
@@ -58,6 +60,8 @@ namespace KMS
 
             const Configurator & operator = (const Configurator &);
 
+            bool IsSilenced(const char* aLine);
+
             unsigned int OnConfigFilesChanged();
             unsigned int OnOptionalConfigFilesChanged();
             unsigned int OnSaveChanged();
@@ -69,6 +73,8 @@ namespace KMS
             DI::Dictionary mDictionary;
 
             unsigned int mIgnoredCount;
+
+            const char** mSilence;
 
             // ===== Configurable attributes ================================
             DI::Array   mConfigFiles;

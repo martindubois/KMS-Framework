@@ -58,7 +58,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Configurator::Configurator() : mIgnoredCount(0)
+        Configurator::Configurator() : mIgnoredCount(0), mSilence(NULL)
         {
             mConfigFiles        .mOnChanged.Set(this, ON_CONFIG_FILES_CHANGED);
             mHelp               .mOnChanged.Set(this, ON_HELP_CHANGED);
@@ -95,6 +95,15 @@ namespace KMS
         }
 
         unsigned int Configurator::GetIgnoredCount() const { return mIgnoredCount; }
+
+        void Configurator::SetSilence(const char** aSilence)
+        {
+            assert(NULL != aSilence);
+
+            assert(NULL == mSilence);
+
+            mSilence = aSilence;
+        }
 
         void Configurator::Help(FILE* aOut) const
         {
@@ -162,6 +171,26 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
+        bool Configurator::IsSilenced(const char* aLine)
+        {
+            if (NULL != mSilence)
+            {
+                const char** lS = mSilence;
+
+                while (NULL != (*lS))
+                {
+                    if (0 == strncmp(aLine, *lS, strlen(*lS)))
+                    {
+                        return true;
+                    }
+
+                    lS++;
+                }
+            }
+
+            return false;
+        }
+
         unsigned int Configurator::OnConfigFilesChanged()
         {
             unsigned int lCount = mConfigFiles.GetCount();
@@ -228,9 +257,12 @@ namespace KMS
                 }
             }
 
-            KMS_DBG_LOG_WARNING();
-            Dbg::gLog.WriteMessage(aLine);
-            mIgnoredCount++;
+            if (!IsSilenced(aLine))
+            {
+                KMS_DBG_LOG_WARNING();
+                Dbg::gLog.WriteMessage(aLine);
+                mIgnoredCount++;
+            }
         }
 
     }
