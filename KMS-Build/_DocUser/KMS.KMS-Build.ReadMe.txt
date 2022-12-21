@@ -7,6 +7,9 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.56-dev Windows 2022-12-21
+- Build::Build - Fix an error occuring when a product has no library
+
 0.1.55-dev Windows 2022-12-19
 
 0.1.5-dev Linux x86_64 2022-10-19

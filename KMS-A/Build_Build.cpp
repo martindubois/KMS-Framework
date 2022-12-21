@@ -409,29 +409,36 @@ namespace KMS
         {
             std::string lC = std::string(aC) + "_" + mEmbedded.Get();
 
-            File::Folder lBin(mTmp_Binaries , lC.c_str());
-            File::Folder lLib(mTmp_Libraries, lC.c_str());
-
-            File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
-            File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
-
-            lBin.Create();
-            lLib.Create();
-
-            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+            if (!mBinaries.IsEmpty())
             {
-                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lB);
+                File::Folder lBin(mTmp_Binaries, lC.c_str());
+                File::Folder lBin_Src((std::string("Binaries/") + aC).c_str());
 
-                lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
+                lBin.Create();
+
+                for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+                {
+                    const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                    assert(NULL != lB);
+
+                    lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
+                }
             }
 
-            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+            if (!mLibraries.IsEmpty())
             {
-                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lL);
+                File::Folder lLib(mTmp_Libraries, lC.c_str());
+                File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
 
-                lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
+                lLib.Create();
+
+                for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+                {
+                    const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                    assert(NULL != lL);
+
+                    lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
+                }
             }
         }
 
