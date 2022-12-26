@@ -7,7 +7,7 @@ File      KMS-Build/_DocUser/KMS.KMS-ComTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.56-dev Windows 2022-12-21
+0.1.57-dev Windows 2022-12-26
 
 0.1.7-dev Windows 2022-10-25
 * Com::Tool - Connect and Disconnect command

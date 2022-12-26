@@ -7,6 +7,11 @@ File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.57-dev Windows 2022-12-26
+* File::Sync
+    * Display counters
+    * Verbose attribute
+
 0.1.56-dev Windows 2022-12-21
 
 0.0.6-dev Windows 2022-07-26

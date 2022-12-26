@@ -26,6 +26,25 @@ namespace KMS
 
         public:
 
+            class Counters
+            {
+
+            public:
+
+                Counters();
+
+            // Internal
+
+                void Display(std::ostream& aOut) const;
+
+                void Increment(unsigned int aId);
+
+            private:
+
+                unsigned int mCounters[6];
+
+            };
+
             static const unsigned int FLAG_IF_DOES_NOT_EXIST;
             static const unsigned int FLAG_IF_NEWER;
 
@@ -41,9 +60,13 @@ namespace KMS
 
             void Copy(const Folder& aNewRoot, unsigned int aFlags = 0);
 
-            void Copy(FileInfoList* aList, unsigned int aFlags = 0);
+            void Copy(FileInfoList* aList, unsigned int aFlags = 0, Counters* aCounters = NULL);
 
             FileInfo* Find(const char* aRelPath);
+
+        // Internal
+
+            void Display(std::ostream& aOut) const;
 
         private:
 
@@ -67,3 +90,6 @@ namespace KMS
 
     }
 }
+
+std::ostream& operator << (std::ostream& aOut, const KMS::File::FileInfoList          & aFIL);
+std::ostream& operator << (std::ostream& aOut, const KMS::File::FileInfoList::Counters& aC);

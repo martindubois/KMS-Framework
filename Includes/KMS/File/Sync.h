@@ -10,6 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
+#include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
 
 namespace KMS
@@ -32,6 +33,9 @@ namespace KMS
 
             // ===== DI::Object =============================================
             ~Sync();
+
+            // ===== Configurable attributes ================================
+            DI::Boolean mVerbose;
 
         private:
 

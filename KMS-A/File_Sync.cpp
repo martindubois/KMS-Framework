@@ -28,6 +28,7 @@
 
 static const KMS::Cfg::MetaData MD_BIDIRECTIONAL ("Bidirectional[{Group}] += {Path}");
 static const KMS::Cfg::MetaData MD_UNIDIRECTIONAL("Unidirectional += {Path};{Path}");
+static const KMS::Cfg::MetaData MD_VERBOSE       ("Verbose = False | True");
 
 // Static fonction desclarations
 // //////////////////////////////////////////////////////////////////////////
@@ -80,15 +81,14 @@ namespace KMS
         Sync::Sync()
         {
             mBidirectional .SetCreator(CreateGroup);
-            mUnidirectional.SetCreator(DI::String::Create);
+            mUnidirectional.SetCreator(DI::String_Expand::Create);
 
             AddEntry("Bidirectional" , &mBidirectional , false, &MD_BIDIRECTIONAL);
             AddEntry("Unidirectional", &mUnidirectional, false, &MD_UNIDIRECTIONAL);
+            AddEntry("Verbose"       , &mVerbose       , false, &MD_VERBOSE);
         }
 
-        Sync::~Sync()
-        {
-        }
+        Sync::~Sync() {}
 
         int Sync::Run()
         {
@@ -134,14 +134,25 @@ namespace KMS
                 FileInfoList* lDst = ToFileInfoList(lDstName);
                 FileInfoList* lSrc = ToFileInfoList(lSrcName);
 
+                std::cout << *lSrc;
+
                 unsigned int lFlags = FileInfoList::FLAG_IF_DOES_NOT_EXIST | FileInfoList::FLAG_IF_NEWER;
 
-                lFlags |= Folder::FLAG_BACKUP | Folder::FLAG_IGNORE_ERROR | Folder::FLAG_VERBOSE;
+                lFlags |= Folder::FLAG_BACKUP | Folder::FLAG_IGNORE_ERROR;
 
-                lSrc->Copy(lDst, lFlags);
+                if (mVerbose.Get())
+                {
+                    lFlags |= Folder::FLAG_VERBOSE;
+                }
+
+                FileInfoList::Counters lCounters;
+
+                lSrc->Copy(lDst, lFlags, &lCounters);
 
                 delete lDst;
                 delete lSrc;
+
+                std::cout << lCounters;
             }
         }
 

@@ -15,6 +15,18 @@
 
 #include <KMS/File/FileInfoList.h>
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#define COUNTER_COPIED       (0)
+#define COUNTER_EXISTING     (1)
+#define COUNTER_NEW          (2)
+#define COUNTER_NEW_COPIED   (3)
+#define COUNTER_NEWER        (4)
+#define COUNTER_NEWER_COPIED (5)
+
+#define COUNTER_QTY (sizeof(FileInfoList::Counters) / sizeof(unsigned int))
+
 namespace KMS
 {
     namespace File
@@ -67,7 +79,7 @@ namespace KMS
             }
         }
 
-        void FileInfoList::Copy(FileInfoList* aList, unsigned int aFlags)
+        void FileInfoList::Copy(FileInfoList* aList, unsigned int aFlags, Counters* aCounters)
         {
             assert(NULL != aList);
             assert(0 != aFlags);
@@ -83,23 +95,38 @@ namespace KMS
                 FileInfo * lFI = aList->Find(lPair.first.c_str());
                 if (NULL == lFI)
                 {
+                    if (aCounters) { aCounters->Increment(COUNTER_NEW); }
+
                     lCopy = (FLAG_IF_DOES_NOT_EXIST == (aFlags & FLAG_IF_DOES_NOT_EXIST));
                     if (lCopy)
                     {
+                        if (aCounters) { aCounters->Increment(COUNTER_NEW_COPIED); }
+
                         aList->Add(lPair.first.c_str(), new FileInfo(*lPair.second));
                     }
                 }
                 else
                 {
-                    lCopy = (FLAG_IF_NEWER == (aFlags & FLAG_IF_NEWER)) && lPair.second->IsNewer(*lFI);
-                    if (lCopy)
+                    if (aCounters) { aCounters->Increment(COUNTER_EXISTING); }
+
+                    if (lPair.second->IsNewer(*lFI))
                     {
-                        *lFI = *lPair.second;
+                        if (aCounters) { aCounters->Increment(COUNTER_NEWER); }
+
+                        lCopy = (FLAG_IF_NEWER == (aFlags & FLAG_IF_NEWER));
+                        if (lCopy)
+                        {
+                            if (aCounters) { aCounters->Increment(COUNTER_NEWER_COPIED); }
+
+                            *lFI = *lPair.second;
+                        }
                     }
                 }
 
                 if (lCopy)
                 {
+                    if (aCounters) { aCounters->Increment(COUNTER_COPIED); }
+
                     mRoot.Copy(lNewRoot, lPair.first.c_str(), aFlags);
                 }
             }
@@ -120,6 +147,45 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        FileInfoList::Counters::Counters()
+        {
+            memset(&mCounters, 0, sizeof(mCounters));
+        }
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        void FileInfoList::Display(std::ostream& aOut) const
+        {
+            aOut << mRoot.GetPath() << "\n";
+            aOut << "    " << mFolders.size() << " folders\n";
+            aOut << "    " << mFiles  .size() << " files\n";
+            aOut << std::endl;
+        }
+
+        void FileInfoList::Counters::Display(std::ostream& aOut) const
+        {
+            aOut << "    " << mCounters[COUNTER_NEW         ] << " new files\n";
+            aOut << "    " << mCounters[COUNTER_NEW_COPIED  ] << " created files\n";
+            aOut << "    " << mCounters[COUNTER_EXISTING    ] << " existing files\n";
+            aOut << "    " << mCounters[COUNTER_NEWER       ] << " newer files\n";
+            aOut << "    " << mCounters[COUNTER_NEWER_COPIED] << " replaced files\n";
+            aOut << "    " << mCounters[COUNTER_COPIED      ] << " copied files\n";
+
+            assert( mCounters[COUNTER_COPIED  ] == mCounters[COUNTER_NEW_COPIED] + mCounters[COUNTER_NEWER_COPIED]);
+            assert((mCounters[COUNTER_EXISTING] >= mCounters[COUNTER_NEWER]));
+
+            assert((mCounters[COUNTER_NEWER] == mCounters[COUNTER_NEWER_COPIED]) || (0 == mCounters[COUNTER_NEWER_COPIED]));
+            assert((mCounters[COUNTER_NEW  ] == mCounters[COUNTER_NEW_COPIED  ]) || (0 == mCounters[COUNTER_NEW_COPIED  ]));
+        }
+
+        void FileInfoList::Counters::Increment(unsigned int aId)
+        {
+            assert(COUNTER_QTY > aId);
+
+            mCounters[aId]++;
         }
 
         // Private
@@ -211,4 +277,20 @@ namespace KMS
         }
 
     }
+}
+
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const File::FileInfoList& aFIL)
+{
+    aFIL.Display(aOut);
+
+    return aOut;
+}
+
+std::ostream& operator << (std::ostream& aOut, const File::FileInfoList::Counters& aC)
+{
+    aC.Display(aOut);
+
+    return aOut;
 }
