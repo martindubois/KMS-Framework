@@ -73,36 +73,44 @@ namespace KMS
                 lCfg += "_";
                 lCfg += lP->Get();
 
-                File::Folder lBin(mTmp_Binaries , lCfg.c_str());
-                File::Folder lLib(mTmp_Libraries, lCfg.c_str());
-
                 std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
 
                 File::Folder lOut_Src(lOutDir.c_str());
 
-                lBin.Create();
-                lLib.Create();
-
-                for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+                if (!mBinaries.IsEmpty())
                 {
-                    assert(NULL != lEntry);
+                    File::Folder lBin(mTmp_Binaries, lCfg.c_str());
 
-                    const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(NULL != lB);
+                    lBin.Create();
 
-                    lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
-                    lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
+                    for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+                    {
+                        assert(NULL != lEntry);
+
+                        const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                        assert(NULL != lB);
+
+                        lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
+                        lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
+                    }
                 }
 
-                for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+                if (!mLibraries.IsEmpty())
                 {
-                    assert(NULL != lEntry);
+                    File::Folder lLib(mTmp_Libraries, lCfg.c_str());
 
-                    const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(NULL != lL);
+                    lLib.Create();
 
-                    lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
-                    lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
+                    for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+                    {
+                        assert(NULL != lEntry);
+
+                        const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                        assert(NULL != lL);
+
+                        lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
+                        lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
+                    }
                 }
             }
         }
