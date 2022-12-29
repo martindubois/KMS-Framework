@@ -15,9 +15,9 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define VERSION_RC  0,1,57,0
-#define VERSION_STR "0.1.57.0"
+#define VERSION_RC  0,1,58,0
+#define VERSION_STR "0.1.58.0"
 
 #ifdef __cplusplus
-    KMS_VERSION("dev");
+    KMS_VERSION("stm32f373vctx");
 #endif

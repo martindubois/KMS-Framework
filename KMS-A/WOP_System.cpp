@@ -36,6 +36,8 @@
 
 #define VERSION_UNKNOWN        (0xff)
 
+static const char* DIGITS = "0123456789abcdef";
+
 namespace KMS
 {
     namespace WOP
@@ -109,14 +111,41 @@ namespace KMS
         void System::AddTrace(const char* aMsg, uint8_t aLen)
         {
             uint8_t lSpace = sizeof(mTrace) - mTraceLen;
-            if (aLen > lSpace)
+            if (aLen >= lSpace)
             {
                 mTrace[0] = '*';
                 mTraceLen = 1;
             }
+            else if (0 < mTraceLen)
+            {
+                mTrace[mTraceLen] = ' ';
+                mTraceLen++;
+            }
 
             memcpy(mTrace + mTraceLen, aMsg, aLen);
             mTraceLen += aLen;
+
+            AddRequest(BIT_TRACE);
+        }
+
+        void System::AddTrace(uint16_t aMsg)
+        {
+            uint8_t lSpace = sizeof(mTrace) - mTraceLen;
+            if (4 >= lSpace)
+            {
+                mTrace[0] = '*';
+                mTraceLen = 1;
+            }
+            else if (0 < mTraceLen)
+            {
+                mTrace[mTraceLen] = ' ';
+                mTraceLen++;
+            }
+
+            mTrace[mTraceLen] = DIGITS[(aMsg & 0xf000) >> 12]; mTraceLen++;
+            mTrace[mTraceLen] = DIGITS[(aMsg & 0x0f00) >>  8]; mTraceLen++;
+            mTrace[mTraceLen] = DIGITS[(aMsg & 0x00f0) >>  4]; mTraceLen++;
+            mTrace[mTraceLen] = DIGITS[ aMsg & 0x000f       ]; mTraceLen++;
 
             AddRequest(BIT_TRACE);
         }
