@@ -43,7 +43,7 @@ void SPI::Init(uint8_t aSPI)
     case 1: RCC->APB1ENR |= RCC_APB1ENR_SPI2EN; break;
     case 2: RCC->APB1ENR |= RCC_APB1ENR_SPI3EN; break;
 
-    // default: assert(false);
+    default: Assert(false);
     }
 
     mSPI = sSPIs[aSPI];
@@ -59,42 +59,45 @@ void SPI::Init(uint8_t aSPI)
     NVIC_EnableIRQ(sIRQs[aSPI]);
 }
 
-#define TX_WORD(W,F)                            \
-    mSPI->DR = (W);                             \
-    if (0 == ((F) & ISlave::FLAG_TX_LAST_WORD)) \
-    {                                           \
-        mSPI->CR2 |= SPI_CR2_TXEIE;             \
-    }
-
 void SPI::OnInterrupt()
 {
-    // assert(NULL != mSPI);
-
     uint32_t lSR = mSPI->SR;
 
     uint8_t  lFlags;
     uint16_t lWord;
 
-    if (0 != (lSR & SPI_SR_TXE))
+    if ((0 != (lSR & SPI_SR_TXE)) && (0 != (mSPI->CR2 & SPI_CR2_TXEIE)))
     {
-        mSPI->CR2 &= ~ SPI_CR2_TXEIE;
-
         lFlags = mSlave->OnTxReady(&lWord);
         if (0 != (lFlags & ISlave::FLAG_TX_WORD))
         {
-            TX_WORD(lWord, lFlags)
+            mSPI->DR = lWord;
+            if (0 != (lFlags & ISlave::FLAG_TX_LAST_WORD))
+            {
+                mSPI->CR2 &= ~ SPI_CR2_TXEIE;
+            }
+        }
+        else
+        {
+            mSPI->CR2 &= ~ SPI_CR2_TXEIE;
         }
     }
 
-    if (0 != (lSR & SPI_SR_RXNE))
+    while (0 != (lSR & SPI_SR_RXNE))
     {
         lWord = mSPI->DR;
 
         lFlags = mSlave->OnRxWord(&lWord);
         if (0 != (lFlags & ISlave::FLAG_TX_WORD))
         {
-            TX_WORD(lWord, lFlags);
+            mSPI->DR = lWord;
+            if (0 == (lFlags & ISlave::FLAG_TX_LAST_WORD))
+            {
+                mSPI->CR2 |= SPI_CR2_TXEIE;
+            }
         }
+
+        lSR = mSPI->SR;
     }
 }
 
@@ -105,8 +108,7 @@ void SPI::Slave_Connect(ISlave* aSlave)
 {
     // assert(NULL != aSlave);
 
-    // assert(NULL == mSlave);
-    // assert(NULL != mSPI);
+    mSlave = aSlave;
 
     uint16_t lWord;
 
@@ -130,8 +132,6 @@ void SPI::Slave_Connect(ISlave* aSlave)
     {
         mSPI->CR2 |= SPI_CR2_TXEIE;
     }
-
-    mSlave = aSlave;
 }
 
 // This method is responsible for restoring default configuration. This make
@@ -144,10 +144,22 @@ void SPI::Slave_Connect(ISlave* aSlave)
 
 void SPI::Slave_Disconnect()
 {
-    // assert(NULL != mSlave);
-    // assert(NULL != mSPI);
+    Assert(NULL != mSlave);
+
+    uint32_t lSR = mSPI->SR;
+
+    while (0 != (lSR & SPI_SR_RXNE))
+    {
+        uint16_t lWord = mSPI->DR;
+
+        uint8_t lFlags = mSlave->OnRxWord(&lWord);
+        Assert(0 == lFlags);
+
+        lSR = mSPI->SR;
+    }
 
     mSPI->CR1 |= SPI_CR1_CPOL | SPI_CR1_SSI;
+    mSPI->CR2 &= ~ SPI_CR2_TXEIE;
 
     SET_WORD_SIZE_16();
 }
