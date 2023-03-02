@@ -156,6 +156,8 @@ namespace KMS
 
                     if (lProductFolder.DoesFileExist(lPackage))
                     {
+                        std::cout << "Importing " << lProduct << " " << lVersion << " from " << *lR << std::endl;
+
                         mImport.Uncompress(lProductFolder, lPackage);
                         return;
                     }
