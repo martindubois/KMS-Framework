@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_Master_Com.cpp
@@ -28,9 +28,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Master =====================================================
-
         Master_Com::Master_Com() { AddEntry("Port", &mPort, false); }
+
+        // ===== Master =====================================================
 
         void Master_Com::Connect()
         {
@@ -81,11 +81,11 @@ namespace KMS
             VerifyDeviceAddress(lBuffer);
             VerifyFunction(aFunction, lBuffer + 1);
 
-            mPort.Read(lBuffer + MIN_SIZE_byte, aOutSize_byte + CRC_SIZE_byte);
+            mPort.Read(lBuffer + MIN_SIZE_byte, aOutSize_byte - 1 + CRC_SIZE_byte);
 
-            CRC::Verify(lBuffer, MIN_SIZE_byte + aOutSize_byte + CRC_SIZE_byte);
+            CRC::Verify(lBuffer, MIN_SIZE_byte - 1 + aOutSize_byte + CRC_SIZE_byte);
 
-            memcpy(aOut, lBuffer + MIN_SIZE_byte, aOutSize_byte);
+            memcpy(aOut, lBuffer + MIN_SIZE_byte - 1, aOutSize_byte);
 
             return aOutSize_byte;
         }
@@ -145,13 +145,6 @@ namespace KMS
             CRC::Add(lBuffer, lSize_byte);
 
             mPort.Write(lBuffer, lSize_byte);
-        }
-
-        void Master_Com::VerifyDeviceAddress(const uint8_t* aData)
-        {
-            assert(NULL != aData);
-
-            KMS_EXCEPTION_ASSERT(GetDeviceAddress() == aData[0], MODBUS_CONFIG_INVALID, "Invalid slave address", aData[0]);
         }
 
     }

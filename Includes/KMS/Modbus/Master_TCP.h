@@ -1,27 +1,27 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Modbus/Master_Com.h
+// File      Includes/KMS/Modbus/Master_TCP.h
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Com/Port.h>
 #include <KMS/Modbus/Master.h>
+#include <KMS/Net/Socket_Client.h>
 
 namespace KMS
 {
     namespace Modbus
     {
 
-        class Master_Com : public Master
+        class Master_TCP : public Master
         {
 
         public:
 
-            Master_Com();
+            Master_TCP();
 
             // ===== Master =================================================
             virtual void         Connect();
@@ -38,7 +38,9 @@ namespace KMS
 
             void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
 
-            Com::Port mPort;
+            Net::Socket_Client mSocket;
+
+            uint16_t mTransactionId;
 
         };
 

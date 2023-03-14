@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus_Master.cpp
@@ -121,6 +121,13 @@ namespace KMS
         }
 
         uint8_t Master::GetDeviceAddress() const { return mDeviceAddress; }
+
+        void Master::VerifyDeviceAddress(const uint8_t* aData)
+        {
+            assert(NULL != aData);
+
+            KMS_EXCEPTION_ASSERT(mDeviceAddress == aData[0], MODBUS_CONFIG_INVALID, "Invalid slave address", aData[0]);
+        }
 
         void Master::VerifyFunction(Function aFunction, const uint8_t* aData)
         {

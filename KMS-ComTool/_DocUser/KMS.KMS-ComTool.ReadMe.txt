@@ -1,13 +1,13 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022 KMS
+Copyright (C) 2022-2023 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-ComTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.57-dev Windows 2022-12-26
+0.1.58-dev Windows 2023-03-14
 
 0.1.7-dev Windows 2022-10-25
 * Com::Tool - Connect and Disconnect command

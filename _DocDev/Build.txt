@@ -1,6 +1,6 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022 KMS
+Copyright (C) 2022-2023 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocDev/Build.txt
@@ -11,32 +11,32 @@ Date and time       20 ______ - ______ - ______               ______ : ______
 
 Computer            _________________________________________________________
 
-[ ] File "Common/Version.h" - Edit the Version
+File "Common/Version.h" - Edit the Version
 
 Version             ______ . ______ . ______ . ______ - _____________________
 
-[ ] Search "EDIT ON BUILD" and edit found file as needed
+Search "EDIT ON BUILD" and edit found file as needed
 
 ===== Linux only ============================================================
-[ ] Tool "Terminal" - Un the product folder
-        Binaries/Debug/KMS-Make Config=Debug Operation+=Make
-        Binaries/Debug/KMS-Build
-[ ] Copy the exported file to the server
+Tool "Terminal" - Un the product folder
+    Binaries/Debug/KMS-Make Config=Debug Operation+=Make                  [ ]
+    Binaries/Debug/KMS-Build                                              [ ]
+Copy the exported file to the server                                      [ ]
 
 ===== Windows only ==========================================================
-[ ] Tool "Visual Studio 2022"
-        - Build KMS-Build in Debug x64
-        - Close
-[ ] Tools "PowerShell" - In the product folder
-        .\x64\Debug\KMS-Build.exe
-[ ] If needed, update KMS-Import.exe in K:\
-[ ] If needed, update KMS-Sync.exe in K:\
+Tool "Visual Studio 2022"
+    - Build KMS-Build in Debug x64                                        [ ]
+    - Close                                                               [ ]
+Tools "PowerShell" - In the product folder
+        .\x64\Debug\KMS-Build.exe                                         [ ]
+If needed, update KMS-Import.exe in K:\                                   [ ]
+If needed, update KMS-Sync.exe in K:\                                     [ ]
 
-[ ] Tools "GIT GUI"
+Tools "GIT GUI"
     - Commit all modified File with {Ma}.{Mi}.{Bu}[-{Type}] Linux|Windows as
-      message
-    - Push the servers
-[ ] If needed, upload the release on GitHub.com
+      message                                                             [ ]
+    - Push the servers                                                    [ ]
+If needed, upload the release on GitHub.com                               [ ]
 
 Time and duration   ______ : ______           ______ hours and ______ minutes
 
