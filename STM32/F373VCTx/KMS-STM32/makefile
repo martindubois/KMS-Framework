@@ -5,11 +5,9 @@
 # Product   KMS-Framework
 # File      STM32/F373CVTx/KMS-STM32/makefile
 
-KMS_MAKEFILES = ../../Makefiles
+include ../../$(CONFIG).mk
 
 include $(KMS_MAKEFILES)/stm32f373cvtx.mk
-
-include ../../$(CONFIG).mk
 
 OUTPUT = $(KMS_STM32_A)
 

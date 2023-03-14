@@ -11,3 +11,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
+
+// ===== Includes ===========================================================
+#include <KMS/Embedded/Assert.h>

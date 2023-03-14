@@ -9,6 +9,12 @@ EDIT ON BUILD
 
 0.1.58-dev Windows 2023-03-14
 
+0.1.59-stm32f373vctx 2022-12-30
+- Embedded::AssertFailure
+
+0.1.58-stm32f373vctx 2022-12-29
+- WOP::System::AddTrace(uint16_t)
+
 0.1.55-dev Windows 2022-12-19
 - Build::Depend::Display
 

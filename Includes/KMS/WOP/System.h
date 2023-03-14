@@ -41,6 +41,8 @@ namespace KMS
 
             void AddTrace(const char* aMsg, uint8_t aLen);
 
+            void AddTrace(uint16_t aMsg);
+
             const FrameBuffer* PrepareFrame();
 
             #ifndef _KMS_EMBEDDED_
