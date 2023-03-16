@@ -14,8 +14,9 @@ Computer            _________________________________________________________
 File "Common/Version.h" - Edit the Version
 
 Version             ______ . ______ . ______ . ______ - _____________________
+                    {Ma}     {Mi}     {Bu}              {Type}
 
-Search "EDIT ON BUILD" and edit found file as needed
+Search "EDIT ON BUILD" and edit found file as needed                      [ ]
 
 ===== Linux only ============================================================
 Tool "Terminal" - Un the product folder

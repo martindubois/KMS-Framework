@@ -7,6 +7,9 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
+0.1.60-dev Windows 2023-03-16
+- Modbus::Master_Com - Clear receive buffer before sending a command
+
 0.1.58-dev Windows 2023-03-14
 
 0.1.52-dev Windows 2022-12-05

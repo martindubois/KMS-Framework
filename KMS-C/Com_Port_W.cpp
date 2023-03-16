@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Com_Port_W.cpp
@@ -14,6 +14,15 @@ namespace KMS
 {
     namespace Com
     {
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        void Port::ClearReadBuffer()
+        {
+            BOOL lRetB = PurgeComm(*this, PURGE_RXCLEAR);
+            KMS_EXCEPTION_ASSERT(lRetB, COM_CLEAR_FAILED, "Cannot clear the read buffer", "");
+        }
 
         // Protected
         // //////////////////////////////////////////////////////////////////

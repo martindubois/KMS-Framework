@@ -144,6 +144,8 @@ namespace KMS
 
             CRC::Add(lBuffer, lSize_byte);
 
+            mPort.ClearReadBuffer();
+
             mPort.Write(lBuffer, lSize_byte);
         }
 
