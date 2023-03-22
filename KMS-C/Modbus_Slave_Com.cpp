@@ -61,6 +61,8 @@ namespace KMS
         void Slave_Com::Connect()
         {
             mPort.Connect(Com::Port::FLAG_READ_ACCESS | Com::Port::FLAG_WRITE_ACCESS);
+
+            mPort.Write("a", 1);
         }
 
         // Protected
@@ -158,13 +160,22 @@ namespace KMS
         {
              switch (mState)
              {
-             case STATE_CRC_H: mReceivedCRC |= aByte << 8; OnRequest(); return;
+             case STATE_CRC_H:
+                 mReceivedCRC |= aByte << 8;
+                 if (GetDeviceAddress() == mTarget)
+                 {
+                     OnRequest();
+                 }
+                 else
+                 {
+                     Reset();
+                 }
+                 return;
              case STATE_CRC_L: mReceivedCRC =  aByte; mState = STATE_CRC_H; return;
 
              case STATE_DEV_ADDR:
-                 if (GetDeviceAddress() != aByte) { return; }
-
-                 mState = STATE_FUNCTION;
+                 mState  = STATE_FUNCTION;
+                 mTarget = aByte;
                  break;
 
              case STATE_FUNCTION:
@@ -179,7 +190,7 @@ namespace KMS
                  case Function::WRITE_SINGLE_COIL    :
                  case Function::WRITE_SINGLE_REGISTER: mState = STATE_OUT_ADDR_H; break;
 
-                 default: SendException(mFunction, Exception::ILLEGAL_FUNCTION); return;
+                 default: Reset(); return;
                  }
                  break;
 
@@ -216,7 +227,7 @@ namespace KMS
                 case Function::WRITE_SINGLE_COIL    : OnRequest_B(mFunction, mAddress, mBuffer, &mOnWriteSingleCoil    ); break;
                 case Function::WRITE_SINGLE_REGISTER: OnRequest_B(mFunction, mAddress, mBuffer, &mOnWriteSingleRegister); break;
 
-                default: assert(false);
+                default: SendException(mFunction, Exception::ILLEGAL_FUNCTION);
                 }
             }
             else
@@ -227,9 +238,8 @@ namespace KMS
 
         void Slave_Com::Reset()
         {
-            mBufferLevel_byte = 0;
-            mSilentCounter    = 0;
-            mState            = STATE_DEV_ADDR;
+            mSilentCounter = 0;
+            mState         = STATE_DEV_ADDR;
 
             mCRC.Reset();
         }

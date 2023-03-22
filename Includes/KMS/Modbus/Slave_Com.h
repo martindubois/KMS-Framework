@@ -48,8 +48,6 @@ namespace KMS
 
             uint8_t mBuffer[260];
 
-            unsigned int mBufferLevel_byte;
-
             CRC mCRC;
 
             uint16_t mAddress;
@@ -63,6 +61,8 @@ namespace KMS
             unsigned int mSilentCounter;
 
             unsigned int mState;
+
+            uint8_t mTarget;
 
             Com::Port mPort;
 

@@ -7,12 +7,10 @@ File      KMS-ModbusTool/_DocUser/KMS.KMS-ModbusTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.60-dev Windows 2023-03-16
-
-0.1.58-dev Windows 2023-03-14
+0.1.61-dev Windows 2023-03-22
 * Modubus::Tool - COM or TCP mode
 
-0.1.57-dev Windows 2022-12-26
+0.1.60-dev Windows 2023-03-16
 
 0.1.7-dev Windows 2022-10-25
 * Modbus::Tool - Use CLI::Tool

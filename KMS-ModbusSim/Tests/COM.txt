@@ -3,10 +3,10 @@
 # Copyright (C) 2022-2023 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
-# File      KMS-Import.cfg
+# File      KMS-ModbusSim/Tests/COM.txt
 
-# EDIT ON BUILD
+DeviceAddress = 2
 
-Dependencies += KMS-Framework;0.1.61-dev
-
-OSIndependentDeps += KMS-Framework;0.0.14-front-end
+Port.Index       = 8
+Port.ReadTimeout = 5
+Port.Speed       = 38400

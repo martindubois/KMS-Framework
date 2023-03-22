@@ -133,6 +133,8 @@ namespace KMS
         {
             assert(NULL != aIn);
 
+            VerifyState(State::CONNECTED);
+
             assert(INVALID_SOCKET != mSocket);
 
             int lRet = send(mSocket, reinterpret_cast<const char*>(aIn), aInSize_byte, 0);

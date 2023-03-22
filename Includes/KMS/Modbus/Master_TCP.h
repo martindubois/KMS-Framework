@@ -36,6 +36,20 @@ namespace KMS
 
         private:
 
+            typedef struct
+            {
+                uint16_t mTransactionId;
+                uint16_t mProtocolId;
+                uint16_t mLength_byte;
+                uint8_t  mDeviceAddress;
+                uint8_t  mFunctionCode;
+
+                uint8_t  mData[4];
+            }
+            Buffer;
+
+            void Answer_Receive(Buffer* aBuffer, unsigned int aSize_byte);
+
             void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
 
             Net::Socket_Client mSocket;

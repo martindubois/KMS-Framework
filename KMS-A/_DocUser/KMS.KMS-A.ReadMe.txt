@@ -7,6 +7,10 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.61-dev Windows 2023-03-22
+* FileFormat::ELF
+- Modbus::Slave - Fix bugs
+
 0.1.60-dev Windows 2023-03-16
 
 0.1.59-stm32f373vctx 2022-12-30

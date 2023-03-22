@@ -1,0 +1,26 @@
+
+# Author    KMS - Martin Dubois, P. Eng.
+# Copyright (C) 2022-2023 KMS
+# License   http://www.apache.org/licenses/LICENSE-2.0
+# Product   KMS-Framework
+# File      KMS-ModbusTool/Tests/TCP.txt
+
+DeviceAddress = 2
+
+Socket.LocalAddress  = 0.0.0.0
+Socket.RemoteAddress = 192.168.0.28:502
+
+Commands += Shell
+
+# Some register definition for the FMD88-10 PLC
+
+# TIME
+HoldingRegisters.512_Hour      = 512
+HoldingRegisters.513_Minute    = 513
+HoldingRegisters.514_Second    = 514
+
+# DATE
+HoldingRegisters.516_Year      = 516
+HoldingRegisters.517_Month     = 517
+HoldingRegisters.518_Day       = 518
+HoldingRegisters.519_DayOfWeek = 519

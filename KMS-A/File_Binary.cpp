@@ -21,6 +21,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Binary::Binary(const Folder& aFolder, const char* aFile, bool aWrite)
+            : mMappedSize_byte(0), mMapping(NULL), mView(NULL), mWrite(aWrite)
         {
             char lPath[PATH_LENGTH];
 
@@ -46,9 +47,25 @@ namespace KMS
         {
             assert(INVALID_HANDLE_VALUE != mHandle);
 
-            BOOL lRet = CloseHandle(mHandle);
+            BOOL lRet;
+
+            if (NULL != mMapping)
+            {
+                if (NULL != mView)
+                {
+                    lRet = UnmapViewOfFile(mView);
+                    assert(lRet);
+                }
+
+                lRet = CloseHandle(mMapping);
+                assert(lRet);
+            }
+
+            lRet = CloseHandle(mHandle);
             assert(lRet);
         }
+
+        unsigned int Binary::GetMappedSize() const { return mMappedSize_byte; }
 
         unsigned int Binary::GetSize()
         {
@@ -64,6 +81,30 @@ namespace KMS
             assert(0 == lResult_byte.HighPart);
 
             return lResult_byte.LowPart;
+        }
+
+        void* Binary::Map(unsigned int aMinSize_byte, unsigned int aMaxSize_byte)
+        {
+            unsigned int lSize_byte = GetSize();
+
+            KMS_EXCEPTION_ASSERT(aMinSize_byte <= lSize_byte, FILE_TOO_SHORT, "The file is too short", lSize_byte);
+
+            mMappedSize_byte = (lSize_byte > aMaxSize_byte) ? aMaxSize_byte : lSize_byte;
+
+            mMapping = CreateFileMapping(mHandle, NULL, mWrite ? PAGE_READWRITE : PAGE_READONLY, 0, mMappedSize_byte, NULL);
+            KMS_EXCEPTION_ASSERT(NULL != mMapping, FILE_MAPPING_FAILED, "Cannot map the file", aMaxSize_byte);
+
+            DWORD lAccess = FILE_MAP_READ;
+
+            if (mWrite)
+            {
+                lAccess |= FILE_MAP_WRITE;
+            }
+
+            mView = MapViewOfFile(mMapping, lAccess, 0, 0, mMappedSize_byte);
+            KMS_EXCEPTION_ASSERT(NULL != mView, FILE_MAPPING_FAILED, "Cannot map the file", mMappedSize_byte);
+
+            return mView;
         }
 
         unsigned int Binary::Read(void* aOut, unsigned int aOutSize_byte)

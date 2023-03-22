@@ -17,18 +17,6 @@
 
 #define HEADER_SIZE_byte (7)
 
-typedef struct
-{
-    uint16_t mTransactionId;
-    uint16_t mProtocolId;
-    uint16_t mLength_byte;
-    uint8_t  mDeviceAddress;
-    uint8_t  mFunctionCode;
-
-    uint8_t  mData[4];
-}
-Buffer;
-
 namespace KMS
 {
     namespace Modbus
@@ -56,25 +44,31 @@ namespace KMS
             assert(NULL != aOut);
             assert(0 < aOutSize_byte);
 
-            Request_Send(aFunction, aIn, aInSize_byte);
+            unsigned int lResult_byte = 0;
 
-            Buffer lBuffer;
+            try
+            {
+                Request_Send(aFunction, aIn, aInSize_byte);
 
-            unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + Byte count (or exception)
+                Buffer lBuffer;
 
-            unsigned int lRet_byte = mSocket.Receive(&lBuffer, lSize_byte);
-            KMS_EXCEPTION_ASSERT(lSize_byte     == lRet_byte             , MODBUS_RECV_ERROR, "Incomplete header"     , lRet_byte);
-            KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == lBuffer.mProtocolId   , MODBUS_RECV_ERROR, "Invalid protocol ID"   , lBuffer.mProtocolId);
-            KMS_EXCEPTION_ASSERT(mTransactionId == lBuffer.mTransactionId, MODBUS_RECV_ERROR, "Invalid transaction ID", lBuffer.mTransactionId);
+                unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + Byte count (or exception)
 
-            VerifyDeviceAddress(&lBuffer.mDeviceAddress);
-            VerifyFunction(aFunction, &lBuffer.mFunctionCode);
+                Answer_Receive(&lBuffer, lSize_byte);
 
-            unsigned int lResult_byte = lBuffer.mLength_byte - 2; // Function code + Byte count
-            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, MODBUS_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
+                VerifyFunction(aFunction, &lBuffer.mFunctionCode);
 
-            lRet_byte = mSocket.Receive(aOut, lResult_byte);
-            KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                lResult_byte = lBuffer.mLength_byte - 3; // Device address + Function code + Byte count
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, MODBUS_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
+
+                unsigned int lRet_byte = mSocket.Receive(aOut, lResult_byte);
+                KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+            }
+            catch (...)
+            {
+                mSocket.Disconnect();
+                throw;
+            }
 
             return lResult_byte;
         }
@@ -84,31 +78,36 @@ namespace KMS
             assert(NULL != aOut);
             assert(0 < aOutSize_byte);
 
-            Request_Send(aFunction, aIn, aInSize_byte);
+            unsigned int lResult_byte = 0;
 
-            Buffer lBuffer;
+            try
+            {
+                Request_Send(aFunction, aIn, aInSize_byte);
 
-            unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + First data byte (or exception)
+                Buffer lBuffer;
 
-            unsigned int lRet_byte = mSocket.Receive(&lBuffer, lSize_byte);
-            KMS_EXCEPTION_ASSERT(lSize_byte     == lRet_byte             , MODBUS_RECV_ERROR, "Incomplete header"     , lRet_byte);
-            KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == lBuffer.mProtocolId   , MODBUS_RECV_ERROR, "Invalid protocol ID"   , lBuffer.mProtocolId);
-            KMS_EXCEPTION_ASSERT(mTransactionId == lBuffer.mTransactionId, MODBUS_RECV_ERROR, "Invalid transaction ID", lBuffer.mTransactionId);
+                unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + First data byte (or exception)
 
-            VerifyDeviceAddress(&lBuffer.mDeviceAddress);
-            VerifyFunction(aFunction, &lBuffer.mFunctionCode);
+                Answer_Receive(&lBuffer, lSize_byte);
 
-            unsigned int lResult_byte = lBuffer.mLength_byte - 1; // Function code
+                VerifyFunction(aFunction, &lBuffer.mFunctionCode);
 
-            uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
+                lResult_byte = lBuffer.mLength_byte - 2; // Device address + Function code
 
-            lOut[0] = lBuffer.mData[0];
+                uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
 
-            lSize_byte = lResult_byte - 1; // First data byte alread read
+                lOut[0] = lBuffer.mData[0];
 
-            lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
+                lSize_byte = lResult_byte - 1; // First data byte alread read
 
-            KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                unsigned int lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
+                KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+            }
+            catch (...)
+            {
+                mSocket.Disconnect();
+                throw;
+            }
 
             return lResult_byte;
         }
@@ -145,20 +144,44 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
+        void Master_TCP::Answer_Receive(Buffer* aBuffer, unsigned int aSize_byte)
+        {
+            assert(NULL != aBuffer);
+            assert(HEADER_SIZE_byte < aSize_byte);
+
+            unsigned int lRet_byte = mSocket.Receive(aBuffer, aSize_byte);
+            KMS_EXCEPTION_ASSERT(aSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete header", lRet_byte);
+
+            aBuffer->mLength_byte   = ntohs(aBuffer->mLength_byte);
+            aBuffer->mProtocolId    = ntohs(aBuffer->mProtocolId);
+            aBuffer->mTransactionId = ntohs(aBuffer->mTransactionId);
+
+            KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == aBuffer->mProtocolId   , MODBUS_RECV_ERROR, "Invalid protocol ID"   , aBuffer->mProtocolId);
+            KMS_EXCEPTION_ASSERT(mTransactionId == aBuffer->mTransactionId, MODBUS_RECV_ERROR, "Invalid transaction ID", aBuffer->mTransactionId);
+
+            VerifyDeviceAddress(&aBuffer->mDeviceAddress);
+        }
+
         void Master_TCP::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)
         {
             mTransactionId++;
 
-            Buffer lBuffer;
+            union
+            {
+                Buffer mBuffer;
+                uint8_t mBytes[HEADER_SIZE_byte + 260];
+            }
+            lBuffer;
 
-            lBuffer.mDeviceAddress = GetDeviceAddress();
-            lBuffer.mFunctionCode  = static_cast<uint8_t>(aFunction);
-            lBuffer.mLength_byte   = aInSize_byte + 1;
-            lBuffer.mProtocolId    = PROTOCOL_ID;
-            lBuffer.mTransactionId = mTransactionId;
+            lBuffer.mBuffer.mDeviceAddress = GetDeviceAddress();
+            lBuffer.mBuffer.mFunctionCode  = static_cast<uint8_t>(aFunction);
+            lBuffer.mBuffer.mLength_byte   = htons(aInSize_byte + 2); // Device address + Function code
+            lBuffer.mBuffer.mProtocolId    = htons(PROTOCOL_ID);
+            lBuffer.mBuffer.mTransactionId = htons(mTransactionId);
 
-            mSocket.Send(&lBuffer, HEADER_SIZE_byte + 1);
-            mSocket.Send(aIn, aInSize_byte);
+            memcpy(lBuffer.mBytes + HEADER_SIZE_byte + 1, aIn, aInSize_byte); // Function code
+
+            mSocket.Send(lBuffer.mBytes, HEADER_SIZE_byte + 1 + aInSize_byte);
         }
 
     }

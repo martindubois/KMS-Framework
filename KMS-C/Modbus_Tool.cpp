@@ -57,6 +57,8 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            Net::Thread_Startup();
+
             try
             {
                 unsigned int       lArgStart = 1;
@@ -94,6 +96,8 @@ namespace KMS
                 lResult = lT.Run();
             }
             KMS_CATCH_RESULT(lResult)
+
+            Net::Thread_Cleanup();
 
             return lResult;
         }

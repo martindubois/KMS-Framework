@@ -276,6 +276,9 @@
     <ClCompile Include="ScaleAndOffset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FileFormat_ELF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

@@ -40,7 +40,7 @@ namespace KMS
             {
                 try
                 {
-                    if (!OnIterate())
+                    if (!KMS_MSG_SUCCESS(OnIterate()))
                     {
                         break;
                     }
