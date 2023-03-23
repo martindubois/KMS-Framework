@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/FileFormat/ELF.h>
+#include <KMS/Modbus/CRC.h>
 
 using namespace KMS;
 
@@ -18,7 +19,13 @@ KMS_TEST(FileFormat_ELF_Main, "FileFormat_ELF_Base", "Auto", sTest_Base)
 
     lELF0.DisplayHeaders(stdout);
 
-    uint8_t lImage[0x4000];
+    uint8_t lImage[0x2000];
 
-    KMS_TEST_COMPARE(lELF0.CreateFlashImage(0, 0x4000, lImage), static_cast<unsigned int>(14934));
+    KMS_TEST_COMPARE(lELF0.CreateFlashImage(0x2000, sizeof(lImage), lImage), static_cast<unsigned int>(966));
+
+    Modbus::CRC lCRC;
+
+    lCRC.Compute(lImage, sizeof(lImage));
+
+    KMS_TEST_COMPARE(static_cast<unsigned int>(lCRC), static_cast<unsigned int>(36098));
 }

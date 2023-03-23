@@ -96,8 +96,6 @@ namespace KMS
                 }
             }
 
-            lResult_byte -= aStart;
-
             return lResult_byte;
         }
 
