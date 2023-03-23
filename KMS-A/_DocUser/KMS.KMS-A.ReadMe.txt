@@ -7,6 +7,13 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+* Modbus
+    * Master
+        * FLAG_DO_NOT_WAIT_ANSWER
+        - The request type handler are protected
+    * Master_Com::GetPort (KF-30)
+    * Master_TCP::GetSocket (KF-30)
+
 0.1.61-dev Windows 2023-03-22
 * FileFormat::ELF
 - Modbus::Slave - Fix bugs

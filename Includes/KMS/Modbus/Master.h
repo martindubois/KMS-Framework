@@ -23,6 +23,8 @@ namespace KMS
 
         public:
 
+            static const unsigned int FLAG_DO_NOT_WAIT_ANSWER;
+
             void SetDeviceAddress(DeviceAddress aDA);
 
             DeviceAddress GetLastException() const;
@@ -41,9 +43,20 @@ namespace KMS
 
             RegisterValue ReadInputRegister(Address aAddr);
 
-            void WriteSingleCoil(Address aAddr, bool aValue);
+            void WriteSingleCoil(Address aAddr, bool aValue, unsigned int aFlags = 0);
 
-            void WriteSingleRegister(Address aAddr, RegisterValue aValue);
+            void WriteSingleRegister(Address aAddr, RegisterValue aValue, unsigned int aFlags = 0);
+
+            // ===== Configurable attributes ================================
+            DI::UInt<uint8_t> mDeviceAddress;
+
+        protected:
+
+            Master();
+
+            void VerifyDeviceAddress(const uint8_t* aData);
+
+            void VerifyFunction(Function aFunction, const uint8_t* aData);
 
             // ===== Low level request type =================================
 
@@ -76,16 +89,6 @@ namespace KMS
             // aFunction     READ_FIFO_QUEUE
             virtual unsigned int Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
 
-        protected:
-
-            Master();
-
-            DeviceAddress GetDeviceAddress() const;
-
-            void VerifyDeviceAddress(const uint8_t* aData);
-
-            void VerifyFunction(Function aFunction, const uint8_t* aData);
-
         private:
 
             Master(const Master&);
@@ -93,9 +96,6 @@ namespace KMS
             const Master operator = (const Master&);
 
             Exception mLastException;
-
-            // ===== Configurable attributes ================================
-            DI::UInt<uint8_t> mDeviceAddress;
 
         };
 

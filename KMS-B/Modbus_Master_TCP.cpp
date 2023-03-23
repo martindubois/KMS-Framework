@@ -34,10 +34,17 @@ namespace KMS
             mSocket.mReuseAddr = true;
         }
 
+        Net::Socket_Client* Master_TCP::GetSocket() { return &mSocket; }
+
         // ===== Master =====================================================
 
         void Master_TCP::Connect   () { mSocket.Connect   (); }
         void Master_TCP::Disconnect() { mSocket.Disconnect(); }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        // ===== Master =====================================================
 
         unsigned int Master_TCP::Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
@@ -75,33 +82,35 @@ namespace KMS
 
         unsigned int Master_TCP::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
-            assert(0 < aOutSize_byte);
-
             unsigned int lResult_byte = 0;
 
             try
             {
                 Request_Send(aFunction, aIn, aInSize_byte);
 
-                Buffer lBuffer;
+                if (0 < aOutSize_byte)
+                {
+                    assert(NULL != aOut);
 
-                unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + First data byte (or exception)
+                    Buffer lBuffer;
 
-                Answer_Receive(&lBuffer, lSize_byte);
+                    unsigned int lSize_byte = HEADER_SIZE_byte + 2; // Function code + First data byte (or exception)
 
-                VerifyFunction(aFunction, &lBuffer.mFunctionCode);
+                    Answer_Receive(&lBuffer, lSize_byte);
 
-                lResult_byte = lBuffer.mLength_byte - 2; // Device address + Function code
+                    VerifyFunction(aFunction, &lBuffer.mFunctionCode);
 
-                uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
+                    lResult_byte = lBuffer.mLength_byte - 2; // Device address + Function code
 
-                lOut[0] = lBuffer.mData[0];
+                    uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
 
-                lSize_byte = lResult_byte - 1; // First data byte alread read
+                    lOut[0] = lBuffer.mData[0];
 
-                unsigned int lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
-                KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                    lSize_byte = lResult_byte - 1; // First data byte alread read
+
+                    unsigned int lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
+                    KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                }
             }
             catch (...)
             {
@@ -173,7 +182,7 @@ namespace KMS
             }
             lBuffer;
 
-            lBuffer.mBuffer.mDeviceAddress = GetDeviceAddress();
+            lBuffer.mBuffer.mDeviceAddress = mDeviceAddress;
             lBuffer.mBuffer.mFunctionCode  = static_cast<uint8_t>(aFunction);
             lBuffer.mBuffer.mLength_byte   = htons(aInSize_byte + 2); // Device address + Function code
             lBuffer.mBuffer.mProtocolId    = htons(PROTOCOL_ID);

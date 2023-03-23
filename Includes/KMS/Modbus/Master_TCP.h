@@ -23,9 +23,15 @@ namespace KMS
 
             Master_TCP();
 
+            Net::Socket_Client* GetSocket();
+
             // ===== Master =================================================
             virtual void         Connect();
             virtual void         Disconnect();
+
+        protected:
+
+            // ===== Master =================================================
             virtual unsigned int Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Request_C(Function aFunction, void* aOut, unsigned int aOutSize_byte);
