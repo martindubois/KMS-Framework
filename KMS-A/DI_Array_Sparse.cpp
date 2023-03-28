@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Array_Sparse.cpp
@@ -98,7 +98,11 @@ namespace KMS
             char         lRest[NAME_LENGTH];
 
             int lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, "Invalid name", aName);
+
+            char lMsg[64 + NAME_LENGTH];
+
+            sprintf_s(lMsg, "\"%s\" is not a valid element name", aName);
+            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
 
             Object * lResult;
 
@@ -116,7 +120,9 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, "Denied", aName);
+                sprintf_s(lMsg, "\"%s\" is read only", aName);
+                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, lMsg, "");
+
                 lResult = lIt->second.Get();
             }
 

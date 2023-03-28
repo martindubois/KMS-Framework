@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build_W.cpp
@@ -16,6 +16,8 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+
+#define MSBUILD_ALLOWER_TIME_ms (1000 * 60 * 10) // 10 minutes
 
 namespace KMS
 {
@@ -50,7 +52,7 @@ namespace KMS
                 lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
                 lProcess.AddArgument(("/property:Platform=" + std::string(lP->Get())).c_str());
 
-                lProcess.Run(1000 * 60 * 5);
+                lProcess.Run(MSBUILD_ALLOWER_TIME_ms);
 
                 if (0 != lProcess.GetExitCode())
                 {

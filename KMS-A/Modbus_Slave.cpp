@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus_Slave.cpp
@@ -86,6 +86,8 @@ namespace KMS
             lData.mException = Exception::NO_EXCEPTION;
 
             uint8_t lBuffer[256];
+
+            memset(&lBuffer, 0, sizeof(lBuffer));
 
             lData.mBuffer    = lBuffer;
             lData.mQty       = aQty;

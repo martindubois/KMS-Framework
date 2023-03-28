@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Array.cpp
@@ -63,7 +63,9 @@ namespace KMS
         {
             assert(0 <= aIndex);
 
-            KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
+            char lMsg[64];
+            sprintf_s(lMsg, "%d is not a valid index", aIndex);
+            KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, lMsg, mInternal.size());
 
             Internal::const_iterator lIt = mInternal.begin() + aIndex;
 
@@ -80,7 +82,9 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, "Invalid index", aIndex);
+                char lMsg[64];
+                sprintf_s(lMsg, "%d is not a valid index", aIndex);
+                KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, lMsg, mInternal.size());
 
                 mInternal[aIndex].Set(aE, aDelete);
             }
@@ -98,9 +102,14 @@ namespace KMS
             char         lRest[NAME_LENGTH];
 
             int lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, "Invalid name", aName);
 
-            KMS_EXCEPTION_ASSERT(mInternal.size() >= lIndex, DI_INDEX_INVALID, "Invalid index", aName);
+            char lMsg[64 + NAME_LENGTH];
+
+            sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
+
+            sprintf_s(lMsg, "%u is not a valid index", lIndex);
+            KMS_EXCEPTION_ASSERT(mInternal.size() >= lIndex, DI_INDEX_INVALID, lMsg, mInternal.size());
 
             Object* lResult;
 
@@ -117,14 +126,17 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(!mInternal[lIndex].IsConst(), DI_DENIED, "Denied", aName);
+                sprintf_s(lMsg, "\"%s\" is read only", aName);
+                KMS_EXCEPTION_ASSERT(!mInternal[lIndex].IsConst(), DI_DENIED, lMsg, "");
                 lResult = mInternal[lIndex].Get();
             }
 
             if (2 == lRet)
             {
                 DI::Container *lContainer = dynamic_cast<DI::Container*>(lResult);
-                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+
+                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
 
                 lResult = lContainer->FindObject_RW(lRest);
             }

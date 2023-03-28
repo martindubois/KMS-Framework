@@ -144,33 +144,35 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
 #define KMS_CATCH                                                          \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
-        KMS::Dbg::gLog.WriteException(eE);                                 \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage(eE.what());                            \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage("Unknown exception");                  \
     }
 
 #define KMS_CATCH_RESULT(R)                                                \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
-        KMS::Dbg::gLog.WriteException(eE);                                 \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
         R = static_cast<int>(eE.GetCode());                                \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage(eE.what());                            \
         R = __LINE__;                                                      \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage("Unknown exception");                  \
         R = __LINE__;                                                      \
     }
 

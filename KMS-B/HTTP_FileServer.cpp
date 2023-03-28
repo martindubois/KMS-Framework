@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_FileServer.cpp
@@ -228,7 +228,7 @@ namespace KMS
                 return;
             }
 
-            KMS_DBG_LOG_INFO();
+            KMS_DBG_LOG_INFO_F(Dbg::Log::FLAG_USER_REDUNDANT);
             Dbg::gLog.WriteMessage(lPath);
 
             lIt->second(aR);

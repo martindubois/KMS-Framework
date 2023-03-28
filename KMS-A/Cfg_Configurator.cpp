@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
@@ -259,7 +259,7 @@ namespace KMS
 
             if (!IsSilenced(aLine))
             {
-                KMS_DBG_LOG_WARNING();
+                KMS_DBG_LOG_WARNING_F(Dbg::Log::FLAG_USER_REDUNDANT);
                 Dbg::gLog.WriteMessage(aLine);
                 mIgnoredCount++;
             }

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Log.cpp
@@ -17,17 +17,23 @@
 
 #include <KMS/Dbg/Log.h>
 
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define DEFAULT_CONSOLE_LEVEL (LogFile::Level::LEVEL_WARNING)
+#define DEFAULT_CONSOLE_MODE  (Log::ConsoleMode::USER)
+#define DEFAULT_FILE_LEVEL    (LogFile::Level::LEVEL_INFO)
+#define DEFAULT_FOLDER_NAME   ("KMS-Framework")
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
 static const KMS::Cfg::MetaData MD_CONSOLE_LEVEL("ConsoleLevel = NOISE | INFO | WARNING | ERROR | NONE");
+static const KMS::Cfg::MetaData MD_CONSOLE_MODE ("ConsoleMode = DEBUG | USER");
 static const KMS::Cfg::MetaData MD_FILE_LEVEL   ("FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
 static const KMS::Cfg::MetaData MD_FOLDER       ("Folder = {Path}");
 
 #define ON_FOLDER_CHANGED (1)
-
-// Static function declarations
-// //////////////////////////////////////////////////////////////////////////
 
 namespace KMS
 {
@@ -37,10 +43,15 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Log::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
+
+        const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
+
         Log::Log()
-            : mConsoleLevel(LogFile::Level::LEVEL_WARNING)
-            , mFileLevel   (LogFile::Level::LEVEL_INFO)
-            , mFolder      (File::Folder(File::Folder::Id::HOME, "KMS-Framework"))
+            : mConsoleLevel(DEFAULT_CONSOLE_LEVEL)
+            , mConsoleMode (DEFAULT_CONSOLE_MODE)
+            , mFileLevel   (DEFAULT_FILE_LEVEL)
+            , mFolder      (File::Folder(File::Folder::Id::HOME, DEFAULT_FOLDER_NAME))
             , mCounter(0)
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
@@ -50,6 +61,7 @@ namespace KMS
             mFolder.mOnChanged.Set(this, ON_FOLDER_CHANGED);
 
             AddEntry("ConsoleLevel", &mConsoleLevel, false, &MD_CONSOLE_LEVEL);
+            AddEntry("ConsoleMode" , &mConsoleMode , false, &MD_CONSOLE_MODE);
             AddEntry("FileLevel"   , &mFileLevel   , false, &MD_FILE_LEVEL);
             AddEntry("Folder"      , &mFolder      , false, &MD_FOLDER);
 
@@ -81,10 +93,10 @@ namespace KMS
             mEnabled = mFolder.Get().DoesExist();
         }
 
-        #define IF_FILE    if (mEnabled && (mFileLevel >= mEntryLevel))
-        #define IF_CONSOLE if (((!mEnabled) && LogFile::Level::LEVEL_WARNING >= mEntryLevel) || (mConsoleLevel >= mEntryLevel))
+        #define IF_FILE       if (mEnabled && (mFileLevel >= mEntryLevel))
+        #define IF_CONSOLE(F) if ((0 == ((F) & FLAG_USER_REDUNDANT)) && (((!mEnabled) && (LogFile::Level::LEVEL_WARNING >= mEntryLevel)) || (mConsoleLevel >= mEntryLevel)))
 
-        void Log::WriteData(const void* aData, unsigned int aSize_byte)
+        void Log::WriteData(const void* aData, unsigned int aSize_byte, unsigned int aFlags)
         {
             IF_FILE
             {
@@ -100,35 +112,39 @@ namespace KMS
                 return;
             }
 
-            IF_CONSOLE
+            IF_CONSOLE(aFlags)
             {
-                switch (mEntryLevel)
+                switch (mConsoleMode)
                 {
-                case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << Console::Color::RED;
-                    std::cerr << "Data\t" << aSize_byte << " bytes";
-                    std::cerr << Console::Color::WHITE << std::endl;
-                    break;
+                case ConsoleMode::DEBUG:
+                    switch (mEntryLevel)
+                    {
+                    case LogFile::Level::LEVEL_ERROR:
+                        std::cerr << Console::Color::RED;
+                        std::cerr << "Data\t" << aSize_byte << " bytes";
+                        std::cerr << Console::Color::WHITE << std::endl;
+                        break;
 
-                case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << Console::Color::YELLOW;
-                    std::cerr << "Data\t" << aSize_byte << " bytes";
-                    std::cerr << Console::Color::WHITE << std::endl;
-                    break;
+                    case LogFile::Level::LEVEL_WARNING:
+                        std::cerr << Console::Color::YELLOW;
+                        std::cerr << "Data\t" << aSize_byte << " bytes";
+                        std::cerr << Console::Color::WHITE << std::endl;
+                        break;
 
-                case LogFile::Level::LEVEL_INFO:
-                case LogFile::Level::LEVEL_NOISE:
-                    // NOT TESTED
-                    std::cerr << "Data\t" << aSize_byte << "bytes";
-                    std::cerr << std::endl;
-                    break;
+                    case LogFile::Level::LEVEL_INFO:
+                    case LogFile::Level::LEVEL_NOISE:
+                        // NOT TESTED
+                        std::cerr << "Data\t" << aSize_byte << "bytes";
+                        std::cerr << std::endl;
+                        break;
 
-                default: assert(false);
+                    default: assert(false);
+                    }
                 }
             }
         }
 
-        void Log::WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, Dbg::LogFile::Level aLevel)
+        void Log::WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, Dbg::LogFile::Level aLevel, unsigned int aFlags)
         {
             mEntryLevel = aLevel;
 
@@ -148,42 +164,30 @@ namespace KMS
                 return;
             }
 
-            IF_CONSOLE
+            IF_CONSOLE(aFlags)
             {
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
-                    std::cerr << "ERROR\n";
-                    std::cerr << "    Counter  : " << mCounter << "\n";
-                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
-                    std::cerr << "    Function : " << aFunction;
+                    DisplayInConsole("ERROR", aFile, aFunction, aLine);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
-                    std::cerr << "WARNING\n";
-                    std::cerr << "    Counter  : " << mCounter << "\n";
-                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
-                    std::cerr << "    Function : " << aFunction;
+                    DisplayInConsole("WARNING", aFile, aFunction, aLine);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                     // NOT TESTED
-                    std::cerr << "INFO\n";
-                    std::cerr << "    Counter  : " << mCounter << "\n";
-                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
-                    std::cerr << "    Function : " << aFunction << std::endl;
+                    DisplayInConsole("INFO", aFile, aFunction, aLine);
                     break;
 
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "NOISE\n";
-                    std::cerr << "    Counter  : " << mCounter << "\n";
-                    std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
-                    std::cerr << "    Function : " << aFunction << std::endl;
+                    DisplayInConsole("NOISE", aFile, aFunction, aLine);
                     break;
 
                 default: assert(false);
@@ -191,7 +195,7 @@ namespace KMS
             }
         }
 
-        void Log::WriteException(const Exception& aException)
+        void Log::WriteException(const Exception& aException, unsigned int aFlags)
         {
             IF_FILE
             {
@@ -207,29 +211,26 @@ namespace KMS
                 return;
             }
 
-            IF_CONSOLE
+            IF_CONSOLE(aFlags)
             {
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
-                    std::cerr << "Exception\n";
-                    std::cerr << aException;
+                    DisplayInConsole(aException);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
-                    std::cerr << "Exception\n";
-                    std::cerr << aException;
+                    DisplayInConsole(aException);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "Exception\n";
-                    std::cerr << aException << std::endl;
+                    DisplayInConsole(aException);
                     break;
 
                 default: assert(false);
@@ -237,7 +238,7 @@ namespace KMS
             }
         }
 
-        void Log::WriteMessage(const char* aMsg)
+        void Log::WriteMessage(const char* aMsg, unsigned int aFlags)
         {
             IF_FILE
             {
@@ -253,7 +254,7 @@ namespace KMS
                 return;
             }
 
-            IF_CONSOLE
+            IF_CONSOLE(aFlags)
             {
                 switch (mEntryLevel)
                 {
@@ -300,6 +301,46 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void Log::DisplayInConsole(const char* aTitle, const char* aFile, const char* aFunction, unsigned int aLine)
+        {
+            assert(NULL != aTitle);
+            assert(NULL != aFile);
+            assert(NULL != aLine);
+
+            switch (mConsoleMode)
+            {
+            case ConsoleMode::DEBUG:
+                std::cerr << aTitle << "\n";
+                std::cerr << "    Counter  : " << mCounter << "\n";
+                std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
+                std::cerr << "    Function : " << aFunction << std::endl;
+                break;
+
+            case ConsoleMode::USER:
+                std::cerr << aTitle << "  " << aFile << " (" << aLine << ")" << std::endl;
+                break;
+
+            default: assert(false);
+            }
+        }
+
+        void Log::DisplayInConsole(const Exception& aException)
+        {
+            switch (mConsoleMode)
+            {
+            case ConsoleMode::DEBUG:
+                std::cerr << "Exception\n";
+                std::cerr << aException << std::endl;
+                break;
+
+            case ConsoleMode::USER:
+                std::cerr << "Exception  " << aException.what() << std::endl;
+                break;
+
+            default: assert(false);
+            }
+        }
 
         LogFile* Log::FindLogFile()
         {

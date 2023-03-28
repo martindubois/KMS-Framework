@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Dbg_LogFile.cpp
@@ -45,7 +45,10 @@ namespace KMS
             aFolder.GetPath(lFileName, lPath, sizeof(lPath));
 
             int lRet = fopen_s(&mFile, lPath, "ab");
-            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, "Cannot open log file", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\"", lPath);
+            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, lMsg, lRet);
 
             WriteEntry(0, __FILE__, __FUNCTION__, __LINE__, Level::LEVEL_INFO);
             WriteVersion(VERSION);

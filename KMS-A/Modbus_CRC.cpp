@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus_CRC.cpp
@@ -56,7 +56,9 @@ namespace KMS
             lReceived <<= 8;
             lReceived |= aBuffer[lSize_byte];
 
-            KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC_ERROR, "Bad Modbus CRC", aSize_byte);
+            char lMsg[128];
+            sprintf_s(lMsg, "Bad Modbus CRC (Expected = 0x%04x, Received = 0x%04x)", static_cast<unsigned int>(lCRC), lReceived);
+            KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC_ERROR, lMsg, aSize_byte);
         }
 
 

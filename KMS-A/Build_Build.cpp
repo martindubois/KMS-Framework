@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build.cpp
@@ -517,7 +517,9 @@ namespace KMS
 
                 if (!mDoNotExport)
                 {
-                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, "Invalid export folder", *mExportFolder);
+                    char lMsg[64 + PATH_LENGTH];
+                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.Get().GetPath());
+                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, lMsg, "");
 
                     KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), BUILD_CONFIG_INVALID, "Invalid product name", "");
                 }

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_File.cpp
@@ -64,7 +64,10 @@ namespace KMS
             else
             {
                 errno_t lRet = fopen_s(&mInternal, lIn, mMode);
-                KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, "Cannot open file", lIn);
+
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\"", lIn);
+                KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, lMsg, lRet);
             }
 
             assert(NULL != mInternal);

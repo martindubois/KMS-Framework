@@ -34,7 +34,9 @@ namespace KMS
 
         const char* File_ASCII::GetLine(unsigned int aNo) const
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             return mLines[aNo].c_str();
         }
@@ -45,7 +47,9 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             Internal::const_iterator lIt = mLines.begin();
 
@@ -58,7 +62,9 @@ namespace KMS
 
         void File_ASCII::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             Internal::const_iterator lFirst = mLines.begin() + aNo;
             Internal::const_iterator lLast = lFirst + aCount;
@@ -70,7 +76,9 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             mLines[aNo] = aLine;
         }
@@ -105,7 +113,10 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ifstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for reading", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             std::string lLine;
 
@@ -122,7 +133,10 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ofstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             for (std::string lLine : mLines)
             {

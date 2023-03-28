@@ -7,6 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+* Dbg::Log::FLAG_USER_REDUNDANT (KF-29)
+- User friendly message (KF-29)
+
 0.1.62-dev Windows 2023-03-23
 * Modbus
     * Master

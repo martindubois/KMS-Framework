@@ -30,7 +30,7 @@ namespace KMS
     {
         Construct(aFile, aFunction, aLine, aCode, aMsg);
 
-        KMS_DBG_LOG_ERROR();
+        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
         Dbg::gLog.WriteException(*this);
     }
 
@@ -40,7 +40,7 @@ namespace KMS
 
         mInfo = aInfo;
 
-        KMS_DBG_LOG_ERROR();
+        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
         Dbg::gLog.WriteException(*this);
     }
 
@@ -60,7 +60,7 @@ namespace KMS
 
         mInfo = lInfo;
 
-        KMS_DBG_LOG_ERROR();
+        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
         Dbg::gLog.WriteException(*this);
     }
 

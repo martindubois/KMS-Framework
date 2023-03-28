@@ -44,7 +44,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_COILS, lBuffer, 4, lBuffer, 1);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
         }
@@ -57,7 +57,7 @@ namespace KMS
             WriteUInt16(lBuffer, 2, 1);
 
             unsigned int lRet_byte = Request_A(Function::READ_DISCRETE_INPUTS, lBuffer, 4, lBuffer, 1);
-            KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
         }
@@ -159,7 +159,22 @@ namespace KMS
             {
                 mLastException = static_cast<Exception>(aData[1]);
                 
-                KMS_EXCEPTION(MODBUS_EXCEPTION, "Modbus exception", aData[1]);
+                const char* lMsg = "Modbus exception";
+
+                switch (static_cast<Modbus::Exception>(aData[1]))
+                {
+                case Modbus::Exception::ACKNOWLEDGE                            : lMsg = "Modbus exception  ACKNOWLEDGE"                            ; break;
+                case Modbus::Exception::GATEWAY_PATH_UNAVAILABLE               : lMsg = "Modbus exception  GATEWAY PATH UNAVAILABLE"               ; break;
+                case Modbus::Exception::GATEWAY_TARGET_DEVICE_FAILED_TO_RESPOND: lMsg = "Modbus exception  GATEWAY TARGET DEVICE FAILED TO RESPOND"; break;
+                case Modbus::Exception::ILLEGAL_DATA_ADDRESS                   : lMsg = "Modbus exception  ILLEGAL DATA ADDRESS"                   ; break;
+                case Modbus::Exception::ILLEGAL_DATA_VALUE                     : lMsg = "Modbus exception  ILLEGAL DATA VALUE"                     ; break;
+                case Modbus::Exception::ILLEGAL_FUNCTION                       : lMsg = "Modbus exception  ILLEGAL FUNCTION"                       ; break;
+                case Modbus::Exception::MEMORY_PARITY_ERROR                    : lMsg = "Modbus exception  MEMORY PARITY ERROR"                    ; break;
+                case Modbus::Exception::SLAVE_DEVICE_BUSY                      : lMsg = "Modbus exception  SLAVE DEVICE BUSY"                      ; break;
+                case Modbus::Exception::SLAVE_DEVICE_FAILURE                   : lMsg = "Modbus exception  SLAVE DEVICE FAILURE"                   ; break;
+                }
+
+                KMS_EXCEPTION(MODBUS_EXCEPTION, lMsg, aData[1]);
             }
 
             KMS_EXCEPTION_ASSERT(lFunction == aData[0], MODBUS_ERROR, "Invalid function code", aData[0]);

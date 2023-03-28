@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build_L.cpp
@@ -61,7 +61,9 @@ namespace KMS
 
                 lP.Run(1000 * 60 * 5);
 
-                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, "The test failed", lP.GetCmdLine());
+                char lMsg[64 + NAME_LENGTH];
+                sprintf(lMsg, "\"%s\" failed", lT->Get());
+                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, lMsg, lP.GetCmdLine());
             }
         }
 

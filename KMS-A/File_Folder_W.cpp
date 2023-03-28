@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_W.cpp
@@ -157,20 +157,26 @@ namespace KMS
             GetPath(aFile, lPath, sizeof(lPath));
 
             DWORD lAttr = GetFileAttributes(lPath);
-            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, "Cannot retrieve attributes", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+
+            sprintf_s(lMsg, "Cannot retrieve attributes of \"%s\"", lPath);
+            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, lMsg, "");
 
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;
                 if (!SetFileAttributes(lPath, lAttr))
                 {
-                    KMS_EXCEPTION(FILE_DELETE_FAILED, "Cannot change attributes", lPath);
+                    sprintf_s(lMsg, "Cannot change attributes of \"%s\"", lPath);
+                    KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
                 }
             }
 
             if (!DeleteFile(aFile))
             {
-                KMS_EXCEPTION(FILE_DELETE_FAILED, "Cannot delete file", lPath);
+                sprintf_s(lMsg, "Cannot delete \"%s\"", lPath);
+                KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
             }
         }
 

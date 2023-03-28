@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Environment_W.cpp
@@ -27,7 +27,10 @@ namespace KMS
             assert(NULL != aOut);
 
             unsigned int lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
-            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, "GetEnvironmentVariable failed", aName);
+
+            char lMsg[64 + NAME_LENGTH];
+            sprintf_s(lMsg, "Cannot retrieve the value of \"%s\"", aName);
+            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, lMsg, lResult);
 
             return lResult;
         }
