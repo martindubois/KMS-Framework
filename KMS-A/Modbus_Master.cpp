@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Log.h>
 
 #include <KMS/Modbus/Master.h>
 
@@ -16,11 +17,13 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_DEVICE_ADDRESS (BROADCAST)
+#define DEFAULT_RETRY_COUNT    (3)
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
 static const KMS::Cfg::MetaData MD_DEVICE_ADDRESS("DeviceAddress = {Address}");
+static const KMS::Cfg::MetaData MD_RETRY_COUNT   ("RetryCount = {Count}");
 
 namespace KMS
 {
@@ -36,6 +39,25 @@ namespace KMS
 
         // ===== Modbus functions ===========================================
 
+        #define RETRY_BEGIN          \
+            unsigned int lRetry = 0; \
+            for (;;)                 \
+            {                        \
+                try
+
+        #define RETRY_END                                                   \
+                catch (...)                                                 \
+                {                                                           \
+                    if (mRetryCount.Get() == lRetry)                        \
+                    {                                                       \
+                        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT); \
+                        throw;                                              \
+                    }                                                       \
+                    KMS_DBG_LOG_INFO();                                     \
+                    lRetry++;                                               \
+                }                                                           \
+            }
+
         bool Master::ReadCoil(uint16_t aAddr)
         {
             uint8_t lBuffer[4];
@@ -43,7 +65,15 @@ namespace KMS
             WriteUInt16(lBuffer, 0, aAddr);
             WriteUInt16(lBuffer, 2, 1);
 
-            unsigned int lRet_byte = Request_A(Function::READ_COILS, lBuffer, 4, lBuffer, 1);
+            unsigned int lRet_byte;
+
+            RETRY_BEGIN
+            {
+                lRet_byte = Request_A(Function::READ_COILS, lBuffer, 4, lBuffer, 1);
+                break;
+            }
+            RETRY_END;
+
             KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
@@ -56,7 +86,15 @@ namespace KMS
             WriteUInt16(lBuffer, 0, aAddr);
             WriteUInt16(lBuffer, 2, 1);
 
-            unsigned int lRet_byte = Request_A(Function::READ_DISCRETE_INPUTS, lBuffer, 4, lBuffer, 1);
+            unsigned int lRet_byte;
+            
+            RETRY_BEGIN
+            {
+                lRet_byte = Request_A(Function::READ_DISCRETE_INPUTS, lBuffer, 4, lBuffer, 1);
+                break;
+            }
+            RETRY_END;
+
             KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadBit(lBuffer, 0, 0);
@@ -69,7 +107,15 @@ namespace KMS
             WriteUInt16(lBuffer, 0, aAddr);
             WriteUInt16(lBuffer, 2, 1);
 
-            unsigned int lRet_byte = Request_A(Function::READ_HOLDING_REGISTERS, lBuffer, 4, lBuffer, 2);
+            unsigned int lRet_byte;
+
+            RETRY_BEGIN
+            {
+                lRet_byte = Request_A(Function::READ_HOLDING_REGISTERS, lBuffer, 4, lBuffer, 2);
+                break;
+            }
+            RETRY_END;
+
             KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadUInt16(lBuffer, 0);
@@ -82,7 +128,15 @@ namespace KMS
             WriteUInt16(lBuffer, 0, aAddr);
             WriteUInt16(lBuffer, 2, 1);
 
-            unsigned int lRet_byte = Request_A(Function::READ_INPUT_REGISTERS, lBuffer, 4, lBuffer, 2);
+            unsigned int lRet_byte;
+
+            RETRY_BEGIN
+            {
+                lRet_byte = Request_A(Function::READ_INPUT_REGISTERS, lBuffer, 4, lBuffer, 2);
+                break;
+            }
+            RETRY_END;
+
             KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
             return ReadUInt16(lBuffer, 0);
@@ -104,7 +158,13 @@ namespace KMS
             }
             else
             {
-                lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, lBuffer, 4);
+                RETRY_BEGIN
+                {
+                    lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, lBuffer, 4);
+                    break;
+                }
+                RETRY_END;
+
                 KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
                 assert(aAddr == ReadUInt16(lBuffer, 0));
@@ -127,7 +187,13 @@ namespace KMS
             }
             else
             {
-                lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, lBuffer, 4);
+                RETRY_BEGIN
+                {
+                    lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, lBuffer, 4);
+                    break;
+                }
+                RETRY_END;
+
                 KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
                 assert(aAddr == ReadUInt16(lBuffer, 0));
@@ -137,9 +203,13 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Master::Master() : mLastException(Exception::NO_EXCEPTION)
+        Master::Master()
+            : mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
+            , mRetryCount   (DEFAULT_RETRY_COUNT   )
+            , mLastException(Exception::NO_EXCEPTION)
         {
             AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
+            AddEntry("RetryCount"   , &mRetryCount   , false, &MD_RETRY_COUNT);
         }
 
         void Master::VerifyDeviceAddress(const uint8_t* aData)

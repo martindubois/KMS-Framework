@@ -137,14 +137,14 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            uint8_t lBuffer[7];
+            uint8_t lBuffer[8];
 
             WriteUInt8(lBuffer, 0, GetDeviceAddress());
             WriteUInt8(lBuffer, 1, static_cast<uint8_t>(aFunction));
 
             WriteUInt16(lBuffer, 2, aAddress);
 
-            memcpy(lBuffer + 3, aData, sizeof(RegisterValue));
+            memcpy(lBuffer + 4, aData, sizeof(RegisterValue));
 
             CRC::Add(lBuffer, sizeof(lBuffer));
 

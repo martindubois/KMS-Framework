@@ -12,6 +12,11 @@
 
 #include <KMS/Build/Build.h>
 
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define TEST_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+
 namespace KMS
 {
     namespace Build
@@ -59,7 +64,7 @@ namespace KMS
 
                 lP.AddArgument("Groups+=Auto");
 
-                lP.Run(1000 * 60 * 5);
+                lP.Run(TEST_ALLOWED_TIME_ms);
 
                 char lMsg[64 + NAME_LENGTH];
                 sprintf(lMsg, "\"%s\" failed", lT->Get());

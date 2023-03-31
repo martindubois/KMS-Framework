@@ -49,6 +49,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             DI::UInt<uint8_t> mDeviceAddress;
+            DI::UInt<uint8_t> mRetryCount;
 
         protected:
 

@@ -18,6 +18,7 @@
 #define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
 
 #define MSBUILD_ALLOWER_TIME_ms (1000 * 60 * 10) // 10 minutes
+#define TEST_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
 
 namespace KMS
 {
@@ -139,7 +140,7 @@ namespace KMS
 
                     lProcess.AddArgument("Groups+=Auto");
 
-                    lProcess.Run(1000 * 60 * 5);
+                    lProcess.Run(TEST_ALLOWED_TIME_ms);
 
                     if (0 != lProcess.GetExitCode())
                     {

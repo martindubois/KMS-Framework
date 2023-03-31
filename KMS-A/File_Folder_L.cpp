@@ -18,6 +18,14 @@
 
 #include <KMS/File/Folder.h>
 
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define CP_ALLOWED_TIME_ms    (1000 * 60 * 2) // 2 minutes
+#define RM_ALLOWED_TIME_ms    (1000 * 60 * 2) // 2 minutes
+#define UNZIP_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+#define ZIP_ALLOWED_TIME_ms   (1000 * 60 * 5) // 5 minutes
+
 namespace KMS
 {
     namespace File
@@ -69,7 +77,7 @@ namespace KMS
 
             lP.SetWorkingDirectory(mPath.c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(ZIP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COMPRESS_FAILED, "Cannot compress the folder's elements", lP.GetCmdLine());
         }
@@ -86,7 +94,7 @@ namespace KMS
             lP.AddArgument("-d");
             lP.AddArgument(mPath.c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(UNZIP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lP.GetCmdLine());
         }
@@ -99,7 +107,7 @@ namespace KMS
             lP.AddArgument(mPath.c_str());
             lP.AddArgument(aDst.GetPath());
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COPY_FAILED, "Cannot copy folder", lP.GetCmdLine());
         }
@@ -143,7 +151,7 @@ namespace KMS
             lP.AddArgument("-f");
             lP.AddArgument(lPattern);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(RM_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
         }
@@ -188,7 +196,7 @@ namespace KMS
             lP.AddArgument(aSrc);
             lP.AddArgument(aDst);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COPY_FAILED, "Cannot copy the file", lP.GetCmdLine());
         }

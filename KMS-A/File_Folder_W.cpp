@@ -15,8 +15,15 @@
 
 #include <KMS/File/Folder.h>
 
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define CMD_ALLOWED_TIME_ms         (1000 * 60 *  2) //  2 minutes
+#define POWER_SHELL_ALLOWER_TIME_ms (1000 * 60 * 10) // 10 minutes
+#define XCOPY_ALLOWER_TIME_ms       (1000 * 60 *  5) //  5 minutes
+
 // Constants
-/////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////
 
 #define FILE_ATTR   (0)
 #define FILE_MASK   (FILE_ATTRIBUTE_DEVICE|FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_REPARSE_POINT)
@@ -83,7 +90,7 @@ namespace KMS
             lProcess.AddArgument("-DestinationPath");
             lProcess.AddArgument(lDst);
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -108,7 +115,7 @@ namespace KMS
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument("-Force");
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -124,7 +131,7 @@ namespace KMS
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument(aDst.GetPath());
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(XCOPY_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -194,7 +201,7 @@ namespace KMS
             lP.AddArgument("/Q");
             lP.AddArgument(lPattern);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CMD_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
         }

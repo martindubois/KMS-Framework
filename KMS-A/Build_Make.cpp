@@ -31,6 +31,8 @@
 
 #define DEFAULT_MAKE "make"
 
+#define MAKE_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -408,7 +410,7 @@ namespace KMS
 
             lP.AddArgument(("CONFIG=" + mConfiguration.mInternal).c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(MAKE_ALLOWED_TIME_ms);
 
             if (0 != lP.GetExitCode())
             {
