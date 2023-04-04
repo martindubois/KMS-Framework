@@ -78,6 +78,7 @@ namespace KMS
 
             const Log& operator = (const Log&);
 
+            void DisplayInConsole(const char* aMessage);
             void DisplayInConsole(const char* aTitle, const char* aFile, const char* aFunction, unsigned int aLine);
             void DisplayInConsole(const Exception& aException);
 

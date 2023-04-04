@@ -260,20 +260,20 @@ namespace KMS
                 {
                 case LogFile::Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
-                    std::cerr << "Message\t\"" << aMsg << "\"";
+                    DisplayInConsole(aMsg);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
-                    std::cerr << "Message\t\"" << aMsg << "\"";
+                    DisplayInConsole(aMsg);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
                 case LogFile::Level::LEVEL_NOISE:
                     // NOT TESTED
-                    std::cerr << "Message\t\"" << aMsg << "\"" << std::endl;
+                    DisplayInConsole(aMsg);
                     break;
 
                 default: assert(false);
@@ -301,6 +301,24 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void Log::DisplayInConsole(const char* aMsg)
+        {
+            assert(NULL != aMsg);
+
+            switch (mConsoleMode)
+            {
+            case ConsoleMode::DEBUG:
+                std::cerr << "Message\t\"" << aMsg << "\"" << std::endl;
+                break;
+
+            case ConsoleMode::USER:
+                std::cerr << aMsg << std::endl;
+                break;
+
+            default: assert(false);
+            }
+        }
 
         void Log::DisplayInConsole(const char* aTitle, const char* aFile, const char* aFunction, unsigned int aLine)
         {
