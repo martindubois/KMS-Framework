@@ -121,9 +121,7 @@ namespace KMS
 
         private:
 
-            Socket(const Socket&);
-
-            const Socket& operator = (const Socket&);
+            NO_COPY(Socket);
 
             void Bind();
 

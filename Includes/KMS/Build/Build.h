@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Build.h
@@ -62,9 +62,7 @@ namespace KMS
 
         private:
 
-            Build(const Build &);
-
-            const Build & operator = (const Build &);
+            NO_COPY(Build);
 
             bool IsEmbedded() const;
 

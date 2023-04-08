@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Embedded/WorkItem.h
@@ -27,9 +27,7 @@ namespace KMS
 
         private:
 
-            WorkItem(const WorkItem&);
-
-            const WorkItem& operator = (const WorkItem&);
+            NO_COPY(WorkItem);
 
         };
 

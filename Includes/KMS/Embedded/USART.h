@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Embedded/UART.h
@@ -57,9 +57,7 @@ namespace KMS
 
         private:
 
-            USART(const USART&);
-
-            const USART& operator = (const USART&);
+            NO_COPY(USART);
 
             void Rx_IncIndex(uint8_t* aIndex);
 

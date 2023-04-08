@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/LogFile.h
@@ -105,9 +105,7 @@ namespace KMS
             // X {CodeName} {Message} {Line} {Function} {File} {Info}
             // Z {Timestamp}
 
-            LogFile(const LogFile&);
-
-            const LogFile& operator = (const LogFile&);
+            NO_COPY(LogFile);
 
             uint8_t      mBuffer[256];
             unsigned int mCounter;

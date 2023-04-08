@@ -92,9 +92,7 @@ namespace KMS
 
         private:
 
-            Master(const Master&);
-
-            const Master operator = (const Master&);
+            NO_COPY(Master);
 
             Exception mLastException;
 

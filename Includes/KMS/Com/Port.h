@@ -82,9 +82,7 @@ namespace KMS
 
         private:
 
-            Port(const Port&);
-
-            const Port& operator = (const Port&);
+            NO_COPY(Port);
 
             void ApplyConfig  ();
             void ApplySignals ();

@@ -74,9 +74,7 @@ namespace KMS
 
             typedef std::map<unsigned int, LogFile*> FileMap;
 
-            Log(const Log&);
-
-            const Log& operator = (const Log&);
+            NO_COPY(Log);
 
             void DisplayInConsole(const char* aMessage);
             void DisplayInConsole(const char* aTitle, const char* aFile, const char* aFunction, unsigned int aLine);
