@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_FileInfo.cpp
@@ -85,7 +85,7 @@ namespace KMS
 
         void FileInfo::Allocate()
         {
-            WIN32_FIND_DATA* lData = new WIN32_FIND_DATA;
+            auto lData = new WIN32_FIND_DATA;
 
             mData = lData;
         }

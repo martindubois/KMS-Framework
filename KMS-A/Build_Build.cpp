@@ -14,6 +14,8 @@
 #include <KMS/Build/Make.h>
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Text/File_ASCII.h>
 #include <KMS/Version.h>
@@ -28,6 +30,7 @@
 #define DEFAULT_DO_NOT_COMPILE (false)
 #define DEFAULT_DO_NOT_EXPORT  (false)
 #define DEFAULT_DO_NOT_PACKAGE (false)
+#define DEFAULT_DO_NOT_TEST    (false)
 #define DEFAULT_OS_INDEPENDENT (false)
 #define DEFAULT_VERSION_FILE   ("Common" SLASH "Version.h")
 
@@ -41,6 +44,7 @@ static const KMS::Cfg::MetaData MD_CONFIGURATIONS ("Configurations += {Name}");
 static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
+static const KMS::Cfg::MetaData MD_DO_NOT_TEST    ("DoNotTest = false | true");
 static const KMS::Cfg::MetaData MD_EDIT_OPERATIONS("EditOperations += {Operation}");
 static const KMS::Cfg::MetaData MD_EMBEDDED       ("Embedded = false | true");
 static const KMS::Cfg::MetaData MD_EXPORT_FOLDER  ("ExportFolder = {Path}");
@@ -123,6 +127,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("ExecutionTime");
+            lET->Start();
+
             try
             {
                 Build             lB;
@@ -135,6 +142,7 @@ namespace KMS
                 lC.AddConfigurable(&lInstaller);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
@@ -146,6 +154,8 @@ namespace KMS
             }
             KMS_CATCH_RESULT(lResult)
 
+            lET->Stop();
+
             return lResult;
         }
 
@@ -153,6 +163,7 @@ namespace KMS
             : mDoNotCompile (DEFAULT_DO_NOT_COMPILE)
             , mDoNotExport  (DEFAULT_DO_NOT_EXPORT)
             , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
+            , mDoNotTest    (DEFAULT_DO_NOT_TEST)
             , mOSIndependent(DEFAULT_OS_INDEPENDENT)
             , mVersionFile  (DEFAULT_VERSION_FILE)
             , mTmp_Root(File::Folder::Id::TEMPORARY)
@@ -177,6 +188,7 @@ namespace KMS
             AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
             AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
             AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
+            AddEntry("DoNotTest"     , &mDoNotTest     , false, &MD_DO_NOT_TEST);
             AddEntry("EditOperations", &mEditOperations, false, &MD_EDIT_OPERATIONS);
             AddEntry("Embedded"      , &mEmbedded      , false, &MD_EMBEDDED);
             AddEntry("ExportFolder"  , &mExportFolder  , false, &MD_EXPORT_FOLDER);
@@ -229,22 +241,10 @@ namespace KMS
 
             ExecuteCommands(mPreBuildCmds);
 
-            if (!mDoNotCompile)
-            {
-                Compile();
-            }
-
-            Test();
-
-            if (!mDoNotPackage)
-            {
-                Package();
-            }
-
-            if (!mDoNotExport)
-            {
-                Export();
-            }
+            if (!mDoNotCompile) { Compile(); }
+            if (!mDoNotTest   ) { Test   (); }
+            if (!mDoNotPackage) { Package(); }
+            if (!mDoNotExport ) { Export (); }
 
             return 0;
         }
@@ -256,9 +256,13 @@ namespace KMS
 
         void Build::Compile()
         {
+            auto lCT = new Dbg::Stats_Timer("CompileTime");
+
             for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
+
+                lCT->Start();
 
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
@@ -277,6 +281,8 @@ namespace KMS
                         Compile_VisualStudio(*lC);
                     #endif
                 }
+
+                lCT->Stop();
             }
         }
 
@@ -491,14 +497,20 @@ namespace KMS
 
         void Build::Test()
         {
+            auto lTT = new Dbg::Stats_Timer("TestTime");
+
             for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
+
+                lTT->Start();
 
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Test(*lC);
+
+                lTT->Stop();
             }
         }
 

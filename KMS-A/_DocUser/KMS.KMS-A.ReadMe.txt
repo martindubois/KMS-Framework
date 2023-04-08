@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- Dbg::Stats
+
 0.1.65-dev Windows 2023-04-03
 
 0.1.64-dev Windows 2023-03-30

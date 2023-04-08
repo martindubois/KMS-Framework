@@ -54,6 +54,7 @@ namespace KMS
             DI::Boolean mDoNotCompile;
             DI::Boolean mDoNotExport;
             DI::Boolean mDoNotPackage;
+            DI::Boolean mDoNotTest;
             DI::String  mEmbedded;
             DI::Folder  mExportFolder;
             DI::Boolean mOSIndependent;

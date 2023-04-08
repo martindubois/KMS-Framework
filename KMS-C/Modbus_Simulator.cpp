@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus_Simulator.cpp
@@ -15,6 +15,8 @@
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Modbus/Slave_Com.h>
 
@@ -83,6 +85,10 @@ namespace KMS
 
             _crt_signal_t lHandler = NULL;
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -97,6 +103,7 @@ namespace KMS
                 lC.AddConfigurable(&lSi);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
@@ -115,6 +122,8 @@ namespace KMS
 
             }
             KMS_CATCH_RESULT(lResult)
+
+            lET->Stop();
 
             signal(SIGINT, lHandler);
 

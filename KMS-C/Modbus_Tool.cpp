@@ -16,6 +16,8 @@
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Modbus/Master_Com.h>
 #include <KMS/Modbus/Master_TCP.h>
@@ -59,6 +61,9 @@ namespace KMS
 
             Net::Thread_Startup();
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 unsigned int       lArgStart = 1;
@@ -83,6 +88,7 @@ namespace KMS
                 lC.AddConfigurable(&lT);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lT.InitMaster(lM);
 
@@ -96,6 +102,8 @@ namespace KMS
                 lResult = lT.Run();
             }
             KMS_CATCH_RESULT(lResult)
+
+            lET->Stop();
 
             Net::Thread_Cleanup();
 

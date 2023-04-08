@@ -279,6 +279,15 @@
     <ClCompile Include="FileFormat_ELF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dbg_Stats.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Stats_Entry.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Stats_Timer.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

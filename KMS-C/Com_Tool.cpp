@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Com_Port.cpp
@@ -10,6 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Installer.h>
 
@@ -58,6 +60,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -68,6 +73,7 @@ namespace KMS
                 lC.AddConfigurable(&lT);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
@@ -79,6 +85,8 @@ namespace KMS
                 lResult = lT.Run();
             }
             KMS_CATCH_RESULT(lResult)
+
+            lET->Stop();
 
             return lResult;
         }

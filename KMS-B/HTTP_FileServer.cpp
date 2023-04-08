@@ -16,6 +16,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/HTTP/Request.h>
@@ -107,6 +109,9 @@ namespace KMS
 
             Net::Thread_Startup();
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -121,6 +126,7 @@ namespace KMS
                 lC.AddConfigurable(&lS.mSocket);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
@@ -142,6 +148,8 @@ namespace KMS
                 lResult = 0;
             }
             KMS_CATCH_RESULT(lResult);
+
+            lET->Stop();
 
             Net::Thread_Cleanup();
 
@@ -233,10 +241,10 @@ namespace KMS
 
             lIt->second(aR);
 
-            File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
+            auto lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            DI::UInt<uint32_t>* lValue = new DI::UInt<uint32_t>(lFile->GetSize());
+            auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
             aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);
 
             aR->SetFile(lFile);

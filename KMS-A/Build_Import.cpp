@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Import.cpp
@@ -10,6 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Version.h>
 
@@ -70,6 +72,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Build::Import     lI;
@@ -82,6 +87,7 @@ namespace KMS
                 lC.AddConfigurable(&lInstaller);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
@@ -92,6 +98,8 @@ namespace KMS
                 lResult = lI.Run();
             }
             KMS_CATCH_RESULT(lResult);
+
+            lET->Stop();
 
             return lResult;
         }
@@ -176,24 +184,34 @@ namespace KMS
                 mImport.Create();
             }
 
+            auto lIT = new Dbg::Stats_Timer("ImportTime");
+
             for (const DI::Container::Entry& lEntry : mDependencies.mInternal)
             {
                 assert(NULL != lEntry);
+
+                lIT->Start();
 
                 const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, false);
+
+                lIT->Stop();
             }
 
             for (const DI::Container::Entry& lEntry : mOSIndependentDeps.mInternal)
             {
                 assert(NULL != lEntry);
 
+                lIT->Start();
+
                 const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, true);
+
+                lIT->Stop();
             }
 
             return 0;
