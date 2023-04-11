@@ -288,6 +288,9 @@
     <ClCompile Include="Dbg_Stats_Timer.cpp">
       <Filter>Source Files\Dbg</Filter>
     </ClCompile>
+    <ClCompile Include="Click_Master.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

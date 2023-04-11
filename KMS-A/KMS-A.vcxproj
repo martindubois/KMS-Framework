@@ -43,6 +43,7 @@
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
+    <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />

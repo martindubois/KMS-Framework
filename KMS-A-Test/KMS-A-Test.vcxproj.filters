@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\DI">
+      <UniqueIdentifier>{7bde79b5-cbd2-440f-9319-60334c963052}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\File">
+      <UniqueIdentifier>{ec1dc537-e569-4c89-9c45-9de64e9264f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-A-Test.cpp">
@@ -22,9 +28,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ByteTool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Thread_Lock.cpp">
@@ -42,9 +45,6 @@
     <ClCompile Include="Dbg_Log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_Array.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="JSON.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -57,19 +57,28 @@
     <ClCompile Include="Cfg_Configurator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="File_Folder.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_Functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="WOP_System.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FileFormat_ELF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Array.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Folder.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Functions.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Folder.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="File_Sync.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="Click_Master.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
