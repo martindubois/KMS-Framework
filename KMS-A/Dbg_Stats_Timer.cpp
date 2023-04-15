@@ -52,6 +52,48 @@ namespace KMS
 
         const char* Stats_Timer::GetType() const { return "Stats_Timer"; }
 
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        // ===== Stats_Entry ================================================
+
+        void Stats_Timer::Display(std::ostream& aOut) const
+        {
+            unsigned int lCount = GetCount();
+            if (0 < lCount)
+            {
+                aOut << GetName() << " : ";
+
+                double lAvg = GetAverage();
+                double lDiv = 1.0;
+
+                const char* lUnit = "s";
+
+                if (60.0 < lAvg)
+                {
+                    lAvg /= 60.0;
+                    lDiv *= 60.0;
+                    lUnit = "m";
+
+                    if (60.0 < lAvg)
+                    {
+                        lAvg /= 60.0;
+                        lDiv *= 60.0;
+                        lUnit = "h";
+                    }
+                }
+
+                aOut << (GetLast() / lDiv) << " " << lUnit;
+
+                if (1 < lCount)
+                {
+                    aOut << " ( " << (GetMin() / lDiv) << " ; " << lAvg << " ; " << (GetMax() / lDiv);
+                    aOut << " ; n = " << lCount << " ; Std.Dev. = " << ( GetStdDev() / lDiv ) << " )";
+                }
+
+                aOut << std::endl;
+            }
+        }
     }
 }
 

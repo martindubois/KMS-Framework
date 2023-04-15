@@ -16,7 +16,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Click_Master_Base, "Click_Master_Base", "Auto", sTest_Base)
+KMS_TEST(Click_Master_Base, "Click_Master_Base", "Click_Master", sTest_Base)
 {
     Proc::Process lP(File::Folder::NONE, "Notepad.exe");
 

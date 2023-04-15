@@ -37,6 +37,15 @@ namespace KMS
             // ===== Stats_Entry ============================================
             virtual void Display(std::ostream& aOut) const;
 
+        protected:
+
+            double       GetAverage() const;
+            unsigned int GetCount  () const;
+            T            GetLast   () const;
+            T            GetMax    () const;
+            T            GetMin    () const;
+            double       GetStdDev () const;
+
         private:
 
             unsigned int mCount;
@@ -107,19 +116,46 @@ namespace KMS
                     aOut << " " << mUnit;
                 }
 
-                double lAvg = mSum / static_cast<double>(mCount);
-
-                aOut << " ( " << mMin << " ; " << lAvg << " ; " << mMax << " ; n = " << mCount;
-
                 if (1 < mCount)
                 {
-                    double lSD = (mSum2 - (mSum * mSum)) / static_cast<double>(mCount - 1);
-
-                    aOut << " ; S.D. = " << lSD;
+                    aOut << " ( " << mMin << " ; " << GetAverage() << " ; " << mMax;
+                    aOut << " ; n = " << mCount << " ; Std.Dev. = " << GetStdDev() << " )";
                 }
 
-                aOut << " )" << std::endl;
+                aOut << std::endl;
             }
+        }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        template <class T>
+        double Stats_Value<T>::GetAverage() const
+        {
+            double lDiv = mCount;
+
+            return mSum / lDiv;
+        }
+
+        template <class T>
+        unsigned int Stats_Value<T>::GetCount() const { return mCount; }
+
+        template <class T>
+        T Stats_Value<T>::GetLast() const { return mLast; }
+
+        template <class T>
+        T Stats_Value<T>::GetMax() const { return mMax; }
+
+        template <class T>
+        T Stats_Value<T>::GetMin() const { return mMin; }
+
+        template <class T>
+        double Stats_Value<T>::GetStdDev() const
+        {
+            double lDivA = mCount;
+            double lDivB = mCount - 1;
+
+            return sqrt((mSum2 - ((mSum * mSum) / lDivA)) / lDivB);
         }
 
     }

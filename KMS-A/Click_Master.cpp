@@ -221,7 +221,7 @@ namespace KMS
 
             Sleep(mDelay_ms);
 
-            BOOL lRet = PostMessage(mCurrent, aMsg, aParamW, aParamL);
+            BOOL lRet = PostMessage(mCurrent, aMsg, static_cast<WPARAM>(aParamW), static_cast<LPARAM>(aParamL));
             KMS_EXCEPTION_ASSERT(lRet, CLICK_OPERATION_FAILED, "Cannot post message", "");
         }
 
@@ -282,7 +282,7 @@ BOOL Operation::Search(HWND aHandle)
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-BOOL Operation_Search(HWND aHandle, LPARAM aParam)
+BOOL CALLBACK Operation_Search(HWND aHandle, LPARAM aParam)
 {
     assert(NULL != aParam);
 

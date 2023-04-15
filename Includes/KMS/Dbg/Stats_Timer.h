@@ -31,6 +31,11 @@ namespace KMS
             // ===== StatsEntry =============================================
             virtual const char* GetType() const;
 
+        // Internal
+
+            // ===== Stats_Entry ============================================
+            virtual void Display(std::ostream& aOut) const;
+
         private:
 
             double mStart_s;
