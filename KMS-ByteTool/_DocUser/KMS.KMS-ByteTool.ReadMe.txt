@@ -7,6 +7,6 @@ File      KMS-ByteTool/_DocUser/KMS.KMS-ByteTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.66-dev Windows 2023-04-14
+0.1.67-dev Windows 2023-04-19
 
 0.0.2 Windows 2022-05-21
