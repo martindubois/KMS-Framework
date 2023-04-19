@@ -131,8 +131,10 @@ namespace KMS
             }
         }
 
-        void File_UTF16::Write(const File::Folder& aFolder, const char* aFile)
+        void File_UTF16::Write(const File::Folder& aFolder, const char* aFile, const wchar_t* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
@@ -147,12 +149,14 @@ namespace KMS
 
             for (const std::wstring& lLine : mLines)
             {
-                lStream << lLine << "\n";
+                lStream << lLine << aEOL;
             }
         }
 
-        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile)
+        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
@@ -167,7 +171,7 @@ namespace KMS
 
             for (const std::wstring& lLine : mLines)
             {
-                fprintf(lFile, "%S\n", lLine.c_str());
+                fprintf(lFile, "%S%s", lLine.c_str(), aEOL);
             }
 
             int lRet = fclose(lFile);

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Text_File_ASCII.cpp
@@ -126,8 +126,10 @@ namespace KMS
             }
         }
 
-        void File_ASCII::Write(const File::Folder& aFolder, const char* aFile)
+        void File_ASCII::Write(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
@@ -140,7 +142,7 @@ namespace KMS
 
             for (std::string lLine : mLines)
             {
-                lStream << lLine << "\n";
+                lStream << lLine << aEOL;
             }
         }
 

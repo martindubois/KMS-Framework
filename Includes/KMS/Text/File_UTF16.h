@@ -47,9 +47,9 @@ namespace KMS
             unsigned int ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
 
             void Read (const File::Folder& aFolder, const char* aFileName);
-            void Write(const File::Folder& aFolder, const char* aFileName);
+            void Write(const File::Folder& aFolder, const char* aFileName, const wchar_t* aEOL = L"\n");
 
-            void Write_ASCII(const File::Folder& aFolder, const char* aFileName);
+            void Write_ASCII(const File::Folder& aFolder, const char* aFileName, const char* aEOL = "\n");
 
             unsigned int CountOccurrence(const wchar_t* aStr) const;
 
