@@ -497,20 +497,14 @@ namespace KMS
 
         void Build::Test()
         {
-            auto lTT = new Dbg::Stats_Timer("TestTime");
-
             for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
-
-                lTT->Start();
 
                 const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Test(*lC);
-
-                lTT->Stop();
             }
         }
 
