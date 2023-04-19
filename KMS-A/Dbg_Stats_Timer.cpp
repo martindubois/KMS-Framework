@@ -28,14 +28,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Stats_Timer::Stats_Timer(const char* aName) : Stats_Value<double>(aName, "s"), mStart_s(0.0) {}
+        Stats_Timer::Stats_Timer(const char* aName) : Stats_Value<double>(aName, "s"), mStart_s(DBL_MAX) {}
 
-        void Stats_Timer::Start()
-        {
-            assert(0.0 == mStart_s);
-
-            mStart_s = GetNow_s();
-        }
+        void Stats_Timer::Start() { mStart_s = GetNow_s(); }
 
         void Stats_Timer::Stop()
         {
@@ -45,7 +40,7 @@ namespace KMS
                 Set(lNow_s - mStart_s);
             }
 
-            mStart_s = 0.0;
+            mStart_s = DBL_MAX;
         }
 
         // ===== Stats_Entry ================================================
