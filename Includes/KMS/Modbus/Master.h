@@ -23,8 +23,6 @@ namespace KMS
 
         public:
 
-            static const unsigned int FLAG_DO_NOT_WAIT_ANSWER;
-
             void SetDeviceAddress(DeviceAddress aDA);
 
             DeviceAddress GetLastException() const;
@@ -43,9 +41,9 @@ namespace KMS
 
             RegisterValue ReadInputRegister(Address aAddr);
 
-            void WriteSingleCoil(Address aAddr, bool aValue, unsigned int aFlags = 0);
+            void WriteSingleCoil(Address aAddr, bool aValue);
 
-            void WriteSingleRegister(Address aAddr, RegisterValue aValue, unsigned int aFlags = 0);
+            void WriteSingleRegister(Address aAddr, RegisterValue aValue);
 
             // ===== Configurable attributes ================================
             DI::UInt<uint8_t> mDeviceAddress;

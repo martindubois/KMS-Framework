@@ -33,8 +33,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const unsigned int Master::FLAG_DO_NOT_WAIT_ANSWER = 0x00000001;
-
         void Master::SetDeviceAddress(uint8_t aDA) { mDeviceAddress = aDA; }
 
         // ===== Modbus functions ===========================================
@@ -142,7 +140,7 @@ namespace KMS
             return ReadUInt16(lBuffer, 0);
         }
 
-        void Master::WriteSingleCoil(uint16_t aAddr, bool aValue, unsigned int aFlags)
+        void Master::WriteSingleCoil(uint16_t aAddr, bool aValue)
         {
             uint8_t lBuffer[4];
 
@@ -151,27 +149,19 @@ namespace KMS
 
             unsigned int lRet_byte;
 
-            if (0 != (aFlags & FLAG_DO_NOT_WAIT_ANSWER))
+            RETRY_BEGIN
             {
-                lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, NULL, 0);
-                assert(0 == lRet_byte);
+                lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, lBuffer, 4);
+                break;
             }
-            else
-            {
-                RETRY_BEGIN
-                {
-                    lRet_byte = Request_B(Function::WRITE_SINGLE_COIL, lBuffer, 4, lBuffer, 4);
-                    break;
-                }
-                RETRY_END;
+            RETRY_END;
 
-                KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
-                assert(aAddr == ReadUInt16(lBuffer, 0));
-            }
+            assert(aAddr == ReadUInt16(lBuffer, 0));
         }
 
-        void Master::WriteSingleRegister(uint16_t aAddr, uint16_t aValue, unsigned int aFlags)
+        void Master::WriteSingleRegister(uint16_t aAddr, uint16_t aValue)
         {
             uint8_t lBuffer[4];
 
@@ -180,24 +170,16 @@ namespace KMS
 
             unsigned int lRet_byte;
 
-            if (0 != (aFlags & FLAG_DO_NOT_WAIT_ANSWER))
+            RETRY_BEGIN
             {
-                lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, NULL, 0);
-                assert(0 == lRet_byte);
+                lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, lBuffer, 4);
+                break;
             }
-            else
-            {
-                RETRY_BEGIN
-                {
-                    lRet_byte = Request_B(Function::WRITE_SINGLE_REGISTER, lBuffer, 4, lBuffer, 4);
-                    break;
-                }
-                RETRY_END;
+            RETRY_END;
 
-                KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+            KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
 
-                assert(aAddr == ReadUInt16(lBuffer, 0));
-            }
+            assert(aAddr == ReadUInt16(lBuffer, 0));
         }
 
         // Protected

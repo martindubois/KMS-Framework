@@ -24,11 +24,9 @@ EDIT ON BUILD
 
 0.1.62-dev Windows 2023-03-23
 * Modbus
-    * Master
-        * FLAG_DO_NOT_WAIT_ANSWER
-        - The request type handler are protected
     * Master_Com::GetPort (KF-30)
     * Master_TCP::GetSocket (KF-30)
+    - Master - The request type handler are protected
 
 0.1.61-dev Windows 2023-03-22
 * FileFormat::ELF
