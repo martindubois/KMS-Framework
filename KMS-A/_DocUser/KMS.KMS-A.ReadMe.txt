@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- Cfg::Configurator::DisplayConfig (KF-28)
+
 0.1.67-dev Windows 2023-04-19
 - Text::File_ASCII and Text::File_UTF16 - Configurable EOL
 

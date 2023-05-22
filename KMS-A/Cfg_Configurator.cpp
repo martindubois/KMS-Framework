@@ -5,9 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
 
-// TEST COVERAGE 2022-10-28 KMS - Martin Dubois, P. Eng.
-
-// TODO Do not read the same configuration file twice.
+// TEST COVERAGE 2023-05-21 KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -26,14 +24,16 @@
 // //////////////////////////////////////////////////////////////////////////
 
 static const KMS::Cfg::MetaData MD_CONFIG_FILES         ("ConfigFiles += {Path}");
+static const KMS::Cfg::MetaData MD_DISPLAY_CONFIG       ("DisplayConfig = false | true");
 static const KMS::Cfg::MetaData MD_HELP                 ("Help");
 static const KMS::Cfg::MetaData MD_OPTIONAL_CONFIG_FILES("OptionalConfigFiles += {Path}");
 static const KMS::Cfg::MetaData MD_SAVE_CONFIG          ("SaveConfig = {Path}");
 
 #define ON_CONFIG_FILES_CHANGED          (1)
-#define ON_HELP_CHANGED                  (2)
-#define ON_OPTIONAL_CONFIG_FILES_CHANGED (3)
-#define ON_SAVE_CHANGED                  (4)
+#define ON_DISPLAY_CONFIG_CHANGED        (2)
+#define ON_HELP_CHANGED                  (3)
+#define ON_OPTIONAL_CONFIG_FILES_CHANGED (4)
+#define ON_SAVE_CONFIG_CHANGED           (5)
 
 #define FMT_ATT "%[A-Za-z0-9_.]"
 #define FMT_IDX "%[A-Za-z0-9_]"
@@ -61,9 +61,10 @@ namespace KMS
         Configurator::Configurator() : mIgnoredCount(0), mSilence(NULL)
         {
             mConfigFiles        .mOnChanged.Set(this, ON_CONFIG_FILES_CHANGED);
+            mDisplayConfig      .mOnChanged.Set(this, ON_DISPLAY_CONFIG_CHANGED);
             mHelp               .mOnChanged.Set(this, ON_HELP_CHANGED);
             mOptionalConfigFiles.mOnChanged.Set(this, ON_OPTIONAL_CONFIG_FILES_CHANGED);
-            mSaveConfig         .mOnChanged.Set(this, ON_SAVE_CHANGED);
+            mSaveConfig         .mOnChanged.Set(this, ON_SAVE_CONFIG_CHANGED);
 
             mConfigFiles        .SetCreator(DI::String_Expand::Create);
             mOptionalConfigFiles.SetCreator(DI::String_Expand::Create);
@@ -71,9 +72,10 @@ namespace KMS
             mSaveConfig.SetMode("wb");
 
             mDictionary.AddEntry("ConfigFiles"        , &mConfigFiles        , false, &MD_CONFIG_FILES);
+            mDictionary.AddEntry("DisplayConfig"      , &mDisplayConfig      , false, &MD_DISPLAY_CONFIG);
             mDictionary.AddEntry("Help"               , &mHelp               , false, &MD_HELP);
             mDictionary.AddEntry("OptionalConfigFiles", &mOptionalConfigFiles, false, &MD_OPTIONAL_CONFIG_FILES);
-            mDictionary.AddEntry("SaveConfig"         , &mSaveConfig            , false, &MD_SAVE_CONFIG);
+            mDictionary.AddEntry("SaveConfig"         , &mSaveConfig         , false, &MD_SAVE_CONFIG);
 
             mConfigurables.push_back(&mDictionary);
         }
@@ -105,11 +107,16 @@ namespace KMS
             mSilence = aSilence;
         }
 
+        void Configurator::DisplayConfig() { mDisplayConfig.Set(true); OnDisplayConfigChanged(); }
+
+        // NOT TESTED
+        void Configurator::Help() { mHelp.Set(true); OnHelpChanged(); }
+
         void Configurator::Help(FILE* aOut) const
         {
             FILE* lOut = (NULL == aOut) ? stdout : aOut;
 
-            for (DI::Dictionary* lD : mConfigurables)
+            for (auto lD : mConfigurables)
             {
                 Help_Dictionary(lOut, NULL, NULL, lD, 0);
             }
@@ -136,7 +143,7 @@ namespace KMS
                 lTF.RemoveEmptyLines();
                 lTF.RemoveComments_Script();
 
-                for (std::string lLine : lTF.mLines)
+                for (const auto& lLine : lTF.mLines)
                 {
                     ParseLine(lLine.c_str());
                 }
@@ -146,21 +153,23 @@ namespace KMS
         void Configurator::SaveConfig(const char* aFileName)
         {
             mSaveConfig.Set(aFileName);
+
+            OnSaveConfigChanged();
         }
 
         // ===== Msg::IReceived =============================================
 
         unsigned int Configurator::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
+            auto lResult = Msg::IReceiver::MSG_IGNORED;
 
             switch (aCode)
             {
             case ON_CONFIG_FILES_CHANGED         : lResult = OnConfigFilesChanged        (); break;
+            case ON_DISPLAY_CONFIG_CHANGED       : lResult = OnDisplayConfigChanged      (); break;
+            case ON_HELP_CHANGED                 : lResult = OnHelpChanged               (); break;
             case ON_OPTIONAL_CONFIG_FILES_CHANGED: lResult = OnOptionalConfigFilesChanged(); break;
-            case ON_SAVE_CHANGED                 : lResult = OnSaveChanged               (); break;
-
-            case ON_HELP_CHANGED: Help(); exit(0);
+            case ON_SAVE_CONFIG_CHANGED          : lResult = OnSaveConfigChanged         (); break;
 
             default: assert(false);
             }
@@ -175,7 +184,7 @@ namespace KMS
         {
             if (NULL != mSilence)
             {
-                const char** lS = mSilence;
+                auto lS = mSilence;
 
                 while (NULL != (*lS))
                 {
@@ -193,13 +202,13 @@ namespace KMS
 
         unsigned int Configurator::OnConfigFilesChanged()
         {
-            unsigned int lCount = mConfigFiles.GetCount();
+            auto lCount = mConfigFiles.GetCount();
             if (0 < lCount)
             {
-                const DI::Object* lObject = mConfigFiles.GetEntry_R(lCount - 1);
+                auto lObject = mConfigFiles.GetEntry_R(lCount - 1);
                 assert(NULL != lObject);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObject);
+                auto lString = dynamic_cast<const DI::String*>(lObject);
                 assert(NULL != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), true);
@@ -208,15 +217,46 @@ namespace KMS
             return 0;
         }
 
+        unsigned int Configurator::OnDisplayConfigChanged()
+        {
+            if (mDisplayConfig)
+            {
+                printf(
+                    "\n"
+                    "===== Configuration =====\n"
+                    "\n");
+
+                for (const auto lD : mConfigurables)
+                {
+                    Save_Dictionary(stdout, lD, NULL);
+                }
+            }
+
+            return 0;
+        }
+
+        // NOT TESTED
+        unsigned int Configurator::OnHelpChanged()
+        {
+            if (mHelp)
+            {
+                Help(stdout);
+
+                exit(0);
+            }
+
+            return 0;
+        }
+
         unsigned int Configurator::OnOptionalConfigFilesChanged()
         {
-            unsigned int lCount = mOptionalConfigFiles.GetCount();
+            auto lCount = mOptionalConfigFiles.GetCount();
             if (0 < lCount)
             {
-                const DI::Object* lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
+                auto lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
                 assert(NULL != lObject);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObject);
+                auto lString = dynamic_cast<const DI::String*>(lObject);
                 assert(NULL != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), false);
@@ -225,7 +265,7 @@ namespace KMS
             return 0;
         }
 
-        unsigned int Configurator::OnSaveChanged()
+        unsigned int Configurator::OnSaveConfigChanged()
         {
             if (mSaveConfig.IsOpen())
             {
@@ -234,7 +274,7 @@ namespace KMS
                     "# Configuration file generated by the KMS::Cfg::Configurator class\n"
                     "\n");
 
-                for (DI::Dictionary* lD : mConfigurables)
+                for (const auto lD : mConfigurables)
                 {
                     Save_Dictionary(mSaveConfig, lD, NULL);
                 }
@@ -249,7 +289,7 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            for (DI::Dictionary* lD : mConfigurables)
+            for (auto lD : mConfigurables)
             {
                 if (DI::Execute_Operation(lD, aLine))
                 {
@@ -280,12 +320,12 @@ void Help_Dictionary(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, co
 
     Help_Object(aOut, aName, aMD, aLevel);
 
-    for (const DI::Dictionary::Internal::value_type lVT : aD->mInternal)
+    for (const auto& lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 
-        const Cfg::MetaData * lMD = dynamic_cast<const Cfg::MetaData *>(lVT.second.mMetaData);
-        const DI::Dictionary* lD  = dynamic_cast<const DI::Dictionary*>(lVT.second.Get());
+        auto lMD = dynamic_cast<const Cfg::MetaData *>(lVT.second.mMetaData);
+        auto lD  = dynamic_cast<const DI::Dictionary*>(lVT.second.Get());
         if (NULL == lD)
         {
             Help_Object(aOut, lVT.first.c_str(), lMD, aLevel + 1);
@@ -319,7 +359,7 @@ void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
     assert(NULL != aA);
     assert(NULL != aName);
 
-    for (const DI::Container::Entry& lEntry : aA->mInternal)
+    for (const auto& lEntry : aA->mInternal)
     {
         assert(NULL != lEntry);
 
@@ -330,7 +370,7 @@ void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
 
         lV->Get(lData, sizeof(lData));
 
-        fprintf(aOut, "%s += %s", aName, lData);
+        fprintf(aOut, "%s += %s\n", aName, lData);
     }
 }
 
@@ -338,7 +378,7 @@ void Save_Dictionary(FILE* aOut, const DI::Dictionary* aD, const char* aName)
 {
     assert(NULL != aD);
 
-    for (const DI::Dictionary::Internal::value_type lVT : aD->mInternal)
+    for (const auto& lVT : aD->mInternal)
     {
         assert(NULL != lVT.second);
 
@@ -361,13 +401,13 @@ void Save_Object(FILE* aOut, const DI::Object* aO, const char* aName)
 {
     assert(NULL != aO);
 
-    const DI::Dictionary* lD = dynamic_cast<const DI::Dictionary*>(aO);
+    auto lD = dynamic_cast<const DI::Dictionary*>(aO);
     if (NULL == lD)
     {
-        const DI::Array* lA = dynamic_cast<const DI::Array*>(aO);
+        auto lA = dynamic_cast<const DI::Array*>(aO);
         if (NULL == lA)
         {
-            const DI::Value* lV = dynamic_cast<const DI::Value*>(aO);
+            auto lV = dynamic_cast<const DI::Value*>(aO);
             KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
             Save_Value(aOut, lV, aName);

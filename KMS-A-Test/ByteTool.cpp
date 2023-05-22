@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/ByteTool.cpp
@@ -30,7 +30,7 @@ KMS_TEST(ByteTool_Base, "ByteTool_Base", "Auto", sTest_Base)
 
     lC.AddConfigurable(&lBT);
 
-    lC.Help();
+    lC.Help(NULL);
 
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 10);
     lC.ParseArguments(7, VECTOR);
