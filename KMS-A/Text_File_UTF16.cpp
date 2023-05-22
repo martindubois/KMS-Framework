@@ -127,6 +127,11 @@ namespace KMS
 
             while (getline(lStream, lLine))
             {
+                if ((!lLine.empty()) && (L'\r' == lLine.back()))
+                {
+                    lLine.pop_back();
+                }
+
                 mLines.push_back(lLine);
             }
         }

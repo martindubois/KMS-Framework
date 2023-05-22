@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Text_File_ASCII.cpp
 
+// TEST COVERAGE  2023-05-21  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C++ ================================================================
@@ -122,6 +124,12 @@ namespace KMS
 
             while (getline(lStream, lLine))
             {
+                if ((!lLine.empty()) && ('\r' == lLine.back()))
+                {
+                    // NOT TESTED
+                    lLine.pop_back();
+                }
+
                 mLines.push_back(lLine);
             }
         }
