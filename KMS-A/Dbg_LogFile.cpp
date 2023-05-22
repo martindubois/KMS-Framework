@@ -44,7 +44,7 @@ namespace KMS
 
             aFolder.GetPath(lFileName, lPath, sizeof(lPath));
 
-            int lRet = fopen_s(&mFile, lPath, "ab");
+            auto lRet = fopen_s(&mFile, lPath, "ab");
 
             char lMsg[64 + PATH_LENGTH];
             sprintf_s(lMsg, "Cannot open \"%s\"", lPath);
@@ -58,7 +58,7 @@ namespace KMS
         {
             assert(NULL != mFile);
 
-            uint64_t lTimeStamp = OS::GetSystemTime();
+            auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
                 #ifdef _KMS_LINUX_
@@ -76,7 +76,7 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            const uint8_t* lData = reinterpret_cast<const uint8_t*>(aData);
+            auto lData = reinterpret_cast<const uint8_t*>(aData);
 
             fprintf(mFile, "D\t%u\t", aSize_byte);
 
@@ -109,7 +109,7 @@ namespace KMS
             default: assert(false);
             }
 
-            uint64_t lTimeStamp = OS::GetSystemTime();
+            auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
                 #ifdef _KMS_LINUX_

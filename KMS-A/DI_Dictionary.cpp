@@ -24,7 +24,7 @@ namespace KMS
         {
             assert(NULL != aName);
 
-            Internal::iterator lIt = mInternal.find(aName);
+            auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aName, Entry(const_cast<Object*>(aObject), aMD)));
@@ -40,7 +40,7 @@ namespace KMS
         {
             assert(NULL != aName);
 
-            Internal::iterator lIt = mInternal.find(aName);
+            auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aName, Entry(aObject, aDelete, aMD)));
@@ -54,7 +54,7 @@ namespace KMS
 
         Object* Dictionary::CreateEntry(const char* aName, const MetaData* aMD)
         {
-            Object* lResult = CallCreator();
+            auto lResult = CallCreator();
             assert(NULL != lResult);
 
             AddEntry(aName, lResult, true, aMD);
@@ -66,7 +66,7 @@ namespace KMS
         {
             assert(NULL != aKey);
 
-            Internal::const_iterator lIt = mInternal.find(aKey);
+            auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
                 return NULL;
@@ -81,7 +81,7 @@ namespace KMS
         {
             assert(NULL != aKey);
 
-            Internal::iterator lIt = mInternal.find(aKey);
+            auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
                 return NULL;
@@ -103,7 +103,7 @@ namespace KMS
             char lName[NAME_LENGTH];
             char lRest[NAME_LENGTH];
 
-            int lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
+            auto lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
 
             char lMsg[64 + NAME_LENGTH];
 
@@ -112,7 +112,7 @@ namespace KMS
 
             Object* lResult;
 
-            Internal::iterator lIt = mInternal.find(lName);
+            auto lIt = mInternal.find(lName);
             if (mInternal.end() == lIt)
             {
                 if (!IsDynamic())
@@ -133,7 +133,7 @@ namespace KMS
 
             if (2 == lRet)
             {
-                DI::Container* lContainer = dynamic_cast<DI::Container*>(lResult);
+                auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
                 sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
                 KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
@@ -149,9 +149,9 @@ namespace KMS
 
         bool Dictionary::Clear()
         {
-            bool lResult = !mInternal.empty();
+            auto lResult = !mInternal.empty();
 
-            for (Internal::value_type lVT : mInternal)
+            for (auto& lVT : mInternal)
             {
                 lVT.second.Release();
             }

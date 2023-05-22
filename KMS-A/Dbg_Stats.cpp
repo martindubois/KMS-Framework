@@ -72,7 +72,7 @@ namespace KMS
                 std::ofstream lStream(lPath);
                 if (lStream.is_open())
                 {
-                    for (Stats_Entry* lEntry : mEntries)
+                    for (auto lEntry : mEntries)
                     {
                         assert(NULL != lEntry);
 
@@ -81,7 +81,7 @@ namespace KMS
                 }
             }
 
-            for (Stats_Entry* lEntry : mEntries)
+            for (auto lEntry : mEntries)
             {
                 assert(NULL != lEntry);
 

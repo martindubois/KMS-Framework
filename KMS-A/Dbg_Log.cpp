@@ -83,7 +83,7 @@ namespace KMS
 
         void Log::CloseLogFiles()
         {
-            for (const FileMap::value_type& lVT : mFiles)
+            for (const auto& lVT : mFiles)
             {
                 delete lVT.second;
             }
@@ -100,7 +100,7 @@ namespace KMS
         {
             IF_FILE
             {
-                LogFile* lLF = FindLogFile();
+                auto lLF = FindLogFile();
                 assert(NULL != lLF);
 
                 lLF->WriteData(aData, aSize_byte);
@@ -152,7 +152,7 @@ namespace KMS
 
             IF_FILE
             {
-                LogFile* lLF = FindLogFile();
+                auto lLF = FindLogFile();
                 assert(NULL != lLF);
 
                 lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
@@ -199,7 +199,7 @@ namespace KMS
         {
             IF_FILE
             {
-                LogFile* lLF = FindLogFile();
+                auto lLF = FindLogFile();
                 assert(NULL != lLF);
 
                 lLF->WriteException(aException);
@@ -242,7 +242,7 @@ namespace KMS
         {
             IF_FILE
             {
-                LogFile* lLF = FindLogFile();
+                auto lLF = FindLogFile();
                 assert(NULL != lLF);
 
                 lLF->WriteMessage(aMsg);
@@ -285,7 +285,7 @@ namespace KMS
 
         unsigned int Log::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
+            auto lResult = Msg::IReceiver::MSG_IGNORED;
 
             switch (aCode)
             {
@@ -364,9 +364,9 @@ namespace KMS
         {
             LogFile* lResult;
 
-            unsigned int lThreadId = OS::GetThreadId();
+            auto lThreadId = OS::GetThreadId();
 
-            FileMap::iterator lIt = mFiles.find(lThreadId);
+            auto lIt = mFiles.find(lThreadId);
             if (mFiles.end() == lIt)
             {
                 lResult = new LogFile(mFolder, mProcessId, lThreadId);

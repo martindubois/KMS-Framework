@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_L.cpp
@@ -205,7 +205,7 @@ namespace KMS
         {
             char lPath[PATH_LENGTH];
 
-            char* lRet = getcwd(lPath, sizeof(lPath));
+            auto lRet = getcwd(lPath, sizeof(lPath));
             assert(lPath == lRet);
 
             mPath = lPath;
@@ -215,10 +215,10 @@ namespace KMS
         {
             char lModule[PATH_LENGTH];
 
-            ssize_t lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
+            auto lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "readlink failed", lRet);
 
-            char* lPtr = strrchr(lModule, '/');
+            auto lPtr = strrchr(lModule, '/');
             KMS_EXCEPTION_ASSERT(NULL != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
 
             *lPtr = '\0';
@@ -232,7 +232,7 @@ namespace KMS
 
             strcpy(lPath, "/tmp/KMSXXXXXX");
 
-            char* lRet = mkdtemp(lPath);
+            auto lRet = mkdtemp(lPath);
             KMS_EXCEPTION_ASSERT(NULL != lRet, FILE_INIT_FAILED, "mkdtemp failed", lPath);
 
             mPath = lPath;

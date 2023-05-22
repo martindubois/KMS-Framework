@@ -23,14 +23,14 @@ namespace KMS
             assert(NULL != aName);
             assert(NULL != aOut);
 
-            const char* lValue = getenv(aName);
+            const auto lValue = getenv(aName);
 
             char lMsg[64 + LINE_LENGTH];
 
             sprintf_s(lMsg, "The \"%s\" environment variable does not exist", aName);
             KMS_EXCEPTION_ASSERT(NULL != lValue, ENV_EXPAND_FAILED, lMsg, "");
 
-            unsigned int lResult = strlen(lValue);
+            auto lResult = strlen(lValue);
 
             sprintf_s(lMsg, "The value of \"%s\" is too long", aName);
             KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, lMsg, lResult);

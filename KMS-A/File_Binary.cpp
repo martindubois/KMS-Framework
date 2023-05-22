@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/File_Binary.cpp
@@ -85,7 +85,7 @@ namespace KMS
 
         void* Binary::Map(unsigned int aMinSize_byte, unsigned int aMaxSize_byte)
         {
-            unsigned int lSize_byte = GetSize();
+            auto lSize_byte = GetSize();
 
             KMS_EXCEPTION_ASSERT(aMinSize_byte <= lSize_byte, FILE_TOO_SHORT, "The file is too short", lSize_byte);
 

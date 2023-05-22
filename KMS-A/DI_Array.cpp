@@ -24,7 +24,7 @@ namespace KMS
 
         DI::Object* Array::CreateEntry()
         {
-            DI::Object* lResult = CallCreator();
+            auto lResult = CallCreator();
 
             AddEntry(lResult, true);
 
@@ -67,7 +67,7 @@ namespace KMS
             sprintf_s(lMsg, "%d is not a valid index", aIndex);
             KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, lMsg, mInternal.size());
 
-            Internal::const_iterator lIt = mInternal.begin() + aIndex;
+            auto lIt = mInternal.begin() + aIndex;
 
             mInternal.erase(lIt);
         }
@@ -101,7 +101,7 @@ namespace KMS
             unsigned int lIndex;
             char         lRest[NAME_LENGTH];
 
-            int lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
+            auto lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
 
             char lMsg[64 + NAME_LENGTH];
 
@@ -133,7 +133,7 @@ namespace KMS
 
             if (2 == lRet)
             {
-                DI::Container *lContainer = dynamic_cast<DI::Container*>(lResult);
+                auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
                 sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
                 KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
@@ -152,7 +152,7 @@ namespace KMS
         {
             bool lResult = !mInternal.empty();
 
-            for (Container::Entry& lEntry : mInternal)
+            for (auto& lEntry : mInternal)
             {
                 lEntry.Release();
             }

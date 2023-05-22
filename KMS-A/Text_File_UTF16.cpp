@@ -54,7 +54,7 @@ namespace KMS
             sprintf_s(lMsg, "%u is not a valid line number", aNo);
             KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
 
             lIt += aNo;
 
@@ -69,8 +69,8 @@ namespace KMS
             sprintf_s(lMsg, "%u is not a valid line number", aNo);
             KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lFirst = mLines.begin() + aNo;
-            Internal::const_iterator lLast  = lFirst + aCount;
+            auto lFirst = mLines.begin() + aNo;
+            auto lLast  = lFirst + aCount;
 
             mLines.erase(lFirst, lLast);
         }
@@ -95,7 +95,7 @@ namespace KMS
 
             std::wregex lRegEx(aRegEx);
 
-            for (std::wstring& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (std::regex_match(lLine, lRegEx))
                 {
@@ -152,7 +152,7 @@ namespace KMS
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 
-            for (const std::wstring& lLine : mLines)
+            for (const auto& lLine : mLines)
             {
                 lStream << lLine << aEOL;
             }
@@ -168,18 +168,18 @@ namespace KMS
 
             FILE* lFile;
 
-            errno_t lErr = fopen_s(&lFile, lPath, "wb");
+            auto lErr = fopen_s(&lFile, lPath, "wb");
 
             char lMsg[64 + PATH_LENGTH];
             sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
             KMS_EXCEPTION_ASSERT(0 == lErr, TEXT_OPEN_FAILED, lMsg, lErr);
 
-            for (const std::wstring& lLine : mLines)
+            for (const auto& lLine : mLines)
             {
                 fprintf(lFile, "%S%s", lLine.c_str(), aEOL);
             }
 
-            int lRet = fclose(lFile);
+            auto lRet = fclose(lFile);
             assert(0 == lRet);
         }
 
@@ -189,7 +189,7 @@ namespace KMS
 
             unsigned int lResult = 0;
 
-            for (const std::wstring& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (lLine.npos != lLine.find(aStr))
                 {
@@ -210,7 +210,7 @@ namespace KMS
         {
             unsigned int lResult = 0;
 
-            Internal::iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
             while (mLines.end() != lIt)
             {
                 if (std::regex_match(*lIt, aRegEx))

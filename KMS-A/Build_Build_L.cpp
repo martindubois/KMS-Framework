@@ -36,17 +36,17 @@ namespace KMS
             lBin.Create();
             lLib.Create();
 
-            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+            for (const auto& lEntry : mBinaries.mInternal)
             {
-                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
 
                 lBin_Src.Copy(lBin, lB->Get());
             }
 
-            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+            for (const auto& lEntry : mLibraries.mInternal)
             {
-                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lL);
 
                 lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
@@ -55,9 +55,9 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            for (const DI::Container::Entry& lEntry : mTests.mInternal)
+            for (const auto& lEntry : mTests.mInternal)
             {
-                const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lT);
 
                 Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());

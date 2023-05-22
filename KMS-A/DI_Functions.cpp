@@ -39,15 +39,15 @@ namespace KMS
             char lOperator[NAME_LENGTH];
             char lValue   [LINE_LENGTH];
 
-            int lRet = sscanf_s(aOperation, "%[^ +=] %[+=] %[^\n\r\t]", lName SizeInfo(lName), lOperator SizeInfo(lOperator), lValue SizeInfo(lValue));
+            auto lRet = sscanf_s(aOperation, "%[^ +=] %[+=] %[^\n\r\t]", lName SizeInfo(lName), lOperator SizeInfo(lOperator), lValue SizeInfo(lValue));
 
             char lMsg[64 + LINE_LENGTH];
             sprintf_s(lMsg, "\"%s\" is not a valid operation", aOperation);
             KMS_EXCEPTION_ASSERT(1 <= lRet, DI_FORMAT_INVALID, lMsg, lRet);
 
-            Object* lObject = aRoot->FindObject_RW(lName);
+            auto lObject = aRoot->FindObject_RW(lName);
 
-            bool lResult = (NULL != lObject);
+            auto lResult = (NULL != lObject);
             if (lResult)
             {
                 switch (lRet)
@@ -88,10 +88,10 @@ void Add(DI::Object* aObject, const char* aValue)
 {
     assert(NULL != aValue);
 
-    DI::Array* lArray = dynamic_cast<DI::Array*>(aObject);
+    auto lArray = dynamic_cast<DI::Array*>(aObject);
     if (NULL != lArray)
     {
-        DI::Object* lObject = lArray->CreateEntry();
+        auto lObject = lArray->CreateEntry();
 
         Assign(lObject, aValue);
 
@@ -107,7 +107,7 @@ void Assign(DI::Object* aObject, const char* aValue)
 {
     assert(NULL != aObject);
 
-    DI::Value* lValue = dynamic_cast<DI::Value*>(aObject);
+    auto lValue = dynamic_cast<DI::Value*>(aObject);
     if (NULL != lValue)
     {
         lValue->Set(aValue);
@@ -121,7 +121,7 @@ void Set(DI::Object* aObject)
 {
     assert(NULL != aObject);
 
-    DI::Boolean* lBoolean = dynamic_cast<DI::Boolean*>(aObject);
+    auto lBoolean = dynamic_cast<DI::Boolean*>(aObject);
     if (NULL != lBoolean)
     {
         if (!lBoolean->Get())

@@ -22,7 +22,7 @@ namespace KMS
         {
             assert(NULL != aO);
 
-            Internal::iterator lIt = mInternal.find(aIndex);
+            auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aIndex, Entry(aO)));
@@ -37,7 +37,7 @@ namespace KMS
         {
             assert(NULL != aO);
 
-            Internal::iterator lIt = mInternal.find(aIndex);
+            auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aIndex, Entry(aO, aDelete)));
@@ -50,7 +50,7 @@ namespace KMS
 
         DI::Object* Array_Sparse::CreateEntry(int aIndex)
         {
-            DI::Object* lResult = CallCreator();
+            auto lResult = CallCreator();
             assert(NULL != lResult);
 
             AddEntry(aIndex, lResult, true);
@@ -62,7 +62,7 @@ namespace KMS
         {
             const Object* lResult = NULL;
 
-            Internal::const_iterator lIt = mInternal.find(aIndex);
+            auto lIt = mInternal.find(aIndex);
             if (mInternal.end() != lIt)
             {
                 lResult = lIt->second;
@@ -76,7 +76,7 @@ namespace KMS
         {
             Object* lResult = NULL;
 
-            Internal::iterator lIt = mInternal.find(aIndex);
+            auto lIt = mInternal.find(aIndex);
             if (mInternal.end() != lIt)
             {
                 lResult = lIt->second;
@@ -97,7 +97,7 @@ namespace KMS
             unsigned int lIndex;
             char         lRest[NAME_LENGTH];
 
-            int lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
+            auto lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
 
             char lMsg[64 + NAME_LENGTH];
 
@@ -106,7 +106,7 @@ namespace KMS
 
             Object * lResult;
 
-            Internal::iterator lIt = mInternal.find(lIndex);
+            auto lIt = mInternal.find(lIndex);
             if (mInternal.end() == lIt)
             {
                 if (!IsDynamic())
@@ -128,7 +128,7 @@ namespace KMS
 
             if (2 == lRet)
             {
-                DI::Container* lContainer = dynamic_cast<DI::Container*>(lResult);
+                auto lContainer = dynamic_cast<DI::Container*>(lResult);
                 KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
 
                 lResult = lContainer->FindObject_RW(lRest);
@@ -143,9 +143,9 @@ namespace KMS
 
         bool Array_Sparse::Clear()
         {
-            bool lResult = !mInternal.empty();
+            auto lResult = !mInternal.empty();
 
-            for (Internal::value_type lVT : mInternal)
+            for (auto& lVT : mInternal)
             {
                 lVT.second.Release();
             }

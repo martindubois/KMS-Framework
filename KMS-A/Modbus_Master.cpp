@@ -205,13 +205,13 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            uint8_t lFunction = static_cast<uint8_t>(aFunction);
+            auto lFunction = static_cast<uint8_t>(aFunction);
 
             if ((0x80 | lFunction) == aData[0])
             {
                 mLastException = static_cast<Exception>(aData[1]);
                 
-                const char* lMsg = "Modbus exception";
+                auto lMsg = "Modbus exception";
 
                 switch (static_cast<Modbus::Exception>(aData[1]))
                 {

@@ -30,7 +30,7 @@ namespace KMS
         {
             mHeader = reinterpret_cast<Header32*>(mBinary.Map(sizeof(Header32)));
 
-            unsigned int lMappedSize_byte = mBinary.GetMappedSize();
+            auto lMappedSize_byte = mBinary.GetMappedSize();
 
             KMS_EXCEPTION_ASSERT(MAGIC                == mHeader->mMagic                   , FILE_FORMAT_ERROR, "Invalid magic"              , mHeader->mMagic);
             KMS_EXCEPTION_ASSERT(CLASS_32_BIT         == mHeader->mClass                   , FILE_FORMAT_ERROR, "Not a 32 bit file"          , mHeader->mClass);
@@ -46,7 +46,7 @@ namespace KMS
             lSize_byte = mHeader->mSectHeaderOffset_byte + sizeof(SectHeader32) * mHeader->mSectHeaderNumber;
             KMS_EXCEPTION_ASSERT(lMappedSize_byte >= lSize_byte, FILE_FORMAT_ERROR, "Corrupeted file", lSize_byte);
 
-            const uint8_t* lBase = reinterpret_cast<const uint8_t*>(mHeader);
+            auto lBase = reinterpret_cast<const uint8_t*>(mHeader);
 
             mProgHeaders = reinterpret_cast<const ProgHeader32*>(lBase + mHeader->mProgHeaderOffset_byte);
             mSectHeaders = reinterpret_cast<const SectHeader32*>(lBase + mHeader->mSectHeaderOffset_byte);
@@ -60,16 +60,16 @@ namespace KMS
         {
             memset(aOut, 0, aSize_byte);
 
-            const uint8_t* lBase = reinterpret_cast<const uint8_t*>(mHeader);
-                  uint8_t* lOut  = reinterpret_cast<      uint8_t*>(aOut);
+            auto lBase = reinterpret_cast<const uint8_t*>(mHeader);
+            auto lOut  = reinterpret_cast<      uint8_t*>(aOut);
 
             unsigned int lResult_byte = 0;
 
-            uint32_t lEnd = aStart + aSize_byte;
+            auto lEnd = aStart + aSize_byte;
 
             for (unsigned int i = 0; i < mHeader->mProgHeaderNumber; i++)
             {
-                const ProgHeader32* lPH = mProgHeaders + i;
+                auto lPH = mProgHeaders + i;
 
                 switch (lPH->mFlags)
                 {
@@ -79,7 +79,7 @@ namespace KMS
                     {
                         if (lEnd > lPH->mVirtualAddress)
                         {
-                            uint32_t lOutOffset_byte = lPH->mVirtualAddress - aStart;
+                            auto lOutOffset_byte = lPH->mVirtualAddress - aStart;
 
                             KMS_EXCEPTION_ASSERT(aSize_byte > lOutOffset_byte + lPH->mMemSize_byte, FILE_FORMAT_ERROR, "Invalid memory segment", lPH->mVirtualAddress);
 
@@ -101,7 +101,7 @@ namespace KMS
 
         void ELF::DisplayHeaders(FILE* aOut) const
         {
-            FILE* lOut = (NULL == aOut) ? stdout : aOut;
+            auto lOut = (NULL == aOut) ? stdout : aOut;
 
             fprintf(lOut, "Header\n");
             mHeader->Display(lOut);
@@ -221,7 +221,7 @@ namespace KMS
 
         const char* ELF::Header32::GetClass_Name() const
         {
-            const char* lResult = "Invalid";
+            auto lResult = "Invalid";
 
             switch (mClass)
             {
@@ -236,7 +236,7 @@ namespace KMS
 
         const char* ELF::Header32::GetEndianness_Name() const
         {
-            const char* lResult = "Invalid";
+            auto lResult = "Invalid";
 
             switch (mEndianness)
             {
@@ -251,7 +251,7 @@ namespace KMS
 
         const char* ELF::Header32::GetMachine_Name() const
         {
-            const char* lResult = "Unknown";
+            auto lResult = "Unknown";
 
             switch (mMachine)
             {
@@ -263,7 +263,7 @@ namespace KMS
 
         const char* ELF::Header32::GetOS_Name() const
         {
-            const char* lResult = "Unknown";
+            auto lResult = "Unknown";
 
             switch (mOS)
             {
@@ -276,7 +276,7 @@ namespace KMS
 
         const char* ELF::Header32::GetType_Name() const
         {
-            const char* lResult = "Invalid";
+            auto lResult = "Invalid";
 
             switch (mType)
             {
@@ -294,7 +294,7 @@ namespace KMS
 
         const char* ELF::ProgHeader32::GetType_Name() const
         {
-            const char* lResult = "Invalid";
+            auto lResult = "Invalid";
 
             switch (mType)
             {
@@ -315,7 +315,7 @@ namespace KMS
 
         const char* ELF::SectHeader32::GetType_Name() const
         {
-            const char* lResult = "Invalid";
+            auto lResult = "Invalid";
 
             switch (mType)
             {

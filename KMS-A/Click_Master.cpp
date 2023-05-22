@@ -84,7 +84,7 @@ namespace KMS
         {
             KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, CLICK_KEY_INVALID, "Invalid key", "");
 
-            char lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
+            auto lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
 
             Key(WM_KEYDOWN, lKey, aFlags);
             Key(WM_KEYUP  , lKey, aFlags);
@@ -92,7 +92,7 @@ namespace KMS
 
         void Master::Key(char aKey, unsigned int aFlags)
         {
-            char lKey = toupper(aKey);
+            auto lKey = toupper(aKey);
 
             Key(WM_KEYDOWN, lKey, aFlags);
             Key(WM_KEYUP  , lKey, aFlags);
@@ -104,7 +104,7 @@ namespace KMS
         {
             KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, CLICK_KEY_INVALID, "Invalid key", "");
 
-            char lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
+            auto lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
 
             Key(WM_SYSKEYDOWN, lKey, aFlags);
             Key(WM_SYSKEYUP  , lKey, aFlags);
@@ -112,7 +112,7 @@ namespace KMS
 
         void Master::SystemKey(char aKey, unsigned int aFlags)
         {
-            char lKey = toupper(aKey);
+            auto lKey = toupper(aKey);
 
             Key(WM_SYSKEYDOWN, lKey, aFlags);
             Key(WM_SYSKEYUP  , lKey, aFlags);
@@ -126,7 +126,7 @@ namespace KMS
 
             Sleep(TEXT_DELAY_ms);
 
-            const char* lText = aText;
+            auto lText = aText;
             while ('\0' != *lText)
             {
                 Text(*lText);
@@ -154,7 +154,7 @@ namespace KMS
 
             for (unsigned int lRetry = 0; lRetry < lFD.mRetryCount; lRetry++)
             {
-                HWND lHandle = FindWindowEx(lFD.mParent, lFD.mCurrent, aClass, aName);
+                auto lHandle = FindWindowEx(lFD.mParent, lFD.mCurrent, aClass, aName);
                 if (NULL != lHandle)
                 {
                     return Window_Select(lHandle, aFlags);
@@ -169,7 +169,7 @@ namespace KMS
 
                 EnumChildWindows(lFD.mParent, Operation_Search, reinterpret_cast<LPARAM>(&lOperation));
 
-                HWND lHandle = lOperation.GetResult();
+                auto lHandle = lOperation.GetResult();
                 if (NULL != lHandle)
                 {
                     return Window_Select(lHandle, aFlags);
@@ -221,7 +221,7 @@ namespace KMS
 
             Sleep(mDelay_ms);
 
-            BOOL lRet = PostMessage(mCurrent, aMsg, static_cast<WPARAM>(aParamW), static_cast<LPARAM>(aParamL));
+            auto lRet = PostMessage(mCurrent, aMsg, static_cast<WPARAM>(aParamW), static_cast<LPARAM>(aParamL));
             KMS_EXCEPTION_ASSERT(lRet, CLICK_OPERATION_FAILED, "Cannot post message", "");
         }
 
@@ -286,7 +286,7 @@ BOOL CALLBACK Operation_Search(HWND aHandle, LPARAM aParam)
 {
     assert(NULL != aParam);
 
-    Operation* lOperation = reinterpret_cast<Operation*>(aParam);
+    auto* lOperation = reinterpret_cast<Operation*>(aParam);
 
     return lOperation->Search(aHandle);
 }

@@ -227,7 +227,7 @@ const char* ToCodeName(Exception::Code aCode)
         "VERSION_FILE_CORRUPTED", "VERSION_FORMAT_INVALID", "VERSION_NUMBER_INVALID",
     };
 
-    unsigned int lCode = static_cast<unsigned int>(aCode);
+    auto lCode = static_cast<unsigned int>(aCode);
 
     assert(static_cast<unsigned int>(Exception::Code::CODE_QTY) > lCode);
 

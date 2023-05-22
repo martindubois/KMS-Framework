@@ -26,7 +26,7 @@ namespace KMS
             assert(NULL != aName);
             assert(NULL != aOut);
 
-            unsigned int lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
+            auto lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
 
             char lMsg[64 + NAME_LENGTH];
             sprintf_s(lMsg, "Cannot retrieve the value of \"%s\"", aName);

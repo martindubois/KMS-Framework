@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Thread_Thread.cpp
@@ -191,7 +191,7 @@ namespace KMS
         {
             if (NULL != mHandle)
             {
-                bool lRet = CloseHandle(mHandle);
+                auto lRet = CloseHandle(mHandle);
                 assert(lRet);
 
                 mHandle = NULL;
@@ -210,7 +210,7 @@ DWORD WINAPI Run_Link(LPVOID aParam)
 {
     assert(NULL != aParam);
 
-    Thread::Thread* lThis = reinterpret_cast<Thread::Thread*>(aParam);
+    auto lThis = reinterpret_cast<Thread::Thread*>(aParam);
 
     lThis->Run();
 

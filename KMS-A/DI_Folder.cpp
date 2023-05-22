@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Folder.cpp
@@ -47,7 +47,7 @@ namespace KMS
 
         void Folder::Send_OnChanged(void* aData)
         {
-            const char* lIn = String_Expand::Get();
+            auto lIn = String_Expand::Get();
 
             if      (0 == strncmp("EXECUTABLE:"       , lIn, 11)) { mInternal = File::Folder(File::Folder::EXECUTABLE       , lIn + 11); }
             else if (0 == strncmp("HOME:"             , lIn,  5)) { mInternal = File::Folder(File::Folder::HOME             , lIn +  5); }

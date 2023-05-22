@@ -151,11 +151,11 @@ namespace KMS
 
             lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
 
-            for (const DI::Container::Entry& lEntry : mRepositories.mInternal)
+            for (const auto& lEntry : mRepositories.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::Folder* lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
+                auto lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
                 assert(NULL != lR);
 
                 if (lR->Get().DoesFolderExist(lProduct))
@@ -186,13 +186,13 @@ namespace KMS
 
             auto lIT = new Dbg::Stats_Timer("ImportTime");
 
-            for (const DI::Container::Entry& lEntry : mDependencies.mInternal)
+            for (const auto& lEntry : mDependencies.mInternal)
             {
                 assert(NULL != lEntry);
 
                 lIT->Start();
 
-                const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, false);
@@ -200,13 +200,13 @@ namespace KMS
                 lIT->Stop();
             }
 
-            for (const DI::Container::Entry& lEntry : mOSIndependentDeps.mInternal)
+            for (const auto& lEntry : mOSIndependentDeps.mInternal)
             {
                 assert(NULL != lEntry);
 
                 lIT->Start();
 
-                const DI::String* lD = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lD);
 
                 ImportDependency(*lD, true);

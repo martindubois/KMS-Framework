@@ -44,7 +44,7 @@ namespace KMS
 
         bool Folder::DoesExist() const
         {
-            DWORD lAttributes = GetFileAttributes(mPath.c_str());
+            auto lAttributes = GetFileAttributes(mPath.c_str());
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
@@ -56,7 +56,7 @@ namespace KMS
 
             GetPath(aFile, lPath, sizeof(lPath));
 
-            DWORD lAttributes = GetFileAttributes(lPath);
+            auto lAttributes = GetFileAttributes(lPath);
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FILE_ATTR == (lAttributes & FILE_MASK);
@@ -68,7 +68,7 @@ namespace KMS
 
             GetPath(aFolder, lPath, sizeof(lPath));
 
-            DWORD lAttributes = GetFileAttributes(lPath);
+            auto lAttributes = GetFileAttributes(lPath);
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
@@ -163,7 +163,7 @@ namespace KMS
 
             GetPath(aFile, lPath, sizeof(lPath));
 
-            DWORD lAttr = GetFileAttributes(lPath);
+            auto lAttr = GetFileAttributes(lPath);
 
             char lMsg[64 + PATH_LENGTH];
 
@@ -255,7 +255,7 @@ namespace KMS
         {
             char lPath[PATH_LENGTH];
 
-            DWORD lRet = GetCurrentDirectory(sizeof(lPath), lPath);
+            auto lRet = GetCurrentDirectory(sizeof(lPath), lPath);
             assert(0 < lRet);
             assert(sizeof(lPath) > lRet);
 
@@ -266,7 +266,7 @@ namespace KMS
         {
             char lModule[PATH_LENGTH];
 
-            DWORD lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
+            auto lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "GetModuleFileName failed", lRet);
 
             char* lPtr = strrchr(lModule, '\\');
@@ -283,7 +283,7 @@ namespace KMS
 
             unsigned int lLength = sizeof(lRoot) / sizeof(lRoot[0]);
 
-            DWORD lRet = GetTempPath(lLength, lRoot);
+            auto lRet = GetTempPath(lLength, lRoot);
             KMS_EXCEPTION_ASSERT((0 < lRet) && (lLength > lRet), FILE_INIT_FAILED, "GetTempPath failed", lRet);
 
             char lFolder[PATH_LENGTH];
@@ -293,7 +293,7 @@ namespace KMS
                 KMS_EXCEPTION(FILE_INIT_FAILED, "GetTempFileName failed", lRoot);
             }
 
-            BOOL lRetB = DeleteFile(lFolder);
+            auto lRetB = DeleteFile(lFolder);
             assert(lRetB);
 
             mPath = lFolder;

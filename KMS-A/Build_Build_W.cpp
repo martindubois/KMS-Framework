@@ -39,7 +39,7 @@ namespace KMS
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
                 File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
@@ -64,11 +64,11 @@ namespace KMS
 
         void Build::Package_Components(const char* aC)
         {
-            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
+            for (const auto& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
                 std::string lCfg = aC;
@@ -86,11 +86,11 @@ namespace KMS
 
                     lBin.Create();
 
-                    for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+                    for (const auto& lEntry : mBinaries.mInternal)
                     {
                         assert(NULL != lEntry);
 
-                        const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                        auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                         assert(NULL != lB);
 
                         lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
@@ -104,11 +104,11 @@ namespace KMS
 
                     lLib.Create();
 
-                    for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+                    for (const auto& lEntry : mLibraries.mInternal)
                     {
                         assert(NULL != lEntry);
 
-                        const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                        auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                         assert(NULL != lL);
 
                         lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
@@ -120,18 +120,18 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
+            for (const auto& lEntry : mWindowsProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
-                for (const DI::Container::Entry& lEntry : mTests.mInternal)
+                for (const auto& lEntry : mTests.mInternal)
                 {
                     assert(NULL != lEntry);
 
-                    const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                    auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lT);
 
                     std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;

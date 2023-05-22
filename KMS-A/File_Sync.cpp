@@ -113,11 +113,11 @@ namespace KMS
 
         void Sync::Run_Bidirectional()
         {
-            for (const DI::Dictionary::Internal::value_type lVT : mBidirectional.mInternal)
+            for (const auto& lVT : mBidirectional.mInternal)
             {
                 assert(NULL != lVT.second);
 
-                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
+                auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
                 assert(NULL != lGroup);
 
                 Run_Bidirectional(*lGroup);
@@ -130,17 +130,17 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lStr = dynamic_cast<const DI::String*>(lObj);
+                auto lStr = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lStr);
 
                 char lDstName[PATH_LENGTH];
                 char lSrcName[PATH_LENGTH];
 
-                int lRet = sscanf_s(*lStr, "%[^;];%s", lSrcName SizeInfo(lSrcName), lDstName SizeInfo(lDstName));
+                auto lRet = sscanf_s(*lStr, "%[^;];%s", lSrcName SizeInfo(lSrcName), lDstName SizeInfo(lDstName));
                 KMS_EXCEPTION_ASSERT(2 == lRet, FILE_CONFIG_INVALID, "Invalid unidirectional entry", lRet);
 
-                FileInfoList* lDst = ToFileInfoList(lDstName);
-                FileInfoList* lSrc = ToFileInfoList(lSrcName);
+                auto lDst = ToFileInfoList(lDstName);
+                auto lSrc = ToFileInfoList(lSrcName);
 
                 std::cout << *lSrc;
 
@@ -172,15 +172,15 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lPath = dynamic_cast<const DI::String*>(lObj);
+                auto lPath = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lPath);
 
                 lLists.push_back(ToFileInfoList(*lPath));
             }
 
-            for (FileInfoList* lA : lLists)
+            for (auto lA : lLists)
             {
-                for (FileInfoList* lB : lLists)
+                for (auto lB : lLists)
                 {
                     if (lA != lB)
                     {
@@ -189,7 +189,7 @@ namespace KMS
                 }
             }
 
-            for (FileInfoList* lList : lLists)
+            for (auto lList : lLists)
             {
                 delete lList;
             }
@@ -210,11 +210,11 @@ namespace KMS
 
         void Sync::VerifyConfig() const
         {
-            for (const DI::Dictionary::Internal::value_type lVT : mBidirectional.mInternal)
+            for (const auto& lVT : mBidirectional.mInternal)
             {
                 assert(NULL != lVT.second);
 
-                const DI::Array* lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
+                auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
                 assert(NULL != lGroup);
 
                 KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), FILE_CONFIG_INVALID, "Number of folders cannot be one", lVT.first.c_str());

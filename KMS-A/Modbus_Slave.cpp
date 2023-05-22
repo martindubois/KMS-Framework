@@ -93,7 +93,7 @@ namespace KMS
             lData.mQty       = aQty;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aDst->Send(this, &lData);
+            auto lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
@@ -133,7 +133,7 @@ namespace KMS
             lData.mQty       = aQty;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aDst->Send(this, &lData);
+            auto lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
@@ -164,7 +164,7 @@ namespace KMS
             lData.mQty       = 1;
             lData.mStartAddr = aStartAddr;
 
-            unsigned int lRet = aDst->Send(this, &lData);
+            auto lRet = aDst->Send(this, &lData);
             if (KMS_MSG_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)

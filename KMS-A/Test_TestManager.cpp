@@ -80,10 +80,10 @@ namespace KMS
         {
             assert(NULL != aGroup);
 
-            Test::TestList* lTests = Test::GetTests();
+            auto lTests = Test::GetTests();
             if (NULL != lTests)
             {
-                for (Test* lT : *lTests)
+                for (auto lT : *lTests)
                 {
                     if (lT->IsGroup(aGroup))
                     {
@@ -97,10 +97,10 @@ namespace KMS
         {
             assert(NULL != aTest);
 
-            Test::TestList* lTests = Test::GetTests();
+            auto lTests = Test::GetTests();
             if (NULL != lTests)
             {
-                for (Test* lT : *lTests)
+                for (auto lT : *lTests)
                 {
                     if (lT->IsName(aTest))
                     {
@@ -118,7 +118,7 @@ namespace KMS
 
             auto lTT = new Dbg::Stats_Timer("TestTime");
 
-            for (Test* lT : mTestList)
+            for (auto lT : mTestList)
             {
                 lTT->Start();
 
@@ -141,7 +141,7 @@ namespace KMS
         {
             unsigned int lIndex = 0;
 
-            for (const Test* lT : mTestList)
+            for (auto lT : mTestList)
             {
                 aOut << "Test " << lIndex << "\n";
                 aOut << *lT;
@@ -181,7 +181,7 @@ namespace KMS
         {
             assert(NULL != aTest);
 
-            for (Test* lTest : mTestList)
+            for (auto lTest : mTestList)
             {
                 assert(NULL != lTest);
 
@@ -200,7 +200,7 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                auto lString = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lString);
 
                 AddGroup(*lString);
@@ -210,7 +210,7 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                auto lString = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lString);
 
                 AddTest(*lString);

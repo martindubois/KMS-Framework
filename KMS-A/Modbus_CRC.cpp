@@ -72,7 +72,7 @@ namespace KMS
 
             for (unsigned int j = 0; j < 8; j++)
             {
-                bool lCarry = 1 == (mValue & 0x0001);
+                auto lCarry = 1 == (mValue & 0x0001);
 
                 mValue >>= 1;
 

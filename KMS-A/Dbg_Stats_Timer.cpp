@@ -34,7 +34,7 @@ namespace KMS
 
         void Stats_Timer::Stop()
         {
-            double lNow_s = GetNow_s();
+            auto lNow_s = GetNow_s();
             if (mStart_s <= lNow_s)
             {
                 Set(lNow_s - mStart_s);
@@ -54,15 +54,15 @@ namespace KMS
 
         void Stats_Timer::Display(std::ostream& aOut) const
         {
-            unsigned int lCount = GetCount();
+            auto lCount = GetCount();
             if (0 < lCount)
             {
                 aOut << GetName() << " : ";
 
-                double lAvg = GetAverage();
+                auto   lAvg = GetAverage();
                 double lDiv = 1.0;
 
-                const char* lUnit = "s";
+                auto lUnit = "s";
 
                 if (60.0 < lAvg)
                 {
@@ -99,9 +99,9 @@ using namespace KMS;
 
 double GetNow_s()
 {
-    uint64_t lNow_100ns = OS::GetSystemTime();
+    auto lNow_100ns = OS::GetSystemTime();
 
-    double lResult_s = static_cast<double>(lNow_100ns);
+    auto lResult_s = static_cast<double>(lNow_100ns);
 
     lResult_s /= 10000000;
 

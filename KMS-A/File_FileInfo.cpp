@@ -25,7 +25,7 @@ namespace KMS
         {
             assert(NULL != mData);
 
-            WIN32_FIND_DATA* lData = reinterpret_cast<WIN32_FIND_DATA*>(mData);
+            auto lData = reinterpret_cast<WIN32_FIND_DATA*>(mData);
 
             delete lData;
         }
@@ -60,7 +60,7 @@ namespace KMS
         {
             assert(NULL != mData);
 
-            const WIN32_FIND_DATA* lData = reinterpret_cast<const WIN32_FIND_DATA*>(mData);
+            auto lData = reinterpret_cast<const WIN32_FIND_DATA*>(mData);
 
             uint64_t lResult = lData->ftLastWriteTime.dwLowDateTime;
 

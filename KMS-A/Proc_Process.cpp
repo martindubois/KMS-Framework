@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Proc_Process.cpp
@@ -88,7 +88,7 @@ namespace KMS
             lCmdLine += lExec;
             lCmdLine += "\"";
 
-            for (std::string lA : mArguments)
+            for (const auto& lA : mArguments)
             {
                 if (std::string::npos == lA.find_first_of(' '))
                 {
@@ -100,7 +100,7 @@ namespace KMS
                 }
             }
 
-            size_t lLen = lCmdLine.size() + 1;
+            auto lLen = lCmdLine.size() + 1;
 
             mCmdLine = new char[lLen];
 

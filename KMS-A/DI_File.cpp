@@ -35,7 +35,7 @@ namespace KMS
                 && (stdin  != mInternal)
                 && (stdout != mInternal))
             {
-                int lRet = fclose(mInternal);
+                auto lRet = fclose(mInternal);
                 assert(0 == lRet);
             }
 
@@ -56,14 +56,14 @@ namespace KMS
 
             assert(NULL == mInternal);
 
-            const char* lIn = Get();
+            auto lIn = Get();
 
             if      (0 == strcmp("stderr", lIn)) { mInternal = stderr; }
             else if (0 == strcmp("stdin" , lIn)) { mInternal = stdin; }
             else if (0 == strcmp("stdout", lIn)) { mInternal = stdout; }
             else
             {
-                errno_t lRet = fopen_s(&mInternal, lIn, mMode);
+                auto lRet = fopen_s(&mInternal, lIn, mMode);
 
                 char lMsg[64 + PATH_LENGTH];
                 sprintf_s(lMsg, "Cannot open \"%s\"", lIn);
