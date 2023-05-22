@@ -269,7 +269,7 @@ namespace KMS
         {
             Connect();
 
-            int lRet = CLI::Tool::Run();
+            auto lRet = CLI::Tool::Run();
 
             Disconnect();
 
@@ -290,14 +290,14 @@ uint16_t ToAddress(const DI::Dictionary& aMap, const char* aName)
 
     uint16_t lResult;
 
-    const DI::Object* lObject = aMap.GetEntry_R(aName);
+    auto lObject = aMap.GetEntry_R(aName);
     if (NULL == lObject)
     {
         lResult = Convert::ToUInt16(aName);
     }
     else
     {
-        const DI::UInt<uint16_t>* lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
+        auto lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
         assert(NULL != lAddr);
 
         lResult = *lAddr;

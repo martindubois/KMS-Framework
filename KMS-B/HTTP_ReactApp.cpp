@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -106,16 +106,16 @@ namespace KMS
         {
             assert(NULL != aRequest);
 
-            const char* lPath = aRequest->GetPath();
+            auto lPath = aRequest->GetPath();
 
-            FunctionMap::iterator lIt = mFunctions.find(lPath);
+            auto lIt = mFunctions.find(lPath);
             if (mFunctions.end() == lIt)
             {
                 mFileServer.ProcessRequest(aRequest);
             }
             else
             {
-                unsigned int lRet = lIt->second.Send(this, aRequest);
+                auto lRet = lIt->second.Send(this, aRequest);
                 if (!KMS_MSG_SUCCESS(lRet))
                 {
                     aRequest->SetResult(Request::Result::INTERNAL_SERVER_ERROR);
@@ -129,11 +129,11 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            Request* lRequest = reinterpret_cast<Request*>(aData);
+            auto lRequest = reinterpret_cast<Request*>(aData);
 
-            const char* lPath = lRequest->GetPath();
+            auto lPath = lRequest->GetPath();
 
-            StringSet_ASCII::iterator lIt = mRoutes.find(lPath);
+            auto lIt = mRoutes.find(lPath);
             if (mRoutes.end() == lIt)
             {
                 OnFunction(lRequest);

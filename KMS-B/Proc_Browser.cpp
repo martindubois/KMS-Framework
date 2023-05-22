@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Proc_Browser.cpp
@@ -171,7 +171,7 @@ namespace KMS
             assert(NULL != aOut);
             assert(0 < aOutSize_byte);
 
-            bool lResult = false;
+            auto lResult = false;
 
             switch (mType)
             {

@@ -68,7 +68,7 @@ namespace KMS
                 lResult_byte = lBuffer.mLength_byte - 3; // Device address + Function code + Byte count
                 KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, MODBUS_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
 
-                unsigned int lRet_byte = mSocket.Receive(aOut, lResult_byte);
+                auto lRet_byte = mSocket.Receive(aOut, lResult_byte);
                 KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
             }
             catch (...)
@@ -102,13 +102,13 @@ namespace KMS
 
                     lResult_byte = lBuffer.mLength_byte - 2; // Device address + Function code
 
-                    uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
+                    auto lOut = reinterpret_cast<uint8_t*>(aOut);
 
                     lOut[0] = lBuffer.mData[0];
 
                     lSize_byte = lResult_byte - 1; // First data byte alread read
 
-                    unsigned int lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
+                    auto lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
                     KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
                 }
             }
@@ -158,7 +158,7 @@ namespace KMS
             assert(NULL != aBuffer);
             assert(HEADER_SIZE_byte < aSize_byte);
 
-            unsigned int lRet_byte = mSocket.Receive(aBuffer, aSize_byte);
+            auto lRet_byte = mSocket.Receive(aBuffer, aSize_byte);
             KMS_EXCEPTION_ASSERT(aSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete header", lRet_byte);
 
             aBuffer->mLength_byte   = ntohs(aBuffer->mLength_byte);

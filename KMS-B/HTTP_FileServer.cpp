@@ -176,7 +176,7 @@ namespace KMS
         {
             assert(NULL != aExt);
 
-            FileTypeMap::iterator lIt = mFileTypes.find(aExt);
+            auto lIt = mFileTypes.find(aExt);
             if (mFileTypes.end() == lIt)
             {
                 mFileTypes.insert(FileTypeMap::value_type(aExt, aFunction));
@@ -212,18 +212,18 @@ namespace KMS
         {
             assert(NULL != aR);
 
-            const char* lPath = (NULL == aPath) ? aR->GetPath() : aPath;
+            auto lPath = (NULL == aPath) ? aR->GetPath() : aPath;
 
             // TODO Protect against .. in path.
 
-            const char* lExt = strrchr(lPath, '.');
+            auto lExt = strrchr(lPath, '.');
             if (NULL == lExt)
             {
                 aR->SetResult(Request::Result::FORBIDDEN);
                 return;
             }
 
-            FileTypeMap::iterator lIt = mFileTypes.find(lExt + 1);
+            auto lIt = mFileTypes.find(lExt + 1);
             if (mFileTypes.end() == lIt)
             {
                 aR->SetResult(Request::Result::FORBIDDEN);

@@ -175,7 +175,7 @@ namespace KMS
 
         unsigned int Simulator::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            Slave::MsgData* lData = reinterpret_cast<Slave::MsgData*>(aData);
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
             unsigned int lResult;
 
@@ -243,7 +243,7 @@ namespace KMS
 
         bool Simulator::Item::Clear()
         {
-            bool lResult = !mName.empty();
+            auto lResult = !mName.empty();
 
             mFlags = 0;
             mName  = "";
@@ -263,16 +263,16 @@ namespace KMS
 
             for (unsigned int i = 0; i < aData->mQty; i++)
             {
-                bool lValue = false;
+                auto lValue = false;
 
-                const DI::Object* lObject = mCoils.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mCoils.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Coil", aData->mStartAddr + i, OFF);
                 }
                 else
                 {
-                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
                     TraceKnown("Read Coil", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
@@ -292,16 +292,16 @@ namespace KMS
 
             for (unsigned int i = 0; i < aData->mQty; i++)
             {
-                bool lValue = false;
+                auto lValue = false;
 
-                const DI::Object* lObject = mDiscreteInputs.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mDiscreteInputs.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Discrete Input", aData->mStartAddr + i, OFF);
                 }
                 else
                 {
-                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
                     TraceKnown("Read Discrete Input", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
@@ -323,14 +323,14 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                const DI::Object* lObject = mHoldingRegisters.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mHoldingRegisters.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Holding Register", aData->mStartAddr + i, 0);
                 }
                 else
                 {
-                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
                     TraceKnown("Read Holding Register", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
@@ -352,14 +352,14 @@ namespace KMS
             {
                 RegisterValue lValue = 0;
 
-                const DI::Object* lObject = mInputRegisters.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mInputRegisters.GetEntry_R(aData->mStartAddr + i);
                 if (NULL == lObject)
                 {
                     TraceUnknown("Read Input Register", aData->mStartAddr + i, 0);
                 }
                 else
                 {
-                    const Item* lItem = dynamic_cast<const Item*>(lObject);
+                    auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
                     TraceKnown("Read Input Register", aData->mStartAddr, *lItem, FLAG_VERBOSE_READ);
@@ -377,19 +377,19 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
+            auto lValue = ReadUInt16(aData->mBuffer, 0);
 
-            DI::Object* lObject = mCoils.GetEntry_RW(aData->mStartAddr);
+            auto lObject = mCoils.GetEntry_RW(aData->mStartAddr);
             if (NULL == lObject)
             {
                 TraceUnknown("Write Single Coil", aData->mStartAddr, lValue);
             }
             else
             {
-                bool lBool = ON == lValue;
+                auto lBool = ON == lValue;
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
-                Item* lItem = dynamic_cast<Item*>(lObject);
+                auto lItem = dynamic_cast<Item*>(lObject);
                 assert(NULL != lItem);
 
                 if ((0 != lItem->mValue) != lBool)
@@ -408,9 +408,9 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            RegisterValue lValue = ReadUInt16(aData->mBuffer, 0);
+            auto lValue = ReadUInt16(aData->mBuffer, 0);
 
-            DI::Object* lObject = mHoldingRegisters.GetEntry_RW(aData->mStartAddr);
+            auto lObject = mHoldingRegisters.GetEntry_RW(aData->mStartAddr);
             if (NULL == lObject)
             {
                 TraceUnknown("Write Single Register", aData->mStartAddr, lValue);
@@ -419,7 +419,7 @@ namespace KMS
             {
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
-                Item* lItem = dynamic_cast<Item*>(lObject);
+                auto lItem = dynamic_cast<Item*>(lObject);
                 assert(NULL != lItem);
 
                 if (lItem->mValue != lValue)

@@ -57,7 +57,7 @@ namespace KMS
 
         void Socket_Client::Connect_Internal()
         {
-            int lRet = connect(mSocket, mRemoteAddress.Get(), mRemoteAddress.Get().GetInternalSize());
+            auto lRet = connect(mSocket, mRemoteAddress.Get(), mRemoteAddress.Get().GetInternalSize());
             KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_CONNECT_FAILED, "Connect failed", lRet);
 
             mState = State::CONNECTED;

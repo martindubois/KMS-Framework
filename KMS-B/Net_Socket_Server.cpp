@@ -48,7 +48,7 @@ namespace KMS
                 int lSize_byte = Address::INTERNAL_SIZE_byte;
                 assert(0 < lSize_byte);
 
-                SOCKET lSocket = accept(mSocket, *aFrom, &lSize_byte);
+                auto lSocket = accept(mSocket, *aFrom, &lSize_byte);
                 if (INVALID_SOCKET != lSocket)
                 {
                     aFrom->SetInternalSize(lSize_byte);
@@ -63,7 +63,7 @@ namespace KMS
                     }
                     else
                     {
-                        int lRet = closesocket(lSocket);
+                        auto lRet = closesocket(lSocket);
                         assert(0 == lRet);
                     }
                 }
@@ -136,7 +136,7 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::NetAddressRange* lAR = dynamic_cast<const DI::NetAddressRange*>(lObj);
+                auto lAR = dynamic_cast<const DI::NetAddressRange*>(lObj);
                 assert(NULL != lAR);
 
                 if (lAR->Get() == aA)
@@ -153,7 +153,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
             assert(State::OPEN == mState);
 
-            int lRet = listen(mSocket, 1);
+            auto lRet = listen(mSocket, 1);
             KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_LISTEN_FAILED, "listen failed", lRet);
 
             mState = State::LISTEN;

@@ -149,11 +149,11 @@ namespace KMS
 
             char lData[LINE_LENGTH];
 
-            unsigned int lSize_byte = mPort.Read(lData, lInSize_byte, Com::Port::FLAG_READ_ALL);
+            auto lSize_byte = mPort.Read(lData, lInSize_byte, Com::Port::FLAG_READ_ALL);
 
             lData[lSize_byte] = '\0';
 
-            bool lMatch = (lInSize_byte == lSize_byte);
+            auto lMatch = (lInSize_byte == lSize_byte);
             if (lMatch)
             {
                 lMatch = 0 == memcmp(lIn, lData, lSize_byte);
@@ -319,7 +319,7 @@ namespace KMS
         {
             uint8_t lData[LINE_LENGTH];
 
-            unsigned int lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
+            auto lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
 
             ReceiveAndVerify(lData, lSize_byte, aFlags);
         }
@@ -328,7 +328,7 @@ namespace KMS
         {
             uint8_t lData[LINE_LENGTH];
 
-            unsigned int lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
+            auto lSize_byte = Convert::ToUInt8Array(aIn, " ", "", lData, sizeof(lData));
 
             Send(lData, lSize_byte, aFlags);
         }
@@ -358,7 +358,7 @@ void Dump(FILE* aOut, const void* aIn, unsigned int aInSize_byte)
     assert(NULL != aOut);
     assert(NULL != aIn);
 
-    const uint8_t* lIn = static_cast<const uint8_t*>(aIn);
+    auto lIn = static_cast<const uint8_t*>(aIn);
 
     for (unsigned int i = 0; i < aInSize_byte; i++)
     {
@@ -375,7 +375,7 @@ unsigned int ToFrameT(const void* aIn, unsigned int aInSize_byte, void* aOut, un
 
     KMS_EXCEPTION_ASSERT(aInSize_byte + 4 <= aOutSize_byte, COM_OUTPUT_TOO_SHORT, "The output buffer is too short", aInSize_byte);
 
-    uint8_t* lOut = reinterpret_cast<uint8_t*>(aOut);
+    auto lOut = reinterpret_cast<uint8_t*>(aOut);
     unsigned int lResult_byte = 0;
 
     lOut[lResult_byte] = 0x7e; lResult_byte++;

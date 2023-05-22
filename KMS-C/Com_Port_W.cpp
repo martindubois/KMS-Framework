@@ -20,7 +20,7 @@ namespace KMS
 
         void Port::ClearReadBuffer()
         {
-            BOOL lRetB = PurgeComm(*this, PURGE_RXCLEAR);
+            auto lRetB = PurgeComm(*this, PURGE_RXCLEAR);
             KMS_EXCEPTION_ASSERT(lRetB, COM_CLEAR_FAILED, "Cannot clear the read buffer", "");
         }
 
@@ -121,7 +121,7 @@ namespace KMS
         {
             DWORD lBits;
 
-            Port* lThis = const_cast<Port*>(this);
+            auto lThis = const_cast<Port*>(this);
 
             if (!GetCommModemStatus(*lThis, &lBits))
             {

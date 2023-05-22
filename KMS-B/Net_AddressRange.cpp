@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_AddressRange.cpp
@@ -37,8 +37,8 @@ namespace KMS
 
             if (mType == aA.GetType())
             {
-                const uint8_t* lA = reinterpret_cast<const uint8_t*>(aA.GetBinary());
-                unsigned int lSize_byte = GetSize();
+                auto lA = reinterpret_cast<const uint8_t*>(aA.GetBinary());
+                auto lSize_byte = GetSize();
 
                 lResult = true;
 
@@ -57,7 +57,7 @@ namespace KMS
 
         void AddressRange::SetMask(unsigned int aBits)
         {
-            unsigned int lBits = aBits;
+            auto lBits = aBits;
 
             for (unsigned int i = 0; i < sizeof(mMask) / sizeof(mMask[1]); i++)
             {

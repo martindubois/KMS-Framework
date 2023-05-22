@@ -164,7 +164,7 @@ namespace KMS
 
             addrinfo* lAddr;
 
-            int lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
+            auto lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
 
             char lMsg[64 + NAME_LENGTH];
             sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
@@ -172,7 +172,7 @@ namespace KMS
 
             assert(NULL != lAddr);
 
-            addrinfo* lCurrent = lAddr;
+            auto lCurrent = lAddr;
 
             while (NULL != lCurrent)
             {

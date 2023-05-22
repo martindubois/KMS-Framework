@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_AddressRangeList.cpp
@@ -24,7 +24,7 @@ namespace KMS
 
         bool AddressRangeList::IsInRanges(const Address& aA) const
         {
-            for (const AddressRange& lAR : mInternal)
+            for (auto& lAR : mInternal)
             {
                 if (lAR == aA)
                 {

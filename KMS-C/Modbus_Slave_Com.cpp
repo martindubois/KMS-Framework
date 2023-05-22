@@ -72,7 +72,7 @@ namespace KMS
         {
             char lBuffer[260];
 
-            unsigned int lRet_byte = mPort.Read(lBuffer, sizeof(lBuffer));
+            auto lRet_byte = mPort.Read(lBuffer, sizeof(lBuffer));
             if (0 < lRet_byte)
             {
                 mSilentCounter = 0;
