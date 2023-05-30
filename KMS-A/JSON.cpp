@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/JSON.cpp
@@ -91,14 +91,14 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
     assert(NULL != aObject);
 
     // Dictionary must be tested before Array because Dictionary is an Array
-    DI::Dictionary* lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
+    auto lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Decode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        DI::Array* lArray = dynamic_cast<DI::Array*>(aObject);
+        auto lArray = dynamic_cast<DI::Array*>(aObject);
         if (NULL != lArray)
         {
             Decode_Array(lArray, aPtr);
@@ -106,14 +106,14 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
         else
         {
             // String must be tested before Value because String is a Value
-            DI::String* lString = dynamic_cast<DI::String*>(aObject);
+            auto lString = dynamic_cast<DI::String*>(aObject);
             if (NULL != lString)
             {
                 Decode_String(lString, aPtr);
             }
             else
             {
-                DI::Value* lValue = dynamic_cast<DI::Value*>(aObject);
+                auto lValue = dynamic_cast<DI::Value*>(aObject);
                 KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not suppoert this data type", "");
 
                 Decode_Value(lValue, aPtr);
@@ -196,7 +196,7 @@ void Decode_Array(DI::Array* aArray, Text::ReadPtr* aPtr)
 
         for (;;)
         {
-            DI::Object* lObject = aArray->GetEntry_RW(lIndex);
+            auto lObject = aArray->GetEntry_RW(lIndex);
             if (NULL != lObject)
             {
                 Decode(lObject, &lPtr);
@@ -257,7 +257,7 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
 
             lPtr.SkipBlank();
 
-            DI::Object* lObject = aDictionary->GetEntry_RW(lName);
+            auto lObject = aDictionary->GetEntry_RW(lName);
             if (NULL != lObject)
             {
                 Decode(lObject, &lPtr);
@@ -333,14 +333,14 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
     Text::WritePtr lPtr(*aPtr);
 
     // Dictionary must be tested before Array because Dictionary is an Array
-    const DI::Dictionary* lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
+    auto lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Encode_Dictionary(lDictionary, &lPtr);
     }
     else
     {
-        const DI::Array* lArray = dynamic_cast<const DI::Array*>(aObject);
+        auto lArray = dynamic_cast<const DI::Array*>(aObject);
         if (NULL != lArray)
         {
             Encode_Array(lArray, &lPtr);
@@ -348,14 +348,14 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
         else
         {
             // String must be tested before Value because String is a Value
-            const DI::String* lString = dynamic_cast<const DI::String*>(aObject);
+            auto lString = dynamic_cast<const DI::String*>(aObject);
             if (NULL != lString)
             {
                 Encode_String(lString, &lPtr);
             }
             else
             {
-                const DI::Value* lValue = dynamic_cast<const DI::Value*>(aObject);
+                auto lValue = dynamic_cast<const DI::Value*>(aObject);
                 KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not support this data type", "");
 
                 lPtr += lValue->Get(lPtr, lPtr.GetRemainingSize());
@@ -375,7 +375,7 @@ void Encode_Array(const DI::Array* aArray, Text::WritePtr* aPtr)
 
     lPtr.Write('[');
 
-    bool lFirst = true;
+    auto lFirst = true;
 
     for (const DI::Object* lObj : aArray->mInternal)
     {
@@ -407,9 +407,9 @@ void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 
     lPtr.Write('{');
 
-    bool lFirst = true;
+    auto lFirst = true;
 
-    for (const DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
+    for (const auto& lVT : aDictionary->mInternal)
     {
         assert(NULL != lVT.second);
 

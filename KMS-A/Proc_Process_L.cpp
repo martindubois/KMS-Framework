@@ -30,7 +30,7 @@ namespace KMS
         {
             assert(NULL != mCmdLine);
 
-            bool lCD = 0 < mWorkingDirectory.size();
+            auto lCD = 0 < mWorkingDirectory.size();
 
             char lDir[PATH_LENGTH];
 
@@ -54,7 +54,7 @@ namespace KMS
 
         void Process::Start_Internal()
         {
-            pid_t lPId = fork();
+            auto lPId = fork();
             switch (lPId)
             {
             case -1: KMS_EXCEPTION(PROC_START_FAILED, "fork failed", mCmdLine);
@@ -72,7 +72,7 @@ namespace KMS
 
                     lVector[0] = lPath;
 
-                    for (std::string& lA : mArguments)
+                    for (const auto& lA : mArguments)
                     {
                         lVector[lIndex] = lA.c_str(); lIndex++;
                     }
@@ -87,7 +87,7 @@ namespace KMS
                         }
                     }
 
-                    int lRet = execv(lPath, const_cast<char **>(lVector));
+                    auto lRet = execv(lPath, const_cast<char **>(lVector));
                     assert(-1 == lRet);
 
                     KMS_EXCEPTION(PROC_START_FAILED, "execv failed", mCmdLine);

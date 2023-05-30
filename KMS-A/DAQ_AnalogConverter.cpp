@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DAC_AnalogConverter.cpp
@@ -28,7 +28,7 @@ namespace KMS
 
         double AnalogConverter::Revert(Id aId, double aIn) const
         {
-            ScaleMap::const_iterator lIt = mScales.find(aId);
+            auto lIt = mScales.find(aId);
             assert(mScales.end() != lIt);
 
             return lIt->second.Revert(aIn);
@@ -36,7 +36,7 @@ namespace KMS
 
         double AnalogConverter::Scale(Id aId, double aIn) const
         {
-            ScaleMap::const_iterator lIt = mScales.find(aId);
+            auto lIt = mScales.find(aId);
             assert(mScales.end() != lIt);
 
             return lIt->second.Scale(aIn);

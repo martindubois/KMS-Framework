@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Text_File_UTF16.cpp
@@ -37,7 +37,9 @@ namespace KMS
 
         const wchar_t* File_UTF16::GetLine(unsigned int aNo) const
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             return mLines[aNo].c_str();
         }
@@ -48,9 +50,11 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
 
             lIt += aNo;
 
@@ -61,10 +65,12 @@ namespace KMS
 
         void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lFirst = mLines.begin() + aNo;
-            Internal::const_iterator lLast  = lFirst + aCount;
+            auto lFirst = mLines.begin() + aNo;
+            auto lLast  = lFirst + aCount;
 
             mLines.erase(lFirst, lLast);
         }
@@ -73,7 +79,9 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             mLines[aNo] = aLine;
         }
@@ -87,7 +95,7 @@ namespace KMS
 
             std::wregex lRegEx(aRegEx);
 
-            for (std::wstring& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (std::regex_match(lLine, lRegEx))
                 {
@@ -108,7 +116,10 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wifstream lStream(lPath, std::ios::binary);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for reading", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
 
@@ -116,44 +127,59 @@ namespace KMS
 
             while (getline(lStream, lLine))
             {
+                if ((!lLine.empty()) && (L'\r' == lLine.back()))
+                {
+                    lLine.pop_back();
+                }
+
                 mLines.push_back(lLine);
             }
         }
 
-        void File_UTF16::Write(const File::Folder& aFolder, const char* aFile)
+        void File_UTF16::Write(const File::Folder& aFolder, const char* aFile, const wchar_t* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wofstream lStream(lPath, std::ios::binary);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 
-            for (const std::wstring& lLine : mLines)
+            for (const auto& lLine : mLines)
             {
-                lStream << lLine << "\n";
+                lStream << lLine << aEOL;
             }
         }
 
-        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile)
+        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             FILE* lFile;
 
-            errno_t lErr = fopen_s(&lFile, lPath, "wb");
-            KMS_EXCEPTION_ASSERT(0 == lErr, TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
+            auto lErr = fopen_s(&lFile, lPath, "wb");
 
-            for (const std::wstring& lLine : mLines)
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+            KMS_EXCEPTION_ASSERT(0 == lErr, TEXT_OPEN_FAILED, lMsg, lErr);
+
+            for (const auto& lLine : mLines)
             {
-                fprintf(lFile, "%S\n", lLine.c_str());
+                fprintf(lFile, "%S%s", lLine.c_str(), aEOL);
             }
 
-            int lRet = fclose(lFile);
+            auto lRet = fclose(lFile);
             assert(0 == lRet);
         }
 
@@ -163,7 +189,7 @@ namespace KMS
 
             unsigned int lResult = 0;
 
-            for (const std::wstring& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (lLine.npos != lLine.find(aStr))
                 {
@@ -184,7 +210,7 @@ namespace KMS
         {
             unsigned int lResult = 0;
 
-            Internal::iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
             while (mLines.end() != lIt)
             {
                 if (std::regex_match(*lIt, aRegEx))

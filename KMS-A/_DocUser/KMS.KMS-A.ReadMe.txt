@@ -1,19 +1,48 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022 KMS
+Copyright (C) 2022-2023 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.68-dev Windows 2023-05-25
+- Cfg::Configurator::DisplayConfig (KF-28)
+
+0.1.67-dev Windows 2023-04-19
+- Text::File_ASCII and Text::File_UTF16 - Configurable EOL
+
+0.1.66-dev Windows 2023-04-14
+* Click::Master
+* Dbg::Stats
+
+0.1.65-dev Windows 2023-04-03
+
+0.1.64-dev Windows 2023-03-30
+- Modbus::Master::mRetryCount
+
+0.1.63-dev Windows 2023-03-27
+* Dbg::Log::FLAG_USER_REDUNDANT (KF-29)
+- User friendly message (KF-29)
+
+0.1.62-dev Windows 2023-03-23
+* Modbus
+    * Master_Com::GetPort (KF-30)
+    * Master_TCP::GetSocket (KF-30)
+    - Master - The request type handler are protected
+
+0.1.61-dev Windows 2023-03-22
+* FileFormat::ELF
+- Modbus::Slave - Fix bugs
+
+0.1.60-dev Windows 2023-03-16
+
 0.1.59-stm32f373vctx 2022-12-30
 - Embedded::AssertFailure
 
 0.1.58-stm32f373vctx 2022-12-29
 - WOP::System::AddTrace(uint16_t)
-
-0.1.57-dev Windows 2022-12-26
 
 0.1.55-dev Windows 2022-12-19
 - Build::Depend::Display

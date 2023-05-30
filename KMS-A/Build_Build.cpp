@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build.cpp
@@ -14,6 +14,8 @@
 #include <KMS/Build/Make.h>
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Text/File_ASCII.h>
 #include <KMS/Version.h>
@@ -28,6 +30,7 @@
 #define DEFAULT_DO_NOT_COMPILE (false)
 #define DEFAULT_DO_NOT_EXPORT  (false)
 #define DEFAULT_DO_NOT_PACKAGE (false)
+#define DEFAULT_DO_NOT_TEST    (false)
 #define DEFAULT_OS_INDEPENDENT (false)
 #define DEFAULT_VERSION_FILE   ("Common" SLASH "Version.h")
 
@@ -41,6 +44,7 @@ static const KMS::Cfg::MetaData MD_CONFIGURATIONS ("Configurations += {Name}");
 static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
+static const KMS::Cfg::MetaData MD_DO_NOT_TEST    ("DoNotTest = false | true");
 static const KMS::Cfg::MetaData MD_EDIT_OPERATIONS("EditOperations += {Operation}");
 static const KMS::Cfg::MetaData MD_EMBEDDED       ("Embedded = false | true");
 static const KMS::Cfg::MetaData MD_EXPORT_FOLDER  ("ExportFolder = {Path}");
@@ -123,6 +127,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("ExecutionTime");
+            lET->Start();
+
             try
             {
                 Build             lB;
@@ -135,6 +142,7 @@ namespace KMS
                 lC.AddConfigurable(&lInstaller);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
@@ -146,6 +154,8 @@ namespace KMS
             }
             KMS_CATCH_RESULT(lResult)
 
+            lET->Stop();
+
             return lResult;
         }
 
@@ -153,6 +163,7 @@ namespace KMS
             : mDoNotCompile (DEFAULT_DO_NOT_COMPILE)
             , mDoNotExport  (DEFAULT_DO_NOT_EXPORT)
             , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
+            , mDoNotTest    (DEFAULT_DO_NOT_TEST)
             , mOSIndependent(DEFAULT_OS_INDEPENDENT)
             , mVersionFile  (DEFAULT_VERSION_FILE)
             , mTmp_Root(File::Folder::Id::TEMPORARY)
@@ -177,6 +188,7 @@ namespace KMS
             AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
             AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
             AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
+            AddEntry("DoNotTest"     , &mDoNotTest     , false, &MD_DO_NOT_TEST);
             AddEntry("EditOperations", &mEditOperations, false, &MD_EDIT_OPERATIONS);
             AddEntry("Embedded"      , &mEmbedded      , false, &MD_EMBEDDED);
             AddEntry("ExportFolder"  , &mExportFolder  , false, &MD_EXPORT_FOLDER);
@@ -229,22 +241,10 @@ namespace KMS
 
             ExecuteCommands(mPreBuildCmds);
 
-            if (!mDoNotCompile)
-            {
-                Compile();
-            }
-
-            Test();
-
-            if (!mDoNotPackage)
-            {
-                Package();
-            }
-
-            if (!mDoNotExport)
-            {
-                Export();
-            }
+            if (!mDoNotCompile) { Compile(); }
+            if (!mDoNotTest   ) { Test   (); }
+            if (!mDoNotPackage) { Package(); }
+            if (!mDoNotExport ) { Export (); }
 
             return 0;
         }
@@ -256,11 +256,15 @@ namespace KMS
 
         void Build::Compile()
         {
-            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
+            auto lCT = new Dbg::Stats_Timer("CompileTime");
+
+            for (const auto& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                lCT->Start();
+
+                auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 if (IsEmbedded())
@@ -277,6 +281,8 @@ namespace KMS
                         Compile_VisualStudio(*lC);
                     #endif
                 }
+
+                lCT->Stop();
             }
         }
 
@@ -299,7 +305,7 @@ namespace KMS
             lM.AddCommand("Clean");
             lM.AddCommand("Make");
 
-            int lRet = lM.Run();
+            auto lRet = lM.Run();
             if (0 != lRet)
             {
                 KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
@@ -308,11 +314,11 @@ namespace KMS
 
         void Build::Edit()
         {
-            for (const DI::Container::Entry& lEntry : mEditOperations.mInternal)
+            for (const auto& lEntry : mEditOperations.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lOp = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lOp = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lOp);
 
                 char lFile   [FILE_LENGTH];
@@ -340,11 +346,11 @@ namespace KMS
 
         void Build::ExecuteCommands(const DI::Array& aCommands)
         {
-            for (const DI::Container::Entry& lEntry : aCommands.mInternal)
+            for (const auto& lEntry : aCommands.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lCommand);
 
                 if (0 != system(*lCommand))
@@ -387,11 +393,11 @@ namespace KMS
             if (!mBinaries .IsEmpty()) { mTmp_Binaries .Create(); }
             if (!mLibraries.IsEmpty()) { mTmp_Libraries.Create(); }
 
-            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
+            for (const auto& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 if (IsEmbedded())
@@ -416,9 +422,9 @@ namespace KMS
 
                 lBin.Create();
 
-                for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+                for (const auto& lEntry : mBinaries.mInternal)
                 {
-                    const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                    auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lB);
 
                     lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
@@ -432,9 +438,9 @@ namespace KMS
 
                 lLib.Create();
 
-                for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+                for (const auto& lEntry : mLibraries.mInternal)
                 {
-                    const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                    auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(NULL != lL);
 
                     lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
@@ -444,14 +450,14 @@ namespace KMS
 
         void Build::Package_Files()
         {
-            for (const DI::Container::Entry& lEntry : mFiles.mInternal)
+            for (const auto& lEntry : mFiles.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lF = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lF = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lF);
 
-                const char* lPtr = strrchr(*lF, '/');
+                auto lPtr = strrchr(*lF, '/');
                 if (NULL == lPtr)
                 {
                     lPtr = *lF;
@@ -467,11 +473,11 @@ namespace KMS
 
         void Build::Package_Folders()
         {
-            for (const DI::Container::Entry& lEntry : mFolders.mInternal)
+            for (const auto& lEntry : mFolders.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lF = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lF = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lF);
 
                 char lDst[NAME_LENGTH];
@@ -491,11 +497,11 @@ namespace KMS
 
         void Build::Test()
         {
-            for (const DI::Container::Entry& lEntry : mConfigurations.mInternal)
+            for (const auto& lEntry : mConfigurations.mInternal)
             {
                 assert(NULL != lEntry);
 
-                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Test(*lC);
@@ -517,7 +523,9 @@ namespace KMS
 
                 if (!mDoNotExport)
                 {
-                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, "Invalid export folder", *mExportFolder);
+                    char lMsg[64 + PATH_LENGTH];
+                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.Get().GetPath());
+                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, lMsg, "");
 
                     KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), BUILD_CONFIG_INVALID, "Invalid product name", "");
                 }
@@ -553,10 +561,10 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
 
     assert(NULL != aIn);
 
-    const char * lIn = aIn;
+    auto         lIn = aIn;
     std::string  lResult;
     unsigned int lState = STATE_INIT;
-    const char * lType = aVersion.GetType();
+    auto         lType = aVersion.GetType();
 
     if (0 >= strlen(lType))
     {

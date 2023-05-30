@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/HTTP.cpp
@@ -66,14 +66,14 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
 {
     assert(NULL != aObject);
 
-    DI::Dictionary* lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
+    auto lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Decode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        DI::Value* lValue = dynamic_cast<DI::Value*>(aObject);
+        auto lValue = dynamic_cast<DI::Value*>(aObject);
         KMS_EXCEPTION_ASSERT(NULL != lValue, HTTP_NOT_IMPLEMENTED, "HTTP do not suppoert this data type", "");
 
         Decode_Value(lValue, aPtr);
@@ -136,7 +136,7 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
 
         lPtr.SkipBlank();
 
-        DI::Object* lObject = aDictionary->GetEntry_RW(lName);
+        auto lObject = aDictionary->GetEntry_RW(lName);
         if (NULL != lObject)
         {
             Decode(lObject, &lPtr);
@@ -180,14 +180,14 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
     assert(NULL != aObject);
     assert(NULL != aPtr);
 
-    const DI::Dictionary* lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
+    auto lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
     if (NULL != lDictionary)
     {
         Encode_Dictionary(lDictionary, aPtr);
     }
     else
     {
-        const DI::Value* lValue = dynamic_cast<const DI::Value*>(aObject);
+        auto lValue = dynamic_cast<const DI::Value*>(aObject);
         if (NULL != lValue)
         {
             (*aPtr) += lValue->Get(*aPtr, aPtr->GetRemainingSize());
@@ -206,7 +206,7 @@ void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 
     Text::WritePtr lPtr(*aPtr);
 
-    for (const DI::Dictionary::Internal::value_type lVT : aDictionary->mInternal)
+    for (const auto& lVT : aDictionary->mInternal)
     {
         assert(NULL != lVT.second);
 

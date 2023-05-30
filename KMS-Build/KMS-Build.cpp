@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-Build/KMS-Build.cpp
 
+#include <KMS/Base.h>
+
 // ===== Includes ===========================================================
 #include <KMS/Banner.h>
 #include <KMS/Build/Build.h>

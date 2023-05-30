@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/DI_NetAddress.cpp
@@ -23,7 +23,7 @@ namespace KMS
         {
             Net::Address lResult;
 
-            const char* lASCII = aASCII;
+            auto lASCII = aASCII;
 
             if      (0 == _stricmp(lASCII, "IPv4")) { lResult.SetType(Net::Address::Type::IPv4); }
             else if (0 == _stricmp(lASCII, "IPv6")) { lResult.SetType(Net::Address::Type::IPv6); }

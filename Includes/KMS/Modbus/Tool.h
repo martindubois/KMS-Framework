@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Tool.h
@@ -67,9 +67,7 @@ namespace KMS
 
         private:
 
-            Tool(const Tool&);
-
-            const Tool& operator = (const Tool&);
+            NO_COPY(Tool);
 
             Master* mMaster;
 

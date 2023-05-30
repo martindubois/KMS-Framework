@@ -267,11 +267,13 @@
   <ItemGroup>
     <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
+    <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="DI_Array.cpp" />
     <ClCompile Include="DI_Folder.cpp" />
     <ClCompile Include="DI_Functions.cpp" />
+    <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="File_Folder.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="HTTP.cpp" />
@@ -279,6 +281,7 @@
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
+    <ClCompile Include="Text_File_ASCII.cpp" />
     <ClCompile Include="Text_File_UTF16.cpp" />
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Version.cpp" />

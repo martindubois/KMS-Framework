@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Msg_Destination.cpp
@@ -68,19 +68,19 @@ namespace KMS
                     }
                     catch (Exception eE)
                     {
-                        KMS_DBG_LOG_ERROR();
-                        Dbg::gLog.WriteException(eE);
+                        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
                         lResult = IReceiver::MSG_EXCEPTION;
                     }
                     catch (std::exception eE)
                     {
-                        KMS_DBG_LOG_ERROR();
+                        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
                         Dbg::gLog.WriteMessage(eE.what());
                         lResult = IReceiver::MSG_EXCEPTION_STD;
                     }
                     catch (...)
                     {
-                        KMS_DBG_LOG_ERROR();
+                        KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
+                        Dbg::gLog.WriteMessage("Unknown exception");
                         lResult = IReceiver::MSG_EXCEPTION_UNKNOWN;
                     }
                 #endif

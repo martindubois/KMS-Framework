@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/GUI_Form.cpp
@@ -51,9 +51,9 @@ namespace KMS
 
                 for (const DI::Dictionary::Internal::value_type lVT : mDictionary->mInternal)
                 {
-                    const GUI::MetaData* lMD = dynamic_cast<const GUI::MetaData*>(lVT.second.mMetaData);
+                    auto lMD = dynamic_cast<const GUI::MetaData*>(lVT.second.mMetaData);
 
-                    DI::Dictionary* lD = dynamic_cast<DI::Dictionary*>(mFields.CreateEntry());
+                    auto lD = dynamic_cast<DI::Dictionary*>(mFields.CreateEntry());
 
                     lD->AddEntry("Index", new DI::UInt<uint32_t>(lCount   ), true);
                     lD->AddEntry("Label", new DI::String(lMD->GetLabel()  ), true);
@@ -87,7 +87,7 @@ namespace KMS
 
         unsigned int Form::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
+            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
             unsigned int lResult = 0;
 

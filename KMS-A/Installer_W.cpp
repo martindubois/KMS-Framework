@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Installer_W.cpp
@@ -23,7 +23,7 @@ namespace KMS
     {
         HKEY lKey;
 
-        LSTATUS lRet = RegOpenKeyEx(HKEY_CURRENT_USER, "Environment", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &lKey);
+        auto lRet = RegOpenKeyEx(HKEY_CURRENT_USER, "Environment", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &lKey);
         KMS_EXCEPTION_ASSERT(ERROR_SUCCESS == lRet, REG_OPEN_FAILED, "Cannot open HKCU\\Environment", lRet);
 
         char  lData[4096];

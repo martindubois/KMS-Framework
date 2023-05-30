@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Master.h
@@ -45,6 +45,18 @@ namespace KMS
 
             void WriteSingleRegister(Address aAddr, RegisterValue aValue);
 
+            // ===== Configurable attributes ================================
+            DI::UInt<uint8_t> mDeviceAddress;
+            DI::UInt<uint8_t> mRetryCount;
+
+        protected:
+
+            Master();
+
+            void VerifyDeviceAddress(const uint8_t* aData);
+
+            void VerifyFunction(Function aFunction, const uint8_t* aData);
+
             // ===== Low level request type =================================
 
             // aFunction READ_COILS, READ_DISCRETE_INPUTS,
@@ -76,24 +88,11 @@ namespace KMS
             // aFunction     READ_FIFO_QUEUE
             virtual unsigned int Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
 
-        protected:
-
-            Master();
-
-            DeviceAddress GetDeviceAddress() const;
-
-            void VerifyFunction(Function aFunction, const uint8_t* aData);
-
         private:
 
-            Master(const Master&);
-
-            const Master operator = (const Master&);
+            NO_COPY(Master);
 
             Exception mLastException;
-
-            // ===== Configurable attributes ================================
-            DI::UInt<uint8_t> mDeviceAddress;
 
         };
 

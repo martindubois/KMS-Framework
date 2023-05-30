@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Common/Version.h
@@ -15,9 +15,9 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define VERSION_RC  0,1,59,0
-#define VERSION_STR "0.1.59.0"
+#define VERSION_RC  0,1,68,0
+#define VERSION_STR "0.1.68.0"
 
 #ifdef __cplusplus
-    KMS_VERSION("stm32f373vctx");
+    KMS_VERSION("dev");
 #endif

@@ -1,11 +1,18 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022 KMS
+Copyright (C) 2022-2023 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
+
+0.1.68-dev Windows 2023-05-25
+
+0.1.63-dev Windows 2023-03-27
+- Build::Build - User friendly error message (KF-29)
+
+0.1.62-dev Windows 2023-03-23
 
 0.1.57-dev Windows 2022-12-26
 - Build::Build - Fix an error occuring when a product has no library

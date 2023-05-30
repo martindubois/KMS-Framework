@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Com/Port.h
@@ -56,6 +56,8 @@ namespace KMS
 
             void SetWriteTimeout(unsigned int aWT_ms);
 
+            void ClearReadBuffer();
+
             void Wait();
 
             // ===== Dev::Device ============================================
@@ -80,9 +82,7 @@ namespace KMS
 
         private:
 
-            Port(const Port&);
-
-            const Port& operator = (const Port&);
+            NO_COPY(Port);
 
             void ApplyConfig  ();
             void ApplySignals ();

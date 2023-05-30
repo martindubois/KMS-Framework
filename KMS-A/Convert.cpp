@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Convert.cpp
@@ -48,9 +48,11 @@ namespace KMS
 
             char* lPtr;
 
-            double lResult = strtod(aASCII, &lPtr);
+            auto lResult = strtod(aASCII, &lPtr);
 
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_FORMAT_INVALID, "Invalid double format", aASCII);
+            char lMsg[64 + NAME_LENGTH];
+            sprintf_s(lMsg, "\"%s\" is not a valid floating point value", aASCII);
+            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_FORMAT_INVALID, lMsg, "");
 
             return lResult;
         }
@@ -66,8 +68,11 @@ namespace KMS
 
             FILE* lResult;
 
-            int lRet = fopen_s(&lResult, aASCII, aMode);
-            KMS_EXCEPTION_ASSERT(0 == lRet, CONVERT_OPEN_FAILED, "fopen_s failed", aASCII);
+            auto lRet = fopen_s(&lResult, aASCII, aMode);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\"", aASCII);
+            KMS_EXCEPTION_ASSERT(0 == lRet, CONVERT_OPEN_FAILED, lMsg, lRet);
 
             assert(NULL != lResult);
 
@@ -94,18 +99,22 @@ namespace KMS
 
             char* lPtr;
 
-            long lResult = strtol(lASCII, &lPtr, static_cast<int>(lRadix));
+            auto lResult = strtol(lASCII, &lPtr, static_cast<int>(lRadix));
 
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, "The value is not of the expected type", aASCII);
+            char lMsg[64 + NAME_LENGTH];
+            sprintf_s(lMsg, "\"%s\" is not a valid integer value", lASCII);
+            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, lMsg, "");
 
             return static_cast<int32_t>(lResult);
         }
 
         uint16_t ToUInt16(const char* aASCII, Radix aRadix)
         {
-            uint32_t lResult = ToUInt32(aASCII, aRadix);
+            auto lResult = ToUInt32(aASCII, aRadix);
 
-            KMS_EXCEPTION_ASSERT(0xffff >= lResult, CONVERT_VALUE_INVALID, "The value is to large for the expected type (uint16_t)", aASCII);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is too large for the expected type (uint16_t)", lResult);
+            KMS_EXCEPTION_ASSERT(0xffff >= lResult, CONVERT_VALUE_INVALID, lMsg, aASCII);
 
             return static_cast<uint16_t>(lResult);
         }
@@ -130,17 +139,22 @@ namespace KMS
 
             char* lPtr;
 
-            unsigned long lResult = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
+            auto lResult = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
 
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, "The value is not of the expected type", aASCII);
+            char lMsg[64 + NAME_LENGTH];
+            sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
+            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, lMsg, "");
 
             return static_cast<uint32_t>(lResult);
         }
 
         uint8_t ToUInt8(const char* aASCII, Radix aRadix)
         {
-            uint32_t lResult = ToUInt32(aASCII, aRadix);
-            KMS_EXCEPTION_ASSERT (0xff >= lResult, CONVERT_DATA_TYPE_INVALID, "The value is to large for the expected type (uint8_t)", aASCII);
+            auto lResult = ToUInt32(aASCII, aRadix);
+
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is too large for the expected type (uint8_t)", lResult);
+            KMS_EXCEPTION_ASSERT (0xff >= lResult, CONVERT_DATA_TYPE_INVALID, lMsg, aASCII);
 
             return static_cast<uint8_t>(lResult);
         }
@@ -150,13 +164,13 @@ namespace KMS
             assert(NULL != aUTF16);
             assert(NULL != aOut);
 
-            unsigned int lLen = static_cast<unsigned int>(wcslen(aUTF16));
+            auto lLen = static_cast<unsigned int>(wcslen(aUTF16));
 
             KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", lLen);
 
             unsigned int lResult_byte = 0;
 
-            const wchar_t* lUTF16 = aUTF16;
+            auto lUTF16 = aUTF16;
             while (0 != *lUTF16)
             {
                 if (128 > *lUTF16)
@@ -177,13 +191,13 @@ namespace KMS
             assert(NULL != aASCII);
             assert(NULL != aOut);
 
-            unsigned int lLen = static_cast<unsigned int>(strlen(aASCII));
+            auto lLen = static_cast<unsigned int>(strlen(aASCII));
 
             KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen * sizeof(wchar_t), CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
 
             unsigned int lResult_word = 0;
 
-            const char* lASCII = aASCII;
+            auto lASCII = aASCII;
             while ('\0' != *lASCII)
             {
                 aOut[lResult_word] = *lASCII; lResult_word++;
@@ -225,7 +239,7 @@ namespace KMS
 
         extern unsigned int ToUInt8Array(const char* aASCII, const char* aSeparators, const char* aBlanks, uint8_t* aOut, unsigned aOutSize_byte)
         {
-            const char * lASCII       = aASCII;
+            auto         lASCII       = aASCII;
             uint8_t      lByte;
             unsigned int lResult_byte = 0;
             unsigned int lState       = STATE_HIGH;

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_L.cpp
@@ -17,6 +17,14 @@
 #include <KMS/Proc/Process.h>
 
 #include <KMS/File/Folder.h>
+
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define CP_ALLOWED_TIME_ms    (1000 * 60 * 2) // 2 minutes
+#define RM_ALLOWED_TIME_ms    (1000 * 60 * 2) // 2 minutes
+#define UNZIP_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+#define ZIP_ALLOWED_TIME_ms   (1000 * 60 * 5) // 5 minutes
 
 namespace KMS
 {
@@ -69,7 +77,7 @@ namespace KMS
 
             lP.SetWorkingDirectory(mPath.c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(ZIP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COMPRESS_FAILED, "Cannot compress the folder's elements", lP.GetCmdLine());
         }
@@ -86,7 +94,7 @@ namespace KMS
             lP.AddArgument("-d");
             lP.AddArgument(mPath.c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(UNZIP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lP.GetCmdLine());
         }
@@ -99,7 +107,7 @@ namespace KMS
             lP.AddArgument(mPath.c_str());
             lP.AddArgument(aDst.GetPath());
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COPY_FAILED, "Cannot copy folder", lP.GetCmdLine());
         }
@@ -143,7 +151,7 @@ namespace KMS
             lP.AddArgument("-f");
             lP.AddArgument(lPattern);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(RM_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
         }
@@ -188,7 +196,7 @@ namespace KMS
             lP.AddArgument(aSrc);
             lP.AddArgument(aDst);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CP_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_COPY_FAILED, "Cannot copy the file", lP.GetCmdLine());
         }
@@ -197,7 +205,7 @@ namespace KMS
         {
             char lPath[PATH_LENGTH];
 
-            char* lRet = getcwd(lPath, sizeof(lPath));
+            auto lRet = getcwd(lPath, sizeof(lPath));
             assert(lPath == lRet);
 
             mPath = lPath;
@@ -207,10 +215,10 @@ namespace KMS
         {
             char lModule[PATH_LENGTH];
 
-            ssize_t lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
+            auto lRet = readlink("/proc/self/exe", lModule, sizeof(lModule));
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "readlink failed", lRet);
 
-            char* lPtr = strrchr(lModule, '/');
+            auto lPtr = strrchr(lModule, '/');
             KMS_EXCEPTION_ASSERT(NULL != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
 
             *lPtr = '\0';
@@ -224,7 +232,7 @@ namespace KMS
 
             strcpy(lPath, "/tmp/KMSXXXXXX");
 
-            char* lRet = mkdtemp(lPath);
+            auto lRet = mkdtemp(lPath);
             KMS_EXCEPTION_ASSERT(NULL != lRet, FILE_INIT_FAILED, "mkdtemp failed", lPath);
 
             mPath = lPath;

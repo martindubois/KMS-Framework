@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_FileServer.cpp
@@ -16,6 +16,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/HTTP/Request.h>
@@ -107,6 +109,9 @@ namespace KMS
 
             Net::Thread_Startup();
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -121,6 +126,7 @@ namespace KMS
                 lC.AddConfigurable(&lS.mSocket);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
@@ -142,6 +148,8 @@ namespace KMS
                 lResult = 0;
             }
             KMS_CATCH_RESULT(lResult);
+
+            lET->Stop();
 
             Net::Thread_Cleanup();
 
@@ -168,7 +176,7 @@ namespace KMS
         {
             assert(NULL != aExt);
 
-            FileTypeMap::iterator lIt = mFileTypes.find(aExt);
+            auto lIt = mFileTypes.find(aExt);
             if (mFileTypes.end() == lIt)
             {
                 mFileTypes.insert(FileTypeMap::value_type(aExt, aFunction));
@@ -204,18 +212,18 @@ namespace KMS
         {
             assert(NULL != aR);
 
-            const char* lPath = (NULL == aPath) ? aR->GetPath() : aPath;
+            auto lPath = (NULL == aPath) ? aR->GetPath() : aPath;
 
             // TODO Protect against .. in path.
 
-            const char* lExt = strrchr(lPath, '.');
+            auto lExt = strrchr(lPath, '.');
             if (NULL == lExt)
             {
                 aR->SetResult(Request::Result::FORBIDDEN);
                 return;
             }
 
-            FileTypeMap::iterator lIt = mFileTypes.find(lExt + 1);
+            auto lIt = mFileTypes.find(lExt + 1);
             if (mFileTypes.end() == lIt)
             {
                 aR->SetResult(Request::Result::FORBIDDEN);
@@ -228,15 +236,15 @@ namespace KMS
                 return;
             }
 
-            KMS_DBG_LOG_INFO();
+            KMS_DBG_LOG_INFO_F(Dbg::Log::FLAG_USER_REDUNDANT);
             Dbg::gLog.WriteMessage(lPath);
 
             lIt->second(aR);
 
-            File::Binary* lFile = new File::Binary(mRoot, lPath + 1);
+            auto lFile = new File::Binary(mRoot, lPath + 1);
             assert(NULL != lFile);
 
-            DI::UInt<uint32_t>* lValue = new DI::UInt<uint32_t>(lFile->GetSize());
+            auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
             aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);
 
             aR->SetFile(lFile);

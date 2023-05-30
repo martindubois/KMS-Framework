@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -69,7 +69,7 @@ namespace KMS
         {
             Net::Address lFrom;
 
-            Net::Socket* lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
+            auto lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
             if (NULL != lSocket)
             {
                 OnConnect(lSocket);

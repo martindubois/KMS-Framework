@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_Master_Com.cpp
@@ -28,9 +28,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Master =====================================================
-
         Master_Com::Master_Com() { AddEntry("Port", &mPort, false); }
+
+        Com::Port* Master_Com::GetPort() { return &mPort; }
+
+        // ===== Master =====================================================
 
         void Master_Com::Connect()
         {
@@ -41,6 +43,11 @@ namespace KMS
         {
             mPort.Disconnect();
         }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        // ===== Master =====================================================
 
         unsigned int Master_Com::Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
@@ -69,23 +76,25 @@ namespace KMS
 
         unsigned int Master_Com::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
-            assert(0 < aOutSize_byte);
-
             Request_Send(aFunction, aIn, aInSize_byte);
 
-            uint8_t lBuffer[BUFFER_SIZE_byte];
+            if (0 < aOutSize_byte)
+            {
+                assert(NULL != aOut);
 
-            mPort.Read(lBuffer, MIN_SIZE_byte, Dev::Device::FLAG_READ_ALL);
+                uint8_t lBuffer[BUFFER_SIZE_byte];
 
-            VerifyDeviceAddress(lBuffer);
-            VerifyFunction(aFunction, lBuffer + 1);
+                mPort.Read(lBuffer, MIN_SIZE_byte, Dev::Device::FLAG_READ_ALL);
 
-            mPort.Read(lBuffer + MIN_SIZE_byte, aOutSize_byte + CRC_SIZE_byte);
+                VerifyDeviceAddress(lBuffer);
+                VerifyFunction(aFunction, lBuffer + 1);
 
-            CRC::Verify(lBuffer, MIN_SIZE_byte + aOutSize_byte + CRC_SIZE_byte);
+                mPort.Read(lBuffer + MIN_SIZE_byte, aOutSize_byte - 1 + CRC_SIZE_byte);
 
-            memcpy(aOut, lBuffer + MIN_SIZE_byte, aOutSize_byte);
+                CRC::Verify(lBuffer, MIN_SIZE_byte - 1 + aOutSize_byte + CRC_SIZE_byte);
+
+                memcpy(aOut, lBuffer + MIN_SIZE_byte - 1, aOutSize_byte);
+            }
 
             return aOutSize_byte;
         }
@@ -135,7 +144,7 @@ namespace KMS
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
 
-            lBuffer[0] = GetDeviceAddress();
+            lBuffer[0] = mDeviceAddress;
             lBuffer[1] = static_cast<uint8_t>(aFunction);
 
             memcpy(lBuffer + 2, aIn, aInSize_byte);
@@ -144,14 +153,9 @@ namespace KMS
 
             CRC::Add(lBuffer, lSize_byte);
 
+            mPort.ClearReadBuffer();
+
             mPort.Write(lBuffer, lSize_byte);
-        }
-
-        void Master_Com::VerifyDeviceAddress(const uint8_t* aData)
-        {
-            assert(NULL != aData);
-
-            KMS_EXCEPTION_ASSERT(GetDeviceAddress() == aData[0], MODBUS_CONFIG_INVALID, "Invalid slave address", aData[0]);
         }
 
     }

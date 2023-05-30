@@ -54,9 +54,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteTool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -274,6 +271,21 @@
       <Filter>Source Files\WOP</Filter>
     </ClCompile>
     <ClCompile Include="ScaleAndOffset.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFormat_ELF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Stats.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Stats_Entry.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Dbg_Stats_Timer.cpp">
+      <Filter>Source Files\Dbg</Filter>
+    </ClCompile>
+    <ClCompile Include="Click_Master.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

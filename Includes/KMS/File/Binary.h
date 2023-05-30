@@ -26,7 +26,11 @@ namespace KMS
 
             ~Binary();
 
+            unsigned int GetMappedSize() const;
+
             unsigned int GetSize();
+
+            void* Map(unsigned int aMinSize_byte = 0, unsigned int aMaxSize_byte = 0xffffffff);
 
             unsigned int Read(void* aOut, unsigned int aOutSize_byte);
 
@@ -34,7 +38,11 @@ namespace KMS
 
         private:
 
-            HANDLE mHandle;
+            HANDLE       mHandle;
+            unsigned int mMappedSize_byte;
+            HANDLE       mMapping;
+            void       * mView;
+            bool         mWrite;
 
         };
 

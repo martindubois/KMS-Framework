@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Dictionary.cpp
@@ -24,7 +24,7 @@ namespace KMS
         {
             assert(NULL != aName);
 
-            Internal::iterator lIt = mInternal.find(aName);
+            auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aName, Entry(const_cast<Object*>(aObject), aMD)));
@@ -40,7 +40,7 @@ namespace KMS
         {
             assert(NULL != aName);
 
-            Internal::iterator lIt = mInternal.find(aName);
+            auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
                 mInternal.insert(Internal::value_type(aName, Entry(aObject, aDelete, aMD)));
@@ -54,7 +54,7 @@ namespace KMS
 
         Object* Dictionary::CreateEntry(const char* aName, const MetaData* aMD)
         {
-            Object* lResult = CallCreator();
+            auto lResult = CallCreator();
             assert(NULL != lResult);
 
             AddEntry(aName, lResult, true, aMD);
@@ -66,7 +66,7 @@ namespace KMS
         {
             assert(NULL != aKey);
 
-            Internal::const_iterator lIt = mInternal.find(aKey);
+            auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
                 return NULL;
@@ -81,7 +81,7 @@ namespace KMS
         {
             assert(NULL != aKey);
 
-            Internal::iterator lIt = mInternal.find(aKey);
+            auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
                 return NULL;
@@ -103,12 +103,16 @@ namespace KMS
             char lName[NAME_LENGTH];
             char lRest[NAME_LENGTH];
 
-            int lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, "Invalid name", aName);
+            auto lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
+
+            char lMsg[64 + NAME_LENGTH];
+
+            sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
 
             Object* lResult;
 
-            Internal::iterator lIt = mInternal.find(lName);
+            auto lIt = mInternal.find(lName);
             if (mInternal.end() == lIt)
             {
                 if (!IsDynamic())
@@ -122,14 +126,17 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, "Denied", aName);
+                sprintf_s(lMsg, "\"%s\" is read only", aName);
+                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, lMsg, "");
                 lResult = lIt->second.Get();
             }
 
             if (2 == lRet)
             {
-                DI::Container* lContainer = dynamic_cast<DI::Container*>(lResult);
-                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+                auto lContainer = dynamic_cast<DI::Container*>(lResult);
+
+                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
 
                 lResult = lContainer->FindObject_RW(lRest);
             }
@@ -142,9 +149,9 @@ namespace KMS
 
         bool Dictionary::Clear()
         {
-            bool lResult = !mInternal.empty();
+            auto lResult = !mInternal.empty();
 
-            for (Internal::value_type lVT : mInternal)
+            for (auto& lVT : mInternal)
             {
                 lVT.second.Release();
             }

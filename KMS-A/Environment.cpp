@@ -29,10 +29,10 @@ namespace KMS
             const unsigned int STATE_NAME = 1;
             const unsigned int STATE_TEXT = 2;
 
-            const char * lIn = aIn;
+            auto         lIn = aIn;
             unsigned int lLen;
-            char       * lOut = aOut;
-            unsigned int lOutSize_byte = aOutSize_byte;
+            auto         lOut = aOut;
+            auto         lOutSize_byte = aOutSize_byte;
             unsigned int lState = STATE_TEXT;
             char         lVarName[NAME_LENGTH];
             unsigned int lVarIndex = 0;

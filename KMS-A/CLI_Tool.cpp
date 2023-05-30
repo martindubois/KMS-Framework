@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/CLI_Tool.cpp
@@ -100,7 +100,7 @@ namespace KMS
             lScript.RemoveEmptyLines();
             lScript.RemoveComments_Script();
 
-            for (const std::string& lLine : lScript.mLines)
+            for (const auto& lLine : lScript.mLines)
             {
                 try
                 {
@@ -173,9 +173,9 @@ namespace KMS
 
         int Tool::Run()
         {
-            for (const DI::Array::Entry& lEntry : mCommands.mInternal)
+            for (const auto& lEntry : mCommands.mInternal)
             {
-                const DI::String* lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lCommand);
 
                 try
@@ -226,7 +226,7 @@ namespace KMS
 
         void Tool::UntilCtrlC(const char* aC)
         {
-            _crt_signal_t lHandler = signal(SIGINT, OnCtrlC);
+            auto lHandler = signal(SIGINT, OnCtrlC);
 
             sContinue = true;
 

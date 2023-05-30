@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Test/TestManager.h
@@ -41,13 +41,11 @@ namespace KMS
 
         private:
 
-            TestManager(const TestManager&);
+            NO_COPY(TestManager);
 
             void AddTest(Test* aTest);
 
             void UpdateTestList();
-
-            void operator = (const TestManager&);
 
             unsigned int mErrorCount;
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/HTTP_ReactApp.cpp
@@ -106,7 +106,7 @@ static const DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
 
 unsigned int TestApp::Receive(void* aSender, unsigned int aCode, void* aData)
 {
-    HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
+    auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
     unsigned int lResult = 0;
 

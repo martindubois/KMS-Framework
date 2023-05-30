@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Master_Com.h
@@ -23,9 +23,15 @@ namespace KMS
 
             Master_Com();
 
+            Com::Port* GetPort();
+
             // ===== Master =================================================
             virtual void         Connect();
             virtual void         Disconnect();
+
+        protected:
+
+            // ===== Master =================================================
             virtual unsigned int Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Request_C(Function aFunction, void* aOut, unsigned int aOutSize_byte);
@@ -37,8 +43,6 @@ namespace KMS
         private:
 
             void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
-
-            void VerifyDeviceAddress(const uint8_t* aData);
 
             Com::Port mPort;
 

@@ -40,9 +40,9 @@
     <ClCompile Include="Build_Depend.cpp" />
     <ClCompile Include="Build_Import.cpp" />
     <ClCompile Include="Build_Make.cpp" />
-    <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
+    <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Convert.cpp" />
@@ -56,6 +56,9 @@
     <ClCompile Include="DAQ_Dummy.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
     <ClCompile Include="Dbg_LogFile.cpp" />
+    <ClCompile Include="Dbg_Stats.cpp" />
+    <ClCompile Include="Dbg_Stats_Entry.cpp" />
+    <ClCompile Include="Dbg_Stats_Timer.cpp" />
     <ClCompile Include="DI_Array_Sparse.cpp" />
     <ClCompile Include="DI_Boolean.cpp" />
     <ClCompile Include="DI_Array.cpp" />
@@ -70,6 +73,7 @@
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
     <ClCompile Include="DI_Value.cpp" />
+    <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="GUI_MetaData.cpp" />
     <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="Installer.cpp" />

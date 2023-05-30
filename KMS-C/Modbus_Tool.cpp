@@ -1,11 +1,14 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_Tool.cpp
 
 #include "Component.h"
+
+// ===== Windows ============================================================
+#include <winsock2.h>
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
@@ -13,8 +16,11 @@
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
 #include <KMS/Modbus/Master_Com.h>
+#include <KMS/Modbus/Master_TCP.h>
 
 #include <KMS/Modbus/Tool.h>
 
@@ -53,31 +59,53 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            Net::Thread_Startup();
+
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
+                unsigned int       lArgStart = 1;
                 Cfg::Configurator  lC;
                 Installer          lInstaller;
-                Modbus::Master_Com lM;
+                Modbus::Master_Com lMC;
+                Modbus::Master_TCP lMT;
                 Modbus::Tool       lT;
 
+                // Be default, the tool runs in COM mode. This keep backward
+                // compatibility.
+                Modbus::Master* lM = &lMC;
+
+                if (2 < aCount)
+                {
+                    if      (0 == strcmp("COM", aVector[1])) {            lArgStart = 2; }
+                    else if (0 == strcmp("TCP", aVector[1])) { lM = &lMT; lArgStart = 2; }
+                }
+
                 lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lM);
+                lC.AddConfigurable(lM);
                 lC.AddConfigurable(&lT);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
-                lT.InitMaster(&lM);
+                lT.InitMaster(lM);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                lC.ParseArguments(aCount - lArgStart, aVector + lArgStart);
 
                 lInstaller.Run();
 
                 lResult = lT.Run();
             }
             KMS_CATCH_RESULT(lResult)
+
+            lET->Stop();
+
+            Net::Thread_Cleanup();
 
             return lResult;
         }
@@ -241,7 +269,7 @@ namespace KMS
         {
             Connect();
 
-            int lRet = CLI::Tool::Run();
+            auto lRet = CLI::Tool::Run();
 
             Disconnect();
 
@@ -262,14 +290,14 @@ uint16_t ToAddress(const DI::Dictionary& aMap, const char* aName)
 
     uint16_t lResult;
 
-    const DI::Object* lObject = aMap.GetEntry_R(aName);
+    auto lObject = aMap.GetEntry_R(aName);
     if (NULL == lObject)
     {
         lResult = Convert::ToUInt16(aName);
     }
     else
     {
-        const DI::UInt<uint16_t>* lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
+        auto lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
         assert(NULL != lAddr);
 
         lResult = *lAddr;

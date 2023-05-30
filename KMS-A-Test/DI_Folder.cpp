@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/DI_Array.cpp
@@ -15,7 +15,7 @@ using namespace KMS;
 KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
 {
     // Create
-    DI::Object* lO = DI::Folder::Create();
+    auto lO = DI::Folder::Create();
     KMS_TEST_ASSERT(NULL != lO);
     delete lO;
 

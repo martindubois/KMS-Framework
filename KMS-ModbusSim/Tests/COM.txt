@@ -1,0 +1,12 @@
+
+# Author    KMS - Martin Dubois, P. Eng.
+# Copyright (C) 2022-2023 KMS
+# License   http://www.apache.org/licenses/LICENSE-2.0
+# Product   KMS-Framework
+# File      KMS-ModbusSim/Tests/COM.txt
+
+DeviceAddress = 2
+
+Port.Index       = 8
+Port.ReadTimeout = 5
+Port.Speed       = 38400

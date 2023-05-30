@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Cfg/Configurator.h
@@ -41,7 +41,11 @@ namespace KMS
 
             void SetSilence(const char** aSilence);
 
-            void Help(FILE* aOut = NULL) const;
+            void DisplayConfig();
+
+            void Help();
+
+            void Help(FILE* aOut) const;
 
             void ParseArguments(int aCount, const char ** aVector);
 
@@ -56,15 +60,15 @@ namespace KMS
 
             typedef std::list<DI::Dictionary *> ConfigurableList;
 
-            Configurator(const Configurator &);
-
-            const Configurator & operator = (const Configurator &);
+            NO_COPY(Configurator);
 
             bool IsSilenced(const char* aLine);
 
             unsigned int OnConfigFilesChanged();
+            unsigned int OnDisplayConfigChanged();
+            unsigned int OnHelpChanged();
             unsigned int OnOptionalConfigFilesChanged();
-            unsigned int OnSaveChanged();
+            unsigned int OnSaveConfigChanged();
 
             void ParseLine(const char * aLine);
 
@@ -78,6 +82,7 @@ namespace KMS
 
             // ===== Configurable attributes ================================
             DI::Array   mConfigFiles;
+            DI::Boolean mDisplayConfig;
             DI::Boolean mHelp;
             DI::Array   mOptionalConfigFiles;
             DI::File    mSaveConfig;

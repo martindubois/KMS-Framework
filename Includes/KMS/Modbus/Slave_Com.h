@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Slave_Com.h
@@ -37,9 +37,7 @@ namespace KMS
 
         private:
 
-            Slave_Com(const Slave_Com&);
-
-            const Slave_Com operator = (Slave_Com&);
+            NO_COPY(Slave_Com);
 
             void OnByte(uint8_t aByte);
             void OnRequest();
@@ -47,8 +45,6 @@ namespace KMS
             void Reset();
 
             uint8_t mBuffer[260];
-
-            unsigned int mBufferLevel_byte;
 
             CRC mCRC;
 
@@ -63,6 +59,8 @@ namespace KMS
             unsigned int mSilentCounter;
 
             unsigned int mState;
+
+            uint8_t mTarget;
 
             Com::Port mPort;
 

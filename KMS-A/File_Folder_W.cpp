@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_W.cpp
@@ -15,8 +15,15 @@
 
 #include <KMS/File/Folder.h>
 
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define CMD_ALLOWED_TIME_ms         (1000 * 60 *  2) //  2 minutes
+#define POWER_SHELL_ALLOWER_TIME_ms (1000 * 60 * 10) // 10 minutes
+#define XCOPY_ALLOWER_TIME_ms       (1000 * 60 *  5) //  5 minutes
+
 // Constants
-/////////////////////////////////////////////////////////////////////////////
+// //////////////////////////////////////////////////////////////////////////
 
 #define FILE_ATTR   (0)
 #define FILE_MASK   (FILE_ATTRIBUTE_DEVICE|FILE_ATTRIBUTE_DIRECTORY|FILE_ATTRIBUTE_REPARSE_POINT)
@@ -37,7 +44,7 @@ namespace KMS
 
         bool Folder::DoesExist() const
         {
-            DWORD lAttributes = GetFileAttributes(mPath.c_str());
+            auto lAttributes = GetFileAttributes(mPath.c_str());
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
@@ -49,7 +56,7 @@ namespace KMS
 
             GetPath(aFile, lPath, sizeof(lPath));
 
-            DWORD lAttributes = GetFileAttributes(lPath);
+            auto lAttributes = GetFileAttributes(lPath);
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FILE_ATTR == (lAttributes & FILE_MASK);
@@ -61,7 +68,7 @@ namespace KMS
 
             GetPath(aFolder, lPath, sizeof(lPath));
 
-            DWORD lAttributes = GetFileAttributes(lPath);
+            auto lAttributes = GetFileAttributes(lPath);
             if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
@@ -83,7 +90,7 @@ namespace KMS
             lProcess.AddArgument("-DestinationPath");
             lProcess.AddArgument(lDst);
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -108,7 +115,7 @@ namespace KMS
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument("-Force");
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -124,7 +131,7 @@ namespace KMS
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument(aDst.GetPath());
 
-            lProcess.Run(1000 * 60 * 5);
+            lProcess.Run(XCOPY_ALLOWER_TIME_ms);
 
             if (0 != lProcess.GetExitCode())
             {
@@ -156,21 +163,27 @@ namespace KMS
 
             GetPath(aFile, lPath, sizeof(lPath));
 
-            DWORD lAttr = GetFileAttributes(lPath);
-            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, "Cannot retrieve attributes", lPath);
+            auto lAttr = GetFileAttributes(lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+
+            sprintf_s(lMsg, "Cannot retrieve attributes of \"%s\"", lPath);
+            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, lMsg, "");
 
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;
                 if (!SetFileAttributes(lPath, lAttr))
                 {
-                    KMS_EXCEPTION(FILE_DELETE_FAILED, "Cannot change attributes", lPath);
+                    sprintf_s(lMsg, "Cannot change attributes of \"%s\"", lPath);
+                    KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
                 }
             }
 
             if (!DeleteFile(aFile))
             {
-                KMS_EXCEPTION(FILE_DELETE_FAILED, "Cannot delete file", lPath);
+                sprintf_s(lMsg, "Cannot delete \"%s\"", lPath);
+                KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
             }
         }
 
@@ -188,7 +201,7 @@ namespace KMS
             lP.AddArgument("/Q");
             lP.AddArgument(lPattern);
 
-            lP.Run(1000 * 60 * 2);
+            lP.Run(CMD_ALLOWED_TIME_ms);
 
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
         }
@@ -242,7 +255,7 @@ namespace KMS
         {
             char lPath[PATH_LENGTH];
 
-            DWORD lRet = GetCurrentDirectory(sizeof(lPath), lPath);
+            auto lRet = GetCurrentDirectory(sizeof(lPath), lPath);
             assert(0 < lRet);
             assert(sizeof(lPath) > lRet);
 
@@ -253,7 +266,7 @@ namespace KMS
         {
             char lModule[PATH_LENGTH];
 
-            DWORD lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
+            auto lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "GetModuleFileName failed", lRet);
 
             char* lPtr = strrchr(lModule, '\\');
@@ -270,7 +283,7 @@ namespace KMS
 
             unsigned int lLength = sizeof(lRoot) / sizeof(lRoot[0]);
 
-            DWORD lRet = GetTempPath(lLength, lRoot);
+            auto lRet = GetTempPath(lLength, lRoot);
             KMS_EXCEPTION_ASSERT((0 < lRet) && (lLength > lRet), FILE_INIT_FAILED, "GetTempPath failed", lRet);
 
             char lFolder[PATH_LENGTH];
@@ -280,7 +293,7 @@ namespace KMS
                 KMS_EXCEPTION(FILE_INIT_FAILED, "GetTempFileName failed", lRoot);
             }
 
-            BOOL lRetB = DeleteFile(lFolder);
+            auto lRetB = DeleteFile(lFolder);
             assert(lRetB);
 
             mPath = lFolder;

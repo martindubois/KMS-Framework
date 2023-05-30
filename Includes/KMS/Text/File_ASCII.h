@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_ASCII.h
@@ -45,7 +45,7 @@ namespace KMS
             unsigned int ReplaceLines(const char* aRegEx, const char* aReplace);
 
             void Read (const File::Folder& aFolder, const char* aFileName);
-            void Write(const File::Folder& aFolder, const char* aFileName);
+            void Write(const File::Folder& aFolder, const char* aFileName, const char* aEOL = "\n");
 
             unsigned int CountOccurrence(const char* aStr) const;
 
@@ -60,9 +60,7 @@ namespace KMS
 
         private:
 
-            File_ASCII(const File_ASCII&);
-
-            const File_ASCII& operator = (const File_ASCII&);
+            NO_COPY(File_ASCII);
 
             unsigned int RemoveLines(const std::regex& aRegEx);
 

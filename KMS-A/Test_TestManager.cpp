@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Test_TestManager.cpp
@@ -13,6 +13,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
 #include <KMS/Console/Color.h>
 
@@ -39,6 +41,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -47,6 +52,7 @@ namespace KMS
                 lC.AddConfigurable(&lTM);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
@@ -55,6 +61,8 @@ namespace KMS
                 std::cerr << lTM;
             }
             KMS_CATCH_RESULT(lResult);
+
+            lET->Stop();
 
             return lResult;
         }
@@ -72,10 +80,10 @@ namespace KMS
         {
             assert(NULL != aGroup);
 
-            Test::TestList* lTests = Test::GetTests();
+            auto lTests = Test::GetTests();
             if (NULL != lTests)
             {
-                for (Test* lT : *lTests)
+                for (auto lT : *lTests)
                 {
                     if (lT->IsGroup(aGroup))
                     {
@@ -89,10 +97,10 @@ namespace KMS
         {
             assert(NULL != aTest);
 
-            Test::TestList* lTests = Test::GetTests();
+            auto lTests = Test::GetTests();
             if (NULL != lTests)
             {
-                for (Test* lT : *lTests)
+                for (auto lT : *lTests)
                 {
                     if (lT->IsName(aTest))
                     {
@@ -108,9 +116,15 @@ namespace KMS
         {
             UpdateTestList();
 
-            for (Test* lT : mTestList)
+            auto lTT = new Dbg::Stats_Timer("TestTime");
+
+            for (auto lT : mTestList)
             {
+                lTT->Start();
+
                 lT->CallRun();
+
+                lTT->Stop();
 
                 mErrorCount += lT->GetErrorCount();
             }
@@ -127,7 +141,7 @@ namespace KMS
         {
             unsigned int lIndex = 0;
 
-            for (const Test* lT : mTestList)
+            for (auto lT : mTestList)
             {
                 aOut << "Test " << lIndex << "\n";
                 aOut << *lT;
@@ -167,7 +181,7 @@ namespace KMS
         {
             assert(NULL != aTest);
 
-            for (Test* lTest : mTestList)
+            for (auto lTest : mTestList)
             {
                 assert(NULL != lTest);
 
@@ -186,7 +200,7 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                auto lString = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lString);
 
                 AddGroup(*lString);
@@ -196,7 +210,7 @@ namespace KMS
             {
                 assert(NULL != lObj);
 
-                const DI::String* lString = dynamic_cast<const DI::String*>(lObj);
+                auto lString = dynamic_cast<const DI::String*>(lObj);
                 assert(NULL != lString);
 
                 AddTest(*lString);

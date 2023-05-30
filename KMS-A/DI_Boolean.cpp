@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Boolean.cpp
@@ -54,7 +54,7 @@ namespace KMS
 
         void Boolean::Set(const char* aIn)
         {
-            bool lIn = Convert::ToBool(aIn);
+            auto lIn = Convert::ToBool(aIn);
             if (mInternal != lIn)
             {
                 mInternal = lIn;
@@ -69,7 +69,7 @@ namespace KMS
 
         bool Boolean::Clear()
         {
-            bool lResult = !mInternal;
+            auto lResult = !mInternal;
 
             mInternal = false;
 

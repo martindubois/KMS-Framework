@@ -13,49 +13,67 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\DI">
+      <UniqueIdentifier>{a0739384-55da-4586-8cf3-616dfc55cfca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\HTTP">
+      <UniqueIdentifier>{44b630da-108f-42f6-8518-79494dfd8a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Net">
+      <UniqueIdentifier>{8f3ea882-d94c-4d52-ae44-fe615855a4fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="HTTP_Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net_Socket.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net_Address.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net_AddressRangeList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net_AddressRange.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HTTP_FileServer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HTTP_Request.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Net_Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Proc_Browser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HTTP_ReactApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_Form.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_NetAddress.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_NetAddressRange.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Convert.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Modbus_Master_TCP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_NetAddress.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_NetAddressRange.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_FileServer.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_ReactApp.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Request.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Server.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Address.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_AddressRange.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_AddressRangeList.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Server.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Socket.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Socket_Server.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Socket_Client.cpp">
+      <Filter>Source Files\Net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

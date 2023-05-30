@@ -1,0 +1,29 @@
+0,eStopButton
+1,Door_Closed
+~
+0,eStop_out
+1,lock_door
+~
+0,Start
+1,EStop
+2,Stop
+~
+10,TimerStep 5999
+~
+0,Seq1 31
+~
+%LInit=1st.Scan
+$Main program:þ
+~END_CIRCUIT~
+È
+Fn#0,15699
+// Function #1 Init
+for i=0 to 9
+next
+~END_CUSTFN~
+0,Init
+~END_DEFINES~
+0,002B,0063
+~END_BREAKPOINTS~
+192.168.2.233:9080
+~END_LASTIPADDR~

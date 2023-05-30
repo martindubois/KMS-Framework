@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_FileInfo.cpp
@@ -25,7 +25,7 @@ namespace KMS
         {
             assert(NULL != mData);
 
-            WIN32_FIND_DATA* lData = reinterpret_cast<WIN32_FIND_DATA*>(mData);
+            auto lData = reinterpret_cast<WIN32_FIND_DATA*>(mData);
 
             delete lData;
         }
@@ -60,7 +60,7 @@ namespace KMS
         {
             assert(NULL != mData);
 
-            const WIN32_FIND_DATA* lData = reinterpret_cast<const WIN32_FIND_DATA*>(mData);
+            auto lData = reinterpret_cast<const WIN32_FIND_DATA*>(mData);
 
             uint64_t lResult = lData->ftLastWriteTime.dwLowDateTime;
 
@@ -85,7 +85,7 @@ namespace KMS
 
         void FileInfo::Allocate()
         {
-            WIN32_FIND_DATA* lData = new WIN32_FIND_DATA;
+            auto lData = new WIN32_FIND_DATA;
 
             mData = lData;
         }

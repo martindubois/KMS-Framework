@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/WOP_Link_Port.cpp
@@ -57,7 +57,7 @@ namespace KMS
 
         unsigned int Link_Port::Receive(void* aSender, unsigned int aCode, void* aData)
         {
-            unsigned int lResult = Msg::IReceiver::MSG_IGNORED;
+            auto lResult = Msg::IReceiver::MSG_IGNORED;
 
             switch (aCode)
             {
@@ -78,7 +78,7 @@ namespace KMS
 
             uint8_t lBuffer[262];
 
-            unsigned int lSize_byte = mPort->Read(lBuffer, sizeof(lBuffer));
+            auto lSize_byte = mPort->Read(lBuffer, sizeof(lBuffer));
             if (0 < lSize_byte)
             {
                 mSystem->AddReceivedBytes(lBuffer, lSize_byte);
@@ -92,7 +92,7 @@ namespace KMS
             assert(NULL != mPort);
             assert(NULL != mSystem);
 
-            const FrameBuffer* lFB = mSystem->PrepareFrame();
+            auto lFB = mSystem->PrepareFrame();
             if (NULL != lFB)
             {
                 mPort->Write(lFB->GetRawFrame(), lFB->GetFrameSize_byte());

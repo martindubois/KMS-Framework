@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Depend.cpp
@@ -31,7 +31,7 @@ namespace KMS
 
         Depend::~Depend()
         {
-            for (const FileMap::value_type& lPair : mCache)
+            for (const auto& lPair : mCache)
             {
                 assert(NULL != lPair.second);
 
@@ -53,7 +53,7 @@ namespace KMS
 
             StringSet_ASCII* lResult;
 
-            FileMap::iterator lIt = mCache.find(aFile);
+            auto lIt = mCache.find(aFile);
             if (mCache.end() != lIt)
             {
                 assert(NULL != lIt->second);
@@ -72,7 +72,7 @@ namespace KMS
 
                 lFile.Read(mFolder, aFile);
 
-                for (const std::string& lLine : lFile.mLines)
+                for (const auto& lLine : lFile.mLines)
                 {
                     char lInclude[FILE_LENGTH];
 
@@ -130,9 +130,9 @@ namespace KMS
         {
             assert(NULL != aFile);
 
-            for (const DI::Container::Entry& lEntry : mIncludes.mInternal)
+            for (const auto& lEntry : mIncludes.mInternal)
             {
-                const DI::String* lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lF_Include);
 
                 char lHeader[PATH_LENGTH];
@@ -158,7 +158,7 @@ namespace KMS
 
             strcpy_s(lFrom, aFrom);
 
-            char* lPtr = strrchr(lFrom, '/');
+            auto lPtr = strrchr(lFrom, '/');
             if (NULL != lPtr)
             {
                 *lPtr = '\0';
@@ -199,7 +199,7 @@ void InsertStringSet(StringSet_ASCII* aInOut, const StringSet_ASCII* aIn)
     assert(NULL != aInOut);
     assert(NULL != aIn);
 
-    for (const std::string& lStr : *aIn)
+    for (const auto& lStr : *aIn)
     {
         aInOut->insert(lStr);
     }

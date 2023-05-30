@@ -52,3 +52,10 @@
 #else
     #define OS_NAME_PROC OS_NAME
 #endif
+
+// Macros
+// //////////////////////////////////////////////////////////////////////////
+
+#define NO_COPY(C)              \
+    C(const C &);               \
+    void operator = (const C &)

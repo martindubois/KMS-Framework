@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus.cpp
@@ -30,14 +30,14 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            uint8_t lByte = aData[aOffset + aIndex / 8];
+            auto lByte = aData[aOffset + aIndex / 8];
 
             return 0 != (lByte & (1 << (aIndex % 8)));
         }
 
         void WriteBit(uint8_t* aData, unsigned int aOffset, unsigned aIndex, bool aValue)
         {
-            uint8_t* lByte = aData + aOffset + aIndex / 8;
+            auto lByte = aData + aOffset + aIndex / 8;
 
             uint8_t lBit = 1 << (aIndex % 8);
 

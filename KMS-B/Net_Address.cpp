@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Address.cpp
@@ -127,7 +127,9 @@ namespace KMS
 
         void Address::SetPortNumber(unsigned int aP)
         {
-            KMS_EXCEPTION_ASSERT(0xffff >= aP, NET_PORT_INVALID, "Invalid port number", aP);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid port number", aP);
+            KMS_EXCEPTION_ASSERT(0xffff >= aP, NET_PORT_INVALID, lMsg, "");
 
             SetPortNumber(static_cast<uint16_t>(aP));
         }
@@ -162,12 +164,15 @@ namespace KMS
 
             addrinfo* lAddr;
 
-            int lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_ADDRESS_RESOLUTION_FAILED, "Cannot resolve the network address", aN);
+            auto lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
+
+            char lMsg[64 + NAME_LENGTH];
+            sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
+            KMS_EXCEPTION_ASSERT(0 == lRet, NET_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
 
             assert(NULL != lAddr);
 
-            addrinfo* lCurrent = lAddr;
+            auto lCurrent = lAddr;
 
             while (NULL != lCurrent)
             {
@@ -187,7 +192,7 @@ namespace KMS
 
             freeaddrinfo(lAddr);
 
-            KMS_EXCEPTION(NET_ADDRESS_RESOLUTION_FAILED, "Cannot resolve the network address", aN);
+            KMS_EXCEPTION(NET_ADDRESS_RESOLUTION_FAILED, lMsg, "");
         }
 
         void Address::UpdateName()

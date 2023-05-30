@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_String.cpp
@@ -36,7 +36,7 @@ namespace KMS
 
         unsigned int String::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            unsigned int lResult_byte = static_cast<unsigned int>(mInternal.size());
+            auto lResult_byte = static_cast<unsigned int>(mInternal.size());
             KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, DI_OUTPUT_TOO_SHORT, "The output buffer is too short", lResult_byte);
 
             strcpy_s(aOut SizeInfoV(aOutSize_byte), mInternal.c_str());
@@ -60,7 +60,7 @@ namespace KMS
 
         bool String::Clear()
         {
-            bool lResult = !mInternal.empty();
+            auto lResult = !mInternal.empty();
 
             mInternal.clear();
 

@@ -1,9 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Text_File_ASCII.cpp
+
+// TEST COVERAGE  2023-05-21  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -34,7 +36,9 @@ namespace KMS
 
         const char* File_ASCII::GetLine(unsigned int aNo) const
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             return mLines[aNo].c_str();
         }
@@ -45,9 +49,11 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
 
             lIt += aNo;
 
@@ -58,10 +64,12 @@ namespace KMS
 
         void File_ASCII::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
-            Internal::const_iterator lFirst = mLines.begin() + aNo;
-            Internal::const_iterator lLast = lFirst + aCount;
+            auto lFirst = mLines.begin() + aNo;
+            auto lLast  = lFirst + aCount;
 
             mLines.erase(lFirst, lLast);
         }
@@ -70,7 +78,9 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, "Invalide line number", aNo);
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
 
             mLines[aNo] = aLine;
         }
@@ -84,7 +94,7 @@ namespace KMS
 
             std::regex lRegEx(aRegEx);
 
-            for (std::string& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (std::regex_match(lLine, lRegEx))
                 {
@@ -105,28 +115,42 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ifstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for reading", lPath);
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             std::string lLine;
 
             while (getline(lStream, lLine))
             {
+                if ((!lLine.empty()) && ('\r' == lLine.back()))
+                {
+                    // NOT TESTED
+                    lLine.pop_back();
+                }
+
                 mLines.push_back(lLine);
             }
         }
 
-        void File_ASCII::Write(const File::Folder& aFolder, const char* aFile)
+        void File_ASCII::Write(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
+            assert(NULL != aEOL);
+
             char lPath[PATH_LENGTH];
 
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::ofstream lStream(lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, "Cannot open text file for writing", lPath);
 
-            for (std::string lLine : mLines)
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
+
+            for (const auto& lLine : mLines)
             {
-                lStream << lLine << "\n";
+                lStream << lLine << aEOL;
             }
         }
 
@@ -136,7 +160,7 @@ namespace KMS
 
             unsigned int lResult = 0;
 
-            for (const std::string& lLine : mLines)
+            for (auto& lLine : mLines)
             {
                 if (lLine.npos != lLine.find(aStr))
                 {
@@ -157,7 +181,7 @@ namespace KMS
         {
             unsigned int lResult = 0;
 
-            Internal::iterator lIt = mLines.begin();
+            auto lIt = mLines.begin();
             while (lIt != mLines.end())
             {
                 if (std::regex_match(*lIt, aRegEx))

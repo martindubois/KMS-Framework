@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Dbg_LogFile.cpp
@@ -44,8 +44,11 @@ namespace KMS
 
             aFolder.GetPath(lFileName, lPath, sizeof(lPath));
 
-            int lRet = fopen_s(&mFile, lPath, "ab");
-            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, "Cannot open log file", lPath);
+            auto lRet = fopen_s(&mFile, lPath, "ab");
+
+            char lMsg[64 + PATH_LENGTH];
+            sprintf_s(lMsg, "Cannot open \"%s\"", lPath);
+            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, lMsg, lRet);
 
             WriteEntry(0, __FILE__, __FUNCTION__, __LINE__, Level::LEVEL_INFO);
             WriteVersion(VERSION);
@@ -55,7 +58,7 @@ namespace KMS
         {
             assert(NULL != mFile);
 
-            uint64_t lTimeStamp = OS::GetSystemTime();
+            auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
                 #ifdef _KMS_LINUX_
@@ -73,7 +76,7 @@ namespace KMS
         {
             assert(NULL != aData);
 
-            const uint8_t* lData = reinterpret_cast<const uint8_t*>(aData);
+            auto lData = reinterpret_cast<const uint8_t*>(aData);
 
             fprintf(mFile, "D\t%u\t", aSize_byte);
 
@@ -106,7 +109,7 @@ namespace KMS
             default: assert(false);
             }
 
-            uint64_t lTimeStamp = OS::GetSystemTime();
+            auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
                 #ifdef _KMS_LINUX_

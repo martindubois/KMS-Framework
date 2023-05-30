@@ -49,7 +49,7 @@ namespace KMS
 
         FileInfoList::~FileInfoList()
         {
-            for (FileInfoMap::value_type lInfo : mFiles)
+            for (auto& lInfo : mFiles)
             {
                 assert(NULL != lInfo.second);
 
@@ -73,7 +73,7 @@ namespace KMS
         {
             CreateFolders(aNewRoot);
 
-            for (FileInfoMap::value_type lInfo : mFiles)
+            for (const auto& lInfo : mFiles)
             {
                 mRoot.Copy(aNewRoot, lInfo.first.c_str(), aFlags);
             }
@@ -84,15 +84,15 @@ namespace KMS
             assert(NULL != aList);
             assert(0 != aFlags);
 
-            const Folder& lNewRoot = aList->GetRoot();
+            auto lNewRoot = aList->GetRoot();
 
             CreateFolders(lNewRoot);
 
-            for (FileInfoMap::value_type& lPair : mFiles)
+            for (const auto& lPair : mFiles)
             {
-                bool lCopy = false;
+                auto lCopy = false;
 
-                FileInfo * lFI = aList->Find(lPair.first.c_str());
+                auto lFI = aList->Find(lPair.first.c_str());
                 if (NULL == lFI)
                 {
                     if (aCounters) { aCounters->Increment(COUNTER_NEW); }
@@ -138,7 +138,7 @@ namespace KMS
 
             FileInfo* lResult = NULL;
 
-            FileInfoMap::iterator lIt = mFiles.find(aRelPath);
+            auto lIt = mFiles.find(aRelPath);
             if (mFiles.end() != lIt)
             {
                 assert(NULL != lIt->second);
@@ -193,7 +193,7 @@ namespace KMS
 
         void FileInfoList::CreateFolders(const Folder& aNewRoot)
         {
-            for (std::string lFolder : mFolders)
+            for (const auto& lFolder : mFolders)
             {
                 Folder lF(aNewRoot, lFolder.c_str());
                 if (!lF.DoesExist())
@@ -212,7 +212,7 @@ namespace KMS
 
             WIN32_FIND_DATA lData;
 
-            HANDLE lHandle = FindFirstFile(lPattern, &lData);
+            auto lHandle = FindFirstFile(lPattern, &lData);
             if (INVALID_HANDLE_VALUE != lHandle)
             {
                 do
@@ -253,7 +253,7 @@ namespace KMS
 
             WIN32_FIND_DATA lData;
 
-            HANDLE lHandle = FindFirstFile(lPattern, &lData);
+            auto lHandle = FindFirstFile(lPattern, &lData);
             if (INVALID_HANDLE_VALUE != lHandle)
             {
                 do

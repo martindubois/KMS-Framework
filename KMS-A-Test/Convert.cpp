@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Convert.cpp
@@ -33,7 +33,7 @@ KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(0.0 == Convert::ToDouble("0.0"));
 
     // ToFile
-    FILE* lFile = Convert::ToFile("KMS-A-Test/Tests/Test1.cfg");
+    auto lFile = Convert::ToFile("KMS-A-Test/Tests/Test1.cfg");
     KMS_TEST_ASSERT(NULL != lFile);
     int lRet = fclose(lFile);
     KMS_TEST_COMPARE(lRet, 0);

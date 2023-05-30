@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Make.cpp
@@ -16,6 +16,8 @@
 #include <KMS/Build/Depend.h>
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Stats.h>
+#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Make.h>
@@ -30,6 +32,8 @@
 #define DEFAULT_INCLUDE "Includes"
 
 #define DEFAULT_MAKE "make"
+
+#define MAKE_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -104,6 +108,9 @@ namespace KMS
 
             int lResult = __LINE__;
 
+            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
+            lET->Start();
+
             try
             {
                 Cfg::Configurator lC;
@@ -114,6 +121,7 @@ namespace KMS
                 lC.AddConfigurable(&lM);
 
                 lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
                 lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
@@ -123,6 +131,8 @@ namespace KMS
                 lResult = lM.Run();
             }
             KMS_CATCH_RESULT(lResult)
+
+            lET->Stop();
 
             return lResult;
         }
@@ -210,9 +220,9 @@ namespace KMS
 
         void Make::Clean_Binaries()
         {
-            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+            for (const auto& lEntry : mBinaries.mInternal)
             {
-                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
 
                 Clean_Component(lB->Get());
@@ -237,9 +247,9 @@ namespace KMS
         {
             File::Folder lC(mF_Product, aC);
 
-            for (const DI::Container::Entry& lEntry : mCleanExtensions.mInternal)
+            for (const auto& lEntry : mCleanExtensions.mInternal)
             {
-                const DI::String* lCE = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lCE = dynamic_cast<const DI::String*>(lEntry.Get());
 
                 lC.DeleteFiles(lCE->Get());
             }
@@ -259,9 +269,9 @@ namespace KMS
 
         void Make::Clean_Libraries()
         {
-            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+            for (const auto& lEntry : mLibraries.mInternal)
             {
-                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lL);
 
                 Clean_Component(lL->Get());
@@ -271,9 +281,9 @@ namespace KMS
 
         void Make::Clean_Tests()
         {
-            for (const DI::Container::Entry& lEntry : mTests.mInternal)
+            for (const auto& lEntry : mTests.mInternal)
             {
-                const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lT);
 
                 Clean_Component(lT->Get());
@@ -296,7 +306,7 @@ namespace KMS
             {
                 Depend lDepend(mIncludes, lF_Component);
 
-                for (const std::string& lSource : lSources)
+                for (const auto& lSource : lSources)
                 {
                     Depend_ParseSource(&lDepend, lSource.c_str(), &lMakeFile);
                 }
@@ -315,9 +325,9 @@ namespace KMS
 
         void Make::Depend_Components(const DI::Array& aComponents)
         {
-            for (const DI::Container::Entry& lEntry : aComponents.mInternal)
+            for (const auto& lEntry : aComponents.mInternal)
             {
-                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Depend_Component(lC->Get());
@@ -339,9 +349,7 @@ namespace KMS
 
             char lSource[PATH_LENGTH];
 
-            Text::File_ASCII::Internal::iterator lIt;
-
-            for (lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
+            for (auto lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
             {
                 if (1 == sscanf_s(lIt->c_str(), "SOURCES = %[^ \\\n\r\r]", lSource SizeInfo(lSource)))
                 {
@@ -378,19 +386,19 @@ namespace KMS
 
         void Make::Depend_ParseSource(Depend* aDepend, const char* aSource, Text::File_ASCII* aMakeFile)
         {
-            StringSet_ASCII* lHeaders = aDepend->ParseFile(aSource);
+            auto lHeaders = aDepend->ParseFile(aSource);
             if (0 < lHeaders->size())
             {
                 char lLongLine[8192];
 
                 strcpy_s(lLongLine, aSource);
 
-                char* lPtr = strrchr(lLongLine, '.');
+                auto lPtr = strrchr(lLongLine, '.');
                 assert(NULL != lPtr);
 
                 strcpy_s(lPtr SizeInfoV(lLongLine + sizeof(lLongLine) - lPtr), ".o:");
 
-                for (const std::string& lHeader : *lHeaders)
+                for (const auto& lHeader : *lHeaders)
                 {
                     strcat_s(lLongLine, " ");
                     strcat_s(lLongLine, lHeader.c_str());
@@ -408,7 +416,7 @@ namespace KMS
 
             lP.AddArgument(("CONFIG=" + mConfiguration.mInternal).c_str());
 
-            lP.Run(1000 * 60 * 5);
+            lP.Run(MAKE_ALLOWED_TIME_ms);
 
             if (0 != lP.GetExitCode())
             {
@@ -418,9 +426,9 @@ namespace KMS
 
         void Make::Make_Components(const DI::Array& aComponents)
         {
-            for (const DI::Container::Entry& lEntry : aComponents.mInternal)
+            for (const auto& lEntry : aComponents.mInternal)
             {
-                const DI::String* lC = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
                 Make_Component(lC->Get());
@@ -508,7 +516,7 @@ namespace KMS
         {
             if (0 < mComponent.GetLength())
             {
-                const char* lComponent = mComponent.Get();
+                auto lComponent = mComponent.Get();
 
                 if      (DoesContain(mBinaries , lComponent)) { mComponentType = ComponentType::BINARY ; }
                 else if (DoesContain(mLibraries, lComponent)) { mComponentType = ComponentType::LIBRARY; }
@@ -532,9 +540,9 @@ using namespace KMS;
 
 bool DoesContain(const DI::Array& aArray, const char* aStr)
 {
-    for (const DI::Container::Entry& lEntry : aArray.mInternal)
+    for (const auto& lEntry : aArray.mInternal)
     {
-        const DI::String* lStr = dynamic_cast<const DI::String*>(lEntry.Get());
+        auto lStr = dynamic_cast<const DI::String*>(lEntry.Get());
         assert(NULL != lStr);
 
         if (*lStr == aStr)

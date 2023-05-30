@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Version.cpp
@@ -139,7 +139,7 @@ namespace KMS
             assert(NULL != aOut);
             assert(0 < aOutSize_byte);
 
-            bool lTypePresent = 0 < strlen(mType);
+            auto lTypePresent = 0 < strlen(mType);
 
             if (0 == (aFlags & FLAG_OS_INDEPENDENT))
             {

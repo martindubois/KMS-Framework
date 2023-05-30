@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Exception.h
@@ -25,6 +25,8 @@ namespace KMS
             APPLICATION_SYSTEM_ERROR,
             APPLICATION_USER_ERROR,
 
+            ARG_COUNT_ERROR, ARG_VALUE_ERROR,
+
             BUILD_COMMAND_FAILED      , BUILD_COMPILE_FAILED, BUILD_CONFIG_INVALID,
             BUILD_DEPENDENCY_NOT_FOUND, BUILD_TEST_FAILED   ,
 
@@ -32,8 +34,11 @@ namespace KMS
 
             CLI_COMMAND_INVALID, CLI_NAME_INVALID,
 
-            COM_CONFIG_FAILED, COM_CONFIG_INVALID  , COM_CONTROL_FAILED,
-            COM_DATA_INVALID , COM_OUTPUT_TOO_SHORT,
+            CLICK_CLASS_INVALID, CLICK_HANDLE_INVALID  , CLICK_KEY_INVALID,
+            CLICK_NAME_INVALID , CLICK_OPERATION_FAILED,
+
+            COM_CLEAR_FAILED  , COM_CONFIG_FAILED, COM_CONFIG_INVALID  ,
+            COM_CONTROL_FAILED, COM_DATA_INVALID , COM_OUTPUT_TOO_SHORT,
 
             CONVERT_DATA_TYPE_INVALID, CONVERT_FORMAT_INVALID, CONVERT_OPEN_FAILED,
             CONVERT_OUTPUT_TOO_SHORT , CONVERT_VALUE_INVALID ,
@@ -49,23 +54,26 @@ namespace KMS
 
             ENV_EXPAND_FAILED, ENV_OUTPUT_TOO_SHORT,
 
-            FILE_ACCESS_FAILED    , FILE_BACKUP_FAILED, FILE_COMPRESS_FAILED,
-            FILE_CONFIG_INVALID   , FILE_COPY_FAILED  , FILE_CREATE_FAILED  ,
-            FILE_DELETE_FAILED    , FILE_INIT_FAILED  , FILE_OPEN_FAILED    ,
-            FILE_READ_FAILED      , FILE_REMOVE_FAILED, FILE_RENAME_FAILED  ,
-            FILE_UNCOMPRESS_FAILED,
+            FILE_ACCESS_FAILED , FILE_BACKUP_FAILED, FILE_COMPRESS_FAILED  ,
+            FILE_CONFIG_INVALID, FILE_COPY_FAILED  , FILE_CREATE_FAILED    ,
+            FILE_DELETE_FAILED , FILE_INIT_FAILED  , FILE_MAPPING_FAILED   ,
+            FILE_OPEN_FAILED   , FILE_READ_FAILED  , FILE_REMOVE_FAILED    ,
+            FILE_RENAME_FAILED , FILE_TOO_SHORT    , FILE_UNCOMPRESS_FAILED,
+
+            FILE_FORMAT_ERROR,
 
             HTTP_INSTALLATION_ERROR, HTTP_NOT_IMPLEMENTED, HTTP_RECEIVE_ERROR,
 
             JSON_FORMAT_INVALID, JSON_NOT_IMPLEMENTED,
 
-            MODBUS_CONFIG_INVALID, MODBUS_CRC_ERROR       , MODBUS_ERROR,
-            MODBUS_EXCEPTION     , MODBUS_OUTPUT_TOO_SHORT,
+            MODBUS_CONFIG_INVALID, MODBUS_CRC_ERROR       , MODBUS_ERROR     ,
+            MODBUS_EXCEPTION     , MODBUS_OUTPUT_TOO_SHORT, MODBUS_RECV_ERROR,
 
-            NET_ADDRESS_INVALID     , NET_ADDRESS_RANGE_INVALID, NET_ADDRESS_RESOLUTION_FAILED,
-            NET_PORT_INVALID        , NET_SOCKET_BIND_FAILED   , NET_SOCKET_FAILED            ,
-            NET_SOCKET_LISTEN_FAILED, NET_SOCKET_OPTION_FAILED , NET_SOCKET_RECEIVE_FAILED    ,
-            NET_SOCKET_SEND_FAILED  , NET_SOCKET_STARTUP_FAILED, NET_STATE_INVALID            ,
+            NET_ADDRESS_INVALID      , NET_ADDRESS_RANGE_INVALID, NET_ADDRESS_RESOLUTION_FAILED,
+            NET_PORT_INVALID         , NET_SOCKET_BIND_FAILED   , NET_SOCKET_CONNECT_FAILED    ,
+            NET_SOCKET_FAILED        , NET_SOCKET_LISTEN_FAILED , NET_SOCKET_OPTION_FAILED     ,
+            NET_SOCKET_RECEIVE_FAILED, NET_SOCKET_SEND_FAILED   , NET_SOCKET_STARTUP_FAILED    ,
+            NET_STATE_INVALID        ,
 
             NOT_IMPLEMENTED,
 
@@ -139,33 +147,35 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception::Code& aC);
 #define KMS_CATCH                                                          \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
-        KMS::Dbg::gLog.WriteException(eE);                                 \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage(eE.what());                            \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage("Unknown exception");                  \
     }
 
 #define KMS_CATCH_RESULT(R)                                                \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
-        KMS::Dbg::gLog.WriteException(eE);                                 \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
         R = static_cast<int>(eE.GetCode());                                \
     }                                                                      \
     catch (std::exception eE)                                              \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage(eE.what());                            \
         R = __LINE__;                                                      \
     }                                                                      \
     catch (...)                                                            \
     {                                                                      \
-        KMS_DBG_LOG_ERROR();                                               \
+        KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);           \
+        KMS::Dbg::gLog.WriteMessage("Unknown exception");                  \
         R = __LINE__;                                                      \
     }
 

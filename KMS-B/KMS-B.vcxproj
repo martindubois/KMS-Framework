@@ -43,11 +43,14 @@
     <ClCompile Include="HTTP_ReactApp.cpp" />
     <ClCompile Include="HTTP_Request.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />
+    <ClCompile Include="Modbus_Master_TCP.cpp" />
     <ClCompile Include="Net_Address.cpp" />
     <ClCompile Include="Net_AddressRange.cpp" />
     <ClCompile Include="Net_AddressRangeList.cpp" />
     <ClCompile Include="Net_Server.cpp" />
     <ClCompile Include="Net_Socket.cpp" />
+    <ClCompile Include="Net_Socket_Client.cpp" />
+    <ClCompile Include="Net_Socket_Server.cpp" />
     <ClCompile Include="Proc_Browser.cpp" />
   </ItemGroup>
   <ItemGroup>

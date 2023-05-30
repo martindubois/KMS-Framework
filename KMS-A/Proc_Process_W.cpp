@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Proc_Process_W.cpp
@@ -28,7 +28,7 @@ namespace KMS
             }
 
             DWORD lExitCode;
-            HANDLE lHandle = reinterpret_cast<HANDLE>(mHandle);
+            auto lHandle = reinterpret_cast<HANDLE>(mHandle);
 
             if (!GetExitCodeProcess(lHandle, &lExitCode))
             {
@@ -52,11 +52,11 @@ namespace KMS
         {
             assert(0 != mHandle);
 
-            HANDLE lHandle = reinterpret_cast<HANDLE>(mHandle);
+            auto lHandle = reinterpret_cast<HANDLE>(mHandle);
 
             mHandle = 0;
 
-            BOOL lRetB = CloseHandle(lHandle);
+            auto lRetB = CloseHandle(lHandle);
             assert(lRetB);
         }
 
@@ -64,7 +64,7 @@ namespace KMS
         {
             assert(0 != mHandle);
 
-            HANDLE lHandle = reinterpret_cast<HANDLE>(mHandle);
+            auto lHandle = reinterpret_cast<HANDLE>(mHandle);
 
             if (!TerminateProcess(lHandle, 0))
             {
@@ -81,7 +81,7 @@ namespace KMS
         {
             assert(0 != mHandle);
 
-            HANDLE lHandle = reinterpret_cast<HANDLE>(mHandle);
+            auto lHandle = reinterpret_cast<HANDLE>(mHandle);
 
             if (WAIT_OBJECT_0 != WaitForSingleObject(lHandle, aTimeout_ms))
             {
@@ -132,7 +132,7 @@ namespace KMS
 
                 lStart.cb = sizeof(lStart);
 
-                BOOL lRetB = CreateProcess(NULL, mCmdLine, NULL, NULL, FALSE, 0, NULL, lWD, &lStart, &lInfo);
+                auto lRetB = CreateProcess(NULL, mCmdLine, NULL, NULL, FALSE, 0, NULL, lWD, &lStart, &lInfo);
                 if (!lRetB)
                 {
                     mExitCode = EXIT_CODE_ERROR;

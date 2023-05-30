@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Request.cpp
@@ -140,7 +140,7 @@ namespace KMS
 
         bool Request::Receive()
         {
-            unsigned int lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
+            auto lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
             if ((0 >= lSize_byte) || (sizeof(mBuffer) <= lSize_byte))
             {
                 return false;
@@ -171,7 +171,7 @@ namespace KMS
 
             GetSystemTime(&lST);
 
-            int lSize_byte = sprintf_s(mBuffer,
+            auto lSize_byte = sprintf_s(mBuffer,
                 "HTTP/1.1 %u %s\r\n"
                 "Date: %s, %u %s %u %u:%02u:%02u GMT\r\n",
                 mResult, GetResultName(),
@@ -216,10 +216,10 @@ namespace KMS
 
             mPath = lPath;
 
-            char* lPtr = strchr(mBuffer, '\n');
+            auto lPtr = strchr(mBuffer, '\n');
             assert(NULL != lPtr);
 
-            unsigned int lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
+            auto lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
 
             HTTP::Decode_Dictionary(&mRequestHeader, mBuffer + lIndex, sizeof(mBuffer) - lIndex);
 

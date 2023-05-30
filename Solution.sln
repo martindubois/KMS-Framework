@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-ByteTool", "KMS-ByteTool\KMS-ByteTool.vcxproj", "{D070A8C3-1A81-4E30-9B03-3E92225370E0}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4} = {8C35FFEB-3770-497D-96EA-64DC9B36D9C4}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-A", "KMS-A\KMS-A.vcxproj", "{8C35FFEB-3770-497D-96EA-64DC9B36D9C4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-A-Test", "KMS-A-Test\KMS-A-Test.vcxproj", "{AF943290-23D8-485C-9338-1225A3B30EC4}"
@@ -46,6 +41,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-FileServer", "KMS-FileS
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KMS-ModbusTool", "KMS-ModbusTool\KMS-ModbusTool.vcxproj", "{D1630117-C536-4217-B160-BC5B8A429015}"
 	ProjectSection(ProjectDependencies) = postProject
+		{46393A2C-A239-4A77-9D30-71344DF95B15} = {46393A2C-A239-4A77-9D30-71344DF95B15}
 		{5960B59C-CFA4-49A0-A28D-803646981F6E} = {5960B59C-CFA4-49A0-A28D-803646981F6E}
 		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4} = {8C35FFEB-3770-497D-96EA-64DC9B36D9C4}
 	EndProjectSection
@@ -95,22 +91,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug_Static|x64.ActiveCfg = Debug_Static|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug_Static|x64.Build.0 = Debug_Static|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug_Static|x86.ActiveCfg = Debug_Static|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug_Static|x86.Build.0 = Debug_Static|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug|x64.ActiveCfg = Debug|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug|x64.Build.0 = Debug|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug|x86.ActiveCfg = Debug|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Debug|x86.Build.0 = Debug|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release_Static|x64.ActiveCfg = Release_Static|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release_Static|x64.Build.0 = Release_Static|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release_Static|x86.ActiveCfg = Release_Static|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release_Static|x86.Build.0 = Release_Static|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release|x64.ActiveCfg = Release|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release|x64.Build.0 = Release|x64
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release|x86.ActiveCfg = Release|Win32
-		{D070A8C3-1A81-4E30-9B03-3E92225370E0}.Release|x86.Build.0 = Release|Win32
 		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4}.Debug_Static|x64.ActiveCfg = Debug_Static|x64
 		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4}.Debug_Static|x64.Build.0 = Debug_Static|x64
 		{8C35FFEB-3770-497D-96EA-64DC9B36D9C4}.Debug_Static|x86.ActiveCfg = Debug_Static|Win32

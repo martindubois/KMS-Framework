@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -57,7 +57,7 @@ namespace KMS
 
                 if (lRequest.Receive())
                 {
-                    unsigned int lRet = mOnRequest.Send(this, &lRequest);
+                    auto lRet = mOnRequest.Send(this, &lRequest);
                     if (KMS_MSG_SUCCESS(lRet))
                     {
                         lRequest.Reply();

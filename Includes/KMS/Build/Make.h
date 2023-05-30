@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Make.h
@@ -68,9 +68,7 @@ namespace KMS
 
             static const char* COMPONENT_TYPE_NAMES[];
 
-            Make(const Make&);
-
-            const Make& operator = (const Make&);
+            NO_COPY(Make);
 
             void Clean_Binaries();
             void Clean_Binary(const char*aB);

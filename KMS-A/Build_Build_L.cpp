@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build_L.cpp
@@ -11,6 +11,11 @@
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
+
+// Configuration
+// //////////////////////////////////////////////////////////////////////////
+
+#define TEST_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
 
 namespace KMS
 {
@@ -31,17 +36,17 @@ namespace KMS
             lBin.Create();
             lLib.Create();
 
-            for (const DI::Container::Entry& lEntry : mBinaries.mInternal)
+            for (const auto& lEntry : mBinaries.mInternal)
             {
-                const DI::String* lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lB);
 
                 lBin_Src.Copy(lBin, lB->Get());
             }
 
-            for (const DI::Container::Entry& lEntry : mLibraries.mInternal)
+            for (const auto& lEntry : mLibraries.mInternal)
             {
-                const DI::String* lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lL);
 
                 lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
@@ -50,18 +55,20 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            for (const DI::Container::Entry& lEntry : mTests.mInternal)
+            for (const auto& lEntry : mTests.mInternal)
             {
-                const DI::String* lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lT);
 
                 Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());
 
                 lP.AddArgument("Groups+=Auto");
 
-                lP.Run(1000 * 60 * 5);
+                lP.Run(TEST_ALLOWED_TIME_ms);
 
-                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, "The test failed", lP.GetCmdLine());
+                char lMsg[64 + NAME_LENGTH];
+                sprintf(lMsg, "\"%s\" failed", lT->Get());
+                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, lMsg, lP.GetCmdLine());
             }
         }
 

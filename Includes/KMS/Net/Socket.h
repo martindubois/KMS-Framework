@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Socket.h
@@ -16,6 +16,7 @@
 
 // ===== Includes ========================================================
 #include <KMS/DI/Array.h>
+#include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/NetAddress.h>
 #include <KMS/DI/UInt.h>
@@ -61,13 +62,7 @@ namespace KMS
             void SetReceiveTimeout(unsigned int aRT_ms);
             void SetSendTimeout   (unsigned int aST_ms);
 
-            Socket * Accept(unsigned int aTimeout_ms, Address* aFrom);
-
             void Close();
-
-            void Connect(const Address& aTo);
-
-            void Disconnect();
 
             void Open();
 
@@ -82,20 +77,24 @@ namespace KMS
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
             // ===== Configurable attributes ================================
-            DI::Array          mAllowedRanges;
+            DI::Boolean        mKeepALive;
             DI::NetAddress     mLocalAddress;
+            DI::Boolean        mNoDelay;
             DI::UInt<uint32_t> mReceiveTimeout_ms;
+            DI::Boolean        mReuseAddr;
             DI::UInt<uint32_t> mSendTimeout_ms;
 
         // Internal
 
+            void CopyAttributes(const Socket& aIn);
+
             void Set(SOCKET aS);
 
-        private:
+        protected:
 
             // --> CLOSED <==+=======+------+
-            //      |        |       |      |
-            //      +----> OPEN --> LISTEN  |
+            //        |      |       |      |
+            //        +--> OPEN --> LISTEN  |
             //              |               |
             //              +--> CONNETED --+
             enum class State
@@ -106,34 +105,33 @@ namespace KMS
                 OPEN,
             };
 
-            Socket(const Socket&);
-
-            const Socket& operator = (const Socket&);
-
-            void Bind();
-
             void CloseSocket();
-
-            void Listen();
 
             bool Select(unsigned int aTimeout_ms);
 
-            void SetOption(int aOptName, DWORD aValue);
-
-            bool IsInAllowedRanges(const Address& aA) const;
-
-            void VerifyState(State aS);
-
-            void VerifyState_CLOSED   (State aS);
-            void VerifyState_CONNECTED(State aS);
-            void VerifyState_LISTEN   (State aS);
-            void VerifyState_OPEN     (State aS);
-
-            bool mBroadcastReceive;
+            virtual void VerifyState(State aS);
+            
+            virtual void VerifyState_CLOSED   (State aS);
+            virtual void VerifyState_CONNECTED(State aS);
+            virtual void VerifyState_OPEN     (State aS);
 
             SOCKET mSocket;
 
             State mState;
+
+        private:
+
+            NO_COPY(Socket);
+
+            void Bind();
+
+            void Configure();
+
+            void SetOption(int aOptName, DWORD aValue);
+
+            void SetOption_TCP(int aOptName, DWORD aValue);
+
+            bool mBroadcastReceive;
 
             Type mType;
 

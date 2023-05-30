@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/WOP_System.cpp
@@ -49,7 +49,7 @@ KMS_TEST(WOP_System_Base, "WOP_System_Base", "Auto", sTest_Base)
     // AddReceivedBytes / PrepareFrame
 
     // Frame #1 - Write System::mResult_In (KMS_WOP_RESULT_INVALID_CONTROL_VALUE)
-    const WOP::FrameBuffer* lF0 = lS0.PrepareFrame();
+    auto lF0 = lS0.PrepareFrame();
     KMS_TEST_ASSERT(NULL != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
     KMS_TEST_ASSERT(KMS_WOP_RESULT_INVALID_CONTROL_VALUE == lS0.GetResult());
