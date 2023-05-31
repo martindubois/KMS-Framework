@@ -265,7 +265,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ByteTool.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="Convert.cpp" />

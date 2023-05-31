@@ -30,9 +30,6 @@
     <ClCompile Include="Test_TestManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ByteTool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Thread_Lock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
