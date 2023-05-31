@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- Text::File_ASCII and Text::File_UTF16 - User line number
+
 0.1.68-dev Windows 2023-05-25
 - Cfg::Configurator::DisplayConfig (KF-28)
 

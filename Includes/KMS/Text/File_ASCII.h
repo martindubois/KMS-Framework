@@ -54,7 +54,23 @@ namespace KMS
 
         // Internal
 
-            typedef std::vector<std::string> Internal;
+            class Line : public std::string
+            {
+
+            public:
+
+                Line(const char       * aIn, unsigned int aUserLineNo = 0xffffffff);
+                Line(const std::string& aIn, unsigned int aUserLineNo = 0xffffffff);
+
+                unsigned int GetUserLineNo() const;
+
+            private:
+
+                unsigned int mUserLineNo;
+
+            };
+
+            typedef std::vector<Line> Internal;
 
             Internal mLines;
 

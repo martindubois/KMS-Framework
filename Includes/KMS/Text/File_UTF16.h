@@ -9,7 +9,6 @@
 
 // ===== C++ ================================================================
 #include <regex>
-#include <string>
 #include <vector>
 
 // ===== Includes ===========================================================
@@ -58,7 +57,23 @@ namespace KMS
 
         // Internal
 
-            typedef std::vector<std::wstring> Internal;
+            class Line : public std::wstring
+            {
+
+            public:
+
+                Line(const wchar_t     * aIn, unsigned int aUserLineNo = 0xffffffff);
+                Line(const std::wstring& aIn, unsigned int aUserLineNo = 0xffffffff);
+
+                unsigned int GetUserLineNo() const;
+
+            private:
+
+                unsigned int mUserLineNo;
+
+            };
+
+            typedef std::vector<Line> Internal;
 
             Internal mLines;
 

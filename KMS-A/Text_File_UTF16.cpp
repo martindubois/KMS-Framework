@@ -124,6 +124,7 @@ namespace KMS
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
 
             std::wstring lLine;
+            unsigned int lLineNo = 0;
 
             while (getline(lStream, lLine))
             {
@@ -132,7 +133,9 @@ namespace KMS
                     lLine.pop_back();
                 }
 
-                mLines.push_back(lLine);
+                mLines.push_back(Line(lLine, lLineNo));
+
+                lLineNo++;
             }
         }
 
@@ -202,6 +205,19 @@ namespace KMS
 
         unsigned int File_UTF16::RemoveComments_CPP   () { return RemoveLines(std::wregex(L"[ \t]*//.*")); }
         unsigned int File_UTF16::RemoveComments_Script() { return RemoveLines(std::wregex(L"[ \t]*#.*" )); }
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        File_UTF16::Line::Line(const wchar_t* aIn, unsigned int aUserLineNo)
+            : std::wstring(aIn), mUserLineNo(aUserLineNo)
+        {}
+
+        File_UTF16::Line::Line(const std::wstring& aIn, unsigned int aUserLineNo)
+            : std::wstring(aIn), mUserLineNo(aUserLineNo)
+        {}
+
+        unsigned int File_UTF16::Line::GetUserLineNo() const { return mUserLineNo; }
 
         // Private
         // //////////////////////////////////////////////////////////////////

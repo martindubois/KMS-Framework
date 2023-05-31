@@ -121,6 +121,7 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
 
             std::string lLine;
+            unsigned int lLineNo = 0;
 
             while (getline(lStream, lLine))
             {
@@ -130,7 +131,9 @@ namespace KMS
                     lLine.pop_back();
                 }
 
-                mLines.push_back(lLine);
+                mLines.push_back(Line(lLine, lLineNo));
+
+                lLineNo++;
             }
         }
 
@@ -173,6 +176,19 @@ namespace KMS
 
         unsigned int File_ASCII::RemoveComments_CPP   () { return RemoveLines(std::regex("[ \t]*//.*")); }
         unsigned int File_ASCII::RemoveComments_Script() { return RemoveLines(std::regex("[ \t]*#.*" )); }
+
+        // Internal
+        // //////////////////////////////////////////////////////////////////
+
+        File_ASCII::Line::Line(const char* aIn, unsigned int aUserLineNo)
+            : std::string(aIn), mUserLineNo(aUserLineNo)
+        {}
+
+        File_ASCII::Line::Line(const std::string& aIn, unsigned int aUserLineNo)
+            : std::string(aIn), mUserLineNo(aUserLineNo)
+        {}
+
+        unsigned int File_ASCII::Line::GetUserLineNo() const { return mUserLineNo; }
 
         // Private
         // //////////////////////////////////////////////////////////////////
