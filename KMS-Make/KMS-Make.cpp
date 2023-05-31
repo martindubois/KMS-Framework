@@ -11,10 +11,10 @@
 #include <KMS/Banner.h>
 #include <KMS/Build/Make.h>
 
-using namespace KMS;
-
-// ===== KMS-ByteTool =======================================================
+// ===== Local ==============================================================
 #include "../Common/Version.h"
+
+using namespace KMS;
 
 // Entry point
 // //////////////////////////////////////////////////////////////////////////
