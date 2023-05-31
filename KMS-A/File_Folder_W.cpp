@@ -180,7 +180,7 @@ namespace KMS
                 }
             }
 
-            if (!DeleteFile(aFile))
+            if (!DeleteFile(lPath))
             {
                 sprintf_s(lMsg, "Cannot delete \"%s\"", lPath);
                 KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");

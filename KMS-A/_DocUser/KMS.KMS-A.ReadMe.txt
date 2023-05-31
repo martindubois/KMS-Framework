@@ -7,6 +7,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+* File::Folder::Delete fix (KF-42)
 - Text::File_ASCII and Text::File_UTF16 - User line number
 
 0.1.69-stm32f373vctx 2023-05-31
