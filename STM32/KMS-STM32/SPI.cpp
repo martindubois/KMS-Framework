@@ -154,6 +154,7 @@ void SPI::Slave_Disconnect()
 
         uint8_t lFlags = mSlave->OnRxWord(&lWord);
         Assert(0 == lFlags);
+        (void)lFlags;
 
         lSR = mSPI->SR;
     }
