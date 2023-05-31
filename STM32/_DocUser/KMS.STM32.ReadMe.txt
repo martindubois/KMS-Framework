@@ -5,7 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      STM32/_DocUser/KMS.STM32.ReadMe.txt
 
-0.1.69-stm32f373vctx 2023-05-31
+0.1.70-stm32f373vctx 2023-05-31
 * KMS-STM32-S library
 
 0.1.59-stm32f373vctx 2022-12-30
