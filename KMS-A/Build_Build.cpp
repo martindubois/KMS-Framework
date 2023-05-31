@@ -14,6 +14,7 @@
 #include <KMS/Build/Make.h>
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Console/Color.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
@@ -314,6 +315,8 @@ namespace KMS
 
         void Build::Edit()
         {
+            unsigned int lOpIndex = 0;
+
             for (const auto& lEntry : mEditOperations.mInternal)
             {
                 assert(NULL != lEntry);
@@ -330,17 +333,33 @@ namespace KMS
                     KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid edit operation", *lOp);
                 }
 
-                std::string lReplaceStr = ProcessReplaceLine(lReplace, mVersion);
+                auto lReplaceStr = ProcessReplaceLine(lReplace, mVersion);
 
                 Text::File_ASCII lText;
 
                 lText.Read(File::Folder::CURRENT, lFile);
 
-                lText.ReplaceLines(lRegEx, lReplaceStr.c_str());
+                auto lCount = lText.ReplaceLines(lRegEx, lReplaceStr.c_str());
+                if (0 == lCount)
+                {
+                    std::cout << Console::Color::RED;
+                    {
+                        std::cout << "Edit operation " << lOpIndex << " - 0 line replaced";
+                    }
+                    std::cout << Console::Color::WHITE;
+                }
+                else
+                {
+                    std::cout << "Edit operation " << lOpIndex << " - " << lCount << " line replaced";
 
-                File::Folder::CURRENT.Backup(lFile);
+                    File::Folder::CURRENT.Backup(lFile);
 
-                lText.Write(File::Folder::CURRENT, lFile);
+                    lText.Write(File::Folder::CURRENT, lFile);
+                }
+
+                std::cout << std::endl;
+
+                lOpIndex++;
             }
         }
 
