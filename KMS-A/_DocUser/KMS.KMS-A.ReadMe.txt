@@ -9,6 +9,8 @@ EDIT ON BUILD
 
 - Text::File_ASCII and Text::File_UTF16 - User line number
 
+0.1.69-stm32f373vctx 2023-05-31
+
 0.1.68-dev Windows 2023-05-25
 - Cfg::Configurator::DisplayConfig (KF-28)
 

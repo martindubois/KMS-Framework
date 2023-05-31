@@ -1,15 +1,15 @@
 
 # Author    KMS - Martin Dubois, P. Eng.
-# Copyright (C) 2022 KMS
+# Copyright (C) 2022-2023 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
 # File      STM32/F373CVTx/Test/makefile
 
 include ../../$(CONFIG).mk
 
-include $(KMS_MAKEFILES)/stm32f373cvtx.mk
+include $(KMS_MAKEFILES)/stm32f373vctx.mk
 
-LIBRARIES = $(KMS_STM32_A) $(KMS_A_A)
+LIBRARIES = $(KMS_STM32_S_A) $(KMS_STM32_A) $(KMS_A_A)
 
 OUTPUT = ../Binaries/$(CONFIG)/Test.elf
 
