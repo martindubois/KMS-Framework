@@ -92,6 +92,7 @@ namespace KMS
             "Configurations",
             "Embedded"      ,
             "Files"         ,
+            "Folders"       ,
             "Product"       ,
             "VersionFile"   ,
 
