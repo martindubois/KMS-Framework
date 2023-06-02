@@ -35,6 +35,8 @@ namespace KMS
 
             unsigned int GetLineCount() const;
 
+            unsigned int GetUserLineNo(unsigned int aNo) const;
+
             void InsertLine(unsigned int aNo, const wchar_t* aLine);
 
             unsigned int RemoveEmptyLines();
@@ -74,6 +76,8 @@ namespace KMS
             };
 
             typedef std::vector<Line> Internal;
+
+            const Line& GetLine2(unsigned int aNo) const;
 
             Internal mLines;
 

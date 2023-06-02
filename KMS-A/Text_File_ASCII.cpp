@@ -45,6 +45,15 @@ namespace KMS
 
         unsigned int File_ASCII::GetLineCount() const { return static_cast<unsigned int>(mLines.size()); }
 
+        unsigned int File_ASCII::GetUserLineNo(unsigned int aNo) const
+        {
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+
+            return mLines[aNo].GetUserLineNo();
+        }
+
         void File_ASCII::InsertLine(unsigned int aNo, const char* aLine)
         {
             assert(NULL != aLine);
@@ -189,6 +198,15 @@ namespace KMS
         {}
 
         unsigned int File_ASCII::Line::GetUserLineNo() const { return mUserLineNo; }
+
+        const File_ASCII::Line& File_ASCII::GetLine2(unsigned int aNo) const
+        {
+            char lMsg[64];
+            sprintf_s(lMsg, "%u is not a valid line number", aNo);
+            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+
+            return mLines[aNo];
+        }
 
         // Private
         // //////////////////////////////////////////////////////////////////
