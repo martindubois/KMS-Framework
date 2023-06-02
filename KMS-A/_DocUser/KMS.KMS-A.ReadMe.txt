@@ -8,6 +8,11 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 EDIT ON BUILD
 
 0.1.71-dev Windows 2023-06-01
+
+0.1.70-stm32f373vctx 2023-05-31
+
+0.1.70-dev Windows 2023-05-31
+* File::Folder::Delete fix (KF-42)
 - Text::File_ASCII and Text::File_UTF16 - User line number
 
 0.1.70-dev Windows 2023-05-31

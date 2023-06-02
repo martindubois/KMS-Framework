@@ -17,9 +17,10 @@ Version             ______ . ______ . ______ . ______ - _____________________
                     {Ma}     {Mi}     {Bu}              {Type}
 
 File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"                                [ ]
-File "{Family}/_DocUser/KMS.{Family}.ReadMe.txt"                          [ ]
-File "{Family}/_DocUser/KMS.{Family}-S.ReadMe.txt"                        [ ]
-File "{Family}/{Processor}/_DocUser/KMS.{Family}.{Processor}.ReadMe.txt"  [ ]
+File "STM32/_DocUser/KMS.STM32.ReadMe.txt"                                [ ]
+File "STM32/KMS-STM32/_DocUser/KMS.STM32.ReadMe.txt"                      [ ]
+File "STM32/KMS-STM32-S/_DocUser/KMS.STM32-S.ReadMe.txt"                  [ ]
+File "STM32/F373VCTx/_DocUser/KMS.STM32.F373VCTx.ReadMe.txt"              [ ]
 
 Tools "PowerShell" - In the processor folder
     ..\..\Import\Binaries\Release_Static_x64\KMS-Build.exe                [ ]
