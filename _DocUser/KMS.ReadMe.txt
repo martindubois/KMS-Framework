@@ -7,6 +7,8 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.71-dev Windows 2023-06-01
+
 0.1.70-dev Windows 2023-05-31
 - Moving KMS-ByteTool to KMS-Samples (KF-39)
 
