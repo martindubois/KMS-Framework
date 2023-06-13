@@ -11,9 +11,9 @@ include $(KMS_MAKEFILES)/stm32h743xx_m7.mk
 
 OUTPUT = $(KMS_STM32_A)
 
-OBJECTS = Dummy.o
+OBJECTS = STM32H.o
 
-SOURCES = ../../KMS-STM32/Dummy.cpp
+SOURCES = ../../KMS-STM32/STM32H.cpp
 
 # ===== Rules ===============================================================
 

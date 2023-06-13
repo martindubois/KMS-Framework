@@ -17,14 +17,14 @@
 // ===== Includes ===========================================================
 #include <KMS/Embedded/Test.h>
 
-// TODO #include <KMS/STM/STM32F.h>
+#include <KMS/STM/STM32H.h>
 
 using namespace KMS;
 
 // Static variables
 // //////////////////////////////////////////////////////////////////////////
 
-// TODO static STM::STM32F sProcessor;
+static STM::STM32H sProcessor;
 
 // Entry point
 // //////////////////////////////////////////////////////////////////////////
