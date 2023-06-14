@@ -13,16 +13,19 @@ Computer            _________________________________________________________
 
 File "Common/Version.h"                                                   [ ]
 
-Version             ______ . ______ . ______ . ______ - _____________________
-                    {Ma}     {Mi}     {Bu}              {Type}
+Version             ______ . ______ . ______ . ______ - stm32f373vctx     ( )
+                    {Ma}     {Mi}     {Bu}              stm32h743xx_m7    ( )
+                                                        stm32h747xx_m4    ( )
+                                                        stm32h747xx_m7    ( )
+                                                        {Type}
 
 File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"                                [ ]
 File "STM32/_DocUser/KMS.STM32.ReadMe.txt"                                [ ]
 File "STM32/KMS-STM32/_DocUser/KMS.STM32.ReadMe.txt"                      [ ]
 File "STM32/KMS-STM32-S/_DocUser/KMS.STM32-S.ReadMe.txt"                  [ ]
-File "STM32/F373VCTx/_DocUser/KMS.STM32.F373VCTx.ReadMe.txt"              [ ]
+File "STM32/{Sufix}/_DocUser/KMS.STM32.{Sufix}.ReadMe.txt"                [ ]
 
-Tools "PowerShell" - In the processor folder
+Tools "PowerShell" - In the "STM32/{Sufix}" folder
     ..\..\Import\Binaries\Release_Static_x64\KMS-Build.exe                [ ]
 
 Tools "GIT GUI"
