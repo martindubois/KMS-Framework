@@ -3,7 +3,9 @@ Author    KMS - Martin Dubois, P. Eng.
 Copyright (C) 2022-2023 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
-File      STM32/F373VCTx/_DocUser/KMS.STM32.F373VCTx.ReadMe.txt
+File      STM32/F373xC/_DocUser/KMS.STM32.F373xC.ReadMe.txt
+
+* F373VCTX -> F373xC
 
 0.1.72-stm32f373vctx 2023-06-14
 

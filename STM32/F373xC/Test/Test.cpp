@@ -3,7 +3,7 @@
 // Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      STM32/F373CVTx/Test/Test.cpp
+// File      STM32/F373xC/Test/Test.cpp
 
 #include <KMS/Base.h>
 

@@ -3,11 +3,11 @@
 # Copyright (C) 2023 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
-# File      STM32/F373CVTx/KMS-STM32-S/makefile
+# File      STM32/F373xC/KMS-STM32-S/makefile
 
 include ../../$(CONFIG).mk
 
-include $(KMS_MAKEFILES)/stm32f373vctx.mk
+include $(KMS_MAKEFILES)/stm32f373xc.mk
 
 OUTPUT = $(KMS_STM32_S_A)
 

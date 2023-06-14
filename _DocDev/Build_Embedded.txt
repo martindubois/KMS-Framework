@@ -13,7 +13,7 @@ Computer            _________________________________________________________
 
 File "Common/Version.h"                                                   [ ]
 
-Version             ______ . ______ . ______ . ______ - stm32f373vctx     ( )
+Version             ______ . ______ . ______ . ______ - stm32f373xc       ( )
                     {Ma}     {Mi}     {Bu}              stm32h743xx_m7    ( )
                                                         stm32h747xx_m4    ( )
                                                         stm32h747xx_m7    ( )
@@ -24,7 +24,7 @@ File "STM32/_DocUser/KMS.STM32.ReadMe.txt"                                [ ]
 File "STM32/KMS-STM32/_DocUser/KMS.KMS-STM32.ReadMe.txt"                  [ ]
 File "STM32/{Sufix}/_DocUser/KMS.STM32.{Sufix}.ReadMe.txt"                [ ]
 
-===== stm32f373vctx only ====================================================
+===== stm32f373xc only ======================================================
 - File "STM32/KMS-STM32-S/_DocUser/KMS.KMS-STM32-S.ReadMe.txt"            [ ]
 
 Tools "PowerShell" - In the "STM32/{Sufix}" folder

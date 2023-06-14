@@ -3,7 +3,7 @@
     Copyright (C) 2022 KMS
     License   http://www.apache.org/licenses/LICENSE-2.0
     Product   KMS-Framework
-    File      STM32/F373CVTx/README.md
+    File      STM32/F373xC/README.md
 
     ===== References ========================================================
 
