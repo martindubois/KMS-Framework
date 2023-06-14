@@ -26,6 +26,8 @@ static STM::STM32F sProcessor;
 // Entry point
 // //////////////////////////////////////////////////////////////////////////
 
+void SystemInit() {}
+
 int main()
 {
     sProcessor.Clock_64_MHz();

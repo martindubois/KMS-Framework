@@ -7,4 +7,4 @@
 
 include $(KMS_MAKEFILES)/stm32.mk
 
-CFLAGS += -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -DSTM32F3 -DSTM32F373xC -DSTM32F373VCTx
+CFLAGS += -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -DSTM32F373xC

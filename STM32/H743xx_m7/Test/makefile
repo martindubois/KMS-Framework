@@ -9,7 +9,7 @@ include ../../$(CONFIG).mk
 
 include $(KMS_MAKEFILES)/stm32h743xx_m7.mk
 
-LIBRARIES = $(KMS_STM32_S_A) $(KMS_STM32_A) $(KMS_A_A)
+LIBRARIES = $(KMS_STM32_A) $(KMS_A_A)
 
 OUTPUT = ../Binaries/$(CONFIG)/Test.elf
 
@@ -27,7 +27,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 # ===== Targets =============================================================
 
 $(OUTPUT): Startup.o $(OBJECTS) $(LIBRARIES)
-	$(GPP) $(CFLAGS) -T"$(KMS_LINKER_SCRIPTS)/STM32H743XX_M7_FLASH.ld" -Wl,-Map="Test.map" -o $@ $^
+	$(GPP) $(CFLAGS) -T"$(KMS_LINKER_SCRIPTS)/STM32H743XX_M7_FLASH.ld" -Wl,-Map="Test.map" -o $@ $^ -lc_nano -lnosys
 	$(SIZE) $@
 
 # ===== Specific rules ======================================================
