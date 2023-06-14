@@ -22,8 +22,10 @@ Version             ______ . ______ . ______ . ______ - stm32f373vctx     ( )
 File "KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt"                                [ ]
 File "STM32/_DocUser/KMS.STM32.ReadMe.txt"                                [ ]
 File "STM32/KMS-STM32/_DocUser/KMS.KMS-STM32.ReadMe.txt"                  [ ]
-File "STM32/KMS-STM32-S/_DocUser/KMS.KMS-STM32-S.ReadMe.txt"              [ ]
 File "STM32/{Sufix}/_DocUser/KMS.STM32.{Sufix}.ReadMe.txt"                [ ]
+
+===== stm32f373vctx only ====================================================
+- File "STM32/KMS-STM32-S/_DocUser/KMS.KMS-STM32-S.ReadMe.txt"            [ ]
 
 Tools "PowerShell" - In the "STM32/{Sufix}" folder
     ..\..\Import\Binaries\Release_Static_x64\KMS-Build.exe                [ ]
