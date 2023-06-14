@@ -19,5 +19,5 @@
 #define VERSION_STR "0.1.72.0"
 
 #ifdef __cplusplus
-    KMS_VERSION("stm32f373vctx");
+    KMS_VERSION("stm32h743xx_m7");
 #endif
