@@ -40,7 +40,6 @@
     <ClCompile Include="Com_Tool.cpp" />
     <ClCompile Include="Dev_Device_W.cpp" />
     <ClCompile Include="Dev_Device.cpp" />
-    <ClCompile Include="Modbus_Master_Com.cpp" />
     <ClCompile Include="Modbus_Simulator.cpp" />
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="Modbus_Tool.cpp" />

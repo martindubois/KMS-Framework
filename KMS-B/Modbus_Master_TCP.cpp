@@ -27,8 +27,6 @@ namespace KMS
 
         Master_TCP::Master_TCP() : mSocket(Net::Socket::Type::STREAM), mTransactionId(0)
         {
-            AddEntry("Socket", &mSocket, false);
-
             mSocket.mKeepALive = true;
             mSocket.mNoDelay   = true;
             mSocket.mReuseAddr = true;

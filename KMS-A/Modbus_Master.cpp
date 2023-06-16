@@ -46,7 +46,7 @@ namespace KMS
         #define RETRY_END                                                   \
                 catch (...)                                                 \
                 {                                                           \
-                    if (mRetryCount.Get() == lRetry)                        \
+                    if (mRetryCount == lRetry)                              \
                     {                                                       \
                         KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT); \
                         throw;                                              \
@@ -189,10 +189,7 @@ namespace KMS
             : mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
             , mRetryCount   (DEFAULT_RETRY_COUNT   )
             , mLastException(Exception::NO_EXCEPTION)
-        {
-            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
-            AddEntry("RetryCount"   , &mRetryCount   , false, &MD_RETRY_COUNT);
-        }
+        {}
 
         void Master::VerifyDeviceAddress(const uint8_t* aData)
         {

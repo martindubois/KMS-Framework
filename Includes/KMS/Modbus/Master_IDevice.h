@@ -3,12 +3,12 @@
 // Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Modbus/Master_Com.h
+// File      Includes/KMS/Modbus/Master_IDevice.h
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Com/Port.h>
+#include <KMS/Dev/IDevice.h>
 #include <KMS/Modbus/Master.h>
 
 namespace KMS
@@ -16,14 +16,12 @@ namespace KMS
     namespace Modbus
     {
 
-        class Master_Com : public Master
+        class Master_IDevice : public Master
         {
 
         public:
 
-            Master_Com();
-
-            Com::Port* GetPort();
+            Master_IDevice(Dev::IDevice* aDevice);
 
             // ===== Master =================================================
             virtual void         Connect();
@@ -44,7 +42,7 @@ namespace KMS
 
             void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
 
-            Com::Port mPort;
+            Dev::IDevice* mDevice;
 
         };
 

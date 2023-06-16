@@ -42,9 +42,6 @@
     <ClCompile Include="Dev_Device_W.cpp">
       <Filter>Source Files\Dev</Filter>
     </ClCompile>
-    <ClCompile Include="Modbus_Master_Com.cpp">
-      <Filter>Source Files\Modbus</Filter>
-    </ClCompile>
     <ClCompile Include="Modbus_Simulator.cpp">
       <Filter>Source Files\Modbus</Filter>
     </ClCompile>

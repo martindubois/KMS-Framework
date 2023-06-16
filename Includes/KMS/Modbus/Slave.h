@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Slave.h
@@ -9,8 +9,6 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Di/Dictionary.h>
-#include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Modbus.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Msg/Destination.h>
@@ -20,7 +18,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Slave : public DI::Dictionary, public Msg::IReceiver
+        class Slave : public Msg::IReceiver
         {
 
         public:
@@ -39,8 +37,6 @@ namespace KMS
 
             void SetDeviceAddress(DeviceAddress aDA);
 
-            const Msg::Destination ON_ITERATE;
-
             virtual void Run();
 
             virtual void Stop();
@@ -56,6 +52,9 @@ namespace KMS
 
             // ===== Msg::IReceiver =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+
+            // ===== Confiurable attributes - See Slave_Cfg =================
+            uint8_t mDeviceAddress;
 
         protected:
 
@@ -77,10 +76,9 @@ namespace KMS
 
         private:
 
-            bool mStopped;
+            NO_COPY(Slave);
 
-            // ===== Configurable attributes ================================
-            DI::UInt<uint8_t> mDeviceAddress;
+            bool mStopped;
 
         };
 

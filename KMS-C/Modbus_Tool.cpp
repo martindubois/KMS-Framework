@@ -13,13 +13,15 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Com/Port.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
-#include <KMS/Modbus/Master_Com.h>
+#include <KMS/Modbus/Master_CFG.h>
+#include <KMS/Modbus/Master_IDevice.h>
 #include <KMS/Modbus/Master_TCP.h>
 
 #include <KMS/Modbus/Tool.h>
@@ -66,12 +68,14 @@ namespace KMS
 
             try
             {
-                unsigned int       lArgStart = 1;
-                Cfg::Configurator  lC;
-                Installer          lInstaller;
-                Modbus::Master_Com lMC;
-                Modbus::Master_TCP lMT;
-                Modbus::Tool       lT;
+                unsigned int           lArgStart = 1;
+                Cfg::Configurator      lC;
+                Installer              lInstaller;
+                Com::Port              lPort;
+
+                Modbus::Master_IDevice lMC(&lPort);
+                Modbus::Master_TCP     lMT;
+                Modbus::Tool           lT;
 
                 // Be default, the tool runs in COM mode. This keep backward
                 // compatibility.
@@ -79,12 +83,24 @@ namespace KMS
 
                 if (2 < aCount)
                 {
-                    if      (0 == strcmp("COM", aVector[1])) {            lArgStart = 2; }
-                    else if (0 == strcmp("TCP", aVector[1])) { lM = &lMT; lArgStart = 2; }
+                    if      (0 == strcmp("COM", aVector[1]))
+                    {
+                        lArgStart = 2;
+                        lC.AddConfigurable(&lPort);
+                    }
+                    else if (0 == strcmp("TCP", aVector[1]))
+                    {
+                        lM        = &lMT;
+                        lArgStart = 2;
+
+                        lC.AddConfigurable(lMT.GetSocket());
+                    }
                 }
 
+                Modbus::Master_Cfg lCfg(lM);
+
                 lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(lM);
+                lC.AddConfigurable(&lCfg);
                 lC.AddConfigurable(&lT);
 
                 lC.AddConfigurable(&Dbg::gLog);

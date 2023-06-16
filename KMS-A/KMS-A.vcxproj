@@ -91,7 +91,11 @@
     <ClCompile Include="Modbus.cpp" />
     <ClCompile Include="Modbus_CRC.cpp" />
     <ClCompile Include="Modbus_Master.cpp" />
+    <ClCompile Include="Modbus_Master_Cfg.cpp" />
+    <ClCompile Include="Modbus_Master_IDevice.cpp" />
     <ClCompile Include="Modbus_Slave.cpp" />
+    <ClCompile Include="Modbus_Slave_Serial.cpp" />
+    <ClCompile Include="Modbus_Slave_USART.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
     <ClCompile Include="Msg_IReceiver.cpp" />
     <ClCompile Include="OS_W.cpp" />

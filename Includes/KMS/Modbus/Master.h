@@ -9,8 +9,6 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI/Dictionary.h>
-#include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Modbus.h>
 
 namespace KMS
@@ -18,7 +16,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Master : public DI::Dictionary
+        class Master
         {
 
         public:
@@ -45,9 +43,9 @@ namespace KMS
 
             void WriteSingleRegister(Address aAddr, RegisterValue aValue);
 
-            // ===== Configurable attributes ================================
-            DI::UInt<uint8_t> mDeviceAddress;
-            DI::UInt<uint8_t> mRetryCount;
+            // ===== Configurable attributes - See Master_Cfg ===============
+            uint8_t mDeviceAddress;
+            uint8_t mRetryCount;
 
         protected:
 

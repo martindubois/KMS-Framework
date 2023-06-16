@@ -74,7 +74,7 @@ namespace KMS
 
         // ===== Socket =====================================================
 
-        Socket_Server::~Socket_Server() {}
+        Socket_Server::~Socket_Server() { VerifyState(State::CLOSED); }
 
         // Protected
         // //////////////////////////////////////////////////////////////////

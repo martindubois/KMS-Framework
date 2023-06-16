@@ -13,12 +13,14 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Com/Port.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
-#include <KMS/Modbus/Slave_Com.h>
+#include <KMS/Modbus/Slave_Cfg.h>
+#include <KMS/Modbus/Slave_IDevice.h>
 
 #include <KMS/Modbus/Simulator.h>
 
@@ -93,13 +95,17 @@ namespace KMS
             {
                 Cfg::Configurator lC;
                 Installer         lInstaller;
-                Slave_Com lSl;
-                Simulator lSi;
+                Com::Port         lPort;
+                Slave_IDevice     lSl(&lPort);
+                Simulator         lSi;
+
+                Modbus::Slave_Cfg lCfg(&lSl);
 
                 lSi.InitSlave(&lSl);
 
                 lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lSl);
+                lC.AddConfigurable(&lCfg);
+                lC.AddConfigurable(&lPort);
                 lC.AddConfigurable(&lSi);
 
                 lC.AddConfigurable(&Dbg::gLog);

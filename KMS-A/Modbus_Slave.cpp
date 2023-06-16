@@ -20,8 +20,6 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_DEVICE_ADDRESS("DeviceAddress = {Address}");
-
 #define MSG_ITERATE (1)
 
 namespace KMS
@@ -70,10 +68,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Slave::Slave() : mStopped(false)
-        {
-            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
-        }
+        Slave::Slave() : mStopped(false) {}
 
         DeviceAddress Slave::GetDeviceAddress() const { return mDeviceAddress; }
 
