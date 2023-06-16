@@ -18,6 +18,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        // ===== Dev::IDevice ===============================================
+
         void Port::ClearReadBuffer()
         {
             auto lRetB = PurgeComm(*this, PURGE_RXCLEAR);

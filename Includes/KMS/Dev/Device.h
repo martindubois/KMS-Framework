@@ -18,6 +18,7 @@
 #endif
 
 // ===== Includes ===========================================================
+#include <KMS/Dev/IDevice.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/GUID.h>
 #include <KMS/DI/String.h>
@@ -28,14 +29,10 @@ namespace KMS
     namespace Dev
     {
 
-        class Device : public DI::Dictionary
+        class Device : public DI::Dictionary, public IDevice
         {
 
         public:
-
-            static const unsigned int FLAG_READ_ACCESS;
-            static const unsigned int FLAG_READ_ALL;
-            static const unsigned int FLAG_WRITE_ACCESS;
 
             Device();
 
@@ -48,16 +45,6 @@ namespace KMS
             void SetLink(const char* aL);
 
             unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
-
-            // aFlags FLAG_READ_ACCESS, FLAG_WRITE_ACCESS
-            virtual void Connect(unsigned int aFlags);
-
-            virtual void Disconnect();
-
-            // aFlags FLAG_READ_ALL
-            unsigned int Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
-
-            void Write(const void* aIn, unsigned int aInSize_byte);
 
             #ifdef _KMS_WINDOWS_
 
@@ -74,6 +61,14 @@ namespace KMS
                 void        SetLocation(const char* aHI);
 
             #endif
+
+            // ===== IDevice ================================================
+
+            virtual void Connect   (unsigned int aFlags);
+            virtual void Disconnect();
+
+            virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
+            virtual void         Write(const void* aIn, unsigned int aInSize_byte);
 
         // Internal
 

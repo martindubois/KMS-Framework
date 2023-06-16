@@ -105,7 +105,7 @@ namespace KMS
             unsigned int lInstance;
             unsigned int lMask;
 
-            if      (0 == strcmp(aC, "Connect"   )) { mPort.Connect(Dev::Device::FLAG_READ_ACCESS | Dev::Device::FLAG_WRITE_ACCESS); }
+            if      (0 == strcmp(aC, "Connect"   )) { mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE); }
             else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
             else if (0 == strcmp(aC, "Dump"      )) { Dump(); }
             else if (0 == strcmp(aC, "Start"     )) { mLink.Start(); }

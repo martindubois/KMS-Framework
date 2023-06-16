@@ -34,10 +34,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const unsigned int Device::FLAG_READ_ACCESS  = 0x00000001;
-        const unsigned int Device::FLAG_READ_ALL     = 0x00000002;
-        const unsigned int Device::FLAG_WRITE_ACCESS = 0x00000004;
-
         Device::Device()
             : mIndex(DEFAULT_INDEX)
             #ifdef _KMS_WINDOWS_

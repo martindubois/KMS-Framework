@@ -32,6 +32,8 @@ namespace KMS
         void Device::SetInterface  (const GUID& aI) { mInterface.Set(aI); mInterface_Valid = true; }
         void Device::SetLocation   (const char* aL) { assert(NULL != aL);  mLocation = aL; }
 
+        // ===== IDevice ====================================================
+
         void Device::Connect(unsigned int aFlags)
         {
             if (IsConnected())
@@ -66,8 +68,8 @@ namespace KMS
 
             DWORD lAccess = 0;
 
-            if (0 != (aFlags & FLAG_READ_ACCESS )) { lAccess |= GENERIC_READ; }
-            if (0 != (aFlags & FLAG_WRITE_ACCESS)) { lAccess |= GENERIC_WRITE; }
+            if (0 != (aFlags & FLAG_ACCESS_READ )) { lAccess |= GENERIC_READ; }
+            if (0 != (aFlags & FLAG_ACCESS_WRITE)) { lAccess |= GENERIC_WRITE; }
 
             mHandle = CreateFile(mLink, lAccess, 0, NULL, OPEN_EXISTING, 0, NULL);
             KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, DEV_CONNECT_FAILED, "CreateFile failed", mLink);

@@ -87,7 +87,7 @@ namespace KMS
         void Port::SetSpeed       (unsigned int aS_bps) { mSpeed_bps       = aS_bps; if (IsConnected()) { ApplyConfig  (); } }
         void Port::SetWriteTimeout(unsigned int aWT_ms) { mWriteTimeout_ms = aWT_ms; if (IsConnected()) { ApplyTimeouts(); } }
 
-        // ===== Dev::Device ================================================
+        // ===== Dev::IDevice ================================================
 
         void Port::Connect(unsigned int aFlags)
         {

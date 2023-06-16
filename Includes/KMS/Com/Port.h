@@ -56,11 +56,11 @@ namespace KMS
 
             void SetWriteTimeout(unsigned int aWT_ms);
 
-            void ClearReadBuffer();
-
             void Wait();
 
-            // ===== Dev::Device ============================================
+            // ===== Dev::IDevice ===========================================
+            virtual void ClearReadBuffer();
+
             virtual void Connect(unsigned int aFlags);
 
         // Internal
