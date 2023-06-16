@@ -52,6 +52,8 @@ namespace KMS
             DI_NAME_INVALID    , DI_NOT_DYNAMIC     , DI_OPEN_FAILED     ,
             DI_OUTPUT_TOO_SHORT,
 
+            ENUM_INVALID_VALUE_NAME,
+
             ENV_EXPAND_FAILED, ENV_OUTPUT_TOO_SHORT,
 
             FILE_ACCESS_FAILED , FILE_BACKUP_FAILED, FILE_COMPRESS_FAILED  ,
@@ -93,7 +95,7 @@ namespace KMS
 
             VERSION_FILE_CORRUPTED, VERSION_FORMAT_INVALID, VERSION_NUMBER_INVALID,
 
-            CODE_QTY
+            QTY
         };
 
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg);

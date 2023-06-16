@@ -110,7 +110,7 @@ namespace KMS
         assert(NULL != aFile);
         assert(NULL != aFunction);
         assert(0 < aLine);
-        assert(Code::CODE_QTY > aCode);
+        assert(Code::QTY > aCode);
         assert(NULL != aMsg);
 
         mCode      = aCode;
@@ -151,7 +151,7 @@ std::ostream& operator << (std::ostream& aOut, const Exception::Code& aC)
 
 const char* ToCodeName(Exception::Code aCode)
 {
-    static const char* CODE_NAMES[static_cast<unsigned int>(Exception::Code::CODE_QTY)] =
+    static const char* CODE_NAMES[static_cast<unsigned int>(Exception::Code::QTY)] =
     {
         "APPLICATION_ERROR",
         "APPLICATION_SYSTEM_ERROR",
@@ -183,6 +183,8 @@ const char* ToCodeName(Exception::Code aCode)
         "DI_DENIED"          , "DI_FORMAT_INVALID", "DI_INDEX_INVALID",
         "DI_NAME_INVALID"    , "DI_NOT_DYNAMIC"   , "DI_OPEN_FAILED"  ,
         "DI_OUTPUT_TOO_SHORT",
+
+        "ENUM_INVALID_VALUE_NAME",
 
         "ENV_EXPAND_FAILED", "ENV_OUTPUT_TOO_SHORT",
 
@@ -227,9 +229,7 @@ const char* ToCodeName(Exception::Code aCode)
         "VERSION_FILE_CORRUPTED", "VERSION_FORMAT_INVALID", "VERSION_NUMBER_INVALID",
     };
 
-    auto lCode = static_cast<unsigned int>(aCode);
+    Enum<Exception::Code, CODE_NAMES> lCode(aCode);
 
-    assert(static_cast<unsigned int>(Exception::Code::CODE_QTY) > lCode);
-
-    return CODE_NAMES[lCode];
+    return lCode.GetName();
 }
