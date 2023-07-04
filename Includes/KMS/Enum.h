@@ -1,14 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/DI/Boolean.h
+// File      Includes/KMS/Enum.h
 
 #pragma once
-
-// ===== Includes ===========================================================
-#include <KMS/Exception.h>
 
 namespace KMS
 {
@@ -31,15 +28,24 @@ namespace KMS
 
         const char* GetName() const;
 
-        bool Set(const char* aName);
-
         bool Set(T aValue);
+
+        bool SetName(const char* aName);
 
     private:
 
         T mValue;
 
     };
+
+}
+
+// ===== Includes ===========================================================
+// The KMS/Exception.h header file use the Enum template.
+#include <KMS/Exception.h>
+
+namespace KMS
+{
 
     // Public
     // //////////////////////////////////////////////////////////////////////
@@ -48,7 +54,7 @@ namespace KMS
     inline Enum<T, N>::Enum(T aValue) { Set(aValue); }
 
     template <typename T, const char** N>
-    inline Enum<T, N>::Enum(const char* aName) { Set(aName); }
+    inline Enum<T, N>::Enum(const char* aName) { SetName(aName); }
 
     template <typename T, const char** N>
     inline void Enum<T, N>::operator = (T aValue) { Set(aValue); }
@@ -68,7 +74,7 @@ namespace KMS
     }
 
     template <typename T, const char** N>
-    bool Enum<T, N>::Set(const char* aName)
+    bool Enum<T, N>::SetName(const char* aName)
     {
         assert(NULL != aName);
 

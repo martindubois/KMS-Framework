@@ -18,7 +18,41 @@ namespace KMS
     {
 
         template <typename T>
-        class UInt : public Value
+        class UInt_Base : public Value
+        {
+
+        public:
+
+            void operator = (T aIn);
+
+            operator T () const;
+
+            bool operator == (T aIn);
+
+            void SetRadix(Radix aRadix);
+
+            virtual T Get() const = 0;
+
+            virtual void Set(T aIn) = 0;
+
+            // ===== Value ==================================================
+            virtual bool         Clear();
+            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
+            virtual void         Set(const char* aIn);
+
+            // ===== Object =================================================
+            virtual ~UInt_Base();
+
+        protected:
+
+            UInt_Base();
+
+            Radix mRadix;
+
+        };
+
+        template <typename T>
+        class UInt : public UInt_Base<T>
         {
 
         public:
@@ -27,20 +61,9 @@ namespace KMS
 
             UInt(T aIn = 0);
 
-            void operator = (T aIn);
-
-            operator T () const;
-
-            bool operator == (T aIn);
-
-            T Get() const;
-
-            void SetRadix(Radix aRadix);
-
-            // ===== Value ==================================================
-            virtual bool         Clear();
-            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
-            virtual void         Set(const char* aIn);
+            // ===== UInt_Base ==============================================
+            virtual T    Get() const;
+            virtual void Set(T aIn);
 
             // ===== Object =================================================
             virtual ~UInt();
@@ -49,9 +72,26 @@ namespace KMS
 
             T mInternal;
 
-        private:
+        };
 
-            Radix mRadix;
+        template <typename T>
+        class UInt_Ptr : public UInt_Base<T>
+        {
+
+        public:
+
+            UInt_Ptr(T* aInternal);
+
+            // ===== UInt_Base ==============================================
+            virtual T    Get() const;
+            virtual void Set(T aIn);
+
+            // ===== Object =================================================
+            virtual ~UInt_Ptr();
+
+        // Internal
+
+            T* mInternal;
 
         };
 
@@ -62,37 +102,51 @@ namespace KMS
         DI::Object* UInt<T>::Create() { return new UInt<T>; }
 
         template <typename T>
-        UInt<T>::UInt(T aIn) : mInternal(aIn), mRadix(Radix::DECIMAL) {}
+        UInt<T>::UInt(T aIn) : mInternal(aIn) {}
 
         template <typename T>
-        void UInt<T>::operator = (T aIn) { mInternal = aIn; }
+        UInt_Ptr<T>::UInt_Ptr(T* aInternal) : mInternal(aInternal) {}
 
         template <typename T>
-        UInt<T>::operator T () const { return mInternal; }
+        void UInt_Base<T>::operator = (T aIn) { Set(aIn); }
 
         template <typename T>
-        bool UInt<T>::operator == (T aIn) { return mInternal == aIn; }
+        UInt_Base<T>::operator T () const { return Get(); }
+
+        template <typename T>
+        bool UInt_Base<T>::operator == (T aIn) { return Get() == aIn; }
+
+        template <typename T>
+        void UInt_Base<T>::SetRadix(Radix aRadix) { mRadix = aRadix; }
+
+        // ===== UInt_Base ==================================================
 
         template <typename T>
         T UInt<T>::Get() const { return mInternal; }
 
         template <typename T>
-        void UInt<T>::SetRadix(Radix aRadix) { mRadix = aRadix; }
+        T UInt_Ptr<T>::Get() const { return *mInternal; }
+
+        template <typename T>
+        void UInt<T>::Set(T aIn) { mInternal = aIn; };
+
+        template <typename T>
+        void UInt_Ptr<T>::Set(T aIn) { *mInternal = aIn; };
 
         // ===== Value ======================================================
 
         template <typename T>
-        bool UInt<T>::Clear()
+        bool UInt_Base<T>::Clear()
         {
-            bool lResult = mInternal != 0;
+            bool lResult = Get() != 0;
 
-            mInternal = 0;
+            Set(static_cast<T>(0));
 
             return lResult;
         }
 
         template <typename T>
-        unsigned int UInt<T>::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int UInt_Base<T>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(NULL != aOut);
 
@@ -100,8 +154,8 @@ namespace KMS
 
             switch (mRadix)
             {
-            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mInternal); break;
-            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", mInternal); break;
+            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", Get()); break;
+            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", Get()); break;
 
             default: assert(false);
             }
@@ -110,7 +164,7 @@ namespace KMS
         }
 
         template <typename T>
-        void UInt<T>::Set(const char* aIn)
+        void UInt_Base<T>::Set(const char* aIn)
         {
             uint32_t lValue = Convert::ToUInt32(aIn, mRadix);
 
@@ -132,13 +186,25 @@ namespace KMS
             default: assert(false);
             }
 
-            mInternal = lValue;
+            Set(lValue);
         }
 
         // ===== Object =====================================================
 
         template <typename T>
+        UInt_Base<T>::~UInt_Base() {}
+
+        template <typename T>
         UInt<T>::~UInt() {}
+
+        template <typename T>
+        UInt_Ptr<T>::~UInt_Ptr() {}
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        UInt_Base<T>::UInt_Base() : mRadix(Radix::DECIMAL) {}
 
     }
 }

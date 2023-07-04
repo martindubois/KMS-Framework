@@ -10,7 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Di/Dictionary.h>
-#include <KMS/DI/UInt_Wrapper.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Slave.h>
 
 namespace KMS
@@ -30,7 +30,7 @@ namespace KMS
             NO_COPY(Slave_Cfg);
 
             // ===== Configurable attributes ================================
-            DI::UInt_Wrapper<uint8_t> mDeviceAddress_Wrapper;
+            DI::UInt_Ptr<uint8_t> mDeviceAddress_Wrapper;
 
         };
 

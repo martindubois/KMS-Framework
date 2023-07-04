@@ -19,7 +19,37 @@ namespace KMS
     {
 
         template <typename T, const char** N>
-        class Enum : public Value
+        class Enum_Base : public Value
+        {
+
+        public:
+
+            void operator = (T aIn);
+
+            operator T () const;
+
+            const char* GetName() const;
+
+            virtual T Get() const = 0;
+
+            // ===== Value ==================================================
+            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
+            virtual void         Set(const char* aIn);
+
+            // ===== Object =================================================
+            virtual ~Enum_Base();
+            virtual bool Clear();
+
+        protected:
+
+            Enum_Base();
+
+            virtual bool Internal_Set(T aIn) = 0;
+
+        };
+
+        template <typename T, const char** N>
+        class Enum : public Enum_Base<T, N>
         {
 
         public:
@@ -28,23 +58,48 @@ namespace KMS
 
             Enum(T aIn);
 
-            void operator = (T aIn);
-
-            operator T () const;
-
-            // ===== Value ==================================================
-            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
-            virtual void         Set(const char* aIn);
+            // ===== Enum_Base ==============================================
+            virtual T    Get() const;
 
             // ===== Object =================================================
             virtual ~Enum();
-            virtual bool Clear();
 
         // Internal
 
             KMS::Enum<T, N> mInternal;
 
+        protected:
+
+            // ===== Enum_Base ==============================================
+            virtual bool Internal_Set(T aIn);
+
         };
+
+        template <typename T, const char** N>
+        class Enum_Ptr : public Enum_Base<T, N>
+        {
+
+        public:
+
+            Enum_Ptr(T* aIn);
+
+            // ===== Enum_Base ==============================================
+            virtual T Get() const;
+            
+            // ===== Object =================================================
+            virtual ~Enum_Ptr();
+
+        // internal
+
+            KMS::Enum<T, N>* mInternal;
+
+        protected:
+
+            // ===== Enum_Base ==============================================
+            virtual bool Internal_Set(T aIn);
+
+        };
+
     }
 }
 
@@ -61,20 +116,39 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T, const char** N>
-        inline Enum<T, N>::Enum(T aIn) : mInternal(aIn) {}
+        inline Enum<T, N>::Enum(T aIn) : Enum_Base<T, N>(), mInternal(aIn) {}
 
         template <typename T, const char** N>
-        inline void Enum<T, N>::operator = (T aIn) { mInternal = aIn; }
+        inline Enum_Ptr<T, N>::Enum_Ptr(T* aIn) : Enum_Base<T, N>(), mInternal(aIn) {}
+
+        template <typename T, const char** N>
+        inline void Enum_Base<T, N>::operator = (T aIn) { Set(aIn); }
         
         template <typename T, const char** N>
-        Enum<T, N>::operator T () const { return mInternal; }
+        Enum_Base<T, N>::operator T () const { return Get(); }
+
+        template <typename T, const char** N>
+        const char* Enum_Base<T, N>::GetName() const
+        {
+            KMS::Enum<T, N> lIn(Get());
+            
+            return lIn.GetName();
+        }
+
+        // ===== Enum_Base ==================================================
+
+        template <typename T, const char** N>
+        T Enum<T, N>::Get() const { return mInternal; }
+
+        template <typename T, const char** N>
+        T Enum_Ptr<T, N>::Get() const { return *mInternal; }
 
         // ===== Value ======================================================
 
         template <typename T, const char** N>
-        unsigned int Enum<T, N>::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int Enum_Base<T, N>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            const char* lName = mInternal.GetName();
+            const char* lName = GetName();
 
             unsigned int lResult_byte = static_cast<unsigned int>(strlen(lName));
 
@@ -89,27 +163,45 @@ namespace KMS
         }
 
         template <typename T, const char** N>
-        void Enum<T, N>::Set(const char* aIn)
+        void Enum_Base<T, N>::Set(const char* aIn)
         {
-            if (mInternal.Set(aIn))
+            KMS::Enum<T, N> lIn(0);
+
+            lIn.SetName(aIn);
+
+            if (Internal_Set(lIn))
             {
                 Send_OnChanged(const_cast<char*>(aIn));
             }
         }
 
         // ===== Object =====================================================
+
+        template <typename T, const char** N>
+        Enum_Base<T, N>::~Enum_Base() {}
+
         template <typename T, const char** N>
         Enum<T, N>::~Enum() {}
 
         template <typename T, const char** N>
-        bool Enum<T, N>::Clear()
-        {
-            bool lResult = mInternal != static_cast<T>(0);
+        Enum_Ptr<T, N>::~Enum_Ptr() {}
 
-            mInternal = static_cast<T>(0);
+        template <typename T, const char** N>
+        bool Enum_Base<T, N>::Clear() { return Internal_Set(static_cast<T>(0)); }
 
-            return lResult;
-        }
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        template <typename T, const char** N>
+        inline Enum_Base<T, N>::Enum_Base() {}
+
+        // ===== Enum_Base ==================================================
+
+        template <typename T, const char** N>
+        bool Enum<T, N>::Internal_Set(T aIn) { return mInternal.Set(aIn); }
+
+        template <typename T, const char** N>
+        bool Enum_Ptr<T, N>::Internal_Set(T aIn) { return mInternal->Set(aIn); }
 
     }
 }

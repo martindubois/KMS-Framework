@@ -94,6 +94,7 @@
     <ClCompile Include="Modbus_Master_Cfg.cpp" />
     <ClCompile Include="Modbus_Master_IDevice.cpp" />
     <ClCompile Include="Modbus_Slave.cpp" />
+    <ClCompile Include="Modbus_Slave_Cfg.cpp" />
     <ClCompile Include="Modbus_Slave_Serial.cpp" />
     <ClCompile Include="Modbus_Slave_USART.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
