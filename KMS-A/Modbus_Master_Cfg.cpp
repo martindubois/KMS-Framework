@@ -28,11 +28,11 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Master_Cfg::Master_Cfg(Master* aMaster)
-            : mDeviceAddress_Wrapper(&aMaster->mDeviceAddress)
-            , mRetryCount_Wrapper   (&aMaster->mRetryCount)
+            : mDeviceAddress(&aMaster->mDeviceAddress)
+            , mRetryCount   (&aMaster->mRetryCount)
         {
-            AddEntry("DeviceAddress", &mDeviceAddress_Wrapper, false, &MD_DEVICE_ADDRESS);
-            AddEntry("RetryCount"   , &mRetryCount_Wrapper   , false, &MD_RETRY_COUNT);
+            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
+            AddEntry("RetryCount"   , &mRetryCount   , false, &MD_RETRY_COUNT);
         }
 
     }

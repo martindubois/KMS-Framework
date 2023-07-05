@@ -11,7 +11,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
-#include <KMS/Cfg/MetaData.h>
 #include <KMS/OS.h>
 #include <KMS/Proc/Process.h>
 
@@ -25,16 +24,6 @@
 #define DEFAULT_FILE_LEVEL    (LogFile::Level::LEVEL_INFO)
 #define DEFAULT_FOLDER_NAME   ("KMS-Framework")
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-static const KMS::Cfg::MetaData MD_LOG_CONSOLE_LEVEL("Log_ConsoleLevel = NOISE | INFO | WARNING | ERROR | NONE");
-static const KMS::Cfg::MetaData MD_LOG_CONSOLE_MODE ("Log_ConsoleMode = DEBUG | USER");
-static const KMS::Cfg::MetaData MD_LOG_FILE_LEVEL   ("Log_FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
-static const KMS::Cfg::MetaData MD_LOG_FOLDER       ("Log_Folder = {Path}");
-
-#define ON_FOLDER_CHANGED (1)
-
 namespace KMS
 {
     namespace Dbg
@@ -42,8 +31,6 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
-
-        const char* Log::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
 
         const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
 
@@ -57,13 +44,6 @@ namespace KMS
             , mProcessId(OS::GetProcessId())
         {
             memset(&mHideCounts, 0, sizeof(mHideCounts));
-
-            mFolder.mOnChanged.Set(this, ON_FOLDER_CHANGED);
-
-            AddEntry("Log_ConsoleLevel", &mConsoleLevel, false, &MD_LOG_CONSOLE_LEVEL);
-            AddEntry("Log_ConsoleMode" , &mConsoleMode , false, &MD_LOG_CONSOLE_MODE);
-            AddEntry("Log_FileLevel"   , &mFileLevel   , false, &MD_LOG_FILE_LEVEL);
-            AddEntry("Log_Folder"      , &mFolder      , false, &MD_LOG_FOLDER);
 
             CloseLogFiles();
         }
@@ -90,7 +70,7 @@ namespace KMS
 
             mFiles.clear();
 
-            mEnabled = mFolder.Get().DoesExist();
+            mEnabled = mFolder.DoesExist();
         }
 
         #define IF_FILE       if (mEnabled && (mFileLevel >= mEntryLevel))
@@ -279,22 +259,6 @@ namespace KMS
                 default: assert(false);
                 }
             }
-        }
-
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Log::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            auto lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case ON_FOLDER_CHANGED: CloseLogFiles(); lResult = 0; break;
-
-            default: assert(false);
-            }
-
-            return lResult;
         }
 
         Log gLog;

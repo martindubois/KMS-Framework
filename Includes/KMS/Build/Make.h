@@ -11,6 +11,7 @@
 #include <KMS/CLI/Tool.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Enum.h>
+#include <KMS/DI/String_Expand.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Text/File_ASCII.h>
 

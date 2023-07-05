@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Folder.cpp
 
-// TEST COVERAGE 2022-10-26 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE
 
 #include "Component.h"
 
@@ -24,42 +24,66 @@ namespace KMS
 
         Folder::Folder() {}
 
-        Folder::Folder(const File::Folder& aIn) : String_Expand(aIn.GetPath()), mInternal(aIn) {}
+        Folder::Folder(const File::Folder& aIn) : Folder_Base(aIn.GetPath()), mInternal(aIn) {}
 
-        void Folder::operator = (const File::Folder& aIn)
+        Folder_Ptr::Folder_Ptr(File::Folder* aFolder) : mInternal(aFolder) {}
+
+        void Folder_Base::operator = (const File::Folder& aIn)
         {
-            mInternal = aIn;
+            Internal_Set(aIn);
 
             String_Expand::Set(aIn.GetPath());
         }
 
-        Folder::operator const File::Folder& () const { return mInternal; }
+        Folder_Base::operator const File::Folder& () const { return Get(); }
+
+        // ===== Folder_Base ================================================
 
         const File::Folder& Folder::Get() const { return mInternal; }
 
+        const File::Folder& Folder_Ptr::Get() const { return *mInternal; }
+
         // ===== Object =====================================================
+
+        Folder_Base::~Folder_Base() {}
+
         Folder::~Folder() {}
+
+        Folder_Ptr::~Folder_Ptr() {}
 
         // Internal
         // //////////////////////////////////////////////////////////////////
 
         // ===== Object =====================================================
 
-        void Folder::Send_OnChanged(void* aData)
+        void Folder_Base::Send_OnChanged(void* aData)
         {
             auto lIn = String_Expand::Get();
 
-            if      (0 == strncmp("EXECUTABLE:"       , lIn, 11)) { mInternal = File::Folder(File::Folder::EXECUTABLE       , lIn + 11); }
-            else if (0 == strncmp("HOME:"             , lIn,  5)) { mInternal = File::Folder(File::Folder::HOME             , lIn +  5); }
-            else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { mInternal = File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14); }
-            else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { mInternal = File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19); }
+            if      (0 == strncmp("EXECUTABLE:"       , lIn, 11)) { Internal_Set(File::Folder(File::Folder::EXECUTABLE       , lIn + 11)); }
+            else if (0 == strncmp("HOME:"             , lIn,  5)) { Internal_Set(File::Folder(File::Folder::HOME             , lIn +  5)); }
+            else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14)); }
+            else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19)); }
             else
             {
-                mInternal = File::Folder(lIn);
+                Internal_Set(File::Folder(lIn));
             }
 
             String_Expand::Send_OnChanged(aData);
         }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        Folder_Base::Folder_Base() {}
+
+        Folder_Base::Folder_Base(const char* aIn) : String_Expand(aIn) {}
+
+        // ===== Folder_Base ================================================
+
+        void Folder::Internal_Set(const File::Folder& aIn) { mInternal = aIn; }
+
+        void Folder_Ptr::Internal_Set(const File::Folder& aIn) { *mInternal = aIn; }
 
     }
 }

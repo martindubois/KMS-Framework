@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/DI/String.h>
 #include <KMS/Text/File_ASCII.h>
 
 #include <KMS/Build/Depend.h>

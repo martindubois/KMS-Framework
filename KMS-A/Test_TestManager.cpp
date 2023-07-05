@@ -13,6 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
@@ -47,11 +48,12 @@ namespace KMS
             try
             {
                 Cfg::Configurator lC;
+                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 TestManager       lTM;
 
                 lC.AddConfigurable(&lTM);
 
-                lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseArguments(aCount - 1, aVector + 1);

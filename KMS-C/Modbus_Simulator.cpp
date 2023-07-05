@@ -16,6 +16,7 @@
 #include <KMS/Com/Port.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
+#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
@@ -95,6 +96,7 @@ namespace KMS
             {
                 Cfg::Configurator lC;
                 Installer         lInstaller;
+                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 Com::Port         lPort;
                 Slave_IDevice     lSl(&lPort);
                 Simulator         lSi;
@@ -108,7 +110,7 @@ namespace KMS
                 lC.AddConfigurable(&lPort);
                 lC.AddConfigurable(&lSi);
 
-                lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);

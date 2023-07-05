@@ -12,9 +12,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Dbg/LogFile.h>
-#include <KMS/DI/Dictionary.h>
-#include <KMS/DI/Enum.h>
-#include <KMS/DI/Folder.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Msg/IReceiver.h>
 #include <KMS/Version.h>
@@ -24,7 +21,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log : public DI::Dictionary, public Msg::IReceiver
+        class Log
         {
 
         public:
@@ -36,8 +33,6 @@ namespace KMS
 
                 QTY
             };
-
-            static const char* CONSOLE_MODE_NAMES[];
 
             static const unsigned int FLAG_USER_REDUNDANT;
 
@@ -61,14 +56,11 @@ namespace KMS
 
             void WriteVersion(const char* aProduct, const Version& aVersion);
 
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
             // ===== Configurable attributes ================================
-            DI::Enum<LogFile::Level, LogFile::LEVEL_NAMES> mConsoleLevel;
-            DI::Enum<ConsoleMode   , CONSOLE_MODE_NAMES  > mConsoleMode;
-            DI::Enum<LogFile::Level, LogFile::LEVEL_NAMES> mFileLevel;
-            DI::Folder                                     mFolder;
+            LogFile::Level mConsoleLevel;
+            ConsoleMode    mConsoleMode;
+            LogFile::Level mFileLevel;
+            File::Folder   mFolder;
 
         private:
 

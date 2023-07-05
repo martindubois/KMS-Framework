@@ -19,6 +19,7 @@
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/DI/Functions.h>
+#include <KMS/DI/String_Expand.h>
 #include <KMS/Text/File_ASCII.h>
 
 #include <KMS/CLI/Tool.h>

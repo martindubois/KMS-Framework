@@ -10,6 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
@@ -80,13 +81,14 @@ namespace KMS
                 Build::Import     lI;
                 Cfg::Configurator lC;
                 Installer         lInstaller;
+                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
 
                 lC.SetSilence(SILENCE);
 
                 lC.AddConfigurable(&lI);
                 lC.AddConfigurable(&lInstaller);
 
-                lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);

@@ -30,8 +30,8 @@ namespace KMS
             NO_COPY(Master_Cfg);
 
             // ===== Configurable attributes ================================
-            DI::UInt_Ptr<uint8_t> mDeviceAddress_Wrapper;
-            DI::UInt_Ptr<uint8_t> mRetryCount_Wrapper;
+            DI::UInt_Ptr<uint8_t> mDeviceAddress;
+            DI::UInt_Ptr<uint8_t> mRetryCount;
 
         };
 

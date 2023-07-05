@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Folder.h
@@ -17,7 +17,36 @@ namespace KMS
     namespace DI
     {
 
-        class Folder : public String_Expand
+        class Folder_Base : public String_Expand
+        {
+
+        public:
+
+            void operator = (const KMS::File::Folder& aIn);
+
+            operator const KMS::File::Folder& () const;
+
+            virtual const KMS::File::Folder& Get() const = 0;
+
+            // ===== Object =================================================
+            virtual ~Folder_Base();
+
+        // Internal
+
+            // ===== Object =================================================
+            virtual void Send_OnChanged(void* aData);
+
+        protected:
+
+            Folder_Base();
+
+            Folder_Base(const char* aIn);
+
+            virtual void Internal_Set(const KMS::File::Folder& aIn) = 0;
+
+        };
+
+        class Folder : public Folder_Base
         {
 
         public:
@@ -28,21 +57,44 @@ namespace KMS
 
             Folder(const KMS::File::Folder& aFolder);
 
-            void operator = (const KMS::File::Folder& aIn);
-
-            operator const KMS::File::Folder& () const;
-
-            const KMS::File::Folder& Get() const;
+            // ===== Folder_Base ============================================
+            virtual const KMS::File::Folder& Get() const;
 
             // ===== Object =================================================
             virtual ~Folder();
 
         // Internal
 
-            // ===== Object =================================================
-            virtual void Send_OnChanged(void* aData);
-
             KMS::File::Folder mInternal;
+
+        protected:
+
+            // ===== Folder_Base ============================================
+            virtual void Internal_Set(const KMS::File::Folder& aIn);
+
+        };
+
+        class Folder_Ptr : public Folder_Base
+        {
+
+        public:
+
+            Folder_Ptr(KMS::File::Folder* aFolder);
+
+            // ===== Folder_Base ============================================
+            virtual const KMS::File::Folder& Get() const;
+
+            // ===== Object =================================================
+            virtual ~Folder_Ptr();
+
+        // Internal
+
+            KMS::File::Folder* mInternal;
+
+        protected:
+
+            // ===== Folder_Base ============================================
+            virtual void Internal_Set(const KMS::File::Folder& aIn);
 
         };
 

@@ -21,7 +21,7 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     Exception lE(__FILE__, __FUNCTION__, __LINE__, Exception::Code::TEST, "Test");
     Dbg::Log  lL;
 
-    lL.mFolder.Set("DoesNotExist");
+    lL.mFolder = File::Folder("DoesNotExist");
 
     lL.CloseLogFiles();
 
@@ -40,18 +40,6 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     lL.WriteData(&lL, sizeof(lL));
     lL.WriteException(lE);
     lL.WriteMessage("Test");
-
-    lL.mConsoleLevel.Set("NONE");
-    lL.mConsoleLevel.Set("ERROR");
-    lL.mConsoleLevel.Set("WARNING");
-    lL.mConsoleLevel.Set("INFO");
-    lL.mConsoleLevel.Set("NOISE");
-
-    lL.mFileLevel.Set("NONE");
-    lL.mFileLevel.Set("ERROR");
-    lL.mFileLevel.Set("WARNING");
-    lL.mFileLevel.Set("INFO");
-    lL.mFileLevel.Set("NOISE");
 
     KMS_DBG_LOG_INFO();
     Dbg::gLog.WriteData(&lL, sizeof(lL));

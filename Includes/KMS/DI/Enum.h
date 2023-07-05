@@ -12,6 +12,7 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Value.h>
 #include <KMS/Enum.h>
+#include <KMS/Exception.h>
 
 namespace KMS
 {
@@ -91,7 +92,7 @@ namespace KMS
 
         // internal
 
-            KMS::Enum<T, N>* mInternal;
+            T* mInternal;
 
         protected:
 
@@ -99,18 +100,6 @@ namespace KMS
             virtual bool Internal_Set(T aIn);
 
         };
-
-    }
-}
-
-// ===== Includes ===========================================================
-// The KMS/Exception.h header file use the Enum template.
-#include <KMS/Exception.h>
-
-namespace KMS
-{
-    namespace DI
-    {
 
         // Public
         // //////////////////////////////////////////////////////////////////
@@ -201,7 +190,14 @@ namespace KMS
         bool Enum<T, N>::Internal_Set(T aIn) { return mInternal.Set(aIn); }
 
         template <typename T, const char** N>
-        bool Enum_Ptr<T, N>::Internal_Set(T aIn) { return mInternal->Set(aIn); }
+        bool Enum_Ptr<T, N>::Internal_Set(T aIn)
+        {
+            bool lResult = *mInternal != aIn;
+
+            *mInternal = aIn;
+
+            return lResult;
+        }
 
     }
 }

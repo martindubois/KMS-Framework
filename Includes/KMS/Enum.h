@@ -7,6 +7,9 @@
 
 #pragma once
 
+// ===== Includes ===========================================================
+#include <KMS/Exception.h>
+
 namespace KMS
 {
 
@@ -37,15 +40,6 @@ namespace KMS
         T mValue;
 
     };
-
-}
-
-// ===== Includes ===========================================================
-// The KMS/Exception.h header file use the Enum template.
-#include <KMS/Exception.h>
-
-namespace KMS
-{
 
     // Public
     // //////////////////////////////////////////////////////////////////////

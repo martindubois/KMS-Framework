@@ -13,6 +13,8 @@ namespace KMS
     namespace DI
     {
 
+        class Container;
+
         extern bool Execute_Operation(Container* aRoot, const char* aOperation);
 
     }

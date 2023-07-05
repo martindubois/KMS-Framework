@@ -16,6 +16,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
@@ -117,6 +118,7 @@ namespace KMS
                 Cfg::Configurator lC;
                 HTTP::FileServer  lFS;
                 Installer         lInstaller;
+                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 HTTP::Server      lS;
 
                 lS.mOnRequest = lFS.ON_REQUEST;
@@ -125,7 +127,7 @@ namespace KMS
                 lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS.mSocket);
 
-                lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);

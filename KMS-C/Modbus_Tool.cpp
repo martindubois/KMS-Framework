@@ -17,6 +17,7 @@
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
+#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Installer.h>
@@ -71,6 +72,7 @@ namespace KMS
                 unsigned int           lArgStart = 1;
                 Cfg::Configurator      lC;
                 Installer              lInstaller;
+                Dbg::Log_Cfg           lLogCfg(&Dbg::gLog);
                 Com::Port              lPort;
 
                 Modbus::Master_IDevice lMC(&lPort);
@@ -103,7 +105,7 @@ namespace KMS
                 lC.AddConfigurable(&lCfg);
                 lC.AddConfigurable(&lT);
 
-                lC.AddConfigurable(&Dbg::gLog);
+                lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lT.InitMaster(lM);
