@@ -36,7 +36,7 @@ namespace KMS
 
         // ===== Master =====================================================
 
-        void Master_TCP::Connect   () { mSocket.Connect   (); }
+        bool Master_TCP::Connect   () { mSocket.Connect   (); return true; }
         void Master_TCP::Disconnect() { mSocket.Disconnect(); }
 
         // Protected
@@ -166,7 +166,8 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == aBuffer->mProtocolId   , MODBUS_RECV_ERROR, "Invalid protocol ID"   , aBuffer->mProtocolId);
             KMS_EXCEPTION_ASSERT(mTransactionId == aBuffer->mTransactionId, MODBUS_RECV_ERROR, "Invalid transaction ID", aBuffer->mTransactionId);
 
-            VerifyDeviceAddress(&aBuffer->mDeviceAddress);
+            bool lRetB = VerifyDeviceAddress(&aBuffer->mDeviceAddress);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "VerifyDeviceAddress failed", "");
         }
 
         void Master_TCP::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)

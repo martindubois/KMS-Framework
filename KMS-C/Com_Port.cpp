@@ -32,11 +32,6 @@ static const KMS::Cfg::MetaData MD_RTS          ("DTR = false | true");
 static const KMS::Cfg::MetaData MD_SPEED        ("Speed = {bps}");
 static const KMS::Cfg::MetaData MD_WRITE_TIMEOUT("WriteTimeout = {ms}");
 
-// Static function declarations
-// //////////////////////////////////////////////////////////////////////////
-
-static KMS::Com::Port::Parity ToParity(const char* aIn);
-
 namespace KMS
 {
     namespace Com
@@ -89,13 +84,17 @@ namespace KMS
 
         // ===== Dev::IDevice ================================================
 
-        void Port::Connect(unsigned int aFlags)
+        bool Port::Connect(unsigned int aFlags)
         {
-            Dev::Device::Connect(aFlags);
+            bool lResult = Dev::Device::Connect(aFlags);
+            if (lResult)
+            {
+                ApplyConfig();
+                ApplySignals();
+                ApplyTimeouts();
+            }
 
-            ApplyConfig();
-            ApplySignals();
-            ApplyTimeouts();
+            return lResult;
         }
 
         // Internal
@@ -134,20 +133,4 @@ std::ostream& operator << (std::ostream& aOut, const Com::Port& aP)
     aP.Display(aOut);
 
     return aOut;
-}
-
-// Static functions
-// //////////////////////////////////////////////////////////////////////////
-
-Com::Port::Parity ToParity(const char* aIn)
-{
-    assert(NULL != aIn);
-
-    if (strcmp("EVEN"        , aIn)) { return Com::Port::Parity::EVEN        ; }
-    if (strcmp("IGNORED_EVEN", aIn)) { return Com::Port::Parity::IGNORED_EVEN; }
-    if (strcmp("IGNORED_ODD" , aIn)) { return Com::Port::Parity::IGNORED_ODD ; }
-    if (strcmp("NONE"        , aIn)) { return Com::Port::Parity::NONE        ; }
-    if (strcmp("ODD"         , aIn)) { return Com::Port::Parity::ODD         ; }
-
-    KMS_EXCEPTION(COM_CONFIG_INVALID, "Invalid parity", aIn);
 }

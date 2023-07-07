@@ -275,7 +275,13 @@ namespace KMS
 
             if      (0 == strcmp(aC, "ClearDTR"  )) { mPort.SetDTR(false); }
             else if (0 == strcmp(aC, "ClearRTS"  )) { mPort.SetRTS(false); }
-            else if (0 == strcmp(aC, "Connect"   )) { mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE); }
+            else if (0 == strcmp(aC, "Connect"   ))
+            {
+                if (!mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE))
+                {
+                    KMS_EXCEPTION(DEV_CONNECT_FAILED, "Connexion failed", "");
+                }
+            }
             else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
             else if (0 == strcmp(aC, "Receive"   )) { Receive(0, 0); }
             else if (0 == strcmp(aC, "SetDTR"    )) { mPort.SetDTR(true); }
@@ -309,7 +315,10 @@ namespace KMS
 
         int Tool::Run()
         {
-            mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE);
+            if (!mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE))
+            {
+                KMS_EXCEPTION(DEV_CONNECT_FAILED, "Connexion failed", "");
+            }
 
             return CLI::Tool::Run();
         }

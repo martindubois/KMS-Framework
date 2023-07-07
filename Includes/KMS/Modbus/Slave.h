@@ -48,7 +48,7 @@ namespace KMS
             Msg::Destination mOnWriteSingleCoil;
             Msg::Destination mOnWriteSingleRegister;
 
-            virtual void Connect() = 0;
+            virtual bool Connect() = 0;
 
             // ===== Msg::IReceiver =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);

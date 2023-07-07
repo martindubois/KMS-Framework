@@ -41,7 +41,7 @@ namespace KMS
             WriteUInt8(aBuffer, lSize_byte + 1, lValue >> 8);
         }
 
-        void CRC::Verify(const uint8_t* aBuffer, unsigned int aSize_byte)
+        bool CRC::Verify(const uint8_t* aBuffer, unsigned int aSize_byte)
         {
             assert(CRC_SIZE_byte < aSize_byte);
 
@@ -56,11 +56,15 @@ namespace KMS
             lReceived <<= 8;
             lReceived |= aBuffer[lSize_byte];
 
-            char lMsg[128];
-            sprintf_s(lMsg, "Bad Modbus CRC (Expected = 0x%04x, Received = 0x%04x)", static_cast<unsigned int>(lCRC), lReceived);
-            KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC_ERROR, lMsg, aSize_byte);
+            #ifdef _KMS_EMBEDDED_
+                return (lCRC == lReceived);
+            #else
+                char lMsg[128];
+                sprintf_s(lMsg, "Bad Modbus CRC (Expected = 0x%04x, Received = 0x%04x)", static_cast<unsigned int>(lCRC), lReceived);
+                KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC_ERROR, lMsg, aSize_byte);
+                return true;
+            #endif
         }
-
 
         CRC::CRC() { Reset(); }
 

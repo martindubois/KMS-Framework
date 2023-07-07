@@ -167,7 +167,12 @@ namespace KMS
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
                 assert(NULL != lAddr);
 
-                fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), mMaster->ReadCoil(*lAddr) ? "true" : "false");
+                bool lValB;
+
+                bool lRetB = mMaster->ReadCoil(*lAddr, &lValB);
+                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadCoil failed", lAddr->Get());
+
+                fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), lValB ? "true" : "false");
             }
 
             fprintf(aOut, "Discrete inputs\n");
@@ -178,7 +183,12 @@ namespace KMS
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
                 assert(NULL != lAddr);
 
-                fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), mMaster->ReadDiscreteInput(*lAddr) ? "true" : "false");
+                bool lValB;
+
+                bool lRetB = mMaster->ReadDiscreteInput(*lAddr, &lValB);
+                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadDiscreteInput failed", lAddr->Get());
+
+                fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), lValB ? "true" : "false");
             }
 
             fprintf(aOut, "Holding registers\n");
@@ -189,7 +199,12 @@ namespace KMS
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
                 assert(NULL != lAddr);
 
-                fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), mMaster->ReadHoldingRegister(*lAddr));
+                RegisterValue lValR;
+
+                bool lRetB = mMaster->ReadHoldingRegister(*lAddr, &lValR);
+                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadHoldingRegister failed", lAddr->Get());
+
+                fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), lValR);
             }
 
             fprintf(aOut, "Input registers\n");
@@ -200,23 +215,81 @@ namespace KMS
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
                 assert(NULL != lAddr);
 
-                fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), mMaster->ReadInputRegister(*lAddr));
+                RegisterValue lValR;
+
+                bool lRetB = mMaster->ReadInputRegister(*lAddr, &lValR);
+                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadInputRegister failed", lAddr->Get());
+
+                fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), lValR);
             }
         }
 
         // ===== Modbus functions ===========================================
 
-        bool Tool::ReadCoil(const char* aName) { assert(NULL != mMaster); return mMaster->ReadCoil(ToAddress(mCoils, aName)); }
+        bool Tool::ReadCoil(const char* aName)
+        {
+            assert(NULL != mMaster);
+            
+            bool lValB;
 
-        bool Tool::ReadDiscreteInput(const char* aName) { assert(NULL != mMaster); return mMaster->ReadDiscreteInput(ToAddress(mDiscreteInputs, aName)); }
+            bool lRetB = mMaster->ReadCoil(ToAddress(mCoils, aName), &lValB);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadCoil failed", aName);
 
-        uint16_t Tool::ReadHoldingRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadHoldingRegister(ToAddress(mHoldingRegisters, aName)); }
+            return lValB;
 
-        uint16_t Tool::ReadInputRegister(const char* aName) { assert(NULL != mMaster); return mMaster->ReadInputRegister(ToAddress(mInputRegisters, aName)); }
+        }
+            
+        bool Tool::ReadDiscreteInput(const char* aName)
+        {
+            assert(NULL != mMaster);
 
-        void Tool::WriteSingleCoil(const char* aName, bool aValue) { assert(NULL != mMaster); mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue); }
+            bool lValB;
+            
+            bool lRetB = mMaster->ReadDiscreteInput(ToAddress(mDiscreteInputs, aName), &lValB);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadDiscreteInput failed", aName);
 
-        void Tool::WriteSingleRegister(const char* aName, uint16_t aValue) { assert(NULL != mMaster); mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue); }
+            return lValB;
+        }
+
+        uint16_t Tool::ReadHoldingRegister(const char* aName)
+        {
+            assert(NULL != mMaster);
+
+            RegisterValue lValR;
+
+            bool lRetB = mMaster->ReadHoldingRegister(ToAddress(mHoldingRegisters, aName), &lValR);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadHoldingRegister failed", aName);
+
+            return lValR;            
+        }
+
+        uint16_t Tool::ReadInputRegister(const char* aName)
+        {
+            assert(NULL != mMaster);
+
+            RegisterValue lValR;
+            
+            bool lRetB = mMaster->ReadInputRegister(ToAddress(mInputRegisters, aName), &lValR);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadInputRegister failed", aName);
+
+            return lValR;
+        }
+
+        void Tool::WriteSingleCoil(const char* aName, bool aValue)
+        {
+            assert(NULL != mMaster);
+            
+            bool lRetB = mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleCoil failed", aName);
+        }
+
+        void Tool::WriteSingleRegister(const char* aName, uint16_t aValue)
+        {
+            assert(NULL != mMaster);
+            
+            bool lRetB = mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue);
+            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleRegister failed", aName);
+        }
 
         // ===== CLI::Tool ==================================================
 

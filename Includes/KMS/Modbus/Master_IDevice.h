@@ -24,8 +24,8 @@ namespace KMS
             Master_IDevice(Dev::IDevice* aDevice);
 
             // ===== Master =================================================
-            virtual void         Connect();
-            virtual void         Disconnect();
+            virtual bool Connect();
+            virtual void Disconnect();
 
         protected:
 
@@ -40,7 +40,7 @@ namespace KMS
 
         private:
 
-            void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
+            bool Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
 
             Dev::IDevice* mDevice;
 

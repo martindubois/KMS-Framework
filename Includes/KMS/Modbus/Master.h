@@ -23,25 +23,25 @@ namespace KMS
 
             void SetDeviceAddress(DeviceAddress aDA);
 
-            DeviceAddress GetLastException() const;
+            Exception GetLastException() const;
 
-            virtual void Connect() = 0;
+            virtual bool Connect() = 0;
 
             virtual void Disconnect() = 0;
 
             // ===== Modbus functions ===========================================
 
-            bool ReadCoil(Address aAddr);
+            bool ReadCoil(Address aAddr, bool* aOut);
 
-            bool ReadDiscreteInput(Address aAddr);
+            bool ReadDiscreteInput(Address aAddr, bool* aOut);
 
-            RegisterValue ReadHoldingRegister(Address aAddr);
+            bool ReadHoldingRegister(Address aAddr, RegisterValue* aOut);
 
-            RegisterValue ReadInputRegister(Address aAddr);
+            bool ReadInputRegister(Address aAddr, RegisterValue* aOut);
 
-            void WriteSingleCoil(Address aAddr, bool aValue);
+            bool WriteSingleCoil(Address aAddr, bool aValue);
 
-            void WriteSingleRegister(Address aAddr, RegisterValue aValue);
+            bool WriteSingleRegister(Address aAddr, RegisterValue aValue);
 
             // ===== Configurable attributes - See Master_Cfg ===============
             uint8_t mDeviceAddress;
@@ -49,13 +49,21 @@ namespace KMS
 
         protected:
 
+            static const unsigned int ERROR_BAD_CRC;
+            static const unsigned int ERROR_BUFFER_TOO_SMALL;
+            static const unsigned int ERROR_DEVICE_ADDRESS;
+            static const unsigned int ERROR_FUNCTION;
+            static const unsigned int ERROR_READ;
+            static const unsigned int ERROR_SEND;
+
             Master();
 
-            void VerifyDeviceAddress(const uint8_t* aData);
+            bool VerifyDeviceAddress(const uint8_t* aData);
 
-            void VerifyFunction(Function aFunction, const uint8_t* aData);
+            bool VerifyFunction(Function aFunction, const uint8_t* aData);
 
             // ===== Low level request type =================================
+            // Return  ERROR_...
 
             // aFunction READ_COILS, READ_DISCRETE_INPUTS,
             //           READ_HOLDING_REGISTERS, READ_INPUT_REGISTERS,

@@ -35,11 +35,11 @@ namespace KMS
 
         // ===== Master =====================================================
 
-        void Master_IDevice::Connect()
+        bool Master_IDevice::Connect()
         {
             assert(NULL != mDevice);
 
-            mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
+            return mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
         }
 
         void Master_IDevice::Disconnect()
@@ -61,31 +61,45 @@ namespace KMS
 
             assert(NULL != mDevice);
 
-            Request_Send(aFunction, aIn, aInSize_byte);
+            if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
 
-            mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+            unsigned int lResult_byte = mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+            if (MIN_SIZE_byte == lResult_byte)
+            {
+                if (!VerifyDeviceAddress(lBuffer))           { return ERROR_DEVICE_ADDRESS; }
+                if (!VerifyFunction(aFunction, lBuffer + 1)) { return ERROR_FUNCTION; }
 
-            VerifyDeviceAddress(lBuffer);
-            VerifyFunction(aFunction, lBuffer + 1);
+                unsigned int lSize_byte = lBuffer[2] + CRC_SIZE_byte;
 
-            mDevice->Read(lBuffer + MIN_SIZE_byte, lBuffer[2] + CRC_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+                unsigned int lResult_byte = mDevice->Read(lBuffer + MIN_SIZE_byte, lSize_byte, Dev::IDevice::FLAG_READ_ALL);
+                if (lSize_byte == lResult_byte)
+                {
+                    if (!CRC::Verify(lBuffer, MIN_SIZE_byte + lBuffer[2] + CRC_SIZE_byte)) { return ERROR_BAD_CRC; }
 
-            CRC::Verify(lBuffer, MIN_SIZE_byte + lBuffer[2] + CRC_SIZE_byte);
+                    #ifdef _KMS_EMBEDDED_
+                        if (lBuffer[2] > aOutSize_byte) { return ERROR_BUFFER_TOO_SMALL; }
+                    #else
+                        KMS_EXCEPTION_ASSERT(lBuffer[2] <= aOutSize_byte, MODBUS_OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
+                    #endif
 
-            KMS_EXCEPTION_ASSERT(lBuffer[2] <= aOutSize_byte, MODBUS_OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
+                    memcpy(aOut, lBuffer + MIN_SIZE_byte, lBuffer[1]);
 
-            memcpy(aOut, lBuffer + MIN_SIZE_byte, lBuffer[1]);
+                    lResult_byte = lBuffer[2];
+                }
+            }
 
-            return lBuffer[2];
+            return lResult_byte;
         }
 
         unsigned int Master_IDevice::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
             assert(NULL != mDevice);
 
-            Request_Send(aFunction, aIn, aInSize_byte);
+            if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
+
+            unsigned int lResult_byte = 0;
 
             if (0 < aOutSize_byte)
             {
@@ -93,19 +107,27 @@ namespace KMS
 
                 uint8_t lBuffer[BUFFER_SIZE_byte];
 
-                mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+                lResult_byte = mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+                if (MIN_SIZE_byte == lResult_byte)
+                {
+                    if (!VerifyDeviceAddress(lBuffer))           { return ERROR_DEVICE_ADDRESS; }
+                    if (!VerifyFunction(aFunction, lBuffer + 1)) { return ERROR_FUNCTION; }
 
-                VerifyDeviceAddress(lBuffer);
-                VerifyFunction(aFunction, lBuffer + 1);
+                    unsigned int lSize_byte = aOutSize_byte - 1 + CRC_SIZE_byte;
 
-                mDevice->Read(lBuffer + MIN_SIZE_byte, aOutSize_byte - 1 + CRC_SIZE_byte);
+                    lResult_byte = mDevice->Read(lBuffer + MIN_SIZE_byte, lSize_byte);
+                    if (lSize_byte == lResult_byte)
+                    {
+                        if (!CRC::Verify(lBuffer, MIN_SIZE_byte - 1 + aOutSize_byte + CRC_SIZE_byte)) { return ERROR_BAD_CRC; }
 
-                CRC::Verify(lBuffer, MIN_SIZE_byte - 1 + aOutSize_byte + CRC_SIZE_byte);
+                        memcpy(aOut, lBuffer + MIN_SIZE_byte - 1, aOutSize_byte);
 
-                memcpy(aOut, lBuffer + MIN_SIZE_byte - 1, aOutSize_byte);
+                        lResult_byte = aOutSize_byte;
+                    }
+                }
             }
 
-            return aOutSize_byte;
+            return lResult_byte;
         }
 
         unsigned int Master_IDevice::Request_C(Function aFunction, void* aOut, unsigned int aOutSize_byte)
@@ -145,7 +167,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Master_IDevice::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)
+        bool Master_IDevice::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)
         {
             assert(NULL != aIn);
             assert(aInSize_byte > 0);
@@ -166,7 +188,7 @@ namespace KMS
 
             mDevice->ClearReadBuffer();
 
-            mDevice->Write(lBuffer, lSize_byte);
+            return mDevice->Write(lBuffer, lSize_byte);
         }
 
     }

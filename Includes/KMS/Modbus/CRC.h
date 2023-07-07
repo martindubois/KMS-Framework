@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/CRC.h
@@ -19,7 +19,7 @@ namespace KMS
 
             static void Add(uint8_t* aBuffer, unsigned int aSize_byte);
 
-            static void Verify(const uint8_t* aBuffer, unsigned int aSize_byte);
+            static bool Verify(const uint8_t* aBuffer, unsigned int aSize_byte);
 
             CRC();
 

@@ -34,7 +34,7 @@ namespace KMS
 
         // ===== IDevice ====================================================
 
-        void Device::Connect(unsigned int aFlags)
+        bool Device::Connect(unsigned int aFlags)
         {
             if (IsConnected())
             {
@@ -73,6 +73,8 @@ namespace KMS
 
             mHandle = CreateFile(mLink, lAccess, 0, NULL, OPEN_EXISTING, 0, NULL);
             KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, DEV_CONNECT_FAILED, "CreateFile failed", mLink);
+
+            return true;
         }
 
         void Device::Disconnect()
@@ -108,7 +110,7 @@ namespace KMS
             return lResult_byte;
         }
 
-        void Device::Write(const void* aIn, unsigned int aInSize_byte)
+        bool Device::Write(const void* aIn, unsigned int aInSize_byte)
         {
             assert(NULL != aIn);
             assert(0 < aInSize_byte);
@@ -123,6 +125,7 @@ namespace KMS
             }
 
             KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, DEV_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
+            return true;
         }
 
         // Protected

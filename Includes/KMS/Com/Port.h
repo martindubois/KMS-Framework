@@ -61,7 +61,7 @@ namespace KMS
             // ===== Dev::IDevice ===========================================
             virtual void ClearReadBuffer();
 
-            virtual void Connect(unsigned int aFlags);
+            virtual bool Connect(unsigned int aFlags);
 
         // Internal
 

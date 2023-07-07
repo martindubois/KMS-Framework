@@ -26,8 +26,8 @@ namespace KMS
             Net::Socket_Client* GetSocket();
 
             // ===== Master =================================================
-            virtual void         Connect();
-            virtual void         Disconnect();
+            virtual bool Connect();
+            virtual void Disconnect();
 
         protected:
 

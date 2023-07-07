@@ -64,11 +64,11 @@ namespace KMS
 
             // ===== IDevice ================================================
 
-            virtual void Connect   (unsigned int aFlags);
+            virtual bool Connect   (unsigned int aFlags);
             virtual void Disconnect();
 
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
-            virtual void         Write(const void* aIn, unsigned int aInSize_byte);
+            virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
 
         // Internal
 

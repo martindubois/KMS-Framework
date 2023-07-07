@@ -25,13 +25,17 @@ namespace KMS
 
         // ===== Slave ======================================================
 
-        void Slave_IDevice::Connect()
+        bool Slave_IDevice::Connect()
         {
             assert(NULL != mDevice);
 
-            mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
+            bool lResult = mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
+            if (lResult)
+            {
+                mDevice->Write("a", 1);
+            }
 
-            mDevice->Write("a", 1);
+            return lResult;
         }
 
         // Protected

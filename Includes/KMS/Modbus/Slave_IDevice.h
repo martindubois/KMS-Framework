@@ -16,6 +16,7 @@ namespace KMS
     namespace Modbus
     {
 
+        // No exception
         class Slave_IDevice : public Slave_Serial
         {
 
@@ -24,7 +25,7 @@ namespace KMS
             Slave_IDevice(Dev::IDevice* aDevice);
 
             // ===== Slave ==================================================
-            virtual void Connect();
+            virtual bool Connect();
 
         protected:
 

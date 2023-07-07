@@ -171,7 +171,11 @@ namespace KMS
         {
             assert(NULL != mSlave);
 
-            mSlave->Connect();
+            if (!mSlave->Connect())
+            {
+                return __LINE__;
+            }
+
             mSlave->Run();
 
             return 0;
