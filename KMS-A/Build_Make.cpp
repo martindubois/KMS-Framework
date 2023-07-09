@@ -41,15 +41,19 @@
 
 #define MAKE_FILE_NAME "makefile"
 
-static const KMS::Cfg::MetaData MD_BINARIES        ("Binaries += {Name}");
 static const KMS::Cfg::MetaData MD_CLEAN_EXTENSIONS("CleanExtensions += {Name}");
 static const KMS::Cfg::MetaData MD_COMPONENT       ("Component = {Name}");
 static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | LIBRARY | NONE | TEST");
 static const KMS::Cfg::MetaData MD_CONFIGURATION   ("Configuration = {Name}");
 static const KMS::Cfg::MetaData MD_INCLUDES        ("Includes += {Name}");
-static const KMS::Cfg::MetaData MD_LIBRARIES       ("Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_MAKE            ("Make = {Path}");
-static const KMS::Cfg::MetaData MD_TESTS           ("Tests += {Name}");
+static const KMS::Cfg::MetaData MD_PROCESSOR       ("Processor = {Name}");
+
+// ----- Build --------------------------------------------------------------
+
+static const KMS::Cfg::MetaData MD_BINARIES  ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_LIBRARIES ("Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
@@ -90,12 +94,13 @@ namespace KMS
             NO_OS_0 "Binaries" , NO_OS_1 "Binaries" ,
             NO_OS_0 "Libraries", NO_OS_1 "Libraries",
 
-            "Configurations",
-            "Embedded"      ,
-            "Files"         ,
-            "Folders"       ,
-            "Product"       ,
-            "VersionFile"   ,
+            "Configurations"  ,
+            "Embedded"        ,
+            "Files"           ,
+            "Folders"         ,
+            "Product"         ,
+            "VersionFile"     ,
+            "WindowsProcessor",
 
             NULL
         };
@@ -146,30 +151,35 @@ namespace KMS
             , mF_Product(File::Folder::Id::CURRENT)
             , mMake(DEFAULT_MAKE)
         {
-            mBinaries       .SetCreator(DI::String::Create);
             mCleanExtensions.SetCreator(DI::String::Create);
             mIncludes       .SetCreator(DI::String_Expand::Create);
-            mLibraries      .SetCreator(DI::String::Create);
-            mTests          .SetCreator(DI::String::Create);
 
-            AddEntry("Binaries"       , &mBinaries       , false, &MD_BINARIES);
             AddEntry("CleanExtensions", &mCleanExtensions, false, &MD_CLEAN_EXTENSIONS);
             AddEntry("Component"      , &mComponent      , false, &MD_COMPONENT);
             AddEntry("ComponentType"  , &mComponentType  , false, &MD_COMPONENT_TYPE);
             AddEntry("Configuration"  , &mConfiguration  , false, &MD_CONFIGURATION);
             AddEntry("Includes"       , &mIncludes       , false, &MD_INCLUDES);
-            AddEntry("Libraries"      , &mLibraries      , false, &MD_LIBRARIES);
             AddEntry("Make"           , &mMake           , false, &MD_MAKE);
-            AddEntry("Tests"          , &mTests          , false, &MD_TESTS);
+            AddEntry("Processor"      , &mProcessor      , false, &MD_PROCESSOR);
+
+            mCleanExtensions.AddEntry(new DI::String(DEFAULT_CLEAN_EXCENTION), true);
+            mIncludes       .AddEntry(new DI::String(DEFAULT_INCLUDE        ), true);
+
+            // ----- Build --------------------------------------------------
+
+            mBinaries .SetCreator(DI::String::Create);
+            mLibraries.SetCreator(DI::String::Create);
+            mTests    .SetCreator(DI::String::Create);
+
+            AddEntry("Binaries" , &mBinaries , false, &MD_BINARIES);
+            AddEntry("Libraries", &mLibraries, false, &MD_LIBRARIES);
+            AddEntry("Tests"    , &mTests    , false, &MD_TESTS);
 
             AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
             AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
-
-            mCleanExtensions.AddEntry(new DI::String(DEFAULT_CLEAN_EXCENTION), true);
-            mIncludes       .AddEntry(new DI::String(DEFAULT_INCLUDE        ), true);
         }
 
         Make::~Make() {}
@@ -210,8 +220,12 @@ namespace KMS
         {
             VerifyConfig();
 
-            mF_Bin_Cfg = File::Folder(mF_Binaries , mConfiguration.Get());
-            mF_Lib_Cfg = File::Folder(mF_Libraries, mConfiguration.Get());
+            char lFolder[PATH_LENGTH];
+
+            sprintf_s(lFolder, "%s_%s", mConfiguration.Get(), mProcessor.Get());
+
+            mF_Bin_Cfg = File::Folder(mF_Binaries , lFolder);
+            mF_Lib_Cfg = File::Folder(mF_Libraries, lFolder);
 
             Prepare();
 
@@ -417,7 +431,8 @@ namespace KMS
 
             lP.SetWorkingDirectory(aC);
 
-            lP.AddArgument(("CONFIG=" + mConfiguration.mInternal).c_str());
+            lP.AddArgument(("CONFIG="    + mConfiguration.mInternal).c_str());
+            lP.AddArgument(("PROCESSOR=" + mProcessor    .mInternal).c_str());
 
             lP.Run(MAKE_ALLOWED_TIME_ms);
 
@@ -531,6 +546,7 @@ namespace KMS
             }
 
             KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
+            KMS_EXCEPTION_ASSERT(0 < mProcessor    .GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
         }
 
     }

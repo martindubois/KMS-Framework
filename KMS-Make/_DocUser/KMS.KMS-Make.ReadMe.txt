@@ -7,6 +7,9 @@ File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.74-dev Windows 2023-07-07
+* Processor attribute
+
 0.1.71-dev Windows 2023-06-01
 
 0.1.55-dev Windows 2022-12-19
