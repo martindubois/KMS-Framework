@@ -7,6 +7,9 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.75-dev Windows 2023-07-10
+* Processors attributes for embedded and Linux product
+
 0.1.74-dev Windows 2023-07-07
 
 0.1.63-dev Windows 2023-03-27

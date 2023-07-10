@@ -546,7 +546,7 @@ namespace KMS
             }
 
             KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
-            KMS_EXCEPTION_ASSERT(0 < mProcessor    .GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
+            KMS_EXCEPTION_ASSERT(0 < mProcessor    .GetLength(), BUILD_CONFIG_INVALID, "Empty processor"    , "");
         }
 
     }

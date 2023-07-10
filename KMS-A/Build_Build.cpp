@@ -55,6 +55,7 @@ static const KMS::Cfg::MetaData MD_FOLDERS        ("Folders += {Path}");
 static const KMS::Cfg::MetaData MD_LIBRARIES      ("Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_OS_INDEPENDENT ("OSIntependent = false | true");
 static const KMS::Cfg::MetaData MD_PRE_BUILD_CMDS ("PreBuildCmds += {Command}");
+static const KMS::Cfg::MetaData MD_PROCESSORS     ("Processors += x64 | x86 | ...");
 static const KMS::Cfg::MetaData MD_PRODUCT        ("Product = {Name}");
 static const KMS::Cfg::MetaData MD_TESTS          ("Tests += {Name}");
 static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
@@ -77,7 +78,6 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     #define NO_OS_1 "Linux"
 
     static const KMS::Cfg::MetaData MD_WINDOWS_FILE_MSI  ("WindowsFile_MSI = {Path}");
-    static const KMS::Cfg::MetaData MD_WINDOWS_PROCESSORS("WindowsProcessors += x64 | x86");
 #endif
 
 static const KMS::Cfg::MetaData MD_OS_BINARIES      (NAME_OS "Binaries += {Name}");
@@ -100,7 +100,6 @@ static const char* SILENCE[] =
 
     #if defined(_KMS_DARWIN_) || defined(_KMS_LINUX_)
         "WindowsFile_MSI"  ,
-        "WindowsProcessors",
     #endif
 
     NULL
@@ -184,6 +183,7 @@ namespace KMS
             mFolders       .SetCreator(DI::String::Create);
             mLibraries     .SetCreator(DI::String::Create);
             mPreBuildCmds  .SetCreator(DI::String::Create);
+            mProcessors    .SetCreator(DI::String::Create);
             mTests         .SetCreator(DI::String::Create);
 
             AddEntry("Binaries"      , &mBinaries      , false, &MD_BINARIES);
@@ -200,6 +200,7 @@ namespace KMS
             AddEntry("Libraries"     , &mLibraries     , false, &MD_LIBRARIES);
             AddEntry("OSIndependent" , &mOSIndependent , false, &MD_OS_INDEPENDENT);
             AddEntry("PreBuildCmds"  , &mPreBuildCmds  , false, &MD_PRE_BUILD_CMDS);
+            AddEntry("Processors"    , &mProcessors    , false, &MD_PROCESSORS);
             AddEntry("Product"       , &mProduct       , false, &MD_PRODUCT);
             AddEntry("Tests"         , &mTests         , false, &MD_TESTS);
             AddEntry("VersionFile"   , &mVersionFile   , false, &MD_VERSION_FILE);
@@ -213,10 +214,7 @@ namespace KMS
             AddEntry(NAME_OS "Tests"         , &mTests         , false, &MD_OS_TESTS);
 
             #ifdef _KMS_WINDOWS_
-                mWindowsProcessors.SetCreator(DI::String::Create);
-
                 AddEntry("WindowsFile_MSI"  , &mWindowsFile_MSI  , false, &MD_WINDOWS_FILE_MSI);
-                AddEntry("WindowsProcessors", &mWindowsProcessors, false, &MD_WINDOWS_PROCESSORS);
             #endif
 
             mTmp_Binaries  = File::Folder(mTmp_Root, "Binaries" );
@@ -232,6 +230,7 @@ namespace KMS
         void Build::AddFolder       (const char* aF) { assert(NULL != aF); mFolders       .AddEntry(new DI::String(aF), true); }
         void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .AddEntry(new DI::String(aL), true); }
         void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .AddEntry(new DI::String(aC), true); }
+        void Build::AddProcessor    (const char* aP) { assert(NULL != aP); mProcessors    .AddEntry(new DI::String(aP), true); }
         void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .AddEntry(new DI::String(aT), true); }
 
         int Build::Run()
@@ -263,8 +262,6 @@ namespace KMS
 
             for (const auto& lEntry : mConfigurations.mInternal)
             {
-                assert(NULL != lEntry);
-
                 lCT->Start();
 
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
@@ -291,28 +288,32 @@ namespace KMS
 
         void Build::Compile_Make(const char* aC)
         {
-            Cfg::Configurator lC;
-            Make              lM;
-            Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
-
-            lC.SetSilence(Make::SILENCE);
-
-            lC.AddConfigurable(&lM);
-
-            lC.AddConfigurable(&lLogCfg);
-
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
-
-            lM.mConfiguration.Set(aC);
-
-            lM.AddCommand("Clean");
-            lM.AddCommand("Make");
-
-            auto lRet = lM.Run();
-            if (0 != lRet)
+            for (const auto& lEntry : mProcessors.mInternal)
             {
-                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(NULL != lP);
+
+                Cfg::Configurator lC;
+                Make              lM;
+                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+
+                lC.SetSilence(Make::SILENCE);
+
+                lC.AddConfigurable(&lM);
+
+                lC.AddConfigurable(&lLogCfg);
+
+                lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
+                lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
+
+                lM.mConfiguration.Set(aC);
+                lM.mProcessor    .Set(lP->Get());
+
+                lM.AddCommand("Clean");
+                lM.AddCommand("Make");
+
+                auto lRet = lM.Run();
+                KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
             }
         }
 
@@ -417,8 +418,6 @@ namespace KMS
 
             for (const auto& lEntry : mConfigurations.mInternal)
             {
-                assert(NULL != lEntry);
-
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lC);
 
@@ -435,37 +434,41 @@ namespace KMS
 
         void Build::Package_Components_Embedded(const char* aC)
         {
-            std::string lC = std::string(aC) + "_" + mEmbedded.Get();
-
-            if (!mBinaries.IsEmpty())
+            for (const auto& lEntryP : mProcessors.mInternal)
             {
-                File::Folder lBin(mTmp_Binaries, lC.c_str());
-                File::Folder lBin_Src((std::string("Binaries/") + aC).c_str());
+                auto lP = dynamic_cast<const DI::String*>(lEntryP.Get());
+                assert(NULL != lP);
 
-                lBin.Create();
+                std::string lFolder = std::string(aC) + "_" + lP->Get();
 
-                for (const auto& lEntry : mBinaries.mInternal)
+                if (!mBinaries.IsEmpty())
                 {
-                    auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(NULL != lB);
+                    File::Folder lBin(mTmp_Binaries, lFolder.c_str());
+                    File::Folder lBin_Src((std::string("Binaries/") + lFolder).c_str());
 
-                    lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
+                    lBin.Create();
+
+                    for (const auto& lEntry : mBinaries.mInternal)
+                    {
+                        auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
+
+                        lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
+                    }
                 }
-            }
 
-            if (!mLibraries.IsEmpty())
-            {
-                File::Folder lLib(mTmp_Libraries, lC.c_str());
-                File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
-
-                lLib.Create();
-
-                for (const auto& lEntry : mLibraries.mInternal)
+                if (!mLibraries.IsEmpty())
                 {
-                    auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(NULL != lL);
+                    File::Folder lLib(mTmp_Libraries, lFolder.c_str());
+                    File::Folder lLib_Src((std::string("Libraries/") + lFolder).c_str());
 
-                    lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
+                    lLib.Create();
+
+                    for (const auto& lEntry : mLibraries.mInternal)
+                    {
+                        auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
+
+                        lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
+                    }
                 }
             }
         }
@@ -537,10 +540,6 @@ namespace KMS
                 if (!mDoNotCompile)
                 {
                     KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), BUILD_CONFIG_INVALID, "No configuration", "");
-
-                    #ifdef _KMS_WINDOWS_
-                        KMS_EXCEPTION_ASSERT(IsEmbedded() || (!mWindowsProcessors.IsEmpty()), BUILD_CONFIG_INVALID, "No processor", "");
-                    #endif
                 }
 
                 if (!mDoNotExport)
@@ -553,7 +552,8 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), BUILD_CONFIG_INVALID, "Invalid version file", "");
+            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()       , BUILD_CONFIG_INVALID, "No processor"        , "");
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength (), BUILD_CONFIG_INVALID, "Invalid version file", "");
         }
 
     }

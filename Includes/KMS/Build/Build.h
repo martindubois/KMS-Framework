@@ -42,13 +42,10 @@ namespace KMS
             void AddFolder       (const char* aF);
             void AddLibrary      (const char* aL);
             void AddPreBuildCmd  (const char* aC);
+            void AddProcessor    (const char* aP);
             void AddTest         (const char* aT);
 
             int Run();
-
-            #ifdef _KMS_WINDOWS_
-                void AddProcessor(const char * aP);
-            #endif
 
             // ===== Configurable attributes ================================
             DI::Boolean mDoNotCompile;
@@ -104,11 +101,11 @@ namespace KMS
             DI::Array    mFolders;
             DI::Array    mLibraries;
             DI::Array    mPreBuildCmds;
+            DI::Array    mProcessors;
             DI::Array    mTests;
 
             #ifdef _KMS_WINDOWS_
                 DI::String mWindowsFile_MSI;
-                DI::Array  mWindowsProcessors;
             #endif
 
         };

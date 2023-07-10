@@ -25,17 +25,12 @@ namespace KMS
     namespace Build
     {
 
-        // Public
-        // //////////////////////////////////////////////////////////////////
-
-        void Build::AddProcessor(const char* aP) { assert(NULL != aP); mWindowsProcessors.AddEntry(new DI::String(aP), true); }
-
         // Private
         // //////////////////////////////////////////////////////////////////
 
         void Build::Compile_VisualStudio(const char* aC)
         {
-            for (const DI::Container::Entry& lEntry : mWindowsProcessors.mInternal)
+            for (const DI::Container::Entry& lEntry : mProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -64,7 +59,7 @@ namespace KMS
 
         void Build::Package_Components(const char* aC)
         {
-            for (const auto& lEntry : mWindowsProcessors.mInternal)
+            for (const auto& lEntry : mProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 
@@ -120,7 +115,7 @@ namespace KMS
 
         void Build::Test(const char* aC)
         {
-            for (const auto& lEntry : mWindowsProcessors.mInternal)
+            for (const auto& lEntry : mProcessors.mInternal)
             {
                 assert(NULL != lEntry);
 

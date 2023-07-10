@@ -7,7 +7,7 @@ File      KMS-ModbusSim/_DocUser/KMS.KMS-ModbusSim.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-0.1.74-dev Windows 2023-07-07
+0.1.75-dev Windows 2023-07-10
 
 0.0.6-dev Windows 2022-07-27
 * Modbus::Simulator
