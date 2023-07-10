@@ -9,7 +9,10 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Dbg/Log.h>
+
+#ifndef _KMS_EMBEDDED_
+    #include <KMS/Dbg/Log.h>
+#endif
 
 #include <KMS/Modbus/Master.h>
 

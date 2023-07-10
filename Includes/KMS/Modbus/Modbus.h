@@ -79,6 +79,7 @@ namespace KMS
     }
 }
 
-std::ostream& operator << (std::ostream& aOut, KMS::Modbus::Exception aIn);
-
-std::ostream& operator << (std::ostream& aOut, KMS::Modbus::Function aIn);
+#ifndef _KMS_EMBEDDED_
+    std::ostream& operator << (std::ostream& aOut, KMS::Modbus::Exception aIn);
+    std::ostream& operator << (std::ostream& aOut, KMS::Modbus::Function  aIn);
+#endif

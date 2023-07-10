@@ -9,8 +9,10 @@ KMS_LINKER_SCRIPTS = ../../LinkerScripts
 KMS_MAKEFILES      = ../../Makefiles
 KMS_STARTUP        = ../../Startup
 
+include $(KMS_MAKEFILES)/$(PROCESSOR).mk
+
 INCLUDES = -I ../../Includes/STM -I ../../../Includes
 
-KMS_A_A       = ../Libraries/$(CONFIG)/KMS-A.a
-KMS_STM32_A   = ../Libraries/$(CONFIG)/KMS-STM32.a
-KMS_STM32_S_A = ../Libraries/$(CONFIG)/KMS-STM32-S.a
+KMS_A_A       = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-A.a
+KMS_STM32_A   = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-STM32.a
+KMS_STM32_S_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-STM32-S.a

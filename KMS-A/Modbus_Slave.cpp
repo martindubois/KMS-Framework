@@ -36,14 +36,18 @@ namespace KMS
         {
             while (!mStopped)
             {
-                try
-                {
-                    if (!KMS_MSG_SUCCESS(OnIterate()))
+                #ifndef _KMS_EMBEDDED_
+                    try
                     {
-                        break;
+                #endif
+                        if (!KMS_MSG_SUCCESS(OnIterate()))
+                        {
+                            break;
+                        }
+                #ifndef _KMS_EMBEDDED_
                     }
-                }
-                KMS_CATCH
+                    KMS_CATCH
+                #endif
             }
         }
 

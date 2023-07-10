@@ -23,7 +23,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Slave_USART::Slave_USART(Embedded::USART* aUSART) : mUSART(aUSART), ON_RX_BYTE(this, MSG_RX_BYTE)
+        Slave_USART::Slave_USART(Embedded::USART* aUSART) : ON_RX_BYTE(this, MSG_RX_BYTE), mUSART(aUSART)
         {
             assert(NULL != aUSART);
 
