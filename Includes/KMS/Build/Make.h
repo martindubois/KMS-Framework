@@ -46,14 +46,17 @@ namespace KMS
             virtual int  Run();
 
             // ===== Configurable attributes ================================
-            DI::Array         mBinaries;
             DI::Array         mCleanExtensions;
             DI::String        mComponent;
             DI::String        mConfiguration;
             DI::Array         mIncludes;
-            DI::Array         mLibraries;
             DI::String_Expand mMake;
-            DI::Array         mTests;
+            DI::String        mProcessor;
+
+            // ----- Build --------------------------------------------------
+            DI::Array mBinaries;
+            DI::Array mLibraries;
+            DI::Array mTests;
 
         private:
 

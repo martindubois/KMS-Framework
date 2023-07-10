@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-FileServer/KMS-FileServer.cpp
 
+#include <KMS/Base.h>
+
 // ===== Includes ===========================================================
 #include <KMS/Banner.h>
 #include <KMS/HTTP/FileServer.h>

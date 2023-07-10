@@ -154,9 +154,7 @@ namespace KMS
         template <typename T, const char** N>
         void Enum_Base<T, N>::Set(const char* aIn)
         {
-            KMS::Enum<T, N> lIn(0);
-
-            lIn.SetName(aIn);
+            KMS::Enum<T, N> lIn(aIn);
 
             if (Internal_Set(lIn))
             {

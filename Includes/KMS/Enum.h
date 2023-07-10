@@ -86,7 +86,7 @@ namespace KMS
     template <typename T, const char** N>
     bool Enum<T, N>::Set(T aValue)
     {
-        assert(T::QTY > mValue);
+        assert(T::QTY > aValue);
 
         bool lResult = mValue != aValue;
 
