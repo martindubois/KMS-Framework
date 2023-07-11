@@ -5,6 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      STM32/F3/_DocUser/KMS.STM32.F3.ReadMe.txt
 
+0.1.75-stm32f3 2023-07-11
 * F373xC -> F3
 * Use CONFIG and PROCESSOR
 

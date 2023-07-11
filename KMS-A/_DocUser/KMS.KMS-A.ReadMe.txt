@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+0.1.75-stm32f3 2023-07-11
+
 0.1.75-dev Windows 2023-07-07
 - DI - Enum_Ptr, Folder_Ptr and UInt_Ptr
 - Dbg::Log_Cfg
