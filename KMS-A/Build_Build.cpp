@@ -86,6 +86,7 @@ static const KMS::Cfg::MetaData MD_OS_FILES         (NAME_OS "Files += {Path}");
 static const KMS::Cfg::MetaData MD_OS_FOLDERS       (NAME_OS "Folders += {Path}");
 static const KMS::Cfg::MetaData MD_OS_LIBRARIES     (NAME_OS "Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS(NAME_OS "PreBuildCmds += {Command}");
+static const KMS::Cfg::MetaData MD_OS_PROCESSORS    (NAME_OS "Processors += x64 | x86 | ...");
 static const KMS::Cfg::MetaData MD_OS_TESTS         (NAME_OS "Tests += {Name}");
 
 static const char* SILENCE[] =
@@ -96,6 +97,7 @@ static const char* SILENCE[] =
     NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
     NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
     NO_OS_0 "PreBuildCmds"  , NO_OS_1 "PreBuildCmds"  ,
+    NO_OS_0 "Processors"    , NO_OS_1 "Processors"    ,
     NO_OS_0 "Tests"         , NO_OS_1 "Tests"         ,
 
     #if defined(_KMS_DARWIN_) || defined(_KMS_LINUX_)
@@ -211,6 +213,7 @@ namespace KMS
             AddEntry(NAME_OS "Folders"       , &mFolders       , false, &MD_OS_FOLDERS);
             AddEntry(NAME_OS "Libraries"     , &mLibraries     , false, &MD_OS_LIBRARIES);
             AddEntry(NAME_OS "PreBuildCmds"  , &mPreBuildCmds  , false, &MD_OS_PRE_BUILD_CMDS);
+            AddEntry(NAME_OS "Processors"    , &mProcessors    , false, &MD_OS_PROCESSORS);
             AddEntry(NAME_OS "Tests"         , &mTests         , false, &MD_OS_TESTS);
 
             #ifdef _KMS_WINDOWS_
@@ -258,7 +261,7 @@ namespace KMS
 
         void Build::Compile()
         {
-            auto lCT = new Dbg::Stats_Timer("CompileTime");
+            auto lCT = new Dbg::Stats_Timer("CompileTime.Configuration");
 
             for (const auto& lEntry : mConfigurations.mInternal)
             {
@@ -288,33 +291,44 @@ namespace KMS
 
         void Build::Compile_Make(const char* aC)
         {
+            auto lCT = new Dbg::Stats_Timer("CompileTime.Processor");
+
             for (const auto& lEntry : mProcessors.mInternal)
             {
+                lCT->Start();
+
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
-                Cfg::Configurator lC;
-                Make              lM;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+                Compile_Make(aC, *lP);
 
-                lC.SetSilence(Make::SILENCE);
-
-                lC.AddConfigurable(&lM);
-
-                lC.AddConfigurable(&lLogCfg);
-
-                lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
-                lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
-
-                lM.mConfiguration.Set(aC);
-                lM.mProcessor    .Set(lP->Get());
-
-                lM.AddCommand("Clean");
-                lM.AddCommand("Make");
-
-                auto lRet = lM.Run();
-                KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
+                lCT->Stop();
             }
+        }
+
+        void Build::Compile_Make(const char* aC, const char* aP)
+        {
+            Cfg::Configurator lC;
+            Make              lM;
+            Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+
+            lC.SetSilence(Make::SILENCE);
+
+            lC.AddConfigurable(&lM);
+
+            lC.AddConfigurable(&lLogCfg);
+
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
+
+            lM.mConfiguration.Set(aC);
+            lM.mProcessor    .Set(aP);
+
+            lM.AddCommand("Clean");
+            lM.AddCommand("Make");
+
+            auto lRet = lM.Run();
+            KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
         }
 
         void Build::Edit()

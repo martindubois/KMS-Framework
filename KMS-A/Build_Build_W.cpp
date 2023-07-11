@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Proc/Process.h>
+#include <KMS/Dbg/Stats_Timer.h>
 
 #include <KMS/Build/Build.h>
 
@@ -30,31 +31,38 @@ namespace KMS
 
         void Build::Compile_VisualStudio(const char* aC)
         {
+            auto lCT = new Dbg::Stats_Timer("CompileTime.Processor");
+
             for (const DI::Container::Entry& lEntry : mProcessors.mInternal)
             {
-                assert(NULL != lEntry);
+                lCT->Start();
 
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(NULL != lP);
 
-                File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
-                File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
+                Compile_VisualStudio(aC, *lP);
 
-                Proc::Process lProcess(lBin, "MSBuild.exe");
-
-                lProcess.AddArgument("Solution.sln");
-                lProcess.AddArgument("/target:rebuild");
-
-                lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
-                lProcess.AddArgument(("/property:Platform=" + std::string(lP->Get())).c_str());
-
-                lProcess.Run(MSBUILD_ALLOWER_TIME_ms);
-
-                if (0 != lProcess.GetExitCode())
-                {
-                    KMS_EXCEPTION(BUILD_COMPILE_FAILED, "The compilation failed", lProcess.GetCmdLine());
-                }
+                lCT->Stop();
             }
+        }
+
+        void Build::Compile_VisualStudio(const char* aC, const char* aP)
+        {
+            File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
+            File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
+
+            Proc::Process lProcess(lBin, "MSBuild.exe");
+
+            lProcess.AddArgument("Solution.sln");
+            lProcess.AddArgument("/target:rebuild");
+
+            lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
+            lProcess.AddArgument(("/property:Platform=" + std::string(aP)).c_str());
+
+            lProcess.Run(MSBUILD_ALLOWER_TIME_ms);
+
+            auto lRet = lProcess.GetExitCode();
+            KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "The compilation failed", lProcess.GetCmdLine());
         }
 
         void Build::Package_Components(const char* aC)
