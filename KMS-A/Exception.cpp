@@ -197,6 +197,7 @@ const char* ToCodeName(Exception::Code aCode)
         "FILE_DELETE_FAILED" , "FILE_INIT_FAILED"  , "FILE_MAPPING_FAILED"   ,
         "FILE_OPEN_FAILED"   , "FILE_READ_FAILED"  , "FILE_REMOVE_FAILED"    ,
         "FILE_RENAME_FAILED" , "FILE_TOO_SHORT"    , "FILE_UNCOMPRESS_FAILED",
+        "FILE_WRITE_FAILED"  ,
 
         "FILE_FORMAT_ERROR",
 

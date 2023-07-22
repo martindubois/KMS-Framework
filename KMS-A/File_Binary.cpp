@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-B/File_Binary.cpp
 
+// TEST COVERAGE 2023-07-22 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -39,7 +41,9 @@ namespace KMS
             mHandle = CreateFile(lPath, lAccess, 0, NULL, lDispo, 0, NULL);
             if (INVALID_HANDLE_VALUE == mHandle)
             {
-                KMS_EXCEPTION(FILE_OPEN_FAILED, "Cannot open binary file", lPath);
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open %s", lPath);
+                KMS_EXCEPTION(FILE_OPEN_FAILED, lMsg, lAccess);
             }
         }
 
@@ -75,6 +79,7 @@ namespace KMS
 
             if (!GetFileSizeEx(mHandle, &lResult_byte))
             {
+                // NOT TESTED
                 KMS_EXCEPTION(FILE_ACCESS_FAILED, "Cannot retrieve the size of the binary file", "");
             }
 
@@ -91,17 +96,10 @@ namespace KMS
 
             mMappedSize_byte = (lSize_byte > aMaxSize_byte) ? aMaxSize_byte : lSize_byte;
 
-            mMapping = CreateFileMapping(mHandle, NULL, mWrite ? PAGE_READWRITE : PAGE_READONLY, 0, mMappedSize_byte, NULL);
+            mMapping = CreateFileMapping(mHandle, NULL, PAGE_READONLY, 0, mMappedSize_byte, NULL);
             KMS_EXCEPTION_ASSERT(NULL != mMapping, FILE_MAPPING_FAILED, "Cannot map the file", aMaxSize_byte);
 
-            DWORD lAccess = FILE_MAP_READ;
-
-            if (mWrite)
-            {
-                lAccess |= FILE_MAP_WRITE;
-            }
-
-            mView = MapViewOfFile(mMapping, lAccess, 0, 0, mMappedSize_byte);
+            mView = MapViewOfFile(mMapping, FILE_MAP_READ, 0, 0, mMappedSize_byte);
             KMS_EXCEPTION_ASSERT(NULL != mView, FILE_MAPPING_FAILED, "Cannot map the file", mMappedSize_byte);
 
             return mView;
@@ -117,10 +115,27 @@ namespace KMS
 
             if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL))
             {
+                // NOT TESTED
                 KMS_EXCEPTION(FILE_READ_FAILED, "Cannot read the binary file", aOutSize_byte);
             }
 
             return lResult_byte;
+        }
+
+        void Binary::Write(const void* aIn, unsigned int aInSize_byte)
+        {
+            assert(NULL != aIn);
+
+            assert(INVALID_HANDLE_VALUE != mHandle);
+
+            DWORD lInfo_byte;
+
+            if (!WriteFile(mHandle, aIn, aInSize_byte, &lInfo_byte, NULL))
+            {
+                KMS_EXCEPTION(FILE_WRITE_FAILED, "Cannot write the binary file", aInSize_byte);
+            }
+
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, FILE_WRITE_FAILED, "Cannot write the binary file", lInfo_byte);
         }
 
     }
