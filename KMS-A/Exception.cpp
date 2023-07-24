@@ -201,6 +201,8 @@ const char* ToCodeName(Exception::Code aCode)
 
         "FILE_FORMAT_ERROR",
 
+        "FOLDER_CHANGE_FAILED",
+
         "HTTP_INSTALLATION_ERROR", "HTTP_NOT_IMPLEMENTED", "HTTP_RECEIVE_ERROR",
 
         "JSON_FORMAT_INVALID", "JSON_NOT_IMPLEMENTED",

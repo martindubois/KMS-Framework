@@ -23,7 +23,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const Folder Folder::CURRENT          (Folder::Id::CURRENT);
+              Folder Folder::CURRENT          (Folder::Id::CURRENT);
         const Folder Folder::EXECUTABLE       (Folder::Id::EXECUTABLE);
         const Folder Folder::HOME             (Folder::Id::HOME);
         const Folder Folder::NONE             (Folder::Id::NONE);

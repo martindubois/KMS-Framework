@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/File/Folder.h
+// Status    PROD_READY
+// Library   KMS-A
 
 #pragma once
 
@@ -31,7 +33,7 @@ namespace KMS
                 TEMPORARY,
             };
 
-            static const Folder CURRENT;
+            static       Folder CURRENT;
             static const Folder EXECUTABLE;
             static const Folder HOME;
             static const Folder NONE;
@@ -44,6 +46,9 @@ namespace KMS
             static const unsigned int FLAG_OVERWRITE;
             static const unsigned int FLAG_RED;
             static const unsigned int FLAG_VERBOSE;
+
+            // Exception  FOLDER_CHANGE_FAILED
+            static void ChangeCurrentDirectory(const Folder& aNew);
 
             Folder();
             Folder(Id aId);
