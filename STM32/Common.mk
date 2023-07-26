@@ -5,11 +5,12 @@
 # Product   KMS-Framework
 # File      STM32/Common.mk
 
+KMS_ARGS           = ../../Args
 KMS_LINKER_SCRIPTS = ../../LinkerScripts
 KMS_MAKEFILES      = ../../Makefiles
 KMS_STARTUP        = ../../Startup
 
-include $(KMS_MAKEFILES)/$(PROCESSOR).mk
+include $(KMS_MAKEFILES)/stm32.mk
 
 INCLUDES = -I ../../Includes/STM -I ../../../Includes
 

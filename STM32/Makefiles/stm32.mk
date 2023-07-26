@@ -1,6 +1,6 @@
 
 # Author    KMS - Martin Dubois, P. Eng.
-# Copyright (C) 2022 KMS
+# Copyright (C) 2022-2023 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
 # File      STM32/Makefiles/stm32.mk
@@ -14,4 +14,4 @@ AS   = $(BINPATH)/$(PREFIX)gcc -x assembler-with-cpp
 GPP  = $(BINPATH)/$(PREFIX)g++
 SIZE = $(BINPATH)/$(PREFIX)size
 
-CFLAGS += -g3 -std=gnu++14 -D_KMS_EMBEDDED_ -DSTM32 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -MMD -MP --specs=nano.specs -mfloat-abi=hard -mthumb
+CFLAGS += @$(KMS_ARGS)/$(CONFIG).args @$(KMS_ARGS)/$(PROCESSOR).args @$(KMS_ARGS)/stm32.args

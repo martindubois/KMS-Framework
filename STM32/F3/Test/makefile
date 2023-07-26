@@ -5,7 +5,7 @@
 # Product   KMS-Framework
 # File      STM32/F3/Test/makefile
 
-include ../../$(CONFIG).mk
+include ../../Common.mk
 
 LIBRARIES = $(KMS_STM32_S_A) $(KMS_STM32_A) $(KMS_A_A)
 

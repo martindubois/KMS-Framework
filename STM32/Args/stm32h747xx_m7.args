@@ -1,0 +1,4 @@
+-mcpu=cortex-m7
+-mfpu=fpv5-d16
+-DCORE_CM7
+-DSTM32H747xx
