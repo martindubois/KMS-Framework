@@ -66,7 +66,9 @@ namespace KMS
 
             void Compile();
             void Compile_Make(const char* aC);
+            void Compile_Make(const char* aC, const char* aP);
             void Compile_VisualStudio(const char* aC);
+            void Compile_VisualStudio(const char* aC, const char* aP);
             void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
             void Export();

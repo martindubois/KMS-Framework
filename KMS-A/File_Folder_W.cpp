@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_W.cpp
 
+// TEST COVERAGE 2023-07-24 KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Windows ============================================================
@@ -42,10 +44,27 @@ namespace KMS
         const Folder PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
         const Folder PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
 
+        void Folder::ChangeCurrentDirectory(const Folder& aNew)
+        {
+            const char* lNew = aNew.GetPath();
+
+            if (!SetCurrentDirectory(lNew))
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot change the current directory for %s", lNew);
+                KMS_EXCEPTION(FOLDER_CHANGE_FAILED, lMsg, "");
+            }
+
+            CURRENT.Init_Current();
+        }
+
         bool Folder::DoesExist() const
         {
             auto lAttributes = GetFileAttributes(mPath.c_str());
-            if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
+            if (INVALID_FILE_ATTRIBUTES == lAttributes)
+            {
+                return false;
+            }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
         }
@@ -57,7 +76,10 @@ namespace KMS
             GetPath(aFile, lPath, sizeof(lPath));
 
             auto lAttributes = GetFileAttributes(lPath);
-            if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
+            if (INVALID_FILE_ATTRIBUTES == lAttributes)
+            {
+                return false;
+            }
 
             return FILE_ATTR == (lAttributes & FILE_MASK);
         }
@@ -69,7 +91,10 @@ namespace KMS
             GetPath(aFolder, lPath, sizeof(lPath));
 
             auto lAttributes = GetFileAttributes(lPath);
-            if (INVALID_FILE_ATTRIBUTES == lAttributes) { return false; }
+            if (INVALID_FILE_ATTRIBUTES == lAttributes)
+            {
+                return false;
+            }
 
             return FOLDER_ATTR == (lAttributes & FOLDER_MASK);
         }
@@ -92,10 +117,7 @@ namespace KMS
 
             lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
-            if (0 != lProcess.GetExitCode())
-            {
-                KMS_EXCEPTION(FILE_COMPRESS_FAILED, "Cannot compress the folder's elements", lProcess.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_COMPRESS_FAILED, "Cannot compress the folder's elements", lProcess.GetCmdLine());
         }
 
         void Folder::Uncompress(const Folder& aFolder, const char* aFile)
@@ -117,10 +139,7 @@ namespace KMS
 
             lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
-            if (0 != lProcess.GetExitCode())
-            {
-                KMS_EXCEPTION(FILE_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lProcess.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lProcess.GetCmdLine());
         }
 
         void Folder::Copy(const Folder& aDst) const
@@ -133,16 +152,14 @@ namespace KMS
 
             lProcess.Run(XCOPY_ALLOWER_TIME_ms);
 
-            if (0 != lProcess.GetExitCode())
-            {
-                KMS_EXCEPTION(FILE_UNCOMPRESS_FAILED, "Cannot copy folder", lProcess.GetCmdLine());
-            }
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot copy folder", lProcess.GetCmdLine());
         }
 
         void Folder::Create()
         {
             if (!CreateDirectory(mPath.c_str(), NULL))
             {
+                // NOT TESTED
                 KMS_EXCEPTION(FILE_CREATE_FAILED, "Cannot create the folder", mPath.c_str());
             }
         }
@@ -172,6 +189,7 @@ namespace KMS
 
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
+                // NOT TESTED
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;
                 if (!SetFileAttributes(lPath, lAttr))
                 {
@@ -182,6 +200,7 @@ namespace KMS
 
             if (!DeleteFile(lPath))
             {
+                // NOT TESTED
                 sprintf_s(lMsg, "Cannot delete \"%s\"", lPath);
                 KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
             }
@@ -244,10 +263,7 @@ namespace KMS
             {
                 Verbose(aSrc, "not copied to", aDst, aFlags | FLAG_RED);
 
-                if (FLAG_IGNORE_ERROR != (aFlags & FLAG_IGNORE_ERROR))
-                {
-                    KMS_EXCEPTION(FILE_COPY_FAILED, "Cannot copy the file", aSrc);
-                }
+                KMS_EXCEPTION_ASSERT(FLAG_IGNORE_ERROR == (aFlags & FLAG_IGNORE_ERROR), FILE_COPY_FAILED, "Cannot copy the file", aSrc);
             }
         }
 
@@ -288,10 +304,7 @@ namespace KMS
 
             char lFolder[PATH_LENGTH];
 
-            if (0 == GetTempFileName(lRoot, "KMS_", 0, lFolder))
-            {
-                KMS_EXCEPTION(FILE_INIT_FAILED, "GetTempFileName failed", lRoot);
-            }
+            KMS_EXCEPTION_ASSERT(0 != GetTempFileName(lRoot, "KMS_", 0, lFolder), FILE_INIT_FAILED, "GetTempFileName failed", lRoot);
 
             auto lRetB = DeleteFile(lFolder);
             assert(lRetB);

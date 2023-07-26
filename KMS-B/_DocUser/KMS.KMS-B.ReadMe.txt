@@ -7,7 +7,7 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD
 
-0.1.75-dev Windows 2023-07-07
+0.1.76-dev Windows 2023-07-19
 
 0.1.61-dev Windows 2023-03-22
 - Modbus::Master_TCP - Disconnect on error and auto reconnect
