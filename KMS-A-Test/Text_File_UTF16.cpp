@@ -41,11 +41,14 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
     lF0.Read(File::Folder(File::Folder::Id::CURRENT, "KMS-A-Test" SLASH "Tests"), "Test0.txt");
     KMS_TEST_COMPARE(lF0.GetLineCount(), 29U);
 
+    // GetUserLineNo *
+    KMS_TEST_COMPARE(lF0.GetUserLineNo(0), 0U);
+
     // Write
-    lF0.Write(File::Folder::CURRENT, "Test.txt");
+    lF0.Write(File::Folder::CURRENT, "Test_Text_File_UTF16_Base_0.txt");
 
     // Write_ASCII
-    lF0.Write_ASCII(File::Folder::CURRENT, "Test.txt");
+    lF0.Write_ASCII(File::Folder::CURRENT, "Test_Text_File_UTF16_Base_1.txt");
 
     // CountOccurrence
     KMS_TEST_COMPARE(lF0.CountOccurrence(L"Start"), 1U);
@@ -62,12 +65,18 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
 
     // ReplaceLines *
     KMS_TEST_COMPARE(lF0.ReplaceLines(L"^Test$", L"Replaced"), 1U);
+
+    // ===== Internal =======================================================
+
+    // GetLine2
+    lF0.GetLine2(0);
 }
 
-KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Exception)
+KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_Exception)
 {
     Text::File_UTF16 lF0;
 
+    // GetLine
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
@@ -76,6 +85,16 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     }
     KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
 
+    // GetUserLineNo
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lF0.GetUserLineNo(0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+
+    // InsertLine
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
@@ -84,6 +103,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     }
     KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
 
+    // RemoveLines
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
@@ -92,6 +112,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     }
     KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
 
+    // ReplaceLine
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
@@ -100,6 +121,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     }
     KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
 
+    // Read
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
@@ -108,11 +130,32 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Base", "Auto", sTest_Except
     }
     KMS_TEST_CATCH(TEXT_OPEN_FAILED);
 
+    // Write
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "DoesNotExist");
+        lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_0");
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+
+    // Write_ASCII
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lF0.Write_ASCII(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_1");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+
+    // ===== Internal =======================================================
+
+    // GetLine2
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lF0.GetLine2(0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
 }

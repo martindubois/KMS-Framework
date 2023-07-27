@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Text_File_UTF16.cpp
 
-// TEST COVERAGE 2022-10-24 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-07-27  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -37,9 +37,12 @@ namespace KMS
 
         const wchar_t* File_UTF16::GetLine(unsigned int aNo) const
         {
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() <= aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             return mLines[aNo].c_str();
         }
@@ -48,9 +51,12 @@ namespace KMS
 
         unsigned int File_UTF16::GetUserLineNo(unsigned int aNo) const
         {
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() <= aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             return mLines[aNo].GetUserLineNo();
         }
@@ -59,9 +65,12 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() < aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             auto lIt = mLines.begin();
 
@@ -74,9 +83,12 @@ namespace KMS
 
         void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
         {
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() >= aNo + aCount, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() < aNo + aCount)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             auto lFirst = mLines.begin() + aNo;
             auto lLast  = lFirst + aCount;
@@ -88,9 +100,12 @@ namespace KMS
         {
             assert(NULL != aLine);
 
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() <= aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             mLines[aNo] = aLine;
         }
@@ -125,10 +140,12 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wifstream lStream(lPath, std::ios::binary);
-
-            char lMsg[64 + PATH_LENGTH];
-            sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
+            if (!lStream.is_open())
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
+                KMS_EXCEPTION(TEXT_OPEN_FAILED, lMsg, "");
+            }
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
 
@@ -139,6 +156,7 @@ namespace KMS
             {
                 if ((!lLine.empty()) && (L'\r' == lLine.back()))
                 {
+                    // NOT TESTED
                     lLine.pop_back();
                 }
 
@@ -157,10 +175,12 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             std::wofstream lStream(lPath, std::ios::binary);
-
-            char lMsg[64 + PATH_LENGTH];
-            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
-            KMS_EXCEPTION_ASSERT(lStream.is_open(), TEXT_OPEN_FAILED, lMsg, "");
+            if (!lStream.is_open())
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+                KMS_EXCEPTION(TEXT_OPEN_FAILED, lMsg, "");
+            }
 
             lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::generate_header>));
 
@@ -181,10 +201,12 @@ namespace KMS
             FILE* lFile;
 
             auto lErr = fopen_s(&lFile, lPath, "wb");
-
-            char lMsg[64 + PATH_LENGTH];
-            sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
-            KMS_EXCEPTION_ASSERT(0 == lErr, TEXT_OPEN_FAILED, lMsg, lErr);
+            if (0 != lErr)
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
+                KMS_EXCEPTION(TEXT_OPEN_FAILED, lMsg, lErr);
+            }
 
             for (const auto& lLine : mLines)
             {
@@ -230,9 +252,12 @@ namespace KMS
 
         const File_UTF16::Line& File_UTF16::GetLine2(unsigned int aNo) const
         {
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid line number", aNo);
-            KMS_EXCEPTION_ASSERT(mLines.size() > aNo, TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            if (mLines.size() <= aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+            }
 
             return mLines[aNo];
         }
@@ -249,7 +274,6 @@ namespace KMS
             {
                 if (std::regex_match(*lIt, aRegEx))
                 {
-                    // NOT TESTED
                     lIt = mLines.erase(lIt);
                     lResult++;
                 }

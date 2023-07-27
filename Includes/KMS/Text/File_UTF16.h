@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_UTF16.h
+// Status    PROD_READY
 
 #pragma once
 
@@ -31,25 +32,34 @@ namespace KMS
 
             void Clear();
 
+            // Exception  TEXT_ARGUMENT_INVALID
             const wchar_t* GetLine(unsigned int aNo) const;
 
             unsigned int GetLineCount() const;
 
+            // Exception  TEXT_ARGUMENT_INVALID
             unsigned int GetUserLineNo(unsigned int aNo) const;
 
+            // Exception  TEXT_ARGUMENT_INVALID
             void InsertLine(unsigned int aNo, const wchar_t* aLine);
 
             unsigned int RemoveEmptyLines();
 
+            // Exception  TEXT_ARGUMENT_INVALID
             void RemoveLines(unsigned int aNo, unsigned int aCount);
 
+            // Exception  TEXT_ARGUMENT_INVALID
             void ReplaceLine(unsigned int aNo, const wchar_t* aLine);
 
             unsigned int ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
 
-            void Read (const File::Folder& aFolder, const char* aFileName);
+            // Exception  TEXT_OPEN_FAILED
+            void Read(const File::Folder& aFolder, const char* aFileName);
+
+            // Exception  TEXT_OPEN_FAILED
             void Write(const File::Folder& aFolder, const char* aFileName, const wchar_t* aEOL = L"\n");
 
+            // Exception  TEXT_OPEN_FAILED
             void Write_ASCII(const File::Folder& aFolder, const char* aFileName, const char* aEOL = "\n");
 
             unsigned int CountOccurrence(const wchar_t* aStr) const;
@@ -77,6 +87,7 @@ namespace KMS
 
             typedef std::vector<Line> Internal;
 
+            // Exception  TEXT_ARGUMENT_INVALID
             const Line& GetLine2(unsigned int aNo) const;
 
             Internal mLines;
