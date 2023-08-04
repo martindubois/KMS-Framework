@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/Test/Test.h>
 
@@ -38,6 +39,8 @@ namespace KMS
             const Test::TestList* GetTestList() const;
 
             void Display(std::ostream& aOut) const;
+
+            Console::Console mConsole;
 
         private:
 

@@ -45,7 +45,7 @@ KMS_TEST(Msg_Destination_Base, "Msg_Destination_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(!lD.IsSet());
 }
 
-KMS_TEST(Msg_Destination_Exceptions, "Msg_DESTINATION_Exceptions", "Auto", sTest_Exceptions)
+KMS_TEST(Msg_Destination_Exception, "Msg_Destination_Exception", "Auto", sTest_Exception)
 {
     TestReceiver lR;
     Msg::Destination lD(&lR, 3);
@@ -82,7 +82,7 @@ unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aDat
         throw std::exception();
 
     case 5:
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 1);
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         throw "Test unknown exception";
 
     default: assert(false);

@@ -1,9 +1,10 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Value.h
+// Status    PROD_READY
 // Library   KMS-A
 
 #pragma once
@@ -23,6 +24,7 @@ namespace KMS
 
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const = 0;
 
+            // Exception  CONVERT_FORMAT_INVALID
             virtual void Set(const char* aIn) = 0;
 
             // ===== Object =================================================

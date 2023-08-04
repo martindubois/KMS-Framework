@@ -4,10 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Banner.h
+// Status    PROD_READY
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 
@@ -29,9 +32,14 @@ namespace KMS
 
             virtual void DisplayHelp(FILE* aOut) const;
 
+            // Exception  CLI_COMMAND_INVALID
             virtual void ExecuteCommand(const char* aC);
 
             virtual int Run();
+
+        // Internal
+
+            Console::Console mConsole;
 
         protected:
 

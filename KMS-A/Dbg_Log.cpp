@@ -100,22 +100,22 @@ namespace KMS
                     switch (mEntryLevel)
                     {
                     case LogFile::Level::LEVEL_ERROR:
-                        std::cerr << Console::Color::RED;
-                        std::cerr << "Data\t" << aSize_byte << " bytes";
-                        std::cerr << Console::Color::WHITE << std::endl;
+                        mConsole.ErrorStream() << Console::Color::RED;
+                        mConsole.ErrorStream() << "Data\t" << aSize_byte << " bytes";
+                        mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                         break;
 
                     case LogFile::Level::LEVEL_WARNING:
-                        std::cerr << Console::Color::YELLOW;
-                        std::cerr << "Data\t" << aSize_byte << " bytes";
-                        std::cerr << Console::Color::WHITE << std::endl;
+                        mConsole.ErrorStream() << Console::Color::YELLOW;
+                        mConsole.ErrorStream() << "Data\t" << aSize_byte << " bytes";
+                        mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                         break;
 
                     case LogFile::Level::LEVEL_INFO:
                     case LogFile::Level::LEVEL_NOISE:
                         // NOT TESTED
-                        std::cerr << "Data\t" << aSize_byte << "bytes";
-                        std::cerr << std::endl;
+                        mConsole.ErrorStream() << "Data\t" << aSize_byte << "bytes";
+                        mConsole.ErrorStream() << std::endl;
                         break;
 
                     default: assert(false);
@@ -149,15 +149,15 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << Console::Color::RED;
+                    mConsole.ErrorStream() << Console::Color::RED;
                     DisplayInConsole("ERROR", aFile, aFunction, aLine);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << Console::Color::YELLOW;
+                    mConsole.ErrorStream() << Console::Color::YELLOW;
                     DisplayInConsole("WARNING", aFile, aFunction, aLine);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -196,15 +196,15 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << Console::Color::RED;
+                    mConsole.ErrorStream() << Console::Color::RED;
                     DisplayInConsole(aException);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << Console::Color::YELLOW;
+                    mConsole.ErrorStream() << Console::Color::YELLOW;
                     DisplayInConsole(aException);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -239,15 +239,15 @@ namespace KMS
                 switch (mEntryLevel)
                 {
                 case LogFile::Level::LEVEL_ERROR:
-                    std::cerr << Console::Color::RED;
+                    mConsole.ErrorStream() << Console::Color::RED;
                     DisplayInConsole(aMsg);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_WARNING:
-                    std::cerr << Console::Color::YELLOW;
+                    mConsole.ErrorStream() << Console::Color::YELLOW;
                     DisplayInConsole(aMsg);
-                    std::cerr << Console::Color::WHITE << std::endl;
+                    mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
                     break;
 
                 case LogFile::Level::LEVEL_INFO:
@@ -273,11 +273,11 @@ namespace KMS
             switch (mConsoleMode)
             {
             case ConsoleMode::DEBUG:
-                std::cerr << "Message\t\"" << aMsg << "\"" << std::endl;
+                mConsole.ErrorStream() << "Message\t\"" << aMsg << "\"" << std::endl;
                 break;
 
             case ConsoleMode::USER:
-                std::cerr << aMsg << std::endl;
+                mConsole.ErrorStream() << aMsg << std::endl;
                 break;
 
             default: assert(false);
@@ -293,14 +293,14 @@ namespace KMS
             switch (mConsoleMode)
             {
             case ConsoleMode::DEBUG:
-                std::cerr << aTitle << "\n";
-                std::cerr << "    Counter  : " << mCounter << "\n";
-                std::cerr << "    File     : " << aFile << " (" << aLine << ")\n";
-                std::cerr << "    Function : " << aFunction << std::endl;
+                mConsole.ErrorStream() << aTitle << "\n";
+                mConsole.ErrorStream() << "    Counter  : " << mCounter << "\n";
+                mConsole.ErrorStream() << "    File     : " << aFile << " (" << aLine << ")\n";
+                mConsole.ErrorStream() << "    Function : " << aFunction << std::endl;
                 break;
 
             case ConsoleMode::USER:
-                std::cerr << aTitle << "  " << aFile << " (" << aLine << ")" << std::endl;
+                mConsole.ErrorStream() << aTitle << "  " << aFile << " (" << aLine << ")" << std::endl;
                 break;
 
             default: assert(false);
@@ -312,12 +312,12 @@ namespace KMS
             switch (mConsoleMode)
             {
             case ConsoleMode::DEBUG:
-                std::cerr << "Exception\n";
-                std::cerr << aException << std::endl;
+                mConsole.ErrorStream() << "Exception\n";
+                mConsole.ErrorStream() << aException << std::endl;
                 break;
 
             case ConsoleMode::USER:
-                std::cerr << "Exception  " << aException.what() << std::endl;
+                mConsole.ErrorStream() << "Exception  " << aException.what() << std::endl;
                 break;
 
             default: assert(false);

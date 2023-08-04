@@ -37,7 +37,10 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
         "SaveConfig=Test.txt",
     };
 
-    KMS_TEST_COMPARE(File::Sync::Main(4, VECTOR_B), 0);
+    KMS_TEST_OUTPUT_BEGIN();
+    auto lRet = File::Sync::Main(4, VECTOR_B);
+    KMS_TEST_OUTPUT_END();
+    KMS_TEST_COMPARE(lRet, 0);
 }
 
 KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)

@@ -124,6 +124,8 @@ namespace KMS
             {
                 lTT->Start();
 
+                lT->mConsole = mConsole;
+
                 lT->CallRun();
 
                 lTT->Stop();

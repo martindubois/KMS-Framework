@@ -13,6 +13,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
+#include <KMS/Console/Console.h>
 
 namespace KMS
 {
@@ -51,6 +52,8 @@ namespace KMS
             void CallRun();
 
             void Display(std::ostream& aOut) const;
+
+            Console::Console mConsole;
 
         protected:
 
@@ -110,17 +113,21 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
         if (!Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ )) { return; } \
     }
 
-#define KMS_TEST_EXPECTED_ERROR()                        \
-    std::cout << KMS::Console::Color::BLUE;              \
-    std::cout << "EXPECTED ERROR";                       \
-    std::cout << KMS::Console::Color::WHITE << std::endl
+#define KMS_TEST_OUTPUT_BEGIN()                                        \
+    mConsole.OutputStream() << KMS::Console::Color::BLUE;              \
+    mConsole.OutputStream() << "TEST OUTPUT BEGIN";                    \
+    mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl
 
-#define KMS_TEST_EXPECTED_EXCEPTION()                    \
-    std::cout << KMS::Console::Color::BLUE;              \
-    std::cout << "EXPECTED EXCEPTION";                   \
-    std::cout << KMS::Console::Color::WHITE << std::endl
+#define KMS_TEST_OUTPUT_END()                                          \
+    mConsole.OutputStream() << KMS::Console::Color::BLUE;              \
+    mConsole.OutputStream() << "TEST OUTPUT END";                      \
+    mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl
 
-#define KMS_TEST_EXPECTED_WARNINGS(N)                    \
-    std::cout << KMS::Console::Color::BLUE;              \
-    std::cout << "EXPECTED WARNINGS (" << (N) << ")";    \
-    std::cout << KMS::Console::Color::WHITE << std::endl
+#define KMS_TEST_CATCH_OUTPUT_END(C)                                         \
+    catch(KMS::Exception eE)                                                 \
+    {                                                                        \
+        mConsole.OutputStream() << KMS::Console::Color::BLUE;                \
+        mConsole.OutputStream() << "TEST OUTPUT END";                        \
+        mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl;  \
+        Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ ); \
+    }

@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/CLI_Tool.cpp
 
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C ==================================================================
@@ -55,6 +57,7 @@ namespace KMS
             mCommands.AddEntry(new DI::String(aC), true);
         }
 
+        // NOT TESTED
         void Tool::ExecuteCommands(FILE* aFile)
         {
             assert(NULL != aFile);
@@ -63,7 +66,7 @@ namespace KMS
 
             if (stdin == aFile)
             {
-                std::cout << "\n> " << std::flush;
+                mConsole.OutputStream() << "\n> " << std::flush;
             }
 
             while (NULL != fgets(lLine, sizeof(lLine), aFile))
@@ -87,7 +90,7 @@ namespace KMS
 
                 if (stdin == aFile)
                 {
-                    std::cout << "\n> " << std::flush;
+                    mConsole.OutputStream() << "\n> " << std::flush;
                 }
             }
         }
@@ -140,7 +143,7 @@ namespace KMS
             char lValue[LINE_LENGTH];
 
             if      (0 == strcmp(aC, "Exit")) { mExit++; }
-            else if (0 == strcmp(aC, "Help")) { DisplayHelp(stdout); }
+            else if (0 == strcmp(aC, "Help")) { DisplayHelp(mConsole.OutputFile()); }
             else if (0 == strcmp(aC, "Shell")) { ExecuteCommands(stdin); }
             else if (1 == sscanf_s(aC, "Config %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
@@ -156,7 +159,7 @@ namespace KMS
                     Sleep(lDelay_ms);
                 #endif
             }
-            else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { std::cout << lValue << std::endl; }
+            else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { mConsole.OutputStream() << lValue << std::endl; }
             else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
                 ExecuteScript(lValue);
@@ -210,10 +213,10 @@ namespace KMS
 
         void Tool::Config(const char* aOperation)
         {
-            if (DI::Execute_Operation(this, aOperation))
+            if (!DI::Execute_Operation(this, aOperation))
             {
-                std::cout << Console::Color::YELLOW;
-                std::cout << "WARNING  Ignored operation" << Console::Color::WHITE << std::endl;
+                mConsole.OutputStream() << Console::Color::YELLOW;
+                mConsole.OutputStream() << "WARNING  Ignored operation" << Console::Color::WHITE << std::endl;
             }
         }
 
@@ -249,6 +252,7 @@ namespace KMS
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
+// NOT TESTED
 void OnCtrlC(int aSignal)
 {
     assert(SIGINT == aSignal);

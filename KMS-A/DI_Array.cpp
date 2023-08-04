@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Array.cpp
 
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -63,9 +65,12 @@ namespace KMS
         {
             assert(0 <= aIndex);
 
-            char lMsg[64];
-            sprintf_s(lMsg, "%d is not a valid index", aIndex);
-            KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, lMsg, mInternal.size());
+            if (mInternal.size() <= static_cast<size_t>(aIndex))
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%d is not a valid index", aIndex);
+                KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+            }
 
             auto lIt = mInternal.begin() + aIndex;
 
@@ -82,9 +87,12 @@ namespace KMS
             }
             else
             {
-                char lMsg[64];
-                sprintf_s(lMsg, "%d is not a valid index", aIndex);
-                KMS_EXCEPTION_ASSERT(mInternal.size() > static_cast<size_t>(aIndex), DI_INDEX_INVALID, lMsg, mInternal.size());
+                if (mInternal.size() <= static_cast<size_t>(aIndex))
+                {
+                    char lMsg[64];
+                    sprintf_s(lMsg, "%d is not a valid index", aIndex);
+                    KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+                }
 
                 mInternal[aIndex].Set(aE, aDelete);
             }
@@ -105,11 +113,17 @@ namespace KMS
 
             char lMsg[64 + NAME_LENGTH];
 
-            sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
+            if (1 > lRet)
+            {
+                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                KMS_EXCEPTION(DI_NAME_INVALID, lMsg, lRet);
+            }
 
-            sprintf_s(lMsg, "%u is not a valid index", lIndex);
-            KMS_EXCEPTION_ASSERT(mInternal.size() >= lIndex, DI_INDEX_INVALID, lMsg, mInternal.size());
+            if (mInternal.size() < lIndex)
+            {
+                sprintf_s(lMsg, "%u is not a valid index", lIndex);
+                KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+            }
 
             Object* lResult;
 
@@ -120,23 +134,31 @@ namespace KMS
                     return NULL;
                 }
 
+                // NOT TESTED
                 lResult = CreateEntry();
 
                 Send_OnChanged(lResult);
             }
             else
             {
-                sprintf_s(lMsg, "\"%s\" is read only", aName);
-                KMS_EXCEPTION_ASSERT(!mInternal[lIndex].IsConst(), DI_DENIED, lMsg, "");
+                if (mInternal[lIndex].IsConst())
+                {
+                    sprintf_s(lMsg, "\"%s\" is read only (NOT TESTED)", aName);
+                    KMS_EXCEPTION(DI_DENIED, lMsg, "");
+                }
                 lResult = mInternal[lIndex].Get();
             }
 
             if (2 == lRet)
             {
+                // NOT TESTED
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
-                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
+                if (NULL == lContainer)
+                {
+                    sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                    KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);
+                }
 
                 lResult = lContainer->FindObject_RW(lRest);
             }

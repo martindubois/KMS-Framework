@@ -21,6 +21,8 @@ KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 {
     Cfg::Configurator lC;
 
+    lC.mConsole.Set_Null();
+
     lC.SetSilence(SILENCED);
 
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 6);

@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Convert.cpp
 
-// TEST COVERAGE 2022-10-24 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -50,9 +50,12 @@ namespace KMS
 
             auto lResult = strtod(aASCII, &lPtr);
 
-            char lMsg[64 + NAME_LENGTH];
-            sprintf_s(lMsg, "\"%s\" is not a valid floating point value", aASCII);
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_FORMAT_INVALID, lMsg, "");
+            if ('\0' != *lPtr)
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid floating point value", aASCII);
+                KMS_EXCEPTION(CONVERT_FORMAT_INVALID, lMsg, "");
+            }
 
             return lResult;
         }
@@ -70,9 +73,12 @@ namespace KMS
 
             auto lRet = fopen_s(&lResult, aASCII, aMode);
 
-            char lMsg[64 + PATH_LENGTH];
-            sprintf_s(lMsg, "Cannot open \"%s\"", aASCII);
-            KMS_EXCEPTION_ASSERT(0 == lRet, CONVERT_OPEN_FAILED, lMsg, lRet);
+            if (0 != lRet)
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\"", aASCII);
+                KMS_EXCEPTION(CONVERT_OPEN_FAILED, lMsg, lRet);
+            }
 
             assert(NULL != lResult);
 
@@ -101,9 +107,12 @@ namespace KMS
 
             auto lResult = strtol(lASCII, &lPtr, static_cast<int>(lRadix));
 
-            char lMsg[64 + NAME_LENGTH];
-            sprintf_s(lMsg, "\"%s\" is not a valid integer value", lASCII);
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, lMsg, "");
+            if ('\0' != *lPtr)
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid integer value", lASCII);
+                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, "");
+            }
 
             return static_cast<int32_t>(lResult);
         }
@@ -112,9 +121,12 @@ namespace KMS
         {
             auto lResult = ToUInt32(aASCII, aRadix);
 
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is too large for the expected type (uint16_t)", lResult);
-            KMS_EXCEPTION_ASSERT(0xffff >= lResult, CONVERT_VALUE_INVALID, lMsg, aASCII);
+            if (0xffff < lResult)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is too large for the expected type (uint16_t)", lResult);
+                KMS_EXCEPTION(CONVERT_VALUE_INVALID, lMsg, aASCII);
+            }
 
             return static_cast<uint16_t>(lResult);
         }
@@ -141,9 +153,12 @@ namespace KMS
 
             auto lResult = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
 
-            char lMsg[64 + NAME_LENGTH];
-            sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
-            KMS_EXCEPTION_ASSERT('\0' == *lPtr, CONVERT_DATA_TYPE_INVALID, lMsg, "");
+            if ('\0' != *lPtr)
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
+                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, "");
+            }
 
             return static_cast<uint32_t>(lResult);
         }
@@ -152,9 +167,12 @@ namespace KMS
         {
             auto lResult = ToUInt32(aASCII, aRadix);
 
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is too large for the expected type (uint8_t)", lResult);
-            KMS_EXCEPTION_ASSERT (0xff >= lResult, CONVERT_DATA_TYPE_INVALID, lMsg, aASCII);
+            if (0xff < lResult)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is too large for the expected type (uint8_t)", lResult);
+                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, aASCII);
+            }
 
             return static_cast<uint8_t>(lResult);
         }

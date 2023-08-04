@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Msg_Destination.cpp
 
-// TEST COVERAGE 2022-08-15 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 

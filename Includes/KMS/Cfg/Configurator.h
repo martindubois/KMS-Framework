@@ -12,6 +12,7 @@
 #include <list>
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
@@ -55,6 +56,10 @@ namespace KMS
 
             // ===== Msg::IReceived =========================================
             virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
+
+        // Internal
+
+            Console::Console mConsole;
 
         private:
 

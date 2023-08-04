@@ -64,6 +64,8 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
 
     lB.SetPrefered(Proc::Browser::Type::EDGE);
 
+    KMS_TEST_OUTPUT_BEGIN();
+
     lB.Open(lRA.mServer, "", "KMS-Framework");
 
     for (unsigned int i = 0; i < 10; i++)
@@ -83,6 +85,8 @@ KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
     lB.Close();
 
     lRA.mServer.mThread.StopAndWait(2000);
+
+    KMS_TEST_OUTPUT_END();
 }
 
 // Public

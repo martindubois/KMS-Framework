@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Boolean.cpp
 
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois. P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================

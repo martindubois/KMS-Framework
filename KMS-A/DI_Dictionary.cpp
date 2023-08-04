@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Dictionary.cpp
 
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -107,8 +109,11 @@ namespace KMS
 
             char lMsg[64 + NAME_LENGTH];
 
-            sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
+            if (1 > lRet)
+            {
+                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                KMS_EXCEPTION(DI_NAME_INVALID, lMsg, lRet);
+            }
 
             Object* lResult;
 
@@ -126,8 +131,11 @@ namespace KMS
             }
             else
             {
-                sprintf_s(lMsg, "\"%s\" is read only", aName);
-                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, lMsg, "");
+                if (lIt->second.IsConst())
+                {
+                    sprintf_s(lMsg, "\"%s\" is read only (NOT TESTED)", aName);
+                    KMS_EXCEPTION(DI_DENIED, lMsg, "");
+                }
                 lResult = lIt->second.Get();
             }
 
@@ -135,8 +143,11 @@ namespace KMS
             {
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
-                sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, lMsg, lRet);
+                if (NULL == lContainer)
+                {
+                    sprintf_s(lMsg, "\"%s\" is not a valid name (NOT TESTED)", aName);
+                    KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);
+                }
 
                 lResult = lContainer->FindObject_RW(lRest);
             }
@@ -164,13 +175,13 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Dictionary::Entry::Entry(const Object* aObject, const MetaData* aMD) : Container::Entry(aObject), mMetaData(aMD)
-        {
-        }
+        Dictionary::Entry::Entry(const Object* aObject, const MetaData* aMD)
+            : Container::Entry(aObject), mMetaData(aMD)
+        {}
 
-        Dictionary::Entry::Entry(Object* aObject, bool aDelete, const MetaData* aMD) : Container::Entry(aObject, aDelete), mMetaData(aMD)
-        {
-        }
+        Dictionary::Entry::Entry(Object* aObject, bool aDelete, const MetaData* aMD)
+            : Container::Entry(aObject, aDelete), mMetaData(aMD)
+        {}
 
     }
 }

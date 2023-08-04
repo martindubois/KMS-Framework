@@ -7,12 +7,7 @@
 
 #include "Component.h"
 
-// ===== C++ ================================================================
-#include <iostream>
-
 // ===== Includes ===========================================================
-#include <KMS/Console/Color.h>
-
 #include <KMS/Test/Test.h>
 
 // Static variables
@@ -36,7 +31,7 @@ namespace KMS
             if (!aCondition)
             {
                 DisplayTestName();
-                std::cerr << "Assert failure at line " << aLine << " of " << aFileName << Console::Color::WHITE << std::endl;
+                mConsole.ErrorStream() << "Assert failure at line " << aLine << " of " << aFileName << Console::Color::WHITE << std::endl;
                 mErrorCount++;
             }
 
@@ -51,9 +46,9 @@ namespace KMS
                 auto lResult = Assert(aValue == aExpected, aFileName, aLine);                          \
                 if (!lResult)                                                                          \
                 {                                                                                      \
-                    std::cerr << Console::Color::RED;                                                  \
-                    std::cerr << "    Value    : " << aValue    << "\n";                               \
-                    std::cerr << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
+                    mConsole.ErrorStream() << Console::Color::RED;                                                  \
+                    mConsole.ErrorStream() << "    Value    : " << aValue    << "\n";                               \
+                    mConsole.ErrorStream() << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
                 }                                                                                      \
                 return lResult;                                                                        \
             }
@@ -77,33 +72,33 @@ namespace KMS
         {
             try
             {
-                std::cout << "Executing " << mName << " ..." << std::endl;
+                mConsole.OutputStream() << "Executing " << mName << " ..." << std::endl;
                 Run();
                 Cleanup();
             }
             catch (Exception eE)
             {
                 DisplayTestName();
-                std::cerr << "EXCEPTION" << "\n";
-                std::cerr << eE;
-                std::cerr << Console::Color::WHITE << std::endl;
+                mConsole.ErrorStream() << "EXCEPTION" << "\n";
+                mConsole.ErrorStream() << eE;
+                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
             catch (std::exception eE)
             {
                 DisplayTestName();
-                std::cerr << "EXCEPTION" << "\n";
-                std::cerr << eE.what() << "\n";
-                std::cerr << Console::Color::WHITE << std::endl;
+                mConsole.ErrorStream() << "EXCEPTION" << "\n";
+                mConsole.ErrorStream() << eE.what() << "\n";
+                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
             catch (...)
             {
                 DisplayTestName();
-                std::cerr << "UNKNOWN EXCEPTION" << "\n";
-                std::cerr << Console::Color::WHITE << std::endl;
+                mConsole.ErrorStream() << "UNKNOWN EXCEPTION" << "\n";
+                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
@@ -153,7 +148,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Test::DisplayTestName() { std::cerr << Console::Color::RED << "Test : " << mName << std::endl; }
+        void Test::DisplayTestName() { mConsole.ErrorStream() << Console::Color::RED << "Test : " << mName << std::endl; }
 
     }
 }

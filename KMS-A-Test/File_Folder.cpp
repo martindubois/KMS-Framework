@@ -34,9 +34,11 @@ KMS_TEST(File_Folder_Base, "File_Folder_Base", "Auto", sTest_Base)
     lF0.Copy(lF1, ".gitignore");
     lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_0.txt");
     lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_0.txt", File::Folder::FLAG_BACKUP);
+    KMS_TEST_OUTPUT_BEGIN();
     lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_1.txt", File::Folder::FLAG_VERBOSE);
     lF0.Copy(lF1, "DoesNotExist", "Test_File_Folder_Base_2.txt", File::Folder::FLAG_IGNORE_ERROR | File::Folder::FLAG_VERBOSE);
     lF2.Copy(File::Folder(lF1, "Folder2"));
+    KMS_TEST_OUTPUT_END();
 
     // Delete
     lF1.Delete("Test_File_Folder_Base_0.txt");
@@ -44,7 +46,9 @@ KMS_TEST(File_Folder_Base, "File_Folder_Base", "Auto", sTest_Base)
     lF2.Delete();
 
     // DeleteFiles
+    KMS_TEST_OUTPUT_BEGIN();
     File::Folder::CURRENT.DeleteFiles("DoesNotExist");
+    KMS_TEST_OUTPUT_END();
 
     // DoesFolderExist
     KMS_TEST_ASSERT(!lF0.DoesFolderExist(".gitignore"));
@@ -68,10 +72,12 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder lF("DoesNotExist");
+        KMS_TEST_OUTPUT_BEGIN();
         lF.Compress(File::Folder::CURRENT, "Test_File_Folder_Exception_0.zip");
+        KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_COMPRESS_FAILED);
+    KMS_TEST_CATCH_OUTPUT_END(FILE_COMPRESS_FAILED);
 
     // Delete
     try
@@ -105,8 +111,10 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder lF("Test_File_Folder_Exception_2");
+        KMS_TEST_OUTPUT_BEGIN();
         lF.Uncompress(File::Folder::CURRENT, "DoesNotExist.zip");
+        KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_UNCOMPRESS_FAILED);
+    KMS_TEST_CATCH_OUTPUT_END(FILE_UNCOMPRESS_FAILED);
 }

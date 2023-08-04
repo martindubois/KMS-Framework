@@ -87,6 +87,18 @@
     <ClCompile Include="File_Binary.cpp">
       <Filter>Source Files\File</Filter>
     </ClCompile>
+    <ClCompile Include="CLI_Tool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Boolean.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Dictionary.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_String_Expand.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

@@ -1,9 +1,10 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Container.h
+// Status    PROD_READY
 // Library   KMS-A
 
 #pragma once
@@ -29,6 +30,9 @@ namespace KMS
 
             virtual bool IsEmpty() const = 0;
 
+            // Exception  DI_DENIED
+            //            DI_FORMAT_INVALID
+            //            DI_NAME_INVALID
             virtual Object* FindObject_RW(const char* aName) = 0;
 
             // ===== Object =================================================

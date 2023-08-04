@@ -1,9 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Environment.cpp
+
+// TEST COVERAGE  2023-08-01  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -18,6 +20,14 @@ namespace KMS
         // Functions
         // //////////////////////////////////////////////////////////////////////
 
+        #define APPEND_CHAR(C) *lOut = (C); lOut++; lOutSize_byte--
+
+        #define APPEND_VAR()                                        \
+            lVarName[lVarIndex] = '\0';                             \
+            lVarIndex = 0;                                          \
+            lLen = GetVariableValue(lVarName, lOut, lOutSize_byte); \
+            lOut += lLen; lOutSize_byte -= lLen
+
         void Expand(const char* aIn, char* aOut, unsigned int aOutSize_byte)
         {
             // --> TEXT <==+-----+
@@ -25,9 +35,9 @@ namespace KMS
             //      +--> MARK    |
             //            |      |
             //            +--> NAME
-            const unsigned int STATE_MARK = 0;
-            const unsigned int STATE_NAME = 1;
-            const unsigned int STATE_TEXT = 2;
+            static const unsigned int STATE_MARK = 0;
+            static const unsigned int STATE_NAME = 1;
+            static const unsigned int STATE_TEXT = 2;
 
             auto         lIn = aIn;
             unsigned int lLen;
@@ -47,8 +57,8 @@ namespace KMS
                     case '$': lState = STATE_NAME; break;
 
                     default:
-                        *lOut = '{' ; lOut++; lOutSize_byte--;
-                        *lOut = *lIn; lOut++; lOutSize_byte--;
+                        APPEND_CHAR('{');
+                        APPEND_CHAR(*lIn);
                         lState = STATE_TEXT;
                     }
                     break;
@@ -57,12 +67,7 @@ namespace KMS
                     switch (*lIn)
                     {
                     case '}':
-                        lVarName[lVarIndex] = '\0';
-                        lVarIndex = 0;
-
-                        lLen = GetVariableValue(lVarName, lOut, lOutSize_byte);
-
-                        lOut += lLen; lOutSize_byte -= lLen;
+                        APPEND_VAR();
                         lState = STATE_TEXT;
                         break;
 
@@ -75,16 +80,28 @@ namespace KMS
                     {
                     case '{': lState = STATE_MARK; break;
 
-                    default: *lOut = *lIn; lOut++; lOutSize_byte--;
+                    default: APPEND_CHAR(*lIn);
                     }
                     break;
 
+                default: assert(false);
                 }
 
                 KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, ENV_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
                 lIn++;
             }
+
+            switch (lState)
+            {
+            case STATE_MARK: APPEND_CHAR('{'); break;
+            case STATE_NAME: APPEND_VAR(); break;
+            case STATE_TEXT: break;
+
+            default: assert(false);
+            }
+
+            KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, ENV_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
             *lOut = '\0';
         }

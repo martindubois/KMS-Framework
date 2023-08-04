@@ -5,6 +5,7 @@
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_ASCII.h
 // Status    PROD_READY
+// Library   KMS-A
 
 #pragma once
 

@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Environment_W.cpp
 
+// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Windows ============================================================
@@ -27,10 +29,12 @@ namespace KMS
             assert(NULL != aOut);
 
             auto lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
-
-            char lMsg[64 + NAME_LENGTH];
-            sprintf_s(lMsg, "Cannot retrieve the value of \"%s\"", aName);
-            KMS_EXCEPTION_ASSERT((0 < lResult) && (aOutSize_byte > lResult), ENV_EXPAND_FAILED, lMsg, lResult);
+            if ((0 >= lResult) || (aOutSize_byte <= lResult))
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "Cannot retrieve the value of \"%s\"", aName);
+                KMS_EXCEPTION(ENV_EXPAND_FAILED, lMsg, lResult);
+            }
 
             return lResult;
         }

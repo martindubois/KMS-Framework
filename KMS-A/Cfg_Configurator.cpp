@@ -114,7 +114,7 @@ namespace KMS
 
         void Configurator::Help(FILE* aOut) const
         {
-            FILE* lOut = (NULL == aOut) ? stdout : aOut;
+            FILE* lOut = (NULL == aOut) ? mConsole.OutputFile() : aOut;
 
             for (auto lD : mConfigurables)
             {
@@ -221,14 +221,14 @@ namespace KMS
         {
             if (mDisplayConfig)
             {
-                printf(
+                fprintf(mConsole.OutputFile(),
                     "\n"
                     "===== Configuration =====\n"
                     "\n");
 
                 for (const auto lD : mConfigurables)
                 {
-                    Save_Dictionary(stdout, lD, NULL);
+                    Save_Dictionary(mConsole.OutputFile(), lD, NULL);
                 }
             }
 
@@ -240,7 +240,7 @@ namespace KMS
         {
             if (mHelp)
             {
-                Help(stdout);
+                Help(mConsole.OutputFile());
 
                 exit(0);
             }

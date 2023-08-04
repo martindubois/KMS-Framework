@@ -15,9 +15,13 @@ using namespace KMS;
 
 KMS_TEST(FileFormat_ELF_Main, "FileFormat_ELF_Base", "Auto", sTest_Base)
 {
+    Console::Console lConsole;
+
+    lConsole.Set_Null();
+
     FileFormat::ELF lELF0(File::Folder::CURRENT, "KMS-A-Test/Tests/Test3.elf");
 
-    lELF0.DisplayHeaders(stdout);
+    lELF0.DisplayHeaders(lConsole.OutputFile());
 
     uint8_t lImage[0x2000];
 

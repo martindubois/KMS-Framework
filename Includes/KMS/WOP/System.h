@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Console.h>
 #include <KMS/Version.h>
 #include <KMS/WOP/FrameBuffer.h>
 #include <KMS/WOP/Object.h>
@@ -52,6 +53,12 @@ namespace KMS
             // ===== Object =================================================
             virtual bool    PrepareFrame(FrameBuffer* aOut, uint8_t aInstance);
             virtual uint8_t WriteData(const FrameBuffer* aIn);
+
+        // Internal
+
+            #ifndef _KMS_EMBEDDED_
+                Console::Console mConsole;
+            #endif
 
         private:
 

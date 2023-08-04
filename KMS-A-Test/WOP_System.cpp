@@ -31,6 +31,8 @@ KMS_TEST(WOP_System_Base, "WOP_System_Base", "Auto", sTest_Base)
     // Constructor
     WOP::System lS0(VERSION, 'tseT', 0x00);
 
+    lS0.mConsole.Set_Null();
+
     // GetResult
     KMS_TEST_ASSERT(0 == lS0.GetResult());
 

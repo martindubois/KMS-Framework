@@ -52,6 +52,9 @@
     <Filter Include="Source Files\Test">
       <UniqueIdentifier>{adb2df9a-d232-47b7-b4f3-d6569c23b06e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Console">
+      <UniqueIdentifier>{04f81db6-eea3-4a7f-8aee-2375b2fd1c35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -61,9 +64,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Convert.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Console_Color_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Environment_W.cpp">
@@ -308,6 +308,12 @@
     </ClCompile>
     <ClCompile Include="Modbus_Monitor.cpp">
       <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Console_Color_W.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="Console_Console.cpp">
+      <Filter>Source Files\Console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

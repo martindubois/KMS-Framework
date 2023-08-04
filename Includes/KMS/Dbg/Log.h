@@ -11,6 +11,7 @@
 #include <map>
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Console.h>
 #include <KMS/Dbg/LogFile.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Msg/IReceiver.h>
@@ -61,6 +62,10 @@ namespace KMS
             ConsoleMode    mConsoleMode;
             LogFile::Level mFileLevel;
             File::Folder   mFolder;
+
+        // Internal
+
+            Console::Console mConsole;
 
         private:
 
