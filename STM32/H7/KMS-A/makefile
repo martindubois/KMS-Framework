@@ -5,7 +5,7 @@
 # Product   KMS-Framework
 # File      STM32/H7/KMS-A/makefile
 
-include ../../$(CONFIG).mk
+include ../../Common.mk
 
 OUTPUT = $(KMS_A_A)
 

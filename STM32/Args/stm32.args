@@ -1,0 +1,16 @@
+-g3
+-std=gnu++14
+-D_KMS_EMBEDDED_
+-DSTM32
+-ffunction-sections
+-fdata-sections
+-fno-exceptions
+-fno-rtti
+-fno-use-cxa-atexit
+-Wall
+-fstack-usage
+-MMD
+-MP
+--specs=nano.specs
+-mfloat-abi=hard
+-mthumb
