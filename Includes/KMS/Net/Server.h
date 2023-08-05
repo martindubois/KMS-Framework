@@ -4,11 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Server.h
+// Status
+// Library   KMS-B
 
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Msg/IReceiver.h>
+#include <KMS/Callback.h>
 #include <KMS/Net/Socket_Server.h>
 #include <KMS/Thread/Thread.h>
 
@@ -17,16 +19,13 @@ namespace KMS
     namespace Net
     {
 
-        class Server : public Msg::IReceiver
+        class Server
         {
 
         public:
 
             Net::Socket_Server mSocket;
             Thread::Thread     mThread;
-
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
         protected:
 
@@ -36,10 +35,15 @@ namespace KMS
 
         private:
 
-            unsigned int OnIterate ();
-            unsigned int OnStarting();
-            unsigned int OnStop    ();
-            unsigned int OnStopping();
+            // ===== Callbacks ==============================================
+            Callback<Server> ON_ITERATE;
+            Callback<Server> ON_STARTING;
+            Callback<Server> ON_STOP;
+            Callback<Server> ON_STOPPING;
+            unsigned int OnIterate (void* aSender, void* aData);
+            unsigned int OnStarting(void* aSender, void* aData);
+            unsigned int OnStop    (void* aSender, void* aData);
+            unsigned int OnStopping(void* aSender, void* aData);
 
         };
 

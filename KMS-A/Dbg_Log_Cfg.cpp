@@ -20,8 +20,6 @@ static const KMS::Cfg::MetaData MD_LOG_CONSOLE_MODE ("Log_ConsoleMode = DEBUG | 
 static const KMS::Cfg::MetaData MD_LOG_FILE_LEVEL   ("Log_FileLevel = NOISE | INFO | WARNING | ERROR | NONE");
 static const KMS::Cfg::MetaData MD_LOG_FOLDER       ("Log_Folder = {Path}");
 
-#define ON_FOLDER_CHANGED (1)
-
 namespace KMS
 {
     namespace Dbg
@@ -38,8 +36,10 @@ namespace KMS
             , mConsoleMode (&aLog->mConsoleMode )
             , mFileLevel   (&aLog->mFileLevel   )
             , mFolder      (&aLog->mFolder      )
+            // ===== Callbacks ==============================================
+            , ON_FOLDER_CHANGED(this, &Log_Cfg::OnFolderChanged)
         {
-            mFolder.mOnChanged.Set(this, ON_FOLDER_CHANGED);
+            mFolder.mOnChanged = &ON_FOLDER_CHANGED;
 
             AddEntry("Log_ConsoleLevel", &mConsoleLevel, false, &MD_LOG_CONSOLE_LEVEL);
             AddEntry("Log_ConsoleMode" , &mConsoleMode , false, &MD_LOG_CONSOLE_MODE);
@@ -47,22 +47,16 @@ namespace KMS
             AddEntry("Log_Folder"      , &mFolder      , false, &MD_LOG_FOLDER);
         }
 
-        // ===== Msg::IReceiver =============================================
+        // Private
+        // //////////////////////////////////////////////////////////////////
 
-        unsigned int Log_Cfg::Receive(void* aSender, unsigned int aCode, void* aData)
+        // ===== Callbacks ==================================================
+
+        unsigned int Log_Cfg::OnFolderChanged(void*, void*)
         {
-            assert(NULL != mLog);
+            mLog->CloseLogFiles();
 
-            auto lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case ON_FOLDER_CHANGED: mLog->CloseLogFiles(); lResult = 0; break;
-
-            default: assert(false);
-            }
-
-            return lResult;
+            return 0;
         }
 
     }

@@ -4,7 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Msg/Destination.h
-// Status    PROD_READY
+// Status    OBSOLETE
 // Library   KMS-A
 
 #pragma once

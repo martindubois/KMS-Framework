@@ -15,57 +15,34 @@
 
 #define ACCEPT_TIMEOUT_ms (1000)
 
-#define CODE_ON_ITERATE  (1)
-#define CODE_ON_START    (2)
-#define CODE_ON_STOP     (3)
-#define CODE_ON_STOPPING (4)
-
 namespace KMS
 {
     namespace Net
     {
 
-        // Public
-        // //////////////////////////////////////////////////////////////////
-
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Server::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            assert(&mThread == aSender);
-
-            unsigned int lResult;
-
-            switch (aCode)
-            {
-            case CODE_ON_ITERATE : lResult = OnIterate (); break;
-            case CODE_ON_START   : lResult = OnStarting(); break;
-            case CODE_ON_STOP    : lResult = OnStop    (); break;
-            case CODE_ON_STOPPING: lResult = OnStopping(); break;
-
-            default:
-                assert(false);
-                lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
-        }
-
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Server::Server() : mSocket(Net::Socket::Type::STREAM)
+        Server::Server()
+            : mSocket(Net::Socket::Type::STREAM)
+            // ===== Callbacks ==============================================
+            , ON_ITERATE (this, &Server::OnIterate)
+            , ON_STARTING(this, &Server::OnStarting)
+            , ON_STOP    (this, &Server::OnStop)
+            , ON_STOPPING(this, &Server::OnStopping)
         {
-            mThread.mOnIterate .Set(this, CODE_ON_ITERATE );
-            mThread.mOnStarting.Set(this, CODE_ON_START   );
-            mThread.mOnStop    .Set(this, CODE_ON_STOP    );
-            mThread.mOnStopping.Set(this, CODE_ON_STOPPING);
+            mThread.mOnIterate  = &ON_ITERATE;
+            mThread.mOnStarting = &ON_STARTING;
+            mThread.mOnStop     = &ON_STOP;
+            mThread.mOnStopping = &ON_STOPPING;
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int Server::OnIterate()
+        // ===== Callbacks ==================================================
+
+        unsigned int Server::OnIterate(void*, void*)
         {
             Net::Address lFrom;
 
@@ -78,21 +55,21 @@ namespace KMS
             return 0;
         }
 
-        unsigned int Server::OnStarting()
+        unsigned int Server::OnStarting(void*, void*)
         {
             Net::Thread_Startup();
 
             return 0;
         }
 
-        unsigned int Server::OnStop()
+        unsigned int Server::OnStop(void*, void*)
         {
             mSocket.Close();
 
             return 0;
         }
 
-        unsigned int Server::OnStopping()
+        unsigned int Server::OnStopping(void*, void*)
         {
             Net::Thread_Cleanup();
 

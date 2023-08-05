@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Cfg/Configurator.h
+// Status
 // Library   KMS-A
 
 #pragma once
@@ -12,20 +13,20 @@
 #include <list>
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/File.h>
 #include <KMS/File/Folder.h>
-#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
     namespace Cfg
     {
 
-        class Configurator : public Msg::IReceiver
+        class Configurator
         {
 
         public:
@@ -54,9 +55,6 @@ namespace KMS
 
             void SaveConfig(const char* aPath);
 
-            // ===== Msg::IReceived =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
         // Internal
 
             Console::Console mConsole;
@@ -69,13 +67,19 @@ namespace KMS
 
             bool IsSilenced(const char* aLine);
 
-            unsigned int OnConfigFilesChanged();
-            unsigned int OnDisplayConfigChanged();
-            unsigned int OnHelpChanged();
-            unsigned int OnOptionalConfigFilesChanged();
-            unsigned int OnSaveConfigChanged();
-
             void ParseLine(const char * aLine);
+
+            // ===== Callbacks ==============================================
+            const Callback<Configurator> ON_CONFIG_FILES_CHANGED;
+            const Callback<Configurator> ON_DISPLAY_CONFIG_CHANGED;
+            const Callback<Configurator> ON_HELP_CHANGED;
+            const Callback<Configurator> ON_OPTIONAL_CONFIG_FILES_CHANGED;
+            const Callback<Configurator> ON_SAVE_CONFIG_CHANGED;
+            unsigned int OnConfigFilesChanged        (void* aSender, void* aData);
+            unsigned int OnDisplayConfigChanged      (void* aSender, void* aData);
+            unsigned int OnHelpChanged               (void* aSender, void* aData);
+            unsigned int OnOptionalConfigFilesChanged(void* aSender, void* aData);
+            unsigned int OnSaveConfigChanged         (void* aSender, void* aData);
 
             ConfigurableList mConfigurables;
 

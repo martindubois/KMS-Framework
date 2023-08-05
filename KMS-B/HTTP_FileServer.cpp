@@ -37,8 +37,6 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define MSG_ON_REQUEST (1)
-
 static const KMS::Cfg::MetaData MD_ROOT   ("Root = {Path}");
 static const KMS::Cfg::MetaData MD_VERBOSE("Verbose = false | true");
 
@@ -121,7 +119,7 @@ namespace KMS
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 HTTP::Server      lS;
 
-                lS.mOnRequest = lFS.ON_REQUEST;
+                lS.mOnRequest = &lFS.ON_REQUEST;
 
                 lC.AddConfigurable(&lFS);
                 lC.AddConfigurable(&lInstaller);
@@ -159,9 +157,10 @@ namespace KMS
         }
 
         FileServer::FileServer()
-            : ON_REQUEST(this, MSG_ON_REQUEST)
-            , mRoot   (DEFAULT_ROOT)
+            : mRoot   (DEFAULT_ROOT)
             , mVerbose(false)
+            // ===== Callbacks ==============================================
+            , ON_REQUEST(this, &FileServer::OnRequest)
         {
             AddEntry("Root"   , &mRoot   , false, &MD_ROOT);
             AddEntry("Verbose", &mVerbose, false, &MD_VERBOSE);
@@ -252,28 +251,12 @@ namespace KMS
             aR->SetFile(lFile);
         }
 
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int FileServer::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult;
-
-            switch (aCode)
-            {
-            case MSG_ON_REQUEST: lResult = OnRequest(aData); break;
-
-            default:
-                assert(false);
-                lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
-        }
-
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int FileServer::OnRequest(void* aData)
+        // ===== Callbacks ==================================================
+
+        unsigned int FileServer::OnRequest(void*, void* aData)
         {
             ProcessRequest(reinterpret_cast<Request*>(aData));
 

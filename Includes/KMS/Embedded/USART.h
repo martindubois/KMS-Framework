@@ -4,12 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Embedded/UART.h
+// Status
 
 #pragma once
 
 // ===== Includes ===========================================================
 #include <KMS/Embedded/WorkItem.h>
-#include <KMS/Msg/Destination.h>
 
 namespace KMS
 {
@@ -34,8 +34,8 @@ namespace KMS
 
             // mOnRxByte
             //  Level: WORK INTERRUPT DISABLED
-            Msg::Destination mOnRxByte;
-            Msg::Destination mOnTxCompleted;
+            Callback_Ptr mOnRxByte;
+            Callback_Ptr mOnTxCompleted;
 
             // ===== WorkItem ===============================================
             virtual void Work();

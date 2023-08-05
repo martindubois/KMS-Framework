@@ -1,13 +1,15 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Embedded/Test.h
+// Status
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/DAQ/DigitalOutput.h>
 #include <KMS/Embedded/IInterruptHandler.h>
 #include <KMS/Embedded/USART.h>
@@ -24,7 +26,7 @@ namespace KMS
 
         public:
 
-            const Msg::Destination ON_KEY;
+            const Callback<Test> ON_KEY;
 
             Test(USART* aUSART, const DAQ::DigitalOutput& aLED);
 

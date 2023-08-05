@@ -23,26 +23,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Slave_USART::Slave_USART(Embedded::USART* aUSART) : ON_RX_BYTE(this, MSG_RX_BYTE), mUSART(aUSART)
+        Slave_USART::Slave_USART(Embedded::USART* aUSART)
+            : mUSART(aUSART)
+            // ===== Callbacks ==============================================
+            , ON_RX_BYTE(this, &Slave_USART::OnRxByte)
         {
             assert(NULL != aUSART);
 
-            mUSART->mOnRxByte = ON_RX_BYTE;
-        }
-
-        // ===== Msg::IReceiver =========================================
-        unsigned int Slave_USART::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult;
-
-            switch (aCode)
-            {
-            case MSG_RX_BYTE: lResult = OnRxByte(aData);
-
-            default: lResult = Slave::Receive(aSender, aCode, aData);
-            }
-
-            return lResult;
+            mUSART->mOnRxByte = &ON_RX_BYTE;
         }
 
         // Protected
@@ -70,7 +58,9 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int Slave_USART::OnRxByte(void* aData)
+        // ===== Callbacks ==================================================
+
+        unsigned int Slave_USART::OnRxByte(void*, void* aData)
         {
             assert(NULL != aData);
 

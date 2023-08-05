@@ -10,7 +10,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Msg/Destination.h>
+#include <KMS/Callback.h>
 
 namespace KMS
 {
@@ -26,7 +26,7 @@ namespace KMS
 
             virtual bool Clear() = 0;
 
-            Msg::Destination mOnChanged;
+            Callback_Ptr mOnChanged;
 
         // Internal
 

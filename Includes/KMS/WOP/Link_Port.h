@@ -4,12 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WOP/Link_Port.h
+// Status
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/Com/Port.h>
-#include <KMS/Msg/IReceiver.h>
 #include <KMS/Thread/Thread.h>
 
 namespace KMS
@@ -19,7 +20,7 @@ namespace KMS
 
         class System;
 
-        class Link_Port : public Msg::IReceiver
+        class Link_Port
         {
 
         public:
@@ -29,13 +30,13 @@ namespace KMS
             void Start();
             void Stop ();
 
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
         private:
 
-            unsigned int OnIterate_Rx();
-            unsigned int OnIterate_Tx();
+            // ===== Callbacks ==============================================
+            const Callback<Link_Port> ON_ITERATE_RX;
+            const Callback<Link_Port> ON_ITERATE_TX;
+            unsigned int OnIterate_Rx(void* aSender, void* aData);
+            unsigned int OnIterate_Tx(void* aSender, void* aData);
 
             Com::Port    * mPort;
             System       * mSystem;

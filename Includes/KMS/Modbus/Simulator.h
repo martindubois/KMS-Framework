@@ -1,9 +1,10 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Simulator.h
+// Status
 // Library   KMS-C
 
 #pragma once
@@ -12,18 +13,18 @@
 #include <string>
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/DI/Array_Sparse.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Value.h>
 #include <KMS/Modbus/Slave.h>
-#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
     namespace Modbus
     {
 
-        class Simulator : public DI::Dictionary, public Msg::IReceiver
+        class Simulator : public DI::Dictionary
         {
 
         public:
@@ -54,9 +55,6 @@ namespace KMS
 
             void Stop();
 
-            // ===== Msg::IReceiver =============================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
         // Internal
 
             class Item : public DI::Value
@@ -82,13 +80,19 @@ namespace KMS
 
         private:
 
-            // ===== Message handlers =======================================
-            unsigned int OnReadCoils           (Slave::MsgData* aData);
-            unsigned int OnReadDiscreteInputs  (Slave::MsgData* aData);
-            unsigned int OnReadHoldingRegisters(Slave::MsgData* aData);
-            unsigned int OnReadInputRegisters  (Slave::MsgData* aData);
-            unsigned int OnWriteSingleCoil     (Slave::MsgData* aData);
-            unsigned int OnWriteSingleRegister (Slave::MsgData* aData);
+            // ===== Callbacks ==============================================
+            Callback<Simulator> ON_READ_COILS;
+            Callback<Simulator> ON_READ_DISCRETE_INPUTS;
+            Callback<Simulator> ON_READ_HOLDING_REGISTERS;
+            Callback<Simulator> ON_READ_INPUT_REGISTERS;
+            Callback<Simulator> ON_WRITE_SINGLE_COIL;
+            Callback<Simulator> ON_WRITE_SINGLE_REGISTER;
+            unsigned int OnReadCoils           (void* aSender, void* aData);
+            unsigned int OnReadDiscreteInputs  (void* aSender, void* aData);
+            unsigned int OnReadHoldingRegisters(void* aSender, void* aData);
+            unsigned int OnReadInputRegisters  (void* aSender, void* aData);
+            unsigned int OnWriteSingleCoil     (void* aSender, void* aData);
+            unsigned int OnWriteSingleRegister (void* aSender, void* aData);
 
             Slave* mSlave;
 

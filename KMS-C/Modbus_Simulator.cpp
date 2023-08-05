@@ -38,13 +38,6 @@ static const KMS::Cfg::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs[{Address}] 
 static const KMS::Cfg::MetaData MD_HOLDING_REGISTERS("HoldingRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
 static const KMS::Cfg::MetaData MD_INPUT_REGISTERS  ("InputRegisters[{Address}] = {Name}[;{Value}][;{Flags}]");
 
-#define MSG_READ_COILS             (1)
-#define MSG_READ_DISCRETE_INPUTS   (2)
-#define MSG_READ_HOLDING_REGISTERS (3)
-#define MSG_READ_INPUT_REGISTERS   (4)
-#define MSG_WRITE_SINGLE_COIL      (5)
-#define MSG_WRITE_SINGLE_REGISTER  (6)
-
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +133,15 @@ namespace KMS
             return lResult;
         }
 
-        Simulator::Simulator() : mSlave(NULL)
+        Simulator::Simulator()
+            : mSlave(NULL)
+            // ===== Callbacks ==============================================
+            , ON_READ_COILS            (this, &Simulator::OnReadCoils)
+            , ON_READ_DISCRETE_INPUTS  (this, &Simulator::OnReadDiscreteInputs)
+            , ON_READ_HOLDING_REGISTERS(this, &Simulator::OnReadHoldingRegisters)
+            , ON_READ_INPUT_REGISTERS  (this, &Simulator::OnReadInputRegisters)
+            , ON_WRITE_SINGLE_COIL     (this, &Simulator::OnWriteSingleCoil)
+            , ON_WRITE_SINGLE_REGISTER (this, &Simulator::OnWriteSingleRegister)
         {
             mCoils           .SetCreator(CreateItem);
             mDiscreteInputs  .SetCreator(CreateItem);
@@ -159,12 +160,12 @@ namespace KMS
 
             mSlave = aSlave;
 
-            mSlave->mOnReadCoils           .Set(this, MSG_READ_COILS);
-            mSlave->mOnReadDiscreteInputs  .Set(this, MSG_READ_DISCRETE_INPUTS);
-            mSlave->mOnReadHoldingRegisters.Set(this, MSG_READ_HOLDING_REGISTERS);
-            mSlave->mOnReadInputRegisters  .Set(this, MSG_READ_INPUT_REGISTERS);
-            mSlave->mOnWriteSingleCoil     .Set(this, MSG_WRITE_SINGLE_COIL);
-            mSlave->mOnWriteSingleRegister .Set(this, MSG_WRITE_SINGLE_REGISTER);
+            mSlave->mOnReadCoils            = &ON_READ_COILS;
+            mSlave->mOnReadDiscreteInputs   = &ON_READ_DISCRETE_INPUTS;
+            mSlave->mOnReadHoldingRegisters = &ON_READ_HOLDING_REGISTERS;
+            mSlave->mOnReadInputRegisters   = &ON_READ_INPUT_REGISTERS;
+            mSlave->mOnWriteSingleCoil      = &ON_WRITE_SINGLE_COIL;
+            mSlave->mOnWriteSingleRegister  = &ON_WRITE_SINGLE_REGISTER;
         }
 
         int Simulator::Run()
@@ -182,31 +183,6 @@ namespace KMS
         }
 
         void Simulator::Stop() { assert(NULL != mSlave); mSlave->Stop(); }
-
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Simulator::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
-
-            unsigned int lResult;
-
-            switch (aCode)
-            {
-            case MSG_READ_COILS            : lResult = OnReadCoils           (lData); break;
-            case MSG_READ_DISCRETE_INPUTS  : lResult = OnReadDiscreteInputs  (lData); break;
-            case MSG_READ_HOLDING_REGISTERS: lResult = OnReadHoldingRegisters(lData); break;
-            case MSG_READ_INPUT_REGISTERS  : lResult = OnReadInputRegisters  (lData); break;
-            case MSG_WRITE_SINGLE_COIL     : lResult = OnWriteSingleCoil     (lData); break;
-            case MSG_WRITE_SINGLE_REGISTER : lResult = OnWriteSingleRegister (lData); break;
-
-            default:
-                assert(false);
-                lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
-        }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -267,134 +243,144 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Message handlers ===========================================
+        // ===== Callbacks ==================================================
 
-        unsigned int Simulator::OnReadCoils(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadCoils(void*, void* aData)
         {
             assert(NULL != aData);
 
-            for (unsigned int i = 0; i < aData->mQty; i++)
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
+
+            for (unsigned int i = 0; i < lData->mQty; i++)
             {
                 auto lValue = false;
 
-                auto lObject = mCoils.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mCoils.GetEntry_R(lData->mStartAddr + i);
                 if (NULL == lObject)
                 {
-                    TraceUnknown("Read Coil", aData->mStartAddr + i, OFF);
+                    TraceUnknown("Read Coil", lData->mStartAddr + i, OFF);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
-                    TraceKnown("Read Coil", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+                    TraceKnown("Read Coil", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
                     lValue = lItem->mValue;
                 }
 
-                WriteBit(aData->mBuffer, 0, i, lValue);
+                WriteBit(lData->mBuffer, 0, i, lValue);
             }
 
             return 0;
         }
 
-        unsigned int Simulator::OnReadDiscreteInputs(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadDiscreteInputs(void*, void* aData)
         {
             assert(NULL != aData);
 
-            for (unsigned int i = 0; i < aData->mQty; i++)
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
+
+            for (unsigned int i = 0; i < lData->mQty; i++)
             {
                 auto lValue = false;
 
-                auto lObject = mDiscreteInputs.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mDiscreteInputs.GetEntry_R(lData->mStartAddr + i);
                 if (NULL == lObject)
                 {
-                    TraceUnknown("Read Discrete Input", aData->mStartAddr + i, OFF);
+                    TraceUnknown("Read Discrete Input", lData->mStartAddr + i, OFF);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
-                    TraceKnown("Read Discrete Input", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+                    TraceKnown("Read Discrete Input", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
                     lValue = lItem->mValue;
                 }
 
-                WriteBit(aData->mBuffer, 0, i, lValue);
+                WriteBit(lData->mBuffer, 0, i, lValue);
             }
 
             return 0;
         }
 
-        unsigned int Simulator::OnReadHoldingRegisters(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadHoldingRegisters(void*, void* aData)
         {
             assert(NULL != aData);
 
-            for (unsigned int i = 0; i < aData->mQty; i++)
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
+
+            for (unsigned int i = 0; i < lData->mQty; i++)
             {
                 RegisterValue lValue = 0;
 
-                auto lObject = mHoldingRegisters.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mHoldingRegisters.GetEntry_R(lData->mStartAddr + i);
                 if (NULL == lObject)
                 {
-                    TraceUnknown("Read Holding Register", aData->mStartAddr + i, 0);
+                    TraceUnknown("Read Holding Register", lData->mStartAddr + i, 0);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
-                    TraceKnown("Read Holding Register", aData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
+                    TraceKnown("Read Holding Register", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
                     lValue = lItem->mValue;
                 }
 
-                WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
+                WriteUInt16(lData->mBuffer, sizeof(RegisterValue) * i, lValue);
             }
 
             return 0;
         }
 
-        unsigned int Simulator::OnReadInputRegisters(Slave::MsgData* aData)
+        unsigned int Simulator::OnReadInputRegisters(void*, void* aData)
         {
             assert(NULL != aData);
 
-            for (unsigned int i = 0; i < aData->mQty; i++)
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
+
+            for (unsigned int i = 0; i < lData->mQty; i++)
             {
                 RegisterValue lValue = 0;
 
-                auto lObject = mInputRegisters.GetEntry_R(aData->mStartAddr + i);
+                auto lObject = mInputRegisters.GetEntry_R(lData->mStartAddr + i);
                 if (NULL == lObject)
                 {
-                    TraceUnknown("Read Input Register", aData->mStartAddr + i, 0);
+                    TraceUnknown("Read Input Register", lData->mStartAddr + i, 0);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
                     assert(NULL != lItem);
 
-                    TraceKnown("Read Input Register", aData->mStartAddr, *lItem, FLAG_VERBOSE_READ);
+                    TraceKnown("Read Input Register", lData->mStartAddr, *lItem, FLAG_VERBOSE_READ);
 
                     lValue = lItem->mValue;
                 }
 
-                WriteUInt16(aData->mBuffer, sizeof(RegisterValue) * i, lValue);
+                WriteUInt16(lData->mBuffer, sizeof(RegisterValue) * i, lValue);
             }
 
             return 0;
         }
 
-        unsigned int Simulator::OnWriteSingleCoil(Slave::MsgData* aData)
+        unsigned int Simulator::OnWriteSingleCoil(void*, void* aData)
         {
             assert(NULL != aData);
 
-            auto lValue = ReadUInt16(aData->mBuffer, 0);
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
-            auto lObject = mCoils.GetEntry_RW(aData->mStartAddr);
+            auto lValue = ReadUInt16(lData->mBuffer, 0);
+
+            auto lObject = mCoils.GetEntry_RW(lData->mStartAddr);
             if (NULL == lObject)
             {
-                TraceUnknown("Write Single Coil", aData->mStartAddr, lValue);
+                TraceUnknown("Write Single Coil", lData->mStartAddr, lValue);
             }
             else
             {
@@ -410,22 +396,24 @@ namespace KMS
                     lFlags |= FLAG_VERBOSE_CHANGE;
                 }
 
-                TraceKnown("Write Single Coil", aData->mStartAddr, *lItem, lFlags);
+                TraceKnown("Write Single Coil", lData->mStartAddr, *lItem, lFlags);
             }
 
             return 0;
         }
 
-        unsigned int Simulator::OnWriteSingleRegister(Slave::MsgData* aData)
+        unsigned int Simulator::OnWriteSingleRegister(void*, void* aData)
         {
             assert(NULL != aData);
 
-            auto lValue = ReadUInt16(aData->mBuffer, 0);
+            auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
-            auto lObject = mHoldingRegisters.GetEntry_RW(aData->mStartAddr);
+            auto lValue = ReadUInt16(lData->mBuffer, 0);
+
+            auto lObject = mHoldingRegisters.GetEntry_RW(lData->mStartAddr);
             if (NULL == lObject)
             {
-                TraceUnknown("Write Single Register", aData->mStartAddr, lValue);
+                TraceUnknown("Write Single Register", lData->mStartAddr, lValue);
             }
             else
             {
@@ -440,7 +428,7 @@ namespace KMS
                     lFlags |= FLAG_VERBOSE_CHANGE;
                 }
 
-                TraceKnown("Write Single Register", aData->mStartAddr, *lItem, lFlags);
+                TraceKnown("Write Single Register", lData->mStartAddr, *lItem, lFlags);
             }
 
             return 0;

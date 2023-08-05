@@ -4,6 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
+// Status
 // Library   KMS-B
 
 #pragma once
@@ -13,10 +14,10 @@
 #include <string>
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
-#include <KMS/Msg/Destination.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -24,31 +25,31 @@ namespace KMS
     namespace HTTP
     {
 
-        class ReactApp : public DI::Dictionary, public Msg::IReceiver
+        class ReactApp : public DI::Dictionary
         {
 
         public:
 
             ReactApp();
 
-            void AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode);
+            void AddFunction(const char* aPath, const ICallback* aCallback);
             void AddRoute   (const char* aPath);
-
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             Server mServer;
 
         private:
 
-            typedef std::map<std::string, Msg::Destination> FunctionMap;
+            typedef std::map<std::string, ICallback*> FunctionMap;
 
             NO_COPY(ReactApp);
 
             void LocateFrontEnd();
 
             unsigned int OnFunction(Request* aRequest);
-            unsigned int OnRequest (void   * aData   );
+
+            // ===== Callbacks ==============================================
+            const Callback<ReactApp> ON_REQUEST;
+            unsigned int OnRequest(void* aSender, void* aData);
 
             FileServer      mFileServer;
             FunctionMap     mFunctions;

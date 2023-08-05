@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Log.h
+// Status    DEV
+// Librarie  KMS-A
 
 #pragma once
 
@@ -14,7 +16,6 @@
 #include <KMS/Console/Console.h>
 #include <KMS/Dbg/LogFile.h>
 #include <KMS/File/Folder.h>
-#include <KMS/Msg/IReceiver.h>
 #include <KMS/Version.h>
 
 namespace KMS

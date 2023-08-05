@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Msg/Receiver.h
+// Status    OBSOLETE
+// Library   KMS-A
 
 #pragma once
 

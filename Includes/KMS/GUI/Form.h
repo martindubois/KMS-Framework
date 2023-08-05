@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/GUI/Form.h
@@ -8,15 +8,15 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/HTTP/ReactApp.h>
-#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
     namespace GUI
     {
 
-        class Form : public Msg::IReceiver
+        class Form
         {
 
         public:
@@ -29,14 +29,15 @@ namespace KMS
 
             void Connect(HTTP::ReactApp* aApp, const char* aName);
 
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
         private:
 
-            unsigned int OnGetData    (HTTP::Request* aR);
-            unsigned int OnGetMetaData(HTTP::Request* aR);
-            unsigned int OnSetData    (HTTP::Request* aR);
+            // ===== Callbacks ==============================================
+            const Callback<Form> ON_GET_DATA;
+            const Callback<Form> ON_GET_META_DATA;
+            const Callback<Form> ON_SET_DATA;
+            unsigned int OnGetData    (void* aSender, void* aData);
+            unsigned int OnGetMetaData(void* aSender, void* aData);
+            unsigned int OnSetData    (void* aSender, void* aData);
 
             DI::Dictionary* mDictionary;
 

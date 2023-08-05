@@ -58,7 +58,7 @@ namespace KMS
                 if (lRequest.Receive())
                 {
                     auto lRet = mOnRequest.Send(this, &lRequest);
-                    if (KMS_MSG_SUCCESS(lRet))
+                    if (CALLBACK_SUCCESS(lRet))
                     {
                         lRequest.Reply();
                     }

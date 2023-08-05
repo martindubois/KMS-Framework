@@ -22,10 +22,6 @@
 
 static const KMS::DI::UInt<uint32_t> ZERO(0);
 
-#define MSG_ON_GET_DATA      (1)
-#define MSG_ON_GET_META_DATA (2)
-#define MSG_ON_SET_DATA      (3)
-
 namespace KMS
 {
     namespace GUI
@@ -34,7 +30,12 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Form::Form() : mDictionary(NULL)
+        Form::Form()
+            : mDictionary(NULL)
+            // ===== Callbacks ==============================================
+            , ON_GET_DATA     (this, &Form::OnGetData)
+            , ON_GET_META_DATA(this, &Form::OnGetMetaData)
+            , ON_SET_DATA     (this, &Form::OnSetData)
         {
             mFields.SetCreator(DI::Dictionary::Create);
         }
@@ -74,40 +75,26 @@ namespace KMS
             char lPath[128];
 
             sprintf_s(lPath, "/%s/GetData", aName);
-            aRA->AddFunction(lPath, this, MSG_ON_GET_DATA);
+            aRA->AddFunction(lPath, &ON_GET_DATA);
 
             sprintf_s(lPath, "/%s/GetMetaData", aName);
-            aRA->AddFunction(lPath, this, MSG_ON_GET_META_DATA);
+            aRA->AddFunction(lPath, &ON_GET_META_DATA);
 
             sprintf_s(lPath, "/%s/SetData", aName);
-            aRA->AddFunction(lPath, this, MSG_ON_SET_DATA);
-        }
-
-        // ===== Msg::IReceive ==============================================
-
-        unsigned int Form::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
-
-            unsigned int lResult = 0;
-
-            switch (aCode)
-            {
-            case MSG_ON_GET_DATA     : lResult = OnGetData    (lRequest); break;
-            case MSG_ON_GET_META_DATA: lResult = OnGetMetaData(lRequest); break;
-            case MSG_ON_SET_DATA     : lResult = OnSetData    (lRequest); break;
-
-            default: lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
+            aRA->AddFunction(lPath, &ON_SET_DATA);
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int Form::OnGetData(HTTP::Request* aR)
+        // ===== Callbacks ==================================================
+
+        unsigned int Form::OnGetData(void* aSenser, void* aData)
         {
+            assert(NULL != aData);
+
+            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+
             /* TODO mData.Clear();
 
             JSON::Array::Internal* lInternal = mMetaData.GetInternal();
@@ -133,17 +120,23 @@ namespace KMS
             return 0;
         }
 
-        unsigned int Form::OnGetMetaData(HTTP::Request* aR)
+        unsigned int Form::OnGetMetaData(void* aSenser, void* aData)
         {
-            assert(NULL != aR);
+            assert(NULL != aData);
 
-            aR->mResponseData.AddEntry("Fields", &mFields, false);
+            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+
+            lRequest->mResponseData.AddEntry("Fields", &mFields, false);
 
             return 0;
         }
 
-        unsigned int Form::OnSetData(HTTP::Request* aR)
+        unsigned int Form::OnSetData(void* aSenser, void* aData)
         {
+            assert(NULL != aData);
+
+            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+
             // TODO
             return 0;
         }

@@ -1,9 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Thread/Thread.h
+// Status
+// Library   KMS-A
 
 #pragma once
 
@@ -11,7 +13,7 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Msg/Destination.h>
+#include <KMS/Callback.h>
 #include <KMS/Thread/Gate.h>
 
 namespace KMS
@@ -36,11 +38,11 @@ namespace KMS
 
             Gate mGate;
 
-            Msg::Destination mOnIterate;
-            Msg::Destination mOnRun;
-            Msg::Destination mOnStarting;
-            Msg::Destination mOnStop;
-            Msg::Destination mOnStopping;
+            Callback_Ptr mOnIterate;
+            Callback_Ptr mOnRun;
+            Callback_Ptr mOnStarting;
+            Callback_Ptr mOnStop;
+            Callback_Ptr mOnStopping;
 
         // internal
 

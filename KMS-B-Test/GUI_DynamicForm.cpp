@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/GUI_DynamicForm.cpp
@@ -24,25 +24,25 @@ using namespace KMS;
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define MSG_VERSION_GET_DATA (1)
-
 static const GUI::MetaData MD_RESULT("", "Result");
 
-class TestApp1 : public Msg::IReceiver
+class TestApp1
 {
 
 public:
+
+    const Callback<TestApp1> ON_VERSION_GET_DATA;
 
     TestApp1();
 
     bool GetResult() const;
 
-    // ===== Msg::IReceiver =================================================
-    virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
     GUI::Form mForm;
 
 private:
+
+    // ===== Callbacks ======================================================
+    unsigned int OnVersionGetData(void* aSender, void* aData);
 
     DI::Dictionary mDictionary;
 
@@ -68,7 +68,7 @@ KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactiv
     lRA.AddRoute("/");
     lRA.AddRoute("/TestDynamicForm");
 
-    lRA.AddFunction("/Version/GetData", &lTA, MSG_VERSION_GET_DATA);
+    lRA.AddFunction("/Version/GetData", &lTA.ON_VERSION_GET_DATA);
 
     lTA.mForm.Connect(&lRA, "DynamicForm");
 
@@ -88,7 +88,10 @@ KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactiv
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-TestApp1::TestApp1() : mResult("Pending")
+TestApp1::TestApp1()
+    : mResult("Pending")
+    // ===== Callbacks ======================================================
+    , ON_VERSION_GET_DATA(this, &TestApp1::OnVersionGetData)
 {
     mDictionary.AddEntry("Result", &mResult, false, &MD_RESULT);
 
@@ -97,30 +100,22 @@ TestApp1::TestApp1() : mResult("Pending")
 
 bool TestApp1::GetResult() const { return "PASSED" == mResult; }
 
-// ===== Msg::Receiver ======================================================
+// Private
+// //////////////////////////////////////////////////////////////////////////
 
-unsigned int TestApp1::Receive(void* aSender, unsigned int aCode, void* aData)
+unsigned int TestApp1::OnVersionGetData(void*, void* aData)
 {
+    assert(NULL != aData);
+
     HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
-    unsigned int lResult = 0;
+    char lVersion[16];
 
-    switch (aCode)
-    {
-    case MSG_VERSION_GET_DATA:
-        char lVersion[16];
+    VERSION.GetString(lVersion, sizeof(lVersion));
 
-        VERSION.GetString(lVersion, sizeof(lVersion));
+    lRequest->mResponseHeader.AddEntry("Access-Control-Allow-Origin", new DI::String("*"), true);
 
-        lRequest->mResponseHeader.AddEntry("Access-Control-Allow-Origin", new DI::String("*"), true);
+    lRequest->mResponseData.AddEntry("Version", new DI::String(lVersion), true);
 
-        lRequest->mResponseData.AddEntry("Version", new DI::String(lVersion), true);
-        break;
-
-    default:
-        assert(false);
-        lResult = Msg::IReceiver::MSG_IGNORED;
-    }
-
-    return lResult;
+    return 0;
 }

@@ -4,21 +4,21 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Slave.h
+// Status
 // Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/Modbus/Modbus.h>
-#include <KMS/Msg/IReceiver.h>
-#include <KMS/Msg/Destination.h>
 
 namespace KMS
 {
     namespace Modbus
     {
 
-        class Slave : public Msg::IReceiver
+        class Slave
         {
 
         public:
@@ -41,17 +41,14 @@ namespace KMS
 
             virtual void Stop();
 
-            Msg::Destination mOnReadCoils;
-            Msg::Destination mOnReadDiscreteInputs;
-            Msg::Destination mOnReadHoldingRegisters;
-            Msg::Destination mOnReadInputRegisters;
-            Msg::Destination mOnWriteSingleCoil;
-            Msg::Destination mOnWriteSingleRegister;
+            Callback_Ptr mOnReadCoils;
+            Callback_Ptr mOnReadDiscreteInputs;
+            Callback_Ptr mOnReadHoldingRegisters;
+            Callback_Ptr mOnReadInputRegisters;
+            Callback_Ptr mOnWriteSingleCoil;
+            Callback_Ptr mOnWriteSingleRegister;
 
             virtual bool Connect() = 0;
-
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             // ===== Confiurable attributes - See Slave_Cfg =================
             uint8_t mDeviceAddress;
@@ -64,10 +61,10 @@ namespace KMS
 
             virtual unsigned int OnIterate() = 0;
 
-            void OnRequest_A_Bit (Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Destination* aDst);
-            void OnRequest_A_Word(Function aFunction, Address aStartAddr, uint16_t aQty, Msg::Destination* aDst);
+            void OnRequest_A_Bit (Function aFunction, Address aStartAddr, uint16_t aQty, Callback_Ptr* aDst);
+            void OnRequest_A_Word(Function aFunction, Address aStartAddr, uint16_t aQty, Callback_Ptr* aDst);
 
-            void OnRequest_B(Function aFunction, Address aStartAddr, void* aData, Msg::Destination* aDst);
+            void OnRequest_B(Function aFunction, Address aStartAddr, void* aData, Callback_Ptr* aDst);
 
             virtual void SendException(Function aFunction, Exception aException) = 0;
 

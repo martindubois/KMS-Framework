@@ -15,11 +15,6 @@
 
 #include <KMS/HTTP/ReactApp.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define MSG_ON_REQUEST (1)
-
 namespace KMS
 {
     namespace HTTP
@@ -29,17 +24,19 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         ReactApp::ReactApp()
+            // ===== Callbacks ==============================================
+            : ON_REQUEST(this, &ReactApp::OnRequest)
         {
             AddEntry("FileServer", &mFileServer, false);
 
             LocateFrontEnd();
 
-            mServer.mOnRequest.Set(this, MSG_ON_REQUEST);
+            mServer.mOnRequest = &ON_REQUEST;
         }
 
-        void ReactApp::AddFunction(const char* aPath, Msg::IReceiver* aReceiver, unsigned int aCode)
+        void ReactApp::AddFunction(const char* aPath, const ICallback* aCallback)
         {
-            mFunctions.insert(FunctionMap::value_type(aPath, Msg::Destination(aReceiver, aCode)));
+            mFunctions.insert(FunctionMap::value_type(aPath, const_cast<ICallback*>(aCallback)));
         }
 
         void ReactApp::AddRoute(const char* aPath)
@@ -47,24 +44,6 @@ namespace KMS
             assert(NULL != aPath);
 
             mRoutes.insert(aPath);
-        }
-
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int ReactApp::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult;
-
-            switch (aCode)
-            {
-            case MSG_ON_REQUEST: lResult = OnRequest(aData); break;
-
-            default:
-                assert(false);
-                lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
         }
 
         // Private
@@ -115,8 +94,8 @@ namespace KMS
             }
             else
             {
-                auto lRet = lIt->second.Send(this, aRequest);
-                if (!KMS_MSG_SUCCESS(lRet))
+                auto lRet = lIt->second->Send(this, aRequest);
+                if (!CALLBACK_SUCCESS(lRet))
                 {
                     aRequest->SetResult(Request::Result::INTERNAL_SERVER_ERROR);
                 }
@@ -125,7 +104,9 @@ namespace KMS
             return 0;
         }
 
-        unsigned int ReactApp::OnRequest(void* aData)
+        // ===== Callbacks ==================================================
+
+        unsigned int ReactApp::OnRequest(void*, void* aData)
         {
             assert(NULL != aData);
 

@@ -4,10 +4,12 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Slave_USART.h
+// Status
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/Embedded/USART.h>
 #include <KMS/Embedded/WorkItem.h>
 #include <KMS/Modbus/Slave_Serial.h>
@@ -24,9 +26,6 @@ namespace KMS
 
             Slave_USART(KMS::Embedded::USART* aUSART);
 
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
         protected:
 
             // ===== Slave_Serial ===========================================
@@ -39,9 +38,9 @@ namespace KMS
 
             NO_COPY(Slave_USART);
 
-            unsigned int OnRxByte(void* aData);
-
-            const Msg::Destination ON_RX_BYTE;
+            // ===== Callbacks ==============================================
+            const Callback<Slave_USART> ON_RX_BYTE;
+            unsigned int OnRxByte(void* aSender, void* aData);
 
             Embedded::USART* mUSART;
 

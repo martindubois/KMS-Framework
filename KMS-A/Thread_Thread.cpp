@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Msg/IReceiver.h>
+#include <KMS/Callback.h>
 #include <KMS/Thread/Lock.h>
 
 #include <KMS/Thread/Thread.h>
@@ -93,7 +93,7 @@ namespace KMS
             lLock.Unlock();
 
             unsigned int lRet = mOnStop.Send(this);
-            assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
+            assert(CALLBACK_SUCCESS_OR_WARNING(lRet));
         }
 
         void Thread::StopAndWait(unsigned int aTimeout_ms)
@@ -133,7 +133,7 @@ namespace KMS
         void Thread::Run()
         {
             unsigned int lRet = mOnStarting.Send(this);
-            if (KMS_MSG_SUCCESS_OR_WARNING(lRet))
+            if (CALLBACK_SUCCESS_OR_WARNING(lRet))
             {
                 Lock lLock(&mGate);
 
@@ -146,7 +146,7 @@ namespace KMS
                         lLock.Unlock();
                         {
                             lRet = mOnRun.Send(this);
-                            assert(KMS_MSG_SUCCESS(lRet));
+                            assert(CALLBACK_SUCCESS(lRet));
                         }
                         lLock.Relock();
 
@@ -162,12 +162,12 @@ namespace KMS
                             }
                             lLock.Relock();
 
-                            if (!KMS_MSG_SUCCESS(lRet))
+                            if (!CALLBACK_SUCCESS(lRet))
                             {
                                 break;
                             }
 
-                            if (0 != (lRet & Msg::IReceiver::MSG_ACTION_STOP))
+                            if (0 != (lRet & ICallback::FLAG_ACTION_STOP))
                             {
                                 break;
                             }
@@ -177,7 +177,7 @@ namespace KMS
                     lLock.Unlock();
 
                     lRet = mOnStopping.Send(this);
-                    assert(KMS_MSG_SUCCESS_OR_WARNING(lRet));
+                    assert(CALLBACK_SUCCESS_OR_WARNING(lRet));
                 }
             }
 

@@ -1,9 +1,10 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
+// Status
 // Library   KMS-B
 
 #pragma once
@@ -12,11 +13,10 @@
 #include <map>
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Folder.h>
-#include <KMS/Msg/Destination.h>
-#include <KMS/Msg/IReceiver.h>
 
 namespace KMS
 {
@@ -24,7 +24,7 @@ namespace KMS
     {
         class Request;
 
-        class FileServer : public DI::Dictionary, public Msg::IReceiver
+        class FileServer : public DI::Dictionary
         {
 
         public:
@@ -39,7 +39,7 @@ namespace KMS
 
             static int Main(int aCount, const char** aVector);
 
-            const Msg::Destination ON_REQUEST;
+            const Callback<FileServer> ON_REQUEST;
 
             FileServer();
 
@@ -55,9 +55,6 @@ namespace KMS
 
             void ProcessRequest_GET(Request* aR, const char* aPath = NULL);
 
-            // ===== Msg::IReceived =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
-
             // ===== Configurable attributes ================================
             DI::Folder  mRoot;
             DI::Boolean mVerbose;
@@ -66,7 +63,8 @@ namespace KMS
 
             typedef std::map<std::string, FileTypeFunction> FileTypeMap;
 
-            unsigned int OnRequest(void* aData);
+            // ===== Callbacks ==============================================
+            unsigned int OnRequest(void* aSender, void* aData);
 
             FileTypeMap mFileTypes;
 

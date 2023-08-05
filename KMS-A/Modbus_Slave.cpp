@@ -17,11 +17,6 @@
 
 #define DEFAULT_DEVICE_ADDRESS (1)
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define MSG_ITERATE (1)
-
 namespace KMS
 {
     namespace Modbus
@@ -40,7 +35,7 @@ namespace KMS
                     try
                     {
                 #endif
-                        if (!KMS_MSG_SUCCESS(OnIterate()))
+                        if (!CALLBACK_SUCCESS(OnIterate()))
                         {
                             break;
                         }
@@ -53,22 +48,6 @@ namespace KMS
 
         void Slave::Stop() { mStopped = true; }
 
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Slave::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            unsigned int lResult;
-
-            if (MSG_ITERATE == aCode) { lResult = OnIterate(); }
-            else
-            {
-                assert(false);
-                lResult = Msg::IReceiver::MSG_IGNORED;
-            }
-
-            return lResult;
-        }
-
         // Protected
         // //////////////////////////////////////////////////////////////////
 
@@ -76,7 +55,7 @@ namespace KMS
 
         DeviceAddress Slave::GetDeviceAddress() const { return mDeviceAddress; }
 
-        void Slave::OnRequest_A_Bit(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Destination* aDst)
+        void Slave::OnRequest_A_Bit(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Callback_Ptr* aDst)
         {
             assert(NULL != aDst);
 
@@ -93,7 +72,7 @@ namespace KMS
             lData.mStartAddr = aStartAddr;
 
             auto lRet = aDst->Send(this, &lData);
-            if (KMS_MSG_SUCCESS(lRet))
+            if (CALLBACK_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
                 {
@@ -118,7 +97,7 @@ namespace KMS
             }
         }
 
-        void Slave::OnRequest_A_Word(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Msg::Destination* aDst)
+        void Slave::OnRequest_A_Word(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Callback_Ptr* aDst)
         {
             assert(NULL != aDst);
 
@@ -133,7 +112,7 @@ namespace KMS
             lData.mStartAddr = aStartAddr;
 
             auto lRet = aDst->Send(this, &lData);
-            if (KMS_MSG_SUCCESS(lRet))
+            if (CALLBACK_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
                 {
@@ -151,7 +130,7 @@ namespace KMS
             }
         }
 
-        void Slave::OnRequest_B(Function aFunction, uint16_t aStartAddr, void * aData, Msg::Destination* aDst)
+        void Slave::OnRequest_B(Function aFunction, uint16_t aStartAddr, void * aData, Callback_Ptr* aDst)
         {
             assert(NULL != aDst);
 
@@ -164,7 +143,7 @@ namespace KMS
             lData.mStartAddr = aStartAddr;
 
             auto lRet = aDst->Send(this, &lData);
-            if (KMS_MSG_SUCCESS(lRet))
+            if (CALLBACK_SUCCESS(lRet))
             {
                 if (Exception::NO_EXCEPTION == lData.mException)
                 {

@@ -29,12 +29,6 @@ static const KMS::Cfg::MetaData MD_HELP                 ("Help");
 static const KMS::Cfg::MetaData MD_OPTIONAL_CONFIG_FILES("OptionalConfigFiles += {Path}");
 static const KMS::Cfg::MetaData MD_SAVE_CONFIG          ("SaveConfig = {Path}");
 
-#define ON_CONFIG_FILES_CHANGED          (1)
-#define ON_DISPLAY_CONFIG_CHANGED        (2)
-#define ON_HELP_CHANGED                  (3)
-#define ON_OPTIONAL_CONFIG_FILES_CHANGED (4)
-#define ON_SAVE_CONFIG_CHANGED           (5)
-
 #define FMT_ATT "%[A-Za-z0-9_.]"
 #define FMT_IDX "%[A-Za-z0-9_]"
 #define FMT_VAL "%[^\n\r\t]"
@@ -58,13 +52,21 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Configurator::Configurator() : mIgnoredCount(0), mSilence(NULL)
+        Configurator::Configurator()
+            : mIgnoredCount(0)
+            , mSilence(NULL)
+            // ===== Callbacks ==============================================
+            , ON_CONFIG_FILES_CHANGED         (this, &Configurator::OnConfigFilesChanged)
+            , ON_DISPLAY_CONFIG_CHANGED       (this, &Configurator::OnDisplayConfigChanged)
+            , ON_HELP_CHANGED                 (this, &Configurator::OnHelpChanged)
+            , ON_OPTIONAL_CONFIG_FILES_CHANGED(this, &Configurator::OnOptionalConfigFilesChanged)
+            , ON_SAVE_CONFIG_CHANGED          (this, &Configurator::OnSaveConfigChanged)
         {
-            mConfigFiles        .mOnChanged.Set(this, ON_CONFIG_FILES_CHANGED);
-            mDisplayConfig      .mOnChanged.Set(this, ON_DISPLAY_CONFIG_CHANGED);
-            mHelp               .mOnChanged.Set(this, ON_HELP_CHANGED);
-            mOptionalConfigFiles.mOnChanged.Set(this, ON_OPTIONAL_CONFIG_FILES_CHANGED);
-            mSaveConfig         .mOnChanged.Set(this, ON_SAVE_CONFIG_CHANGED);
+            mConfigFiles        .mOnChanged = &ON_CONFIG_FILES_CHANGED;
+            mDisplayConfig      .mOnChanged = &ON_DISPLAY_CONFIG_CHANGED;
+            mHelp               .mOnChanged = &ON_HELP_CHANGED;
+            mOptionalConfigFiles.mOnChanged = &ON_OPTIONAL_CONFIG_FILES_CHANGED;
+            mSaveConfig         .mOnChanged = &ON_SAVE_CONFIG_CHANGED;
 
             mConfigFiles        .SetCreator(DI::String_Expand::Create);
             mOptionalConfigFiles.SetCreator(DI::String_Expand::Create);
@@ -86,14 +88,14 @@ namespace KMS
         {
             mConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
 
-            OnConfigFilesChanged();
+            OnConfigFilesChanged(this, NULL);
         }
 
         void Configurator::AddOptionalConfigFile(const char* aPath)
         {
             mOptionalConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
 
-            OnOptionalConfigFilesChanged();
+            OnOptionalConfigFilesChanged(this, NULL);
         }
 
         unsigned int Configurator::GetIgnoredCount() const { return mIgnoredCount; }
@@ -107,10 +109,15 @@ namespace KMS
             mSilence = aSilence;
         }
 
-        void Configurator::DisplayConfig() { mDisplayConfig.Set(true); OnDisplayConfigChanged(); }
+        void Configurator::DisplayConfig()
+        {
+            mDisplayConfig.Set(true);
+            
+            OnDisplayConfigChanged(this, NULL);
+        }
 
         // NOT TESTED
-        void Configurator::Help() { mHelp.Set(true); OnHelpChanged(); }
+        void Configurator::Help() { mHelp.Set(true); OnHelpChanged(this, NULL); }
 
         void Configurator::Help(FILE* aOut) const
         {
@@ -154,27 +161,7 @@ namespace KMS
         {
             mSaveConfig.Set(aFileName);
 
-            OnSaveConfigChanged();
-        }
-
-        // ===== Msg::IReceived =============================================
-
-        unsigned int Configurator::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            auto lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case ON_CONFIG_FILES_CHANGED         : lResult = OnConfigFilesChanged        (); break;
-            case ON_DISPLAY_CONFIG_CHANGED       : lResult = OnDisplayConfigChanged      (); break;
-            case ON_HELP_CHANGED                 : lResult = OnHelpChanged               (); break;
-            case ON_OPTIONAL_CONFIG_FILES_CHANGED: lResult = OnOptionalConfigFilesChanged(); break;
-            case ON_SAVE_CONFIG_CHANGED          : lResult = OnSaveConfigChanged         (); break;
-
-            default: assert(false);
-            }
-
-            return lResult;
+            OnSaveConfigChanged(this, NULL);
         }
 
         // Private
@@ -200,91 +187,6 @@ namespace KMS
             return false;
         }
 
-        unsigned int Configurator::OnConfigFilesChanged()
-        {
-            auto lCount = mConfigFiles.GetCount();
-            if (0 < lCount)
-            {
-                auto lObject = mConfigFiles.GetEntry_R(lCount - 1);
-                assert(NULL != lObject);
-
-                auto lString = dynamic_cast<const DI::String*>(lObject);
-                assert(NULL != lString);
-
-                ParseFile(File::Folder::NONE, lString->Get(), true);
-            }
-
-            return 0;
-        }
-
-        unsigned int Configurator::OnDisplayConfigChanged()
-        {
-            if (mDisplayConfig)
-            {
-                fprintf(mConsole.OutputFile(),
-                    "\n"
-                    "===== Configuration =====\n"
-                    "\n");
-
-                for (const auto lD : mConfigurables)
-                {
-                    Save_Dictionary(mConsole.OutputFile(), lD, NULL);
-                }
-            }
-
-            return 0;
-        }
-
-        // NOT TESTED
-        unsigned int Configurator::OnHelpChanged()
-        {
-            if (mHelp)
-            {
-                Help(mConsole.OutputFile());
-
-                exit(0);
-            }
-
-            return 0;
-        }
-
-        unsigned int Configurator::OnOptionalConfigFilesChanged()
-        {
-            auto lCount = mOptionalConfigFiles.GetCount();
-            if (0 < lCount)
-            {
-                auto lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
-                assert(NULL != lObject);
-
-                auto lString = dynamic_cast<const DI::String*>(lObject);
-                assert(NULL != lString);
-
-                ParseFile(File::Folder::NONE, lString->Get(), false);
-            }
-
-            return 0;
-        }
-
-        unsigned int Configurator::OnSaveConfigChanged()
-        {
-            if (mSaveConfig.IsOpen())
-            {
-                fprintf(mSaveConfig,
-                    "\n"
-                    "# Configuration file generated by the KMS::Cfg::Configurator class\n"
-                    "\n");
-
-                for (const auto lD : mConfigurables)
-                {
-                    Save_Dictionary(mSaveConfig, lD, NULL);
-                }
-
-                mSaveConfig.Close();
-            }
-
-            return 0;
-        }
-
         void Configurator::ParseLine(const char* aLine)
         {
             assert(NULL != aLine);
@@ -303,6 +205,93 @@ namespace KMS
                 Dbg::gLog.WriteMessage(aLine);
                 mIgnoredCount++;
             }
+        }
+
+        // ===== Callbacks ==================================================
+
+        unsigned int Configurator::OnConfigFilesChanged(void*, void*)
+        {
+            auto lCount = mConfigFiles.GetCount();
+            if (0 < lCount)
+            {
+                auto lObject = mConfigFiles.GetEntry_R(lCount - 1);
+                assert(NULL != lObject);
+
+                auto lString = dynamic_cast<const DI::String*>(lObject);
+                assert(NULL != lString);
+
+                ParseFile(File::Folder::NONE, lString->Get(), true);
+            }
+
+            return 0;
+        }
+
+        unsigned int Configurator::OnDisplayConfigChanged(void*, void*)
+        {
+            if (mDisplayConfig)
+            {
+                fprintf(mConsole.OutputFile(),
+                    "\n"
+                    "===== Configuration =====\n"
+                    "\n");
+
+                for (const auto lD : mConfigurables)
+                {
+                    Save_Dictionary(mConsole.OutputFile(), lD, NULL);
+                }
+            }
+
+            return 0;
+        }
+
+        // NOT TESTED
+        unsigned int Configurator::OnHelpChanged(void*, void*)
+        {
+            if (mHelp)
+            {
+                Help(mConsole.OutputFile());
+
+                exit(0);
+            }
+
+            return 0;
+        }
+
+        unsigned int Configurator::OnOptionalConfigFilesChanged(void*, void*)
+        {
+            auto lCount = mOptionalConfigFiles.GetCount();
+            if (0 < lCount)
+            {
+                auto lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
+                assert(NULL != lObject);
+
+                auto lString = dynamic_cast<const DI::String*>(lObject);
+                assert(NULL != lString);
+
+                ParseFile(File::Folder::NONE, lString->Get(), false);
+            }
+
+            return 0;
+        }
+
+        unsigned int Configurator::OnSaveConfigChanged(void*, void*)
+        {
+            if (mSaveConfig.IsOpen())
+            {
+                fprintf(mSaveConfig,
+                    "\n"
+                    "# Configuration file generated by the KMS::Cfg::Configurator class\n"
+                    "\n");
+
+                for (const auto lD : mConfigurables)
+                {
+                    Save_Dictionary(mSaveConfig, lD, NULL);
+                }
+
+                mSaveConfig.Close();
+            }
+
+            return 0;
         }
 
     }

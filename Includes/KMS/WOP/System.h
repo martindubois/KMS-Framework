@@ -1,9 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WOP/System.h
+// Status
+// Library   KMS-A
 
 #pragma once
 
@@ -18,8 +20,7 @@ namespace KMS
     namespace WOP
     {
 
-        // TODO Add a Msg::Destination for error, trace, version and
-        //      protocol
+        // TODO  Add a Callback for error, trace, version and protocol
 
         class System : public Object
         {

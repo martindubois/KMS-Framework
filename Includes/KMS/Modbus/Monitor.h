@@ -4,13 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Monitor.h
+// Status
 // Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
 #include <KMS/Modbus/Modbus.h>
-#include <KMS/Msg/Destination.h>
 
 namespace KMS
 {

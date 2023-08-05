@@ -12,12 +12,6 @@
 
 #include <KMS/WOP/Link_Port.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define MSG_ITERATE_RX (1)
-#define MSG_ITERATE_TX (2)
-
 namespace KMS
 {
 
@@ -30,12 +24,15 @@ namespace KMS
         Link_Port::Link_Port(System* aSystem, Com::Port* aPort)
             : mPort(aPort)
             , mSystem(aSystem)
+            // ===== Callbacks ==============================================
+            , ON_ITERATE_RX(this, &Link_Port::OnIterate_Rx)
+            , ON_ITERATE_TX(this, &Link_Port::OnIterate_Tx)
         {
             assert(NULL != aSystem);
             assert(NULL != aPort);
 
-            mThread_Rx.mOnIterate.Set(this, MSG_ITERATE_RX);
-            mThread_Tx.mOnIterate.Set(this, MSG_ITERATE_TX);
+            mThread_Rx.mOnIterate = &ON_ITERATE_RX;
+            mThread_Tx.mOnIterate = &ON_ITERATE_TX;
         }
 
         void Link_Port::Start()
@@ -53,25 +50,12 @@ namespace KMS
             mThread_Rx.Wait(2000); // 2 s
         }
 
-        // ===== Msg::IReceiver =============================================
-
-        unsigned int Link_Port::Receive(void* aSender, unsigned int aCode, void* aData)
-        {
-            auto lResult = Msg::IReceiver::MSG_IGNORED;
-
-            switch (aCode)
-            {
-            case MSG_ITERATE_RX: lResult = OnIterate_Rx(); break;
-            case MSG_ITERATE_TX: lResult = OnIterate_Tx(); break;
-            }
-
-            return lResult;
-        }
-
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int Link_Port::OnIterate_Rx()
+        // ===== Callbacks ==================================================
+
+        unsigned int Link_Port::OnIterate_Rx(void*, void*)
         {
             assert(NULL != mPort);
             assert(NULL != mSystem);
@@ -87,7 +71,7 @@ namespace KMS
             return 0;
         }
 
-        unsigned int Link_Port::OnIterate_Tx()
+        unsigned int Link_Port::OnIterate_Tx(void*, void*)
         {
             assert(NULL != mPort);
             assert(NULL != mSystem);

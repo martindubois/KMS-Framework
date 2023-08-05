@@ -4,10 +4,13 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Log_Cfg.h
+// Status    DEV
+// Library   KMS-A
 
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Enum.h>
 #include <KMS/DI/Folder.h>
@@ -17,7 +20,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log_Cfg : public DI::Dictionary, public Msg::IReceiver
+        class Log_Cfg : public DI::Dictionary
         {
 
         public:
@@ -25,9 +28,6 @@ namespace KMS
             static const char* CONSOLE_MODE_NAMES[];
 
             Log_Cfg(Log* aLog);
-
-            // ===== Msg::IReceiver =========================================
-            virtual unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 
             // ===== Configurable attributes ================================
             DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES> mConsoleLevel;
@@ -38,6 +38,10 @@ namespace KMS
         private:
 
             NO_COPY(Log_Cfg);
+
+            // ===== Callbacks ==============================================
+            const Callback<Log_Cfg> ON_FOLDER_CHANGED;
+            unsigned int OnFolderChanged(void* aSender, void* aData);
 
             Log* mLog;
 
