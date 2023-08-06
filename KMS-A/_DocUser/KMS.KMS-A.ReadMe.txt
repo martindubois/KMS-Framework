@@ -7,7 +7,19 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-1.0.0 Windows 2023-08-04
+1.0.1 Windows 2023-08-06
+* Callback, Callback_Ptr and ICallback (PROD_READY)
+* PROD_READY
+    - Cfg::Configurator class
+    - CLI::Tool class
+    - Console::Console class
+    - Convert namespace
+    - Dbg namespace
+    - DI namespace
+    - Env namespace
+    - File::Binary and Folder classes
+    - Text::File_ASCII and File_UTF16 classes
+- OBSOLETE - Msg::Destination and IReceiver classes
 
 0.1.76-dev Windows 2023-07-19
 

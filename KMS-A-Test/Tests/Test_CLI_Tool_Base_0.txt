@@ -1,0 +1,10 @@
+
+
+# Author    KMS - Martin Dubois, P. Eng.
+# Copyright (C) 2023 KMS
+# License   http://www.apache.org/licenses/LICENSE-2.0
+# Product   KMS-Framework
+# File      KMS-A-Test/Tests/Test_CLI_Tool_Base_0.cfg
+
+Delay 0
+Exit
