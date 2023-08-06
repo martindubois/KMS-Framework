@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Log.cpp
 
-// TEST COVERAGE 2022-09-06 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 

@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Stats_Timer.h
+// Status    PROD_REDAY
+// Library   KMS-A
 
 #pragma once
 
@@ -27,9 +29,6 @@ namespace KMS
 
             void Start();
             void Stop();
-
-            // ===== StatsEntry =============================================
-            virtual const char* GetType() const;
 
         // Internal
 

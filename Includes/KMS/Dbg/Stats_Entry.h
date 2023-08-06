@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Stats_Entry.h
+// Status    PROD_READY
+// Library   KMS-A
 
 #pragma once
 
@@ -23,8 +25,6 @@ namespace KMS
             virtual ~Stats_Entry();
 
             const char* GetName() const;
-
-            virtual const char* GetType() const = 0;
 
             virtual void Reset() = 0;
 

@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Stats_Timer.cpp
 
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Windows ============================================================
@@ -28,7 +30,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Stats_Timer::Stats_Timer(const char* aName) : Stats_Value<double>(aName, "s"), mStart_s(DBL_MAX) {}
+        Stats_Timer::Stats_Timer(const char* aName)
+            : Stats_Value<double>(aName, "s"), mStart_s(DBL_MAX)
+        {}
 
         void Stats_Timer::Start() { mStart_s = GetNow_s(); }
 
@@ -42,10 +46,6 @@ namespace KMS
 
             mStart_s = DBL_MAX;
         }
-
-        // ===== Stats_Entry ================================================
-
-        const char* Stats_Timer::GetType() const { return "Stats_Timer"; }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -66,6 +66,7 @@ namespace KMS
 
                 if (60.0 < lAvg)
                 {
+                    // NOT TESTED
                     lAvg /= 60.0;
                     lDiv *= 60.0;
                     lUnit = "m";

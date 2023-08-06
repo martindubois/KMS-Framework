@@ -4,6 +4,8 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Stats_Value.h
+// Status    PROD_READY
+// Library   KMS-A
 
 #pragma once
 
@@ -29,8 +31,7 @@ namespace KMS
             void Set(T aIn);
 
             // ===== Stats_Entry ============================================
-            virtual const char* GetType() const;
-            virtual void        Reset();
+            virtual void Reset();
 
         // Internal
 
@@ -92,9 +93,6 @@ namespace KMS
         }
 
         // ===== Stats_Entry ================================================
-
-        template <class T>
-        const char* Stats_Value<T>::GetType() const { return "Stats_Value"; }
 
         template <class T>
         void Stats_Value<T>::Reset() { mCount = 0; mSum = 0.0; }

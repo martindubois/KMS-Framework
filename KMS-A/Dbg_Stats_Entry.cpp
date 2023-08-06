@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Stats_Entry.cpp
 
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================

@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
 
-// TEST COVERAGE 2023-05-21 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -82,7 +82,12 @@ namespace KMS
             mConfigurables.push_back(&mDictionary);
         }
 
-        void Configurator::AddConfigurable(DI::Dictionary* aD) { assert(NULL != aD); mConfigurables.push_back(aD); }
+        void Configurator::AddConfigurable(DI::Dictionary* aD)
+        {
+            assert(NULL != aD);
+
+            mConfigurables.push_back(aD);
+        }
 
         void Configurator::AddConfigFile(const char* aPath)
         {

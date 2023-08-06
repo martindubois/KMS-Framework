@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Stats.cpp
 
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C++ ================================================================
@@ -89,7 +91,10 @@ namespace KMS
             }
         }
 
-        void Stats::AddEntry(Dbg::Stats_Entry* aEntry) { mEntries.push_back(aEntry); }
+        void Stats::AddEntry(Dbg::Stats_Entry* aEntry)
+        {
+            mEntries.push_back(aEntry);
+        }
 
         Stats Dbg::gStats;
 

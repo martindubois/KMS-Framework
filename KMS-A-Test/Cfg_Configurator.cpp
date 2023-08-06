@@ -19,18 +19,35 @@ static const char* SILENCED[] = { "Silenced", NULL };
 
 KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 {
+    // Constructor
     Cfg::Configurator lC;
 
     lC.mConsole.Set_Null();
 
+    // AddConfigurable
+
+    // GetIgnoredCount
+
+    // SetSilence
     lC.SetSilence(SILENCED);
 
+    // AddConfigFile *
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 6);
     lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
 
+    // AddOptionalConfigFile *
     lC.AddOptionalConfigFile("DoesNotExist.cfg");
 
+    // DisplayConfig
     lC.DisplayConfig();
 
+    // Help
+    lC.Help(lC.mConsole.OutputFile());
+
+    // ParseArguments
+
+    // ParseFile
+
+    // SaveConfig
     lC.SaveConfig("");
 }

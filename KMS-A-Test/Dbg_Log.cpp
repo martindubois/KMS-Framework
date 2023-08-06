@@ -17,17 +17,41 @@ using namespace KMS;
 
 KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 {
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-    Exception lE(__FILE__, __FUNCTION__, __LINE__, Exception::Code::TEST, "Test");
+    // Constructor
     Dbg::Log  lL;
-
     lL.mConsole.Set_Null();
 
-    lL.mFolder = File::Folder("DoesNotExist");
+    // SetHideCount
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+    Exception lE(__FILE__, __FUNCTION__, __LINE__, Exception::Code::TEST, "Test");
 
+    // CloseLogFiles
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteException(lE);
+    lL.WriteMessage("Test");
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteMessage("Test");
+
+    lL.mFolder = File::Folder("DoesNotExist");
     lL.CloseLogFiles();
 
+    // IsFileEnabled *
     KMS_TEST_ASSERT(!lL.IsFileEnabled());
+
+    // WriteEntry
+
+    // WriteMessage
+
+    // WriteData
+
+    // WriteException
+
+    // WriteVersion
+
 
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_NOISE);
     lL.WriteData(&lL, sizeof(lL));
@@ -40,6 +64,22 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     lL.WriteData(&lL, sizeof(lL));
     lL.WriteException(lE);
     lL.WriteMessage("Test");
+
+    lL.mConsoleMode = Dbg::Log::ConsoleMode::DEBUG;
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteException(lE);
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+    lL.WriteData(&lL, sizeof(lL));
+    lL.WriteException(lE);
+    lL.WriteMessage("Test");
+
+    lL.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 2);
+
+    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    lL.WriteData(&lL, sizeof(lL));
 
     KMS_DBG_LOG_INFO();
     Dbg::gLog.WriteData(&lL, sizeof(lL));

@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Dbg_Log_Cfg.cpp
 
+// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -52,6 +54,7 @@ namespace KMS
 
         // ===== Callbacks ==================================================
 
+        // NOT TESTED
         unsigned int Log_Cfg::OnFolderChanged(void*, void*)
         {
             mLog->CloseLogFiles();

@@ -4,7 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Cfg/Configurator.h
-// Status
+// Status    PROD_READY
 // Library   KMS-A
 
 #pragma once
