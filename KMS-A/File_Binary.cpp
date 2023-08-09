@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-B/File_Binary.cpp
 
-// TEST COVERAGE 2023-07-22 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-08-09 KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -79,8 +79,7 @@ namespace KMS
 
             if (!GetFileSizeEx(mHandle, &lResult_byte))
             {
-                // NOT TESTED
-                KMS_EXCEPTION(FILE_ACCESS_FAILED, "Cannot retrieve the size of the binary file", "");
+                KMS_EXCEPTION(FILE_ACCESS_FAILED, "Cannot retrieve the size of the binary file (NOT TESTED)", "");
             }
 
             assert(0 == lResult_byte.HighPart);
@@ -90,16 +89,40 @@ namespace KMS
 
         void* Binary::Map(unsigned int aMinSize_byte, unsigned int aMaxSize_byte)
         {
+            DWORD lAccess = FILE_MAP_READ;
+            DWORD lProtect;
+
             auto lSize_byte = GetSize();
 
-            KMS_EXCEPTION_ASSERT(aMinSize_byte <= lSize_byte, FILE_TOO_SHORT, "The file is too short", lSize_byte);
+            mMappedSize_byte = lSize_byte;
 
-            mMappedSize_byte = (lSize_byte > aMaxSize_byte) ? aMaxSize_byte : lSize_byte;
+            if (mWrite)
+            {
+                lAccess |= FILE_MAP_WRITE;
+                lProtect = PAGE_READWRITE;
 
-            mMapping = CreateFileMapping(mHandle, nullptr, PAGE_READONLY, 0, mMappedSize_byte, nullptr);
+                if (mMappedSize_byte < aMinSize_byte)
+                {
+                    mMappedSize_byte = aMinSize_byte;
+                }
+            }
+            else
+            {
+                lProtect = PAGE_READONLY;
+
+                KMS_EXCEPTION_ASSERT(aMinSize_byte <= lSize_byte, FILE_TOO_SHORT, "The file is too short", lSize_byte);
+            }
+
+            if (mMappedSize_byte > aMaxSize_byte)
+            {
+                // NOT TESTED
+                mMappedSize_byte = aMaxSize_byte;
+            }
+
+            mMapping = CreateFileMapping(mHandle, nullptr, lProtect, 0, mMappedSize_byte, nullptr);
             KMS_EXCEPTION_ASSERT(nullptr != mMapping, FILE_MAPPING_FAILED, "Cannot map the file", aMaxSize_byte);
 
-            mView = MapViewOfFile(mMapping, FILE_MAP_READ, 0, 0, mMappedSize_byte);
+            mView = MapViewOfFile(mMapping, lAccess, 0, 0, mMappedSize_byte);
             KMS_EXCEPTION_ASSERT(nullptr != mView, FILE_MAPPING_FAILED, "Cannot map the file", mMappedSize_byte);
 
             return mView;
@@ -115,8 +138,7 @@ namespace KMS
 
             if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, nullptr))
             {
-                // NOT TESTED
-                KMS_EXCEPTION(FILE_READ_FAILED, "Cannot read the binary file", aOutSize_byte);
+                KMS_EXCEPTION(FILE_READ_FAILED, "Cannot read the binary file (NOT TESTED)", aOutSize_byte);
             }
 
             return lResult_byte;

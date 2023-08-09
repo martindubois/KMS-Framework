@@ -15,15 +15,30 @@ using namespace KMS;
 
 KMS_TEST(File_Binary_Base, "File_Binary_Base", "Auto", sTest_Base)
 {
-    uint8_t lBuffer[1];
+    {
+        uint8_t lBuffer[1];
 
-    // Read
-    File::Binary lB0(File::Folder::CURRENT, "Test_File_Binary_Base_0", true);
-    KMS_TEST_COMPARE(lB0.Read(lBuffer, sizeof(lBuffer)), 0U);
+        // Map
+        if (File::Folder::CURRENT.DoesFileExist("Test_File_Binary_Base_0"))
+        {
+            File::Folder::CURRENT.Delete("Test_File_Binary_Base_0");
+        }
+        File::Binary lB0(File::Folder::CURRENT, "Test_File_Binary_Base_0", true);
+        KMS_TEST_ASSERT(nullptr != lB0.Map(1));
 
-    // Write
-    File::Binary lB1(File::Folder::CURRENT, "Test_File_Binary_Base_1", true);
-    lB1.Write(lBuffer, sizeof(lBuffer));
+        // Read
+        File::Binary lB1(File::Folder::CURRENT, "Test_File_Binary_Base_1", true);
+        KMS_TEST_COMPARE(lB1.Read(lBuffer, sizeof(lBuffer)), 0U);
+
+        // Write
+        File::Binary lB2(File::Folder::CURRENT, "Test_File_Binary_Base_2", true);
+        lB2.Write(lBuffer, sizeof(lBuffer));
+    }
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete("Test_File_Binary_Base_0");
+    File::Folder::CURRENT.Delete("Test_File_Binary_Base_1");
+    File::Folder::CURRENT.Delete("Test_File_Binary_Base_2");
 }
 
 KMS_TEST(File_Binary_Exception, "File_Binary_Exception", "Auto", sTest_Exception)
@@ -38,23 +53,6 @@ KMS_TEST(File_Binary_Exception, "File_Binary_Exception", "Auto", sTest_Exception
     KMS_TEST_CATCH(FILE_OPEN_FAILED);
 
     // Map
-    try
-    {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        File::Binary lB(File::Folder::CURRENT, "Test_File_Binary_Exception_0", true);
-        lB.Map(1);
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(FILE_TOO_SHORT);
-
-    try
-    {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        File::Binary lB(File::Folder::CURRENT, "Test_File_Binary_Exception_1", true);
-        lB.Map(0);
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(FILE_MAPPING_FAILED);
 
     // Write
     try

@@ -34,8 +34,6 @@ namespace KMS
             // Exception  FILE_ACCESS_FAILED
             unsigned int GetSize();
 
-            // Map are always read only
-            //
             // Exception  FILE_TOO_SHORT       Trying to map longer than the file
             //            FILE_MAPPING_FAILED
             void* Map(unsigned int aMinSize_byte = 0, unsigned int aMaxSize_byte = 0xffffffff);
