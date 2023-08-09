@@ -397,7 +397,7 @@ void OnInterrupt(uint8_t aIndex)
     InterruptInfo* lInfo  = sInterrupts + aIndex;
     uint8_t        lLevel = 0 == (*lInfo->mDataReg & lBit) ? 0 : 1;
 
-    // assert(NULL != lInfo->mHandler);
+    // assert(nullptr != lInfo->mHandler);
 
     lInfo->mHandler->OnInterrupt(aIndex, lLevel);
 

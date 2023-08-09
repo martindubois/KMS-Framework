@@ -20,7 +20,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Container::Container() : mCreator(NULL) {}
+        Container::Container() : mCreator(nullptr) {}
 
         void Container::SetCreator(Creator aC) { mCreator = aC; }
 
@@ -33,7 +33,7 @@ namespace KMS
 
         Container::Entry::Entry(const Object* aObject) : mObject(const_cast<Object*>(aObject))
         {
-            assert(NULL != aObject);
+            assert(nullptr != aObject);
 
             mFlags.mConst  = true;
             mFlags.mDelete = false;
@@ -41,7 +41,7 @@ namespace KMS
 
         Container::Entry::Entry(Object* aObject, bool aDelete) : mObject(aObject)
         {
-            assert(NULL != aObject);
+            assert(nullptr != aObject);
 
             mFlags.mConst  = false;
             mFlags.mDelete = aDelete;
@@ -51,11 +51,11 @@ namespace KMS
 
         Container::Entry::operator Object* () { return Get(); }
 
-        const Object* Container::Entry::Get() const { assert(NULL != mObject); return mObject; }
+        const Object* Container::Entry::Get() const { assert(nullptr != mObject); return mObject; }
 
         Object* Container::Entry::Get()
         {
-            assert(NULL != mObject);
+            assert(nullptr != mObject);
 
             KMS_EXCEPTION_ASSERT(!mFlags.mConst, DI_DENIED, "Trying to modify a constant Object", "");
 
@@ -67,7 +67,7 @@ namespace KMS
         // NOT TESTED
         void Container::Entry::Set(const Object* aObject)
         {
-            assert(NULL != aObject);
+            assert(nullptr != aObject);
 
             Release();
 
@@ -78,7 +78,7 @@ namespace KMS
 
         void Container::Entry::Set(Object* aObject, bool aDelete)
         {
-            assert(NULL != aObject);
+            assert(nullptr != aObject);
 
             Release();
 
@@ -89,24 +89,24 @@ namespace KMS
 
         void Container::Entry::Release()
         {
-            assert(NULL != mObject);
+            assert(nullptr != mObject);
 
             if (mFlags.mDelete)
             {
                 delete mObject;
             }
 
-            mObject = NULL;
+            mObject = nullptr;
         }
 
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        bool Container::IsDynamic() { return NULL != mCreator; }
+        bool Container::IsDynamic() { return nullptr != mCreator; }
 
         Object* Container::CallCreator()
         {
-            KMS_EXCEPTION_ASSERT(NULL != mCreator, DI_NOT_DYNAMIC, "The container is not dynamic", "");
+            KMS_EXCEPTION_ASSERT(nullptr != mCreator, DI_NOT_DYNAMIC, "The container is not dynamic", "");
 
             return mCreator();
         }

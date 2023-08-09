@@ -20,34 +20,34 @@ namespace KMS
 
         AnalogOutputConverter::AnalogOutputConverter(IAnalogOutputs* aInterface) : mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            assert(nullptr != aInterface);
         }
 
         // ===== IAnalogOutputs =============================================
         AnalogValue AnalogOutputConverter::AO_Get(Id aId) const
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             return Revert(aId, mInterface->AO_Get(aId));
         }
 
         AnalogValue_Raw AnalogOutputConverter::AO_Get_Raw(Id aId) const
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             return mInterface->AO_Get_Raw(aId);
         }
 
         void AnalogOutputConverter::AO_Write(Id aId, AnalogValue aValue)
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             mInterface->AO_Write(aId, Scale(aId, aValue));
         }
 
         void AnalogOutputConverter::AO_Write_Raw(Id aId, AnalogValue_Raw aValue)
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             mInterface->AO_Write_Raw(aId, aValue);
         }

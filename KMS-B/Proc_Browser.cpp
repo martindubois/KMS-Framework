@@ -39,7 +39,7 @@ namespace KMS
             : mPrefered(DEFAULT_PREFERED)
             , mAppMode(false)
             , mKioskMode(false)
-            , mProcess(NULL)
+            , mProcess(nullptr)
             , mType(Type::NONE)
             , mWindow(0)
         {
@@ -48,11 +48,11 @@ namespace KMS
 
         Browser::~Browser()
         {
-            if (NULL != mProcess)
+            if (nullptr != mProcess)
             {
                 Close();
 
-                assert(NULL == mProcess);
+                assert(nullptr == mProcess);
             }
         }
 
@@ -63,7 +63,7 @@ namespace KMS
                 return IsWindow(reinterpret_cast<HWND>(mWindow));
             }
 
-            return (NULL != mProcess) && mProcess->IsRunning();
+            return (nullptr != mProcess) && mProcess->IsRunning();
         }
 
         void Browser::SetAppMode(bool aAM) { mAppMode = aAM; }
@@ -76,7 +76,7 @@ namespace KMS
         {
             if (0 != mWindow)
             {
-                assert(NULL != mProcess);
+                assert(nullptr != mProcess);
 
                 if (PostMessage(reinterpret_cast<HWND>(mWindow), WM_CLOSE, 0, 0))
                 {
@@ -84,7 +84,7 @@ namespace KMS
                 }
             }
 
-            if (NULL != mProcess)
+            if (nullptr != mProcess)
             {
                 if (mProcess->IsRunning())
                 {
@@ -92,7 +92,7 @@ namespace KMS
                 }
 
                 delete mProcess;
-                mProcess = NULL;
+                mProcess = nullptr;
             }
 
             mType   = Type::NONE;
@@ -101,12 +101,12 @@ namespace KMS
 
         void Browser::Detach()
         {
-            if (NULL != mProcess)
+            if (nullptr != mProcess)
             {
                 mProcess->Detach();
 
                 delete mProcess;
-                mProcess = NULL;
+                mProcess = nullptr;
             }
 
             mType   = Type::NONE;
@@ -126,7 +126,7 @@ namespace KMS
 
         void Browser::Open(const HTTP::Server& aServer, const char* aFile, const char* aTitle)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             char lURL[PATH_LENGTH];
 
@@ -139,7 +139,7 @@ namespace KMS
 
         void Browser::Start(const File::Folder& aFolder, const char* aFile)
         {
-            Open(aFolder, aFile, NULL);
+            Open(aFolder, aFile, nullptr);
 
             Detach();
         }
@@ -167,8 +167,8 @@ namespace KMS
 
         bool Browser::BuildExpectedWindowsTitle(const char* aTitle, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aTitle);
-            assert(NULL != aOut);
+            assert(nullptr != aTitle);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
             auto lResult = false;
@@ -228,7 +228,7 @@ namespace KMS
 
         void Browser::CreateProcess_Chrome(const char* aURL)
         {
-            assert(NULL == mProcess);
+            assert(nullptr == mProcess);
 
             File::Folder lPF(File::Folder::Id::PROGRAM_FILES);
 
@@ -260,7 +260,7 @@ namespace KMS
 
         void Browser::CreateProcess_Default(const char* aURL)
         {
-            assert(NULL == mProcess);
+            assert(nullptr == mProcess);
 
             mProcess = new Process(File::Folder(File::Folder::Id::NONE), aURL);
 
@@ -269,7 +269,7 @@ namespace KMS
 
         void Browser::CreateProcess_Edge(const char* aURL)
         {
-            assert(NULL == mProcess);
+            assert(nullptr == mProcess);
 
             File::Folder lPF(File::Folder::Id::PROGRAM_FILES_X86);
 
@@ -297,7 +297,7 @@ namespace KMS
 
             char lTitle[NAME_LENGTH];
 
-            if ((NULL != aTitle) && BuildExpectedWindowsTitle(aTitle, lTitle, sizeof(lTitle)))
+            if ((nullptr != aTitle) && BuildExpectedWindowsTitle(aTitle, lTitle, sizeof(lTitle)))
             {
                 for (unsigned int i = 0; (0 == mWindow) && (i < 20); i++)
                 {
@@ -323,14 +323,14 @@ namespace KMS
                 mType = ORDER[static_cast<unsigned int>(static_cast<Type>(mPrefered))][i];
 
                 Create(aURL);
-                if (NULL == mProcess)
+                if (nullptr == mProcess)
                 {
                     return;
                 }
 
                 Open();
 
-                if (NULL != mProcess)
+                if (nullptr != mProcess)
                 {
                     return;
                 }
@@ -342,7 +342,7 @@ namespace KMS
 
         void Browser::Open()
         {
-            assert(NULL != mProcess);
+            assert(nullptr != mProcess);
 
             try
             {
@@ -351,7 +351,7 @@ namespace KMS
             catch (Exception eE)
             {
                 delete mProcess;
-                mProcess = NULL;
+                mProcess = nullptr;
 
                 mType = Type::NONE;
 

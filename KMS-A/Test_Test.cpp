@@ -13,7 +13,7 @@
 // Static variables
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Test::Test::TestList* sTests = NULL;
+static KMS::Test::Test::TestList* sTests = nullptr;
 
 namespace KMS
 {
@@ -25,7 +25,7 @@ namespace KMS
 
         bool Test::Assert(bool aCondition, const char* aFileName, unsigned int aLine)
         {
-            assert(NULL != aFileName);
+            assert(nullptr != aFileName);
             assert(0 < aLine);
 
             if (!aCondition)
@@ -60,8 +60,8 @@ namespace KMS
         unsigned int Test::GetErrorCount() const { return mErrorCount; }
         const char * Test::GetName      () const { return mName.c_str(); }
 
-        bool Test::IsGroup(const char* aGroup) const { assert(NULL != aGroup); return mGroup == aGroup; }
-        bool Test::IsName (const char* aName ) const { assert(NULL != aName ); return mName  == aName ; }
+        bool Test::IsGroup(const char* aGroup) const { assert(nullptr != aGroup); return mGroup == aGroup; }
+        bool Test::IsName (const char* aName ) const { assert(nullptr != aName ); return mName  == aName ; }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -134,10 +134,10 @@ namespace KMS
 
         Test::Test(const char* aName, const char* aGroup) : mErrorCount(0), mGroup(aGroup), mName(aName)
         {
-            assert(NULL != aName);
-            assert(NULL != aGroup);
+            assert(nullptr != aName);
+            assert(nullptr != aGroup);
 
-            if (NULL == sTests)
+            if (nullptr == sTests)
             {
                 sTests = new TestList;
             }

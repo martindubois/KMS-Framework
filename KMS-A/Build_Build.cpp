@@ -104,7 +104,7 @@ static const char* SILENCE[] =
         "WindowsFile_MSI"  ,
     #endif
 
-    NULL
+    nullptr
 };
 
 // Static function declarataions
@@ -125,8 +125,8 @@ namespace KMS
         int Build::Main(int aCount, const char ** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
-            assert(NULL != aVector[0]);
+            assert(nullptr != aVector);
+            assert(nullptr != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -226,15 +226,15 @@ namespace KMS
 
         Build::~Build() {}
 
-        void Build::AddBinary       (const char* aB) { assert(NULL != aB); mBinaries      .AddEntry(new DI::String(aB), true); }
-        void Build::AddConfiguration(const char* aC) { assert(NULL != aC); mConfigurations.AddEntry(new DI::String(aC), true); }
-        void Build::AddEditOperation(const char* aE) { assert(NULL != aE); mEditOperations.AddEntry(new DI::String(aE), true); }
-        void Build::AddFile         (const char* aF) { assert(NULL != aF); mFiles         .AddEntry(new DI::String(aF), true); }
-        void Build::AddFolder       (const char* aF) { assert(NULL != aF); mFolders       .AddEntry(new DI::String(aF), true); }
-        void Build::AddLibrary      (const char* aL) { assert(NULL != aL); mLibraries     .AddEntry(new DI::String(aL), true); }
-        void Build::AddPreBuildCmd  (const char* aC) { assert(NULL != aC); mPreBuildCmds  .AddEntry(new DI::String(aC), true); }
-        void Build::AddProcessor    (const char* aP) { assert(NULL != aP); mProcessors    .AddEntry(new DI::String(aP), true); }
-        void Build::AddTest         (const char* aT) { assert(NULL != aT); mTests         .AddEntry(new DI::String(aT), true); }
+        void Build::AddBinary       (const char* aB) { assert(nullptr != aB); mBinaries      .AddEntry(new DI::String(aB), true); }
+        void Build::AddConfiguration(const char* aC) { assert(nullptr != aC); mConfigurations.AddEntry(new DI::String(aC), true); }
+        void Build::AddEditOperation(const char* aE) { assert(nullptr != aE); mEditOperations.AddEntry(new DI::String(aE), true); }
+        void Build::AddFile         (const char* aF) { assert(nullptr != aF); mFiles         .AddEntry(new DI::String(aF), true); }
+        void Build::AddFolder       (const char* aF) { assert(nullptr != aF); mFolders       .AddEntry(new DI::String(aF), true); }
+        void Build::AddLibrary      (const char* aL) { assert(nullptr != aL); mLibraries     .AddEntry(new DI::String(aL), true); }
+        void Build::AddPreBuildCmd  (const char* aC) { assert(nullptr != aC); mPreBuildCmds  .AddEntry(new DI::String(aC), true); }
+        void Build::AddProcessor    (const char* aP) { assert(nullptr != aP); mProcessors    .AddEntry(new DI::String(aP), true); }
+        void Build::AddTest         (const char* aT) { assert(nullptr != aT); mTests         .AddEntry(new DI::String(aT), true); }
 
         int Build::Run()
         {
@@ -268,7 +268,7 @@ namespace KMS
                 lCT->Start();
 
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lC);
+                assert(nullptr != lC);
 
                 if (IsEmbedded())
                 {
@@ -298,7 +298,7 @@ namespace KMS
                 lCT->Start();
 
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lP);
+                assert(nullptr != lP);
 
                 Compile_Make(aC, *lP);
 
@@ -337,10 +337,10 @@ namespace KMS
 
             for (const auto& lEntry : mEditOperations.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lOp = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lOp);
+                assert(nullptr != lOp);
 
                 char lFile   [FILE_LENGTH];
                 char lRegEx  [LINE_LENGTH];
@@ -385,10 +385,10 @@ namespace KMS
         {
             for (const auto& lEntry : aCommands.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lCommand);
+                assert(nullptr != lCommand);
 
                 if (0 != system(*lCommand))
                 {
@@ -433,7 +433,7 @@ namespace KMS
             for (const auto& lEntry : mConfigurations.mInternal)
             {
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lC);
+                assert(nullptr != lC);
 
                 if (IsEmbedded())
                 {
@@ -451,7 +451,7 @@ namespace KMS
             for (const auto& lEntryP : mProcessors.mInternal)
             {
                 auto lP = dynamic_cast<const DI::String*>(lEntryP.Get());
-                assert(NULL != lP);
+                assert(nullptr != lP);
 
                 std::string lFolder = std::string(aC) + "_" + lP->Get();
 
@@ -491,13 +491,13 @@ namespace KMS
         {
             for (const auto& lEntry : mFiles.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lF = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lF);
+                assert(nullptr != lF);
 
                 auto lPtr = strrchr(*lF, '/');
-                if (NULL == lPtr)
+                if (nullptr == lPtr)
                 {
                     lPtr = *lF;
                 }
@@ -514,10 +514,10 @@ namespace KMS
         {
             for (const auto& lEntry : mFolders.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lF = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lF);
+                assert(nullptr != lF);
 
                 char lDst[NAME_LENGTH];
                 char lSrc[NAME_LENGTH];
@@ -538,10 +538,10 @@ namespace KMS
         {
             for (const auto& lEntry : mConfigurations.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lC);
+                assert(nullptr != lC);
 
                 Test(*lC);
             }
@@ -595,7 +595,7 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
     static const unsigned int STATE_INIT    = 0;
     static const unsigned int STATE_PROCESS = 1;
 
-    assert(NULL != aIn);
+    assert(nullptr != aIn);
 
     auto         lIn = aIn;
     std::string  lResult;
@@ -604,7 +604,7 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
 
     if (0 >= strlen(lType))
     {
-        lType = NULL;
+        lType = nullptr;
     }
 
     for (;;)
@@ -631,7 +631,7 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
             case 'C': lResult += aVersion.GetCompat(); break;
 
             case 'T':
-                if (NULL != lType)
+                if (nullptr != lType)
                 {
                     lResult += "-";
                     lResult += aVersion.GetType();

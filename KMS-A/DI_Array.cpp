@@ -20,9 +20,9 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array::AddConstEntry(const Object* aO) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO)); }
+        void Array::AddConstEntry(const Object* aO) { assert(nullptr != aO); mInternal.push_back(Container::Entry(aO)); }
 
-        void Array::AddEntry(Object* aO, bool aDelete) { assert(NULL != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
+        void Array::AddEntry(Object* aO, bool aDelete) { assert(nullptr != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
 
         DI::Object* Array::CreateEntry()
         {
@@ -39,10 +39,10 @@ namespace KMS
 
             if (static_cast<int>(mInternal.size()) <= aIndex)
             {
-                return NULL;
+                return nullptr;
             }
 
-            assert(NULL != mInternal[aIndex]);
+            assert(nullptr != mInternal[aIndex]);
 
             return mInternal[aIndex];
         }
@@ -53,10 +53,10 @@ namespace KMS
 
             if (static_cast<int>(mInternal.size()) <= aIndex)
             {
-                return NULL;
+                return nullptr;
             }
 
-            assert(NULL != mInternal[aIndex]);
+            assert(nullptr != mInternal[aIndex]);
 
             return mInternal[aIndex];
         }
@@ -131,7 +131,7 @@ namespace KMS
             {
                 if (!IsDynamic())
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 // NOT TESTED
@@ -154,7 +154,7 @@ namespace KMS
                 // NOT TESTED
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
-                if (NULL == lContainer)
+                if (nullptr == lContainer)
                 {
                     sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
                     KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);

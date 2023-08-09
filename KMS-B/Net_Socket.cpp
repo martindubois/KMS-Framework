@@ -119,7 +119,7 @@ namespace KMS
 
         unsigned int Socket::Receive(void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             assert(INVALID_SOCKET != mSocket);
 
@@ -131,7 +131,7 @@ namespace KMS
 
         void Socket::Send(const void* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             VerifyState(State::CONNECTED);
 

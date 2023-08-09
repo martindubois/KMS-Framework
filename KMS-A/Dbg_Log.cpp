@@ -81,7 +81,7 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(NULL != lLF);
+                assert(nullptr != lLF);
 
                 lLF->WriteData(aData, aSize_byte);
             }
@@ -133,7 +133,7 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(NULL != lLF);
+                assert(nullptr != lLF);
 
                 lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
             }
@@ -180,7 +180,7 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(NULL != lLF);
+                assert(nullptr != lLF);
 
                 lLF->WriteException(aException);
             }
@@ -223,7 +223,7 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(NULL != lLF);
+                assert(nullptr != lLF);
 
                 lLF->WriteMessage(aMsg);
             }
@@ -268,7 +268,7 @@ namespace KMS
 
         void Log::DisplayInConsole(const char* aMsg)
         {
-            assert(NULL != aMsg);
+            assert(nullptr != aMsg);
 
             switch (mConsoleMode)
             {
@@ -286,9 +286,9 @@ namespace KMS
 
         void Log::DisplayInConsole(const char* aTitle, const char* aFile, const char* aFunction, unsigned int aLine)
         {
-            assert(NULL != aTitle);
-            assert(NULL != aFile);
-            assert(NULL != aLine);
+            assert(nullptr != aTitle);
+            assert(nullptr != aFile);
+            assert(0 != aLine);
 
             switch (mConsoleMode)
             {
@@ -342,7 +342,7 @@ namespace KMS
                 lResult = lIt->second;
             }
 
-            assert(NULL != lResult);
+            assert(nullptr != lResult);
             return lResult;
         }
 

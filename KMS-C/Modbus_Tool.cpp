@@ -35,11 +35,10 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_COILS            ("Coils[{Name}] = {Address}");
-static const KMS::Cfg::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs[{Name}] = {Address}");
-static const KMS::Cfg::MetaData MD_HOLDING_REGISTERS("HoldingRegisters[{Name}] = {Address}");
-static const KMS::Cfg::MetaData MD_INPUT_REGISTERS  ("InputRegisters[{Name}] = {Address}");
-static const KMS::Cfg::MetaData MD_OPERATIONS       ("Operations[{Name}] = {Address}");
+static const KMS::Cfg::MetaData MD_COILS            ("Coils.{Name} = {Address}");
+static const KMS::Cfg::MetaData MD_DISCRETE_INPUTS  ("DiscreteInputs.{Name} = {Address}");
+static const KMS::Cfg::MetaData MD_HOLDING_REGISTERS("HoldingRegisters.{Name} = {Address}");
+static const KMS::Cfg::MetaData MD_INPUT_REGISTERS  ("InputRegisters.{Name} = {Address}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -58,7 +57,7 @@ namespace KMS
         int Tool::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             int lResult = __LINE__;
 
@@ -97,6 +96,14 @@ namespace KMS
 
                         lC.AddConfigurable(lMT.GetSocket());
                     }
+                    else
+                    {
+                        lC.AddConfigurable(&lPort);
+                    }
+                }
+                else
+                {
+                    lC.AddConfigurable(&lPort);
                 }
 
                 Modbus::Master_Cfg lCfg(lM);
@@ -128,7 +135,7 @@ namespace KMS
             return lResult;
         }
 
-        Tool::Tool() : mMaster(NULL)
+        Tool::Tool() : mMaster(nullptr)
         {
             mCoils           .SetCreator(DI::UInt<uint16_t>::Create);
             mDiscreteInputs  .SetCreator(DI::UInt<uint16_t>::Create);
@@ -141,31 +148,31 @@ namespace KMS
             AddEntry("InputRegisters"  , &mInputRegisters  , false, &MD_INPUT_REGISTERS);
         }
 
-        void Tool::InitMaster(Master* aMaster) { assert(NULL != aMaster); mMaster = aMaster; }
+        void Tool::InitMaster(Master* aMaster) { assert(nullptr != aMaster); mMaster = aMaster; }
 
         void Tool::AddCoil           (const char* aN, uint16_t aA) { mCoils           .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddHoldingRegister(const char* aN, uint16_t aA) { mHoldingRegisters.AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddInputRegister  (const char* aN, uint16_t aA) { mInputRegisters  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
 
-        void Tool::Connect   () { assert(NULL != mMaster); mMaster->Connect   (); }
-        void Tool::Disconnect() { assert(NULL != mMaster); mMaster->Disconnect(); }
+        void Tool::Connect   () { assert(nullptr != mMaster); mMaster->Connect   (); }
+        void Tool::Disconnect() { assert(nullptr != mMaster); mMaster->Disconnect(); }
 
         void Tool::Dump(FILE* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
 
             const DI::UInt<uint16_t>* lAddr;
 
             fprintf(aOut, "Coils\n");
             for (const DI::Dictionary::Internal::value_type lVT : mCoils.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
-                assert(NULL != lAddr);
+                assert(nullptr != lAddr);
 
                 bool lValB;
 
@@ -178,10 +185,10 @@ namespace KMS
             fprintf(aOut, "Discrete inputs\n");
             for (const DI::Dictionary::Internal::value_type lVT : mDiscreteInputs.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
-                assert(NULL != lAddr);
+                assert(nullptr != lAddr);
 
                 bool lValB;
 
@@ -194,10 +201,10 @@ namespace KMS
             fprintf(aOut, "Holding registers\n");
             for (const DI::Dictionary::Internal::value_type lVT : mHoldingRegisters.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
-                assert(NULL != lAddr);
+                assert(nullptr != lAddr);
 
                 RegisterValue lValR;
 
@@ -210,10 +217,10 @@ namespace KMS
             fprintf(aOut, "Input registers\n");
             for (const DI::Dictionary::Internal::value_type lVT : mInputRegisters.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lVT.second.Get());
-                assert(NULL != lAddr);
+                assert(nullptr != lAddr);
 
                 RegisterValue lValR;
 
@@ -228,7 +235,7 @@ namespace KMS
 
         bool Tool::ReadCoil(const char* aName)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
             
             bool lValB;
 
@@ -241,7 +248,7 @@ namespace KMS
             
         bool Tool::ReadDiscreteInput(const char* aName)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
 
             bool lValB;
             
@@ -253,7 +260,7 @@ namespace KMS
 
         uint16_t Tool::ReadHoldingRegister(const char* aName)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
 
             RegisterValue lValR;
 
@@ -265,7 +272,7 @@ namespace KMS
 
         uint16_t Tool::ReadInputRegister(const char* aName)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
 
             RegisterValue lValR;
             
@@ -277,7 +284,7 @@ namespace KMS
 
         void Tool::WriteSingleCoil(const char* aName, bool aValue)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
             
             bool lRetB = mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue);
             KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleCoil failed", aName);
@@ -285,7 +292,7 @@ namespace KMS
 
         void Tool::WriteSingleRegister(const char* aName, uint16_t aValue)
         {
-            assert(NULL != mMaster);
+            assert(nullptr != mMaster);
             
             bool lRetB = mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue);
             KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleRegister failed", aName);
@@ -295,7 +302,7 @@ namespace KMS
 
         void Tool::DisplayHelp(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "Dump\n"
@@ -377,19 +384,19 @@ using namespace KMS;
 
 uint16_t ToAddress(const DI::Dictionary& aMap, const char* aName)
 {
-    assert(NULL != aName);
+    assert(nullptr != aName);
 
     uint16_t lResult;
 
     auto lObject = aMap.GetEntry_R(aName);
-    if (NULL == lObject)
+    if (nullptr == lObject)
     {
         lResult = Convert::ToUInt16(aName);
     }
     else
     {
         auto lAddr = dynamic_cast<const DI::UInt<uint16_t>*>(lObject);
-        assert(NULL != lAddr);
+        assert(nullptr != lAddr);
 
         lResult = *lAddr;
     }

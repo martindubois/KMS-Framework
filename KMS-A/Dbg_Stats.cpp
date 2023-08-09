@@ -55,7 +55,7 @@ namespace KMS
 
                 for (Stats_Entry* lEntry : mEntries)
                 {
-                    assert(NULL != lEntry);
+                    assert(nullptr != lEntry);
 
                     std::cout << *lEntry;
                 }
@@ -76,7 +76,7 @@ namespace KMS
                 {
                     for (auto lEntry : mEntries)
                     {
-                        assert(NULL != lEntry);
+                        assert(nullptr != lEntry);
 
                         lStream << *lEntry;
                     }
@@ -85,7 +85,7 @@ namespace KMS
 
             for (auto lEntry : mEntries)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 delete lEntry;
             }

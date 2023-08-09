@@ -35,7 +35,7 @@ namespace KMS
         , mCompat(aCompat)
         , mDebug(aDebug)
     {
-        // assert(NULL != aType);
+        // assert(nullptr != aType);
 
         Construct();
 
@@ -135,8 +135,8 @@ namespace KMS
 
         void Version::GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags) const
         {
-            assert(NULL != aProduct);
-            assert(NULL != aOut);
+            assert(nullptr != aProduct);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
             auto lTypePresent = 0 < strlen(mType);

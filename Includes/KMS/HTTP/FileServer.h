@@ -51,9 +51,9 @@ namespace KMS
 
             void SetVerbose(bool aV = true);
 
-            void ProcessRequest(Request* aR, const char* aPath = NULL);
+            void ProcessRequest(Request* aR, const char* aPath = nullptr);
 
-            void ProcessRequest_GET(Request* aR, const char* aPath = NULL);
+            void ProcessRequest_GET(Request* aR, const char* aPath = nullptr);
 
             // ===== Configurable attributes ================================
             DI::Folder  mRoot;

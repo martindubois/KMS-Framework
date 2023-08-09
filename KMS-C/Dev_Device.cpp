@@ -61,7 +61,7 @@ namespace KMS
         }
 
         void Device::SetIndex(unsigned int aI) { mIndex = aI; }
-        void Device::SetLink (const char * aL) { assert(NULL != aL); mLink = aL; }
+        void Device::SetLink (const char * aL) { assert(nullptr != aL); mLink = aL; }
 
         // Protected
         // //////////////////////////////////////////////////////////////////

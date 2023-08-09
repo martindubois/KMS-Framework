@@ -26,7 +26,7 @@ namespace KMS
 
         public:
 
-            Stats_Value(const char* aName, const char* aUnit = NULL);
+            Stats_Value(const char* aName, const char* aUnit = nullptr);
 
             void Set(T aIn);
 
@@ -109,7 +109,7 @@ namespace KMS
             {
                 aOut << GetName() << " : " << mLast;
 
-                if (NULL != mUnit)
+                if (nullptr != mUnit)
                 {
                     aOut << " " << mUnit;
                 }

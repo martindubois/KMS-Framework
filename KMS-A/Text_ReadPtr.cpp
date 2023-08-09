@@ -20,12 +20,12 @@ namespace KMS
 
         ReadPtr::ReadPtr(const char* aBase, unsigned int aSize_byte) : mBase(aBase), mIndex_byte(0), mSize_byte(aSize_byte)
         {
-            assert(NULL != aBase);
+            assert(nullptr != aBase);
         }
 
         ReadPtr::operator const char* () const
         {
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
 
             return mBase + mIndex_byte;
         }
@@ -45,9 +45,9 @@ namespace KMS
 
         unsigned int ReadPtr::ExtractUntil(char aC, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             unsigned int lResult_byte = 0;
@@ -71,10 +71,10 @@ namespace KMS
 
         unsigned int ReadPtr::ExtractUntil(const char* aStr, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aStr);
-            assert(NULL != aOut);
+            assert(nullptr != aStr);
+            assert(nullptr != aOut);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             unsigned int lResult_byte = 0;
@@ -98,10 +98,10 @@ namespace KMS
 
         unsigned int ReadPtr::ExtractWhile(const char* aStr, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aStr);
-            assert(NULL != aOut);
+            assert(nullptr != aStr);
+            assert(nullptr != aOut);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             unsigned int lResult_byte = 0;
@@ -125,9 +125,9 @@ namespace KMS
 
         void ReadPtr::Skip(const char* aStr)
         {
-            assert(NULL != aStr);
+            assert(nullptr != aStr);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             while (mSize_byte > mIndex_byte)
@@ -145,7 +145,7 @@ namespace KMS
 
         void ReadPtr::Test(char aC)
         {
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             KMS_EXCEPTION_ASSERT(mSize_byte > mIndex_byte, TEXT_TOO_SHORT, "Incomplete text", aC);
@@ -157,9 +157,9 @@ namespace KMS
 
         void ReadPtr::Test(const char* aStr)
         {
-            assert(NULL != aStr);
+            assert(nullptr != aStr);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             KMS_EXCEPTION_ASSERT(mSize_byte > mIndex_byte, TEXT_TOO_SHORT, "Incomplete text", aStr);

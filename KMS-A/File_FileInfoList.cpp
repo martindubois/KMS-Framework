@@ -42,7 +42,7 @@ namespace KMS
 
         FileInfoList::FileInfoList(const File::Folder& aRoot, const char* aPattern, bool aRecurse) : mRoot(aRoot)
         {
-            assert(NULL != aPattern);
+            assert(nullptr != aPattern);
 
             Find(aPattern, aRecurse);
         }
@@ -51,7 +51,7 @@ namespace KMS
         {
             for (auto& lInfo : mFiles)
             {
-                assert(NULL != lInfo.second);
+                assert(nullptr != lInfo.second);
 
                 delete lInfo.second;
             }
@@ -63,8 +63,8 @@ namespace KMS
 
         void FileInfoList::Add(const char* aRelPath, FileInfo* aInfo)
         {
-            assert(NULL != aRelPath);
-            assert(NULL != aInfo);
+            assert(nullptr != aRelPath);
+            assert(nullptr != aInfo);
 
             mFiles.insert(FileInfoMap::value_type(aRelPath, aInfo));
         }
@@ -81,7 +81,7 @@ namespace KMS
 
         void FileInfoList::Copy(FileInfoList* aList, unsigned int aFlags, Counters* aCounters)
         {
-            assert(NULL != aList);
+            assert(nullptr != aList);
             assert(0 != aFlags);
 
             auto lNewRoot = aList->GetRoot();
@@ -93,7 +93,7 @@ namespace KMS
                 auto lCopy = false;
 
                 auto lFI = aList->Find(lPair.first.c_str());
-                if (NULL == lFI)
+                if (nullptr == lFI)
                 {
                     if (aCounters) { aCounters->Increment(COUNTER_NEW); }
 
@@ -134,14 +134,14 @@ namespace KMS
 
         FileInfo* FileInfoList::Find(const char* aRelPath)
         {
-            assert(NULL != aRelPath);
+            assert(nullptr != aRelPath);
 
-            FileInfo* lResult = NULL;
+            FileInfo* lResult = nullptr;
 
             auto lIt = mFiles.find(aRelPath);
             if (mFiles.end() != lIt)
             {
-                assert(NULL != lIt->second);
+                assert(nullptr != lIt->second);
 
                 lResult = lIt->second;
             }
@@ -205,7 +205,7 @@ namespace KMS
 
         void FileInfoList::Find(const char* aPattern, bool aRecurse)
         {
-            assert(NULL != aPattern);
+            assert(nullptr != aPattern);
 
             char lPattern[PATH_LENGTH];
             mRoot.GetPath(aPattern, lPattern, sizeof(lPattern));
@@ -235,9 +235,9 @@ namespace KMS
 
         void FileInfoList::FindInFolder(const char* aFullFolder, const char* aFolder, const char* aPattern)
         {
-            assert(NULL != aFullFolder);
-            assert(NULL != aFolder);
-            assert(NULL != aPattern);
+            assert(nullptr != aFullFolder);
+            assert(nullptr != aFolder);
+            assert(nullptr != aPattern);
 
             if ((0 == strcmp(".", aFolder)) || (0 == strcmp("..", aFolder)))
             {

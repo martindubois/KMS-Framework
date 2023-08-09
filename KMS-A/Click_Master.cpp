@@ -74,7 +74,7 @@ namespace KMS
         const unsigned int Master::FLAG_RECURSE      = 0x00000020;
         const unsigned int Master::FLAG_RETRY        = 0x00000040;
 
-        Master::Master() : mCurrent(NULL), mDelay_ms(0) {}
+        Master::Master() : mCurrent(nullptr), mDelay_ms(0) {}
 
         Master::~Master() {}
 
@@ -122,7 +122,7 @@ namespace KMS
 
         void Master::Text(const char* aText)
         {
-            assert(NULL != aText);
+            assert(nullptr != aText);
 
             Sleep(TEXT_DELAY_ms);
 
@@ -139,14 +139,14 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(1 <= mStack.size(), CLICK_OPERATION_FAILED, "No window to pop", "");
 
             mCurrent = mStack.back();
-            assert(NULL != mCurrent);
+            assert(nullptr != mCurrent);
 
             mStack.pop_back();
         }
 
         bool Master::Window_Select(const char* aClass, const char* aName, unsigned int aFlags)
         {
-            assert((NULL != aClass) || (NULL != aName));
+            assert((nullptr != aClass) || (nullptr != aName));
 
             FlagData lFD;
 
@@ -155,7 +155,7 @@ namespace KMS
             for (unsigned int lRetry = 0; lRetry < lFD.mRetryCount; lRetry++)
             {
                 auto lHandle = FindWindowEx(lFD.mParent, lFD.mCurrent, aClass, aName);
-                if (NULL != lHandle)
+                if (nullptr != lHandle)
                 {
                     return Window_Select(lHandle, aFlags);
                 }
@@ -170,7 +170,7 @@ namespace KMS
                 EnumChildWindows(lFD.mParent, Operation_Search, reinterpret_cast<LPARAM>(&lOperation));
 
                 auto lHandle = lOperation.GetResult();
-                if (NULL != lHandle)
+                if (nullptr != lHandle)
                 {
                     return Window_Select(lHandle, aFlags);
                 }
@@ -182,9 +182,9 @@ namespace KMS
 
         bool Master::Window_Select(HWND aHandle, unsigned int aFlags)
         {
-            assert(NULL != aHandle);
+            assert(nullptr != aHandle);
 
-            if ((NULL != mCurrent) && (0 != (aFlags & FLAG_PUSH)))
+            if ((nullptr != mCurrent) && (0 != (aFlags & FLAG_PUSH)))
             {
                 mStack.push_back(mCurrent);
             }
@@ -217,7 +217,7 @@ namespace KMS
 
         void Master::Message_Post(unsigned int aMsg, uint64_t aParamW, uint64_t aParamL)
         {
-            assert(NULL != mCurrent);
+            assert(nullptr != mCurrent);
 
             Sleep(mDelay_ms);
 
@@ -227,7 +227,7 @@ namespace KMS
 
         void Master::ParseFlags(unsigned int aFlags, FlagData* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             if (0 == (aFlags & FLAG_NEXT))
             {
@@ -235,13 +235,13 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(NULL != mCurrent , CLICK_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
+                KMS_EXCEPTION_ASSERT(nullptr != mCurrent , CLICK_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
                 KMS_EXCEPTION_ASSERT(0 < mStack.size(), CLICK_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
 
                 aOut->mCurrent = mCurrent;
                 aOut->mParent  = mStack.back();
 
-                assert(NULL != aOut->mParent);
+                assert(nullptr != aOut->mParent);
             }
 
             if (0 != (aFlags & FLAG_NO_EXCEPTION)) { aOut->mException  = false; }
@@ -249,34 +249,34 @@ namespace KMS
             if (0 != (aFlags & FLAG_RETRY       )) { aOut->mRetryCount = RETRY_COUNT; }
         }
 
-        Master::FlagData::FlagData() : mCurrent(NULL), mException(true), mParent(NULL), mRecurse(false), mRetryCount(1) {}
+        Master::FlagData::FlagData() : mCurrent(nullptr), mException(true), mParent(nullptr), mRecurse(false), mRetryCount(1) {}
 
     }
 }
 
 using namespace KMS;
 
-Operation::Operation(const char* aClass, const char* aName) : mClass(aClass), mName(aName), mResult(NULL)
+Operation::Operation(const char* aClass, const char* aName) : mClass(aClass), mName(aName), mResult(nullptr)
 {
-    assert((NULL != aClass) || (NULL != aName));
+    assert((nullptr != aClass) || (nullptr != aName));
 }
 
 HWND Operation::GetResult() { return mResult; }
 
 BOOL Operation::Search(HWND aHandle)
 {
-    assert(NULL != aHandle);
+    assert(nullptr != aHandle);
 
-    assert((NULL != mClass) || (NULL != mName));
-    assert(NULL == mResult);
+    assert((nullptr != mClass) || (nullptr != mName));
+    assert(nullptr == mResult);
 
-    mResult = FindWindowEx(aHandle, NULL, mClass, mName);
-    if (NULL == mResult)
+    mResult = FindWindowEx(aHandle, nullptr, mClass, mName);
+    if (nullptr == mResult)
     {
         EnumChildWindows(aHandle, Operation_Search, reinterpret_cast<LPARAM>(this));
     }
 
-    return (NULL == mResult) ? TRUE : FALSE;
+    return (nullptr == mResult) ? TRUE : FALSE;
 }
 
 // Static function declarations

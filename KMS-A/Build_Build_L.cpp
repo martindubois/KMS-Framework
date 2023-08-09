@@ -39,7 +39,7 @@ namespace KMS
             for (const auto& lEntry : mBinaries.mInternal)
             {
                 auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lB);
+                assert(nullptr != lB);
 
                 lBin_Src.Copy(lBin, lB->Get());
             }
@@ -47,7 +47,7 @@ namespace KMS
             for (const auto& lEntry : mLibraries.mInternal)
             {
                 auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lL);
+                assert(nullptr != lL);
 
                 lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
             }
@@ -58,7 +58,7 @@ namespace KMS
             for (const auto& lEntry : mTests.mInternal)
             {
                 auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lT);
+                assert(nullptr != lT);
 
                 Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());
 

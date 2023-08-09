@@ -28,7 +28,7 @@ namespace KMS
 
         bool ReadBit(const uint8_t* aData, unsigned int aOffset, unsigned int aIndex)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lByte = aData[aOffset + aIndex / 8];
 
@@ -53,14 +53,14 @@ namespace KMS
 
         uint8_t ReadUInt8(const uint8_t* aData, unsigned int aOffset)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             return aData[aOffset];
         }
 
         uint16_t ReadUInt16(const uint8_t* aData, unsigned int aOffset)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             uint16_t lResult;
 
@@ -72,14 +72,14 @@ namespace KMS
 
         void WriteUInt8(uint8_t* aData, unsigned int aOffset, uint8_t aValue)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             aData[aOffset] = aValue;
         }
 
         void WriteUInt16(uint8_t* aData, unsigned int aOffset, uint16_t aValue)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             aData[aOffset] = aValue >> 8;
             aData[aOffset + 1] = aValue & 0xff;

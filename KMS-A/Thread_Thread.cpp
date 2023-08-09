@@ -27,7 +27,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Thread::Thread()
-            : mHandle(NULL)
+            : mHandle(nullptr)
             , mState(State::STOPPED)
         {
         }
@@ -62,12 +62,12 @@ namespace KMS
 
             CloseIfNeeded();
 
-            assert(NULL == mHandle);
+            assert(nullptr == mHandle);
 
             mState = State::STARTING;
 
             mHandle = CreateThread(NULL, 0, Run_Link, this, 0, NULL);
-            if (NULL == mHandle)
+            if (nullptr == mHandle)
             {
                 mState = State::STOPPED;
                 KMS_EXCEPTION(THREAD_START_FAILED, "Cannot create the thread", "");
@@ -111,7 +111,7 @@ namespace KMS
             case State::RUNNING:
             case State::STARTING:
             case State::STOPPING:
-                assert(NULL != mHandle);
+                assert(nullptr != mHandle);
 
                 lLock.Unlock();
 
@@ -189,12 +189,12 @@ namespace KMS
 
         void Thread::CloseIfNeeded()
         {
-            if (NULL != mHandle)
+            if (nullptr != mHandle)
             {
                 auto lRet = CloseHandle(mHandle);
                 assert(lRet);
 
-                mHandle = NULL;
+                mHandle = nullptr;
             }
         }
 
@@ -208,7 +208,7 @@ using namespace KMS;
 
 DWORD WINAPI Run_Link(LPVOID aParam)
 {
-    assert(NULL != aParam);
+    assert(nullptr != aParam);
 
     auto lThis = reinterpret_cast<Thread::Thread*>(aParam);
 

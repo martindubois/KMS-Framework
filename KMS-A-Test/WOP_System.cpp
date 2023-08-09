@@ -52,60 +52,60 @@ KMS_TEST(WOP_System_Base, "WOP_System_Base", "Auto", sTest_Base)
 
     // Frame #1 - Write System::mResult_In (KMS_WOP_RESULT_INVALID_CONTROL_VALUE)
     auto lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
     KMS_TEST_ASSERT(KMS_WOP_RESULT_INVALID_CONTROL_VALUE == lS0.GetResult());
     KMS_TEST_ASSERT(KMS_WOP_RESULT_OK == lS0.GetResult());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #2 - Bad CRC
     lS0.AddReceivedBytes(FRAME_E, sizeof(FRAME_E));
 
     // Frame #3 - Write System::mResult_In (KMS_WOP_RESULT_INVALID_CRC)
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
     KMS_TEST_ASSERT(KMS_WOP_RESULT_INVALID_CRC == lS0.GetResult());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #4 - Write lBA0
     lBA0.AddRequest(0x02);
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #5 - Write System::mRequest_In (0x01)
     lS0.SendRequest(0x01);
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
 
     // Frame #6 - Write System::mRequest_In (0x01)
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr != lF0);
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #7 - Write System::mProtocol_In
     lS0.AddRequest(0x02);
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #8 - Write System::mVersion_In
     lS0.AddRequest(0x10);
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // Frame #9 - Write mTrace_In
     lS0.AddTrace("Trace\r\n", 7);
     lF0 = lS0.PrepareFrame();
-    KMS_TEST_ASSERT(NULL != lF0);
+    KMS_TEST_ASSERT(nullptr != lF0);
     lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
-    KMS_TEST_ASSERT(NULL == lS0.PrepareFrame());
+    KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // AddTrace
     lS0.AddTrace("Very long trace\r\n", 17);

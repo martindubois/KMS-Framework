@@ -28,19 +28,19 @@ KMS_TEST(Msg_Destination_Base, "Msg_Destination_Base", "Auto", sTest_Base)
 
     KMS_TEST_ASSERT(!lD.IsSet());
 
-    KMS_TEST_COMPARE(Msg::IReceiver::MSG_IGNORED, lD.Send(NULL));
+    KMS_TEST_COMPARE(Msg::IReceiver::MSG_IGNORED, lD.Send(nullptr));
 
     lD.Set(&lR, 1);
 
     KMS_TEST_ASSERT(lD.IsSet());
 
-    KMS_TEST_COMPARE(0L, lD.Send(NULL));
+    KMS_TEST_COMPARE(0L, lD.Send(nullptr));
 
     lD.Set(&lR, 2);
 
     KMS_TEST_ASSERT(lD.IsSet());
 
-    KMS_TEST_COMPARE(0L, lD.Send(NULL));
+    KMS_TEST_COMPARE(0L, lD.Send(nullptr));
 
     KMS_TEST_ASSERT(!lD.IsSet());
 }
@@ -50,21 +50,21 @@ KMS_TEST(Msg_Destination_Exception, "Msg_Destination_Exception", "Auto", sTest_E
     TestReceiver lR;
     Msg::Destination lD(&lR, 3);
 
-    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION, lD.Send(NULL));
+    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION, lD.Send(nullptr));
 
     lD.Set(&lR, 4);
 
-    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION_STD, lD.Send(NULL));
+    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION_STD, lD.Send(nullptr));
 
     lD.Set(&lR, 5);
 
-    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION_UNKNOWN, lD.Send(NULL));
+    KMS_TEST_COMPARE(Msg::IReceiver::MSG_EXCEPTION_UNKNOWN, lD.Send(nullptr));
 }
 
 unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aData)
 {
-    assert(NULL == aSender);
-    assert(NULL == aData);
+    assert(nullptr == aSender);
+    assert(nullptr == aData);
 
     unsigned int lResult = 0;
 

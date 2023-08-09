@@ -105,7 +105,7 @@ bool TestApp1::GetResult() const { return "PASSED" == mResult; }
 
 unsigned int TestApp1::OnVersionGetData(void*, void* aData)
 {
-    assert(NULL != aData);
+    assert(nullptr != aData);
 
     HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
 

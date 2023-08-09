@@ -70,10 +70,10 @@ namespace KMS
 
         Address::operator sockaddr* () { return &mAddress.mBase; }
 
-        // Return NULL it the address type is UNKNOWN.
+        // Return nullptr it the address type is UNKNOWN.
         const void* Address::GetBinary() const
         {
-            const void* lResult = NULL;
+            const void* lResult = nullptr;
 
             switch (mType)
             {
@@ -90,7 +90,7 @@ namespace KMS
 
         void Address::SetAddress(const char* aA)
         {
-            assert(NULL != aA);
+            assert(nullptr != aA);
 
             unsigned int lB[4];
 
@@ -101,7 +101,7 @@ namespace KMS
 
         void Address::SetInternal(const struct sockaddr* aAddr, unsigned int aAddrSize_byte)
         {
-            assert(NULL != aAddr);
+            assert(nullptr != aAddr);
             assert(0 < aAddrSize_byte);
             assert(sizeof(mAddress) >= aAddrSize_byte);
 
@@ -139,7 +139,7 @@ namespace KMS
 
         void Address::SetIPv4(const unsigned int* aA)
         {
-            assert(NULL != aA);
+            assert(nullptr != aA);
 
             for (unsigned int i = 0; i < 4; i++)
             {
@@ -160,7 +160,7 @@ namespace KMS
 
         void Address::SetName(const char* aN)
         {
-            assert(NULL != aN);
+            assert(nullptr != aN);
 
             addrinfo* lAddr;
 
@@ -170,11 +170,11 @@ namespace KMS
             sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
             KMS_EXCEPTION_ASSERT(0 == lRet, NET_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
 
-            assert(NULL != lAddr);
+            assert(nullptr != lAddr);
 
             auto lCurrent = lAddr;
 
-            while (NULL != lCurrent)
+            while (nullptr != lCurrent)
             {
                 if ((AF_INET == lCurrent->ai_family) || (AF_INET6 == lCurrent->ai_family))
                 {

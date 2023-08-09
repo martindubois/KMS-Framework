@@ -101,7 +101,7 @@ namespace KMS
 
         void ELF::DisplayHeaders(FILE* aOut) const
         {
-            auto lOut = (NULL == aOut) ? stdout : aOut;
+            auto lOut = (nullptr == aOut) ? stdout : aOut;
 
             fprintf(lOut, "Header\n");
             mHeader->Display(lOut);
@@ -123,7 +123,7 @@ namespace KMS
 
         void ELF::Header32::Display(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "  00 Magic                      : 0x%08x\n"
@@ -168,7 +168,7 @@ namespace KMS
 
         void ELF::ProgHeader32::Display(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "    00 Type             : 0x%08x = %s\n"
@@ -191,7 +191,7 @@ namespace KMS
 
         void ELF::SectHeader32::Display(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "    00 Name index        : %u\n"

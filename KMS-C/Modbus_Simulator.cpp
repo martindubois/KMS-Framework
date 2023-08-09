@@ -41,7 +41,7 @@ static const KMS::Cfg::MetaData MD_INPUT_REGISTERS  ("InputRegisters[{Address}] 
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Modbus::Simulator* sSimulator = NULL;
+static KMS::Modbus::Simulator* sSimulator = nullptr;
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -75,11 +75,11 @@ namespace KMS
         int Simulator::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             int lResult = __LINE__;
 
-            _crt_signal_t lHandler = NULL;
+            _crt_signal_t lHandler = nullptr;
 
             auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
 
@@ -128,13 +128,13 @@ namespace KMS
 
             signal(SIGINT, lHandler);
 
-            sSimulator = NULL;
+            sSimulator = nullptr;
 
             return lResult;
         }
 
         Simulator::Simulator()
-            : mSlave(NULL)
+            : mSlave(nullptr)
             // ===== Callbacks ==============================================
             , ON_READ_COILS            (this, &Simulator::OnReadCoils)
             , ON_READ_DISCRETE_INPUTS  (this, &Simulator::OnReadDiscreteInputs)
@@ -156,7 +156,7 @@ namespace KMS
 
         void Simulator::InitSlave(Slave* aSlave)
         {
-            assert(NULL != aSlave);
+            assert(nullptr != aSlave);
 
             mSlave = aSlave;
 
@@ -170,7 +170,7 @@ namespace KMS
 
         int Simulator::Run()
         {
-            assert(NULL != mSlave);
+            assert(nullptr != mSlave);
 
             if (!mSlave->Connect())
             {
@@ -182,7 +182,7 @@ namespace KMS
             return 0;
         }
 
-        void Simulator::Stop() { assert(NULL != mSlave); mSlave->Stop(); }
+        void Simulator::Stop() { assert(nullptr != mSlave); mSlave->Stop(); }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -193,7 +193,7 @@ namespace KMS
 
         unsigned int Simulator::Item::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             // TODO Validate aOutSize_byte
 
@@ -202,7 +202,7 @@ namespace KMS
 
         void Simulator::Item::Set(const char* aIn)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             char lN[64];
             char lV[64];
@@ -247,7 +247,7 @@ namespace KMS
 
         unsigned int Simulator::OnReadCoils(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
@@ -256,14 +256,14 @@ namespace KMS
                 auto lValue = false;
 
                 auto lObject = mCoils.GetEntry_R(lData->mStartAddr + i);
-                if (NULL == lObject)
+                if (nullptr == lObject)
                 {
                     TraceUnknown("Read Coil", lData->mStartAddr + i, OFF);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
-                    assert(NULL != lItem);
+                    assert(nullptr != lItem);
 
                     TraceKnown("Read Coil", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
@@ -278,7 +278,7 @@ namespace KMS
 
         unsigned int Simulator::OnReadDiscreteInputs(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
@@ -287,14 +287,14 @@ namespace KMS
                 auto lValue = false;
 
                 auto lObject = mDiscreteInputs.GetEntry_R(lData->mStartAddr + i);
-                if (NULL == lObject)
+                if (nullptr == lObject)
                 {
                     TraceUnknown("Read Discrete Input", lData->mStartAddr + i, OFF);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
-                    assert(NULL != lItem);
+                    assert(nullptr != lItem);
 
                     TraceKnown("Read Discrete Input", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
@@ -309,7 +309,7 @@ namespace KMS
 
         unsigned int Simulator::OnReadHoldingRegisters(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
@@ -318,14 +318,14 @@ namespace KMS
                 RegisterValue lValue = 0;
 
                 auto lObject = mHoldingRegisters.GetEntry_R(lData->mStartAddr + i);
-                if (NULL == lObject)
+                if (nullptr == lObject)
                 {
                     TraceUnknown("Read Holding Register", lData->mStartAddr + i, 0);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
-                    assert(NULL != lItem);
+                    assert(nullptr != lItem);
 
                     TraceKnown("Read Holding Register", lData->mStartAddr + i, *lItem, FLAG_VERBOSE_READ);
 
@@ -340,7 +340,7 @@ namespace KMS
 
         unsigned int Simulator::OnReadInputRegisters(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
@@ -349,14 +349,14 @@ namespace KMS
                 RegisterValue lValue = 0;
 
                 auto lObject = mInputRegisters.GetEntry_R(lData->mStartAddr + i);
-                if (NULL == lObject)
+                if (nullptr == lObject)
                 {
                     TraceUnknown("Read Input Register", lData->mStartAddr + i, 0);
                 }
                 else
                 {
                     auto lItem = dynamic_cast<const Item*>(lObject);
-                    assert(NULL != lItem);
+                    assert(nullptr != lItem);
 
                     TraceKnown("Read Input Register", lData->mStartAddr, *lItem, FLAG_VERBOSE_READ);
 
@@ -371,14 +371,14 @@ namespace KMS
 
         unsigned int Simulator::OnWriteSingleCoil(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
             auto lValue = ReadUInt16(lData->mBuffer, 0);
 
             auto lObject = mCoils.GetEntry_RW(lData->mStartAddr);
-            if (NULL == lObject)
+            if (nullptr == lObject)
             {
                 TraceUnknown("Write Single Coil", lData->mStartAddr, lValue);
             }
@@ -388,7 +388,7 @@ namespace KMS
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
                 auto lItem = dynamic_cast<Item*>(lObject);
-                assert(NULL != lItem);
+                assert(nullptr != lItem);
 
                 if ((0 != lItem->mValue) != lBool)
                 {
@@ -404,14 +404,14 @@ namespace KMS
 
         unsigned int Simulator::OnWriteSingleRegister(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<Slave::MsgData*>(aData);
 
             auto lValue = ReadUInt16(lData->mBuffer, 0);
 
             auto lObject = mHoldingRegisters.GetEntry_RW(lData->mStartAddr);
-            if (NULL == lObject)
+            if (nullptr == lObject)
             {
                 TraceUnknown("Write Single Register", lData->mStartAddr, lValue);
             }
@@ -420,7 +420,7 @@ namespace KMS
                 unsigned int lFlags = FLAG_VERBOSE_WRITE;
 
                 auto lItem = dynamic_cast<Item*>(lObject);
-                assert(NULL != lItem);
+                assert(nullptr != lItem);
 
                 if (lItem->mValue != lValue)
                 {
@@ -446,7 +446,7 @@ void OnCtrlC(int aSignal)
 {
     assert(SIGINT == aSignal);
 
-    assert(NULL != sSimulator);
+    assert(nullptr != sSimulator);
 
     std::cout << "Ctrl-C" << std::endl;
 
@@ -457,7 +457,7 @@ DI::Object* CreateItem() { return new Modbus::Simulator::Item; }
 
 Modbus::RegisterValue ToRegisterValue(const char* aIn)
 {
-    assert(NULL != aIn);
+    assert(nullptr != aIn);
     
     if (0 == _stricmp("false", aIn)) { return 0; }
     if (0 == _stricmp("true" , aIn)) { return 1; }
@@ -470,7 +470,7 @@ Modbus::RegisterValue ToRegisterValue(const char* aIn)
 
 void TraceKnown(const char* aOp, Modbus::Address aA, const Modbus::Simulator::Item& aItem, unsigned int aFlags)
 {
-    assert(NULL != aOp);
+    assert(nullptr != aOp);
 
     if (0 != (aItem.mFlags & aFlags))
     {
@@ -480,7 +480,7 @@ void TraceKnown(const char* aOp, Modbus::Address aA, const Modbus::Simulator::It
 
 void TraceUnknown(const char* aOp, Modbus::Address aA, Modbus::RegisterValue aV)
 {
-    assert(NULL != aOp);
+    assert(nullptr != aOp);
 
     std::cout << Console::Color::RED;
     std::cout << aOp << " at " << aA << " = " << aV;

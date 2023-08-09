@@ -28,7 +28,7 @@
 static const KMS::Cfg::MetaData MD_DTR          ("DTR = false | true");
 static const KMS::Cfg::MetaData MD_PARITY       ("Parity = EVEN | INORED_EVEN | IGNORED_MARK | IGNORED_ODD | IGNORED_SPACE | MARK | NONE | ODD | SPACE");
 static const KMS::Cfg::MetaData MD_READ_TIMEOUT ("ReadTimeout = {ms}");
-static const KMS::Cfg::MetaData MD_RTS          ("DTR = false | true");
+static const KMS::Cfg::MetaData MD_RTS          ("RTS = false | true");
 static const KMS::Cfg::MetaData MD_SPEED        ("Speed = {bps}");
 static const KMS::Cfg::MetaData MD_WRITE_TIMEOUT("WriteTimeout = {ms}");
 

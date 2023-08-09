@@ -51,8 +51,8 @@ namespace KMS
         int Sync::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
-            assert(NULL != aVector[0]);
+            assert(nullptr != aVector);
+            assert(nullptr != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -117,10 +117,10 @@ namespace KMS
         {
             for (const auto& lVT : mBidirectional.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
-                assert(NULL != lGroup);
+                assert(nullptr != lGroup);
 
                 Run_Bidirectional(*lGroup);
             }
@@ -130,10 +130,10 @@ namespace KMS
         {
             for (const DI::Object* lObj : mUnidirectional.mInternal)
             {
-                assert(NULL != lObj);
+                assert(nullptr != lObj);
 
                 auto lStr = dynamic_cast<const DI::String*>(lObj);
-                assert(NULL != lStr);
+                assert(nullptr != lStr);
 
                 char lDstName[PATH_LENGTH];
                 char lSrcName[PATH_LENGTH];
@@ -172,10 +172,10 @@ namespace KMS
 
             for (const DI::Object* lObj : aGroup.mInternal)
             {
-                assert(NULL != lObj);
+                assert(nullptr != lObj);
 
                 auto lPath = dynamic_cast<const DI::String*>(lObj);
-                assert(NULL != lPath);
+                assert(nullptr != lPath);
 
                 lLists.push_back(ToFileInfoList(*lPath));
             }
@@ -199,8 +199,8 @@ namespace KMS
 
         void Sync::Run_Bidirectional(FileInfoList* aA, FileInfoList* aB)
         {
-            assert(NULL != aA);
-            assert(NULL != aB);
+            assert(nullptr != aA);
+            assert(nullptr != aB);
 
             unsigned int lFlags = FileInfoList::FLAG_IF_DOES_NOT_EXIST;
 
@@ -214,10 +214,10 @@ namespace KMS
         {
             for (const auto& lVT : mBidirectional.mInternal)
             {
-                assert(NULL != lVT.second);
+                assert(nullptr != lVT.second);
 
                 auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
-                assert(NULL != lGroup);
+                assert(nullptr != lGroup);
 
                 KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), FILE_CONFIG_INVALID, "Number of folders cannot be one", lVT.first.c_str());
             }

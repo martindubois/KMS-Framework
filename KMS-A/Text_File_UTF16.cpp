@@ -28,7 +28,7 @@ namespace KMS
 
         void File_UTF16::AddLine(const wchar_t* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             mLines.push_back(aLine);
         }
@@ -63,7 +63,7 @@ namespace KMS
 
         void File_UTF16::InsertLine(unsigned int aNo, const wchar_t* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             if (mLines.size() < aNo)
             {
@@ -98,7 +98,7 @@ namespace KMS
 
         void File_UTF16::ReplaceLine(unsigned int aNo, const wchar_t* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             if (mLines.size() <= aNo)
             {
@@ -112,8 +112,8 @@ namespace KMS
 
         unsigned int File_UTF16::ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace)
         {
-            assert(NULL != aRegEx);
-            assert(NULL != aReplace);
+            assert(nullptr != aRegEx);
+            assert(nullptr != aReplace);
 
             unsigned int lResult = 0;
 
@@ -133,7 +133,7 @@ namespace KMS
 
         void File_UTF16::Read(const File::Folder& aFolder, const char* aFile)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             char lPath[PATH_LENGTH];
 
@@ -168,7 +168,7 @@ namespace KMS
 
         void File_UTF16::Write(const File::Folder& aFolder, const char* aFile, const wchar_t* aEOL)
         {
-            assert(NULL != aEOL);
+            assert(nullptr != aEOL);
 
             char lPath[PATH_LENGTH];
 
@@ -192,7 +192,7 @@ namespace KMS
 
         void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
-            assert(NULL != aEOL);
+            assert(nullptr != aEOL);
 
             char lPath[PATH_LENGTH];
 
@@ -219,7 +219,7 @@ namespace KMS
 
         unsigned int File_UTF16::CountOccurrence(const wchar_t* aStr) const
         {
-            assert(NULL != aStr);
+            assert(nullptr != aStr);
 
             unsigned int lResult = 0;
 

@@ -20,12 +20,12 @@ namespace KMS
 
         WritePtr::WritePtr(char* aBase, unsigned int aSize_byte) : mBase(aBase), mIndex_byte(0), mSize_byte(aSize_byte)
         {
-            assert(NULL != aBase);
+            assert(nullptr != aBase);
         }
 
         WritePtr::~WritePtr()
         {
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             if (mIndex_byte < mSize_byte)
@@ -36,7 +36,7 @@ namespace KMS
 
         WritePtr::operator char* ()
         {
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
 
             return mBase + mIndex_byte;
         }
@@ -61,7 +61,7 @@ namespace KMS
 
         void WritePtr::Write(char aIn)
         {
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             KMS_EXCEPTION_ASSERT(mIndex_byte + 1 + 2 <= mSize_byte, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
@@ -73,9 +73,9 @@ namespace KMS
 
         void WritePtr::Write(const char* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
-            assert(NULL != mBase);
+            assert(nullptr != mBase);
             assert(mIndex_byte <= mSize_byte);
 
             KMS_EXCEPTION_ASSERT(mIndex_byte + aInSize_byte + 2 <= mSize_byte, TEXT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);

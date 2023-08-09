@@ -24,7 +24,7 @@ namespace KMS
 
         void Dictionary::AddConstEntry(const char* aName, const Object* aObject, const MetaData* aMD)
         {
-            assert(NULL != aName);
+            assert(nullptr != aName);
 
             auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
@@ -40,7 +40,7 @@ namespace KMS
 
         void Dictionary::AddEntry(const char* aName, Object* aObject, bool aDelete, const MetaData* aMD)
         {
-            assert(NULL != aName);
+            assert(nullptr != aName);
 
             auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
@@ -57,7 +57,7 @@ namespace KMS
         Object* Dictionary::CreateEntry(const char* aName, const MetaData* aMD)
         {
             auto lResult = CallCreator();
-            assert(NULL != lResult);
+            assert(nullptr != lResult);
 
             AddEntry(aName, lResult, true, aMD);
 
@@ -66,30 +66,30 @@ namespace KMS
 
         const Object* Dictionary::GetEntry_R(const char* aKey) const
         {
-            assert(NULL != aKey);
+            assert(nullptr != aKey);
 
             auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
-                return NULL;
+                return nullptr;
             }
 
-            assert(NULL != lIt->second);
+            assert(nullptr != lIt->second);
 
             return lIt->second;
         }
 
         Object* Dictionary::GetEntry_RW(const char* aKey)
         {
-            assert(NULL != aKey);
+            assert(nullptr != aKey);
 
             auto lIt = mInternal.find(aKey);
             if (mInternal.end() == lIt)
             {
-                return NULL;
+                return nullptr;
             }
 
-            assert(NULL != lIt->second);
+            assert(nullptr != lIt->second);
 
             return lIt->second;
         }
@@ -122,7 +122,7 @@ namespace KMS
             {
                 if (!IsDynamic())
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 lResult = CreateEntry(lName);
@@ -143,7 +143,7 @@ namespace KMS
             {
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
 
-                if (NULL == lContainer)
+                if (nullptr == lContainer)
                 {
                     sprintf_s(lMsg, "\"%s\" is not a valid name (NOT TESTED)", aName);
                     KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);

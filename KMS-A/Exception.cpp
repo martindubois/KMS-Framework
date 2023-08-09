@@ -110,11 +110,11 @@ namespace KMS
 
     void Exception::Construct(const char* aFile, const char* aFunction, unsigned int aLine, Code aCode, const char* aMsg)
     {
-        assert(NULL != aFile);
-        assert(NULL != aFunction);
+        assert(nullptr != aFile);
+        assert(nullptr != aFunction);
         assert(0 < aLine);
         assert(Code::QTY > aCode);
-        assert(NULL != aMsg);
+        assert(nullptr != aMsg);
 
         mCode      = aCode;
         mFile      = aFile;

@@ -18,7 +18,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        WorkItem::WorkItem() : mNext(NULL) {}
+        WorkItem::WorkItem() : mNext(nullptr) {}
 
     }
 }

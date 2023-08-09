@@ -26,7 +26,7 @@ namespace KMS
         const unsigned int Console::FLAG_FILE   = 0x00000100;
         const unsigned int Console::FLAG_STREAM = 0x00000200;
 
-        Console::Console() : mFile(NULL) { Set_Default(); }
+        Console::Console() : mFile(nullptr) { Set_Default(); }
 
         Console::~Console() { CloseFile(); }
 
@@ -42,7 +42,7 @@ namespace KMS
 
         void Console::Set(const char* aFileName, unsigned int aFlags)
         {
-            assert(NULL != aFileName);
+            assert(nullptr != aFileName);
 
             CloseFile();
 
@@ -102,7 +102,7 @@ namespace KMS
 
         void Console::CloseFile()
         {
-            if (NULL != mFile)
+            if (nullptr != mFile)
             {
                 auto lRet = fclose(mFile);
                 assert(0 == lRet);

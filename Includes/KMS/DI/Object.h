@@ -30,7 +30,7 @@ namespace KMS
 
         // Internal
 
-            virtual void Send_OnChanged(void* aData = NULL);
+            virtual void Send_OnChanged(void* aData = nullptr);
 
         protected:
 

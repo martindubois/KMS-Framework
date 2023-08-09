@@ -28,7 +28,7 @@ namespace KMS
 
         void Process::Run_Internal(unsigned int)
         {
-            assert(NULL != mCmdLine);
+            assert(nullptr != mCmdLine);
 
             auto lCD = 0 < mWorkingDirectory.size();
 
@@ -77,7 +77,7 @@ namespace KMS
                         lVector[lIndex] = lA.c_str(); lIndex++;
                     }
 
-                    lVector[lIndex] = NULL;
+                    lVector[lIndex] = nullptr;
 
                     if (0 < mWorkingDirectory.size())
                     {
@@ -109,7 +109,7 @@ namespace KMS
 
 void ChangeDirectory(const char* aD)
 {
-    assert(NULL != aD);
+    assert(nullptr != aD);
 
     if (0 != chdir(aD))
     {

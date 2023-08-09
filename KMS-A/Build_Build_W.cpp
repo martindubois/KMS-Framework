@@ -38,7 +38,7 @@ namespace KMS
                 lCT->Start();
 
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lP);
+                assert(nullptr != lP);
 
                 Compile_VisualStudio(aC, *lP);
 
@@ -69,10 +69,10 @@ namespace KMS
         {
             for (const auto& lEntry : mProcessors.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lP);
+                assert(nullptr != lP);
 
                 std::string lCfg = aC;
 
@@ -91,10 +91,10 @@ namespace KMS
 
                     for (const auto& lEntry : mBinaries.mInternal)
                     {
-                        assert(NULL != lEntry);
+                        assert(nullptr != lEntry);
 
                         auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                        assert(NULL != lB);
+                        assert(nullptr != lB);
 
                         lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
                         lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
@@ -109,10 +109,10 @@ namespace KMS
 
                     for (const auto& lEntry : mLibraries.mInternal)
                     {
-                        assert(NULL != lEntry);
+                        assert(nullptr != lEntry);
 
                         auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                        assert(NULL != lL);
+                        assert(nullptr != lL);
 
                         lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
                         lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
@@ -125,17 +125,17 @@ namespace KMS
         {
             for (const auto& lEntry : mProcessors.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lP);
+                assert(nullptr != lP);
 
                 for (const auto& lEntry : mTests.mInternal)
                 {
-                    assert(NULL != lEntry);
+                    assert(nullptr != lEntry);
 
                     auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(NULL != lT);
+                    assert(nullptr != lT);
 
                     std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
 

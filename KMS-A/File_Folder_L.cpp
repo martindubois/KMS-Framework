@@ -183,8 +183,8 @@ namespace KMS
 
         void Folder::Copy_Internal(const char* aDst, const char* aSrc, unsigned int aFlags) const
         {
-            assert(NULL != aDst);
-            assert(NULL != aSrc);
+            assert(nullptr != aDst);
+            assert(nullptr != aSrc);
 
             Proc::Process lP(Folder(Id::NONE), "cp");
 
@@ -219,7 +219,7 @@ namespace KMS
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "readlink failed", lRet);
 
             auto lPtr = strrchr(lModule, '/');
-            KMS_EXCEPTION_ASSERT(NULL != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
+            KMS_EXCEPTION_ASSERT(nullptr != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
 
             *lPtr = '\0';
 
@@ -233,7 +233,7 @@ namespace KMS
             strcpy(lPath, "/tmp/KMSXXXXXX");
 
             auto lRet = mkdtemp(lPath);
-            KMS_EXCEPTION_ASSERT(NULL != lRet, FILE_INIT_FAILED, "mkdtemp failed", lPath);
+            KMS_EXCEPTION_ASSERT(nullptr != lRet, FILE_INIT_FAILED, "mkdtemp failed", lPath);
 
             mPath = lPath;
         }

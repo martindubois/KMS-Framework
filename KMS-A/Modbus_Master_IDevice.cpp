@@ -30,21 +30,21 @@ namespace KMS
 
         Master_IDevice::Master_IDevice(Dev::IDevice* aDevice) : mDevice(aDevice)
         {
-            assert(NULL != aDevice);
+            assert(nullptr != aDevice);
         }
 
         // ===== Master =====================================================
 
         bool Master_IDevice::Connect()
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             return mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
         }
 
         void Master_IDevice::Disconnect()
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             mDevice->Disconnect();
         }
@@ -56,10 +56,10 @@ namespace KMS
 
         unsigned int Master_IDevice::Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
 
@@ -95,7 +95,7 @@ namespace KMS
 
         unsigned int Master_IDevice::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
 
@@ -103,7 +103,7 @@ namespace KMS
 
             if (0 < aOutSize_byte)
             {
-                assert(NULL != aOut);
+                assert(nullptr != aOut);
 
                 uint8_t lBuffer[BUFFER_SIZE_byte];
 
@@ -169,11 +169,11 @@ namespace KMS
 
         bool Master_IDevice::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
             assert(aInSize_byte > 0);
             assert(aInSize_byte <= BUFFER_SIZE_byte - 4);
 
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
 

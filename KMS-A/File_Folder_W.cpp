@@ -157,7 +157,7 @@ namespace KMS
 
         void Folder::Create()
         {
-            if (!CreateDirectory(mPath.c_str(), NULL))
+            if (!CreateDirectory(mPath.c_str(), nullptr))
             {
                 // NOT TESTED
                 KMS_EXCEPTION(FILE_CREATE_FAILED, "Cannot create the folder", mPath.c_str());
@@ -252,8 +252,8 @@ namespace KMS
 
         void Folder::Copy_Internal(const char* aDst, const char* aSrc, unsigned int aFlags) const
         {
-            assert(NULL != aDst);
-            assert(NULL != aSrc);
+            assert(nullptr != aDst);
+            assert(nullptr != aSrc);
 
             if (CopyFile(aSrc, aDst, (FLAG_OVERWRITE == (aFlags & FLAG_OVERWRITE)) ? FALSE : TRUE))
             {
@@ -286,7 +286,7 @@ namespace KMS
             KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "GetModuleFileName failed", lRet);
 
             char* lPtr = strrchr(lModule, '\\');
-            KMS_EXCEPTION_ASSERT(NULL != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
+            KMS_EXCEPTION_ASSERT(nullptr != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
 
             *lPtr = '\0';
 

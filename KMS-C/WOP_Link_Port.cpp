@@ -28,8 +28,8 @@ namespace KMS
             , ON_ITERATE_RX(this, &Link_Port::OnIterate_Rx)
             , ON_ITERATE_TX(this, &Link_Port::OnIterate_Tx)
         {
-            assert(NULL != aSystem);
-            assert(NULL != aPort);
+            assert(nullptr != aSystem);
+            assert(nullptr != aPort);
 
             mThread_Rx.mOnIterate = &ON_ITERATE_RX;
             mThread_Tx.mOnIterate = &ON_ITERATE_TX;
@@ -57,8 +57,8 @@ namespace KMS
 
         unsigned int Link_Port::OnIterate_Rx(void*, void*)
         {
-            assert(NULL != mPort);
-            assert(NULL != mSystem);
+            assert(nullptr != mPort);
+            assert(nullptr != mSystem);
 
             uint8_t lBuffer[262];
 
@@ -73,11 +73,11 @@ namespace KMS
 
         unsigned int Link_Port::OnIterate_Tx(void*, void*)
         {
-            assert(NULL != mPort);
-            assert(NULL != mSystem);
+            assert(nullptr != mPort);
+            assert(nullptr != mSystem);
 
             auto lFB = mSystem->PrepareFrame();
-            if (NULL != lFB)
+            if (nullptr != lFB)
             {
                 mPort->Write(lFB->GetRawFrame(), lFB->GetFrameSize_byte());
             }

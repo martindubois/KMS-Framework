@@ -20,20 +20,20 @@ namespace KMS
 
         AnalogInputConverter::AnalogInputConverter(IAnalogInputs* aInterface) : mInterface(aInterface)
         {
-            assert(NULL != aInterface);
+            assert(nullptr != aInterface);
         }
 
         // ===== IAnalogInputes =============================================
         AnalogValue AnalogInputConverter::AI_Read(Id aId)
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             return Scale(aId, mInterface->AI_Read(aId));
         }
 
         AnalogValue_Raw AnalogInputConverter::AI_Read_Raw(Id aId)
         {
-            assert(NULL != mInterface);
+            assert(nullptr != mInterface);
 
             return mInterface->AI_Read_Raw(aId);
         }

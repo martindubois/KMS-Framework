@@ -32,8 +32,8 @@ namespace KMS
 
         bool Execute_Operation(DI::Container* aRoot, const char* aOperation)
         {
-            assert(NULL != aRoot);
-            assert(NULL != aOperation);
+            assert(nullptr != aRoot);
+            assert(nullptr != aOperation);
 
             char lName    [NAME_LENGTH];
             char lOperator[NAME_LENGTH];
@@ -47,7 +47,7 @@ namespace KMS
 
             auto lObject = aRoot->FindObject_RW(lName);
 
-            auto lResult = (NULL != lObject);
+            auto lResult = (nullptr != lObject);
             if (lResult)
             {
                 switch (lRet)
@@ -86,10 +86,10 @@ using namespace KMS;
 
 void Add(DI::Object* aObject, const char* aValue)
 {
-    assert(NULL != aValue);
+    assert(nullptr != aValue);
 
     auto lArray = dynamic_cast<DI::Array*>(aObject);
-    if (NULL != lArray)
+    if (nullptr != lArray)
     {
         auto lObject = lArray->CreateEntry();
 
@@ -105,10 +105,10 @@ void Add(DI::Object* aObject, const char* aValue)
 
 void Assign(DI::Object* aObject, const char* aValue)
 {
-    assert(NULL != aObject);
+    assert(nullptr != aObject);
 
     auto lValue = dynamic_cast<DI::Value*>(aObject);
-    if (NULL != lValue)
+    if (nullptr != lValue)
     {
         lValue->Set(aValue);
         return;
@@ -119,10 +119,10 @@ void Assign(DI::Object* aObject, const char* aValue)
 
 void Set(DI::Object* aObject)
 {
-    assert(NULL != aObject);
+    assert(nullptr != aObject);
 
     auto lBoolean = dynamic_cast<DI::Boolean*>(aObject);
-    if (NULL != lBoolean)
+    if (nullptr != lBoolean)
     {
         if (!lBoolean->Get())
         {

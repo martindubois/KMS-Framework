@@ -27,10 +27,10 @@ namespace KMS
 
         bool Device::IsConnected() const { return INVALID_HANDLE_VALUE != mHandle; }
 
-        void Device::SetHardwareId (const char* aHI) { assert(NULL != aHI); mHardwareId = aHI; }
+        void Device::SetHardwareId (const char* aHI) { assert(nullptr != aHI); mHardwareId = aHI; }
         void Device::ResetInterface() { mInterface_Valid = false; }
         void Device::SetInterface  (const GUID& aI) { mInterface.Set(aI); mInterface_Valid = true; }
-        void Device::SetLocation   (const char* aL) { assert(NULL != aL);  mLocation = aL; }
+        void Device::SetLocation   (const char* aL) { assert(nullptr != aL);  mLocation = aL; }
 
         // ===== IDevice ====================================================
 
@@ -89,7 +89,7 @@ namespace KMS
 
         unsigned int Device::Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
             assert(0 == (aFlags & ~FLAG_READ_ALL));
 
@@ -112,7 +112,7 @@ namespace KMS
 
         bool Device::Write(const void* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
             assert(0 < aInSize_byte);
 
             assert(INVALID_HANDLE_VALUE != mHandle);

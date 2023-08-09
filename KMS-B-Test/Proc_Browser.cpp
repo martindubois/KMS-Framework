@@ -53,7 +53,7 @@ KMS_TEST(Proc_Browser_Chrome, "Proc_Browser_Chrome", "Chrome", sTest_Chrome)
     lB.Open(File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
     lB.Close();
 
-    lB.Open(File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", NULL);
+    lB.Open(File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", nullptr);
     lB.Close();
 }
 

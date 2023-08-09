@@ -53,7 +53,7 @@ namespace KMS
 
 GUID ToGUID(const char* aIn)
 {
-    assert(NULL != aIn);
+    assert(nullptr != aIn);
 
     GUID lResult;
 

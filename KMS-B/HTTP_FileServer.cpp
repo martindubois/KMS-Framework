@@ -64,35 +64,35 @@ namespace KMS
 
         void FileServer::FileType_App_JS(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &INLINE);
             aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_PLAIN);
@@ -101,8 +101,8 @@ namespace KMS
         int FileServer::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
-            assert(NULL != aVector[0]);
+            assert(nullptr != aVector);
+            assert(nullptr != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -175,7 +175,7 @@ namespace KMS
 
         void FileServer::SetFileType(const char* aExt, FileTypeFunction aFunction)
         {
-            assert(NULL != aExt);
+            assert(nullptr != aExt);
 
             auto lIt = mFileTypes.find(aExt);
             if (mFileTypes.end() == lIt)
@@ -194,7 +194,7 @@ namespace KMS
 
         void FileServer::ProcessRequest(Request* aR, const char* aPath)
         {
-            assert(NULL != aR);
+            assert(nullptr != aR);
 
             switch (aR->GetType())
             {
@@ -211,14 +211,14 @@ namespace KMS
 
         void FileServer::ProcessRequest_GET(Request* aR, const char* aPath)
         {
-            assert(NULL != aR);
+            assert(nullptr != aR);
 
-            auto lPath = (NULL == aPath) ? aR->GetPath() : aPath;
+            auto lPath = (nullptr == aPath) ? aR->GetPath() : aPath;
 
             // TODO Protect against .. in path.
 
             auto lExt = strrchr(lPath, '.');
-            if (NULL == lExt)
+            if (nullptr == lExt)
             {
                 aR->SetResult(Request::Result::FORBIDDEN);
                 return;
@@ -243,7 +243,7 @@ namespace KMS
             lIt->second(aR);
 
             auto lFile = new File::Binary(mRoot, lPath + 1);
-            assert(NULL != lFile);
+            assert(nullptr != lFile);
 
             auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
             aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);

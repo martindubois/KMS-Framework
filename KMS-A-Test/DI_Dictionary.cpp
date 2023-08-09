@@ -20,7 +20,7 @@ KMS_TEST(DI_Dictionary_Base, "DI_Dictionary_Base", "Auto", sTest_Base)
 
     // Create
     DI::Object* lO0 = DI::Dictionary::Create();
-    KMS_TEST_ASSERT(NULL != lO0);
+    KMS_TEST_ASSERT(nullptr != lO0);
     delete lO0;
 
     // AddConstEntry
@@ -33,8 +33,8 @@ KMS_TEST(DI_Dictionary_Base, "DI_Dictionary_Base", "Auto", sTest_Base)
     // CreateEntry
 
     // GetEntry_R
-    KMS_TEST_ASSERT(NULL == lD0.GetEntry_R("DoesNotExist"));
-    KMS_TEST_ASSERT(NULL != lD0.GetEntry_R("Test0"));
+    KMS_TEST_ASSERT(nullptr == lD0.GetEntry_R("DoesNotExist"));
+    KMS_TEST_ASSERT(nullptr != lD0.GetEntry_R("Test0"));
 
     // GetEntry_RW
 

@@ -16,7 +16,7 @@ KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
 {
     // Create
     auto lO = DI::Folder::Create();
-    KMS_TEST_ASSERT(NULL != lO);
+    KMS_TEST_ASSERT(nullptr != lO);
     delete lO;
 
     // Constructors

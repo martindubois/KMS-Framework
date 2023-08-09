@@ -53,7 +53,7 @@ namespace KMS
         {
             Net::AddressRange lResult;
 
-            assert(NULL != aASCII);
+            assert(nullptr != aASCII);
 
             char         lA[LINE_LENGTH];
             unsigned int lM;

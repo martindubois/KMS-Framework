@@ -102,7 +102,7 @@ namespace KMS
             "VersionFile"     ,
             "WindowsProcessor",
 
-            NULL
+            nullptr
         };
 
         const char* Make::COMPONENT_TYPE_NAMES[] = { "BINARY", "LIBRARY", "NONE", "TEST" };
@@ -110,8 +110,8 @@ namespace KMS
         int Make::Main(int aCount, const char ** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
-            assert(NULL != aVector[0]);
+            assert(nullptr != aVector);
+            assert(nullptr != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -193,7 +193,7 @@ namespace KMS
 
         void Make::DisplayHelp(FILE* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "Clean\n"
@@ -205,7 +205,7 @@ namespace KMS
 
         void Make::ExecuteCommand(const char* aC)
         {
-            assert(NULL != aC);
+            assert(nullptr != aC);
 
             if      (0 == strcmp("Clean" , aC)) { Run_Clean (); }
             else if (0 == strcmp("Depend", aC)) { Run_Depend(); }
@@ -240,7 +240,7 @@ namespace KMS
             for (const auto& lEntry : mBinaries.mInternal)
             {
                 auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lB);
+                assert(nullptr != lB);
 
                 Clean_Component(lB->Get());
                 Clean_Binary   (lB->Get());
@@ -289,7 +289,7 @@ namespace KMS
             for (const auto& lEntry : mLibraries.mInternal)
             {
                 auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lL);
+                assert(nullptr != lL);
 
                 Clean_Component(lL->Get());
                 Clean_Library  (lL->Get());
@@ -301,7 +301,7 @@ namespace KMS
             for (const auto& lEntry : mTests.mInternal)
             {
                 auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lT);
+                assert(nullptr != lT);
 
                 Clean_Component(lT->Get());
                 Clean_Binary   (lT->Get());
@@ -345,7 +345,7 @@ namespace KMS
             for (const auto& lEntry : aComponents.mInternal)
             {
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lC);
+                assert(nullptr != lC);
 
                 Depend_Component(lC->Get());
             }
@@ -361,8 +361,8 @@ namespace KMS
 
         void Make::Depend_ParseMakeFile(Text::File_ASCII* aMF, StringSet_ASCII* aSources)
         {
-            assert(NULL != aMF);
-            assert(NULL != aSources);
+            assert(nullptr != aMF);
+            assert(nullptr != aSources);
 
             char lSource[PATH_LENGTH];
 
@@ -411,7 +411,7 @@ namespace KMS
                 strcpy_s(lLongLine, aSource);
 
                 auto lPtr = strrchr(lLongLine, '.');
-                assert(NULL != lPtr);
+                assert(nullptr != lPtr);
 
                 strcpy_s(lPtr SizeInfoV(lLongLine + sizeof(lLongLine) - lPtr), ".o:");
 
@@ -447,7 +447,7 @@ namespace KMS
             for (const auto& lEntry : aComponents.mInternal)
             {
                 auto lC = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lC);
+                assert(nullptr != lC);
 
                 Make_Component(lC->Get());
             }
@@ -562,7 +562,7 @@ bool DoesContain(const DI::Array& aArray, const char* aStr)
     for (const auto& lEntry : aArray.mInternal)
     {
         auto lStr = dynamic_cast<const DI::String*>(lEntry.Get());
-        assert(NULL != lStr);
+        assert(nullptr != lStr);
 
         if (*lStr == aStr)
         {

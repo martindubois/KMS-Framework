@@ -24,7 +24,7 @@ namespace KMS
 
         Stats_Entry::Stats_Entry(const char* aName) : mName(aName)
         {
-            assert(NULL != aName);
+            assert(nullptr != aName);
 
             gStats.AddEntry(this);
         }

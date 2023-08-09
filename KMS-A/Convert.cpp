@@ -27,7 +27,7 @@ namespace KMS
 
         bool ToBool(const char* aASCII)
         {
-            assert(NULL != aASCII);
+            assert(nullptr != aASCII);
 
             if ((0 == _stricmp(aASCII, "true")) || (0 == strcmp(aASCII, "1")))
             {
@@ -44,7 +44,7 @@ namespace KMS
 
         double ToDouble(const char* aASCII)
         {
-            assert(NULL != aASCII);
+            assert(nullptr != aASCII);
 
             char* lPtr;
 
@@ -62,8 +62,8 @@ namespace KMS
 
         FILE* ToFile(const char* aASCII, const char* aMode)
         {
-            assert(NULL != aASCII);
-            assert(NULL != aMode);
+            assert(nullptr != aASCII);
+            assert(nullptr != aMode);
 
             if (0 == strcmp(aASCII, "stderr")) { return stderr; }
             if (0 == strcmp(aASCII, "stdin" )) { return stdin ; }
@@ -80,14 +80,14 @@ namespace KMS
                 KMS_EXCEPTION(CONVERT_OPEN_FAILED, lMsg, lRet);
             }
 
-            assert(NULL != lResult);
+            assert(nullptr != lResult);
 
             return lResult;
         }
 
         int32_t ToInt32(const char* aASCII, Radix aRadix)
         {
-            assert(NULL != aASCII);
+            assert(nullptr != aASCII);
 
             const char* lASCII;
             Radix       lRadix;
@@ -133,7 +133,7 @@ namespace KMS
 
         uint32_t ToUInt32(const char* aASCII, Radix aRadix)
         {
-            assert(NULL != aASCII);
+            assert(nullptr != aASCII);
 
             const char* lASCII;
             Radix       lRadix;
@@ -179,8 +179,8 @@ namespace KMS
 
         unsigned int ToASCII(const wchar_t* aUTF16, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aUTF16);
-            assert(NULL != aOut);
+            assert(nullptr != aUTF16);
+            assert(nullptr != aOut);
 
             auto lLen = static_cast<unsigned int>(wcslen(aUTF16));
 
@@ -206,8 +206,8 @@ namespace KMS
 
         unsigned int ToUTF16(const char* aASCII, wchar_t* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aASCII);
-            assert(NULL != aOut);
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
 
             auto lLen = static_cast<unsigned int>(strlen(aASCII));
 
@@ -269,8 +269,8 @@ namespace KMS
                 case STATE_HIGH:
                     if ('\0' == *lASCII) { return lResult_byte; }
 
-                    if      (NULL != strchr(aBlanks, *lASCII)) {}
-                    else if (NULL != strchr(aSeparators, *lASCII))
+                    if      (nullptr != strchr(aBlanks, *lASCII)) {}
+                    else if (nullptr != strchr(aSeparators, *lASCII))
                     {
                         KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = 0; lResult_byte++;
@@ -290,13 +290,13 @@ namespace KMS
                         return lResult_byte;
                     }
 
-                    if (NULL != strchr(aBlanks, *lASCII))
+                    if (nullptr != strchr(aBlanks, *lASCII))
                     {
                         KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_SEP;
                     }
-                    else if (NULL != strchr(aSeparators, *lASCII))
+                    else if (nullptr != strchr(aSeparators, *lASCII))
                     {
                         KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
@@ -315,8 +315,8 @@ namespace KMS
                 case STATE_SEP:
                     if ('\0' == *lASCII) { return lResult_byte; }
 
-                    if (NULL != strchr(aBlanks, *lASCII)) {}
-                    else if (NULL != strchr(aSeparators, *lASCII)) { lState = STATE_HIGH; }
+                    if (nullptr != strchr(aBlanks, *lASCII)) {}
+                    else if (nullptr != strchr(aSeparators, *lASCII)) { lState = STATE_HIGH; }
                     else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
                     break;
 

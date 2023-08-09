@@ -18,19 +18,19 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        File::File() : mInternal(NULL) {}
+        File::File() : mInternal(nullptr) {}
 
         File::File(FILE* aFile, const char* aIn) : String_Expand(aIn), mInternal(aFile), mMode("rb") {}
 
         File::operator FILE* () { return mInternal; }
 
-        bool File::IsOpen() const { return NULL != mInternal; }
+        bool File::IsOpen() const { return nullptr != mInternal; }
 
         void File::SetMode(const char* aMode) { mMode = aMode; }
 
         void File::Close()
         {
-            if (   (NULL   != mInternal)
+            if (   (nullptr != mInternal)
                 && (stderr != mInternal)
                 && (stdin  != mInternal)
                 && (stdout != mInternal))
@@ -39,7 +39,7 @@ namespace KMS
                 assert(0 == lRet);
             }
 
-            mInternal = NULL;
+            mInternal = nullptr;
         }
 
         // ===== Object =====================================================
@@ -54,7 +54,7 @@ namespace KMS
         {
             Close();
 
-            assert(NULL == mInternal);
+            assert(nullptr == mInternal);
 
             auto lIn = Get();
 
@@ -70,7 +70,7 @@ namespace KMS
                 KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, lMsg, lRet);
             }
 
-            assert(NULL != mInternal);
+            assert(nullptr != mInternal);
 
             Object::Send_OnChanged(aData);
         }

@@ -20,11 +20,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        WorkLoop::WorkLoop() : mFirst(NULL) {}
+        WorkLoop::WorkLoop() : mFirst(nullptr) {}
 
         void WorkLoop::AddItem(WorkItem* aItem)
         {
-            // assert(NULL != aItem);
+            // assert(nullptr != aItem);
 
             aItem->mNext = mFirst;
 
@@ -35,7 +35,7 @@ namespace KMS
         {
             WorkItem* lCurrent = mFirst;
 
-            while (NULL != lCurrent)
+            while (nullptr != lCurrent)
             {
                 lCurrent->Work();
 

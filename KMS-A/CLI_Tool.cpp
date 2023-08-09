@@ -60,7 +60,7 @@ namespace KMS
         // NOT TESTED
         void Tool::ExecuteCommands(FILE* aFile)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             char lLine[LINE_LENGTH];
 
@@ -69,7 +69,7 @@ namespace KMS
                 mConsole.OutputStream() << "\n> " << std::flush;
             }
 
-            while (NULL != fgets(lLine, sizeof(lLine), aFile))
+            while (nullptr != fgets(lLine, sizeof(lLine), aFile))
             {
                 char lCmd[LINE_LENGTH];
 
@@ -122,7 +122,7 @@ namespace KMS
 
         void Tool::DisplayHelp(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "Config {Name} [Op] [Value]\n"
@@ -180,7 +180,7 @@ namespace KMS
             for (const auto& lEntry : mCommands.mInternal)
             {
                 auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lCommand);
+                assert(nullptr != lCommand);
 
                 try
                 {

@@ -47,7 +47,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         System::System(const Version& aVersion, uint32_t aMagic, uint8_t aProtocolVersion)
-            : mInstances(NULL)
+            : mInstances(nullptr)
             , mTx_Instance(0)
             , mProtocol_Out(aMagic, aProtocolVersion)
             , mResult_In(KMS_WOP_RESULT_OK)
@@ -100,7 +100,7 @@ namespace KMS
 
         void System::AddReceivedBytes(const uint8_t* aIn, unsigned int aInSize_byte)
         {
-            // assert(NULL != aIn);
+            // assert(nullptr != aIn);
 
             for (unsigned int i = 0; i < aInSize_byte; i++)
             {
@@ -165,7 +165,7 @@ namespace KMS
                     mTx_Instance = 0;
                 }
 
-                // assert(NULL != mInstances[mInstance]);
+                // assert(nullptr != mInstances[mInstance]);
 
                 if (mInstances[mTx_Instance]->PrepareFrame(&mTx_FrameBuffer, mTx_Instance))
                 {
@@ -178,7 +178,7 @@ namespace KMS
                 mTx_Instance++;
             }
 
-            return NULL;
+            return nullptr;
         }
 
         #ifndef _KMS_EMBEDDED_
@@ -197,7 +197,7 @@ namespace KMS
 
         bool System::PrepareFrame(FrameBuffer* aOut, uint8_t aInstance)
         {
-            // assert(NULL != aOut);
+            // assert(nullptr != aOut);
 
             bool lResult = false;
 
@@ -235,7 +235,7 @@ namespace KMS
 
         uint8_t System::WriteData(const FrameBuffer* aIn)
         {
-            // assert(NULL != aIn);
+            // assert(nullptr != aIn);
 
             uint8_t lResult = KMS_WOP_RESULT_INVALID_DATA_TYPE;
 
@@ -292,7 +292,7 @@ namespace KMS
             }
             else if (mProtocol_Out.mInstanceCount > lInstance)
             {
-                // assert(NULL != mInstances[lInstance]);
+                // assert(nullptr != mInstances[lInstance]);
 
                 lRet = mInstances[lInstance]->WriteData(&mRx_FrameBuffer);
             }

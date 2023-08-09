@@ -32,9 +32,9 @@ namespace KMS
             , mTable_Len(aTable_Len)
             , mRegValue(0)
         {
-            assert(NULL != aTable);
+            assert(nullptr != aTable);
             assert(0 < aTable_Len);
-            assert(NULL != aMaster);
+            assert(nullptr != aMaster);
         }
 
         uint16_t Monitor::GetErrorCode() const
@@ -57,7 +57,7 @@ namespace KMS
         //       consecutive register
         Monitor::Result Monitor::Tick()
         {
-            assert(NULL != mTable);
+            assert(nullptr != mTable);
             assert(0 < mTable_Len);
 
             mIndex++;

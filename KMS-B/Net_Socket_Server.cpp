@@ -35,13 +35,13 @@ namespace KMS
 
         Socket* Socket_Server::Accept(unsigned int aTimeout_ms, Address* aFrom)
         {
-            assert(NULL != aFrom);
+            assert(nullptr != aFrom);
 
             VerifyState(State::LISTEN);
 
             assert(INVALID_SOCKET != mSocket);
 
-            Socket* lResult = NULL;
+            Socket* lResult = nullptr;
 
             if (Select(aTimeout_ms))
             {
@@ -134,10 +134,10 @@ namespace KMS
         {
             for (const DI::Object* lObj : mAllowedRanges.mInternal)
             {
-                assert(NULL != lObj);
+                assert(nullptr != lObj);
 
                 auto lAR = dynamic_cast<const DI::NetAddressRange*>(lObj);
-                assert(NULL != lAR);
+                assert(nullptr != lAR);
 
                 if (lAR->Get() == aA)
                 {

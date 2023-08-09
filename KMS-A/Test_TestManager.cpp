@@ -38,7 +38,7 @@ namespace KMS
         int TestManager::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             int lResult = __LINE__;
 
@@ -80,10 +80,10 @@ namespace KMS
 
         void TestManager::AddGroup(const char * aGroup)
         {
-            assert(NULL != aGroup);
+            assert(nullptr != aGroup);
 
             auto lTests = Test::GetTests();
-            if (NULL != lTests)
+            if (nullptr != lTests)
             {
                 for (auto lT : *lTests)
                 {
@@ -97,10 +97,10 @@ namespace KMS
 
         void TestManager::AddTest(const char* aTest)
         {
-            assert(NULL != aTest);
+            assert(nullptr != aTest);
 
             auto lTests = Test::GetTests();
-            if (NULL != lTests)
+            if (nullptr != lTests)
             {
                 for (auto lT : *lTests)
                 {
@@ -183,11 +183,11 @@ namespace KMS
 
         void TestManager::AddTest(Test* aTest)
         {
-            assert(NULL != aTest);
+            assert(nullptr != aTest);
 
             for (auto lTest : mTestList)
             {
-                assert(NULL != lTest);
+                assert(nullptr != lTest);
 
                 if (aTest == lTest)
                 {
@@ -202,20 +202,20 @@ namespace KMS
         {
             for (const DI::Object* lObj : mGroups.mInternal)
             {
-                assert(NULL != lObj);
+                assert(nullptr != lObj);
 
                 auto lString = dynamic_cast<const DI::String*>(lObj);
-                assert(NULL != lString);
+                assert(nullptr != lString);
 
                 AddGroup(*lString);
             }
 
             for (const DI::Object* lObj : mTests.mInternal)
             {
-                assert(NULL != lObj);
+                assert(nullptr != lObj);
 
                 auto lString = dynamic_cast<const DI::String*>(lObj);
-                assert(NULL != lString);
+                assert(nullptr != lString);
 
                 AddTest(*lString);
             }

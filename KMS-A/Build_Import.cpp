@@ -54,7 +54,7 @@ static const char* SILENCE[] =
 {
     NO_OS_0 "Dependencies", NO_OS_1 "Dependencies",
 
-    NULL
+    nullptr
 };
 
 namespace KMS
@@ -68,8 +68,8 @@ namespace KMS
         int Import::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
-            assert(NULL != aVector[0]);
+            assert(nullptr != aVector);
+            assert(nullptr != aVector[0]);
 
             int lResult = __LINE__;
 
@@ -155,10 +155,10 @@ namespace KMS
 
             for (const auto& lEntry : mRepositories.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 auto lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
-                assert(NULL != lR);
+                assert(nullptr != lR);
 
                 if (lR->Get().DoesFolderExist(lProduct))
                 {
@@ -190,12 +190,12 @@ namespace KMS
 
             for (const auto& lEntry : mDependencies.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 lIT->Start();
 
                 auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lD);
+                assert(nullptr != lD);
 
                 ImportDependency(*lD, false);
 
@@ -204,12 +204,12 @@ namespace KMS
 
             for (const auto& lEntry : mOSIndependentDeps.mInternal)
             {
-                assert(NULL != lEntry);
+                assert(nullptr != lEntry);
 
                 lIT->Start();
 
                 auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lD);
+                assert(nullptr != lD);
 
                 ImportDependency(*lD, true);
 

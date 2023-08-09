@@ -30,13 +30,13 @@ namespace KMS
 
         Destination::Destination(IReceiver* aR, unsigned int aCode) { Set(aR, aCode); }
 
-        void Destination::Clear() { mCode = 0; mReceiver = NULL; }
+        void Destination::Clear() { mCode = 0; mReceiver = nullptr; }
 
-        bool Destination::IsSet() const { return NULL != mReceiver; }
+        bool Destination::IsSet() const { return nullptr != mReceiver; }
 
         void Destination::Set(IReceiver* aR, unsigned int aCode)
         {
-            // assert(NULL != aR);
+            // assert(nullptr != aR);
             // assert(0 < aCode);
 
             mCode = aCode;
@@ -47,7 +47,7 @@ namespace KMS
         {
             unsigned int lResult = 0;
 
-            if (NULL != mReceiver)
+            if (nullptr != mReceiver)
             {
                 // assert(0 < mCode);
 

@@ -18,24 +18,24 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
-    Callback_Ptr::Callback_Ptr() : mCallback(NULL) {}
+    Callback_Ptr::Callback_Ptr() : mCallback(nullptr) {}
 
     void Callback_Ptr::operator = (const ICallback* aCallback) { mCallback = const_cast<ICallback*>(aCallback); }
 
     // NOT TESTED
-    void Callback_Ptr::Clear() { mCallback = NULL; }
+    void Callback_Ptr::Clear() { mCallback = nullptr; }
 
-    bool Callback_Ptr::IsSet() { return NULL != mCallback; }
+    bool Callback_Ptr::IsSet() { return nullptr != mCallback; }
 
     unsigned int Callback_Ptr::Send(void* aSender, void* aData)
     {
-        assert(NULL != aSender);
+        assert(nullptr != aSender);
 
         unsigned int lResult = ICallback::FLAG_NOT_SET;
 
         if (IsSet())
         {
-            assert(NULL != mCallback);
+            assert(nullptr != mCallback);
             
             lResult = mCallback->Send(aSender, aData);
         }

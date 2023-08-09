@@ -28,7 +28,7 @@ KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
     // CreateEntry
 
     // GetEntry_R
-    KMS_TEST_ASSERT(NULL == lA0.GetEntry_R(2));
+    KMS_TEST_ASSERT(nullptr == lA0.GetEntry_R(2));
 
     // GetEntry_RW
 
@@ -48,8 +48,8 @@ KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(!lA0.IsEmpty());
 
     // FindObject_RW
-    KMS_TEST_ASSERT(NULL != lA0.FindObject_RW("0"));
-    KMS_TEST_ASSERT(NULL == lA0.FindObject_RW("2"));
+    KMS_TEST_ASSERT(nullptr != lA0.FindObject_RW("0"));
+    KMS_TEST_ASSERT(nullptr == lA0.FindObject_RW("2"));
 
     // ===== Object =========================================================
 

@@ -77,7 +77,7 @@ namespace KMS
 
         uint8_t Object_Dynamic::WriteData(const FrameBuffer* aIn)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             uint8_t lResult;
 
@@ -118,7 +118,7 @@ namespace KMS
 
         uint8_t Object_Dynamic::Buffer::WriteData(const FrameBuffer* aIn)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             mSize_byte = aIn->GetDataSize_byte();
 

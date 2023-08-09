@@ -57,7 +57,7 @@ namespace KMS
 
         void Slave::OnRequest_A_Bit(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Callback_Ptr* aDst)
         {
-            assert(NULL != aDst);
+            assert(nullptr != aDst);
 
             MsgData lData;
 
@@ -99,7 +99,7 @@ namespace KMS
 
         void Slave::OnRequest_A_Word(Function aFunction, uint16_t aStartAddr, uint16_t aQty, Callback_Ptr* aDst)
         {
-            assert(NULL != aDst);
+            assert(nullptr != aDst);
 
             MsgData lData;
 
@@ -132,7 +132,7 @@ namespace KMS
 
         void Slave::OnRequest_B(Function aFunction, uint16_t aStartAddr, void * aData, Callback_Ptr* aDst)
         {
-            assert(NULL != aDst);
+            assert(nullptr != aDst);
 
             MsgData lData;
 

@@ -113,9 +113,9 @@ namespace KMS
 
         void Process::Start_Internal()
         {
-            assert(NULL != mCmdLine);
+            assert(nullptr != mCmdLine);
 
-            const char* lWD = NULL;
+            const char* lWD = nullptr;
 
             if (0 < mWorkingDirectory.size())
             {

@@ -47,7 +47,7 @@ namespace KMS
             Net::Address lFrom;
 
             auto lSocket = mSocket.Accept(ACCEPT_TIMEOUT_ms, &lFrom);
-            if (NULL != lSocket)
+            if (nullptr != lSocket)
             {
                 OnConnect(lSocket);
             }

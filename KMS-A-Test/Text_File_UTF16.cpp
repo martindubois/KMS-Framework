@@ -27,7 +27,7 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
 
     // InsertLine
     lF0.InsertLine(0, L"0");
-    KMS_TEST_ASSERT(NULL != lF0.GetLine(0));
+    KMS_TEST_ASSERT(nullptr != lF0.GetLine(0));
     KMS_TEST_COMPARE(lF0.GetLineCount(), 1U);
 
     // RemoveEmptyLines

@@ -20,11 +20,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        DigitalInput::DigitalInput() : mId(0), mInterface(NULL) {}
+        DigitalInput::DigitalInput() : mId(0), mInterface(nullptr) {}
 
         DigitalInput::DigitalInput(IDigitalInputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            // assert(NULL != aInterface);
+            // assert(nullptr != aInterface);
         }
 
         void DigitalInput::operator = (const DigitalInput& aIn)

@@ -41,7 +41,7 @@ namespace KMS
 
         void ReactApp::AddRoute(const char* aPath)
         {
-            assert(NULL != aPath);
+            assert(nullptr != aPath);
 
             mRoutes.insert(aPath);
         }
@@ -83,7 +83,7 @@ namespace KMS
 
         unsigned int ReactApp::OnFunction(Request* aRequest)
         {
-            assert(NULL != aRequest);
+            assert(nullptr != aRequest);
 
             auto lPath = aRequest->GetPath();
 
@@ -108,7 +108,7 @@ namespace KMS
 
         unsigned int ReactApp::OnRequest(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lRequest = reinterpret_cast<Request*>(aData);
 

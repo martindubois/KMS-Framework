@@ -15,7 +15,7 @@ using namespace KMS;
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const char* SILENCED[] = { "Silenced", NULL };
+static const char* SILENCED[] = { "Silenced", nullptr };
 
 KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 {

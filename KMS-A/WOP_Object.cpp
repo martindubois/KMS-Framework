@@ -65,7 +65,7 @@ namespace KMS
 
         void Object::PrepareFrame_REQUEST(FrameBuffer* aOut, uint8_t aInstance)
         {
-            // assert(NULL != aOut);
+            // assert(nullptr != aOut);
 
             aOut->Prepare(aInstance, KMS_WOP_DATA_TYPE_REQUEST);
 
@@ -76,7 +76,7 @@ namespace KMS
 
         uint8_t Object::WriteData_REQUEST(const FrameBuffer* aIn)
         {
-            // assert(NULL != aIn);
+            // assert(nullptr != aIn);
 
             uint8_t lMask = 0;
 

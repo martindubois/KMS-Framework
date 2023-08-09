@@ -23,7 +23,7 @@ namespace KMS
 
         FileInfo::~FileInfo()
         {
-            assert(NULL != mData);
+            assert(nullptr != mData);
 
             auto lData = reinterpret_cast<WIN32_FIND_DATA*>(mData);
 
@@ -54,11 +54,11 @@ namespace KMS
 
         void FileInfo::operator = (const FileInfo& aA) { SetData(aA.GetData()); }
 
-        const void* FileInfo::GetData() const { assert(NULL != mData); return mData; }
+        const void* FileInfo::GetData() const { assert(nullptr != mData); return mData; }
 
         uint64_t FileInfo::GetLastWrite() const
         {
-            assert(NULL != mData);
+            assert(nullptr != mData);
 
             auto lData = reinterpret_cast<const WIN32_FIND_DATA*>(mData);
 
@@ -76,9 +76,9 @@ namespace KMS
 
         void FileInfo::SetData(const void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
-            assert(NULL != mData);
+            assert(nullptr != mData);
 
             memcpy(mData, aData, sizeof(WIN32_FIND_DATA));
         }

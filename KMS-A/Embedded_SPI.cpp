@@ -18,7 +18,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        SPI::SPI() : mSlave(NULL) {}
+        SPI::SPI() : mSlave(nullptr) {}
 
     }
 }

@@ -148,7 +148,7 @@ namespace KMS
         template <typename T>
         unsigned int UInt_Base<T>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             unsigned int lResult_byte = 0;
 

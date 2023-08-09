@@ -67,7 +67,7 @@ namespace KMS
 
         Folder::Folder(const char* aPath) : mPath(aPath)
         {
-            assert(NULL != aPath);
+            assert(nullptr != aPath);
         }
 
         Folder::Folder(const Folder& aRoot, const char* aFolder)
@@ -83,8 +83,8 @@ namespace KMS
 
         void Folder::GetPath(const char* aFile, char* aOut, unsigned int aOutSize_byte) const
         {
-            assert(NULL != aFile);
-            assert(NULL != aOut);
+            assert(nullptr != aFile);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
             if (0 < mPath.size())
@@ -99,7 +99,7 @@ namespace KMS
 
         void Folder::Backup(const char* aFile, unsigned int aFlags) const
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             for (unsigned int i = 0; i < 1000; i++)
             {
@@ -183,7 +183,7 @@ namespace KMS
 
         void Folder::Init_Env(const char * aVariable)
         {
-            assert(NULL != aVariable);
+            assert(nullptr != aVariable);
 
             char lPath[PATH_LENGTH];
 

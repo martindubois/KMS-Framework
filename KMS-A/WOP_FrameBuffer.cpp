@@ -32,7 +32,7 @@ namespace KMS
 
         void FrameBuffer::AddDataBytes(const void* aIn, uint8_t aInSize_byte)
         {
-            // assert(NULL != aIn);
+            // assert(nullptr != aIn);
 
             const uint8_t* lIn = reinterpret_cast<const uint8_t*>(aIn);
 
@@ -44,7 +44,7 @@ namespace KMS
 
         uint8_t FrameBuffer::GetData(void* aOut, uint8_t aOutSize_byte) const
         {
-            // assert(NULL != aOut);
+            // assert(nullptr != aOut);
 
             if (mHeader.mFields.mDataSize_byte > aOutSize_byte)
             {

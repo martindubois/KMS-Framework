@@ -20,11 +20,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        AnalogOutput::AnalogOutput() : mId(0), mInterface(NULL) {}
+        AnalogOutput::AnalogOutput() : mId(0), mInterface(nullptr) {}
 
         AnalogOutput::AnalogOutput(IAnalogOutputs* aInterface, Id aId) : mId(aId), mInterface(aInterface)
         {
-            // assert(NULL != aInterface);
+            // assert(nullptr != aInterface);
         }
 
         void AnalogOutput::operator = (const AnalogOutput& aIn)

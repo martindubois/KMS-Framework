@@ -46,7 +46,7 @@ namespace KMS
 
         unsigned int Master_TCP::Request_A(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
             unsigned int lResult_byte = 0;
@@ -88,7 +88,7 @@ namespace KMS
 
                 if (0 < aOutSize_byte)
                 {
-                    assert(NULL != aOut);
+                    assert(nullptr != aOut);
 
                     Buffer lBuffer;
 
@@ -153,7 +153,7 @@ namespace KMS
 
         void Master_TCP::Answer_Receive(Buffer* aBuffer, unsigned int aSize_byte)
         {
-            assert(NULL != aBuffer);
+            assert(nullptr != aBuffer);
             assert(HEADER_SIZE_byte < aSize_byte);
 
             auto lRet_byte = mSocket.Receive(aBuffer, aSize_byte);

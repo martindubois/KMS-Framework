@@ -27,7 +27,7 @@ namespace KMS
 
         void File_ASCII::AddLine(const char* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             mLines.push_back(aLine);
         }
@@ -62,7 +62,7 @@ namespace KMS
 
         void File_ASCII::InsertLine(unsigned int aNo, const char* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             if (mLines.size() < aNo)
             {
@@ -97,7 +97,7 @@ namespace KMS
 
         void File_ASCII::ReplaceLine(unsigned int aNo, const char* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             if (mLines.size() <= aNo)
             {
@@ -111,8 +111,8 @@ namespace KMS
 
         unsigned int File_ASCII::ReplaceLines(const char* aRegEx, const char* aReplace)
         {
-            assert(NULL != aRegEx);
-            assert(NULL != aReplace);
+            assert(nullptr != aRegEx);
+            assert(nullptr != aReplace);
 
             unsigned int lResult = 0;
 
@@ -132,7 +132,7 @@ namespace KMS
 
         void File_ASCII::Read(const File::Folder& aFolder, const char* aFile)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             char lPath[PATH_LENGTH];
 
@@ -165,7 +165,7 @@ namespace KMS
 
         void File_ASCII::Write(const File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
-            assert(NULL != aEOL);
+            assert(nullptr != aEOL);
 
             char lPath[PATH_LENGTH];
 
@@ -187,7 +187,7 @@ namespace KMS
 
         unsigned int File_ASCII::CountOccurrence(const char* aStr) const
         {
-            assert(NULL != aStr);
+            assert(nullptr != aStr);
 
             unsigned int lResult = 0;
 

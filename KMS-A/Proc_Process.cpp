@@ -25,18 +25,18 @@ namespace KMS
         const int Process::EXIT_CODE_TERMINATED  = 0xfffffff8;
 
         Process::Process(const File::Folder& aFolder, const char* aExecutable)
-            : mCmdLine(NULL)
+            : mCmdLine(nullptr)
             , mExecutable(aExecutable)
             , mExitCode(EXIT_CODE_NOT_STARTED)
             , mFolder(aFolder)
             , mHandle(0)
         {
-            assert(NULL != aExecutable);
+            assert(nullptr != aExecutable);
         }
 
         Process::~Process()
         {
-            if (NULL != mCmdLine)
+            if (nullptr != mCmdLine)
             {
                 delete[] mCmdLine;
             }
@@ -44,7 +44,7 @@ namespace KMS
 
         void Process::AddArgument(const char* aArgument)
         {
-            assert(NULL != aArgument);
+            assert(nullptr != aArgument);
 
             mArguments.push_back(aArgument);
         }
@@ -53,9 +53,9 @@ namespace KMS
 
         int Process::GetExitCode() const { return mExitCode; }
 
-        void Process::SetVerb(const char* aV) { assert(NULL != aV); mVerb = aV; }
+        void Process::SetVerb(const char* aV) { assert(nullptr != aV); mVerb = aV; }
 
-        void Process::SetWorkingDirectory(const char* aWD) { assert(NULL != aWD); mWorkingDirectory = aWD; }
+        void Process::SetWorkingDirectory(const char* aWD) { assert(nullptr != aWD); mWorkingDirectory = aWD; }
 
         void Process::Run(unsigned int aTimeout_ms)
         {

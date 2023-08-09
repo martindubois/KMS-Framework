@@ -70,7 +70,7 @@ namespace KMS
     template <typename T, const char** N>
     bool Enum<T, N>::SetName(const char* aName)
     {
-        assert(NULL != aName);
+        assert(nullptr != aName);
 
         for (unsigned int i = 0; i < static_cast<unsigned int>(T::QTY); i++)
         {

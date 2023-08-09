@@ -20,14 +20,14 @@ namespace KMS
 
         Slave_IDevice::Slave_IDevice(Dev::IDevice* aDevice) : mDevice(aDevice)
         {
-            assert(NULL != aDevice);
+            assert(nullptr != aDevice);
         }
 
         // ===== Slave ======================================================
 
         bool Slave_IDevice::Connect()
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             bool lResult = mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
             if (lResult)
@@ -43,7 +43,7 @@ namespace KMS
 
         unsigned int Slave_IDevice::OnIterate()
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             char lBuffer[260];
 
@@ -76,7 +76,7 @@ namespace KMS
 
         void Slave_IDevice::SendData(const uint8_t* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != mDevice);
+            assert(nullptr != mDevice);
 
             mDevice->Write(aIn, aInSize_byte);
         }

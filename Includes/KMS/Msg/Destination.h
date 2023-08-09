@@ -31,7 +31,7 @@ namespace KMS
 
             void Set(IReceiver* aR, unsigned int aCode);
 
-            unsigned int Send(void* aSender, void* aData = NULL);
+            unsigned int Send(void* aSender, void* aData = nullptr);
 
         private:
 

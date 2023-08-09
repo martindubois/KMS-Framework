@@ -26,8 +26,8 @@ namespace KMS
             // ===== Callbacks ==============================================
             , ON_RX_BYTE(this, &Link_USART::OnRxByte)
         {
-            // assert(NULL != aSystem);
-            // assert(NULL != aUSART);
+            // assert(nullptr != aSystem);
+            // assert(nullptr != aUSART);
 
             mUSART->mOnRxByte = &ON_RX_BYTE;
         }
@@ -38,13 +38,13 @@ namespace KMS
 
         void Link_USART::Work()
         {
-            // assert(NULL != mSystem);
-            // assert(NULL != mUSART);
+            // assert(nullptr != mSystem);
+            // assert(nullptr != mUSART);
 
             if (mUSART->Tx_IsReady())
             {
                 const FrameBuffer* lFB = mSystem->PrepareFrame();
-                if (NULL != lFB)
+                if (nullptr != lFB)
                 {
                     mUSART->Tx(lFB->GetRawFrame(), lFB->GetFrameSize_byte());
                 }
@@ -58,9 +58,9 @@ namespace KMS
 
         unsigned int Link_USART::OnRxByte(void* aData)
         {
-            // assert(NULL != aData);
+            // assert(nullptr != aData);
 
-            // assert(NULL != mSystem);
+            // assert(nullptr != mSystem);
 
             uint8_t* lData = reinterpret_cast<uint8_t*>(aData);
 

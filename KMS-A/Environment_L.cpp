@@ -20,15 +20,15 @@ namespace KMS
 
         unsigned int GetVariableValue(const char* aName, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aName);
-            assert(NULL != aOut);
+            assert(nullptr != aName);
+            assert(nullptr != aOut);
 
             const auto lValue = getenv(aName);
 
             char lMsg[64 + LINE_LENGTH];
 
             sprintf_s(lMsg, "The \"%s\" environment variable does not exist", aName);
-            KMS_EXCEPTION_ASSERT(NULL != lValue, ENV_EXPAND_FAILED, lMsg, "");
+            KMS_EXCEPTION_ASSERT(nullptr != lValue, ENV_EXPAND_FAILED, lMsg, "");
 
             auto lResult = strlen(lValue);
 

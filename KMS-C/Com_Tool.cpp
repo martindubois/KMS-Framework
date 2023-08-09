@@ -57,7 +57,7 @@ namespace KMS
         int Tool::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             int lResult = __LINE__;
 
@@ -93,7 +93,7 @@ namespace KMS
             return lResult;
         }
 
-        Tool::Tool() : mDataFile(NULL, "")
+        Tool::Tool() : mDataFile(nullptr, "")
         {
             mDataFile.SetMode("wb");
 
@@ -212,8 +212,8 @@ namespace KMS
 
         void Tool::DisplayDumpWrite(const void* aIn, unsigned int aInSize_byte, unsigned int aFlags, const char* aOp)
         {
-            assert(NULL != aIn);
-            assert(NULL != aOp);
+            assert(nullptr != aIn);
+            assert(nullptr != aOp);
 
             char lNow[NAME_LENGTH];
 
@@ -237,7 +237,7 @@ namespace KMS
                 Dump(stdout, aIn, aInSize_byte);
             }
 
-            if ((0 != (aFlags & FLAG_WRITE)) && (NULL != mDataFile.Get()))
+            if ((0 != (aFlags & FLAG_WRITE)) && (nullptr != mDataFile.Get()))
             {
                 fprintf(mDataFile, "%s %s\n", aOp, lNow);
 
@@ -247,7 +247,7 @@ namespace KMS
 
         void Tool::DisplayHelp(FILE* aFile) const
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             fprintf(aFile,
                 "ClearDTR\n"
@@ -354,7 +354,7 @@ using namespace KMS;
 
 void CreateTimestamp(char* aOut, unsigned int aOutSize_byte)
 {
-    assert(NULL != aOut);
+    assert(nullptr != aOut);
 
     SYSTEMTIME lTime;
 
@@ -366,8 +366,8 @@ void CreateTimestamp(char* aOut, unsigned int aOutSize_byte)
 
 void Dump(FILE* aOut, const void* aIn, unsigned int aInSize_byte)
 {
-    assert(NULL != aOut);
-    assert(NULL != aIn);
+    assert(nullptr != aOut);
+    assert(nullptr != aIn);
 
     auto lIn = static_cast<const uint8_t*>(aIn);
 
@@ -381,8 +381,8 @@ void Dump(FILE* aOut, const void* aIn, unsigned int aInSize_byte)
 
 unsigned int ToFrameT(const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
 {
-    assert(NULL != aIn);
-    assert(NULL != aOut);
+    assert(nullptr != aIn);
+    assert(nullptr != aOut);
 
     KMS_EXCEPTION_ASSERT(aInSize_byte + 4 <= aOutSize_byte, COM_OUTPUT_TOO_SHORT, "The output buffer is too short", aInSize_byte);
 

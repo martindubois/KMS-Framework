@@ -24,14 +24,14 @@ namespace KMS
 
         Lock::Lock(Gate* aGate) : mGate(aGate), mLocked(true)
         {
-            assert(NULL != aGate);
+            assert(nullptr != aGate);
 
             mGate->Lock();
         }
 
         Lock::~Lock()
         {
-            assert(NULL != mGate);
+            assert(nullptr != mGate);
 
             if (mLocked)
             {
@@ -49,7 +49,7 @@ namespace KMS
 
         void Lock::Unlock()
         {
-            assert(NULL != mGate);
+            assert(nullptr != mGate);
             assert(mLocked);
 
             mGate->Unlock();

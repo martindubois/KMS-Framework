@@ -36,7 +36,7 @@ namespace KMS
         int Tool::Main(int aCount, const char** aVector)
         {
             assert(1 <= aCount);
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             int lResult = __LINE__;
 
@@ -88,7 +88,7 @@ namespace KMS
 
         void Tool::DisplayHelp(FILE* aOut) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             fprintf(aOut,
                 "Connect\n"

@@ -89,7 +89,7 @@ namespace KMS
 
         void CRC::Compute(const uint8_t* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             for (unsigned int i = 0; i < aInSize_byte; i++)
             {

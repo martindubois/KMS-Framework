@@ -34,7 +34,7 @@ KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
 
     // ToFile
     auto lFile = Convert::ToFile("KMS-A-Test/Tests/Test1.cfg");
-    KMS_TEST_ASSERT(NULL != lFile);
+    KMS_TEST_ASSERT(nullptr != lFile);
     int lRet = fclose(lFile);
     KMS_TEST_COMPARE(lRet, 0);
 

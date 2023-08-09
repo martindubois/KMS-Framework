@@ -33,13 +33,13 @@ namespace KMS
             , mLink(&mSystem, aUSART)
             , mSystem(VERSION, 0x74736554, 0x00)
         {
-            // assert(NULL != aUSART);
+            // assert(nullptr != aUSART);
         }
 
         int Test::Run()
         {
             USART* lUSART = mLink.GetUSART();
-            // assert(NULL != lUSART);
+            // assert(nullptr != lUSART);
 
             lUSART->Rx_Enable();
 
@@ -59,7 +59,7 @@ namespace KMS
 
         void Test::OnInterrupt(uint8_t, uint8_t aLevel)
         {
-            // assert(NULL != mUSART);
+            // assert(nullptr != mUSART);
 
             mSystem.AddTrace(aLevel ? "Key\r\n" : "KEY\r\n", 5);
         }

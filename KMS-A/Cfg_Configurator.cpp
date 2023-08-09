@@ -54,7 +54,7 @@ namespace KMS
 
         Configurator::Configurator()
             : mIgnoredCount(0)
-            , mSilence(NULL)
+            , mSilence(nullptr)
             // ===== Callbacks ==============================================
             , ON_CONFIG_FILES_CHANGED         (this, &Configurator::OnConfigFilesChanged)
             , ON_DISPLAY_CONFIG_CHANGED       (this, &Configurator::OnDisplayConfigChanged)
@@ -84,7 +84,7 @@ namespace KMS
 
         void Configurator::AddConfigurable(DI::Dictionary* aD)
         {
-            assert(NULL != aD);
+            assert(nullptr != aD);
 
             mConfigurables.push_back(aD);
         }
@@ -93,23 +93,23 @@ namespace KMS
         {
             mConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
 
-            OnConfigFilesChanged(this, NULL);
+            OnConfigFilesChanged(this, nullptr);
         }
 
         void Configurator::AddOptionalConfigFile(const char* aPath)
         {
             mOptionalConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
 
-            OnOptionalConfigFilesChanged(this, NULL);
+            OnOptionalConfigFilesChanged(this, nullptr);
         }
 
         unsigned int Configurator::GetIgnoredCount() const { return mIgnoredCount; }
 
         void Configurator::SetSilence(const char** aSilence)
         {
-            assert(NULL != aSilence);
+            assert(nullptr != aSilence);
 
-            assert(NULL == mSilence);
+            assert(nullptr == mSilence);
 
             mSilence = aSilence;
         }
@@ -118,25 +118,25 @@ namespace KMS
         {
             mDisplayConfig.Set(true);
             
-            OnDisplayConfigChanged(this, NULL);
+            OnDisplayConfigChanged(this, nullptr);
         }
 
         // NOT TESTED
-        void Configurator::Help() { mHelp.Set(true); OnHelpChanged(this, NULL); }
+        void Configurator::Help() { mHelp.Set(true); OnHelpChanged(this, nullptr); }
 
         void Configurator::Help(FILE* aOut) const
         {
-            FILE* lOut = (NULL == aOut) ? mConsole.OutputFile() : aOut;
+            FILE* lOut = (nullptr == aOut) ? mConsole.OutputFile() : aOut;
 
             for (auto lD : mConfigurables)
             {
-                Help_Dictionary(lOut, NULL, NULL, lD, 0);
+                Help_Dictionary(lOut, nullptr, nullptr, lD, 0);
             }
         }
 
         void Configurator::ParseArguments(int aCount, const char** aVector)
         {
-            assert(NULL != aVector);
+            assert(nullptr != aVector);
 
             for (int i = 0; i < aCount; i++)
             {
@@ -166,7 +166,7 @@ namespace KMS
         {
             mSaveConfig.Set(aFileName);
 
-            OnSaveConfigChanged(this, NULL);
+            OnSaveConfigChanged(this, nullptr);
         }
 
         // Private
@@ -174,11 +174,11 @@ namespace KMS
 
         bool Configurator::IsSilenced(const char* aLine)
         {
-            if (NULL != mSilence)
+            if (nullptr != mSilence)
             {
                 auto lS = mSilence;
 
-                while (NULL != (*lS))
+                while (nullptr != (*lS))
                 {
                     if (0 == strncmp(aLine, *lS, strlen(*lS)))
                     {
@@ -194,7 +194,7 @@ namespace KMS
 
         void Configurator::ParseLine(const char* aLine)
         {
-            assert(NULL != aLine);
+            assert(nullptr != aLine);
 
             for (auto lD : mConfigurables)
             {
@@ -220,10 +220,10 @@ namespace KMS
             if (0 < lCount)
             {
                 auto lObject = mConfigFiles.GetEntry_R(lCount - 1);
-                assert(NULL != lObject);
+                assert(nullptr != lObject);
 
                 auto lString = dynamic_cast<const DI::String*>(lObject);
-                assert(NULL != lString);
+                assert(nullptr != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), true);
             }
@@ -242,7 +242,7 @@ namespace KMS
 
                 for (const auto lD : mConfigurables)
                 {
-                    Save_Dictionary(mConsole.OutputFile(), lD, NULL);
+                    Save_Dictionary(mConsole.OutputFile(), lD, nullptr);
                 }
             }
 
@@ -268,10 +268,10 @@ namespace KMS
             if (0 < lCount)
             {
                 auto lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
-                assert(NULL != lObject);
+                assert(nullptr != lObject);
 
                 auto lString = dynamic_cast<const DI::String*>(lObject);
-                assert(NULL != lString);
+                assert(nullptr != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), false);
             }
@@ -290,7 +290,7 @@ namespace KMS
 
                 for (const auto lD : mConfigurables)
                 {
-                    Save_Dictionary(mSaveConfig, lD, NULL);
+                    Save_Dictionary(mSaveConfig, lD, nullptr);
                 }
 
                 mSaveConfig.Close();
@@ -309,18 +309,18 @@ using namespace KMS;
 
 void Help_Dictionary(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, const DI::Dictionary* aD, unsigned int aLevel)
 {
-    assert(NULL != aOut);
-    assert(NULL != aD);
+    assert(nullptr != aOut);
+    assert(nullptr != aD);
 
     Help_Object(aOut, aName, aMD, aLevel);
 
     for (const auto& lVT : aD->mInternal)
     {
-        assert(NULL != lVT.second);
+        assert(nullptr != lVT.second);
 
         auto lMD = dynamic_cast<const Cfg::MetaData *>(lVT.second.mMetaData);
         auto lD  = dynamic_cast<const DI::Dictionary*>(lVT.second.Get());
-        if (NULL == lD)
+        if (nullptr == lD)
         {
             Help_Object(aOut, lVT.first.c_str(), lMD, aLevel + 1);
         }
@@ -334,13 +334,13 @@ void Help_Dictionary(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, co
 
 void Help_Object(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, unsigned int aLevel)
 {
-    assert(NULL != aOut);
+    assert(nullptr != aOut);
 
-    if (NULL != aMD)
+    if (nullptr != aMD)
     {
         fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aMD->GetHelp());
     }
-    else if (NULL != aName)
+    else if (nullptr != aName)
     {
         // NOT TESTED
         fprintf(aOut, "%*c%s\n", aLevel * 2, ' ', aName);
@@ -349,16 +349,16 @@ void Help_Object(FILE* aOut, const char* aName, const Cfg::MetaData* aMD, unsign
 
 void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
 {
-    assert(NULL != aOut);
-    assert(NULL != aA);
-    assert(NULL != aName);
+    assert(nullptr != aOut);
+    assert(nullptr != aA);
+    assert(nullptr != aName);
 
     for (const auto& lEntry : aA->mInternal)
     {
-        assert(NULL != lEntry);
+        assert(nullptr != lEntry);
 
         const DI::Value* lV = dynamic_cast<const DI::Value*>(lEntry.Get());
-        KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
+        KMS_EXCEPTION_ASSERT(nullptr != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
         char lData[LINE_LENGTH];
 
@@ -370,13 +370,13 @@ void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
 
 void Save_Dictionary(FILE* aOut, const DI::Dictionary* aD, const char* aName)
 {
-    assert(NULL != aD);
+    assert(nullptr != aD);
 
     for (const auto& lVT : aD->mInternal)
     {
-        assert(NULL != lVT.second);
+        assert(nullptr != lVT.second);
 
-        if (NULL == aName)
+        if (nullptr == aName)
         {
             Save_Object(aOut, lVT.second.Get(), lVT.first.c_str());
         }
@@ -393,16 +393,16 @@ void Save_Dictionary(FILE* aOut, const DI::Dictionary* aD, const char* aName)
 
 void Save_Object(FILE* aOut, const DI::Object* aO, const char* aName)
 {
-    assert(NULL != aO);
+    assert(nullptr != aO);
 
     auto lD = dynamic_cast<const DI::Dictionary*>(aO);
-    if (NULL == lD)
+    if (nullptr == lD)
     {
         auto lA = dynamic_cast<const DI::Array*>(aO);
-        if (NULL == lA)
+        if (nullptr == lA)
         {
             auto lV = dynamic_cast<const DI::Value*>(aO);
-            KMS_EXCEPTION_ASSERT(NULL != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
+            KMS_EXCEPTION_ASSERT(nullptr != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
 
             Save_Value(aOut, lV, aName);
         }
@@ -419,8 +419,8 @@ void Save_Object(FILE* aOut, const DI::Object* aO, const char* aName)
 
 void Save_Value(FILE* aOut, const DI::Value* aV, const char* aName)
 {
-    assert(NULL != aV);
-    assert(NULL != aName);
+    assert(nullptr != aV);
+    assert(nullptr != aName);
 
     char lData[LINE_LENGTH];
 

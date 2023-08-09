@@ -112,7 +112,7 @@ static const DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
 
 unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 {
-    assert(NULL != aData);
+    assert(nullptr != aData);
 
     auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 

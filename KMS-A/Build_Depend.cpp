@@ -34,7 +34,7 @@ namespace KMS
         {
             for (const auto& lPair : mCache)
             {
-                assert(NULL != lPair.second);
+                assert(nullptr != lPair.second);
 
                 delete lPair.second;
             }
@@ -48,7 +48,7 @@ namespace KMS
 
         StringSet_ASCII* Depend::ParseFile(const char* aFile)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             mFileCount++;
 
@@ -57,7 +57,7 @@ namespace KMS
             auto lIt = mCache.find(aFile);
             if (mCache.end() != lIt)
             {
-                assert(NULL != lIt->second);
+                assert(nullptr != lIt->second);
 
                 lResult = lIt->second;
             }
@@ -113,15 +113,15 @@ namespace KMS
         // Only add the dependency if it is not already in the list.
         void Depend::AddDependency(StringSet_ASCII* aInOut, const char* aFile)
         {
-            assert(NULL != aInOut);
-            assert(NULL != aFile);
+            assert(nullptr != aInOut);
+            assert(nullptr != aFile);
 
             if (aInOut->end() == aInOut->find(aFile))
             {
                 aInOut->insert(aFile);
 
                 StringSet_ASCII* lRet = ParseFile(aFile);
-                assert(NULL != lRet);
+                assert(nullptr != lRet);
 
                 InsertStringSet(aInOut, lRet);
             }
@@ -129,12 +129,12 @@ namespace KMS
 
         void Depend::LocateDependency(StringSet_ASCII* aInOut, const char* aFile)
         {
-            assert(NULL != aFile);
+            assert(nullptr != aFile);
 
             for (const auto& lEntry : mIncludes.mInternal)
             {
                 auto lF_Include = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(NULL != lF_Include);
+                assert(nullptr != lF_Include);
 
                 char lHeader[PATH_LENGTH];
 
@@ -150,8 +150,8 @@ namespace KMS
 
         bool Depend::LocateLocalDependency(StringSet_ASCII* aInOut, const char* aFile, const char* aFrom)
         {
-            assert(NULL != aFile);
-            assert(NULL != aFrom);
+            assert(nullptr != aFile);
+            assert(nullptr != aFrom);
 
             bool lResult = false;
 
@@ -160,7 +160,7 @@ namespace KMS
             strcpy_s(lFrom, aFrom);
 
             auto lPtr = strrchr(lFrom, '/');
-            if (NULL != lPtr)
+            if (nullptr != lPtr)
             {
                 *lPtr = '\0';
 
@@ -197,8 +197,8 @@ std::ostream& operator << (std::ostream& aOut, const Build::Depend& aTM)
 
 void InsertStringSet(StringSet_ASCII* aInOut, const StringSet_ASCII* aIn)
 {
-    assert(NULL != aInOut);
-    assert(NULL != aIn);
+    assert(nullptr != aInOut);
+    assert(nullptr != aIn);
 
     for (const auto& lStr : *aIn)
     {

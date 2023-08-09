@@ -28,7 +28,7 @@ namespace KMS
             // ===== Callbacks ==============================================
             , ON_RX_BYTE(this, &Slave_USART::OnRxByte)
         {
-            assert(NULL != aUSART);
+            assert(nullptr != aUSART);
 
             mUSART->mOnRxByte = &ON_RX_BYTE;
         }
@@ -62,7 +62,7 @@ namespace KMS
 
         unsigned int Slave_USART::OnRxByte(void*, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<uint8_t*>(aData);
 

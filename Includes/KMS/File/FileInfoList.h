@@ -60,7 +60,7 @@ namespace KMS
 
             void Copy(const Folder& aNewRoot, unsigned int aFlags = 0);
 
-            void Copy(FileInfoList* aList, unsigned int aFlags = 0, Counters* aCounters = NULL);
+            void Copy(FileInfoList* aList, unsigned int aFlags = 0, Counters* aCounters = nullptr);
 
             FileInfo* Find(const char* aRelPath);
 

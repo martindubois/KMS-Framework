@@ -69,7 +69,7 @@ namespace KMS
 
         bool Master::ReadCoil(uint16_t aAddr, bool* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             uint8_t lBuffer[4];
 
@@ -97,7 +97,7 @@ namespace KMS
 
         bool Master::ReadDiscreteInput(uint16_t aAddr, bool* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             uint8_t lBuffer[4];
 
@@ -125,7 +125,7 @@ namespace KMS
 
         bool Master::ReadHoldingRegister(uint16_t aAddr, RegisterValue* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             uint8_t lBuffer[4];
 
@@ -153,7 +153,7 @@ namespace KMS
 
         bool Master::ReadInputRegister(uint16_t aAddr, RegisterValue* aOut)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             uint8_t lBuffer[4];
 
@@ -249,7 +249,7 @@ namespace KMS
 
         bool Master::VerifyDeviceAddress(const uint8_t* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             #ifdef _KMS_EMBEDDED_
                 return (mDeviceAddress == aData[0]);
@@ -261,7 +261,7 @@ namespace KMS
 
         bool Master::VerifyFunction(Function aFunction, const uint8_t* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lFunction = static_cast<uint8_t>(aFunction);
 

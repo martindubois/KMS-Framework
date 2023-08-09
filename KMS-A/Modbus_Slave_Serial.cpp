@@ -134,7 +134,7 @@ namespace KMS
 
         void Slave_Serial::SendResponse_A(Function aFunction, uint8_t aSize_byte, const void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             uint8_t lBuffer[260];
 
@@ -155,7 +155,7 @@ namespace KMS
 
         void Slave_Serial::SendResponse_B(Function aFunction, Address aAddress, const void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             uint8_t lBuffer[8];
 

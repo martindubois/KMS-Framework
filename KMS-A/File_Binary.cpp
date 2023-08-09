@@ -23,7 +23,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Binary::Binary(const Folder& aFolder, const char* aFile, bool aWrite)
-            : mMappedSize_byte(0), mMapping(NULL), mView(NULL), mWrite(aWrite)
+            : mMappedSize_byte(0), mMapping(nullptr), mView(nullptr), mWrite(aWrite)
         {
             char lPath[PATH_LENGTH];
 
@@ -38,7 +38,7 @@ namespace KMS
                 lDispo = CREATE_ALWAYS;
             }
 
-            mHandle = CreateFile(lPath, lAccess, 0, NULL, lDispo, 0, NULL);
+            mHandle = CreateFile(lPath, lAccess, 0, nullptr, lDispo, 0, nullptr);
             if (INVALID_HANDLE_VALUE == mHandle)
             {
                 char lMsg[64 + PATH_LENGTH];
@@ -53,9 +53,9 @@ namespace KMS
 
             BOOL lRet;
 
-            if (NULL != mMapping)
+            if (nullptr != mMapping)
             {
-                if (NULL != mView)
+                if (nullptr != mView)
                 {
                     lRet = UnmapViewOfFile(mView);
                     assert(lRet);
@@ -96,24 +96,24 @@ namespace KMS
 
             mMappedSize_byte = (lSize_byte > aMaxSize_byte) ? aMaxSize_byte : lSize_byte;
 
-            mMapping = CreateFileMapping(mHandle, NULL, PAGE_READONLY, 0, mMappedSize_byte, NULL);
-            KMS_EXCEPTION_ASSERT(NULL != mMapping, FILE_MAPPING_FAILED, "Cannot map the file", aMaxSize_byte);
+            mMapping = CreateFileMapping(mHandle, nullptr, PAGE_READONLY, 0, mMappedSize_byte, nullptr);
+            KMS_EXCEPTION_ASSERT(nullptr != mMapping, FILE_MAPPING_FAILED, "Cannot map the file", aMaxSize_byte);
 
             mView = MapViewOfFile(mMapping, FILE_MAP_READ, 0, 0, mMappedSize_byte);
-            KMS_EXCEPTION_ASSERT(NULL != mView, FILE_MAPPING_FAILED, "Cannot map the file", mMappedSize_byte);
+            KMS_EXCEPTION_ASSERT(nullptr != mView, FILE_MAPPING_FAILED, "Cannot map the file", mMappedSize_byte);
 
             return mView;
         }
 
         unsigned int Binary::Read(void* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             assert(INVALID_HANDLE_VALUE != mHandle);
 
             DWORD lResult_byte = aOutSize_byte;
 
-            if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL))
+            if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, nullptr))
             {
                 // NOT TESTED
                 KMS_EXCEPTION(FILE_READ_FAILED, "Cannot read the binary file", aOutSize_byte);
@@ -124,13 +124,13 @@ namespace KMS
 
         void Binary::Write(const void* aIn, unsigned int aInSize_byte)
         {
-            assert(NULL != aIn);
+            assert(nullptr != aIn);
 
             assert(INVALID_HANDLE_VALUE != mHandle);
 
             DWORD lInfo_byte;
 
-            if (!WriteFile(mHandle, aIn, aInSize_byte, &lInfo_byte, NULL))
+            if (!WriteFile(mHandle, aIn, aInSize_byte, &lInfo_byte, nullptr))
             {
                 KMS_EXCEPTION(FILE_WRITE_FAILED, "Cannot write the binary file", aInSize_byte);
             }

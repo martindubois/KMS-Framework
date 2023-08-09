@@ -20,7 +20,7 @@ namespace KMS
 
         void Array_Sparse::AddConstEntry(int aIndex, const Object* aO)
         {
-            assert(NULL != aO);
+            assert(nullptr != aO);
 
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
@@ -35,7 +35,7 @@ namespace KMS
 
         void Array_Sparse::AddEntry(int aIndex, Object* aO, bool aDelete)
         {
-            assert(NULL != aO);
+            assert(nullptr != aO);
 
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
@@ -51,7 +51,7 @@ namespace KMS
         DI::Object* Array_Sparse::CreateEntry(int aIndex)
         {
             auto lResult = CallCreator();
-            assert(NULL != lResult);
+            assert(nullptr != lResult);
 
             AddEntry(aIndex, lResult, true);
 
@@ -60,13 +60,13 @@ namespace KMS
 
         const Object* Array_Sparse::GetEntry_R(int aIndex) const
         {
-            const Object* lResult = NULL;
+            const Object* lResult = nullptr;
 
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() != lIt)
             {
                 lResult = lIt->second;
-                assert(NULL != lResult);
+                assert(nullptr != lResult);
             }
 
             return lResult;
@@ -74,13 +74,13 @@ namespace KMS
 
         Object* Array_Sparse::GetEntry_RW(int aIndex)
         {
-            Object* lResult = NULL;
+            Object* lResult = nullptr;
 
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() != lIt)
             {
                 lResult = lIt->second;
-                assert(NULL != lResult);
+                assert(nullptr != lResult);
             }
 
             return lResult;
@@ -111,7 +111,7 @@ namespace KMS
             {
                 if (!IsDynamic())
                 {
-                    return NULL;
+                    return nullptr;
                 }
 
                 lResult = CreateEntry(lIndex);
@@ -129,7 +129,7 @@ namespace KMS
             if (2 == lRet)
             {
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
-                KMS_EXCEPTION_ASSERT(NULL != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+                KMS_EXCEPTION_ASSERT(nullptr != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
 
                 lResult = lContainer->FindObject_RW(lRest);
             }

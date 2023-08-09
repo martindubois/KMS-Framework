@@ -25,8 +25,8 @@ namespace KMS
 
         unsigned int GetVariableValue(const char* aName, char* aOut, unsigned int aOutSize_byte)
         {
-            assert(NULL != aName);
-            assert(NULL != aOut);
+            assert(nullptr != aName);
+            assert(nullptr != aOut);
 
             auto lResult = GetEnvironmentVariable(aName, aOut, aOutSize_byte);
             if ((0 >= lResult) || (aOutSize_byte <= lResult))

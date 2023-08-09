@@ -33,7 +33,7 @@ static SPI_TypeDef* sSPIs[SPI_QTY] = { SPI1     , SPI2     , SPI3      };
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-SPI::SPI() : mSPI(NULL) {}
+SPI::SPI() : mSPI(nullptr) {}
 
 void SPI::Init(uint8_t aSPI)
 {
@@ -106,7 +106,7 @@ void SPI::OnInterrupt()
 // CRITICAL PATH  SPI slave connexion
 void SPI::Slave_Connect(ISlave* aSlave)
 {
-    // assert(NULL != aSlave);
+    // assert(nullptr != aSlave);
 
     mSlave = aSlave;
 
@@ -139,12 +139,12 @@ void SPI::Slave_Connect(ISlave* aSlave)
 // - Reset the default clock polarity
 // - Reset the word size to 16 bits
 
-// This method does not return mSlave to NULL because some time a SPI
+// This method does not return mSlave to nullptr because some time a SPI
 // interrupt is processed after the processing of the chip select interrupt.
 
 void SPI::Slave_Disconnect()
 {
-    Assert(NULL != mSlave);
+    Assert(nullptr != mSlave);
 
     uint32_t lSR = mSPI->SR;
 

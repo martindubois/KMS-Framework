@@ -31,7 +31,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Form::Form()
-            : mDictionary(NULL)
+            : mDictionary(nullptr)
             // ===== Callbacks ==============================================
             , ON_GET_DATA     (this, &Form::OnGetData)
             , ON_GET_META_DATA(this, &Form::OnGetMetaData)
@@ -46,7 +46,7 @@ namespace KMS
         {
             mDictionary = aD;
 
-            if (mFields.IsEmpty() && (NULL != mDictionary))
+            if (mFields.IsEmpty() && (nullptr != mDictionary))
             {
                 unsigned int lCount = 0;
 
@@ -69,8 +69,8 @@ namespace KMS
 
         void Form::Connect(HTTP::ReactApp* aRA, const char* aName)
         {
-            assert(NULL != aRA);
-            assert(NULL != aName);
+            assert(nullptr != aRA);
+            assert(nullptr != aName);
 
             char lPath[128];
 
@@ -91,25 +91,25 @@ namespace KMS
 
         unsigned int Form::OnGetData(void* aSenser, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
             /* TODO mData.Clear();
 
             JSON::Array::Internal* lInternal = mMetaData.GetInternal();
-            assert(NULL != lInternal);
+            assert(nullptr != lInternal);
 
             for (JSON::Object* lO : *lInternal)
             {
                 JSON::Dictionary* lD = dynamic_cast<JSON::Dictionary*>(lO);
-                assert(NULL != lD);
+                assert(nullptr != lD);
 
                 const JSON::Object* lON = lD->GetEntry("Name");
-                assert(NULL != lON);
+                assert(nullptr != lON);
 
                 const JSON::String* lSN = dynamic_cast<const JSON::String*>(lON);
-                assert(NULL != lSN);
+                assert(nullptr != lSN);
 
                 mData += GetData(*lSN);
             }
@@ -122,7 +122,7 @@ namespace KMS
 
         unsigned int Form::OnGetMetaData(void* aSenser, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 
@@ -133,7 +133,7 @@ namespace KMS
 
         unsigned int Form::OnSetData(void* aSenser, void* aData)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
 

@@ -35,7 +35,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Request::Request() : mSocket(NULL) { Construct(); }
+        Request::Request() : mSocket(nullptr) { Construct(); }
 
         const char* Request::GetPath() const { return mPath.c_str(); }
 
@@ -45,7 +45,7 @@ namespace KMS
 
         const char* Request::GetTypeName() const
         {
-            const char* lResult = NULL;
+            const char* lResult = nullptr;
 
             switch (mType)
             {
@@ -65,7 +65,7 @@ namespace KMS
             mDataSize_byte = aDataSize_byte;
         }
 
-        void Request::SetFile(File::Binary* aF) { assert(NULL != aF); mFile = aF; }
+        void Request::SetFile(File::Binary* aF) { assert(nullptr != aF); mFile = aF; }
 
         void Request::SetResult(Result aR) { mResult = aR; }
 
@@ -74,16 +74,16 @@ namespace KMS
 
         Request::Request(Net::Socket* aSocket) : mSocket(aSocket)
         {
-            assert(NULL != aSocket);
+            assert(nullptr != aSocket);
 
             Construct();
         }
 
         Request::~Request()
         {
-            assert(NULL != mSocket);
+            assert(nullptr != mSocket);
 
-            if (NULL != mFile)
+            if (nullptr != mFile)
             {
                 delete mFile;
             }
@@ -95,9 +95,9 @@ namespace KMS
         {
             memset(&mBuffer, 0, sizeof(mBuffer));
 
-            mData          = NULL;
+            mData          = nullptr;
             mDataSize_byte = 0;
-            mFile          = NULL;
+            mFile          = nullptr;
             mMajor         = 0;
             mMinor         = 0;
             mResult        = Result::OK;
@@ -107,7 +107,7 @@ namespace KMS
 
         const char* Request::GetResultName() const
         {
-            const char* lResult = NULL;
+            const char* lResult = nullptr;
 
             switch (mResult)
             {
@@ -152,7 +152,7 @@ namespace KMS
         void Request::Reply()
         {
             static const char* DAY_NAMES[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-            static const char* MONTH_NAMES[13] = { NULL, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dev" };
+            static const char* MONTH_NAMES[13] = { nullptr, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dev" };
 
             char lData[1024];
 
@@ -183,11 +183,11 @@ namespace KMS
 
             if (0 < mDataSize_byte)
             {
-                assert(NULL != mData);
+                assert(nullptr != mData);
 
                 mSocket->Send(mData, mDataSize_byte);
             }
-            else if (NULL != mFile)
+            else if (nullptr != mFile)
             {
                 mSocket->Send(mFile);
             }
@@ -217,7 +217,7 @@ namespace KMS
             mPath = lPath;
 
             auto lPtr = strchr(mBuffer, '\n');
-            assert(NULL != lPtr);
+            assert(nullptr != lPtr);
 
             auto lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
 

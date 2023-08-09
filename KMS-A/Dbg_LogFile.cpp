@@ -56,7 +56,7 @@ namespace KMS
 
         LogFile::~LogFile()
         {
-            assert(NULL != mFile);
+            assert(nullptr != mFile);
 
             auto lTimeStamp = OS::GetSystemTime();
 
@@ -74,7 +74,7 @@ namespace KMS
 
         void LogFile::WriteData(const void* aData, unsigned int aSize_byte)
         {
-            assert(NULL != aData);
+            assert(nullptr != aData);
 
             auto lData = reinterpret_cast<const uint8_t*>(aData);
 
@@ -90,11 +90,11 @@ namespace KMS
 
         void LogFile::WriteEntry(unsigned int aCounter, const char* aFile, const char* aFunction, unsigned int aLine, Level aLevel)
         {
-            assert(NULL != aFile);
-            assert(NULL != aFunction);
+            assert(nullptr != aFile);
+            assert(nullptr != aFunction);
             assert(0 < aLine);
 
-            assert(NULL != mFile);
+            assert(nullptr != mFile);
 
             char lET;
 
@@ -129,7 +129,7 @@ namespace KMS
 
         void LogFile::WriteException(const Exception& aException)
         {
-            assert(NULL != mFile);
+            assert(nullptr != mFile);
 
             fprintf(mFile, "X\t%s\t\"%s\"\t%u\t%s\t%s\t\"%s\"\n",
                 aException.GetCodeName(),
@@ -143,9 +143,9 @@ namespace KMS
 
         void LogFile::WriteMessage(const char* aMsg)
         {
-            assert(NULL != aMsg);
+            assert(nullptr != aMsg);
 
-            assert(NULL != mFile);
+            assert(nullptr != mFile);
 
             fprintf(mFile, "M\t\"%s\"\n", aMsg);
             fflush(mFile);
@@ -153,7 +153,7 @@ namespace KMS
 
         void LogFile::WriteVersion(const Version& aV)
         {
-            assert(NULL != mFile);
+            assert(nullptr != mFile);
 
             fprintf(mFile, "V\t%u.%u.%u.%u\t\"%s\"\t%s\t%s\n",
                 aV.GetMajor(), aV.GetMinor(), aV.GetBuild(), aV.GetCompat(),

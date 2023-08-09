@@ -88,18 +88,18 @@ using namespace KMS;
 
 void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aObject);
+    assert(nullptr != aObject);
 
     // Dictionary must be tested before Array because Dictionary is an Array
     auto lDictionary = dynamic_cast<DI::Dictionary*>(aObject);
-    if (NULL != lDictionary)
+    if (nullptr != lDictionary)
     {
         Decode_Dictionary(lDictionary, aPtr);
     }
     else
     {
         auto lArray = dynamic_cast<DI::Array*>(aObject);
-        if (NULL != lArray)
+        if (nullptr != lArray)
         {
             Decode_Array(lArray, aPtr);
         }
@@ -107,14 +107,14 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
         {
             // String must be tested before Value because String is a Value
             auto lString = dynamic_cast<DI::String*>(aObject);
-            if (NULL != lString)
+            if (nullptr != lString)
             {
                 Decode_String(lString, aPtr);
             }
             else
             {
                 auto lValue = dynamic_cast<DI::Value*>(aObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not suppoert this data type", "");
+                KMS_EXCEPTION_ASSERT(nullptr != lValue, JSON_NOT_IMPLEMENTED, "JSON do not suppoert this data type", "");
 
                 Decode_Value(lValue, aPtr);
             }
@@ -124,8 +124,8 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
 
 void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aObject);
-    assert(NULL != aPtr);
+    assert(nullptr != aObject);
+    assert(nullptr != aPtr);
 
     Text::ReadPtr lPtr(*aPtr);
 
@@ -179,8 +179,8 @@ void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
 
 void Decode_Array(DI::Array* aArray, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aArray);
-    assert(NULL != aPtr);
+    assert(nullptr != aArray);
+    assert(nullptr != aPtr);
 
     Text::ReadPtr lPtr(*aPtr);
 
@@ -197,14 +197,14 @@ void Decode_Array(DI::Array* aArray, Text::ReadPtr* aPtr)
         for (;;)
         {
             auto lObject = aArray->GetEntry_RW(lIndex);
-            if (NULL != lObject)
+            if (nullptr != lObject)
             {
                 Decode(lObject, &lPtr);
             }
             else
             {
                 Decode(&lObject, &lPtr);
-                assert(NULL != lObject);
+                assert(nullptr != lObject);
 
                 aArray->AddEntry(lObject, true);
             }
@@ -230,8 +230,8 @@ void Decode_Array(DI::Array* aArray, Text::ReadPtr* aPtr)
 
 void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aDictionary);
-    assert(NULL != aPtr);
+    assert(nullptr != aDictionary);
+    assert(nullptr != aPtr);
 
     Text::ReadPtr lPtr(*aPtr);
 
@@ -258,14 +258,14 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
             lPtr.SkipBlank();
 
             auto lObject = aDictionary->GetEntry_RW(lName);
-            if (NULL != lObject)
+            if (nullptr != lObject)
             {
                 Decode(lObject, &lPtr);
             }
             else
             {
                 Decode(&lObject, &lPtr);
-                assert(NULL != lObject);
+                assert(nullptr != lObject);
 
                 aDictionary->AddEntry(lName, lObject, true);
             }
@@ -289,8 +289,8 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
 
 void Decode_String(DI::String* aString, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aString);
-    assert(NULL != aPtr);
+    assert(nullptr != aString);
+    assert(nullptr != aPtr);
 
     Text::ReadPtr lPtr(*aPtr);
 
@@ -309,8 +309,8 @@ void Decode_String(DI::String* aString, Text::ReadPtr* aPtr)
 
 void Decode_Value(DI::Value* aValue, Text::ReadPtr* aPtr)
 {
-    assert(NULL != aValue);
-    assert(NULL != aPtr);
+    assert(nullptr != aValue);
+    assert(nullptr != aPtr);
 
     Text::ReadPtr lPtr(*aPtr);
 
@@ -327,21 +327,21 @@ void Decode_Value(DI::Value* aValue, Text::ReadPtr* aPtr)
 
 void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
 {
-    assert(NULL != aObject);
-    assert(NULL != aPtr);
+    assert(nullptr != aObject);
+    assert(nullptr != aPtr);
 
     Text::WritePtr lPtr(*aPtr);
 
     // Dictionary must be tested before Array because Dictionary is an Array
     auto lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
-    if (NULL != lDictionary)
+    if (nullptr != lDictionary)
     {
         Encode_Dictionary(lDictionary, &lPtr);
     }
     else
     {
         auto lArray = dynamic_cast<const DI::Array*>(aObject);
-        if (NULL != lArray)
+        if (nullptr != lArray)
         {
             Encode_Array(lArray, &lPtr);
         }
@@ -349,14 +349,14 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
         {
             // String must be tested before Value because String is a Value
             auto lString = dynamic_cast<const DI::String*>(aObject);
-            if (NULL != lString)
+            if (nullptr != lString)
             {
                 Encode_String(lString, &lPtr);
             }
             else
             {
                 auto lValue = dynamic_cast<const DI::Value*>(aObject);
-                KMS_EXCEPTION_ASSERT(NULL != lValue, JSON_NOT_IMPLEMENTED, "JSON do not support this data type", "");
+                KMS_EXCEPTION_ASSERT(nullptr != lValue, JSON_NOT_IMPLEMENTED, "JSON do not support this data type", "");
 
                 lPtr += lValue->Get(lPtr, lPtr.GetRemainingSize());
             }
@@ -368,8 +368,8 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
 
 void Encode_Array(const DI::Array* aArray, Text::WritePtr* aPtr)
 {
-    assert(NULL != aArray);
-    assert(NULL != aPtr);
+    assert(nullptr != aArray);
+    assert(nullptr != aPtr);
 
     Text::WritePtr lPtr(*aPtr);
 
@@ -379,7 +379,7 @@ void Encode_Array(const DI::Array* aArray, Text::WritePtr* aPtr)
 
     for (const DI::Object* lObj : aArray->mInternal)
     {
-        assert(NULL != lObj);
+        assert(nullptr != lObj);
 
         if (lFirst)
         {
@@ -400,8 +400,8 @@ void Encode_Array(const DI::Array* aArray, Text::WritePtr* aPtr)
 
 void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 {
-    assert(NULL != aDictionary);
-    assert(NULL != aPtr);
+    assert(nullptr != aDictionary);
+    assert(nullptr != aPtr);
 
     Text::WritePtr lPtr(*aPtr);
 
@@ -411,7 +411,7 @@ void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 
     for (const auto& lVT : aDictionary->mInternal)
     {
-        assert(NULL != lVT.second);
+        assert(nullptr != lVT.second);
 
         if (lFirst)
         {
@@ -438,8 +438,8 @@ void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 
 void Encode_String(const DI::String* aString, Text::WritePtr* aPtr)
 {
-    assert(NULL != aString);
-    assert(NULL != aPtr);
+    assert(nullptr != aString);
+    assert(nullptr != aPtr);
 
     Text::WritePtr lPtr(*aPtr);
 

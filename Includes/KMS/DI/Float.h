@@ -74,7 +74,7 @@ namespace KMS
         template <typename T>
         unsigned int Float<T>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            assert(NULL != aOut);
+            assert(nullptr != aOut);
 
             return sprintf_s(aOut SizeInfoV(aOutSize_byte), "%f", mInternal);
         }
