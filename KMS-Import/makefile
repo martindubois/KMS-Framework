@@ -5,9 +5,9 @@
 # Product   KMS-Framework
 # File      KMS-Import/makefile
 
-include ../$(CONFIG).mk
+include ../Common.mk
 
-OUTPUT = ../Binaries/$(CONFIG)/KMS-Import
+OUTPUT = ../Binaries/$(CONFIG)_$(PROCESSOR)/KMS-Import
 
 LIBRARIES = $(KMS_A_A)
 

@@ -5,9 +5,9 @@
 # Product   KMS-Framework
 # File      KMS-A/makefile
 
-include ../$(CONFIG).mk
+include ../Common.mk
 
-OUTPUT = ../Libraries/$(CONFIG)/KMS-A.a
+OUTPUT = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-A.a
 
 SOURCES = Build_Build_L.cpp       \
           Build_Build.cpp         \
