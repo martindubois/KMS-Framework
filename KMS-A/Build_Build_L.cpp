@@ -25,7 +25,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::Package_Component(const char* aC)
+        void Build::Package_Components(const char* aC)
         {
             File::Folder lBin(mTmp_Binaries , aC);
             File::Folder lLib(mTmp_Libraries, aC);

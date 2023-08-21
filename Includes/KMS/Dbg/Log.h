@@ -30,8 +30,8 @@ namespace KMS
 
             enum class ConsoleMode
             {
-                DEBUG,
-                USER,
+                MODE_DEBUG,
+                MODE_USER,
 
                 QTY
             };

@@ -41,8 +41,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const Folder PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
-        const Folder PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
+        const Folder Folder::PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
+        const Folder Folder::PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
 
         void Folder::ChangeCurrentDirectory(const Folder& aNew)
         {

@@ -62,8 +62,12 @@ namespace KMS
 
             if      (0 == strncmp("EXECUTABLE:"       , lIn, 11)) { Internal_Set(File::Folder(File::Folder::EXECUTABLE       , lIn + 11)); }
             else if (0 == strncmp("HOME:"             , lIn,  5)) { Internal_Set(File::Folder(File::Folder::HOME             , lIn +  5)); }
-            else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14)); }
-            else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19)); }
+
+            #ifdef _KMS_WINDOWS_
+                else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14)); }
+                else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19)); }
+            #endif
+
             else
             {
                 Internal_Set(File::Folder(lIn));

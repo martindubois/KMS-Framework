@@ -97,7 +97,7 @@ namespace KMS
             unsigned int lIndex;
             char         lRest[NAME_LENGTH];
 
-            auto lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, &lRest SizeInfo(lRest));
+            auto lRet = sscanf_s(aName, "%u.%[^ \n\r\t]", &lIndex, lRest SizeInfo(lRest));
 
             char lMsg[64 + NAME_LENGTH];
 

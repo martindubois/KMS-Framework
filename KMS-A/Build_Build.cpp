@@ -277,7 +277,7 @@ namespace KMS
                 else
                 {
                     #ifdef _KMS_LINUX_
-                        Compile_MaKe(*lC);
+                        Compile_Make(*lC);
                     #endif
 
                     #ifdef _KMS_WINDOWS_

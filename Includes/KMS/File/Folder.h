@@ -28,17 +28,23 @@ namespace KMS
                 EXECUTABLE,
                 HOME,
                 NONE,
-                PROGRAM_FILES,
-                PROGRAM_FILES_X86,
                 TEMPORARY,
+
+                #ifdef _KMS_WINDOWS_
+                    PROGRAM_FILES,
+                    PROGRAM_FILES_X86,
+                #endif
             };
 
             static       Folder CURRENT;
             static const Folder EXECUTABLE;
             static const Folder HOME;
             static const Folder NONE;
-            static const Folder PROGRAM_FILES;
-            static const Folder PROGRAM_FILES_X86;
+
+            #ifdef _KMS_WINDOWS_
+                static const Folder PROGRAM_FILES;
+                static const Folder PROGRAM_FILES_X86;
+            #endif
 
             static const unsigned int FLAG_BACKUP;
             static const unsigned int FLAG_BACKUP_RENAME;

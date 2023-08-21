@@ -27,8 +27,6 @@ namespace KMS
         const Folder Folder::EXECUTABLE       (Folder::Id::EXECUTABLE);
         const Folder Folder::HOME             (Folder::Id::HOME);
         const Folder Folder::NONE             (Folder::Id::NONE);
-        const Folder Folder::PROGRAM_FILES    (Folder::Id::PROGRAM_FILES);
-        const Folder Folder::PROGRAM_FILES_X86(Folder::Id::PROGRAM_FILES_X86);
 
         // The flag must be differenent than the one defined in
         // File_FileInfoList.cpp.

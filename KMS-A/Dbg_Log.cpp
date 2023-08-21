@@ -20,7 +20,7 @@
 // //////////////////////////////////////////////////////////////////////////
 
 #define DEFAULT_CONSOLE_LEVEL (LogFile::Level::LEVEL_WARNING)
-#define DEFAULT_CONSOLE_MODE  (Log::ConsoleMode::USER)
+#define DEFAULT_CONSOLE_MODE  (Log::ConsoleMode::MODE_USER)
 #define DEFAULT_FILE_LEVEL    (LogFile::Level::LEVEL_INFO)
 #define DEFAULT_FOLDER_NAME   ("KMS-Framework")
 
@@ -96,7 +96,7 @@ namespace KMS
             {
                 switch (mConsoleMode)
                 {
-                case ConsoleMode::DEBUG:
+                case ConsoleMode::MODE_DEBUG:
                     switch (mEntryLevel)
                     {
                     case LogFile::Level::LEVEL_ERROR:
@@ -272,11 +272,11 @@ namespace KMS
 
             switch (mConsoleMode)
             {
-            case ConsoleMode::DEBUG:
+            case ConsoleMode::MODE_DEBUG:
                 mConsole.ErrorStream() << "Message\t\"" << aMsg << "\"" << std::endl;
                 break;
 
-            case ConsoleMode::USER:
+            case ConsoleMode::MODE_USER:
                 mConsole.ErrorStream() << aMsg << std::endl;
                 break;
 
@@ -292,14 +292,14 @@ namespace KMS
 
             switch (mConsoleMode)
             {
-            case ConsoleMode::DEBUG:
+            case ConsoleMode::MODE_DEBUG:
                 mConsole.ErrorStream() << aTitle << "\n";
                 mConsole.ErrorStream() << "    Counter  : " << mCounter << "\n";
                 mConsole.ErrorStream() << "    File     : " << aFile << " (" << aLine << ")\n";
                 mConsole.ErrorStream() << "    Function : " << aFunction << std::endl;
                 break;
 
-            case ConsoleMode::USER:
+            case ConsoleMode::MODE_USER:
                 mConsole.ErrorStream() << aTitle << "  " << aFile << " (" << aLine << ")" << std::endl;
                 break;
 
@@ -311,12 +311,12 @@ namespace KMS
         {
             switch (mConsoleMode)
             {
-            case ConsoleMode::DEBUG:
+            case ConsoleMode::MODE_DEBUG:
                 mConsole.ErrorStream() << "Exception\n";
                 mConsole.ErrorStream() << aException << std::endl;
                 break;
 
-            case ConsoleMode::USER:
+            case ConsoleMode::MODE_USER:
                 mConsole.ErrorStream() << "Exception  " << aException.what() << std::endl;
                 break;
 
