@@ -21,6 +21,14 @@ SOURCES = Build_Build_L.cpp       \
           Console_Color_L.cpp     \
 		  Console_Console.cpp     \
 		  Convert.cpp             \
+		  DAQ_AnalogConverter.cpp \
+		  DAQ_AnalogInput.cpp     \
+		  DAQ_AnalogInputConverter.cpp \
+		  DAQ_AnalogOutput.cpp    \
+		  DAQ_AnalogOutputConverter.cpp \
+		  DAQ_DigitalInput.cpp    \
+		  DAQ_DigitalOutput.cpp   \
+		  DAQ_Dummy.cpp           \
 		  Dbg_Log.cpp             \
 		  Dbg_Log_Cfg.cpp         \
 		  Dbg_LogFile.cpp         \
@@ -40,20 +48,47 @@ SOURCES = Build_Build_L.cpp       \
 		  DI_String.cpp           \
 		  DI_String_Expand.cpp    \
 		  DI_Value.cpp            \
+		  Embedded_Assert.cpp     \
+		  Embedded_SPI.cpp        \
+		  Embedded_WorkItem.cpp   \
+		  Embedded_WorkLoop.cpp   \
 		  Environment_L.cpp       \
 		  Environment.cpp         \
           Exception.cpp           \
 		  File_Folder_L.cpp       \
           File_Folder.cpp         \
+		  File_Sync.cpp           \
+		  HTTP.cpp                \
 		  Installer.cpp           \
 		  Installer_L.cpp         \
+		  JSON.cpp                \
+		  Modbus_CRC.cpp          \
+		  Modbus_Master_Cfg.cpp   \
+		  Modbus_Master_IDevice.cpp \
+		  Modbus_Master.cpp       \
+		  Modbus_Monitor.cpp      \
+		  Modbus_Slave_Serial.cpp \
+		  Modbus_Slave_USART.cpp  \
+		  Modbus_Slave.cpp        \
+		  Modbus.cpp              \
+		  Msg_Destination.cpp     \
+		  Msg_IReceiver.cpp       \
 		  OS_L.cpp                \
 		  Proc_Process_L.cpp      \
 		  Proc_Process.cpp        \
+		  RefCount.cpp            \
+		  ScaleAndOffset.cpp      \
 		  Test_Test.cpp           \
 		  Test_TestManager.cpp    \
           Text_File_ASCII.cpp     \
-          Version.cpp
+		  Text_File_UTF16.cpp     \
+		  Text_ReadPtr.cpp        \
+		  Text_WritePtr.cpp       \
+          Version.cpp             \
+		  WOP_FrameBuffer.cpp     \
+		  WOP_Object_Dynamic.cpp  \
+		  WOP_Object.cpp          \
+		  WOP_System.cpp
 
 # ===== Rules ===============================================================
 
@@ -87,6 +122,14 @@ Cfg_MetaData.o: ../Includes/KMS/Base.h ../Includes/KMS/Cfg/MetaData.h ../Include
 Console_Color_L.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Color.h ../Includes/KMS/SafeAPI.h Component.h
 Console_Console.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Console.h ../Includes/KMS/SafeAPI.h Component.h
 Convert.o: ../Includes/KMS/Base.h ../Includes/KMS/Convert.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
+DAQ_AnalogConverter.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogConverter.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/ScaleAndOffset.h Component.h
+DAQ_AnalogInput.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogInput.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/IAnalogInputs.h ../Includes/KMS/SafeAPI.h Component.h
+DAQ_AnalogInputConverter.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogConverter.h ../Includes/KMS/DAQ/AnalogInputConverter.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/IAnalogInputs.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/ScaleAndOffset.h Component.h
+DAQ_AnalogOutput.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogOutput.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/IAnalogOutputs.h ../Includes/KMS/SafeAPI.h Component.h
+DAQ_AnalogOutputConverter.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogConverter.h ../Includes/KMS/DAQ/AnalogOutputConverter.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/IAnalogOutputs.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/ScaleAndOffset.h Component.h
+DAQ_DigitalInput.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/DigitalInput.h ../Includes/KMS/DAQ/IDigitalInputs.h ../Includes/KMS/SafeAPI.h Component.h
+DAQ_DigitalOutput.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/DigitalOutput.h ../Includes/KMS/DAQ/IDigitalOutputs.h ../Includes/KMS/SafeAPI.h Component.h
+DAQ_Dummy.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/Dummy.h ../Includes/KMS/DAQ/IAnalogInputs.h ../Includes/KMS/DAQ/IAnalogOutputs.h ../Includes/KMS/DAQ/IDigitalInputs.h ../Includes/KMS/DAQ/IDigitalOutputs.h ../Includes/KMS/SafeAPI.h Component.h
 DI_Array.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/DI/Array.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Object.h ../Includes/KMS/SafeAPI.h Component.h
 DI_Array_Sparse.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/DI/Array_Sparse.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Object.h ../Includes/KMS/SafeAPI.h Component.h
 DI_Boolean.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Convert.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/Value.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
@@ -106,18 +149,45 @@ Dbg_Log_Cfg.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS
 Dbg_Stats.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Folder.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/String_Expand.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Dbg/Stats.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/File/Folder.h ../Includes/KMS/OS.h ../Includes/KMS/SafeAPI.h Component.h
 Dbg_Stats_Entry.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Folder.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/String_Expand.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Dbg/Stats.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h Component.h
 Dbg_Stats_Timer.o: ../Includes/KMS/Base.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/Dbg/Stats_Timer.h ../Includes/KMS/Dbg/Stats_Value.h ../Includes/KMS/OS.h ../Includes/KMS/SafeAPI.h Component.h
+Embedded_Assert.o: ../Includes/KMS/Base.h ../Includes/KMS/Embedded/Assert.h ../Includes/KMS/SafeAPI.h Component.h
+Embedded_SPI.o: ../Includes/KMS/Base.h ../Includes/KMS/Embedded/SPI.h ../Includes/KMS/SafeAPI.h Component.h
+Embedded_WorkItem.o: ../Includes/KMS/Base.h ../Includes/KMS/Embedded/WorkItem.h ../Includes/KMS/SafeAPI.h Component.h
+Embedded_WorkLoop.o: ../Includes/KMS/Base.h ../Includes/KMS/Embedded/WorkItem.h ../Includes/KMS/Embedded/WorkLoop.h ../Includes/KMS/SafeAPI.h Component.h
 Environment.o: ../Includes/KMS/Base.h ../Includes/KMS/Environment.h ../Includes/KMS/SafeAPI.h Component.h
 Environment_L.o: ../Includes/KMS/Base.h ../Includes/KMS/Environment.h ../Includes/KMS/SafeAPI.h Component.h
 Exception.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Console.h ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h ../Includes/KMS/Enum.h ../Includes/KMS/Exception.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Version.h Component.h
 File_Folder.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Color.h ../Includes/KMS/Environment.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h Component.h
 File_Folder_L.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/Proc/Process.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
+File_Sync.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/Configurator.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/Console/Console.h ../Includes/KMS/DI/Array.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Enum.h ../Includes/KMS/DI/File.h ../Includes/KMS/DI/Folder.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/String_Expand.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h ../Includes/KMS/Dbg/Log_Cfg.h ../Includes/KMS/Dbg/Stats.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/Dbg/Stats_Timer.h ../Includes/KMS/Dbg/Stats_Value.h ../Includes/KMS/Enum.h ../Includes/KMS/Exception.h ../Includes/KMS/File/FileInfoList.h ../Includes/KMS/File/Folder.h ../Includes/KMS/File/Sync.h ../Includes/KMS/Installer.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h ../Includes/KMS/Version.h Component.h
+HTTP.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Convert.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/UInt.h ../Includes/KMS/DI/Value.h ../Includes/KMS/HTTP/HTTP.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/ReadPtr.h ../Includes/KMS/Text/WritePtr.h ../Includes/KMS/Types.h Component.h
 Installer.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Installer.h ../Includes/KMS/SafeAPI.h Component.h
 Installer_L.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Installer.h ../Includes/KMS/SafeAPI.h Component.h
+JSON.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Convert.h ../Includes/KMS/DI/Array.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/UInt.h ../Includes/KMS/DI/Value.h ../Includes/KMS/JSON/JSON.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/ReadPtr.h ../Includes/KMS/Text/WritePtr.h ../Includes/KMS/Types.h Component.h
+Modbus.o: ../Includes/KMS/Base.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_CRC.o: ../Includes/KMS/Base.h ../Includes/KMS/Modbus/CRC.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Master.o: ../Includes/KMS/Base.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/Modbus/Master.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Master_Cfg.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/Convert.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/UInt.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Modbus/Master.h ../Includes/KMS/Modbus/Master_Cfg.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
+Modbus_Master_IDevice.o: ../Includes/KMS/Base.h ../Includes/KMS/Dev/IDevice.h ../Includes/KMS/Modbus/CRC.h ../Includes/KMS/Modbus/Master.h ../Includes/KMS/Modbus/Master_IDevice.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Monitor.o: ../Includes/KMS/Base.h ../Includes/KMS/Modbus/Master.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/Modbus/Monitor.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Slave.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/Modbus/Slave.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Slave_Serial.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Modbus/CRC.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/Modbus/Slave.h ../Includes/KMS/Modbus/Slave_Serial.h ../Includes/KMS/SafeAPI.h Component.h
+Modbus_Slave_USART.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Embedded/USART.h ../Includes/KMS/Embedded/WorkItem.h ../Includes/KMS/Modbus/CRC.h ../Includes/KMS/Modbus/Modbus.h ../Includes/KMS/Modbus/Slave.h ../Includes/KMS/Modbus/Slave_Serial.h ../Includes/KMS/Modbus/Slave_USART.h ../Includes/KMS/SafeAPI.h Component.h
+Msg_Destination.o: ../Includes/KMS/Base.h ../Includes/KMS/Msg/Destination.h ../Includes/KMS/Msg/IReceiver.h ../Includes/KMS/SafeAPI.h Component.h
+Msg_IReceiver.o: ../Includes/KMS/Base.h ../Includes/KMS/Msg/IReceiver.h ../Includes/KMS/SafeAPI.h Component.h
 OS_L.o: ../Includes/KMS/Base.h ../Includes/KMS/OS.h ../Includes/KMS/SafeAPI.h Component.h
 Proc_Process.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/Proc/Process.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
 Proc_Process_L.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/Proc/Process.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
+RefCount.o: ../Includes/KMS/Base.h ../Includes/KMS/RefCount.h ../Includes/KMS/SafeAPI.h Component.h
+ScaleAndOffset.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/ScaleAndOffset.h Component.h
 Test_Test.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Color.h ../Includes/KMS/Console/Console.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Test/Test.h Component.h
 Test_TestManager.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/Configurator.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/Console/Color.h ../Includes/KMS/Console/Console.h ../Includes/KMS/DI/Array.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Enum.h ../Includes/KMS/DI/File.h ../Includes/KMS/DI/Folder.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/String_Expand.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h ../Includes/KMS/Dbg/Log_Cfg.h ../Includes/KMS/Dbg/Stats.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/Dbg/Stats_Timer.h ../Includes/KMS/Dbg/Stats_Value.h ../Includes/KMS/Enum.h ../Includes/KMS/Exception.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Test/Test.h ../Includes/KMS/Test/TestManager.h ../Includes/KMS/Version.h Component.h
 Text_File_ASCII.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/File_ASCII.h ../Includes/KMS/Types.h Component.h
+Text_File_UTF16.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/File_UTF16.h ../Includes/KMS/Types.h Component.h
+Text_ReadPtr.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/ReadPtr.h Component.h
+Text_WritePtr.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/WritePtr.h Component.h
 Version.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/File_ASCII.h ../Includes/KMS/Types.h ../Includes/KMS/Version.h Component.h
+WOP_FrameBuffer.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/WOP.h Component.h
+WOP_Object.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/Object.h ../Includes/KMS/WOP/WOP.h Component.h
+WOP_Object_Dynamic.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/Object.h ../Includes/KMS/WOP/Object_Dynamic.h ../Includes/KMS/WOP/WOP.h Component.h
+WOP_System.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Console.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Version.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/Object.h ../Includes/KMS/WOP/System.h ../Includes/KMS/WOP/WOP.h Component.h
 

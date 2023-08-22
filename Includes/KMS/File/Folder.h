@@ -4,7 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/File/Folder.h
-// Status    PROD_READY (Windows)
+// Status    PROD_READY
 // Library   KMS-A
 
 #pragma once

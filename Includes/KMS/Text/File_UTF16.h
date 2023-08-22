@@ -4,7 +4,7 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_UTF16.h
-// Status    PROD_READY
+// Status    PROD_READY (Windows)
 // Library   KMS-A
 
 #pragma once
