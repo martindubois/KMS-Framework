@@ -62,6 +62,9 @@ KMS_TEST(Text_File_ASCII_Base, "Text_File_ASCII_Base", "Auto", sTest_Base)
 
     // ReplaceLines *
     KMS_TEST_COMPARE(lF0.ReplaceLines("^Test$", "Replaced"), 1U);
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete("Test_Text_File_ASCII_Base_0.txt");
 }
 
 KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_Exception)

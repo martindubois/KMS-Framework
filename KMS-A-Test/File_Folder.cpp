@@ -54,6 +54,9 @@ KMS_TEST(File_Folder_Base, "File_Folder_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(!lF0.DoesFolderExist(".gitignore"));
     KMS_TEST_ASSERT(!lF0.DoesFolderExist("DoesNotExist"));
     KMS_TEST_ASSERT( lF0.DoesFolderExist("KMS-A-Test"));
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete(".gitignore.000.bak.000.bak");
 }
 
 KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception)
@@ -117,4 +120,8 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH_OUTPUT_END(FILE_UNCOMPRESS_FAILED);
+
+    // ===== Cleanup ========================================================
+    File::Folder lF("Test_File_Folder_Exception_2");
+    lF.Delete();
 }

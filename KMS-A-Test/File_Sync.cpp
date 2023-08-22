@@ -21,7 +21,7 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
         "Bidirectional.Default+=DoesNotExist_B",
         "Unknown+=1",
         "Unknown=1",
-        "SaveConfig=Test.txt",
+        "SaveConfig=Test_File_Sync_Main_0.txt",
     };
 
     KMS_TEST_COMPARE(File::Sync::Main(3, VECTOR_A), 0);
@@ -34,13 +34,17 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
         "KMS-Test.exe",
         "Unidirectional+=DoesNotExist;DoesNotExist",
         "Unidirectional+=DoesNotExist;DoesNotExist",
-        "SaveConfig=Test.txt",
+        "SaveConfig=Test_File_Sync_Main_1.txt",
     };
 
     KMS_TEST_OUTPUT_BEGIN();
     auto lRet = File::Sync::Main(4, VECTOR_B);
     KMS_TEST_OUTPUT_END();
     KMS_TEST_COMPARE(lRet, 0);
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete("Test_File_Sync_Main_0.txt");
+    File::Folder::CURRENT.Delete("Test_File_Sync_Main_1.txt");
 }
 
 KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)

@@ -70,6 +70,10 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
 
     // GetLine2
     lF0.GetLine2(0);
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete("Test_Text_File_UTF16_Base_0.txt");
+    File::Folder::CURRENT.Delete("Test_Text_File_UTF16_Base_1.txt");
 }
 
 KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_Exception)
