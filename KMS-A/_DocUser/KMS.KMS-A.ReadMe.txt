@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+1.0.2 Linux 2023-08-22
+
 1.0.1 Windows 2023-08-06
 * Callback, Callback_Ptr and ICallback (PROD_READY)
 * PROD_READY

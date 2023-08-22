@@ -75,12 +75,14 @@ namespace KMS
             void Package();
             void Package_Components();
             void Package_Components(const char* aC);
+            void Package_Components(const char* aC, const char* aP);
             void Package_Components_Embedded(const char* aC);
             void Package_Files();
             void Package_Folders();
             void Package_Libraries(const char* aC, const char* aExtension);
             void Test();
             void Test(const char* aC);
+            void Test(const char* aC, const char* aP);
             void VerifyConfig();
 
             #ifdef _KMS_WINDOWS_

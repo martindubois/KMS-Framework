@@ -25,13 +25,20 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::Package_Components(const char* aC)
+        void Build::Package_Components(const char* aC, const char* aP)
         {
-            File::Folder lBin(mTmp_Binaries , aC);
-            File::Folder lLib(mTmp_Libraries, aC);
+            assert(nullptr != aC);
+            assert(nullptr != aP);
 
-            File::Folder lBin_Src((std::string("Binaries/" ) + aC).c_str());
-            File::Folder lLib_Src((std::string("Libraries/") + aC).c_str());
+            char lCP[PATH_LENGTH];
+
+            sprintf_s(lCP, "%s_%s", aC, aP);
+
+            File::Folder lBin(mTmp_Binaries , lCP);
+            File::Folder lLib(mTmp_Libraries, lCP);
+
+            File::Folder lBin_Src((std::string("Binaries/" ) + lCP).c_str());
+            File::Folder lLib_Src((std::string("Libraries/") + lCP).c_str());
 
             lBin.Create();
             lLib.Create();
@@ -53,14 +60,19 @@ namespace KMS
             }
         }
 
-        void Build::Test(const char* aC)
+        void Build::Test(const char* aC, const char* aP)
         {
+            assert(nullptr != aC);
+            assert(nullptr != aP);
+
+            std::string lOutDir = std::string("Binaries/") + aC + "_" + aP;
+
             for (const auto& lEntry : mTests.mInternal)
             {
                 auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(nullptr != lT);
 
-                Proc::Process lP((std::string("Binaries/") + aC).c_str(), lT->Get());
+                Proc::Process lP(lOutDir.c_str(), lT->Get());
 
                 lP.AddArgument("Groups+=Auto");
 

@@ -20,9 +20,11 @@ Search "EDIT ON BUILD" and edit found file as needed                      [ ]
 
 ===== Linux only ============================================================
 Tool "Terminal" - Un the product folder
-    Binaries/Debug/KMS-Make Config=Debug Operation+=Make                  [ ]
-    Binaries/Debug/KMS-Build                                              [ ]
+    Binaries/Debug_x86_64/KMS-Make Commands+=Make Configuration=Debug Processor=x86_64
+                                                                          [ ]
+    Binaries/Debug_x86_64/KMS-Build                                       [ ]
 Copy the exported file to the server                                      [ ]
+If needed, update KMS-Sync.exe in ~\Export                                [ ]
 
 ===== Windows only ==========================================================
 Tool "Visual Studio 2022"

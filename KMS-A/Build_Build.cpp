@@ -446,6 +446,19 @@ namespace KMS
             }
         }
 
+        void Build::Package_Components(const char* aC)
+        {
+            for (const auto& lEntry : mProcessors.mInternal)
+            {
+                assert(nullptr != lEntry);
+
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lP);
+
+                Package_Components(aC, lP->Get());
+            }
+        }
+
         void Build::Package_Components_Embedded(const char* aC)
         {
             for (const auto& lEntryP : mProcessors.mInternal)
@@ -544,6 +557,19 @@ namespace KMS
                 assert(nullptr != lC);
 
                 Test(*lC);
+            }
+        }
+
+        void Build::Test(const char* aC)
+        {
+            for (const auto& lEntry : mProcessors.mInternal)
+            {
+                assert(nullptr != lEntry);
+
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lP);
+
+                Test(aC, lP->Get());
             }
         }
 
