@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/CLI_Tool.cpp
 
-// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-09  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -57,7 +57,6 @@ namespace KMS
             mCommands.AddEntry(new DI::String(aC), true);
         }
 
-        // NOT TESTED
         void Tool::ExecuteCommands(FILE* aFile)
         {
             assert(nullptr != aFile);
@@ -66,11 +65,13 @@ namespace KMS
 
             if (stdin == aFile)
             {
+                // NOT TESTED
                 mConsole.OutputStream() << "\n> " << std::flush;
             }
 
             while (nullptr != fgets(lLine, sizeof(lLine), aFile))
             {
+                // NOT TESTED
                 char lCmd[LINE_LENGTH];
 
                 if (1 == sscanf_s(lLine, " %[^\n\r\t]", lCmd SizeInfo(lCmd)))

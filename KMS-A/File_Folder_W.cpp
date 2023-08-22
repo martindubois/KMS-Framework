@@ -159,8 +159,7 @@ namespace KMS
         {
             if (!CreateDirectory(mPath.c_str(), nullptr))
             {
-                // NOT TESTED
-                KMS_EXCEPTION(FILE_CREATE_FAILED, "Cannot create the folder", mPath.c_str());
+                KMS_EXCEPTION(FILE_CREATE_FAILED, "Cannot create the folder (NOT TESTED)", mPath.c_str());
             }
         }
 
@@ -193,15 +192,14 @@ namespace KMS
                 lAttr &= ~FILE_ATTRIBUTE_READONLY;
                 if (!SetFileAttributes(lPath, lAttr))
                 {
-                    sprintf_s(lMsg, "Cannot change attributes of \"%s\"", lPath);
+                    sprintf_s(lMsg, "Cannot change attributes of \"%s\" (NOT TESTED)", lPath);
                     KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
                 }
             }
 
             if (!DeleteFile(lPath))
             {
-                // NOT TESTED
-                sprintf_s(lMsg, "Cannot delete \"%s\"", lPath);
+                sprintf_s(lMsg, "Cannot delete \"%s\" (NOT TESTED)", lPath);
                 KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
             }
         }

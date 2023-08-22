@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/WOP_System.cpp
 
-// TEST COVERAGE 2022-11-22 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-09  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -249,7 +249,6 @@ namespace KMS
 
             case DATA_TYPE_TRACE:
                 #ifndef _KMS_EMBEDDED_
-                    // NOT TESTED
                     char lData[256];
                     memset(&lData, 0, sizeof(lData));
                     aIn->GetData(lData, sizeof(lData) - 1);

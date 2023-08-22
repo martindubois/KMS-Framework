@@ -156,7 +156,7 @@ namespace KMS
 
                 if (nullptr == lContainer)
                 {
-                    sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
+                    sprintf_s(lMsg, "\"%s\" is not a valid name (NOT TESTED)", aName);
                     KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);
                 }
 

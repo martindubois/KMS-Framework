@@ -107,8 +107,7 @@ namespace KMS
                     {
                         if (!Verify(lMajor, lMinor, lBuild, lCompat))
                         {
-                            // NOT TESTED
-                            KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incoherent version file", aFile);
+                            KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incoherent version file (NOT TESTED)", aFile);
                         }
                         lState++;
                     }
@@ -129,8 +128,7 @@ namespace KMS
                 }
             }
 
-            // NOT TESTED
-            KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incomplet version file", aFile);
+            KMS_EXCEPTION(VERSION_FILE_CORRUPTED, "Incomplet version file (NOT TESTED)", aFile);
         }
 
         void Version::GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags) const

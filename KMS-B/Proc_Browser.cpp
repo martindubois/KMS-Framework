@@ -336,8 +336,7 @@ namespace KMS
                 }
             }
 
-            // NOT TESTED
-            KMS_EXCEPTION(PROC_START_FAILED, "Cannot open a browser", aURL);
+            KMS_EXCEPTION(PROC_START_FAILED, "Cannot open a browser (NOT TESTED)", aURL);
         }
 
         void Browser::Open()
