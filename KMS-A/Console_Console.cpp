@@ -12,6 +12,17 @@
 // ===== Includes ===========================================================
 #include <KMS/Console/Console.h>
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+    #define NULL_DEV "/dev/null"
+#endif
+
+#ifdef _KMS_WINDOWS_
+    #define NULL_DEV "NUL:"
+#endif
+
 namespace KMS
 {
     namespace Console
@@ -88,7 +99,7 @@ namespace KMS
 
         void Console::Set_Null()
         {
-            Set("NUL:", FLAG_ERROR | FLAG_OUTPUT | FLAG_FILE | FLAG_STREAM);
+            Set(NULL_DEV, FLAG_ERROR | FLAG_OUTPUT | FLAG_FILE | FLAG_STREAM);
         }
 
         FILE        * Console::ErrorFile   () const { return  mErrorFile; }

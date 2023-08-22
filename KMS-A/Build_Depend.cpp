@@ -168,7 +168,7 @@ namespace KMS
 
                 if (lFolder.DoesFileExist(aFile))
                 {
-                    char lHeader[PATH_LENGTH];
+                    char lHeader[2 * PATH_LENGTH];
 
                     sprintf_s(lHeader SizeInfo(lHeader), "%s/%s", lFrom, aFile);
 

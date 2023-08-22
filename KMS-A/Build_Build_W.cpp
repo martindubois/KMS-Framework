@@ -65,90 +65,85 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "The compilation failed", lProcess.GetCmdLine());
         }
 
-        void Build::Package_Components(const char* aC)
+        void Build::Package_Components(const char* aC, const char* aP)
         {
-            for (const auto& lEntry : mProcessors.mInternal)
+            assert(nullptr != aC);
+            assert(nullptr != aP);
+
+            std::string lC(aC);
+            std::string lP(aP);
+
+            std::string lCP(aC);
+
+            lCP += "_";
+            lCP += lP;
+
+            std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + lC;
+
+            File::Folder lOut_Src(lOutDir.c_str());
+
+            if (!mBinaries.IsEmpty())
             {
-                assert(nullptr != lEntry);
+                File::Folder lBin(mTmp_Binaries, lCP.c_str());
 
-                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(nullptr != lP);
+                lBin.Create();
 
-                std::string lCfg = aC;
-
-                lCfg += "_";
-                lCfg += lP->Get();
-
-                std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
-
-                File::Folder lOut_Src(lOutDir.c_str());
-
-                if (!mBinaries.IsEmpty())
+                for (const auto& lEntry : mBinaries.mInternal)
                 {
-                    File::Folder lBin(mTmp_Binaries, lCfg.c_str());
+                    assert(nullptr != lEntry);
 
-                    lBin.Create();
+                    auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
+                    assert(nullptr != lB);
 
-                    for (const auto& lEntry : mBinaries.mInternal)
-                    {
-                        assert(nullptr != lEntry);
-
-                        auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
-                        assert(nullptr != lB);
-
-                        lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
-                        lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
-                    }
+                    lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
+                    lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
                 }
+            }
 
-                if (!mLibraries.IsEmpty())
+            if (!mLibraries.IsEmpty())
+            {
+                File::Folder lLib(mTmp_Libraries, lCP.c_str());
+
+                lLib.Create();
+
+                for (const auto& lEntry : mLibraries.mInternal)
                 {
-                    File::Folder lLib(mTmp_Libraries, lCfg.c_str());
+                    assert(nullptr != lEntry);
 
-                    lLib.Create();
+                    auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
+                    assert(nullptr != lL);
 
-                    for (const auto& lEntry : mLibraries.mInternal)
-                    {
-                        assert(nullptr != lEntry);
-
-                        auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
-                        assert(nullptr != lL);
-
-                        lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
-                        lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
-                    }
+                    lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
+                    lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
                 }
             }
         }
 
-        void Build::Test(const char* aC)
+        void Build::Test(const char* aC, const char* aP)
         {
-            for (const auto& lEntry : mProcessors.mInternal)
+            assert(nullptr != aC);
+            assert(nullptr != aP);
+
+            std::string lP(aP);
+
+            std::string lOutDir = (lP == "x86") ? aC : lP + "\\" + aC;
+
+            for (const auto& lEntry : mTests.mInternal)
             {
                 assert(nullptr != lEntry);
 
-                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(nullptr != lP);
+                auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lT);
 
-                for (const auto& lEntry : mTests.mInternal)
+                Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + ".exe").c_str());
+
+                lProcess.AddArgument("Groups+=Auto");
+
+                lProcess.Run(TEST_ALLOWED_TIME_ms);
+
+                if (0 != lProcess.GetExitCode())
                 {
-                    assert(nullptr != lEntry);
-
-                    auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
-                    assert(nullptr != lT);
-
-                    std::string lOutDir = (*lP == "x86") ? aC : std::string(*lP) + "\\" + aC;
-
-                    Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + ".exe").c_str());
-
-                    lProcess.AddArgument("Groups+=Auto");
-
-                    lProcess.Run(TEST_ALLOWED_TIME_ms);
-
-                    if (0 != lProcess.GetExitCode())
-                    {
-                        KMS_EXCEPTION(BUILD_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
-                    }
+                    KMS_EXCEPTION(BUILD_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
                 }
             }
         }

@@ -91,12 +91,12 @@ namespace KMS
             }
         }
 
-        void Stats::AddEntry(Dbg::Stats_Entry* aEntry)
+        void Stats::AddEntry(Stats_Entry* aEntry)
         {
             mEntries.push_back(aEntry);
         }
 
-        Stats Dbg::gStats;
+        Stats gStats;
 
     }
 }

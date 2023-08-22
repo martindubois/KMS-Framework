@@ -29,7 +29,7 @@ KMS_TEST(CLI_Tool_Base, "CLI_Tool_Base", "Auto", sTest_Base)
     // AddCommand
     lT.AddCommand("Config Invalid");
     lT.AddCommand("Echo Message");
-    lT.AddCommand("ExecuteScript KMS-A-Test/Tests/Test_CLI_TOOL_Base_0.txt");
+    lT.AddCommand("ExecuteScript KMS-A-Test/Tests/Test_CLI_Tool_Base_0.txt");
     lT.AddCommand("Help");
     lT.AddCommand("Repeat 0 Help");
     lT.AddCommand("Repeat 1 Help");

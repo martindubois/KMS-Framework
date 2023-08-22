@@ -65,7 +65,7 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
     lL.WriteException(lE);
     lL.WriteMessage("Test");
 
-    lL.mConsoleMode = Dbg::Log::ConsoleMode::DEBUG;
+    lL.mConsoleMode = Dbg::Log::ConsoleMode::MODE_DEBUG;
 
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
     lL.WriteData(&lL, sizeof(lL));

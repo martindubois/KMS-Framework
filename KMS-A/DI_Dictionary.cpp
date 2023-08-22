@@ -105,7 +105,7 @@ namespace KMS
             char lName[NAME_LENGTH];
             char lRest[NAME_LENGTH];
 
-            auto lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), &lRest SizeInfo(lRest));
+            auto lRet = sscanf_s(aName, "%[^.].%[^ \n\r\t]", lName SizeInfo(lName), lRest SizeInfo(lRest));
 
             char lMsg[64 + NAME_LENGTH];
 
