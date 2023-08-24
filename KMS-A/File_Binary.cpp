@@ -30,15 +30,21 @@ namespace KMS
             aFolder.GetPath(aFile, lPath, sizeof(lPath));
 
             DWORD lAccess = GENERIC_READ;
-            DWORD lDispo = OPEN_EXISTING;
+            DWORD lDispo;
+            DWORD lShare = FILE_SHARE_READ;
 
             if (aWrite)
             {
                 lAccess |= GENERIC_WRITE;
                 lDispo = CREATE_ALWAYS;
             }
+            else
+            {
+                lDispo = OPEN_EXISTING;
+                lShare |= FILE_SHARE_WRITE;
+            }
 
-            mHandle = CreateFile(lPath, lAccess, 0, nullptr, lDispo, 0, nullptr);
+            mHandle = CreateFile(lPath, lAccess, FILE_SHARE_READ, nullptr, lDispo, 0, nullptr);
             if (INVALID_HANDLE_VALUE == mHandle)
             {
                 char lMsg[64 + PATH_LENGTH];
@@ -47,26 +53,35 @@ namespace KMS
             }
         }
 
-        Binary::~Binary()
+        Binary::~Binary() { Close(); }
+
+        void Binary::Close()
         {
-            assert(INVALID_HANDLE_VALUE != mHandle);
-
-            BOOL lRet;
-
-            if (nullptr != mMapping)
+            if (INVALID_HANDLE_VALUE != mHandle)
             {
-                if (nullptr != mView)
+                BOOL lRet;
+
+                if (nullptr != mMapping)
                 {
-                    lRet = UnmapViewOfFile(mView);
+                    if (nullptr != mView)
+                    {
+                        lRet = UnmapViewOfFile(mView);
+                        assert(lRet);
+
+                        mView = nullptr;
+                    }
+
+                    lRet = CloseHandle(mMapping);
                     assert(lRet);
+
+                    mMapping = nullptr;
                 }
 
-                lRet = CloseHandle(mMapping);
+                lRet = CloseHandle(mHandle);
                 assert(lRet);
-            }
 
-            lRet = CloseHandle(mHandle);
-            assert(lRet);
+                mHandle = INVALID_HANDLE_VALUE;
+            }
         }
 
         unsigned int Binary::GetMappedSize() const { return mMappedSize_byte; }

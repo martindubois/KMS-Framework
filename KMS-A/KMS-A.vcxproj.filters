@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Console">
       <UniqueIdentifier>{04f81db6-eea3-4a7f-8aee-2375b2fd1c35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FileFormat">
+      <UniqueIdentifier>{4d74492a-6ffa-4cbd-8a83-e0c1ef4b105e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -273,9 +276,6 @@
     <ClCompile Include="ScaleAndOffset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileFormat_ELF.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Dbg_Stats.cpp">
       <Filter>Source Files\Dbg</Filter>
     </ClCompile>
@@ -317,6 +317,12 @@
     </ClCompile>
     <ClCompile Include="Callback.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFormat_ELF.cpp">
+      <Filter>Source Files\FileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFormat_BMP.cpp">
+      <Filter>Source Files\FileFormat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

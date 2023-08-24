@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Text">
       <UniqueIdentifier>{379adee0-4552-4b21-837b-8a571656433d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\FileFormat">
+      <UniqueIdentifier>{c57d24fa-243c-4c8e-be85-5da0165fc977}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-A-Test.cpp">
@@ -55,9 +58,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="WOP_System.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FileFormat_ELF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DI_Array.cpp">
@@ -98,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="DI_String_Expand.cpp">
       <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFormat_ELF.cpp">
+      <Filter>Source Files\FileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="FileFormat_BMP.cpp">
+      <Filter>Source Files\FileFormat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

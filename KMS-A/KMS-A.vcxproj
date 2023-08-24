@@ -76,6 +76,7 @@
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
     <ClCompile Include="DI_Value.cpp" />
+    <ClCompile Include="FileFormat_BMP.cpp" />
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="GUI_MetaData.cpp" />
     <ClCompile Include="HTTP.cpp" />
