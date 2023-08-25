@@ -105,6 +105,9 @@
     <ClCompile Include="FileFormat_BMP.cpp">
       <Filter>Source Files\FileFormat</Filter>
     </ClCompile>
+    <ClCompile Include="Graph_Bitmap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

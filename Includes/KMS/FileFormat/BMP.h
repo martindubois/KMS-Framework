@@ -21,27 +21,6 @@ namespace KMS
 
         public:
 
-            enum class Operation
-            {
-                OP_ADD = 0,
-                OP_AND,
-                OP_COPY,
-                OP_OR,
-                OP_SUB,
-                OP_XOR,
-
-                QTY
-            };
-
-            static const uint32_t BLACK;
-            static const uint32_t BLUE;
-            static const uint32_t GREEN;
-            static const uint32_t RED;
-            static const uint32_t WHITE;
-
-            static uint32_t MakeColor(const uint8_t* aBlue);
-            static uint32_t MakeColor(uint8_t aRed, uint8_t aGreen, uint8_t aBlue);
-
             BMP(const File::Folder& aFolder, const char* aFile, bool aWrite = false);
 
             ~BMP();
@@ -52,18 +31,10 @@ namespace KMS
 
             const void* GetHeader() const;
 
-            uint32_t GetPixel(uint16_t aX_px, uint16_t aY_px) const;
-
             unsigned int GetSize_byte() const;
 
             unsigned int GetSizeX_px() const;
             unsigned int GetSizeY_px() const;
-
-            void SetBox(uint16_t aX0_px, uint16_t aY0_px, uint16_t aX1_px, uint16_t aX2_px, uint32_t aValue, Operation aOp = Operation::OP_COPY);
-
-            void SetLine(uint16_t aX0_px, uint16_t aY0_px, uint16_t aX1_px, uint16_t aX2_px, uint32_t aValue, Operation aOp = Operation::OP_COPY);
-
-            void SetPixel(uint16_t aX_px, uint16_t aY_px, uint32_t aValue, Operation aOp = Operation::OP_COPY );
 
             void Close();
 
@@ -105,8 +76,6 @@ namespace KMS
                 uint16_t mImportantColorCount_High;
             }
             Header;
-
-            unsigned int ComputeOffset(uint16_t aX_px, uint16_t aY_px) const;
 
             void Data_Init();
 

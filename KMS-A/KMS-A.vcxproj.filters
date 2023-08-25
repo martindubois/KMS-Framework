@@ -58,6 +58,9 @@
     <Filter Include="Source Files\FileFormat">
       <UniqueIdentifier>{4d74492a-6ffa-4cbd-8a83-e0c1ef4b105e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graph">
+      <UniqueIdentifier>{5db27f27-8be2-4800-8e79-c21b9d942424}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -323,6 +326,15 @@
     </ClCompile>
     <ClCompile Include="FileFormat_BMP.cpp">
       <Filter>Source Files\FileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph_Bitmap.cpp">
+      <Filter>Source Files\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph_Color.cpp">
+      <Filter>Source Files\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph_Point.cpp">
+      <Filter>Source Files\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
