@@ -44,6 +44,8 @@ namespace KMS
 
             void Init(FileFormat::BMP* aBMP);
 
+            const void* GetData() const;
+
             Color GetPixel(Point aP) const;
 
             unsigned int GetSizeX_px() const;
@@ -61,6 +63,8 @@ namespace KMS
             void Scroll_Right(unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
 
         private:
+
+            NO_COPY(Bitmap);
 
             unsigned int ComputeOffset(Point aP) const;
 

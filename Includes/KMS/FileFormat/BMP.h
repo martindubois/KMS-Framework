@@ -26,6 +26,7 @@ namespace KMS
             ~BMP();
 
             const void* GetData() const;
+                  void* GetData();
 
             unsigned int GetDataSize_byte() const;
 

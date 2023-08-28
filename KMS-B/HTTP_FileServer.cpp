@@ -231,7 +231,7 @@ namespace KMS
                 return;
             }
 
-            if (!mRoot.Get().DoesFileExist(lPath + 1))
+            if (!mRoot.GetFolder().DoesFileExist(lPath + 1))
             {
                 aR->SetResult(Request::Result::NOT_FOUND);
                 return;

@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Graph">
       <UniqueIdentifier>{5db27f27-8be2-4800-8e79-c21b9d942424}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Stats">
+      <UniqueIdentifier>{3a84eb32-e08c-4df7-b76e-9859ec3ae4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\WGDI">
+      <UniqueIdentifier>{1cda7359-6c74-4c9c-b884-94b16e99a076}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -335,6 +341,21 @@
     </ClCompile>
     <ClCompile Include="Graph_Point.cpp">
       <Filter>Source Files\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats_Stats.cpp">
+      <Filter>Source Files\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="Stats_Histogram.cpp">
+      <Filter>Source Files\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="WGDI_Window.cpp">
+      <Filter>Source Files\WGDI</Filter>
+    </ClCompile>
+    <ClCompile Include="WGDI_Window_Bitmap.cpp">
+      <Filter>Source Files\WGDI</Filter>
+    </ClCompile>
+    <ClCompile Include="WGDI_Viewer_Bitmap.cpp">
+      <Filter>Source Files\WGDI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

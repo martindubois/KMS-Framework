@@ -112,6 +112,8 @@
     <ClCompile Include="Proc_Process_W.cpp" />
     <ClCompile Include="RefCount.cpp" />
     <ClCompile Include="ScaleAndOffset.cpp" />
+    <ClCompile Include="Stats_Histogram.cpp" />
+    <ClCompile Include="Stats_Stats.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_File_ASCII.cpp" />
@@ -122,6 +124,9 @@
     <ClCompile Include="Thread_Lock.cpp" />
     <ClCompile Include="Thread_Thread.cpp" />
     <ClCompile Include="Version.cpp" />
+    <ClCompile Include="WGDI_Window_Bitmap.cpp" />
+    <ClCompile Include="WGDI_Viewer_Bitmap.cpp" />
+    <ClCompile Include="WGDI_Window.cpp" />
     <ClCompile Include="WOP_FrameBuffer.cpp" />
     <ClCompile Include="WOP_Object.cpp" />
     <ClCompile Include="WOP_Object_Dynamic.cpp" />

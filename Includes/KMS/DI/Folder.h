@@ -26,7 +26,7 @@ namespace KMS
 
             operator const KMS::File::Folder& () const;
 
-            virtual const KMS::File::Folder& Get() const = 0;
+            virtual const KMS::File::Folder& GetFolder() const = 0;
 
             // ===== Object =================================================
             virtual ~Folder_Base();
@@ -58,7 +58,7 @@ namespace KMS
             Folder(const KMS::File::Folder& aFolder);
 
             // ===== Folder_Base ============================================
-            virtual const KMS::File::Folder& Get() const;
+            virtual const KMS::File::Folder& GetFolder() const;
 
             // ===== Object =================================================
             virtual ~Folder();
@@ -82,7 +82,7 @@ namespace KMS
             Folder_Ptr(KMS::File::Folder* aFolder);
 
             // ===== Folder_Base ============================================
-            virtual const KMS::File::Folder& Get() const;
+            virtual const KMS::File::Folder& GetFolder() const;
 
             // ===== Object =================================================
             virtual ~Folder_Ptr();

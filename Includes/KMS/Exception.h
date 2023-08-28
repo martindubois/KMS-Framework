@@ -98,6 +98,8 @@ namespace KMS
 
             VERSION_FILE_CORRUPTED, VERSION_FORMAT_INVALID, VERSION_NUMBER_INVALID,
 
+            WGDI_CONFIG_ERROR, WGDI_CREATE_ERROR,
+
             QTY
         };
 

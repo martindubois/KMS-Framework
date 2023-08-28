@@ -233,6 +233,8 @@ const char* ToCodeName(Exception::Code aCode)
         "TODO",
 
         "VERSION_FILE_CORRUPTED", "VERSION_FORMAT_INVALID", "VERSION_NUMBER_INVALID",
+
+        "WGDI_CONFIG_ERROR", "WGDI_CREATE_ERROR",
     };
 
     Enum<Exception::Code, CODE_NAMES> lCode(aCode);

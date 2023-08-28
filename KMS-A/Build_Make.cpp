@@ -437,8 +437,8 @@ namespace KMS
 
             lP.SetWorkingDirectory(aC);
 
-            lP.AddArgument(("CONFIG="    + mConfiguration.mInternal).c_str());
-            lP.AddArgument(("PROCESSOR=" + mProcessor    .mInternal).c_str());
+            lP.AddArgument(("CONFIG="    + mConfiguration.GetString()).c_str());
+            lP.AddArgument(("PROCESSOR=" + mProcessor    .GetString()).c_str());
 
             lP.Run(MAKE_ALLOWED_TIME_ms);
 

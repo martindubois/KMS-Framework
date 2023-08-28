@@ -78,6 +78,22 @@ namespace KMS
             memset(mData, 0, lSize_byte);
         }
 
+        void Bitmap::Init(FileFormat::BMP* aBMP)
+        {
+            assert(nullptr != aBMP);
+
+            assert(nullptr == mData);
+            assert(0 == mSizeX_px);
+            assert(0 == mSizeY_px);
+
+            mData = reinterpret_cast<uint8_t*>(aBMP->GetData());
+
+            mSizeX_px = aBMP->GetSizeX_px();
+            mSizeY_px = aBMP->GetSizeY_px();
+        }
+
+        const void* Bitmap::GetData() const { return mData; }
+
         Color Bitmap::GetPixel(Point aP) const
         {
             auto lOffset_byte = ComputeOffset(aP);

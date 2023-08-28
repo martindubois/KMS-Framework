@@ -41,6 +41,7 @@ namespace KMS
         BMP::~BMP() {}
 
         const void* BMP::GetData() const { return mData; }
+              void* BMP::GetData()       { return mData; }
 
         unsigned int BMP::GetDataSize_byte() const
         {

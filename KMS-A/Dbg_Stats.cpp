@@ -61,7 +61,7 @@ namespace KMS
                 }
             }
 
-            if (mFolder.Get().DoesExist())
+            if (mFolder.GetFolder().DoesExist())
             {
                 char lFileName[NAME_LENGTH];
 
@@ -69,7 +69,7 @@ namespace KMS
 
                 char lPath[PATH_LENGTH];
 
-                mFolder.Get().GetPath(lFileName, lPath, sizeof(lPath));
+                mFolder.GetFolder().GetPath(lFileName, lPath, sizeof(lPath));
 
                 std::ofstream lStream(lPath);
                 if (lStream.is_open())

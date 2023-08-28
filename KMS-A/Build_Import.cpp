@@ -160,7 +160,7 @@ namespace KMS
                 auto lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
                 assert(nullptr != lR);
 
-                if (lR->Get().DoesFolderExist(lProduct))
+                if (lR->GetFolder().DoesFolderExist(lProduct))
                 {
                     File::Folder lProductFolder(*lR, lProduct);
 

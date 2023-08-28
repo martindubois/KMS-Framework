@@ -35,13 +35,12 @@ namespace KMS
             String_Expand::Set(aIn.GetPath());
         }
 
-        Folder_Base::operator const File::Folder& () const { return Get(); }
+        Folder_Base::operator const File::Folder& () const { return GetFolder(); }
 
         // ===== Folder_Base ================================================
 
-        const File::Folder& Folder::Get() const { return mInternal; }
-
-        const File::Folder& Folder_Ptr::Get() const { return *mInternal; }
+        const File::Folder& Folder    ::GetFolder() const { return  mInternal; }
+        const File::Folder& Folder_Ptr::GetFolder() const { return *mInternal; }
 
         // ===== Object =====================================================
 

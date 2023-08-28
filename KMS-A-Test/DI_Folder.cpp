@@ -31,5 +31,5 @@ KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
     lF0.Set("PROGRAM_FILES:DoesNotExist");
     lF0.Set("PROGRAM_FILES_X86:DoesNotExist");
     lF0.Set("KMS-A-Test");
-    KMS_TEST_ASSERT(lF0.Get().DoesExist());
+    KMS_TEST_ASSERT(lF0.GetFolder().DoesExist());
 }

@@ -479,7 +479,7 @@ namespace KMS
                     {
                         auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
 
-                        lBin_Src.Copy(lBin, (lB->mInternal + ".elf").c_str());
+                        lBin_Src.Copy(lBin, (lB->GetString() + ".elf").c_str());
                     }
                 }
 
@@ -494,7 +494,7 @@ namespace KMS
                     {
                         auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
 
-                        lLib_Src.Copy(lLib, (lL->mInternal + ".a").c_str());
+                        lLib_Src.Copy(lLib, (lL->GetString() + ".a").c_str());
                     }
                 }
             }
@@ -585,8 +585,8 @@ namespace KMS
                 if (!mDoNotExport)
                 {
                     char lMsg[64 + PATH_LENGTH];
-                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.Get().GetPath());
-                    KMS_EXCEPTION_ASSERT(mExportFolder.Get().DoesExist(), BUILD_CONFIG_INVALID, lMsg, "");
+                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.GetFolder().GetPath());
+                    KMS_EXCEPTION_ASSERT(mExportFolder.GetFolder().DoesExist(), BUILD_CONFIG_INVALID, lMsg, "");
 
                     KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), BUILD_CONFIG_INVALID, "Invalid product name", "");
                 }
