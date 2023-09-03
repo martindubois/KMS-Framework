@@ -198,9 +198,6 @@
     <ClCompile Include="DI_String_Expand.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="DI_Value.cpp">
-      <Filter>Source Files\DI</Filter>
-    </ClCompile>
     <ClCompile Include="File_Binary.cpp">
       <Filter>Source Files\File</Filter>
     </ClCompile>
@@ -356,6 +353,9 @@
     </ClCompile>
     <ClCompile Include="WGDI_Viewer_Bitmap.cpp">
       <Filter>Source Files\WGDI</Filter>
+    </ClCompile>
+    <ClCompile Include="Result.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

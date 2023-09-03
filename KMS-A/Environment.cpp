@@ -87,7 +87,7 @@ namespace KMS
                 default: assert(false);
                 }
 
-                KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, ENV_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
+                KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
                 lIn++;
             }
@@ -101,7 +101,7 @@ namespace KMS
             default: assert(false);
             }
 
-            KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, ENV_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
+            KMS_EXCEPTION_ASSERT(1 < lOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aIn);
 
             *lOut = '\0';
         }

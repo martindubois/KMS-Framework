@@ -10,6 +10,9 @@
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device.h>
 
+KMS_RESULT_STATIC(RESULT_READ_FAILED);
+KMS_RESULT_STATIC(RESULT_WRITE_FAILED);
+
 namespace KMS
 {
     namespace Dev
@@ -29,7 +32,7 @@ namespace KMS
 
         void Device::SetHardwareId (const char* aHI) { assert(nullptr != aHI); mHardwareId = aHI; }
         void Device::ResetInterface() { mInterface_Valid = false; }
-        void Device::SetInterface  (const GUID& aI) { mInterface.Set(aI); mInterface_Valid = true; }
+        void Device::SetInterface  (const GUID& aI) { mInterface = aI; mInterface_Valid = true; }
         void Device::SetLocation   (const char* aL) { assert(nullptr != aL);  mLocation = aL; }
 
         // ===== IDevice ====================================================
@@ -72,7 +75,7 @@ namespace KMS
             if (0 != (aFlags & FLAG_ACCESS_WRITE)) { lAccess |= GENERIC_WRITE; }
 
             mHandle = CreateFile(mLink, lAccess, 0, NULL, OPEN_EXISTING, 0, NULL);
-            KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, DEV_CONNECT_FAILED, "CreateFile failed", mLink);
+            KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, RESULT_CONNECT_FAILED, "CreateFile failed", mLink);
 
             return true;
         }
@@ -99,12 +102,12 @@ namespace KMS
 
             if (!ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL))
             {
-                KMS_EXCEPTION(DEV_READ_FAILED, "Cannot read from the device", aOutSize_byte);
+                KMS_EXCEPTION(RESULT_READ_FAILED, "Cannot read from the device", aOutSize_byte);
             }
 
             if (0 != (aFlags && FLAG_READ_ALL))
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte == lResult_byte, DEV_READ_FAILED, "The device did not return the expected amount of data", lResult_byte);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte == lResult_byte, RESULT_READ_FAILED, "The device did not return the expected amount of data", lResult_byte);
             }
 
             return lResult_byte;
@@ -121,10 +124,10 @@ namespace KMS
 
             if (!WriteFile(mHandle, aIn, aInSize_byte, &lInfo_byte, NULL))
             {
-                KMS_EXCEPTION(DEV_WRITE_FAILED, "Cannot write to the device", aInSize_byte);
+                KMS_EXCEPTION(RESULT_WRITE_FAILED, "Cannot write to the device", aInSize_byte);
             }
 
-            KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, DEV_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, RESULT_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
             return true;
         }
 

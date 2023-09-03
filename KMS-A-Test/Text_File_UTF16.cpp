@@ -87,7 +87,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.GetLine(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // GetUserLineNo
     try
@@ -96,7 +96,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.GetUserLineNo(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // InsertLine
     try
@@ -105,7 +105,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.InsertLine(1, L"");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // RemoveLines
     try
@@ -114,7 +114,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.RemoveLines(0, 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // ReplaceLine
     try
@@ -123,7 +123,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.ReplaceLine(0, L"");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // Read
     try
@@ -132,7 +132,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.Read(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // Write
     try
@@ -141,7 +141,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_0");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // Write_ASCII
     try
@@ -150,7 +150,7 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.Write_ASCII(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_1");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // ===== Internal =======================================================
 
@@ -161,5 +161,5 @@ KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_E
         lF0.GetLine2(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 }

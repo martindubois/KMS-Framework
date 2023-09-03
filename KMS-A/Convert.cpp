@@ -39,7 +39,7 @@ namespace KMS
                 return false;
             }
 
-            KMS_EXCEPTION(CONVERT_FORMAT_INVALID, "Invalid boolean value", aASCII);
+            KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid boolean value", aASCII);
         }
 
         double ToDouble(const char* aASCII)
@@ -54,7 +54,7 @@ namespace KMS
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "\"%s\" is not a valid floating point value", aASCII);
-                KMS_EXCEPTION(CONVERT_FORMAT_INVALID, lMsg, "");
+                KMS_EXCEPTION(RESULT_INVALID_FORMAT, lMsg, "");
             }
 
             return lResult;
@@ -77,7 +77,7 @@ namespace KMS
             {
                 char lMsg[64 + PATH_LENGTH];
                 sprintf_s(lMsg, "Cannot open \"%s\"", aASCII);
-                KMS_EXCEPTION(CONVERT_OPEN_FAILED, lMsg, lRet);
+                KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, lRet);
             }
 
             assert(nullptr != lResult);
@@ -111,7 +111,7 @@ namespace KMS
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "\"%s\" is not a valid integer value", lASCII);
-                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, "");
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
             }
 
             return static_cast<int32_t>(lResult);
@@ -125,7 +125,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is too large for the expected type (uint16_t)", lResult);
-                KMS_EXCEPTION(CONVERT_VALUE_INVALID, lMsg, aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, lMsg, aASCII);
             }
 
             return static_cast<uint16_t>(lResult);
@@ -157,7 +157,7 @@ namespace KMS
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
-                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, "");
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
             }
 
             return static_cast<uint32_t>(lResult);
@@ -171,7 +171,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is too large for the expected type (uint8_t)", lResult);
-                KMS_EXCEPTION(CONVERT_DATA_TYPE_INVALID, lMsg, aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, aASCII);
             }
 
             return static_cast<uint8_t>(lResult);
@@ -184,7 +184,7 @@ namespace KMS
 
             auto lLen = static_cast<unsigned int>(wcslen(aUTF16));
 
-            KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", lLen);
+            KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", lLen);
 
             unsigned int lResult_byte = 0;
 
@@ -211,7 +211,7 @@ namespace KMS
 
             auto lLen = static_cast<unsigned int>(strlen(aASCII));
 
-            KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen * sizeof(wchar_t), CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+            KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen * sizeof(wchar_t), RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
 
             unsigned int lResult_word = 0;
 
@@ -230,7 +230,7 @@ namespace KMS
 
         unsigned int ToDisplay(const char* aASCII, unsigned int aInSize_byte, char* aOut, unsigned aOutSize_byte)
         {
-            KMS_EXCEPTION_ASSERT(aInSize_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
+            KMS_EXCEPTION_ASSERT(aInSize_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
 
             for (unsigned int i = 0; i < aInSize_byte; i++)
             {
@@ -272,7 +272,7 @@ namespace KMS
                     if      (nullptr != strchr(aBlanks, *lASCII)) {}
                     else if (nullptr != strchr(aSeparators, *lASCII))
                     {
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = 0; lResult_byte++;
                     }
                     else
@@ -285,20 +285,20 @@ namespace KMS
                 case STATE_LOW:
                     if ('\0' == *lASCII)
                     {
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         return lResult_byte;
                     }
 
                     if (nullptr != strchr(aBlanks, *lASCII))
                     {
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_SEP;
                     }
                     else if (nullptr != strchr(aSeparators, *lASCII))
                     {
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_HIGH;
                     }
@@ -306,7 +306,7 @@ namespace KMS
                     {
                         lByte <<= 4;
                         lByte |= ToDigitValue(*lASCII);
-                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, CONVERT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
+                        KMS_EXCEPTION_ASSERT(lResult_byte < aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aASCII);
                         aOut[lResult_byte] = lByte; lResult_byte++;
                         lState = STATE_SEP;
                     }
@@ -317,7 +317,7 @@ namespace KMS
 
                     if (nullptr != strchr(aBlanks, *lASCII)) {}
                     else if (nullptr != strchr(aSeparators, *lASCII)) { lState = STATE_HIGH; }
-                    else { KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid charactere", aASCII); }
+                    else { KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid charactere", aASCII); }
                     break;
 
                 default: assert(false);
@@ -329,6 +329,8 @@ namespace KMS
 
     }
 }
+
+using namespace KMS;
 
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
@@ -364,7 +366,7 @@ uint8_t ToDigitValue(char aC)
     case 'e':
     case 'f': lResult = aC - 'a' + 10; break;
 
-    default: KMS_EXCEPTION(CONVERT_VALUE_INVALID, "Invalid digit", aC);
+    default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid digit", aC);
     }
 
     return lResult;

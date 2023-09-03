@@ -40,9 +40,5 @@ namespace KMS
             mInternal = Convert::ToNetAddress(String_Expand::Get());
         }
 
-        // ===== Object =====================================================
-        
-        NetAddress::~NetAddress() {}
-
     }
 }

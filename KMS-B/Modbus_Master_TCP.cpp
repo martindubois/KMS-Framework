@@ -10,6 +10,9 @@
 // ===== Includes ===========================================================
 #include <KMS/Modbus/Master_TCP.h>
 
+KMS_RESULT_STATIC(RESULT_MODBUS_ERROR);
+KMS_RESULT_STATIC(RESULT_RECV_ERROR);
+
 // Data type
 // //////////////////////////////////////////////////////////////////////////
 
@@ -64,10 +67,10 @@ namespace KMS
                 VerifyFunction(aFunction, &lBuffer.mFunctionCode);
 
                 lResult_byte = lBuffer.mLength_byte - 3; // Device address + Function code + Byte count
-                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, MODBUS_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, RESULT_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
 
                 auto lRet_byte = mSocket.Receive(aOut, lResult_byte);
-                KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete answer", lRet_byte);
             }
             catch (...)
             {
@@ -107,7 +110,7 @@ namespace KMS
                     lSize_byte = lResult_byte - 1; // First data byte alread read
 
                     auto lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
-                    KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete answer", lRet_byte);
+                    KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete answer", lRet_byte);
                 }
             }
             catch (...)
@@ -157,17 +160,17 @@ namespace KMS
             assert(HEADER_SIZE_byte < aSize_byte);
 
             auto lRet_byte = mSocket.Receive(aBuffer, aSize_byte);
-            KMS_EXCEPTION_ASSERT(aSize_byte == lRet_byte, MODBUS_RECV_ERROR, "Incomplete header", lRet_byte);
+            KMS_EXCEPTION_ASSERT(aSize_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete header", lRet_byte);
 
             aBuffer->mLength_byte   = ntohs(aBuffer->mLength_byte);
             aBuffer->mProtocolId    = ntohs(aBuffer->mProtocolId);
             aBuffer->mTransactionId = ntohs(aBuffer->mTransactionId);
 
-            KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == aBuffer->mProtocolId   , MODBUS_RECV_ERROR, "Invalid protocol ID"   , aBuffer->mProtocolId);
-            KMS_EXCEPTION_ASSERT(mTransactionId == aBuffer->mTransactionId, MODBUS_RECV_ERROR, "Invalid transaction ID", aBuffer->mTransactionId);
+            KMS_EXCEPTION_ASSERT(PROTOCOL_ID    == aBuffer->mProtocolId   , RESULT_RECV_ERROR, "Invalid protocol ID"   , aBuffer->mProtocolId);
+            KMS_EXCEPTION_ASSERT(mTransactionId == aBuffer->mTransactionId, RESULT_RECV_ERROR, "Invalid transaction ID", aBuffer->mTransactionId);
 
             bool lRetB = VerifyDeviceAddress(&aBuffer->mDeviceAddress);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "VerifyDeviceAddress failed", "");
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "VerifyDeviceAddress failed", "");
         }
 
         void Master_TCP::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)

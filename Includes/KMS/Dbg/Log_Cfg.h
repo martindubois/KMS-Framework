@@ -25,15 +25,13 @@ namespace KMS
 
         public:
 
-            static const char* CONSOLE_MODE_NAMES[];
-
             Log_Cfg(Log* aLog);
 
             // ===== Configurable attributes ================================
-            DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES> mConsoleLevel;
-            DI::Enum_Ptr<Log::ConsoleMode, CONSOLE_MODE_NAMES  > mConsoleMode;
-            DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES> mFileLevel;
-            DI::Folder_Ptr                                       mFolder;
+            DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES   > mConsoleLevel;
+            DI::Enum_Ptr<Log::ConsoleMode, Log::CONSOLE_MODE_NAMES> mConsoleMode;
+            DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES   > mFileLevel;
+            DI::Folder_Ptr                                          mFolder;
 
         private:
 

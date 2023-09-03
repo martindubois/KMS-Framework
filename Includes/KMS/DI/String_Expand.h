@@ -7,6 +7,9 @@
 // Status    PROD_READY (Windows)
 // Library   KMS-A
 
+// External type : const char*
+// Internal type : str::string
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -16,6 +19,23 @@ namespace KMS
 {
     namespace DI
     {
+
+        class String_Expand_Ptr : public String_Ptr
+        {
+
+        public:
+
+            String_Expand_Ptr(std::string* aPtr);
+
+            // ===== String_Ptr =============================================
+            using String_Ptr::operator const char*;
+
+            void operator = (const char* aIn);
+
+            // ===== Value ==================================================
+            virtual void Set(const char* aIn);
+
+        };
 
         class String_Expand : public String
         {
@@ -27,11 +47,13 @@ namespace KMS
             // Exception  ENV_EXPAND_FAILED
             String_Expand(const char* aIn = "");
 
+            // ===== String =================================================
+            using String_Ptr::operator const char*;
+
+            void operator = (const char* aIn);
+
             // ===== Value ==================================================
             virtual void Set(const char* aIn);
-
-            // ===== Object =================================================
-            virtual ~String_Expand();
 
         };
 

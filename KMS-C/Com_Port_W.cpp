@@ -10,6 +10,10 @@
 // ===== Includes ===========================================================
 #include <KMS/Com/Port.h>
 
+KMS_RESULT_STATIC(RESULT_CLEAR_FAILED);
+KMS_RESULT_STATIC(RESULT_CONFIG_FAILED);
+KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
+
 namespace KMS
 {
     namespace Com
@@ -23,7 +27,7 @@ namespace KMS
         void Port::ClearReadBuffer()
         {
             auto lRetB = PurgeComm(*this, PURGE_RXCLEAR);
-            KMS_EXCEPTION_ASSERT(lRetB, COM_CLEAR_FAILED, "Cannot clear the read buffer", "");
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_CLEAR_FAILED, "Cannot clear the read buffer", "");
         }
 
         // Protected
@@ -51,7 +55,7 @@ namespace KMS
 
             if (!GetCommState(*this, &lDCB))
             {
-                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot retrieve the configuration of the port", "");
+                KMS_EXCEPTION(RESULT_CONFIG_FAILED, "Cannot retrieve the configuration of the port", "");
             }
 
             lDCB.BaudRate          = mSpeed_bps;
@@ -86,7 +90,7 @@ namespace KMS
 
             if (!SetCommState(*this, &lDCB))
             {
-                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot set the configuration of the port", "");
+                KMS_EXCEPTION(RESULT_CONFIG_FAILED, "Cannot set the configuration of the port", "");
             }
         }
 
@@ -94,12 +98,12 @@ namespace KMS
         {
             if (!EscapeCommFunction(*this, mDTR ? SETDTR : CLRDTR))
             {
-                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot update DTR signal", "");
+                KMS_EXCEPTION(RESULT_CONTROL_FAILED, "Cannot update DTR signal", "");
             }
 
             if (!EscapeCommFunction(*this, mRTS ? SETRTS : CLRRTS))
             {
-                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot update RTS signal", "");
+                KMS_EXCEPTION(RESULT_CONTROL_FAILED, "Cannot update RTS signal", "");
             }
         }
 
@@ -115,7 +119,7 @@ namespace KMS
 
             if (!SetCommTimeouts(*this, &lCT))
             {
-                KMS_EXCEPTION(COM_CONFIG_FAILED, "Cannot set the communication timeouts", "");
+                KMS_EXCEPTION(RESULT_CONFIG_FAILED, "Cannot set the communication timeouts", "");
             }
         }
 
@@ -127,7 +131,7 @@ namespace KMS
 
             if (!GetCommModemStatus(*lThis, &lBits))
             {
-                KMS_EXCEPTION(COM_CONTROL_FAILED, "Cannot read signals", "");
+                KMS_EXCEPTION(RESULT_CONTROL_FAILED, "Cannot read signals", "");
             }
 
             mCTS = (0 != (lBits & MS_CTS_ON));

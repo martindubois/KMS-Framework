@@ -17,6 +17,8 @@
 
 #include <KMS/HTTP/Server.h>
 
+KMS_RESULT_STATIC(RESULT_SOCKET_RECEIVE_FAILED);
+
 // Config
 // //////////////////////////////////////////////////////////////////////////
 
@@ -66,11 +68,9 @@ namespace KMS
             }
             catch (Exception eE)
             {
-                switch (eE.GetCode())
+                if (RESULT_SOCKET_RECEIVE_FAILED != eE.GetCode())
                 {
-                case Exception::Code::NET_SOCKET_RECEIVE_FAILED: break;
-
-                default: throw eE;
+                    throw eE;
                 }
             }
         }

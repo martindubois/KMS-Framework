@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Boolean.cpp
 
-// TEST COVERAGE  2023-07-28  KMS - Martin Dubois. P. Eng.
+// TEST COVERAGE  2023-08-30  KMS - Martin Dubois. P. Eng.
 
 #include "Component.h"
 
@@ -13,6 +13,11 @@
 #include <KMS/Convert.h>
 
 #include <KMS/DI/Boolean.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const bool DEFAULT_VALUE;
 
 namespace KMS
 {
@@ -22,25 +27,54 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Boolean::Boolean(bool aIn) : mInternal(aIn) {}
+        DI::Object* Boolean::Create() { return new Boolean; }
 
-        void Boolean::operator = (bool aIn) { mInternal = aIn; }
+        Boolean_Ptr::Boolean_Ptr(bool* aPtr) : mPtr(aPtr)
+        {
+            assert(nullptr != aPtr);
+        }
 
-        Boolean::operator bool() const { return mInternal; }
+        Boolean::Boolean(bool aIn) : Boolean_Ptr(&mInternal), mInternal(aIn) {}
 
-        bool Boolean::Get() const { return mInternal; }
+        void Boolean_Ptr::operator = (bool aIn)
+        {
+            assert(nullptr != mPtr);
 
-        void Boolean::Set(bool aIn) { mInternal = aIn; }
+            *mPtr = aIn;
+        }
+
+        Boolean_Ptr::operator bool() const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
+
+        bool Boolean_Ptr::Get() const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
+
+        void Boolean_Ptr::Set(bool aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = aIn;
+        }
 
         // ===== Value ======================================================
 
-        unsigned int Boolean::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int Boolean_Ptr::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            KMS_EXCEPTION_ASSERT(7 <= aOutSize_byte, DI_OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
+            assert(nullptr != mPtr);
+
+            KMS_EXCEPTION_ASSERT(7 <= aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aOutSize_byte);
 
             unsigned int lResult_byte;
 
-            if (mInternal)
+            if (*mPtr)
             {
                 strcpy_s(aOut SizeInfoV(aOutSize_byte), "true");
                 lResult_byte = 4;
@@ -54,12 +88,14 @@ namespace KMS
             return lResult_byte;
         }
 
-        void Boolean::Set(const char* aIn)
+        void Boolean_Ptr::Set(const char* aIn)
         {
+            assert(nullptr != mPtr);
+
             auto lIn = Convert::ToBool(aIn);
-            if (mInternal != lIn)
+            if (*mPtr != lIn)
             {
-                mInternal = lIn;
+                *mPtr = lIn;
 
                 Send_OnChanged(const_cast<char*>(aIn));
             }
@@ -67,13 +103,13 @@ namespace KMS
 
         // ===== Object =====================================================
 
-        Boolean::~Boolean() {}
-
-        bool Boolean::Clear()
+        bool Boolean_Ptr::Clear()
         {
-            auto lResult = !mInternal;
+            assert(nullptr != mPtr);
 
-            mInternal = false;
+            auto lResult = *mPtr != DEFAULT_VALUE;
+
+            *mPtr = DEFAULT_VALUE;
 
             return lResult;
         }

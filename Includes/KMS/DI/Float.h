@@ -5,6 +5,9 @@
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Float.h
 
+// External type : T (floating point value)
+// Internal type : T (floating point value)
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -17,20 +20,18 @@ namespace KMS
     {
 
         template <typename T>
-        class Float : public Value
+        class Float_Ptr : public Value
         {
 
         public:
 
-            static DI::Object* Create();
-
-            Float(T aIn = 0.0);
+            Float_Ptr(T* aPtr);
 
             void operator = (T aIn);
 
             operator T () const;
 
-            bool operator == (T aIn);
+            bool operator == (T aIn) const;
 
             T Get() const;
 
@@ -39,10 +40,30 @@ namespace KMS
             virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
-            virtual ~Float();
-            virtual void Clear();
+            virtual bool Clear();
 
-        // Internal
+        private:
+
+            T* mPtr;
+
+        };
+
+        template <typename T>
+        class Float : public Float_Ptr<T>
+        {
+
+        public:
+
+            static DI::Object* Create();
+
+            Float(T aIn = 0.0);
+
+            // ===== Float_Ptr ==============================================
+            using Float_Ptr<T>::operator =;
+            using Float_Ptr<T>::operator T;
+            using Float_Ptr<T>::operator ==;
+
+        private:
 
             T mInternal;
 
@@ -55,40 +76,79 @@ namespace KMS
         DI::Object* Float<T>::Create() { return new Float<T>; }
 
         template <typename T>
-        Float<T>::Float(T aIn) : mInternal(aIn) {}
+        Float_Ptr<T>::Float_Ptr(T* aPtr) : mPtr(aPtr)
+        {
+            assert(nullptr != aPtr);
+        }
 
         template <typename T>
-        void Float<T>::operator = (T aIn) { mInternal = aIn; }
+        Float<T>::Float(T aIn) : Float_Ptr<T>(&mInternal), mInternal(aIn) {}
 
         template <typename T>
-        Float<T>::operator T () const { return mInternal; }
+        void Float_Ptr<T>::operator = (T aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = aIn;
+        }
 
         template <typename T>
-        bool Float<T>::operator == (T aIn) { return mInternal == aIn; }
+        Float_Ptr<T>::operator T () const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
 
         template <typename T>
-        T Float<T>::Get() const { return mInternal; }
+        bool Float_Ptr<T>::operator == (T aIn) const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr == aIn;
+        }
+
+        template <typename T>
+        T Float_Ptr<T>::Get() const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
 
         // ===== Value ======================================================
 
         template <typename T>
-        unsigned int Float<T>::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int Float_Ptr<T>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(nullptr != aOut);
 
-            return sprintf_s(aOut SizeInfoV(aOutSize_byte), "%f", mInternal);
+            assert(nullptr != mPtr);
+
+            return sprintf_s(aOut SizeInfoV(aOutSize_byte), "%f", *mPtr);
         }
 
         template <typename T>
-        void Float<T>::Set(const char* aIn) { mInternal = Convert::ToDouble(aIn); }
+        void Float_Ptr<T>::Set(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = Convert::ToDouble(aIn);
+        }
 
         // ===== Object =====================================================
 
         template <typename T>
-        Float<T>::~Float() {}
+        bool Float_Ptr<T>::Clear()
+        {
+            assert(nullptr != mPtr);
 
-        template <typename T>
-        void Float<T>::Clear() { mInternal = 0.0; }
+            bool lResult = *mPtr != 0.0;
+
+            *mPtr = 0.0;
+
+            return lResult;
+        }
 
     }
 }

@@ -40,7 +40,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             return mLines[aNo].c_str();
@@ -54,7 +54,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             return mLines[aNo].GetUserLineNo();
@@ -68,7 +68,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             auto lIt = mLines.begin();
@@ -86,7 +86,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             auto lFirst = mLines.begin() + aNo;
@@ -103,7 +103,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             mLines[aNo] = aLine;
@@ -143,7 +143,7 @@ namespace KMS
             {
                 char lMsg[64 + PATH_LENGTH];
                 sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
-                KMS_EXCEPTION(TEXT_OPEN_FAILED, lMsg, "");
+                KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, "");
             }
 
             std::string lLine;
@@ -176,7 +176,7 @@ namespace KMS
             {
                 char lMsg[64 + PATH_LENGTH];
                 sprintf_s(lMsg, "Cannot open \"%s\" for writing", lPath);
-                KMS_EXCEPTION(TEXT_OPEN_FAILED, lMsg, "");
+                KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, "");
             }
 
             for (const auto& lLine : mLines)
@@ -224,7 +224,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(TEXT_ARGUMENT_INVALID, lMsg, mLines.size());
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
             }
 
             return mLines[aNo];

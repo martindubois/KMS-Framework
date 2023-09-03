@@ -15,27 +15,30 @@ using namespace KMS;
 KMS_TEST(DI_String_Expand_Base, "DI_String_Expand_Base", "Auto", sTest_Base)
 {
     // Constructor
+    std::string       lI0;
     DI::String        lS0;
+    DI::String_Ptr    lSP0(&lI0);
     DI::String_Expand lSE0;
 
     // ===== DI::String =====================================================
 
     // operator =
-    lS0 = "";
+    lS0  = "";
+    lSP0 = "";
+    lSE0 = "";
 
     // operator ==
     KMS_TEST_ASSERT(lS0 == "");
 
+    // operator const char*
+
+    // Get
+
     // GetLength
     KMS_TEST_COMPARE(lS0.GetLength(), 0U);
 
-    // ===== DI::Value ======================================================
-
-    // Set
-    lSE0.Set("{");
-    lSE0.Set("{}");
-    lSE0.Set("{$Path");
-    lSE0.Set("{$Path}");
+    // GetString
+    const std::string& lI1 = lS0.GetString();
 }
 
 KMS_TEST(DI_String_Expand_Exception, "DI_String_Expand_Exception", "Auto", sText_Exception)

@@ -7,9 +7,6 @@
 
 #pragma once
 
-// ===== Includes ===========================================================
-#include <KMS/Exception.h>
-
 namespace KMS
 {
 
@@ -68,6 +65,25 @@ namespace KMS
     }
 
     template <typename T, const char** N>
+    bool Enum<T, N>::Set(T aValue)
+    {
+        assert(T::QTY > aValue);
+
+        bool lResult = mValue != aValue;
+
+        mValue = aValue;
+
+        return lResult;
+    }
+
+}
+
+#include <KMS/Exception.h>
+
+namespace KMS
+{
+
+    template <typename T, const char** N>
     bool Enum<T, N>::SetName(const char* aName)
     {
         assert(nullptr != aName);
@@ -80,19 +96,7 @@ namespace KMS
             }
         }
 
-        throw Exception(__FILE__, __FUNCTION__, __LINE__, KMS::Exception::Code::ENUM_INVALID_VALUE_NAME, "Invalid enumeration value name");
-    }
-
-    template <typename T, const char** N>
-    bool Enum<T, N>::Set(T aValue)
-    {
-        assert(T::QTY > aValue);
-
-        bool lResult = mValue != aValue;
-
-        mValue = aValue;
-
-        return lResult;
+        throw Exception(__FILE__, __FUNCTION__, __LINE__, KMS::RESULT_INVALID_NAME, "Invalid enumeration value name");
     }
 
 }

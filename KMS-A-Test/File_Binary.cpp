@@ -50,7 +50,7 @@ KMS_TEST(File_Binary_Exception, "File_Binary_Exception", "Auto", sTest_Exception
         File::Binary lB(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // Map
 
@@ -62,5 +62,5 @@ KMS_TEST(File_Binary_Exception, "File_Binary_Exception", "Auto", sTest_Exception
         lB.Write(" ", 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_WRITE_FAILED);
+    KMS_TEST_CATCH_N("RESULT_WRITE_FAILED");
 }

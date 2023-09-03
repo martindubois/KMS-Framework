@@ -5,12 +5,17 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_String.cpp
 
-// TEST COVERAGE  2023-08-01  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-30  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/DI/String.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static std::string DEFAULT_VALUE;
 
 namespace KMS
 {
@@ -22,53 +27,81 @@ namespace KMS
 
         DI::Object* String::Create() { return new String; }
 
-        String::String(const char* aIn) : mInternal(aIn) {}
+        String_Ptr::String_Ptr(std::string* aPtr) : mPtr(aPtr) {}
 
-        String_Ptr::String_Ptr(std::string* aString) : mInternal(aString) {}
+        String::String(const char* aIn) : String_Ptr(&mInternal), mInternal(aIn) {}
 
-        void String_Base::operator = (const char* aIn) { *Internal_Get() = aIn; }
+        void String_Ptr::operator = (const char* aIn)
+        {
+            assert(nullptr != aIn);
 
-        bool String_Base::operator == (const char* aIn) const { return *Internal_Get() == aIn; }
+            assert(nullptr != mPtr);
 
-        String_Base::operator const char* () const { return Internal_Get()->c_str(); }
+            *mPtr = aIn;
+        }
 
-        const char* String_Base::Get() const { return Internal_Get()->c_str(); }
+        String_Ptr::operator const char* () const
+        {
+            assert(nullptr != mPtr);
 
-        unsigned int String_Base::GetLength() const { return static_cast<unsigned int>(Internal_Get()->size()); }
+            return mPtr->c_str();
+        }
 
-        const std::string& String_Base::GetString() const { return *Internal_Get(); }
+        bool String_Ptr::operator == (const char* aIn) const
+        {
+            assert(nullptr != aIn);
 
-        // ===== String_Base ================================================
+            assert(nullptr != mPtr);
 
-        String_Base::~String_Base() {}
+            return *mPtr == aIn;
+        }
+
+        const char* String_Ptr::Get() const
+        {
+            assert(nullptr != mPtr);
+
+            return mPtr->c_str();
+        }
+
+        unsigned int String_Ptr::GetLength() const
+        {
+            assert(nullptr != mPtr);
+
+            return static_cast<unsigned int>(mPtr->size());
+        }
+
+        const std::string& String_Ptr::GetString() const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
 
         // ===== Value ======================================================
 
-        unsigned int String_Base::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int String_Ptr::Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(nullptr != aOut);
 
-            auto lInternal = Internal_Get();
-            assert(nullptr != lInternal);
+            assert(nullptr != mPtr);
 
-            auto lResult_byte = static_cast<unsigned int>(lInternal->size());
-            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, DI_OUTPUT_TOO_SHORT, "The output buffer is too short", lResult_byte);
+            auto lResult_byte = static_cast<unsigned int>(mPtr->size());
+            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", lResult_byte);
 
-            strcpy_s(aOut SizeInfoV(aOutSize_byte), lInternal->c_str());
+            strcpy_s(aOut SizeInfoV(aOutSize_byte), mPtr->c_str());
 
             return lResult_byte;
         }
 
-        void String_Base::Set(const char* aIn)
+        void String_Ptr::Set(const char* aIn)
         {
             assert(nullptr != aIn);
 
-            auto lInternal = Internal_Get();
-            assert(nullptr != lInternal);
+            assert(nullptr != mPtr);
 
-            if (*lInternal != aIn)
+            if (*mPtr != aIn)
             {
-                *lInternal = aIn;
+                *mPtr = aIn;
 
                 Send_OnChanged(const_cast<char*>(aIn));
             }
@@ -76,32 +109,16 @@ namespace KMS
 
         // ===== Object =====================================================
 
-        String    ::~String    () {}
-        String_Ptr::~String_Ptr() {}
-
-        bool String_Base::Clear()
+        bool String_Ptr::Clear()
         {
-            auto lInternal = Internal_Get();
-            assert(nullptr != lInternal);
+            assert(nullptr != mPtr);
 
-            auto lResult = !lInternal->empty();
+            auto lResult = *mPtr != DEFAULT_VALUE;
 
-            lInternal->clear();
+            *mPtr = DEFAULT_VALUE;
 
             return lResult;
         }
-
-        // Protected
-        // //////////////////////////////////////////////////////////////////
-
-        String_Base::String_Base() {}
-
-        // ===== String_Base ================================================
-
-        const std::string* String    ::Internal_Get() const { return &mInternal; }
-              std::string* String    ::Internal_Get()       { return &mInternal; }
-        const std::string* String_Ptr::Internal_Get() const { return  mInternal; }
-              std::string* String_Ptr::Internal_Get()       { return  mInternal; }
 
     }
 }

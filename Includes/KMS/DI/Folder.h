@@ -6,6 +6,9 @@
 // File      Includes/KMS/DI/Folder.h
 // Library   KMS-A
 
+// External type : KMS::File::Folder (const char*)
+// Internal type : KMS::File::Folder (str::string)
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -17,19 +20,18 @@ namespace KMS
     namespace DI
     {
 
-        class Folder_Base : public String_Expand
+        class Folder_Ptr : public String_Expand
         {
 
         public:
+
+            Folder_Ptr(KMS::File::Folder* aPtr);
 
             void operator = (const KMS::File::Folder& aIn);
 
             operator const KMS::File::Folder& () const;
 
-            virtual const KMS::File::Folder& GetFolder() const = 0;
-
-            // ===== Object =================================================
-            virtual ~Folder_Base();
+            const KMS::File::Folder& GetFolder() const;
 
         // Internal
 
@@ -38,15 +40,15 @@ namespace KMS
 
         protected:
 
-            Folder_Base();
+            Folder_Ptr(KMS::File::Folder* aPtr, const char* aIn);
 
-            Folder_Base(const char* aIn);
+        private:
 
-            virtual void Internal_Set(const KMS::File::Folder& aIn) = 0;
+            KMS::File::Folder* mPtr;
 
         };
 
-        class Folder : public Folder_Base
+        class Folder : public Folder_Ptr
         {
 
         public:
@@ -57,44 +59,13 @@ namespace KMS
 
             Folder(const KMS::File::Folder& aFolder);
 
-            // ===== Folder_Base ============================================
-            virtual const KMS::File::Folder& GetFolder() const;
+            // ===== Folder_Ptr =============================================
+            using Folder_Ptr::operator =;
+            using Folder_Ptr::operator const KMS::File::Folder&;
 
-            // ===== Object =================================================
-            virtual ~Folder();
-
-        // Internal
+        private:
 
             KMS::File::Folder mInternal;
-
-        protected:
-
-            // ===== Folder_Base ============================================
-            virtual void Internal_Set(const KMS::File::Folder& aIn);
-
-        };
-
-        class Folder_Ptr : public Folder_Base
-        {
-
-        public:
-
-            Folder_Ptr(KMS::File::Folder* aFolder);
-
-            // ===== Folder_Base ============================================
-            virtual const KMS::File::Folder& GetFolder() const;
-
-            // ===== Object =================================================
-            virtual ~Folder_Ptr();
-
-        // Internal
-
-            KMS::File::Folder* mInternal;
-
-        protected:
-
-            // ===== Folder_Base ============================================
-            virtual void Internal_Set(const KMS::File::Folder& aIn);
 
         };
 

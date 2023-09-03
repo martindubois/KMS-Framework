@@ -74,7 +74,7 @@ void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
     else
     {
         auto lValue = dynamic_cast<DI::Value*>(aObject);
-        KMS_EXCEPTION_ASSERT(nullptr != lValue, HTTP_NOT_IMPLEMENTED, "HTTP do not suppoert this data type", "");
+        KMS_EXCEPTION_ASSERT(nullptr != lValue, RESULT_NOT_IMPLEMENTED, "HTTP do not suppoert this data type", "");
 
         Decode_Value(lValue, aPtr);
     }
@@ -194,7 +194,7 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
         }
         else
         {
-            KMS_EXCEPTION(HTTP_NOT_IMPLEMENTED, "HTTP do not support this data type", "");
+            KMS_EXCEPTION(RESULT_NOT_IMPLEMENTED, "HTTP do not support this data type", "");
         }
     }
 }

@@ -24,6 +24,9 @@
 
 #include <KMS/Build/Build.h>
 
+KMS_RESULT_STATIC(RESULT_COMMAND_FAILED);
+KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -328,7 +331,7 @@ namespace KMS
             lM.AddCommand("Make");
 
             auto lRet = lM.Run();
-            KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "KMS::Build::Make::Run failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "KMS::Build::Make::Run failed", lRet);
         }
 
         void Build::Edit()
@@ -348,7 +351,7 @@ namespace KMS
 
                 if (3 != sscanf_s(*lOp, "%[^;];%[^;];%[^\n\r]", lFile SizeInfo(lFile), lRegEx SizeInfo(lRegEx), lReplace SizeInfo(lReplace)))
                 {
-                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid edit operation", *lOp);
+                    KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid edit operation", *lOp);
                 }
 
                 auto lReplaceStr = ProcessReplaceLine(lReplace, mVersion);
@@ -392,7 +395,7 @@ namespace KMS
 
                 if (0 != system(*lCommand))
                 {
-                    KMS_EXCEPTION(BUILD_COMMAND_FAILED, "The command failed", *lCommand);
+                    KMS_EXCEPTION(RESULT_COMMAND_FAILED, "The command failed", *lCommand);
                 }
             }
         }
@@ -537,7 +540,7 @@ namespace KMS
 
                 if (2 != sscanf_s(lF->Get(), "%[^;];%[^\n\r]", lSrc SizeInfo(lSrc), lDst SizeInfo(lDst)))
                 {
-                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid folder copy operation", *lF);
+                    KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid folder copy operation", *lF);
                 }
 
                 File::Folder lFD(mTmp_Root, lDst);
@@ -579,21 +582,21 @@ namespace KMS
             {
                 if (!mDoNotCompile)
                 {
-                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), BUILD_CONFIG_INVALID, "No configuration", "");
+                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), RESULT_INVALID_CONFIG, "No configuration", "");
                 }
 
                 if (!mDoNotExport)
                 {
                     char lMsg[64 + PATH_LENGTH];
                     sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.GetFolder().GetPath());
-                    KMS_EXCEPTION_ASSERT(mExportFolder.GetFolder().DoesExist(), BUILD_CONFIG_INVALID, lMsg, "");
+                    KMS_EXCEPTION_ASSERT(mExportFolder.GetFolder().DoesExist(), RESULT_INVALID_CONFIG, lMsg, "");
 
-                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), BUILD_CONFIG_INVALID, "Invalid product name", "");
+                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), RESULT_INVALID_CONFIG, "Invalid product name", "");
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()       , BUILD_CONFIG_INVALID, "No processor"        , "");
-            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength (), BUILD_CONFIG_INVALID, "Invalid version file", "");
+            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()       , RESULT_INVALID_CONFIG, "No processor"        , "");
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength (), RESULT_INVALID_CONFIG, "Invalid version file", "");
         }
 
     }
@@ -649,7 +652,7 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
         case STATE_PROCESS:
             switch (*lIn)
             {
-            case '\0': KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid edition operation", aIn);
+            case '\0': KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid edition operation", aIn);
             case '}': lState = STATE_INIT; break;
             case 'M': lResult += aVersion.GetMajor(); break;
             case 'm': lResult += aVersion.GetMinor(); break;

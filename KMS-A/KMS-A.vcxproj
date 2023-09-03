@@ -75,7 +75,6 @@
     <ClCompile Include="DI_Object.cpp" />
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
-    <ClCompile Include="DI_Value.cpp" />
     <ClCompile Include="FileFormat_BMP.cpp" />
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
@@ -111,6 +110,7 @@
     <ClCompile Include="Proc_Process.cpp" />
     <ClCompile Include="Proc_Process_W.cpp" />
     <ClCompile Include="RefCount.cpp" />
+    <ClCompile Include="Result.cpp" />
     <ClCompile Include="ScaleAndOffset.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Stats_Stats.cpp" />

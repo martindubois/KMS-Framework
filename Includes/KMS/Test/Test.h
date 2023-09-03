@@ -14,6 +14,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
 #include <KMS/Console/Console.h>
+#include <KMS/Result.h>
 
 namespace KMS
 {
@@ -29,9 +30,11 @@ namespace KMS
 
             bool Assert(bool aCondition, const char* aFile, unsigned int aLine);
 
-            bool Compare(Exception::Code aValue, Exception::Code aExpected, const char* aFile, unsigned int aLine);
-            bool Compare(         int    aValue,          int    aExpected, const char* aFile, unsigned int aLine);
-            bool Compare(unsigned int    aValue, unsigned int    aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(bool         aValue, bool         aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(const char * aValue, const char * aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(         int aValue,          int aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(unsigned int aValue, unsigned int aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(Result       aValue, Result       aExpected, const char* aFile, unsigned int aLine);
 
             virtual void Cleanup();
 
@@ -95,10 +98,19 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
 #define KMS_TEST_COMPARE_BREAK(V, E)  if (!Compare(V, E, __FILE__, __LINE__)) { break; }
 #define KMS_TEST_COMPARE_RETURN(V, E) if (!Compare(V, E, __FILE__, __LINE__)) { return; }
 
-#define KMS_TEST_CATCH(C)                                                    \
-    catch(KMS::Exception eE)                                                 \
-    {                                                                        \
-        Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ ); \
+#define KMS_TEST_CATCH(C)                                \
+    catch(KMS::Exception eE)                             \
+    {                                                    \
+        Compare(eE.GetCode(), (C), __FILE__, __LINE__ ); \
+    }
+
+#define KMS_TEST_CATCH_N(N)                                                           \
+    catch(KMS::Exception eE)                                                          \
+    {                                                                                 \
+        auto lC = eE.GetCode();                                                       \
+        Compare(lC.GetName(), (N), __FILE__, __LINE__);                               \
+        Assert(lC.GetLevel() == KMS::Result::Level::LEVEL_ERROR, __FILE__, __LINE__); \
+        Assert(lC.GetType () == KMS::Result::Type ::TYPE_STATIC, __FILE__, __LINE__); \
     }
 
 #define KMS_TEST_CATCH_BREAK(C)                                                              \
@@ -130,4 +142,16 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
         mConsole.OutputStream() << "TEST OUTPUT END";                        \
         mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl;  \
         Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ ); \
+    }
+
+#define KMS_TEST_CATCH_OUTPUT_END_N(N)                                                \
+    catch(KMS::Exception eE)                                                          \
+    {                                                                                 \
+        mConsole.OutputStream() << KMS::Console::Color::BLUE;                         \
+        mConsole.OutputStream() << "TEST OUTPUT END";                                 \
+        mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl;           \
+        auto lC = eE.GetCode();                                                       \
+        Compare(lC.GetName(), (N), __FILE__, __LINE__);                               \
+        Assert(lC.GetLevel() == KMS::Result::Level::LEVEL_ERROR, __FILE__, __LINE__); \
+        Assert(lC.GetType () == KMS::Result::Type ::TYPE_STATIC, __FILE__, __LINE__); \
     }

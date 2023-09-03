@@ -68,7 +68,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         File::Folder::ChangeCurrentDirectory("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FOLDER_CHANGE_FAILED);
+    KMS_TEST_CATCH_N("RESULT_FOLDER_CHANGE_FAILED");
 
     // Compress
     try
@@ -80,7 +80,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_OUTPUT_END(FILE_COMPRESS_FAILED);
+    KMS_TEST_CATCH_OUTPUT_END_N("RESULT_COMPRESS_FAILED");
 
     // Delete
     try
@@ -89,7 +89,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         File::Folder::CURRENT.Delete("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_DELETE_FAILED);
+    KMS_TEST_CATCH_N("RESULT_DELETE_FAILED");
 
     try
     {
@@ -98,7 +98,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         lF.Delete();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_REMOVE_FAILED);
+    KMS_TEST_CATCH_N("RESULT_REMOVE_FAILED");
 
     // Rename
     try
@@ -107,7 +107,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         File::Folder::CURRENT.Rename("DoesNotExist", "Test_File_Folder_Exception_1.zip");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(FILE_RENAME_FAILED);
+    KMS_TEST_CATCH_N("RESULT_RENAME_FAILED");
 
     // Uncompress
     try
@@ -119,7 +119,7 @@ KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_OUTPUT_END(FILE_UNCOMPRESS_FAILED);
+    KMS_TEST_CATCH_OUTPUT_END_N("RESULT_UNCOMPRESS_FAILED");
 
     // ===== Cleanup ========================================================
     File::Folder lF("Test_File_Folder_Exception_2");

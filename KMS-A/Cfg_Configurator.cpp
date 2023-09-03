@@ -358,7 +358,7 @@ void Save_Array(FILE* aOut, const DI::Array* aA, const char* aName)
         assert(nullptr != lEntry);
 
         const DI::Value* lV = dynamic_cast<const DI::Value*>(lEntry.Get());
-        KMS_EXCEPTION_ASSERT(nullptr != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
+        KMS_EXCEPTION_ASSERT(nullptr != lV, RESULT_INVALID_FORMAT, "Can't save part of the configuration", aName);
 
         char lData[LINE_LENGTH];
 
@@ -402,7 +402,7 @@ void Save_Object(FILE* aOut, const DI::Object* aO, const char* aName)
         if (nullptr == lA)
         {
             auto lV = dynamic_cast<const DI::Value*>(aO);
-            KMS_EXCEPTION_ASSERT(nullptr != lV, CFG_FORMAT_INVALID, "Can't save part of the configuration", aName);
+            KMS_EXCEPTION_ASSERT(nullptr != lV, RESULT_INVALID_FORMAT, "Can't save part of the configuration", aName);
 
             Save_Value(aOut, lV, aName);
         }

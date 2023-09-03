@@ -122,13 +122,13 @@ namespace KMS
         {
             assert(nullptr != mHeader);
 
-            KMS_EXCEPTION_ASSERT(MAGIC                 == mHeader->mMagic                  , FILE_FORMAT_ERROR, "Invalid magic"           , mHeader->mMagic);
-            KMS_EXCEPTION_ASSERT(FULL_HEADER_SIZE_byte == mHeader->mDataOffset_Low_byte    , FILE_FORMAT_ERROR, "Invalid data offset"     , mHeader->mDataOffset_Low_byte);
-            KMS_EXCEPTION_ASSERT(INFO_HEADER_SIZE_byte == mHeader->mInfoHeaderSize_Low_byte, FILE_FORMAT_ERROR, "Invalid info header size", mHeader->mInfoHeaderSize_Low_byte);
-            KMS_EXCEPTION_ASSERT(                    0 <  mHeader->mSizeX_Low_px           , FILE_FORMAT_ERROR, "Invalid size X"          , mHeader->mSizeX_Low_px);
-            KMS_EXCEPTION_ASSERT(                    0 <  mHeader->mSizeY_Low_px           , FILE_FORMAT_ERROR, "Invalid size Y"          , mHeader->mSizeY_Low_px);
-            KMS_EXCEPTION_ASSERT(BIT_PER_PIXEL         == mHeader->mBitPerPixel            , FILE_FORMAT_ERROR, "Invalid bit per pixel"   , mHeader->mBitPerPixel);
-            KMS_EXCEPTION_ASSERT(                    0 == mHeader->mCompression_Low        , FILE_FORMAT_ERROR, "Invalid compression"     , mHeader->mCompression_Low);
+            KMS_EXCEPTION_ASSERT(MAGIC                 == mHeader->mMagic                  , RESULT_FILE_FORMAT_ERROR, "Invalid magic"           , mHeader->mMagic);
+            KMS_EXCEPTION_ASSERT(FULL_HEADER_SIZE_byte == mHeader->mDataOffset_Low_byte    , RESULT_FILE_FORMAT_ERROR, "Invalid data offset"     , mHeader->mDataOffset_Low_byte);
+            KMS_EXCEPTION_ASSERT(INFO_HEADER_SIZE_byte == mHeader->mInfoHeaderSize_Low_byte, RESULT_FILE_FORMAT_ERROR, "Invalid info header size", mHeader->mInfoHeaderSize_Low_byte);
+            KMS_EXCEPTION_ASSERT(                    0 <  mHeader->mSizeX_Low_px           , RESULT_FILE_FORMAT_ERROR, "Invalid size X"          , mHeader->mSizeX_Low_px);
+            KMS_EXCEPTION_ASSERT(                    0 <  mHeader->mSizeY_Low_px           , RESULT_FILE_FORMAT_ERROR, "Invalid size Y"          , mHeader->mSizeY_Low_px);
+            KMS_EXCEPTION_ASSERT(BIT_PER_PIXEL         == mHeader->mBitPerPixel            , RESULT_FILE_FORMAT_ERROR, "Invalid bit per pixel"   , mHeader->mBitPerPixel);
+            KMS_EXCEPTION_ASSERT(                    0 == mHeader->mCompression_Low        , RESULT_FILE_FORMAT_ERROR, "Invalid compression"     , mHeader->mCompression_Low);
         }
 
     }

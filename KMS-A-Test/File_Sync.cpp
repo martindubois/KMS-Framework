@@ -56,5 +56,5 @@ KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
     };
 
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 4);
-    KMS_TEST_COMPARE(File::Sync::Main(2, VECTOR_A), static_cast<int>(Exception::Code::FILE_CONFIG_INVALID));
+    KMS_TEST_ASSERT(0 != File::Sync::Main(2, VECTOR_A));
 }

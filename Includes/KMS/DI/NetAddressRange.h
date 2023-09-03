@@ -6,6 +6,9 @@
 // File      Includes/KMS/DI/NetAddressRange.h
 // Library   KMS-B
 
+// External type : Net::AddressRange (const char*)
+// Internal type : Net::AddressRange (std::string)
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -38,9 +41,6 @@ namespace KMS
 
             // ===== Value ==================================================
             virtual void Set(const char* aIn);
-
-            // ===== Object =================================================
-            virtual ~NetAddressRange();
 
         // Internal
 

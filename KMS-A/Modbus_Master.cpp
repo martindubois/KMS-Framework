@@ -16,6 +16,9 @@
 
 #include <KMS/Modbus/Master.h>
 
+KMS_RESULT_STATIC(RESULT_MODBUS_ERROR);
+KMS_RESULT_STATIC(RESULT_MODBUS_EXCEPTION);
+
 // Config
 // //////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +91,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (1 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(1 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             *aOut = ReadBit(lBuffer, 0, 0);
@@ -116,7 +119,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (1 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(1 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(1 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             *aOut = ReadBit(lBuffer, 0, 0);
@@ -144,7 +147,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (2 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(2 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             *aOut = ReadUInt16(lBuffer, 0);
@@ -172,7 +175,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (2 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(2 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(2 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             *aOut = ReadUInt16(lBuffer, 0);
@@ -198,7 +201,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (4 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(4 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             assert(aAddr == ReadUInt16(lBuffer, 0));
@@ -224,7 +227,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 if (4 != lRet_byte) { return false; }
             #else
-                KMS_EXCEPTION_ASSERT(4 == lRet_byte, MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
+                KMS_EXCEPTION_ASSERT(4 == lRet_byte, RESULT_MODBUS_ERROR, "The device returned less data than expected", lRet_byte);
             #endif
 
             assert(aAddr == ReadUInt16(lBuffer, 0));
@@ -254,7 +257,7 @@ namespace KMS
             #ifdef _KMS_EMBEDDED_
                 return (mDeviceAddress == aData[0]);
             #else
-                KMS_EXCEPTION_ASSERT(mDeviceAddress == aData[0], MODBUS_CONFIG_INVALID, "Invalid slave address", aData[0]);
+                KMS_EXCEPTION_ASSERT(mDeviceAddress == aData[0], RESULT_INVALID_CONFIG, "Invalid slave address", aData[0]);
                 return true;
             #endif
         }
@@ -287,14 +290,14 @@ namespace KMS
                     case Modbus::Exception::SLAVE_DEVICE_FAILURE                   : lMsg = "Modbus exception  SLAVE DEVICE FAILURE"                   ; break;
                     }
 
-                    KMS_EXCEPTION(MODBUS_EXCEPTION, lMsg, aData[1]);
+                    KMS_EXCEPTION(RESULT_MODBUS_EXCEPTION, lMsg, aData[1]);
                 #endif
             }
 
             #ifdef _KMS_EMBEDDED_
                 return (lFunction == aData[0]);
             #else
-                KMS_EXCEPTION_ASSERT(lFunction == aData[0], MODBUS_ERROR, "Invalid function code", aData[0]);
+                KMS_EXCEPTION_ASSERT(lFunction == aData[0], RESULT_MODBUS_ERROR, "Invalid function code", aData[0]);
                 return true;
             #endif
         }

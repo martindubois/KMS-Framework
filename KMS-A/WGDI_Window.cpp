@@ -13,6 +13,8 @@
 // ===== Includes ===========================================================
 #include <KMS/WGDI/Window.h>
 
+KMS_RESULT_STATIC(RESULT_CREATE_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -114,7 +116,7 @@ namespace KMS
             assert(nullptr == mWindow);
 
             mWindow = CreateWindowEx(WS_EX_APPWINDOW, CLASS_NAME, mTitle.c_str(), STYLES, CW_USEDEFAULT, CW_USEDEFAULT, mSizeX_px, mSizeY_px, NULL, NULL, mInstance, NULL);
-            KMS_EXCEPTION_ASSERT(nullptr != mWindow, WGDI_CREATE_ERROR, "Cannot create window", "");
+            KMS_EXCEPTION_ASSERT(nullptr != mWindow, RESULT_CREATE_FAILED, "Cannot create window", "");
 
             auto lRet = SetWindowLongPtr(mWindow, 0, reinterpret_cast<ULONG_PTR>(this));
             assert(0 == lRet);
@@ -122,7 +124,7 @@ namespace KMS
             RECT lRect;
 
             auto lRetB = GetClientRect(mWindow, &lRect);
-            KMS_EXCEPTION_ASSERT(lRetB, WGDI_CREATE_ERROR, "Cannot create window", "");
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_CREATE_FAILED, "Cannot create window", "");
 
             // When we first create the windows, the size we indicated
             // include the borders. We need to adjust size to get the size we
@@ -134,7 +136,7 @@ namespace KMS
             auto lSizeY_px = mSizeY_px + mSizeY_px - (lRect.bottom - lRect.top + 1);
 
             lRetB = SetWindowPos(mWindow, nullptr, 0, 0, lSizeX_px, lSizeY_px, FLAGS);
-            KMS_EXCEPTION_ASSERT(lRetB, WGDI_CREATE_ERROR, "Cannot create window", "");
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_CREATE_FAILED, "Cannot create window", "");
         }
 
         void Window::Run()
@@ -163,9 +165,9 @@ namespace KMS
 
         void Window::ValidateConfig()
         {
-            KMS_EXCEPTION_ASSERT(0 < mSizeX_px    , WGDI_CONFIG_ERROR, "Invalid size X", "");
-            KMS_EXCEPTION_ASSERT(0 < mSizeY_px    , WGDI_CONFIG_ERROR, "Invalid size Y", "");
-            KMS_EXCEPTION_ASSERT(0 < mTitle.size(), WGDI_CONFIG_ERROR, "Invalid window title", "");
+            KMS_EXCEPTION_ASSERT(0 < mSizeX_px    , RESULT_INVALID_CONFIG, "Invalid size X", "");
+            KMS_EXCEPTION_ASSERT(0 < mSizeY_px    , RESULT_INVALID_CONFIG, "Invalid size Y", "");
+            KMS_EXCEPTION_ASSERT(0 < mTitle.size(), RESULT_INVALID_CONFIG, "Invalid window title", "");
         }
 
         LRESULT Window::On_WM_PAINT()

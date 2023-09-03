@@ -26,6 +26,8 @@
 
 #include <KMS/CLI/Tool.h>
 
+KMS_RESULT_STATIC(RESULT_INVALID_COMMAND);
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -172,7 +174,7 @@ namespace KMS
             else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", lValue SizeInfo(lValue))) { UntilCtrlC(lValue); }
             else
             {
-                KMS_EXCEPTION(CLI_COMMAND_INVALID, "Invalid command", aC);
+                KMS_EXCEPTION(RESULT_INVALID_COMMAND, "Invalid command", aC);
             }
         }
 

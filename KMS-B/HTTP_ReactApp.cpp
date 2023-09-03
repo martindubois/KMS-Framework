@@ -15,6 +15,8 @@
 
 #include <KMS/HTTP/ReactApp.h>
 
+KMS_RESULT_STATIC(RESULT_INSTALLATION_ERROR);
+
 namespace KMS
 {
     namespace HTTP
@@ -74,7 +76,7 @@ namespace KMS
                 else
                 {
                     File::Folder lC(lExec, "front-end" SLASH "build");
-                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), HTTP_INSTALLATION_ERROR, "The front-end files are not available", lC.GetPath());
+                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), RESULT_INSTALLATION_ERROR, "The front-end files are not available", lC.GetPath());
 
                     mFileServer.SetRoot(lB);
                 }

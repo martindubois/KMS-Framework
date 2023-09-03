@@ -23,7 +23,7 @@ KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
 
     // SetHideCount
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-    Exception lE(__FILE__, __FUNCTION__, __LINE__, Exception::Code::TEST, "Test");
+    Exception lE(__FILE__, __FUNCTION__, __LINE__, RESULT_ERROR, "Test");
 
     // CloseLogFiles
 

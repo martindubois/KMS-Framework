@@ -112,7 +112,7 @@ namespace KMS
             if (1 > lRet)
             {
                 sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-                KMS_EXCEPTION(DI_NAME_INVALID, lMsg, lRet);
+                KMS_EXCEPTION(RESULT_INVALID_NAME, lMsg, lRet);
             }
 
             Object* lResult;
@@ -134,7 +134,7 @@ namespace KMS
                 if (lIt->second.IsConst())
                 {
                     sprintf_s(lMsg, "\"%s\" is read only (NOT TESTED)", aName);
-                    KMS_EXCEPTION(DI_DENIED, lMsg, "");
+                    KMS_EXCEPTION(RESULT_DENIED, lMsg, "");
                 }
                 lResult = lIt->second.Get();
             }
@@ -146,7 +146,7 @@ namespace KMS
                 if (nullptr == lContainer)
                 {
                     sprintf_s(lMsg, "\"%s\" is not a valid name (NOT TESTED)", aName);
-                    KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);
+                    KMS_EXCEPTION(RESULT_INVALID_FORMAT, lMsg, lRet);
                 }
 
                 lResult = lContainer->FindObject_RW(lRest);

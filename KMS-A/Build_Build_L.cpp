@@ -12,6 +12,9 @@
 
 #include <KMS/Build/Build.h>
 
+KMS_RESULT_MODULE("Build_Build");
+KMS_RESULT_SATIC_CODE(RESULT_TEST_FAILED, CODE_ERROR, "An test component execution failed");
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -80,7 +83,7 @@ namespace KMS
 
                 char lMsg[64 + NAME_LENGTH];
                 sprintf(lMsg, "\"%s\" failed", lT->Get());
-                KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), BUILD_TEST_FAILED, lMsg, lP.GetCmdLine());
+                KMS_EXCEPTION_ASSERT_2(0 == lP.GetExitCode(), RESULT_TEST_FAILED, lMsg, lP.GetCmdLine());
             }
         }
 

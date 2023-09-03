@@ -64,6 +64,6 @@ KMS_TEST(DI_Dictionary_Exception, "DI_Dictionary_Exception", "Auto", sTest_Excep
         lD0.FindObject_RW("");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_NAME_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_NAME);
 
 }

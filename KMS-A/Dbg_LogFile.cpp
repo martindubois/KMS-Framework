@@ -48,7 +48,7 @@ namespace KMS
 
             char lMsg[64 + PATH_LENGTH];
             sprintf_s(lMsg, "Cannot open \"%s\"", lPath);
-            KMS_EXCEPTION_ASSERT(0 == lRet, DBG_OPEN_FAILED, lMsg, lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_OPEN_FAILED, lMsg, lRet);
 
             WriteEntry(0, __FILE__, __FUNCTION__, __LINE__, Level::LEVEL_INFO);
             WriteVersion(VERSION);
@@ -132,7 +132,7 @@ namespace KMS
             assert(nullptr != mFile);
 
             fprintf(mFile, "X\t%s\t\"%s\"\t%u\t%s\t%s\t\"%s\"\n",
-                aException.GetCodeName(),
+                aException.GetCode().GetName(),
                 aException.what(),
                 aException.GetLine(),
                 aException.GetFunction(),

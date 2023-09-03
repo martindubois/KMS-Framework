@@ -78,7 +78,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.GetLine(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // GetUserLineNo
     try
@@ -87,7 +87,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.GetUserLineNo(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // InsertLine
     try
@@ -96,7 +96,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.InsertLine(1, "");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // RemoveLines
     try
@@ -105,7 +105,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.RemoveLines(0, 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // ReplaceLine
     try
@@ -114,7 +114,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.ReplaceLine(0, "");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_ARGUMENT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 
     // Read
     try
@@ -123,7 +123,7 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.Read(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // Write
     try
@@ -132,5 +132,5 @@ KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_E
         lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_ASCII_Excpetion_0");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(TEXT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 }

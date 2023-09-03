@@ -61,7 +61,7 @@ namespace KMS
             #else
                 char lMsg[128];
                 sprintf_s(lMsg, "Bad Modbus CRC (Expected = 0x%04x, Received = 0x%04x)", static_cast<unsigned int>(lCRC), lReceived);
-                KMS_EXCEPTION_ASSERT(lCRC == lReceived, MODBUS_CRC_ERROR, lMsg, aSize_byte);
+                KMS_EXCEPTION_ASSERT(lCRC == lReceived, RESULT_CRC_ERROR, lMsg, aSize_byte);
                 return true;
             #endif
         }

@@ -90,13 +90,7 @@
     <ClCompile Include="CLI_Tool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DI_Boolean.cpp">
-      <Filter>Source Files\DI</Filter>
-    </ClCompile>
     <ClCompile Include="DI_Dictionary.cpp">
-      <Filter>Source Files\DI</Filter>
-    </ClCompile>
-    <ClCompile Include="DI_String_Expand.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
     <ClCompile Include="FileFormat_ELF.cpp">
@@ -107,6 +101,9 @@
     </ClCompile>
     <ClCompile Include="Graph_Bitmap.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DI_Value.cpp">
+      <Filter>Source Files\DI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

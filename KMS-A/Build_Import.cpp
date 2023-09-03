@@ -18,6 +18,8 @@
 
 #include <KMS/Build/Import.h>
 
+KMS_RESULT_STATIC(RESULT_DEPENDENCY_NOT_FOUND);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -142,7 +144,7 @@ namespace KMS
 
             if (2 != sscanf_s(aDependency, "%[^;] ; %[^\n\r]", lProduct SizeInfo(lProduct), lVersion SizeInfo(lVersion)))
             {
-                KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid dependency", aDependency);
+                KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid dependency", aDependency);
             }
 
             Version lV(lVersion);
@@ -174,7 +176,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION(BUILD_DEPENDENCY_NOT_FOUND, "Dependency not found", aDependency);
+            KMS_EXCEPTION(RESULT_DEPENDENCY_NOT_FOUND, "Dependency not found", aDependency);
         }
 
         int Import::Run()

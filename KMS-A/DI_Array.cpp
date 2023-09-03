@@ -69,7 +69,7 @@ namespace KMS
             {
                 char lMsg[64];
                 sprintf_s(lMsg, "%d is not a valid index", aIndex);
-                KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+                KMS_EXCEPTION(RESULT_INVALID_INDEX, lMsg, mInternal.size());
             }
 
             auto lIt = mInternal.begin() + aIndex;
@@ -91,7 +91,7 @@ namespace KMS
                 {
                     char lMsg[64];
                     sprintf_s(lMsg, "%d is not a valid index", aIndex);
-                    KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+                    KMS_EXCEPTION(RESULT_INVALID_INDEX, lMsg, mInternal.size());
                 }
 
                 mInternal[aIndex].Set(aE, aDelete);
@@ -116,13 +116,13 @@ namespace KMS
             if (1 > lRet)
             {
                 sprintf_s(lMsg, "\"%s\" is not a valid name", aName);
-                KMS_EXCEPTION(DI_NAME_INVALID, lMsg, lRet);
+                KMS_EXCEPTION(RESULT_INVALID_NAME, lMsg, lRet);
             }
 
             if (mInternal.size() < lIndex)
             {
                 sprintf_s(lMsg, "%u is not a valid index", lIndex);
-                KMS_EXCEPTION(DI_INDEX_INVALID, lMsg, mInternal.size());
+                KMS_EXCEPTION(RESULT_INVALID_INDEX, lMsg, mInternal.size());
             }
 
             Object* lResult;
@@ -144,7 +144,7 @@ namespace KMS
                 if (mInternal[lIndex].IsConst())
                 {
                     sprintf_s(lMsg, "\"%s\" is read only (NOT TESTED)", aName);
-                    KMS_EXCEPTION(DI_DENIED, lMsg, "");
+                    KMS_EXCEPTION(RESULT_DENIED, lMsg, "");
                 }
                 lResult = mInternal[lIndex].Get();
             }
@@ -157,7 +157,7 @@ namespace KMS
                 if (nullptr == lContainer)
                 {
                     sprintf_s(lMsg, "\"%s\" is not a valid name (NOT TESTED)", aName);
-                    KMS_EXCEPTION(DI_FORMAT_INVALID, lMsg, lRet);
+                    KMS_EXCEPTION(RESULT_INVALID_FORMAT, lMsg, lRet);
                 }
 
                 lResult = lContainer->FindObject_RW(lRest);

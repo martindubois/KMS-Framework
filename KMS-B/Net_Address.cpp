@@ -15,6 +15,10 @@
 
 #include <KMS/Net/Address.h>
 
+KMS_RESULT_STATIC(RESULT_ADDRESS_RESOLUTION_FAILED);
+KMS_RESULT_STATIC(RESULT_INVALID_ADDRESS);
+KMS_RESULT_STATIC(RESULT_INVALID_PORT);
+
 namespace KMS
 {
     namespace Net
@@ -129,7 +133,7 @@ namespace KMS
         {
             char lMsg[64];
             sprintf_s(lMsg, "%u is not a valid port number", aP);
-            KMS_EXCEPTION_ASSERT(0xffff >= aP, NET_PORT_INVALID, lMsg, "");
+            KMS_EXCEPTION_ASSERT(0xffff >= aP, RESULT_INVALID_PORT, lMsg, "");
 
             SetPortNumber(static_cast<uint16_t>(aP));
         }
@@ -143,7 +147,7 @@ namespace KMS
 
             for (unsigned int i = 0; i < 4; i++)
             {
-                KMS_EXCEPTION_ASSERT(0xff >= aA[i], NET_ADDRESS_INVALID, "Invalid IPv4 address", aA[i]);
+                KMS_EXCEPTION_ASSERT(0xff >= aA[i], RESULT_INVALID_ADDRESS, "Invalid IPv4 address", aA[i]);
             }
 
             mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1 = aA[0];
@@ -168,7 +172,7 @@ namespace KMS
 
             char lMsg[64 + NAME_LENGTH];
             sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
 
             assert(nullptr != lAddr);
 
@@ -192,7 +196,7 @@ namespace KMS
 
             freeaddrinfo(lAddr);
 
-            KMS_EXCEPTION(NET_ADDRESS_RESOLUTION_FAILED, lMsg, "");
+            KMS_EXCEPTION(RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, "");
         }
 
         void Address::UpdateName()

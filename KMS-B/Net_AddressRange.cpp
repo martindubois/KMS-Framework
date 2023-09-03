@@ -12,6 +12,8 @@
 
 #include <KMS/Net/AddressRange.h>
 
+KMS_RESULT_STATIC(RESULT_INVALID_ADDRESS_RANGE);
+
 namespace KMS
 {
     namespace Net
@@ -75,7 +77,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 >= lBits, NET_ADDRESS_RANGE_INVALID, "Invalid mask length", aBits);
+            KMS_EXCEPTION_ASSERT(0 >= lBits, RESULT_INVALID_ADDRESS_RANGE, "Invalid mask length", aBits);
         }
 
         // Private

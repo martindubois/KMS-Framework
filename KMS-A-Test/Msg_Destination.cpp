@@ -75,7 +75,7 @@ unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aDat
 
     case 3:
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 4);
-        KMS_EXCEPTION(TEST, "Test exception", "");
+        KMS_EXCEPTION(RESULT_ERROR, "Test exception", "");
 
     case 4:
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);

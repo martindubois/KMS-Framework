@@ -82,7 +82,7 @@ namespace KMS
 
         void Master::Key(KeyCode aKey, unsigned int aFlags)
         {
-            KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, CLICK_KEY_INVALID, "Invalid key", "");
+            KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, RESULT_INVALID_KEY, "Invalid key", "");
 
             auto lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
 
@@ -102,7 +102,7 @@ namespace KMS
 
         void Master::SystemKey(KeyCode aKey, unsigned int aFlags)
         {
-            KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, CLICK_KEY_INVALID, "Invalid key", "");
+            KMS_EXCEPTION_ASSERT(KeyCode::QTY > aKey, RESULT_INVALID_KEY, "Invalid key", "");
 
             auto lKey = KEY_CODES[static_cast<unsigned int>(aKey)];
 
@@ -136,7 +136,7 @@ namespace KMS
 
         void Master::Window_Pop()
         {
-            KMS_EXCEPTION_ASSERT(1 <= mStack.size(), CLICK_OPERATION_FAILED, "No window to pop", "");
+            KMS_EXCEPTION_ASSERT(1 <= mStack.size(), RESULT_OPERATION_FAILED, "No window to pop", "");
 
             mCurrent = mStack.back();
             assert(nullptr != mCurrent);
@@ -176,7 +176,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(lFD.mException, CLICK_CLASS_INVALID, "Invalid window selection", "");
+            KMS_EXCEPTION_ASSERT(lFD.mException, RESULT_INVALID_CLASS, "Invalid window selection", "");
             return false;
         }
 
@@ -222,7 +222,7 @@ namespace KMS
             Sleep(mDelay_ms);
 
             auto lRet = PostMessage(mCurrent, aMsg, static_cast<WPARAM>(aParamW), static_cast<LPARAM>(aParamL));
-            KMS_EXCEPTION_ASSERT(lRet, CLICK_OPERATION_FAILED, "Cannot post message", "");
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_OPERATION_FAILED, "Cannot post message", "");
         }
 
         void Master::ParseFlags(unsigned int aFlags, FlagData* aOut)
@@ -235,8 +235,8 @@ namespace KMS
             }
             else
             {
-                KMS_EXCEPTION_ASSERT(nullptr != mCurrent , CLICK_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
-                KMS_EXCEPTION_ASSERT(0 < mStack.size(), CLICK_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
+                KMS_EXCEPTION_ASSERT(nullptr != mCurrent, RESULT_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
+                KMS_EXCEPTION_ASSERT(0 < mStack.size()  , RESULT_OPERATION_FAILED, "Invalid use of FLAG_NEXT", "");
 
                 aOut->mCurrent = mCurrent;
                 aOut->mParent  = mStack.back();

@@ -5,10 +5,17 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_File.cpp
 
+// TEST COVERAGE  2023-08-30  KMS - Martin Dubois. P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
 #include <KMS/DI/File.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#define DEFAULT_MODE "rb"
 
 namespace KMS
 {
@@ -18,59 +25,97 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        File::File() : mInternal(nullptr) {}
+        DI::Object* DI::File::Create() { return new File; }
 
-        File::File(FILE* aFile, const char* aIn) : String_Expand(aIn), mInternal(aFile), mMode("rb") {}
-
-        File::operator FILE* () { return mInternal; }
-
-        bool File::IsOpen() const { return nullptr != mInternal; }
-
-        void File::SetMode(const char* aMode) { mMode = aMode; }
-
-        void File::Close()
+        File_Ptr::File_Ptr(FILE** aPtr, const char* aIn) : String_Expand(aIn), mMode(DEFAULT_MODE), mPtr(aPtr)
         {
-            if (   (nullptr != mInternal)
-                && (stderr != mInternal)
-                && (stdin  != mInternal)
-                && (stdout != mInternal))
+            assert(nullptr != aPtr);
+        }
+
+        File::File() : File_Ptr(&mInternal), mInternal(nullptr) {}
+
+        File::File(FILE* aFile, const char* aIn) : File_Ptr(&mInternal, aIn), mInternal(aFile) {}
+
+        File_Ptr::operator FILE* ()
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
+
+        bool File_Ptr::IsOpen() const
+        {
+            assert(nullptr != mPtr);
+
+            return nullptr != *mPtr;
+        }
+
+        void File_Ptr::SetMode(const char* aMode)
+        {
+            assert(nullptr != aMode);
+
+            mMode = aMode;
+        }
+
+        void File_Ptr::Close()
+        {
+            assert(nullptr != mPtr);
+
+            auto lFile = *mPtr;
+
+            if (   (nullptr != lFile)
+                && (stderr  != lFile)
+                && (stdin   != lFile)
+                && (stdout  != lFile))
             {
-                auto lRet = fclose(mInternal);
+                auto lRet = fclose(lFile);
                 assert(0 == lRet);
             }
 
-            mInternal = nullptr;
+            *mPtr = nullptr;
         }
 
         // ===== Object =====================================================
-        File::~File() { Close(); }
+
+        File_Ptr::~File_Ptr() { Close(); }
+
+        bool File_Ptr::Clear()
+        {
+            Close();
+
+            return String_Expand::Clear();
+        }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
 
         // ===== Object =====================================================
 
-        void File::Send_OnChanged(void* aData)
+        void File_Ptr::Send_OnChanged(void* aData)
         {
+            assert(nullptr != mPtr);
+
             Close();
 
-            assert(nullptr == mInternal);
+            assert(nullptr == *mPtr);
 
             auto lIn = Get();
 
-            if      (0 == strcmp("stderr", lIn)) { mInternal = stderr; }
-            else if (0 == strcmp("stdin" , lIn)) { mInternal = stdin; }
-            else if (0 == strcmp("stdout", lIn)) { mInternal = stdout; }
+            if      (0 == strcmp("stderr", lIn)) { *mPtr = stderr; }
+            else if (0 == strcmp("stdin" , lIn)) { *mPtr = stdin; }
+            else if (0 == strcmp("stdout", lIn)) { *mPtr = stdout; }
             else
             {
-                auto lRet = fopen_s(&mInternal, lIn, mMode);
-
-                char lMsg[64 + PATH_LENGTH];
-                sprintf_s(lMsg, "Cannot open \"%s\"", lIn);
-                KMS_EXCEPTION_ASSERT(0 == lRet, DI_OPEN_FAILED, lMsg, lRet);
+                auto lRet = fopen_s(mPtr, lIn, mMode);
+                if (0 != lRet)
+                {
+                    char lMsg[64 + PATH_LENGTH];
+                    sprintf_s(lMsg, "Cannot open \"%s\"", lIn);
+                    KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, lRet);
+                }
             }
 
-            assert(nullptr != mInternal);
+            assert(nullptr != *mPtr);
 
             Object::Send_OnChanged(aData);
         }

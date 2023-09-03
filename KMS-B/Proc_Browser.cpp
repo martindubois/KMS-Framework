@@ -15,6 +15,8 @@
 
 #include <KMS/Proc/Browser.h>
 
+KMS_RESULT_STATIC(RESULT_START_FAILED);
+
 // Config
 // //////////////////////////////////////////////////////////////////////////
 
@@ -159,7 +161,7 @@ namespace KMS
                 lTime_ms += 100;
             }
 
-            KMS_EXCEPTION(PROC_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
+            KMS_EXCEPTION(RESULT_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
         }
 
         // Private
@@ -336,7 +338,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION(PROC_START_FAILED, "Cannot open a browser (NOT TESTED)", aURL);
+            KMS_EXCEPTION(RESULT_START_FAILED, "Cannot open a browser (NOT TESTED)", aURL);
         }
 
         void Browser::Open()
@@ -354,11 +356,9 @@ namespace KMS
 
                 mType = Type::NONE;
 
-                switch (eE.GetCode())
+                if (RESULT_START_FAILED != eE.GetCode())
                 {
-                case Exception::Code::PROC_START_FAILED: break;
-
-                default: throw eE;
+                    throw eE;
                 }
             }
         }

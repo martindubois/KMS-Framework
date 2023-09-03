@@ -13,6 +13,9 @@
 
 #include <KMS/Build/Build.h>
 
+KMS_RESULT_STATIC(RESULT_TEST_FAILED);
+KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -62,7 +65,7 @@ namespace KMS
             lProcess.Run(MSBUILD_ALLOWER_TIME_ms);
 
             auto lRet = lProcess.GetExitCode();
-            KMS_EXCEPTION_ASSERT(0 == lRet, BUILD_COMPILE_FAILED, "The compilation failed", lProcess.GetCmdLine());
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "The compilation failed", lProcess.GetCmdLine());
         }
 
         void Build::Package_Components(const char* aC, const char* aP)
@@ -143,7 +146,7 @@ namespace KMS
 
                 if (0 != lProcess.GetExitCode())
                 {
-                    KMS_EXCEPTION(BUILD_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
+                    KMS_EXCEPTION(RESULT_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
                 }
             }
         }

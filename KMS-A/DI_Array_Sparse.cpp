@@ -102,7 +102,7 @@ namespace KMS
             char lMsg[64 + NAME_LENGTH];
 
             sprintf_s(lMsg, "\"%s\" is not a valid element name", aName);
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_NAME_INVALID, lMsg, lRet);
+            KMS_EXCEPTION_ASSERT(1 <= lRet, RESULT_INVALID_NAME, lMsg, lRet);
 
             Object * lResult;
 
@@ -121,7 +121,7 @@ namespace KMS
             else
             {
                 sprintf_s(lMsg, "\"%s\" is read only", aName);
-                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), DI_DENIED, lMsg, "");
+                KMS_EXCEPTION_ASSERT(!lIt->second.IsConst(), RESULT_DENIED, lMsg, "");
 
                 lResult = lIt->second.Get();
             }
@@ -129,7 +129,7 @@ namespace KMS
             if (2 == lRet)
             {
                 auto lContainer = dynamic_cast<DI::Container*>(lResult);
-                KMS_EXCEPTION_ASSERT(nullptr != lContainer, DI_FORMAT_INVALID, "Invalid name", aName);
+                KMS_EXCEPTION_ASSERT(nullptr != lContainer, RESULT_INVALID_FORMAT, "Invalid name", aName);
 
                 lResult = lContainer->FindObject_RW(lRest);
             }

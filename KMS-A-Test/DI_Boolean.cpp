@@ -15,12 +15,16 @@ using namespace KMS;
 KMS_TEST(DI_Boolean_Base, "DI_Boolean_Base", "Auto", sTest_Base)
 {
     // Create
+    auto lB0 = DI::Boolean::Create();
 
     // Constructor
-    DI::Boolean lB0;
+    bool            lI0;
+    DI::Boolean_Ptr lBP0(&lI0);
+    DI::Boolean     lB1;
 
     // opearator =
-    lB0 = true;
+    lB1  = true;
+    lBP0 = true;
 
     // operator bool
 
@@ -35,8 +39,8 @@ KMS_TEST(DI_Boolean_Base, "DI_Boolean_Base", "Auto", sTest_Base)
     // Get
 
     // Set
-    lB0.Set("true");
-    lB0.Set("false");
+    lB1.Set("true");
+    lB1.Set("false");
 }
 
 KMS_TEST(DI_Boolean_Exception, "DI_Boolean_Exception", "Auto", sTest_Exception)

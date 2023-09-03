@@ -279,7 +279,7 @@ namespace KMS
             {
                 if (!mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE))
                 {
-                    KMS_EXCEPTION(DEV_CONNECT_FAILED, "Connexion failed", "");
+                    KMS_EXCEPTION(RESULT_CONNECT_FAILED, "Connexion failed", "");
                 }
             }
             else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }
@@ -317,7 +317,7 @@ namespace KMS
         {
             if (!mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE))
             {
-                KMS_EXCEPTION(DEV_CONNECT_FAILED, "Connexion failed", "");
+                KMS_EXCEPTION(RESULT_CONNECT_FAILED, "Connexion failed", "");
             }
 
             return CLI::Tool::Run();
@@ -384,7 +384,7 @@ unsigned int ToFrameT(const void* aIn, unsigned int aInSize_byte, void* aOut, un
     assert(nullptr != aIn);
     assert(nullptr != aOut);
 
-    KMS_EXCEPTION_ASSERT(aInSize_byte + 4 <= aOutSize_byte, COM_OUTPUT_TOO_SHORT, "The output buffer is too short", aInSize_byte);
+    KMS_EXCEPTION_ASSERT(aInSize_byte + 4 <= aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aInSize_byte);
 
     auto lOut = reinterpret_cast<uint8_t*>(aOut);
     unsigned int lResult_byte = 0;

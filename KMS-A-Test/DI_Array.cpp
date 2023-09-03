@@ -69,7 +69,7 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
         lA0.RemoveEntry(0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_INDEX_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_INDEX);
 
     // SetEntry
     try
@@ -78,7 +78,7 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
         lA0.SetEntry(1, &lS0, false);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_INDEX_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_INDEX);
 
     // ===== Container ======================================================
 
@@ -89,7 +89,7 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
         lA0.FindObject_RW("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_NAME_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_NAME);
 
     try
     {
@@ -97,5 +97,5 @@ KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
         lA0.FindObject_RW("1");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_INDEX_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_INDEX);
 }

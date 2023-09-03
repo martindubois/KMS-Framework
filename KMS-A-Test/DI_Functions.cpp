@@ -48,7 +48,7 @@ KMS_TEST(DI_Functions_Exception, "DI_Functions_Exception", "Auto", sTest_Excepti
         DI::Execute_Operation(&lD0, "");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     try
     {
@@ -56,7 +56,7 @@ KMS_TEST(DI_Functions_Exception, "DI_Functions_Exception", "Auto", sTest_Excepti
         DI::Execute_Operation(&lD0, "Boolean+=Ignored");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     try
     {
@@ -64,7 +64,7 @@ KMS_TEST(DI_Functions_Exception, "DI_Functions_Exception", "Auto", sTest_Excepti
         DI::Execute_Operation(&lD0, "Array=Ignored");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     try
     {
@@ -72,5 +72,5 @@ KMS_TEST(DI_Functions_Exception, "DI_Functions_Exception", "Auto", sTest_Excepti
         DI::Execute_Operation(&lD0, "Array");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(DI_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 }

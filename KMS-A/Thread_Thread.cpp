@@ -13,6 +13,8 @@
 
 #include <KMS/Thread/Thread.h>
 
+KMS_RESULT_STATIC(RESULT_START_FAILED);
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +60,7 @@ namespace KMS
 
         void Thread::Start()
         {
-            KMS_EXCEPTION_ASSERT(State::STOPPED == mState, THREAD_STATE_INVALID, "The thread is not stopped", static_cast<unsigned int>(mState));
+            KMS_EXCEPTION_ASSERT(State::STOPPED == mState, RESULT_INVALID_STATE, "The thread is not stopped", static_cast<unsigned int>(mState));
 
             CloseIfNeeded();
 
@@ -70,7 +72,7 @@ namespace KMS
             if (nullptr == mHandle)
             {
                 mState = State::STOPPED;
-                KMS_EXCEPTION(THREAD_START_FAILED, "Cannot create the thread", "");
+                KMS_EXCEPTION(RESULT_START_FAILED, "Cannot create the thread", "");
             }
         }
 

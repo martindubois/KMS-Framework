@@ -30,8 +30,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* Log_Cfg::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
-
         Log_Cfg::Log_Cfg(Dbg::Log* aLog)
             : mLog(aLog)
             , mConsoleLevel(&aLog->mConsoleLevel)

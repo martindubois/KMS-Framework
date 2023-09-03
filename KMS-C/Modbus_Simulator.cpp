@@ -217,7 +217,7 @@ namespace KMS
             case 2: lValue = ToRegisterValue(lV);
             case 1: break;
 
-            default: KMS_EXCEPTION(MODBUS_CONFIG_INVALID, "Invalid bit information", aIn);
+            default: KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid bit information", aIn);
             }
 
             mFlags = lFlags;

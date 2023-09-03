@@ -17,6 +17,16 @@
 
 #include <KMS/File/Folder.h>
 
+KMS_RESULT_STATIC(RESULT_COPY_FAILED);
+KMS_RESULT_STATIC(RESULT_CREATE_FAILED);
+KMS_RESULT_STATIC(RESULT_COMPRESS_FAILED);
+KMS_RESULT_STATIC(RESULT_DELETE_FAILED);
+KMS_RESULT_STATIC(RESULT_FOLDER_CHANGE_FAILED);
+KMS_RESULT_STATIC(RESULT_INIT_FAILED);
+KMS_RESULT_STATIC(RESULT_REMOVE_FAILED);
+KMS_RESULT_STATIC(RESULT_RENAME_FAILED);
+KMS_RESULT_STATIC(RESULT_UNCOMPRESS_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +62,7 @@ namespace KMS
             {
                 char lMsg[64 + PATH_LENGTH];
                 sprintf_s(lMsg, "Cannot change the current directory for %s", lNew);
-                KMS_EXCEPTION(FOLDER_CHANGE_FAILED, lMsg, "");
+                KMS_EXCEPTION(RESULT_FOLDER_CHANGE_FAILED, lMsg, "");
             }
 
             CURRENT.Init_Current();
@@ -117,7 +127,7 @@ namespace KMS
 
             lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
-            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_COMPRESS_FAILED, "Cannot compress the folder's elements", lProcess.GetCmdLine());
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), RESULT_COMPRESS_FAILED, "Cannot compress the folder's elements", lProcess.GetCmdLine());
         }
 
         void Folder::Uncompress(const Folder& aFolder, const char* aFile)
@@ -139,7 +149,7 @@ namespace KMS
 
             lProcess.Run(POWER_SHELL_ALLOWER_TIME_ms);
 
-            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lProcess.GetCmdLine());
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), RESULT_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lProcess.GetCmdLine());
         }
 
         void Folder::Copy(const Folder& aDst) const
@@ -152,14 +162,14 @@ namespace KMS
 
             lProcess.Run(XCOPY_ALLOWER_TIME_ms);
 
-            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), FILE_UNCOMPRESS_FAILED, "Cannot copy folder", lProcess.GetCmdLine());
+            KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), RESULT_UNCOMPRESS_FAILED, "Cannot copy folder", lProcess.GetCmdLine());
         }
 
         void Folder::Create()
         {
             if (!CreateDirectory(mPath.c_str(), nullptr))
             {
-                KMS_EXCEPTION(FILE_CREATE_FAILED, "Cannot create the folder (NOT TESTED)", mPath.c_str());
+                KMS_EXCEPTION(RESULT_CREATE_FAILED, "Cannot create the folder (NOT TESTED)", mPath.c_str());
             }
         }
 
@@ -169,7 +179,7 @@ namespace KMS
 
             if (!RemoveDirectory(mPath.c_str()))
             {
-                KMS_EXCEPTION(FILE_REMOVE_FAILED, "Cannot remove the folder", mPath.c_str());
+                KMS_EXCEPTION(RESULT_REMOVE_FAILED, "Cannot remove the folder", mPath.c_str());
             }
         }
 
@@ -184,7 +194,7 @@ namespace KMS
             char lMsg[64 + PATH_LENGTH];
 
             sprintf_s(lMsg, "Cannot retrieve attributes of \"%s\"", lPath);
-            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, FILE_DELETE_FAILED, lMsg, "");
+            KMS_EXCEPTION_ASSERT(INVALID_FILE_ATTRIBUTES != lAttr, RESULT_DELETE_FAILED, lMsg, "");
 
             if (0 != (lAttr & FILE_ATTRIBUTE_READONLY))
             {
@@ -193,14 +203,14 @@ namespace KMS
                 if (!SetFileAttributes(lPath, lAttr))
                 {
                     sprintf_s(lMsg, "Cannot change attributes of \"%s\" (NOT TESTED)", lPath);
-                    KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
+                    KMS_EXCEPTION(RESULT_DELETE_FAILED, lMsg, "");
                 }
             }
 
             if (!DeleteFile(lPath))
             {
                 sprintf_s(lMsg, "Cannot delete \"%s\" (NOT TESTED)", lPath);
-                KMS_EXCEPTION(FILE_DELETE_FAILED, lMsg, "");
+                KMS_EXCEPTION(RESULT_DELETE_FAILED, lMsg, "");
             }
         }
 
@@ -220,7 +230,7 @@ namespace KMS
 
             lP.Run(CMD_ALLOWED_TIME_ms);
 
-            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), FILE_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
+            KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), RESULT_DELETE_FAILED, "Cannot delete files", lP.GetCmdLine());
         }
 
         void Folder::Rename(const char* aSrc, const char* aDst, unsigned int aFlags) const
@@ -241,7 +251,7 @@ namespace KMS
             {
                 Verbose(lSrc, "not renamed to", lDst, aFlags | FLAG_RED);
 
-                KMS_EXCEPTION(FILE_RENAME_FAILED, "Cannot move the file", lSrc);
+                KMS_EXCEPTION(RESULT_RENAME_FAILED, "Cannot move the file", lSrc);
             }
         }
 
@@ -261,7 +271,7 @@ namespace KMS
             {
                 Verbose(aSrc, "not copied to", aDst, aFlags | FLAG_RED);
 
-                KMS_EXCEPTION_ASSERT(FLAG_IGNORE_ERROR == (aFlags & FLAG_IGNORE_ERROR), FILE_COPY_FAILED, "Cannot copy the file", aSrc);
+                KMS_EXCEPTION_ASSERT(FLAG_IGNORE_ERROR == (aFlags & FLAG_IGNORE_ERROR), RESULT_COPY_FAILED, "Cannot copy the file", aSrc);
             }
         }
 
@@ -281,10 +291,10 @@ namespace KMS
             char lModule[PATH_LENGTH];
 
             auto lRet = GetModuleFileName(NULL, lModule, sizeof(lModule));
-            KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), FILE_INIT_FAILED, "GetModuleFileName failed", lRet);
+            KMS_EXCEPTION_ASSERT((0 < lRet) && (sizeof(lModule) > lRet), RESULT_INIT_FAILED, "GetModuleFileName failed", lRet);
 
             char* lPtr = strrchr(lModule, '\\');
-            KMS_EXCEPTION_ASSERT(nullptr != lPtr, FILE_INIT_FAILED, "Invalid executable name", lModule);
+            KMS_EXCEPTION_ASSERT(nullptr != lPtr, RESULT_INIT_FAILED, "Invalid executable name", lModule);
 
             *lPtr = '\0';
 
@@ -298,11 +308,11 @@ namespace KMS
             unsigned int lLength = sizeof(lRoot) / sizeof(lRoot[0]);
 
             auto lRet = GetTempPath(lLength, lRoot);
-            KMS_EXCEPTION_ASSERT((0 < lRet) && (lLength > lRet), FILE_INIT_FAILED, "GetTempPath failed", lRet);
+            KMS_EXCEPTION_ASSERT((0 < lRet) && (lLength > lRet), RESULT_INIT_FAILED, "GetTempPath failed", lRet);
 
             char lFolder[PATH_LENGTH];
 
-            KMS_EXCEPTION_ASSERT(0 != GetTempFileName(lRoot, "KMS_", 0, lFolder), FILE_INIT_FAILED, "GetTempFileName failed", lRoot);
+            KMS_EXCEPTION_ASSERT(0 != GetTempFileName(lRoot, "KMS_", 0, lFolder), RESULT_INIT_FAILED, "GetTempFileName failed", lRoot);
 
             auto lRetB = DeleteFile(lFolder);
             assert(lRetB);

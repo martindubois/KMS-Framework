@@ -147,9 +147,8 @@ namespace KMS
 
             for (auto lT : mTestList)
             {
-                aOut << "Test " << lIndex << "\n";
+                aOut << "Test " << lIndex << " - ";
                 aOut << *lT;
-                aOut << "\n";
 
                 lIndex++;
             }

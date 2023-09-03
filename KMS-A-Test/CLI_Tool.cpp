@@ -61,5 +61,5 @@ KMS_TEST(CLI_Tool_Exception, "CLI_Tool_Exception", "Auto", sTest_Exception)
         lT.ExecuteCommand("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CLI_COMMAND_INVALID);
+    KMS_TEST_CATCH_N("RESULT_INVALID_COMMAND");
 }

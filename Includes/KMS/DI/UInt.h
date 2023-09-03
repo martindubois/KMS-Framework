@@ -1,9 +1,12 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/UInt.h
+
+// External type : T (unsigned integer)
+// Internal type : T (unsigned integer)
 
 #pragma once
 
@@ -18,41 +21,40 @@ namespace KMS
     {
 
         template <typename T>
-        class UInt_Base : public Value
+        class UInt_Ptr : public Value
         {
 
         public:
+
+            UInt_Ptr(T* aPtr);
 
             void operator = (T aIn);
 
             operator T () const;
 
-            bool operator == (T aIn);
+            bool operator == (T aIn) const;
+
+            T Get() const;
 
             void SetRadix(Radix aRadix);
 
-            virtual T Get() const = 0;
-
-            virtual void Set(T aIn) = 0;
-
             // ===== Value ==================================================
-            virtual bool         Clear();
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
-            virtual ~UInt_Base();
+            virtual bool Clear();
 
-        protected:
+        private:
 
-            UInt_Base();
+            T* mPtr;
 
             Radix mRadix;
 
         };
 
         template <typename T>
-        class UInt : public UInt_Base<T>
+        class UInt : public UInt_Ptr<T>
         {
 
         public:
@@ -61,37 +63,14 @@ namespace KMS
 
             UInt(T aIn = 0);
 
-            // ===== UInt_Base ==============================================
-            virtual T    Get() const;
-            virtual void Set(T aIn);
+            // ===== UInt_Ptr ===============================================
+            using UInt_Ptr<T>::operator =;
+            using UInt_Ptr<T>::operator T;
+            using UInt_Ptr<T>::operator ==;
 
-            // ===== Object =================================================
-            virtual ~UInt();
-
-        // Internal
+        private:
 
             T mInternal;
-
-        };
-
-        template <typename T>
-        class UInt_Ptr : public UInt_Base<T>
-        {
-
-        public:
-
-            UInt_Ptr(T* aInternal);
-
-            // ===== UInt_Base ==============================================
-            virtual T    Get() const;
-            virtual void Set(T aIn);
-
-            // ===== Object =================================================
-            virtual ~UInt_Ptr();
-
-        // Internal
-
-            T* mInternal;
 
         };
 
@@ -102,60 +81,64 @@ namespace KMS
         DI::Object* UInt<T>::Create() { return new UInt<T>; }
 
         template <typename T>
-        UInt<T>::UInt(T aIn) : mInternal(aIn) {}
+        UInt_Ptr<T>::UInt_Ptr(T* aPtr) : mPtr(aPtr), mRadix(Radix::DECIMAL)
+        {
+            assert(nullptr != aPtr);
+        }
 
         template <typename T>
-        UInt_Ptr<T>::UInt_Ptr(T* aInternal) : mInternal(aInternal) {}
+        UInt<T>::UInt(T aIn) : UInt_Ptr<T>(&mInternal), mInternal(aIn) {}
 
         template <typename T>
-        void UInt_Base<T>::operator = (T aIn) { Set(aIn); }
+        void UInt_Ptr<T>::operator = (T aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = aIn;
+        }
 
         template <typename T>
-        UInt_Base<T>::operator T () const { return Get(); }
+        UInt_Ptr<T>::operator T () const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
 
         template <typename T>
-        bool UInt_Base<T>::operator == (T aIn) { return Get() == aIn; }
+        bool UInt_Ptr<T>::operator == (T aIn) const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr == aIn;
+        }
 
         template <typename T>
-        void UInt_Base<T>::SetRadix(Radix aRadix) { mRadix = aRadix; }
+        T UInt_Ptr<T>::Get() const
+        {
+            assert(nullptr != mPtr);
 
-        // ===== UInt_Base ==================================================
-
-        template <typename T>
-        T UInt<T>::Get() const { return mInternal; }
-
-        template <typename T>
-        T UInt_Ptr<T>::Get() const { return *mInternal; }
+            return *mPtr;
+        }
 
         template <typename T>
-        void UInt<T>::Set(T aIn) { mInternal = aIn; };
-
-        template <typename T>
-        void UInt_Ptr<T>::Set(T aIn) { *mInternal = aIn; };
+        void UInt_Ptr<T>::SetRadix(Radix aRadix) { mRadix = aRadix; }
 
         // ===== Value ======================================================
 
         template <typename T>
-        bool UInt_Base<T>::Clear()
-        {
-            bool lResult = Get() != 0;
-
-            Set(static_cast<T>(0));
-
-            return lResult;
-        }
-
-        template <typename T>
-        unsigned int UInt_Base<T>::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int UInt_Ptr<T>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
             assert(nullptr != aOut);
+
+            assert(nullptr != mPtr);
 
             unsigned int lResult_byte = 0;
 
             switch (mRadix)
             {
-            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", Get()); break;
-            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", Get()); break;
+            case Radix::DECIMAL    : lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", *mPtr); break;
+            case Radix::HEXADECIMAL: lResult_byte = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%x", *mPtr); break;
 
             default: assert(false);
             }
@@ -164,47 +147,46 @@ namespace KMS
         }
 
         template <typename T>
-        void UInt_Base<T>::Set(const char* aIn)
+        void UInt_Ptr<T>::Set(const char* aIn)
         {
-            uint32_t lValue = Convert::ToUInt32(aIn, mRadix);
+            assert(nullptr != mPtr);
+
+            auto lValue = Convert::ToUInt32(aIn, mRadix);
 
             switch (sizeof(T))
             {
             case 1:
                 if (0xff < lValue)
                 {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint8_t value" , aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint8_t value" , aIn);
                 }
                 break;
             case 2:
                 if (0xffff < lValue)
                 {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::MODBUS_CONFIG_INVALID, "Invalid uint16_t value", aIn);
+                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint16_t value", aIn);
                 }
                 break;
             case 4: break;
             default: assert(false);
             }
 
-            Set(lValue);
+            *mPtr = lValue;
         }
 
         // ===== Object =====================================================
 
         template <typename T>
-        UInt_Base<T>::~UInt_Base() {}
+        bool UInt_Ptr<T>::Clear()
+        {
+            assert(nullptr != mPtr);
 
-        template <typename T>
-        UInt<T>::~UInt() {}
+            auto lResult = *mPtr != 0;
 
-        template <typename T>
-        UInt_Ptr<T>::~UInt_Ptr() {}
+            *mPtr = 0;
 
-        // Protected
-        // //////////////////////////////////////////////////////////////////
-
-        template <typename T>
-        UInt_Base<T>::UInt_Base() : mRadix(Radix::DECIMAL) {}
+            return lResult;
+        }
 
     }
 }

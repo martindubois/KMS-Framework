@@ -6,6 +6,9 @@
 // File      Includes/KMS/DI/File.h
 // Library   KMS-A
 
+// External type : FILE* (const char*)
+// Internal type : FILE* (str::string)
+
 #pragma once
 
 // ===== C ==================================================================
@@ -19,7 +22,42 @@ namespace KMS
     namespace DI
     {
 
-        class File : public String_Expand
+        class File_Ptr : public String_Expand
+        {
+
+        public:
+
+            File_Ptr(FILE** aPtr, const char* aIn = "");
+
+            operator FILE * ();
+
+            bool IsOpen() const;
+
+            void SetMode(const char* aMode);
+
+            void Close();
+
+            // ===== String_Expand ==========================================
+            using String_Expand::operator =;
+
+            // ===== Object =================================================
+            virtual ~File_Ptr();
+            virtual bool Clear();
+
+        // Internal
+
+            // ===== Object =================================================
+            virtual void Send_OnChanged(void* aData);
+
+        private:
+
+            FILE** mPtr;
+
+            const char* mMode;
+
+        };
+
+        class File : public File_Ptr
         {
 
         public:
@@ -30,27 +68,13 @@ namespace KMS
 
             File(FILE* aFile, const char* aIn);
 
-            operator FILE * ();
-
-            bool IsOpen() const;
-
-            void SetMode(const char* aMode);
-
-            void Close();
-
-            // ===== Object =================================================
-            virtual ~File();
-
-        // Internal
-
-            // ===== Object =================================================
-            virtual void Send_OnChanged(void* aData);
-
-            FILE* mInternal;
+            // ===== File_Ptr ===============================================
+            using File_Ptr::operator =;
+            using File_Ptr::operator FILE*;
 
         private:
 
-            const char* mMode;
+            FILE* mInternal;
 
         };
 

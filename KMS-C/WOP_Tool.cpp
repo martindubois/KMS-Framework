@@ -110,7 +110,7 @@ namespace KMS
             {
                 if (!mPort.Connect(Dev::Device::FLAG_ACCESS_READ | Dev::Device::FLAG_ACCESS_WRITE))
                 {
-                    KMS_EXCEPTION(DEV_CONNECT_FAILED, "Connexion failed", "");
+                    KMS_EXCEPTION(RESULT_CONNECT_FAILED, "Connexion failed", "");
                 }
             }
             else if (0 == strcmp(aC, "Disconnect")) { mPort.Disconnect(); }

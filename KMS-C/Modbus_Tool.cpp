@@ -27,6 +27,8 @@
 
 #include <KMS/Modbus/Tool.h>
 
+KMS_RESULT_STATIC(RESULT_MODBUS_ERROR);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -177,7 +179,7 @@ namespace KMS
                 bool lValB;
 
                 bool lRetB = mMaster->ReadCoil(*lAddr, &lValB);
-                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadCoil failed", lAddr->Get());
+                KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadCoil failed", lAddr->Get());
 
                 fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), lValB ? "true" : "false");
             }
@@ -193,7 +195,7 @@ namespace KMS
                 bool lValB;
 
                 bool lRetB = mMaster->ReadDiscreteInput(*lAddr, &lValB);
-                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadDiscreteInput failed", lAddr->Get());
+                KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadDiscreteInput failed", lAddr->Get());
 
                 fprintf(aOut, "    %s\t(%u)\t%s\n", lVT.first.c_str(), lAddr->Get(), lValB ? "true" : "false");
             }
@@ -209,7 +211,7 @@ namespace KMS
                 RegisterValue lValR;
 
                 bool lRetB = mMaster->ReadHoldingRegister(*lAddr, &lValR);
-                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadHoldingRegister failed", lAddr->Get());
+                KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadHoldingRegister failed", lAddr->Get());
 
                 fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), lValR);
             }
@@ -225,7 +227,7 @@ namespace KMS
                 RegisterValue lValR;
 
                 bool lRetB = mMaster->ReadInputRegister(*lAddr, &lValR);
-                KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadInputRegister failed", lAddr->Get());
+                KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadInputRegister failed", lAddr->Get());
 
                 fprintf(aOut, "    %s\t(%u)\t%u\n", lVT.first.c_str(), lAddr->Get(), lValR);
             }
@@ -240,7 +242,7 @@ namespace KMS
             bool lValB;
 
             bool lRetB = mMaster->ReadCoil(ToAddress(mCoils, aName), &lValB);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadCoil failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadCoil failed", aName);
 
             return lValB;
 
@@ -253,7 +255,7 @@ namespace KMS
             bool lValB;
             
             bool lRetB = mMaster->ReadDiscreteInput(ToAddress(mDiscreteInputs, aName), &lValB);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadDiscreteInput failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadDiscreteInput failed", aName);
 
             return lValB;
         }
@@ -265,7 +267,7 @@ namespace KMS
             RegisterValue lValR;
 
             bool lRetB = mMaster->ReadHoldingRegister(ToAddress(mHoldingRegisters, aName), &lValR);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadHoldingRegister failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadHoldingRegister failed", aName);
 
             return lValR;            
         }
@@ -277,7 +279,7 @@ namespace KMS
             RegisterValue lValR;
             
             bool lRetB = mMaster->ReadInputRegister(ToAddress(mInputRegisters, aName), &lValR);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "ReadInputRegister failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "ReadInputRegister failed", aName);
 
             return lValR;
         }
@@ -287,7 +289,7 @@ namespace KMS
             assert(nullptr != mMaster);
             
             bool lRetB = mMaster->WriteSingleCoil(ToAddress(mCoils, aName), aValue);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleCoil failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "WriteSingleCoil failed", aName);
         }
 
         void Tool::WriteSingleRegister(const char* aName, uint16_t aValue)
@@ -295,7 +297,7 @@ namespace KMS
             assert(nullptr != mMaster);
             
             bool lRetB = mMaster->WriteSingleRegister(ToAddress(mHoldingRegisters, aName), aValue);
-            KMS_EXCEPTION_ASSERT(lRetB, MODBUS_ERROR, "WriteSingleRegister failed", aName);
+            KMS_EXCEPTION_ASSERT(lRetB, RESULT_MODBUS_ERROR, "WriteSingleRegister failed", aName);
         }
 
         // ===== CLI::Tool ==================================================

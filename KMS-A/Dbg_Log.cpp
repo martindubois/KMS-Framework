@@ -32,6 +32,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Log::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
+
         const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
 
         Log::Log()

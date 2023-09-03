@@ -12,6 +12,8 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Container.h>
 
+KMS_RESULT_STATIC(RESULT_NOT_DYNAMIC);
+
 namespace KMS
 {
     namespace DI
@@ -57,7 +59,7 @@ namespace KMS
         {
             assert(nullptr != mObject);
 
-            KMS_EXCEPTION_ASSERT(!mFlags.mConst, DI_DENIED, "Trying to modify a constant Object", "");
+            KMS_EXCEPTION_ASSERT(!mFlags.mConst, RESULT_DENIED, "Trying to modify a constant Object", "");
 
             return mObject;
         }
@@ -105,7 +107,7 @@ namespace KMS
 
         Object* Container::CallCreator()
         {
-            KMS_EXCEPTION_ASSERT(nullptr != mCreator, DI_NOT_DYNAMIC, "The container is not dynamic", "");
+            KMS_EXCEPTION_ASSERT(nullptr != mCreator, RESULT_NOT_DYNAMIC, "The container is not dynamic", "");
 
             return mCreator();
         }

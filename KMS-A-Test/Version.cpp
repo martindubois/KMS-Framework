@@ -51,7 +51,7 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
         Version lV0("0");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(VERSION_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     try
     {
@@ -59,5 +59,5 @@ KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
         Version lV0("0.0.0.256");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(VERSION_NUMBER_INVALID);
+    KMS_TEST_CATCH_N("RESULT_INVALID_NUMBER");
 }

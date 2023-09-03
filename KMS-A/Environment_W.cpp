@@ -15,6 +15,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Environment.h>
 
+KMS_RESULT_STATIC(RESULT_EXPAND_FAILED);
+
 namespace KMS
 {
     namespace Env
@@ -33,7 +35,7 @@ namespace KMS
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "Cannot retrieve the value of \"%s\"", aName);
-                KMS_EXCEPTION(ENV_EXPAND_FAILED, lMsg, lResult);
+                KMS_EXCEPTION(RESULT_EXPAND_FAILED, lMsg, lResult);
             }
 
             return lResult;

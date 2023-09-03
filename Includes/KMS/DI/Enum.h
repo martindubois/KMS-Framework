@@ -1,9 +1,12 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Enum.h
+
+// External type : T (enum class)
+// Internal type : T (enum class)
 
 #pragma once
 
@@ -20,37 +23,38 @@ namespace KMS
     {
 
         template <typename T, const char** N>
-        class Enum_Base : public Value
+        class Enum_Ptr : public Value
         {
 
         public:
+
+            Enum_Ptr(T* aPtr);
 
             void operator = (T aIn);
 
             operator T () const;
 
-            const char* GetName() const;
+            bool operator == (T aIn) const;
 
-            virtual T Get() const = 0;
+            T Get() const;
+
+            const char* GetName() const;
 
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
-            virtual ~Enum_Base();
             virtual bool Clear();
 
-        protected:
+        private:
 
-            Enum_Base();
-
-            virtual bool Internal_Set(T aIn) = 0;
+            T* mPtr;
 
         };
 
         template <typename T, const char** N>
-        class Enum : public Enum_Base<T, N>
+        class Enum : public Enum_Ptr<T, N>
         {
 
         public:
@@ -59,45 +63,14 @@ namespace KMS
 
             Enum(T aIn);
 
-            // ===== Enum_Base ==============================================
-            virtual T    Get() const;
+            // ===== Enum_Ptr ===============================================
+            using Enum_Ptr<T, N>::operator =;
+            using Enum_Ptr<T, N>::operator T;
+            using Enum_Ptr<T, N>::operator ==;
 
-            // ===== Object =================================================
-            virtual ~Enum();
+        private:
 
-        // Internal
-
-            KMS::Enum<T, N> mInternal;
-
-        protected:
-
-            // ===== Enum_Base ==============================================
-            virtual bool Internal_Set(T aIn);
-
-        };
-
-        template <typename T, const char** N>
-        class Enum_Ptr : public Enum_Base<T, N>
-        {
-
-        public:
-
-            Enum_Ptr(T* aIn);
-
-            // ===== Enum_Base ==============================================
-            virtual T Get() const;
-            
-            // ===== Object =================================================
-            virtual ~Enum_Ptr();
-
-        // internal
-
-            T* mInternal;
-
-        protected:
-
-            // ===== Enum_Base ==============================================
-            virtual bool Internal_Set(T aIn);
+            T mInternal;
 
         };
 
@@ -105,45 +78,71 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T, const char** N>
-        inline Enum<T, N>::Enum(T aIn) : Enum_Base<T, N>(), mInternal(aIn) {}
+        DI::Object* Enum<T, N>::Create() { return new Enum<T, N>(static_cast<T>(0)); }
 
         template <typename T, const char** N>
-        inline Enum_Ptr<T, N>::Enum_Ptr(T* aIn) : Enum_Base<T, N>(), mInternal(aIn) {}
-
-        template <typename T, const char** N>
-        inline void Enum_Base<T, N>::operator = (T aIn) { Set(aIn); }
-        
-        template <typename T, const char** N>
-        Enum_Base<T, N>::operator T () const { return Get(); }
-
-        template <typename T, const char** N>
-        const char* Enum_Base<T, N>::GetName() const
+        inline Enum_Ptr<T, N>::Enum_Ptr(T* aPtr) : mPtr(aPtr)
         {
-            KMS::Enum<T, N> lIn(Get());
-            
-            return lIn.GetName();
+            assert(nullptr != aPtr);
         }
 
-        // ===== Enum_Base ==================================================
+        template <typename T, const char** N>
+        inline Enum<T, N>::Enum(T aIn) : Enum_Ptr<T, N>(&mInternal), mInternal(aIn) {}
 
         template <typename T, const char** N>
-        T Enum<T, N>::Get() const { return mInternal; }
+        void Enum_Ptr<T, N>::operator = (T aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = aIn;
+        }
 
         template <typename T, const char** N>
-        T Enum_Ptr<T, N>::Get() const { return *mInternal; }
+        Enum_Ptr<T, N>::operator T () const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr;
+        }
+
+        template <typename T, const char** N>
+        bool Enum_Ptr<T, N>::operator == (T aIn) const
+        {
+            assert(nullptr != mPtr);
+
+            return *mPtr == aIn;
+        }
+
+        template <typename T, const char** N>
+        T Enum_Ptr<T, N>::Get() const { return *mPtr; }
+
+        template <typename T, const char** N>
+        const char* Enum_Ptr<T, N>::GetName() const
+        {
+            assert(nullptr != mPtr);
+
+            KMS::Enum<T, N> lInternal(*mPtr);
+            
+            return lInternal.GetName();
+        }
 
         // ===== Value ======================================================
 
         template <typename T, const char** N>
-        unsigned int Enum_Base<T, N>::Get(char* aOut, unsigned int aOutSize_byte) const
+        unsigned int Enum_Ptr<T, N>::Get(char* aOut, unsigned int aOutSize_byte) const
         {
-            const char* lName = GetName();
+            assert(nullptr != mPtr);
+
+            KMS::Enum<T, N> lInternal(*mPtr);
+
+            const char* lName = lInternal.GetName();
+            assert(nullptr != lName);
 
             unsigned int lResult_byte = static_cast<unsigned int>(strlen(lName));
 
             if (aOutSize_byte <= lResult_byte + 1)
             {
-                throw Exception(__FILE__, __FUNCTION__, __LINE__, Exception::Code::DI_OUTPUT_TOO_SHORT, "The output buffer is too short");
+                throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short");
             }
 
             strcpy_s(aOut SizeInfoV(aOutSize_byte), lName);
@@ -152,12 +151,16 @@ namespace KMS
         }
 
         template <typename T, const char** N>
-        void Enum_Base<T, N>::Set(const char* aIn)
+        void Enum_Ptr<T, N>::Set(const char* aIn)
         {
-            KMS::Enum<T, N> lIn(aIn);
+            assert(nullptr != mPtr);
 
-            if (Internal_Set(lIn))
+            KMS::Enum<T, N> lInternal(*mPtr);
+
+            if (lInternal.SetName(aIn))
             {
+                *mPtr = lInternal;
+
                 Send_OnChanged(const_cast<char*>(aIn));
             }
         }
@@ -165,34 +168,13 @@ namespace KMS
         // ===== Object =====================================================
 
         template <typename T, const char** N>
-        Enum_Base<T, N>::~Enum_Base() {}
-
-        template <typename T, const char** N>
-        Enum<T, N>::~Enum() {}
-
-        template <typename T, const char** N>
-        Enum_Ptr<T, N>::~Enum_Ptr() {}
-
-        template <typename T, const char** N>
-        bool Enum_Base<T, N>::Clear() { return Internal_Set(static_cast<T>(0)); }
-
-        // Protected
-        // //////////////////////////////////////////////////////////////////
-
-        template <typename T, const char** N>
-        inline Enum_Base<T, N>::Enum_Base() {}
-
-        // ===== Enum_Base ==================================================
-
-        template <typename T, const char** N>
-        bool Enum<T, N>::Internal_Set(T aIn) { return mInternal.Set(aIn); }
-
-        template <typename T, const char** N>
-        bool Enum_Ptr<T, N>::Internal_Set(T aIn)
+        bool Enum_Ptr<T, N>::Clear()
         {
-            bool lResult = *mInternal != aIn;
+            assert(nullptr != mPtr);
 
-            *mInternal = aIn;
+            bool lResult = *mPtr != static_cast<T>(0);
+
+            *mPtr = static_cast<T>(0);
 
             return lResult;
         }
@@ -203,7 +185,7 @@ namespace KMS
 template <typename T, const char** N>
 std::ostream& operator << (std::ostream& aOut, const KMS::DI::Enum<T, N>& aE)
 {
-    aOut << aE.mInternal.GetName();
+    aOut << aE.GetName();
 
     return aOut;
 }

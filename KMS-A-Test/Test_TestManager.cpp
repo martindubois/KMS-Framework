@@ -59,7 +59,7 @@ KMS_TEST(Test_TestManager_Fail0, "Test_TestManager_Fail0", "Fail", sTest_Fail0)
 KMS_TEST(Test_TestManager_Fail1, "Test_TestManager_Fail1", "Fail", sTest_Fail1)
 {
     Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-    KMS_EXCEPTION(TEST, "Test", "");
+    KMS_EXCEPTION(RESULT_ERROR, "Test", "");
 }
 
 KMS_TEST(Test_TestManager_Fail2, "Test_TestManager_Fail2", "Fai2", sTest_Fail2)

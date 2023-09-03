@@ -33,9 +33,5 @@ namespace KMS
         
         void NetAddressRange::Set(const char* aIn) { mInternal = Convert::ToNetAddressRange(aIn); };
         
-        // ===== Object =====================================================
-
-        NetAddressRange::~NetAddressRange() {}
-
     }
 }

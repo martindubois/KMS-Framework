@@ -123,7 +123,7 @@ namespace KMS
 
         void Window_Bitmap::ValidateConfig()
         {
-            KMS_EXCEPTION_ASSERT(0 < mZoom, WGDI_CONFIG_ERROR, "Invalid zoom", "");
+            KMS_EXCEPTION_ASSERT(0 < mZoom, RESULT_INVALID_CONFIG, "Invalid zoom", "");
 
             Window::ValidateConfig();
         }

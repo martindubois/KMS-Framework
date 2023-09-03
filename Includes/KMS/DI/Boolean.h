@@ -7,6 +7,9 @@
 // Status    PROD_READY
 // Library   KMS-A
 
+// External type : bool
+// Internal type : bool
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -17,14 +20,12 @@ namespace KMS
     namespace DI
     {
 
-        class Boolean : public Value
+        class Boolean_Ptr : public Value
         {
 
         public:
 
-            static DI::Object* Create();
-
-            Boolean(bool aIn = false);
+            Boolean_Ptr(bool* aPtr);
 
             void operator = (bool aIn);
 
@@ -35,14 +36,32 @@ namespace KMS
             void Set(bool aIn = true);
 
             // ===== Value ==================================================
-            virtual bool         Clear();
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
-            virtual ~Boolean();
+            virtual bool Clear();
 
-        // Internal
+        private:
+
+            bool* mPtr;
+
+        };
+
+        class Boolean : public Boolean_Ptr
+        {
+
+        public:
+
+            static DI::Object* Create();
+
+            Boolean(bool aIn = false);
+
+            // ===== Boolean_Ptr ============================================
+            using Boolean_Ptr::operator =;
+            using Boolean_Ptr::operator bool;
+
+        private:
 
             bool mInternal;
 

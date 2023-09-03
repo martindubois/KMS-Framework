@@ -6,6 +6,9 @@
 // File      Includes/KMS/DI/GUID.h
 // Library   KMS-A
 
+// External type : GUID (const char*)
+// Internal type : GUID (std::string)
+
 #pragma once
 
 // ===== C ==================================================================
@@ -19,7 +22,31 @@ namespace KMS
     namespace DI
     {
 
-        class GUID : public String
+        class GUID_Ptr : public Value
+        {
+
+        public:
+
+            GUID_Ptr(::GUID* aPtr);
+
+            void operator = (const ::GUID& aIn);
+
+            operator const ::GUID& () const;
+
+            // ===== Value ==================================================
+            virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
+            virtual void Set(const char* aIn);
+
+            // ===== Object =================================================
+            virtual bool Clear();
+
+        private:
+
+            GUID* mPtr;
+
+        };
+
+        class GUID : public GUID_Ptr
         {
 
         public:
@@ -28,18 +55,14 @@ namespace KMS
 
             GUID();
 
-            GUID(const ::GUID& aG, const char* aIn);
+            GUID(const ::GUID& aG);
 
-            void Set(const ::GUID& aIn);
+            // ===== GUID_Ptr ===============================================
+            using GUID_Ptr::operator =;
+            using GUID_Ptr::operator const ::GUID&;
 
-            // ===== Object =================================================
-            virtual ~GUID();
-
-        // Internal
-
-            // ===== Object =================================================
-            virtual void Send_OnChanged(void* aData);
-
+        private:
+        
             ::GUID mInternal;
 
         };

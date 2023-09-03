@@ -15,6 +15,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Console/Console.h>
 #include <KMS/Dbg/LogFile.h>
+#include <KMS/Enum.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Version.h>
 
@@ -35,6 +36,8 @@ namespace KMS
 
                 QTY
             };
+
+            static const char* CONSOLE_MODE_NAMES[];
 
             static const unsigned int FLAG_USER_REDUNDANT;
 

@@ -94,7 +94,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToBool("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     // ToDouble
     try
@@ -103,7 +103,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToDouble("0.0 ");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_FORMAT_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 
     // ToFile
     try
@@ -112,7 +112,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToFile("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_OPEN_FAILED);
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
     // ToInt32
     try
@@ -121,7 +121,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToInt32("-1 ");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_DATA_TYPE);
 
     // ToUInt16
     try
@@ -130,7 +130,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     // ToUInt32
     try
@@ -139,7 +139,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt32("0 ");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_DATA_TYPE);
 
     // ToUInt8
     try
@@ -148,7 +148,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt8("0x100");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_DATA_TYPE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_DATA_TYPE);
 
     // ToASCII
     try
@@ -157,7 +157,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToASCII(L"AB", lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
+    KMS_TEST_CATCH(RESULT_OUTPUT_TOO_SHORT);
 
     // ToUTF16
     try
@@ -166,7 +166,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUTF16("AB", lUTF16, 2);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
+    KMS_TEST_CATCH(RESULT_OUTPUT_TOO_SHORT);
 
     // ToDisplay
     try
@@ -175,7 +175,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToDisplay("AB", 2, lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_OUTPUT_TOO_SHORT);
+    KMS_TEST_CATCH(RESULT_OUTPUT_TOO_SHORT);
 
     // ToUInt8Array
     try
@@ -184,7 +184,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt8Array("G", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     try
     {
@@ -192,7 +192,7 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt8Array("FG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     try
     {
@@ -200,5 +200,5 @@ KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
         Convert::ToUInt8Array("EFG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(CONVERT_VALUE_INVALID);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 }

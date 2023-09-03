@@ -40,22 +40,39 @@ namespace KMS
 
         void Test::Cleanup() {};
 
-        #define COMPARE(T)                                                                             \
-            bool Test::Compare(T aValue, T aExpected, const char* aFileName, unsigned int aLine)       \
-            {                                                                                          \
-                auto lResult = Assert(aValue == aExpected, aFileName, aLine);                          \
-                if (!lResult)                                                                          \
-                {                                                                                      \
+        #define COMPARE(T)                                                                                          \
+            bool Test::Compare(T aValue, T aExpected, const char* aFileName, unsigned int aLine)                    \
+            {                                                                                                       \
+                auto lResult = Assert(aValue == aExpected, aFileName, aLine);                                       \
+                if (!lResult)                                                                                       \
+                {                                                                                                   \
                     mConsole.ErrorStream() << Console::Color::RED;                                                  \
                     mConsole.ErrorStream() << "    Value    : " << aValue    << "\n";                               \
                     mConsole.ErrorStream() << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
-                }                                                                                      \
-                return lResult;                                                                        \
+                }                                                                                                   \
+                return lResult;                                                                                     \
             }
 
-        COMPARE(Exception::Code);
-        COMPARE(         int   );
-        COMPARE(unsigned int   );
+        COMPARE(bool        );
+        COMPARE(         int);
+        COMPARE(unsigned int);
+        COMPARE(Result      );
+
+        bool Test::Compare(const char* aValue, const char* aExpected, const char* aFileName, unsigned int aLine)
+        {
+            assert(nullptr != aValue);
+            assert(nullptr != aExpected);
+
+            auto lResult = Assert(0 == strcmp(aValue, aExpected), aFileName, aLine);
+            if (!lResult)
+            {
+                mConsole.ErrorStream() << Console::Color::RED;
+                mConsole.ErrorStream() << "    Value    : " << aValue << "\n";
+                mConsole.ErrorStream() << "    Expected : " << aExpected << Console::Color::WHITE << std::endl;
+            }
+
+            return lResult;
+        }
 
         unsigned int Test::GetErrorCount() const { return mErrorCount; }
         const char * Test::GetName      () const { return mName.c_str(); }
@@ -115,15 +132,15 @@ namespace KMS
                 aOut << Console::Color::GREEN;
             }
 
-            aOut << "    " << GetName() << " - " << mErrorCount << " error(s)" << "\n";
+            aOut << GetName() << "\t- " << mErrorCount << " error(s)" << " - ";
 
             if (0 < mErrorCount)
             {
-                aOut << "    FAILED";
+                aOut << "FAILED";
             }
             else
             {
-                aOut << "    PASSED";
+                aOut << "PASSED";
             }
 
             aOut << Console::Color::WHITE << std::endl;

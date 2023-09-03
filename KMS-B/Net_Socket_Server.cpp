@@ -13,6 +13,8 @@
 
 #include <KMS/Net/Socket_Server.h>
 
+KMS_RESULT_STATIC(RESULT_SOCKET_LISTEN_FAILED);
+
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -111,7 +113,7 @@ namespace KMS
             case State::LISTEN: break;
 
             case State::OPEN:
-                KMS_EXCEPTION(NET_STATE_INVALID, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+                KMS_EXCEPTION(RESULT_INVALID_STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
 
             default: assert(false);
             }
@@ -154,7 +156,7 @@ namespace KMS
             assert(State::OPEN == mState);
 
             auto lRet = listen(mSocket, 1);
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_LISTEN_FAILED, "listen failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_LISTEN_FAILED, "listen failed", lRet);
 
             mState = State::LISTEN;
         }

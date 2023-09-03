@@ -32,19 +32,19 @@ namespace KMS
 
             auto lMappedSize_byte = mBinary.GetMappedSize();
 
-            KMS_EXCEPTION_ASSERT(MAGIC                == mHeader->mMagic                   , FILE_FORMAT_ERROR, "Invalid magic"              , mHeader->mMagic);
-            KMS_EXCEPTION_ASSERT(CLASS_32_BIT         == mHeader->mClass                   , FILE_FORMAT_ERROR, "Not a 32 bit file"          , mHeader->mClass);
-            KMS_EXCEPTION_ASSERT(sizeof(Header32)     <= mHeader->mHeaderSize_byte         , FILE_FORMAT_ERROR, "Invalid header size"        , mHeader->mHeaderSize_byte);
-            KMS_EXCEPTION_ASSERT(sizeof(ProgHeader32) == mHeader->mProgHeaderEntrySize_byte, FILE_FORMAT_ERROR, "Invalid program header size", mHeader->mProgHeaderEntrySize_byte);
-            KMS_EXCEPTION_ASSERT(sizeof(SectHeader32) == mHeader->mSectHeaderEntrySize_byte, FILE_FORMAT_ERROR, "Invalid section header size", mHeader->mSectHeaderEntrySize_byte);
+            KMS_EXCEPTION_ASSERT(MAGIC                == mHeader->mMagic                   , RESULT_FILE_FORMAT_ERROR, "Invalid magic"              , mHeader->mMagic);
+            KMS_EXCEPTION_ASSERT(CLASS_32_BIT         == mHeader->mClass                   , RESULT_FILE_FORMAT_ERROR, "Not a 32 bit file"          , mHeader->mClass);
+            KMS_EXCEPTION_ASSERT(sizeof(Header32)     <= mHeader->mHeaderSize_byte         , RESULT_FILE_FORMAT_ERROR, "Invalid header size"        , mHeader->mHeaderSize_byte);
+            KMS_EXCEPTION_ASSERT(sizeof(ProgHeader32) == mHeader->mProgHeaderEntrySize_byte, RESULT_FILE_FORMAT_ERROR, "Invalid program header size", mHeader->mProgHeaderEntrySize_byte);
+            KMS_EXCEPTION_ASSERT(sizeof(SectHeader32) == mHeader->mSectHeaderEntrySize_byte, RESULT_FILE_FORMAT_ERROR, "Invalid section header size", mHeader->mSectHeaderEntrySize_byte);
 
             uint32_t lSize_byte;
 
             lSize_byte = mHeader->mProgHeaderOffset_byte + sizeof(ProgHeader32) * mHeader->mProgHeaderNumber;
-            KMS_EXCEPTION_ASSERT(lMappedSize_byte >= lSize_byte, FILE_FORMAT_ERROR, "Corrupeted file", lSize_byte);
+            KMS_EXCEPTION_ASSERT(lMappedSize_byte >= lSize_byte, RESULT_FILE_FORMAT_ERROR, "Corrupeted file", lSize_byte);
 
             lSize_byte = mHeader->mSectHeaderOffset_byte + sizeof(SectHeader32) * mHeader->mSectHeaderNumber;
-            KMS_EXCEPTION_ASSERT(lMappedSize_byte >= lSize_byte, FILE_FORMAT_ERROR, "Corrupeted file", lSize_byte);
+            KMS_EXCEPTION_ASSERT(lMappedSize_byte >= lSize_byte, RESULT_FILE_FORMAT_ERROR, "Corrupeted file", lSize_byte);
 
             auto lBase = reinterpret_cast<const uint8_t*>(mHeader);
 
@@ -81,7 +81,7 @@ namespace KMS
                         {
                             auto lOutOffset_byte = lPH->mVirtualAddress - aStart;
 
-                            KMS_EXCEPTION_ASSERT(aSize_byte > lOutOffset_byte + lPH->mMemSize_byte, FILE_FORMAT_ERROR, "Invalid memory segment", lPH->mVirtualAddress);
+                            KMS_EXCEPTION_ASSERT(aSize_byte > lOutOffset_byte + lPH->mMemSize_byte, RESULT_FILE_FORMAT_ERROR, "Invalid memory segment", lPH->mVirtualAddress);
 
                             memcpy(lOut + lOutOffset_byte, lBase + lPH->mFileOffset_byte, lPH->mFileSize_byte);
 
@@ -90,7 +90,7 @@ namespace KMS
                     }
                     else
                     {
-                        KMS_EXCEPTION_ASSERT(aStart >= lPH->mVirtualAddress + lPH->mMemSize_byte, FILE_FORMAT_ERROR, "Invalid memory segment", lPH->mVirtualAddress);
+                        KMS_EXCEPTION_ASSERT(aStart >= lPH->mVirtualAddress + lPH->mMemSize_byte, RESULT_FILE_FORMAT_ERROR, "Invalid memory segment", lPH->mVirtualAddress);
                     }
                     break;
                 }

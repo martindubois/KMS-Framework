@@ -36,7 +36,7 @@ KMS_TEST(Graph_Bitmap_Main, "Graph_Bitmap_Base", "Auto", sTest_Base)
     KMS_TEST_COMPARE(lB0.GetSizeY_px(), SIZE_Y_px);
 
     // SetBox
-    lB0.SetBox(Graph::Point(2, 2), Graph::Point(SIZE_Y_px / 2 - 3, SIZE_Y_px / 2 - 3), Graph::Color::WHITE);
+    lB0.SetBox(Graph::Point(2, 2), Graph::Point(SIZE_X_px / 2 - 3, SIZE_Y_px / 2 - 3), Graph::Color::WHITE);
 
     // SetLine
     lB0.SetLine(Graph::Point( 4,  4), Graph::Point(SIZE_X_px - 3, SIZE_Y_px - 2), Graph::Color::RED, Graph::Bitmap::Operation::OP_XOR);

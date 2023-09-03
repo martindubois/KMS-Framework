@@ -43,7 +43,7 @@ namespace KMS
 
             char lMsg[64 + LINE_LENGTH];
             sprintf_s(lMsg, "\"%s\" is not a valid operation", aOperation);
-            KMS_EXCEPTION_ASSERT(1 <= lRet, DI_FORMAT_INVALID, lMsg, lRet);
+            KMS_EXCEPTION_ASSERT(1 <= lRet, RESULT_INVALID_FORMAT, lMsg, lRet);
 
             auto lObject = aRoot->FindObject_RW(lName);
 
@@ -100,7 +100,7 @@ void Add(DI::Object* aObject, const char* aValue)
         return;
     }
 
-    KMS_EXCEPTION(DI_FORMAT_INVALID, "Invalid add operation", aValue);
+    KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid add operation", aValue);
 }
 
 void Assign(DI::Object* aObject, const char* aValue)
@@ -114,7 +114,7 @@ void Assign(DI::Object* aObject, const char* aValue)
         return;
     }
 
-    KMS_EXCEPTION(DI_FORMAT_INVALID, "Invalid assign operation", aValue);
+    KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid assign operation", aValue);
 }
 
 void Set(DI::Object* aObject)
@@ -133,5 +133,5 @@ void Set(DI::Object* aObject)
         return;
     }
 
-    KMS_EXCEPTION(DI_FORMAT_INVALID, "Invalid set operation", "");
+    KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid set operation", "");
 }

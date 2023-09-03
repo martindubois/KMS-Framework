@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Folder.cpp
 
-// TEST COVERAGE
+// TEST COVERAGE  2023-08-30  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -22,54 +22,60 @@ namespace KMS
 
         Object* Folder::Create() { return new Folder; }
 
-        Folder::Folder() {}
-
-        Folder::Folder(const File::Folder& aIn) : Folder_Base(aIn.GetPath()), mInternal(aIn) {}
-
-        Folder_Ptr::Folder_Ptr(File::Folder* aFolder) : mInternal(aFolder) {}
-
-        void Folder_Base::operator = (const File::Folder& aIn)
+        Folder_Ptr::Folder_Ptr(File::Folder* aPtr) : String_Expand(aPtr->GetPath()), mPtr(aPtr)
         {
-            Internal_Set(aIn);
+            assert(nullptr != aPtr);
+        }
+
+        Folder::Folder() : Folder_Ptr(&mInternal) {}
+
+        Folder::Folder(const File::Folder& aIn) : Folder_Ptr(&mInternal, aIn.GetPath()), mInternal(aIn) {}
+
+        void Folder_Ptr::operator = (const File::Folder& aIn)
+        {
+            assert(nullptr != mPtr);
+
+            *mPtr = aIn;
 
             String_Expand::Set(aIn.GetPath());
         }
 
-        Folder_Base::operator const File::Folder& () const { return GetFolder(); }
+        Folder_Ptr::operator const File::Folder& () const
+        {
+            assert(nullptr != mPtr);
 
-        // ===== Folder_Base ================================================
+            return *mPtr;
+        }
 
-        const File::Folder& Folder    ::GetFolder() const { return  mInternal; }
-        const File::Folder& Folder_Ptr::GetFolder() const { return *mInternal; }
+        const File::Folder& Folder_Ptr::GetFolder() const
+        {
+            assert(nullptr != mPtr);
 
-        // ===== Object =====================================================
-
-        Folder_Base::~Folder_Base() {}
-
-        Folder::~Folder() {}
-
-        Folder_Ptr::~Folder_Ptr() {}
+            return *mPtr;
+        }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
 
         // ===== Object =====================================================
 
-        void Folder_Base::Send_OnChanged(void* aData)
+        void Folder_Ptr::Send_OnChanged(void* aData)
         {
+            assert(nullptr != mPtr);
+
             auto lIn = String_Expand::Get();
 
-            if      (0 == strncmp("EXECUTABLE:"       , lIn, 11)) { Internal_Set(File::Folder(File::Folder::EXECUTABLE       , lIn + 11)); }
-            else if (0 == strncmp("HOME:"             , lIn,  5)) { Internal_Set(File::Folder(File::Folder::HOME             , lIn +  5)); }
+            if      (0 == strncmp("EXECUTABLE:", lIn, 11)) { *mPtr = File::Folder(File::Folder::EXECUTABLE, lIn + 11); }
+            else if (0 == strncmp("HOME:"      , lIn,  5)) { *mPtr = File::Folder(File::Folder::HOME      , lIn +  5); }
 
             #ifdef _KMS_WINDOWS_
-                else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14)); }
-                else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { Internal_Set(File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19)); }
+                else if (0 == strncmp("PROGRAM_FILES:"    , lIn, 14)) { *mPtr = File::Folder(File::Folder::PROGRAM_FILES    , lIn + 14); }
+                else if (0 == strncmp("PROGRAM_FILES_X86:", lIn, 19)) { *mPtr = File::Folder(File::Folder::PROGRAM_FILES_X86, lIn + 19); }
             #endif
 
             else
             {
-                Internal_Set(File::Folder(lIn));
+                *mPtr = File::Folder(lIn);
             }
 
             String_Expand::Send_OnChanged(aData);
@@ -78,15 +84,10 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Folder_Base::Folder_Base() {}
-
-        Folder_Base::Folder_Base(const char* aIn) : String_Expand(aIn) {}
-
-        // ===== Folder_Base ================================================
-
-        void Folder::Internal_Set(const File::Folder& aIn) { mInternal = aIn; }
-
-        void Folder_Ptr::Internal_Set(const File::Folder& aIn) { *mInternal = aIn; }
+        Folder_Ptr::Folder_Ptr(File::Folder* aPtr, const char* aIn) : String_Expand(aIn), mPtr(aPtr)
+        {
+            assert(nullptr != aPtr);
+        }
 
     }
 }

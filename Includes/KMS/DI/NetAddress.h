@@ -6,6 +6,9 @@
 // File      Includes/KMS/DI/NetAddress.h
 // Library   KMS-B
 
+// External type : Net::Address (const char*)
+// Internal type : Net::Address (std::string)
+
 #pragma once
 
 // ===== Includes ===========================================================
@@ -38,9 +41,6 @@ namespace KMS
 
             // ===== Value ==================================================
             virtual void Set(const char* aIn);
-
-            // ===== Object =================================================
-            virtual ~NetAddress();
 
         // Internal
 

@@ -7,6 +7,9 @@
 // Status    PROD_READY
 // Library   KMS-A
 
+// External type : const char*
+// Internal type : std::string
+
 #pragma once
 
 // ===== C++ ================================================================
@@ -20,16 +23,18 @@ namespace KMS
     namespace DI
     {
 
-        class String_Base : public Value
+        class String_Ptr : public Value
         {
 
         public:
 
+            String_Ptr(std::string* aPtr);
+
             void operator = (const char* aIn);
 
-            bool operator == (const char* aIn) const;
-
             operator const char* () const;
+
+            bool operator == (const char* aIn) const;
 
             const char* Get() const;
 
@@ -42,19 +47,15 @@ namespace KMS
             virtual void         Set(const char* aIn);
 
             // ===== Object =================================================
-            virtual ~String_Base();
             virtual bool Clear();
 
-        protected:
+        private:
 
-            String_Base();
-
-            virtual const std::string* Internal_Get() const = 0;
-            virtual       std::string* Internal_Get()       = 0;
+            std::string* mPtr;
 
         };
 
-        class String : public String_Base
+        class String : public String_Ptr
         {
 
         public:
@@ -63,40 +64,14 @@ namespace KMS
 
             String(const char* aIn = "");
 
-            // ===== Object =================================================
-            virtual ~String();
-
-        protected:
-
-            // ===== String_Base ============================================
-            virtual const std::string* Internal_Get() const;
-            virtual       std::string* Internal_Get();
+            // ===== String_Ptr =============================================
+            using String_Ptr::operator =;
+            using String_Ptr::operator const char*;
+            using String_Ptr::operator ==;
 
         private:
 
             std::string mInternal;
-
-        };
-
-        class String_Ptr : public String_Base
-        {
-
-        public:
-
-            String_Ptr(std::string* aString);
-
-            // ===== Object =================================================
-            virtual ~String_Ptr();
-
-        protected:
-        
-            // ===== String_Base ============================================
-            virtual const std::string* Internal_Get() const;
-            virtual       std::string* Internal_Get();
-
-        private:
-
-            std::string* mInternal;
 
         };
 

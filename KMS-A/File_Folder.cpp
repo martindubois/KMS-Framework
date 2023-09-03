@@ -15,6 +15,8 @@
 
 #include <KMS/File/Folder.h>
 
+KMS_RESULT_STATIC(RESULT_BACKUP_FAILED);
+
 namespace KMS
 {
     namespace File
@@ -122,7 +124,7 @@ namespace KMS
                 }
             }
 
-            KMS_EXCEPTION(FILE_BACKUP_FAILED, "Too many backup (NOT TESTED)", aFile);
+            KMS_EXCEPTION(RESULT_BACKUP_FAILED, "Too many backup (NOT TESTED)", aFile);
         }
 
         void Folder::Copy(const char* aSrc, const char* aDst, unsigned int aFlags) const

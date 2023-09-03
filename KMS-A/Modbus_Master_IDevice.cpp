@@ -81,7 +81,7 @@ namespace KMS
                     #ifdef _KMS_EMBEDDED_
                         if (lBuffer[2] > aOutSize_byte) { return ERROR_BUFFER_TOO_SMALL; }
                     #else
-                        KMS_EXCEPTION_ASSERT(lBuffer[2] <= aOutSize_byte, MODBUS_OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
+                        KMS_EXCEPTION_ASSERT(lBuffer[2] <= aOutSize_byte, RESULT_OUTPUT_TOO_SHORT, "Output buffer too short", lBuffer[1]);
                     #endif
 
                     memcpy(aOut, lBuffer + MIN_SIZE_byte, lBuffer[1]);

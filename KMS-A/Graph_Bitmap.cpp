@@ -161,7 +161,7 @@ namespace KMS
             switch (aOp)
             {
             case Operation::OP_AND : *lData32 &= (lColor32 | 0xff000000); break;
-            case Operation::OP_COPY: *lData32 &= 0xffffff; *lData32 |= lColor32; break;
+            case Operation::OP_COPY: *lData32 &= 0xff000000; *lData32 |= lColor32; break;
             case Operation::OP_OR  : *lData32 |= lColor32; break;
             case Operation::OP_XOR : *lData32 ^= lColor32; break;
 

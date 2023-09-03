@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_String_Expand.cpp
 
-// TEST COVERAGE  2023-08-02  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-08-30  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -24,12 +24,45 @@ namespace KMS
 
         Object* String_Expand::Create() { return new String_Expand; }
 
+        String_Expand_Ptr::String_Expand_Ptr(std::string* aPtr) : String_Ptr(aPtr) {}
+
         String_Expand::String_Expand(const char* aIn)
         {
             Set(aIn);
         }
 
+        // ===== String =====================================================
+
+        void String_Expand::operator = (const char* aIn)
+        {
+            char lStr[LINE_LENGTH];
+
+            Env::Expand(aIn, lStr, sizeof(lStr));
+
+            String::Set(lStr);
+        }
+
+        // ===== String_Ptr =================================================
+
+        void String_Expand_Ptr::operator = (const char* aIn)
+        {
+            char lStr[LINE_LENGTH];
+
+            Env::Expand(aIn, lStr, sizeof(lStr));
+
+            String_Ptr::Set(lStr);
+        }
+
         // ===== Value ======================================================
+
+        void String_Expand_Ptr::Set(const char* aIn)
+        {
+            char lStr[LINE_LENGTH];
+
+            Env::Expand(aIn, lStr, sizeof(lStr));
+
+            String_Ptr::Set(lStr);
+        }
 
         void String_Expand::Set(const char* aIn)
         {
@@ -39,10 +72,6 @@ namespace KMS
 
             String::Set(lStr);
         }
-
-        // ===== Object =====================================================
-
-        String_Expand::~String_Expand() {}
 
     }
 }

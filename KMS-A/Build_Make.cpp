@@ -23,6 +23,8 @@
 
 #include <KMS/Build/Make.h>
 
+KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -444,7 +446,7 @@ namespace KMS
 
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION(BUILD_COMPILE_FAILED, "Cannot make", lP.GetCmdLine());
+                KMS_EXCEPTION(RESULT_COMPILATION_FAILED, "Cannot make", lP.GetCmdLine());
             }
         }
 
@@ -547,12 +549,12 @@ namespace KMS
                 else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else
                 {
-                    KMS_EXCEPTION(BUILD_CONFIG_INVALID, "Invalid component", lComponent);
+                    KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid component", lComponent);
                 }
             }
 
-            KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), BUILD_CONFIG_INVALID, "Empty configuration", "");
-            KMS_EXCEPTION_ASSERT(0 < mProcessor    .GetLength(), BUILD_CONFIG_INVALID, "Empty processor"    , "");
+            KMS_EXCEPTION_ASSERT(0 < mConfiguration.GetLength(), RESULT_INVALID_CONFIG, "Empty configuration", "");
+            KMS_EXCEPTION_ASSERT(0 < mProcessor    .GetLength(), RESULT_INVALID_CONFIG, "Empty processor"    , "");
         }
 
     }

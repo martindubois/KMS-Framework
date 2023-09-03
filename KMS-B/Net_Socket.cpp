@@ -12,6 +12,13 @@
 
 #include <KMS/Net/Socket.h>
 
+KMS_RESULT_STATIC(RESULT_SOCKET_BIND_FAILED);
+KMS_RESULT_STATIC(RESULT_SOCKET_FAILED);
+KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
+KMS_RESULT_STATIC(RESULT_SOCKET_RECEIVE_FAILED);
+KMS_RESULT_STATIC(RESULT_SOCKET_SEND_FAILED);
+KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -45,7 +52,7 @@ namespace KMS
             WSADATA lData;
 
             auto lRet = WSAStartup(MAKEWORD(2, 2), &lData);
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_STARTUP_FAILED, "WSAStartup failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_STARTUP_FAILED, "WSAStartup failed", lRet);
         }
 
         void Thread_Cleanup()
@@ -108,7 +115,7 @@ namespace KMS
             }
 
             mSocket = socket(mLocalAddress.Get().GetInternalFamily(), lType, lProt);
-            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, NET_SOCKET_FAILED, "socket failed", "");
+            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, RESULT_SOCKET_FAILED, "socket failed", "");
 
             Configure();
 
@@ -124,7 +131,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lResult = recv(mSocket, reinterpret_cast<char*>(aOut), aOutSize_byte, 0);
-            KMS_EXCEPTION_ASSERT((0 <= lResult) && (aOutSize_byte >= static_cast<unsigned int>(lResult)), NET_SOCKET_RECEIVE_FAILED, "recv failed", lResult);
+            KMS_EXCEPTION_ASSERT((0 <= lResult) && (aOutSize_byte >= static_cast<unsigned int>(lResult)), RESULT_SOCKET_RECEIVE_FAILED, "recv failed", lResult);
 
             return lResult;
         }
@@ -138,7 +145,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = send(mSocket, reinterpret_cast<const char*>(aIn), aInSize_byte, 0);
-            KMS_EXCEPTION_ASSERT(aInSize_byte == lRet, NET_SOCKET_SEND_FAILED, "send failed", lRet);
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lRet, RESULT_SOCKET_SEND_FAILED, "send failed", lRet);
         }
 
         void Socket::Send(File::Binary* aFile)
@@ -204,7 +211,7 @@ namespace KMS
             switch (aS)
             {
             case State::CLOSED   : break;
-            case State::CONNECTED: KMS_EXCEPTION(NET_STATE_INVALID, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
+            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
             case State::OPEN     : Open(); break;
 
             default: assert(false);
@@ -220,7 +227,7 @@ namespace KMS
 
             case State::LISTEN:
             case State::OPEN  :
-                KMS_EXCEPTION(NET_STATE_INVALID, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
+                KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
 
             default: assert(false);
             }
@@ -231,7 +238,7 @@ namespace KMS
             switch (aS)
             {
             case State::CLOSED   : CloseSocket(); break;
-            case State::CONNECTED: KMS_EXCEPTION(NET_STATE_INVALID, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
+            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
             case State::OPEN     : break;
 
             default: assert(false);
@@ -277,7 +284,7 @@ namespace KMS
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
 
-                KMS_EXCEPTION(NET_SOCKET_BIND_FAILED, "Cannot bind the socket", "");
+                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket", "");
             }
         }
 
@@ -300,7 +307,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
         }
 
         void Socket::SetOption_TCP(int aOptName, DWORD aValue)
@@ -308,7 +315,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = setsockopt(mSocket, IPPROTO_TCP, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, NET_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
         }
 
     }
