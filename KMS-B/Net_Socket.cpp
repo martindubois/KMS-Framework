@@ -15,8 +15,6 @@
 KMS_RESULT_STATIC(RESULT_SOCKET_BIND_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_RECEIVE_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_SEND_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
 
 // Configuration
@@ -131,7 +129,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lResult = recv(mSocket, reinterpret_cast<char*>(aOut), aOutSize_byte, 0);
-            KMS_EXCEPTION_ASSERT((0 <= lResult) && (aOutSize_byte >= static_cast<unsigned int>(lResult)), RESULT_SOCKET_RECEIVE_FAILED, "recv failed", lResult);
+            KMS_EXCEPTION_ASSERT((0 <= lResult) && (aOutSize_byte >= static_cast<unsigned int>(lResult)), RESULT_RECEIVE_FAILED, "recv failed", lResult);
 
             return lResult;
         }
@@ -145,7 +143,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = send(mSocket, reinterpret_cast<const char*>(aIn), aInSize_byte, 0);
-            KMS_EXCEPTION_ASSERT(aInSize_byte == lRet, RESULT_SOCKET_SEND_FAILED, "send failed", lRet);
+            KMS_EXCEPTION_ASSERT(aInSize_byte == lRet, RESULT_SEND_FAILED, "send failed", lRet);
         }
 
         void Socket::Send(File::Binary* aFile)

@@ -365,7 +365,7 @@ KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
 
 #ifdef _KMS_WINDOWS_
 
-    KMS_TEST(DI_Value_Base, "DI_Value_Windows", "Auto", sTest_Windows)
+    KMS_TEST(DI_Value_Windows, "DI_Value_Windows", "Auto", sTest_Windows)
     {
         // Create
         DI::Object* lObj;

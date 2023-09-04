@@ -6,3 +6,5 @@ Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-Bitmap.ReadMe.txt
 
 EDIT ON BUILD
+
+1.0.3 Windows 2023-09-04

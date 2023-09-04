@@ -10,9 +10,6 @@
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device.h>
 
-KMS_RESULT_STATIC(RESULT_READ_FAILED);
-KMS_RESULT_STATIC(RESULT_WRITE_FAILED);
-
 namespace KMS
 {
     namespace Dev
