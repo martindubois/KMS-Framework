@@ -42,6 +42,8 @@ namespace KMS
 
             void Init(unsigned int aSizeX_px, unsigned int aSizeY_px);
 
+            void Init(unsigned int aSizeX_px, unsigned int aSizeY_px, const void* aData);
+
             void Init(unsigned int aSizeX_px, unsigned int aSizeY_px, void* aData);
 
             void Init(FileFormat::BMP* aBMP);

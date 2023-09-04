@@ -18,13 +18,24 @@ using namespace KMS;
 #define SIZE_X_px (32U)
 #define SIZE_Y_px (64U)
 
-KMS_TEST(Graph_Bitmap_Main, "Graph_Bitmap_Base", "Auto", sTest_Base)
+KMS_TEST(Graph_Bitmap_Base, "Graph_Bitmap_Base", "Auto", sTest_Base)
 {
+    uint8_t lData[SIZE_X_px * SIZE_Y_px * 3];
+    FileFormat::BMP lBMP(File::Folder::CURRENT, "KMS-A-Test/Tests/Test_Graph_Bitmap_Base_0.bmp");
+
+    lBMP.Open();
+
     // Constructor
     Graph::Bitmap lB0;
+    Graph::Bitmap lB1;
+    Graph::Bitmap lB2;
+    Graph::Bitmap lB3;
 
     // Init
     lB0.Init(SIZE_X_px, SIZE_Y_px);
+    lB1.Init(SIZE_X_px, SIZE_Y_px, lB0.GetData());
+    lB2.Init(SIZE_X_px, SIZE_Y_px, lData);
+    lB3.Init(&lBMP);
 
     // GetPixel
     KMS_TEST_ASSERT(Graph::Color::BLACK == lB0.GetPixel(Graph::Point::ORIGIN));
@@ -34,6 +45,9 @@ KMS_TEST(Graph_Bitmap_Main, "Graph_Bitmap_Base", "Auto", sTest_Base)
 
     // GetSizeY_px
     KMS_TEST_COMPARE(lB0.GetSizeY_px(), SIZE_Y_px);
+
+    // GetUpperRight
+    Graph::Point lUR = lB0.GetUpperRight();
 
     // SetBox
     lB0.SetBox(Graph::Point(2, 2), Graph::Point(SIZE_X_px / 2 - 3, SIZE_Y_px / 2 - 3), Graph::Color::WHITE);
@@ -49,6 +63,8 @@ KMS_TEST(Graph_Bitmap_Main, "Graph_Bitmap_Base", "Auto", sTest_Base)
     lB0.SetPixel(Graph::Point(0, 1),            0x804020, Graph::Bitmap::Operation::OP_ADD);
     lB0.SetPixel(Graph::Point(0, 1), Graph::Color::RED  , Graph::Bitmap::Operation::OP_AND);
     lB0.SetPixel(Graph::Point(0, 2), Graph::Color::GREEN, Graph::Bitmap::Operation::OP_COPY);
+    lB0.SetPixel(Graph::Point(0, 2),            0x010102, Graph::Bitmap::Operation::OP_DIV);
+    lB0.SetPixel(Graph::Point(0, 2),            0x010102, Graph::Bitmap::Operation::OP_MULT);
     lB0.SetPixel(Graph::Point(0, 3), Graph::Color::GREEN, Graph::Bitmap::Operation::OP_OR);
     lB0.SetPixel(Graph::Point(0, 3),            0x804020, Graph::Bitmap::Operation::OP_SUB);
     lB0.SetPixel(Graph::Point(0, 4), Graph::Color::BLUE , Graph::Bitmap::Operation::OP_XOR);

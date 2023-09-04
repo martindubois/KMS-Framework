@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Graph_Bitmap.cpp
 
+// TEST COVERAGE  2023-09-04  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -39,19 +41,26 @@ public:
 #define PIXEL_SIZE_byte (3)
 
 #define FLAG_DELETE_DATA (0x00000001)
+#define FLAG_READ_ONLY   (0x00000002)
 
 namespace KMS
 {
     namespace Graph
     {
 
-        Bitmap::Bitmap() : mData(nullptr), mFlags(0), mSizeX_px(0), mSizeY_px(0) {}
+        Bitmap::Bitmap()
+            : mData(nullptr)
+            , mFlags(0)
+            , mSizeX_px(0)
+            , mSizeY_px(0)
+        {}
 
         Bitmap::~Bitmap()
         {
             if (0 != (mFlags & FLAG_DELETE_DATA))
             {
                 assert(nullptr != mData);
+                assert(0 == (mFlags & FLAG_READ_ONLY));
 
                 delete[] mData;
             }
@@ -76,6 +85,40 @@ namespace KMS
             mSizeY_px = aSizeY_px;
 
             memset(mData, 0, lSize_byte);
+        }
+
+        void Bitmap::Init(unsigned int aSizeX_px, unsigned int aSizeY_px, const void* aData)
+        {
+            assert(0 < aSizeX_px);
+            assert(0 < aSizeY_px);
+            assert(nullptr != aData);
+
+            assert(nullptr == mData);
+            assert(0 == mSizeX_px);
+            assert(0 == mSizeY_px);
+
+            mData = reinterpret_cast<uint8_t*>(const_cast<void*>(aData));
+
+            mFlags |= FLAG_READ_ONLY;
+
+            mSizeX_px = aSizeX_px;
+            mSizeY_px = aSizeY_px;
+        }
+
+        void Bitmap::Init(unsigned int aSizeX_px, unsigned int aSizeY_px, void* aData)
+        {
+            assert(0 < aSizeX_px);
+            assert(0 < aSizeY_px);
+            assert(nullptr != aData);
+
+            assert(nullptr == mData);
+            assert(0 == mSizeX_px);
+            assert(0 == mSizeY_px);
+
+            mData = reinterpret_cast<uint8_t*>(aData);
+
+            mSizeX_px = aSizeX_px;
+            mSizeY_px = aSizeY_px;
         }
 
         void Bitmap::Init(FileFormat::BMP* aBMP)
@@ -148,6 +191,8 @@ namespace KMS
 
         void Bitmap::SetPixel(Point aP, Color aColor, Operation aOp)
         {
+            KMS_EXCEPTION_ASSERT(0 == (mFlags & FLAG_READ_ONLY), RESULT_DENIED, "The bitmap is read only", "");
+
             auto lOffset_byte = ComputeOffset(aP);
 
             auto lColor8 = reinterpret_cast<uint8_t*>(&aColor);
@@ -208,6 +253,8 @@ namespace KMS
             assert(0 < mSizeX_px);
             assert(0 < mSizeY_px);
 
+            KMS_EXCEPTION_ASSERT(0 == (mFlags & FLAG_READ_ONLY), RESULT_DENIED, "The bitmap is read only", "");
+
             auto lScroll_byte = aScroll_px * PIXEL_SIZE_byte;
 
             auto lDst = mData;
@@ -238,6 +285,8 @@ namespace KMS
             assert(0 < mSizeX_px);
             assert(0 < mSizeY_px);
 
+            KMS_EXCEPTION_ASSERT(0 == (mFlags & FLAG_READ_ONLY), RESULT_DENIED, "The bitmap is read only", "");
+            
             auto lScroll_byte = aScroll_px * PIXEL_SIZE_byte;
 
             auto lSrc = mData;
