@@ -79,6 +79,7 @@
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
     <ClCompile Include="Graph_Color.cpp" />
+    <ClCompile Include="Graph_Histogram.cpp" />
     <ClCompile Include="Graph_Point.cpp" />
     <ClCompile Include="GUI_MetaData.cpp" />
     <ClCompile Include="HTTP.cpp" />

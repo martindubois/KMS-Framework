@@ -104,6 +104,8 @@ namespace KMS
         unsigned int Bitmap::GetSizeX_px() const { return mSizeX_px; }
         unsigned int Bitmap::GetSizeY_px() const { return mSizeY_px; }
 
+        Point Bitmap::GetUpperRight() const { return Point(mSizeX_px - 1, mSizeY_px - 1); }
+
         void Bitmap::SetBox(Point aP0, Point aP1, Color aColor, Operation aOp)
         {
             assert(aP0.mX_px <= aP1.mX_px);
@@ -169,6 +171,20 @@ namespace KMS
                 for (i = 0; i < PIXEL_SIZE_byte; i++)
                 {
                     lData8[i] += lColor8[i];
+                }
+                break;
+
+            case Operation::OP_DIV:
+                for (i = 0; i < PIXEL_SIZE_byte; i++)
+                {
+                    lData8[i] /= lColor8[i];
+                }
+                break;
+
+            case Operation::OP_MULT:
+                for (i = 0; i < PIXEL_SIZE_byte; i++)
+                {
+                    lData8[i] *= lColor8[i];
                 }
                 break;
 

@@ -27,6 +27,8 @@ namespace KMS
                 OP_ADD = 0,
                 OP_AND,
                 OP_COPY,
+                OP_DIV,
+                OP_MULT,
                 OP_OR,
                 OP_SUB,
                 OP_XOR,
@@ -50,6 +52,8 @@ namespace KMS
 
             unsigned int GetSizeX_px() const;
             unsigned int GetSizeY_px() const;
+
+            Point GetUpperRight() const;
 
             // aP0  Bottom left corner
             // aP1  Upper right corner
