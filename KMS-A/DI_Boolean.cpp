@@ -17,7 +17,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const bool DEFAULT_VALUE;
+static const bool DEFAULT_VALUE = false;
 
 namespace KMS
 {

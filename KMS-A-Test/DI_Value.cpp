@@ -7,8 +7,10 @@
 
 #include "Component.h"
 
-// ===== Windows ============================================================
-#include <Windows.h>
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Boolean.h>
@@ -16,20 +18,25 @@
 #include <KMS/DI/File.h>
 #include <KMS/DI/Float.h>
 #include <KMS/DI/Folder.h>
-#include <KMS/DI/GUID.h>
 #include <KMS/DI/Int.h>
 #include <KMS/DI/String_Expand.h>
 #include <KMS/DI/UInt.h>
+
+#ifdef _KMS_WINDOWS_
+    #include <KMS/DI/GUID.h>
+#endif
 
 using namespace KMS;
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const GUID TEST_GUID = { 0x8d057212, 0xac5c, 0x41b0, { 0xb6, 0xaa, 0xc9, 0xf6, 0xe7, 0x65, 0xcb, 0xfb } };
-
 #define TEST_FILE_0 "KMS-A-Test/Tests/Test_DI_Value_Base_0.txt"
 #define TEST_FILE_1 "KMS-A-Test/Tests/Test_DI_Value_Base_1.txt"
+
+#ifdef _KMS_WINDOWS_
+    static const GUID TEST_GUID = { 0x8d057212, 0xac5c, 0x41b0, { 0xb6, 0xaa, 0xc9, 0xf6, 0xe7, 0x65, 0xcb, 0xfb } };
+#endif
 
 // Data type
 // //////////////////////////////////////////////////////////////////////////
@@ -53,7 +60,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     lObj = DI::Float<double>                  ::Create(); delete lObj;
     lObj = DI::File                           ::Create(); delete lObj;
     lObj = DI::Folder                         ::Create(); delete lObj;
-    lObj = DI::GUID                           ::Create(); delete lObj;
     lObj = DI::Int<int32_t>                   ::Create(); delete lObj;
     lObj = DI::String                         ::Create(); delete lObj;
     lObj = DI::String_Expand                  ::Create(); delete lObj;
@@ -75,9 +81,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     File::Folder                            lFo0I;
     DI::Folder_Ptr                          lFo0 (&lFo0I);
     DI::Folder                              lFo1;
-    GUID                                    lG0I = TEST_GUID;
-    DI::GUID_Ptr                            lG0  (&lG0I);
-    DI::GUID                                lG1;
     int32_t                                 lI0I = 0;
     DI::Int_Ptr<int32_t>                    lI0  (&lI0I);
     DI::Int<int32_t>                        lI1  (1);
@@ -103,8 +106,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     lFi1.Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "stdin"));
     lFo0.Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, ""));
     lFo1.Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, ""));
-    lG0 .Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "{8d057212-ac5c-41b0-b6aa-c9f6e765cbfb}"));
-    lG1 .Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "{00000000-0000-0000-0000-000000000000}"));
     lI0 .Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "0"));
     lI1 .Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "1"));
     lS0 .Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "Test 1"));
@@ -125,8 +126,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     lFi1.Set(TEST_FILE_1);
     lFo0.Set("2");
     lFo1.Set("3");
-    lG0 .Set("{01234567-89ab-cdef-0000-000000000002}");
-    lG1 .Set("{01234567-89AB-CDEF-0000-000000000003}");
     lI0 .Set("2");
     lI1 .Set("3");
     lS0 .Set("Test 3");
@@ -156,8 +155,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     lFi1 = TEST_FILE_1;
     lFo0 = File::Folder("4");
     lFo1 = File::Folder("5");
-    lG0  = TEST_GUID;
-    lG1  = TEST_GUID;
     lI0  = 4;
     lI1  = 5;
     lS0  = "Test 5";
@@ -183,8 +180,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(lE1  == TestEnum::TEST_ENUM_1);
     KMS_TEST_ASSERT(lF0  == 4.0);
     KMS_TEST_ASSERT(lF1  == 5.0);
-    KMS_TEST_ASSERT(lG0  == TEST_GUID);
-    KMS_TEST_ASSERT(lG1  == TEST_GUID);
     KMS_TEST_ASSERT(lI0  == 4);
     KMS_TEST_ASSERT(lI1  == 5);
     KMS_TEST_ASSERT(lS0  == "Test 5");
@@ -219,8 +214,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(lFi1.Clear());
     KMS_TEST_ASSERT(lFo0.Clear());
     KMS_TEST_ASSERT(lFo1.Clear());
-    KMS_TEST_ASSERT(lG0 .Clear());
-    KMS_TEST_ASSERT(lG1 .Clear());
     KMS_TEST_ASSERT(lI0 .Clear());
     KMS_TEST_ASSERT(lI1 .Clear());
     KMS_TEST_ASSERT(lS0 .Clear());
@@ -240,8 +233,6 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(!lFi1.Clear());
     KMS_TEST_ASSERT(!lFo0.Clear());
     KMS_TEST_ASSERT(!lFo1.Clear());
-    KMS_TEST_ASSERT(!lG0 .Clear());
-    KMS_TEST_ASSERT(!lG1 .Clear());
     KMS_TEST_ASSERT(!lI0 .Clear());
     KMS_TEST_ASSERT(!lI1 .Clear());
     KMS_TEST_ASSERT(!lS0 .Clear());
@@ -266,11 +257,14 @@ KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
     DI::Enum<TestEnum, TEST_ENUM_NAMES> lE0(TestEnum::TEST_ENUM_0);
     DI::Float<double>                   lF0;
     DI::File                            lFi0;
-    DI::GUID                            lG0;
     DI::Int<int8_t>                     lI0;
     DI::String                          lS0("Test0");
     DI::String_Expand                   lSE0;
     DI::Int<uint8_t>                    lUI0;
+
+    #ifdef _KMS_WINDOWS_
+        DI::GUID                        lG0;
+    #endif
 
     // Get
     char lBuffer[8];
@@ -319,14 +313,6 @@ KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-        lG0.Set("Invalid");
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
-
-    try
-    {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lI0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -363,4 +349,58 @@ KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_INVALID_VALUE);
+
+    #ifdef _KMS_WINDOWS_
+    
+        try
+        {
+            Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+            lG0.Set("Invalid");
+            KMS_TEST_ASSERT(false);
+        }
+        KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    #endif
 }
+
+#ifdef _KMS_WINDOWS_
+
+    KMS_TEST(DI_Value_Base, "DI_Value_Windows", "Auto", sTest_Windows)
+    {
+        // Create
+        DI::Object* lObj;
+        lObj = DI::GUID::Create(); delete lObj;
+
+        // Constructor
+        GUID         lG0I = TEST_GUID;
+        DI::GUID_Ptr lG0  (&lG0I);
+        DI::GUID     lG1;
+    
+        // Get
+        char lStr[128];
+        lG0.Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "{8d057212-ac5c-41b0-b6aa-c9f6e765cbfb}"));
+        lG1.Get(lStr, sizeof(lStr)); KMS_TEST_ASSERT(0 == strcmp(lStr, "{00000000-0000-0000-0000-000000000000}"));
+
+        // Set
+        lG0.Set("{01234567-89ab-cdef-0000-000000000002}");
+        lG1.Set("{01234567-89AB-CDEF-0000-000000000003}");
+
+        // operator =
+        lG0 = TEST_GUID;
+        lG1 = TEST_GUID;
+
+        // operator ==
+        KMS_TEST_ASSERT(lG0  == TEST_GUID);
+        KMS_TEST_ASSERT(lG1  == TEST_GUID);
+
+        // ===== Object =========================================================
+
+        // Clear
+        KMS_TEST_ASSERT(lG0 .Clear());
+        KMS_TEST_ASSERT(lG1 .Clear());
+
+        KMS_TEST_ASSERT(!lG0 .Clear());
+        KMS_TEST_ASSERT(!lG1 .Clear());
+    }
+
+#endif

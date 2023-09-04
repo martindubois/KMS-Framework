@@ -27,7 +27,7 @@ namespace KMS
             assert(nullptr != aPtr);
         }
 
-        Folder::Folder() : Folder_Ptr(&mInternal) {}
+        Folder::Folder() { Init(&mInternal); }
 
         Folder::Folder(const File::Folder& aIn) : Folder_Ptr(&mInternal, aIn.GetPath()), mInternal(aIn) {}
 
@@ -56,6 +56,17 @@ namespace KMS
 
         // Internal
         // //////////////////////////////////////////////////////////////////
+
+        Folder_Ptr::Folder_Ptr() : mPtr(nullptr) {}
+
+        void Folder_Ptr::Init(KMS::File::Folder* aPtr)
+        {
+            assert(nullptr != aPtr);
+
+            assert(nullptr == mPtr);
+
+            mPtr = aPtr;
+        }
 
         // ===== Object =====================================================
 

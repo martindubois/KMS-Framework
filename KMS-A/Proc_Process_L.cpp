@@ -13,6 +13,9 @@
 // ===== Includes ===========================================================
 #include <KMS/Proc/Process.h>
 
+KMS_RESULT_STATIC(RESULT_ACCESS_FAILED);
+KMS_RESULT_STATIC(RESULT_START_FAILED);
+
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +41,7 @@ namespace KMS
             {
                 if (NULL == getcwd(lDir, sizeof(lDir)))
                 {
-                    KMS_EXCEPTION(PROC_ACCESS_FAILED, "Cannot retrive the current workding directory", mCmdLine);
+                    KMS_EXCEPTION(RESULT_ACCESS_FAILED, "Cannot retrive the current workding directory", mCmdLine);
                 }
 
                 ChangeDirectory(mWorkingDirectory.c_str());
@@ -57,7 +60,7 @@ namespace KMS
             auto lPId = fork();
             switch (lPId)
             {
-            case -1: KMS_EXCEPTION(PROC_START_FAILED, "fork failed", mCmdLine);
+            case -1: KMS_EXCEPTION(RESULT_START_FAILED, "fork failed", mCmdLine);
 
             case 0:
                 int lResult;
@@ -83,14 +86,14 @@ namespace KMS
                     {
                         if (0 != chdir(mWorkingDirectory.c_str()))
                         {
-                            KMS_EXCEPTION(PROC_ACCESS_FAILED, "chdir failed", mWorkingDirectory.c_str());
+                            KMS_EXCEPTION(RESULT_ACCESS_FAILED, "chdir failed", mWorkingDirectory.c_str());
                         }
                     }
 
                     auto lRet = execv(lPath, const_cast<char **>(lVector));
                     assert(-1 == lRet);
 
-                    KMS_EXCEPTION(PROC_START_FAILED, "execv failed", mCmdLine);
+                    KMS_EXCEPTION(RESULT_START_FAILED, "execv failed", mCmdLine);
                 }
                 KMS_CATCH_RESULT(lResult);
 
@@ -113,6 +116,6 @@ void ChangeDirectory(const char* aD)
 
     if (0 != chdir(aD))
     {
-        KMS_EXCEPTION(PROC_ACCESS_FAILED, "chdir failed", aD);
+        KMS_EXCEPTION(RESULT_ACCESS_FAILED, "chdir failed", aD);
     }
 }

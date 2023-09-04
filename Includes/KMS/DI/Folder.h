@@ -35,6 +35,10 @@ namespace KMS
 
         // Internal
 
+            Folder_Ptr();
+
+            void Init(KMS::File::Folder* aPtr);
+
             // ===== Object =================================================
             virtual void Send_OnChanged(void* aData);
 

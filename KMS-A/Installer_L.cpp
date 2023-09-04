@@ -18,7 +18,7 @@ namespace KMS
 
     void Installer::AddToPath()
     {
-        KMS_EXCEPTION(NOT_IMPLEMENTED, "NotImplemented", "");
+        KMS_EXCEPTION(RESULT_NOT_IMPLEMENTED, "NotImplemented", "");
     }
 
 }
