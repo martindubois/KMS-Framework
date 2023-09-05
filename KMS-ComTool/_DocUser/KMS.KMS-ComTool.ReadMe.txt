@@ -7,7 +7,7 @@ File      KMS-Build/_DocUser/KMS.KMS-ComTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.0.3 Windows 2023-09-04
+1.0.4 Windows 2023-09-05
 
 0.1.76-dev Windows 2023-07-19
 
