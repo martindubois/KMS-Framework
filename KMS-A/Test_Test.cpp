@@ -54,6 +54,7 @@ namespace KMS
             }
 
         COMPARE(bool        );
+        COMPARE(double      );
         COMPARE(         int);
         COMPARE(unsigned int);
         COMPARE(Result      );

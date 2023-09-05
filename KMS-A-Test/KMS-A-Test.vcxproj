@@ -285,6 +285,7 @@
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />
     <ClCompile Include="Msg_Destination.cpp" />
+    <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_File_ASCII.cpp" />
     <ClCompile Include="Text_File_UTF16.cpp" />

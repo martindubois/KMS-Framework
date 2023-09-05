@@ -32,6 +32,7 @@ namespace KMS
 
             bool Compare(bool         aValue, bool         aExpected, const char* aFile, unsigned int aLine);
             bool Compare(const char * aValue, const char * aExpected, const char* aFile, unsigned int aLine);
+            bool Compare(double       aValue, double       aExpected, const char* aFile, unsigned int aLine);
             bool Compare(         int aValue,          int aExpected, const char* aFile, unsigned int aLine);
             bool Compare(unsigned int aValue, unsigned int aExpected, const char* aFile, unsigned int aLine);
             bool Compare(Result       aValue, Result       aExpected, const char* aFile, unsigned int aLine);

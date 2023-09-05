@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Stats_Stats.cpp
 
+// TEST COVERAGE  2023-09-04  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== C ==================================================================
@@ -85,6 +87,16 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        void Stats::Reset()
+        {
+            mCount = 0;
+            mLast  = 0.0;
+            mMax   = 0.0;
+            mMin   = 0.0;
+            mSum   = 0.0;
+            mSum2  = 0.0;
         }
 
     }

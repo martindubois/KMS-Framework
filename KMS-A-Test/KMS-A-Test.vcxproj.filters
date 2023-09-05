@@ -105,6 +105,9 @@
     <ClCompile Include="DI_Value.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
+    <ClCompile Include="Stats_Histogram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

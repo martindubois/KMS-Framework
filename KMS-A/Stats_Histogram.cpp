@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/Stats_Stats.cpp
 
+// TEST COVERAGE  2023-09-04  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -36,15 +38,15 @@ namespace KMS
             delete[] mZones;
         }
 
+        unsigned int Histogram::GetAboveMaxCount() const { return mAboveMaxCount; }
+        unsigned int Histogram::GetBelowMinCount() const { return mBelowMinCount; }
+
         unsigned int Histogram::GetZoneCount(unsigned int aIndex) const
         {
             assert(nullptr != mZones);
 
             return mZones[aIndex];
         }
-
-        unsigned int Histogram::GetAboveMaxCount() const { return mAboveMaxCount; }
-        unsigned int Histogram::GetBelowMinCount() const { return mBelowMinCount; }
 
         double Histogram::GetZoneMax(unsigned int aIndex) const
         {
@@ -111,6 +113,8 @@ namespace KMS
             mBelowMinCount = 0;
 
             memset(mZones, 0, sizeof(unsigned int) * mZoneQty);
+
+            Stats::Reset();
         }
 
     }
