@@ -281,6 +281,7 @@
     <ClCompile Include="File_Folder.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
+    <ClCompile Include="Graph_Histogram.cpp" />
     <ClCompile Include="HTTP.cpp" />
     <ClCompile Include="JSON.cpp" />
     <ClCompile Include="KMS-A-Test.cpp" />

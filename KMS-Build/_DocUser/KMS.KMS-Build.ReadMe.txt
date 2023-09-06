@@ -7,7 +7,7 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
-1.0.4 Windows 2023-09-05
+1.0.5 Windows 2023-09-06
 
 1.0.2 Linux 2023-08-22
 

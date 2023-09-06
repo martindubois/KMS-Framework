@@ -25,6 +25,9 @@
     <Filter Include="Source Files\FileFormat">
       <UniqueIdentifier>{c57d24fa-243c-4c8e-be85-5da0165fc977}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Graph">
+      <UniqueIdentifier>{7483aa91-1dc3-4e34-a3ab-e453cf26079e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-A-Test.cpp">
@@ -99,14 +102,17 @@
     <ClCompile Include="FileFormat_BMP.cpp">
       <Filter>Source Files\FileFormat</Filter>
     </ClCompile>
-    <ClCompile Include="Graph_Bitmap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DI_Value.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
     <ClCompile Include="Stats_Histogram.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph_Bitmap.cpp">
+      <Filter>Source Files\Graph</Filter>
+    </ClCompile>
+    <ClCompile Include="Graph_Histogram.cpp">
+      <Filter>Source Files\Graph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
