@@ -122,9 +122,9 @@ namespace KMS
                 lS.mOnRequest = &lFS.ON_REQUEST;
 
                 lC.AddConfigurable(&lFS);
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS.mSocket);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -132,6 +132,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 
@@ -249,6 +251,15 @@ namespace KMS
             aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);
 
             aR->SetFile(lFile);
+        }
+
+        // ===== DI::Container ==============================================
+
+        void FileServer::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            KMS_EXCEPTION_ASSERT(mRoot.GetFolder().DoesExist(), RESULT_INVALID_CONFIG, "The root folder does not exist", mRoot);
         }
 
         // Private

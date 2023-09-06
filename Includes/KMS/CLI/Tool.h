@@ -37,6 +37,9 @@ namespace KMS
 
             virtual int Run();
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
         // Internal
 
             Console::Console mConsole;

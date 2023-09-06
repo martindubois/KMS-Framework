@@ -80,8 +80,8 @@ namespace KMS
 
             try
             {
-                Build::Import     lI;
                 Cfg::Configurator lC;
+                Build::Import     lI;
                 Installer         lInstaller;
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
 
@@ -96,6 +96,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 
@@ -219,6 +221,29 @@ namespace KMS
             }
 
             return 0;
+        }
+
+        // ===== DI::Container ==============================================
+
+        void Import::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            for (const auto& lEntry : mDependencies.mInternal)
+            {
+                auto lS = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lS);
+
+                KMS_EXCEPTION_ASSERT(!lS->GetString().empty(), RESULT_INVALID_CONFIG, "Empty dependency", "");
+            }
+
+            for (const auto& lEntry : mOSIndependentDeps.mInternal)
+            {
+                auto lS = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lS);
+
+                KMS_EXCEPTION_ASSERT(!lS->GetString().empty(), RESULT_INVALID_CONFIG, "Empty dependency", "");
+            }
         }
 
     }

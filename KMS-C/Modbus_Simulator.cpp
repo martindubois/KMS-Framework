@@ -98,11 +98,11 @@ namespace KMS
 
                 lSi.InitSlave(&lSl);
 
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lCfg);
                 lC.AddConfigurable(&lPort);
                 lC.AddConfigurable(&lSi);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -110,6 +110,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 

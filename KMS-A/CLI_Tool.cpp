@@ -201,6 +201,21 @@ namespace KMS
             return 0;
         }
 
+        // ===== DI::Container ==============================================
+
+        void Tool::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            for (auto& lEntry : mCommands.mInternal)
+            {
+                auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lCommand);
+
+                KMS_EXCEPTION_ASSERT(!lCommand->GetString().empty(), RESULT_INVALID_CONFIG, "Empty command", lCommand->Get());
+            }
+        }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 

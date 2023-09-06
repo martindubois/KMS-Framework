@@ -62,6 +62,9 @@ namespace KMS
 
             #endif
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== IDevice ================================================
 
             virtual bool Connect   (unsigned int aFlags);

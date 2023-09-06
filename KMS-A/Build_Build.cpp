@@ -155,6 +155,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
+                lC.Validate();
+
                 lInstaller.Run();
 
                 lResult = lB.Run();
@@ -241,8 +243,6 @@ namespace KMS
 
         int Build::Run()
         {
-            VerifyConfig();
-
             mVersion = Version(File::Folder::CURRENT, mVersionFile);
 
             Edit();
@@ -255,6 +255,33 @@ namespace KMS
             if (!mDoNotExport ) { Export (); }
 
             return 0;
+        }
+
+        // ===== DI::Container ==============================================
+
+        void Build::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            if ((!mBinaries.IsEmpty()) || (!mLibraries.IsEmpty()))
+            {
+                if (!mDoNotCompile)
+                {
+                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), RESULT_INVALID_CONFIG, "No configuration", "");
+                }
+
+                if (!mDoNotExport)
+                {
+                    char lMsg[64 + PATH_LENGTH];
+                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.GetFolder().GetPath());
+                    KMS_EXCEPTION_ASSERT(mExportFolder.GetFolder().DoesExist(), RESULT_INVALID_CONFIG, lMsg, "");
+
+                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), RESULT_INVALID_CONFIG, "Invalid product name", "");
+                }
+            }
+
+            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()      , RESULT_INVALID_CONFIG, "No processor", "");
+            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), RESULT_INVALID_CONFIG, "Invalid version file", "");
         }
 
         // Private
@@ -329,6 +356,8 @@ namespace KMS
 
             lM.AddCommand("Clean");
             lM.AddCommand("Make");
+
+            lC.Validate();
 
             auto lRet = lM.Run();
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "KMS::Build::Make::Run failed", lRet);
@@ -574,29 +603,6 @@ namespace KMS
 
                 Test(aC, lP->Get());
             }
-        }
-
-        void Build::VerifyConfig()
-        {
-            if ((!mBinaries.IsEmpty()) || (!mLibraries.IsEmpty()))
-            {
-                if (!mDoNotCompile)
-                {
-                    KMS_EXCEPTION_ASSERT(!mConfigurations.IsEmpty(), RESULT_INVALID_CONFIG, "No configuration", "");
-                }
-
-                if (!mDoNotExport)
-                {
-                    char lMsg[64 + PATH_LENGTH];
-                    sprintf_s(lMsg, "\"%s\" is not a valid export folder", mExportFolder.GetFolder().GetPath());
-                    KMS_EXCEPTION_ASSERT(mExportFolder.GetFolder().DoesExist(), RESULT_INVALID_CONFIG, lMsg, "");
-
-                    KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), RESULT_INVALID_CONFIG, "Invalid product name", "");
-                }
-            }
-
-            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()       , RESULT_INVALID_CONFIG, "No processor"        , "");
-            KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength (), RESULT_INVALID_CONFIG, "Invalid version file", "");
         }
 
     }

@@ -31,8 +31,11 @@ namespace KMS
 
             int Run();
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== DI::Object =============================================
-            ~Sync();
+            virtual ~Sync();
 
             // ===== Configurable attributes ================================
             DI::Boolean mVerbose;
@@ -46,8 +49,6 @@ namespace KMS
 
             void Run_Bidirectional(const DI::Array& aGroup);
             void Run_Bidirectional(FileInfoList * aA, FileInfoList * aB);
-
-            void VerifyConfig() const;
 
             // ===== Configurable attributes ================================
             DI::Dictionary mBidirectional;

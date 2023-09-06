@@ -16,6 +16,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
+#define RETRY_COUNT_MAX (8)
+
 static const KMS::Cfg::MetaData MD_DEVICE_ADDRESS("DeviceAddress = {Address}");
 static const KMS::Cfg::MetaData MD_RETRY_COUNT   ("RetryCount = {Count}");
 
@@ -24,7 +26,7 @@ namespace KMS
     namespace Modbus
     {
 
-        // Protected
+        // Public
         // //////////////////////////////////////////////////////////////////
 
         Master_Cfg::Master_Cfg(Master* aMaster)
@@ -33,6 +35,15 @@ namespace KMS
         {
             AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
             AddEntry("RetryCount"   , &mRetryCount   , false, &MD_RETRY_COUNT);
+        }
+
+        // ===== DI::Container ==============================================
+
+        void Master_Cfg::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            KMS_EXCEPTION_ASSERT(RETRY_COUNT_MAX >= mRetryCount, RESULT_INVALID_CONFIG, "The retry count is not valid", mRetryCount);
         }
 
     }

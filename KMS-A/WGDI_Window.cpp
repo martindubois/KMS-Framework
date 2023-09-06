@@ -78,6 +78,18 @@ namespace KMS
             assert(lRet);
         }
 
+        void Window::SetTitle(const char* aTitle)
+        {
+            assert(nullptr != aTitle);
+
+            mTitle = aTitle;
+
+            if (nullptr != mWindow)
+            {
+                SetWindowText(mWindow, mTitle.c_str());
+            }
+        }
+
         void Window::Show()
         {
             ValidateConfig();

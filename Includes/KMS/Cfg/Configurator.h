@@ -55,6 +55,8 @@ namespace KMS
 
             void SaveConfig(const char* aPath);
 
+            void Validate() const;
+
         // Internal
 
             Console::Console mConsole;

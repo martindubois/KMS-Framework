@@ -163,6 +163,14 @@ namespace KMS
             while (sizeof(lBuffer) == lSize_byte);
         }
 
+        // ===== DI::Container ==============================================
+        void Socket::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            // TODO
+        }
+
         // Internal
         // //////////////////////////////////////////////////////////////////
 

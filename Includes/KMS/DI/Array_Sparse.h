@@ -40,6 +40,7 @@ namespace KMS
             virtual unsigned int GetCount() const;
             virtual bool         IsEmpty() const;
             virtual Object     * FindObject_RW(const char* aName);
+            virtual void         Validate() const;
 
             // ===== Object =================================================
             virtual ~Array_Sparse();

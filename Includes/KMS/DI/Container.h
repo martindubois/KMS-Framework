@@ -35,6 +35,8 @@ namespace KMS
             //            DI_NAME_INVALID
             virtual Object* FindObject_RW(const char* aName) = 0;
 
+            virtual void Validate() const = 0;
+
             // ===== Object =================================================
             virtual ~Container();
 

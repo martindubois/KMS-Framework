@@ -76,6 +76,9 @@ namespace KMS
 
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== Configurable attributes ================================
             DI::Boolean        mKeepALive;
             DI::NetAddress     mLocalAddress;

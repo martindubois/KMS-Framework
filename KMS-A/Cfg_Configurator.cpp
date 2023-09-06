@@ -169,6 +169,14 @@ namespace KMS
             OnSaveConfigChanged(this, nullptr);
         }
 
+        void Configurator::Validate() const
+        {
+            for (auto lD : mConfigurables)
+            {
+                lD->Validate();
+            }
+        }
+
         // Private
         // //////////////////////////////////////////////////////////////////
 

@@ -66,9 +66,9 @@ namespace KMS
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 File::Sync        lS;
 
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lS);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -76,6 +76,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 
@@ -102,12 +104,27 @@ namespace KMS
 
         int Sync::Run()
         {
-            VerifyConfig();
-
             Run_Bidirectional();
             Run_Unidirectional();
 
             return 0;
+        }
+
+        // ===== DI::Dictionary =============================================
+
+        void Sync::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            for (const auto& lVT : mBidirectional.mInternal)
+            {
+                assert(nullptr != lVT.second);
+
+                auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
+                assert(nullptr != lGroup);
+
+                KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), RESULT_INVALID_CONFIG, "Number of folders cannot be one", lVT.first.c_str());
+            }
         }
 
         // Private
@@ -208,19 +225,6 @@ namespace KMS
 
             aA->Copy(aB, lFlags);
             aB->Copy(aA, lFlags);
-        }
-
-        void Sync::VerifyConfig() const
-        {
-            for (const auto& lVT : mBidirectional.mInternal)
-            {
-                assert(nullptr != lVT.second);
-
-                auto lGroup = dynamic_cast<const DI::Array*>(lVT.second.Get());
-                assert(nullptr != lGroup);
-
-                KMS_EXCEPTION_ASSERT(1 < lGroup->GetCount(), RESULT_INVALID_CONFIG, "Number of folders cannot be one", lVT.first.c_str());
-            }
         }
 
     }

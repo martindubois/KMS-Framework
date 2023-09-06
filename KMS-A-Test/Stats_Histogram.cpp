@@ -14,6 +14,9 @@ using namespace KMS;
 
 KMS_TEST(Stats_Histogram_Base, "Stats_Histogram_Base", "Auto", sTest_Base)
 {
+    Console::Console lConsole;
+    lConsole.Set_Null();
+
     // Constructor
     Stats::Histogram lH0(0.0, 10.0, 10);
 
@@ -88,4 +91,7 @@ KMS_TEST(Stats_Histogram_Base, "Stats_Histogram_Base", "Auto", sTest_Base)
     KMS_TEST_COMPARE(lH0.GetDataMin(), 0.0);
     KMS_TEST_COMPARE(lH0.GetDataStdDev(), 0.0);
     KMS_TEST_COMPARE(lH0.GetDataVariance(), 0.0);
+
+    // operator <<
+    lConsole.OutputStream() << lH0;
 }

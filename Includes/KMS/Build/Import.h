@@ -45,6 +45,9 @@ namespace KMS
 
             int Run();
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
         private:
 
             NO_COPY(Import);

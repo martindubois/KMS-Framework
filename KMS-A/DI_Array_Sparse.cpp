@@ -137,6 +137,18 @@ namespace KMS
             return lResult;
         }
 
+        void Array_Sparse::Validate() const
+        {
+            for (auto& lVT : mInternal)
+            {
+                auto lC = dynamic_cast<const DI::Container*>(lVT.second.Get());
+                if (nullptr != lC)
+                {
+                    lC->Validate();
+                }
+            }
+        }
+
         // ===== Object =====================================================
 
         Array_Sparse::~Array_Sparse() { Clear(); }

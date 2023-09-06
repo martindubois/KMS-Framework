@@ -58,6 +58,8 @@ namespace KMS
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
 
+                lC.Validate();
+
                 lResult = lTM.Run();
 
                 std::cerr << lTM;

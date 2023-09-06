@@ -154,6 +154,18 @@ namespace KMS
 
             return lResult;
         }
+
+        void Dictionary::Validate() const
+        {
+            for (auto& lVT : mInternal)
+            {
+                auto lC = dynamic_cast<const DI::Container*>(lVT.second.Get());
+                if (nullptr != lC)
+                {
+                    lC->Validate();
+                }
+            }
+        }
         
         // ===== Object =====================================================
         Dictionary::~Dictionary() { Clear(); }

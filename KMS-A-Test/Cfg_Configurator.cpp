@@ -50,4 +50,7 @@ KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
 
     // SaveConfig
     lC.SaveConfig("");
+
+    // Validate
+    lC.Validate();
 }

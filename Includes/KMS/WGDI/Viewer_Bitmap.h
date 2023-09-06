@@ -31,6 +31,9 @@ namespace KMS
 
             int Run();
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== Configurable attributes ================================
             DI::String_Expand mFileName;
 

@@ -19,6 +19,7 @@
 #include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
+#include <KMS/Installer.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Make.h>
@@ -129,13 +130,15 @@ namespace KMS
             try
             {
                 Cfg::Configurator lC;
-                Build::Make       lM;
+                Installer         lInstaller;
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+                Build::Make       lM;
 
                 lC.SetSilence(SILENCE);
 
                 lC.AddConfigurable(&lM);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -143,6 +146,10 @@ namespace KMS
                 lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
 
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
+
+                lInstaller.Run();
 
                 lResult = lM.Run();
             }

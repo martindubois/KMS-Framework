@@ -55,6 +55,9 @@ namespace KMS
 
             void ProcessRequest_GET(Request* aR, const char* aPath = nullptr);
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== Configurable attributes ================================
             DI::Folder  mRoot;
             DI::Boolean mVerbose;

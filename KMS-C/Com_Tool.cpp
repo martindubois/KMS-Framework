@@ -71,9 +71,9 @@ namespace KMS
                 Installer         lInstaller;
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
 
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lT);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -81,6 +81,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 

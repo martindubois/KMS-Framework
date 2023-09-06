@@ -166,6 +166,18 @@ namespace KMS
             return lResult;
         }
 
+        void Array::Validate() const
+        {
+            for (auto& lEntry : mInternal)
+            {
+                auto lC = dynamic_cast<const DI::Container*>(lEntry.Get());
+                if (nullptr != lC)
+                {
+                    lC->Validate();
+                }
+            }
+        }
+
         // ===== Object =====================================================
 
         Array::~Array() { Clear(); }

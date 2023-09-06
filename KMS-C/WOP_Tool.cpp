@@ -50,14 +50,16 @@ namespace KMS
                 Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
                 WOP::Tool         lT;
 
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lT);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
                 lC.ParseFile(File::Folder::CURRENT, CONFIG_FILE);
                 lC.ParseArguments(aCount - 1, aVector + 1);
+
+                lC.Validate();
 
                 lInstaller.Run();
 

@@ -110,10 +110,10 @@ namespace KMS
 
                 Modbus::Master_Cfg lCfg(lM);
 
-                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lCfg);
                 lC.AddConfigurable(&lT);
 
+                lC.AddConfigurable(&lInstaller);
                 lC.AddConfigurable(&lLogCfg);
                 lC.AddConfigurable(&Dbg::gStats);
 
@@ -123,6 +123,8 @@ namespace KMS
                 lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
                 lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
                 lC.ParseArguments(aCount - lArgStart, aVector + lArgStart);
+
+                lC.Validate();
 
                 lInstaller.Run();
 

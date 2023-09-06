@@ -47,6 +47,9 @@ namespace KMS
 
             int Run();
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
             // ===== Configurable attributes ================================
             DI::Boolean mDoNotCompile;
             DI::Boolean mDoNotExport;

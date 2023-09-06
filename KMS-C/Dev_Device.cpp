@@ -63,6 +63,15 @@ namespace KMS
         void Device::SetIndex(unsigned int aI) { mIndex = aI; }
         void Device::SetLink (const char * aL) { assert(nullptr != aL); mLink = aL; }
 
+        // ===== DI::Container ==============================================
+
+        void Device::Validate() const
+        {
+            DI::Dictionary::Validate();
+
+            // TODO
+        }
+
         // Protected
         // //////////////////////////////////////////////////////////////////
 

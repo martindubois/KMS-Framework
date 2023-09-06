@@ -25,6 +25,9 @@ namespace KMS
 
             Master_Cfg(Master* aMaster);
 
+            // ===== DI::Container ==========================================
+            virtual void Validate() const;
+
         private:
 
             NO_COPY(Master_Cfg);
