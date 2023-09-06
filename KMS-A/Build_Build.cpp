@@ -12,13 +12,9 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Build/Make.h>
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 #include <KMS/Text/File_ASCII.h>
 #include <KMS/Version.h>
 
@@ -127,45 +123,26 @@ namespace KMS
 
         int Build::Main(int aCount, const char ** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-            assert(nullptr != aVector[0]);
-
-            int lResult = __LINE__;
-
-            auto lET = new Dbg::Stats_Timer("ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Build             lB;
-                Cfg::Configurator lC;
-                Installer         lInstaller;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+                Build lB;
 
-                lC.SetSilence(SILENCE);
+                lConfigurator.SetSilence(SILENCE);
 
-                lC.AddConfigurable(&lB);
-                lC.AddConfigurable(&lInstaller);
+                lConfigurator.AddConfigurable(&lB);
 
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE, true);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 lResult = lB.Run();
             }
-            KMS_CATCH_RESULT(lResult)
+            KMS_MAIN_END;
 
-            lET->Stop();
-
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         Build::Build()

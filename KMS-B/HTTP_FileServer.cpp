@@ -14,16 +14,12 @@
 #include <WinSock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 
 #include <KMS/HTTP/FileServer.h>
 
@@ -100,42 +96,25 @@ namespace KMS
 
         int FileServer::Main(int aCount, const char** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-            assert(nullptr != aVector[0]);
-
-            int lResult = __LINE__;
-
             Net::Thread_Startup();
 
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Cfg::Configurator lC;
-                HTTP::FileServer  lFS;
-                Installer         lInstaller;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
-                HTTP::Server      lS;
+                HTTP::FileServer lFS;
+                HTTP::Server     lS;
 
                 lS.mOnRequest = &lFS.ON_REQUEST;
 
-                lC.AddConfigurable(&lFS);
-                lC.AddConfigurable(&lS.mSocket);
+                lConfigurator.AddConfigurable(&lFS);
+                lConfigurator.AddConfigurable(&lS.mSocket);
 
-                lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::HOME      , CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 lS.mThread.Start();
 
@@ -149,13 +128,11 @@ namespace KMS
 
                 lResult = 0;
             }
-            KMS_CATCH_RESULT(lResult);
-
-            lET->Stop();
+            KMS_MAIN_END;
 
             Net::Thread_Cleanup();
 
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         FileServer::FileServer()

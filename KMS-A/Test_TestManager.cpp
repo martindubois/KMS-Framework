@@ -11,13 +11,10 @@
 #include <iostream>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/DI/String.h>
 #include <KMS/Console/Color.h>
+#include <KMS/Main.h>
 
 #include <KMS/Test/TestManager.h>
 
@@ -40,35 +37,23 @@ namespace KMS
             assert(1 <= aCount);
             assert(nullptr != aVector);
 
-            int lResult = __LINE__;
-
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Cfg::Configurator lC;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
-                TestManager       lTM;
+                TestManager lTM;
 
-                lC.AddConfigurable(&lTM);
+                lConfigurator.AddConfigurable(&lTM);
 
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.ParseArguments(aCount - 1, aVector + 1);
-
-                lC.Validate();
+                KMS_MAIN_VALIDATE;
 
                 lResult = lTM.Run();
 
                 std::cerr << lTM;
             }
-            KMS_CATCH_RESULT(lResult);
+            KMS_MAIN_END;
 
-            lET->Stop();
-
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         TestManager::TestManager() : mErrorCount(0)

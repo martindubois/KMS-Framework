@@ -8,12 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
@@ -69,45 +65,26 @@ namespace KMS
 
         int Import::Main(int aCount, const char** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-            assert(nullptr != aVector[0]);
-
-            int lResult = __LINE__;
-
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Cfg::Configurator lC;
-                Build::Import     lI;
-                Installer         lInstaller;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+                Build::Import lI;
 
-                lC.SetSilence(SILENCE);
+                lConfigurator.SetSilence(SILENCE);
 
-                lC.AddConfigurable(&lI);
-                lC.AddConfigurable(&lInstaller);
+                lConfigurator.AddConfigurable(&lI);
 
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 lResult = lI.Run();
             }
-            KMS_CATCH_RESULT(lResult);
+            KMS_MAIN_END;
 
-            lET->Stop();
-
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         Import::Import() : mImport("Import")

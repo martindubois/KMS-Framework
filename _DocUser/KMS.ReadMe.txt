@@ -7,6 +7,8 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+* KMS/Main.h
+
 1.0.5 Windows 2023-09-06
 
 1.0.2 Linux 2023-08-22

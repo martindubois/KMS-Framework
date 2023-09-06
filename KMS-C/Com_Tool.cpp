@@ -8,13 +8,9 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Console/Color.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 
 #include <KMS/Com/Tool.h>
 
@@ -56,43 +52,25 @@ namespace KMS
 
         int Tool::Main(int aCount, const char** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-
-            int lResult = __LINE__;
-
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Cfg::Configurator lC;
-                Com::Tool         lT;
-                Installer         lInstaller;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
+                Com::Tool lT;
 
-                lC.AddConfigurable(&lT);
+                lConfigurator.AddConfigurable(&lT);
 
-                lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::HOME      , CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 lResult = lT.Run();
             }
-            KMS_CATCH_RESULT(lResult)
+            KMS_MAIN_END;
 
-            lET->Stop();
-
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         Tool::Tool() : mDataFile(nullptr, "")

@@ -11,15 +11,11 @@
 #include <signal.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Com/Port.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Convert.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 #include <KMS/Modbus/Slave_Cfg.h>
 #include <KMS/Modbus/Slave_IDevice.h>
 
@@ -74,46 +70,29 @@ namespace KMS
 
         int Simulator::Main(int aCount, const char** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-
-            int lResult = __LINE__;
-
             _crt_signal_t lHandler = nullptr;
 
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
-                Cfg::Configurator lC;
-                Installer         lInstaller;
-                Dbg::Log_Cfg      lLogCfg(&Dbg::gLog);
-                Com::Port         lPort;
-                Slave_IDevice     lSl(&lPort);
-                Simulator         lSi;
+                Com::Port     lPort;
+                Slave_IDevice lSl(&lPort);
+                Simulator     lSi;
 
                 Modbus::Slave_Cfg lCfg(&lSl);
 
                 lSi.InitSlave(&lSl);
 
-                lC.AddConfigurable(&lCfg);
-                lC.AddConfigurable(&lPort);
-                lC.AddConfigurable(&lSi);
+                lConfigurator.AddConfigurable(&lCfg);
+                lConfigurator.AddConfigurable(&lPort);
+                lConfigurator.AddConfigurable(&lSi);
 
-                lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::HOME      , CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - 1, aVector + 1);
+                KMS_MAIN_PARSE_ARGS(aCount, aVector);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 sSimulator = &lSi;
 
@@ -122,17 +101,14 @@ namespace KMS
                 std::cout << "Press Ctrl-C to stop" << std::endl;
 
                 lResult = lSi.Run();
-
             }
-            KMS_CATCH_RESULT(lResult)
-
-            lET->Stop();
+            KMS_MAIN_END;
 
             signal(SIGINT, lHandler);
 
             sSimulator = nullptr;
 
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         Simulator::Simulator()

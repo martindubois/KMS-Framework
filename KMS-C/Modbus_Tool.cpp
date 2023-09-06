@@ -11,16 +11,12 @@
 #include <winsock2.h>
 
 // ===== Includes ===========================================================
-#include <KMS/Cfg/Configurator.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Com/Port.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
-#include <KMS/Dbg/Log_Cfg.h>
-#include <KMS/Dbg/Stats.h>
-#include <KMS/Dbg/Stats_Timer.h>
-#include <KMS/Installer.h>
+#include <KMS/Main.h>
 #include <KMS/Modbus/Master_CFG.h>
 #include <KMS/Modbus/Master_IDevice.h>
 #include <KMS/Modbus/Master_TCP.h>
@@ -58,22 +54,11 @@ namespace KMS
 
         int Tool::Main(int aCount, const char** aVector)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-
-            int lResult = __LINE__;
-
             Net::Thread_Startup();
 
-            auto lET = new Dbg::Stats_Timer("Main_ExecutionTime");
-            lET->Start();
-
-            try
+            KMS_MAIN_BEGIN;
             {
                 unsigned int           lArgStart = 1;
-                Cfg::Configurator      lC;
-                Installer              lInstaller;
-                Dbg::Log_Cfg           lLogCfg(&Dbg::gLog);
                 Com::Port              lPort;
 
                 Modbus::Master_IDevice lMC(&lPort);
@@ -89,54 +74,47 @@ namespace KMS
                     if      (0 == strcmp("COM", aVector[1]))
                     {
                         lArgStart = 2;
-                        lC.AddConfigurable(&lPort);
+                        lConfigurator.AddConfigurable(&lPort);
                     }
                     else if (0 == strcmp("TCP", aVector[1]))
                     {
                         lM        = &lMT;
                         lArgStart = 2;
 
-                        lC.AddConfigurable(lMT.GetSocket());
+                        lConfigurator.AddConfigurable(lMT.GetSocket());
                     }
                     else
                     {
-                        lC.AddConfigurable(&lPort);
+                        lConfigurator.AddConfigurable(&lPort);
                     }
                 }
                 else
                 {
-                    lC.AddConfigurable(&lPort);
+                    lConfigurator.AddConfigurable(&lPort);
                 }
 
                 Modbus::Master_Cfg lCfg(lM);
 
-                lC.AddConfigurable(&lCfg);
-                lC.AddConfigurable(&lT);
-
-                lC.AddConfigurable(&lInstaller);
-                lC.AddConfigurable(&lLogCfg);
-                lC.AddConfigurable(&Dbg::gStats);
+                lConfigurator.AddConfigurable(&lCfg);
+                lConfigurator.AddConfigurable(&lT);
 
                 lT.InitMaster(lM);
 
-                lC.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
-                lC.ParseFile(File::Folder::HOME      , CONFIG_FILE);
-                lC.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
-                lC.ParseArguments(aCount - lArgStart, aVector + lArgStart);
+                lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::HOME      , CONFIG_FILE);
+                lConfigurator.ParseFile(File::Folder::CURRENT   , CONFIG_FILE);
+                
+                lConfigurator.ParseArguments(aCount - lArgStart, aVector + lArgStart);
 
-                lC.Validate();
-
-                lInstaller.Run();
+                KMS_MAIN_VALIDATE;
 
                 lResult = lT.Run();
             }
-            KMS_CATCH_RESULT(lResult)
-
-            lET->Stop();
+            KMS_MAIN_END;
 
             Net::Thread_Cleanup();
 
-            return lResult;
+            KMS_MAIN_RETURN;
         }
 
         Tool::Tool() : mMaster(nullptr)
