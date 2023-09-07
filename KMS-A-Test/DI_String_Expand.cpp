@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(DI_String_Expand_Base, "DI_String_Expand_Base", "Auto", sTest_Base)
+KMS_TEST(DI_String_Expand_Base, "Auto", sTest_Base)
 {
     // Constructor
     std::string       lI0;
@@ -41,7 +41,7 @@ KMS_TEST(DI_String_Expand_Base, "DI_String_Expand_Base", "Auto", sTest_Base)
     const std::string& lI1 = lS0.GetString();
 }
 
-KMS_TEST(DI_String_Expand_Exception, "DI_String_Expand_Exception", "Auto", sText_Exception)
+KMS_TEST(DI_String_Expand_Exception, "Auto", sText_Exception)
 {
     char lBuffer[8];
 

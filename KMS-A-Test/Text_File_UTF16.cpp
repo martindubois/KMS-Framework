@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
+KMS_TEST(Text_File_UTF16_Base, "Auto", sTest_Base)
 {
     Text::File_UTF16 lF0;
 
@@ -76,7 +76,7 @@ KMS_TEST(Text_File_UTF16_Base, "Text_File_UTF16_Base", "Auto", sTest_Base)
     File::Folder::CURRENT.Delete("Test_Text_File_UTF16_Base_1.txt");
 }
 
-KMS_TEST(Text_File_UTF16_Exception, "Text_File_UTF16_Exception", "Auto", sTest_Exception)
+KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
 {
     Text::File_UTF16 lF0;
 

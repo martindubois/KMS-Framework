@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(HTTP_Server_Base, "HTTP_Server_Base", "Auto", sTest_Base)
+KMS_TEST(HTTP_Server_Base, "Auto", sTest_Base)
 {
     HTTP::Server lS;
 }

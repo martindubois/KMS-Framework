@@ -15,7 +15,7 @@ using namespace KMS;
 // We could use Dbg::Log::SetHideCount to hide error message on console, but
 // doing that would not thest the code displaying error on the console.
 
-KMS_TEST(Dbg_Log_Base, "Dbg_Log_Base", "Auto", sTest_Base)
+KMS_TEST(Dbg_Log_Base, "Auto", sTest_Base)
 {
     // Constructor
     Dbg::Log  lL;

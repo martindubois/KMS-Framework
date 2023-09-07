@@ -13,7 +13,7 @@
 
 using namespace KMS;
 
-KMS_TEST(File_Binary_Base, "File_Binary_Base", "Auto", sTest_Base)
+KMS_TEST(File_Binary_Base, "Auto", sTest_Base)
 {
     {
         uint8_t lBuffer[1];
@@ -41,7 +41,7 @@ KMS_TEST(File_Binary_Base, "File_Binary_Base", "Auto", sTest_Base)
     File::Folder::CURRENT.Delete("Test_File_Binary_Base_2");
 }
 
-KMS_TEST(File_Binary_Exception, "File_Binary_Exception", "Auto", sTest_Exception)
+KMS_TEST(File_Binary_Exception, "Auto", sTest_Exception)
 {
     // Constructor
     try

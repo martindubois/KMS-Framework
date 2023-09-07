@@ -13,7 +13,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Thread_Lock_Base, "Thread_Lock_Base", "Auto", sTest_Base)
+KMS_TEST(Thread_Lock_Base, "Auto", sTest_Base)
 {
     Thread::Gate lG;
     Thread::Lock lL(&lG);

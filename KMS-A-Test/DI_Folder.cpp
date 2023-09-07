@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(DI_Folder_Base, "DI_Folder_Base", "Auto", sTest_Base)
+KMS_TEST(DI_Folder_Base, "Auto", sTest_Base)
 {
     // Create
     auto lF0 = DI::Folder::Create();

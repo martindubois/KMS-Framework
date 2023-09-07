@@ -14,7 +14,7 @@
 
 using namespace KMS;
 
-KMS_TEST(DI_Functions_Base, "DI_Functions_Base", "Auto", sTest_Base)
+KMS_TEST(DI_Functions_Base, "Auto", sTest_Base)
 {
     DI::Array      lA0;
     DI::Boolean    lB0;
@@ -32,7 +32,7 @@ KMS_TEST(DI_Functions_Base, "DI_Functions_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(DI::Execute_Operation(&lD0, "String="));
 }
 
-KMS_TEST(DI_Functions_Exception, "DI_Functions_Exception", "Auto", sTest_Exception)
+KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
 {
     DI::Array      lA0;
     DI::Boolean    lB0;

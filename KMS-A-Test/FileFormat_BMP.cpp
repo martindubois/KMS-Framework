@@ -20,7 +20,7 @@ using namespace KMS;
 #define SIZE_X (64U)
 #define SIZE_Y (32U)
 
-KMS_TEST(FileFormat_BMP_Main, "FileFormat_BMP_Base", "Auto", sTest_Base)
+KMS_TEST(FileFormat_BMP_Main, "Auto", sTest_Base)
 {
     // Constructeur
     FileFormat::BMP lBMP0(File::Folder::CURRENT, "KMS-A-Test/Tests/Test_FileFormat_BMP_Base_0.bmp");

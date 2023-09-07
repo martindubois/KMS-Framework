@@ -21,7 +21,7 @@ public:
     unsigned int Receive(void* aSender, unsigned int aCode, void* aData);
 };
 
-KMS_TEST(Msg_Destination_Base, "Msg_Destination_Base", "Auto", sTest_Base)
+KMS_TEST(Msg_Destination_Base, "Auto", sTest_Base)
 {
     TestReceiver lR;
     Msg::Destination lD;
@@ -45,7 +45,7 @@ KMS_TEST(Msg_Destination_Base, "Msg_Destination_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(!lD.IsSet());
 }
 
-KMS_TEST(Msg_Destination_Exception, "Msg_Destination_Exception", "Auto", sTest_Exception)
+KMS_TEST(Msg_Destination_Exception, "Auto", sTest_Exception)
 {
     TestReceiver lR;
     Msg::Destination lD(&lR, 3);

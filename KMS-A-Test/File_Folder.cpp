@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(File_Folder_Base, "File_Folder_Base", "Auto", sTest_Base)
+KMS_TEST(File_Folder_Base, "Auto", sTest_Base)
 {
     // ChangeCurrentDirectory
     File::Folder::ChangeCurrentDirectory("KMS-A-Test");
@@ -59,7 +59,7 @@ KMS_TEST(File_Folder_Base, "File_Folder_Base", "Auto", sTest_Base)
     File::Folder::CURRENT.Delete(".gitignore.000.bak.000.bak");
 }
 
-KMS_TEST(File_Folder_Exception, "File_Folder_Exception", "Auto", sTest_Exception)
+KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
 {
     // ChangeCurrentDirectory
     try

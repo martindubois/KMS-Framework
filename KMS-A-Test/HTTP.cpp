@@ -14,7 +14,7 @@
 
 using namespace KMS;
 
-KMS_TEST(HTTP_Base, "HTTP_Base", "Auto", sTest_Base)
+KMS_TEST(HTTP_Base, "Auto", sTest_Base)
 {
     char           lBuffer[1024];
     DI::Dictionary lD0;

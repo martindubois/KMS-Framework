@@ -17,7 +17,7 @@ using namespace KMS;
 // ===== Local ==============================================================
 #include "../Common/Version.h"
 
-KMS_TEST(WOP_System_Base, "WOP_System_Base", "Auto", sTest_Base)
+KMS_TEST(WOP_System_Base, "Auto", sTest_Base)
 {
     static const uint8_t FRAME_E[] = { 0x00, 0xff, 0x00, 0x01, 0x02, 0x94, 0x46 }; // Bad CRC
 

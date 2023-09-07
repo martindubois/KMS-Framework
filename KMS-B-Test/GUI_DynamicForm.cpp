@@ -50,7 +50,7 @@ private:
 
 };
 
-KMS_TEST(GUI_DynamicForm_Interactive, "GUI_DynamicForm_Interactive", "Interactive", sTest_Interactive)
+KMS_TEST(GUI_DynamicForm_Interactive, "Interactive", sTest_Interactive)
 {
     Proc::Browser    lB;
     HTTP::ReactApp   lRA;

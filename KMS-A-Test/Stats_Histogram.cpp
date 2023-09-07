@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Stats_Histogram_Base, "Stats_Histogram_Base", "Auto", sTest_Base)
+KMS_TEST(Stats_Histogram_Base, "Auto", sTest_Base)
 {
     Console::Console lConsole;
     lConsole.Set_Null();

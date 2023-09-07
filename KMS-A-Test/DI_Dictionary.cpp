@@ -13,7 +13,7 @@
 
 using namespace KMS;
 
-KMS_TEST(DI_Dictionary_Base, "DI_Dictionary_Base", "Auto", sTest_Base)
+KMS_TEST(DI_Dictionary_Base, "Auto", sTest_Base)
 {
     DI::Dictionary lD0;
     DI::String     lS0;
@@ -51,7 +51,7 @@ KMS_TEST(DI_Dictionary_Base, "DI_Dictionary_Base", "Auto", sTest_Base)
     // FindObject_RW
 }
 
-KMS_TEST(DI_Dictionary_Exception, "DI_Dictionary_Exception", "Auto", sTest_Exception)
+KMS_TEST(DI_Dictionary_Exception, "Auto", sTest_Exception)
 {
     DI::Dictionary lD0;
 

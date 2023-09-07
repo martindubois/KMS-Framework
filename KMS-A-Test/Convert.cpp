@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
+KMS_TEST(Convert_Base, "Auto", sTest_Base)
 {
     uint8_t lArray[16];
     char    lASCII[LINE_LENGTH];
@@ -81,7 +81,7 @@ KMS_TEST(Convert_Base, "Convert_Base", "Auto", sTest_Base)
     KMS_TEST_COMPARE(lArray[0], 0x05);
 }
 
-KMS_TEST(Convert_Fail, "Convert_Fail", "Auto", sTest_Fail)
+KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
 {
     uint8_t lArray[4];
     char    lASCII[4];

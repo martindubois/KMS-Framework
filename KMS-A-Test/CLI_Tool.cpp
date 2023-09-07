@@ -19,7 +19,7 @@ class Test_Tool : public CLI::Tool
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-KMS_TEST(CLI_Tool_Base, "CLI_Tool_Base", "Auto", sTest_Base)
+KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
 {
     // Constructor
     Test_Tool lT;
@@ -50,7 +50,7 @@ KMS_TEST(CLI_Tool_Base, "CLI_Tool_Base", "Auto", sTest_Base)
     lT.Run();
 }
 
-KMS_TEST(CLI_Tool_Exception, "CLI_Tool_Exception", "Auto", sTest_Exception)
+KMS_TEST(CLI_Tool_Exception, "Auto", sTest_Exception)
 {
     Test_Tool lT;
 

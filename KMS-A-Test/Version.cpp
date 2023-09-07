@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Version_Base, "Version_Base", "Auto", sTest_Base)
+KMS_TEST(Version_Base, "Auto", sTest_Base)
 {
     Version lV0("0.0");
     Version lV1("0.0-Test");
@@ -43,7 +43,7 @@ KMS_TEST(Version_Base, "Version_Base", "Auto", sTest_Base)
     KMS_TEST_COMPARE(strcmp("0.0.0.0", lString), 0);
 }
 
-KMS_TEST(Version_Fail, "Version_Fail", "Auto", sTest_Fail)
+KMS_TEST(Version_Fail, "Auto", sTest_Fail)
 {
     try
     {

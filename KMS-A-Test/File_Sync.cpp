@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
+KMS_TEST(File_Sync_Main, "Auto", sTest_Main)
 {
     static const char* VECTOR_A[] =
     {
@@ -47,7 +47,7 @@ KMS_TEST(File_Sync_Main, "File_Sync_Main", "Auto", sTest_Main)
     File::Folder::CURRENT.Delete("Test_File_Sync_Main_1.txt");
 }
 
-KMS_TEST(File_Sync_Main_Fail, "File_Sync_Main_Fail", "Auto", sTest_Fail)
+KMS_TEST(File_Sync_Main_Fail, "Auto", sTest_Fail)
 {
     static const char* VECTOR_A[] =
     {

@@ -47,7 +47,7 @@ private:
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-KMS_TEST(HTTP_ReactApp_Base, "HTTP_ReactApp_Base", "Auto", sTest_Base)
+KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 {
     Proc::Browser lB;
     HTTP::ReactApp lRA;

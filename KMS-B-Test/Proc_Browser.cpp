@@ -15,7 +15,7 @@ using namespace KMS;
 // Static variable
 // //////////////////////////////////////////////////////////////////////////
 
-KMS_TEST(Proc_Browser_Base, "Proc_Browser_Base", "Auto", sTest_Base)
+KMS_TEST(Proc_Browser_Base, "Auto", sTest_Base)
 {
     Proc::Browser lB;
 
@@ -37,7 +37,7 @@ KMS_TEST(Proc_Browser_Base, "Proc_Browser_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT(lB.IsOpen());
 }
 
-KMS_TEST(Proc_Browser_Chrome, "Proc_Browser_Chrome", "Chrome", sTest_Chrome)
+KMS_TEST(Proc_Browser_Chrome, "Chrome", sTest_Chrome)
 {
     Proc::Browser lB;
 
@@ -57,7 +57,7 @@ KMS_TEST(Proc_Browser_Chrome, "Proc_Browser_Chrome", "Chrome", sTest_Chrome)
     lB.Close();
 }
 
-KMS_TEST(Proc_Browser_Config, "Proc_Browser_Config", "Auto", sTest_Config)
+KMS_TEST(Proc_Browser_Config, "Auto", sTest_Config)
 {
     Proc::Browser lB;
 
@@ -67,7 +67,7 @@ KMS_TEST(Proc_Browser_Config, "Proc_Browser_Config", "Auto", sTest_Config)
     lB.mPrefered.Set("NONE");
 }
 
-KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
+KMS_TEST(Proc_Browser_Fail, "Auto", sTest_Fail)
 {
     Proc::Browser lB;
 
@@ -80,7 +80,7 @@ KMS_TEST(Proc_Browser_Fail, "Proc_Browser_Fail", "Auto", sTest_Fail)
     KMS_TEST_CATCH(RESULT_INVALID_NAME);
 }
 
-KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sTest_Interactive)
+KMS_TEST(Proc_Browser_Interactive, "Interactive", sTest_Interactive)
 {
     Proc::Browser lB;
 
@@ -94,7 +94,7 @@ KMS_TEST(Proc_Browser_Interactive, "Proc_Browser_Interactive", "Interactive", sT
 
 #ifdef _KMS_WINDOWS_
 
-    KMS_TEST(Proc_Browser_Window, "Proc_Browser_Windows", "Auto", sTest_Windows)
+    KMS_TEST(Proc_Browser_Window, "Auto", sTest_Windows)
     {
         Proc::Browser lB;
 

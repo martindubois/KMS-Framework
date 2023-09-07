@@ -80,7 +80,7 @@ namespace KMS
 
 std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
 
-#define KMS_TEST(C,N,G,V)            \
+#define KMS_TEST(C,G,V)              \
     class C : public KMS::Test::Test \
     {                                \
     public:                          \
@@ -88,7 +88,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
         virtual void Run();          \
     };                               \
     static C V;                      \
-    C::C() : Test(N, G) {};          \
+    C::C() : Test(#C, G) {};         \
     void C::Run()
 
 #define KMS_TEST_ASSERT(C)        Assert(C, __FILE__, __LINE__)

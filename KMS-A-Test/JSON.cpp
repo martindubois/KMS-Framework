@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(JSON_Base, "JSON_Base", "Auto", sTest_Base)
+KMS_TEST(JSON_Base, "Auto", sTest_Base)
 {
     char        lBuffer[1024];
     const char* lIn;
@@ -100,7 +100,7 @@ KMS_TEST(JSON_Base, "JSON_Base", "Auto", sTest_Base)
     delete lO0;
 }
 
-KMS_TEST(JSON_Exception, "JSON_Exception", "Auto", sTest_Exception)
+KMS_TEST(JSON_Exception, "Auto", sTest_Exception)
 {
     DI::Object* lO0;
 

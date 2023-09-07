@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Text_File_ASCII_Base, "Text_File_ASCII_Base", "Auto", sTest_Base)
+KMS_TEST(Text_File_ASCII_Base, "Auto", sTest_Base)
 {
     Text::File_ASCII lF0;
 
@@ -67,7 +67,7 @@ KMS_TEST(Text_File_ASCII_Base, "Text_File_ASCII_Base", "Auto", sTest_Base)
     File::Folder::CURRENT.Delete("Test_Text_File_ASCII_Base_0.txt");
 }
 
-KMS_TEST(Text_File_ASCII_Exception, "Text_File_ASCII_Exception", "Auto", sTest_Exception)
+KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
 {
     Text::File_ASCII lF0;
 

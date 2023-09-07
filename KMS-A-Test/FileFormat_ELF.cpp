@@ -13,7 +13,7 @@
 
 using namespace KMS;
 
-KMS_TEST(FileFormat_ELF_Main, "FileFormat_ELF_Base", "Auto", sTest_Base)
+KMS_TEST(FileFormat_ELF_Main, "Auto", sTest_Base)
 {
     Console::Console lConsole;
 

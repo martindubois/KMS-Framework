@@ -51,7 +51,7 @@ enum class TestEnum
 
 static const char* TEST_ENUM_NAMES[] = { "0", "1" };
 
-KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
+KMS_TEST(DI_Value_Base, "Auto", sTest_Base)
 {
     // Create
     DI::Object* lObj;
@@ -251,7 +251,7 @@ KMS_TEST(DI_Value_Base, "DI_Value_Base", "Auto", sTest_Base)
     KMS_TEST_ASSERT( lUI0I == 0);
 }
 
-KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
+KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 {
     DI::Boolean                         lB0;
     DI::Enum<TestEnum, TEST_ENUM_NAMES> lE0(TestEnum::TEST_ENUM_0);
@@ -365,7 +365,7 @@ KMS_TEST(DI_Value_Exception, "DI_Value_Exception", "Auto", sTest_Exception)
 
 #ifdef _KMS_WINDOWS_
 
-    KMS_TEST(DI_Value_Windows, "DI_Value_Windows", "Auto", sTest_Windows)
+    KMS_TEST(DI_Value_Windows, "Auto", sTest_Windows)
     {
         // Create
         DI::Object* lObj;

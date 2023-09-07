@@ -17,7 +17,7 @@ using namespace KMS;
 
 static const char* SILENCED[] = { "Silenced", nullptr };
 
-KMS_TEST(Cfg_Configurator_Base, "Cfg_Configurator_Base", "Auto", sTest_Base)
+KMS_TEST(Cfg_Configurator_Base, "Auto", sTest_Base)
 {
     // Constructor
     Cfg::Configurator lC;

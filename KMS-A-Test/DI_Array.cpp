@@ -13,7 +13,7 @@
 
 using namespace KMS;
 
-KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
+KMS_TEST(DI_Array_Base, "Auto", sTest_Base)
 {
     DI::Array lA0;
 
@@ -56,7 +56,7 @@ KMS_TEST(DI_Array_Base, "DI_Array_Base", "Auto", sTest_Base)
     // Clear
 }
 
-KMS_TEST(DI_Array_Exception, "DI_Array_Exception", "Auto", sTest_Exception)
+KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
 {
     DI::Array lA0;
 

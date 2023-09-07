@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-KMS_TEST(Graph_Histogram_Base, "Graph_Histogram_Base", "Auto", sTest_Base)
+KMS_TEST(Graph_Histogram_Base, "Auto", sTest_Base)
 {
     // Constructor
     Graph::Histogram lH0(0.0, 1.0, 4);

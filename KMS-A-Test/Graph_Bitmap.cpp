@@ -18,7 +18,7 @@ using namespace KMS;
 #define SIZE_X_px (32U)
 #define SIZE_Y_px (64U)
 
-KMS_TEST(Graph_Bitmap_Base, "Graph_Bitmap_Base", "Auto", sTest_Base)
+KMS_TEST(Graph_Bitmap_Base, "Auto", sTest_Base)
 {
     uint8_t lData[SIZE_X_px * SIZE_Y_px * 3];
     FileFormat::BMP lBMP(File::Folder::CURRENT, "KMS-A-Test/Tests/Test_Graph_Bitmap_Base_0.bmp");
