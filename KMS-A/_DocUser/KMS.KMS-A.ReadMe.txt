@@ -7,6 +7,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+1.0.6 Windows 2023-09-07
 * DI::Container::Validate
 * Stats::Stats - operator <<
 - Graph::Bitmap::SetString

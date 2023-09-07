@@ -24,6 +24,8 @@ namespace KMS
 
             virtual ~Window();
 
+            void SetTitle(const char* aTitle);
+
             virtual void Show();
 
             // ===== Configurable attribute =================================

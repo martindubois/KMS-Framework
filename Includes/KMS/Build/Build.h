@@ -86,7 +86,6 @@ namespace KMS
             void Test();
             void Test(const char* aC);
             void Test(const char* aC, const char* aP);
-            void VerifyConfig();
 
             #ifdef _KMS_WINDOWS_
                 void Export_WindowsFile_MSI();
