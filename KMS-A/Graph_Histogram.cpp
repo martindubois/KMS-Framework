@@ -20,6 +20,9 @@ namespace KMS
         Histogram::Histogram(double aMin, double aMax, unsigned int aZoneQty)
             : KMS::Stats::Histogram(aMin, aMax, aZoneQty)
             , mDivY(1)
+            , mStepX_px(0)
+            , mX0_px(0)
+            , mX1_px(0)
         {}
 
         void Histogram::Prepare()
@@ -88,7 +91,15 @@ namespace KMS
 
         void Histogram::Clear()
         {
-            mBitmap.SetBox(Point::ORIGIN, mBitmap.GetUpperRight(), Color::BLACK);
+            auto lUR = mBitmap.GetUpperRight();
+
+            mBitmap.SetBox(Point::ORIGIN, lUR, Color::BLACK);
+
+            char lStr[16];
+
+            sprintf_s(lStr, "%8u", lUR.mY_px * mDivY);
+
+            mBitmap.SetString(lStr, Point(lUR.mX_px - 90, lUR.mY_px - 15), 0x808080);
         }
 
         void Histogram::Draw()
@@ -107,7 +118,7 @@ namespace KMS
                 auto lX0_px = mX0_px + mStepX_px * i;
                 auto lX1_px = mX1_px + mStepX_px * i;
 
-                mBitmap.SetLine(Point(lX0_px, 0), Point(lX1_px, lY_px), Color::WHITE);
+                mBitmap.SetBox(Point(lX0_px, 0), Point(lX1_px, lY_px), 0xf0f0f0);
             }
         }
 

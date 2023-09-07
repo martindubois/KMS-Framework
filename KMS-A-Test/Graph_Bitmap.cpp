@@ -52,6 +52,10 @@ KMS_TEST(Graph_Bitmap_Base, "Graph_Bitmap_Base", "Auto", sTest_Base)
     // SetBox
     lB0.SetBox(Graph::Point(2, 2), Graph::Point(SIZE_X_px / 2 - 3, SIZE_Y_px / 2 - 3), Graph::Color::WHITE);
 
+    // SetChar
+    lB0.SetChar( 31, Graph::Point(0, SIZE_Y_px - 1), Graph::Color::WHITE);
+    lB0.SetChar(128, Graph::Point(0, SIZE_Y_px - 1), Graph::Color::WHITE);
+
     // SetLine
     lB0.SetLine(Graph::Point( 4,  4), Graph::Point(SIZE_X_px - 3, SIZE_Y_px - 2), Graph::Color::RED, Graph::Bitmap::Operation::OP_XOR);
     lB0.SetLine(Graph::Point( 1, 48), Graph::Point(SIZE_X_px - 2,            48),          0x101010, Graph::Bitmap::Operation::OP_ADD);
@@ -68,6 +72,9 @@ KMS_TEST(Graph_Bitmap_Base, "Graph_Bitmap_Base", "Auto", sTest_Base)
     lB0.SetPixel(Graph::Point(0, 3), Graph::Color::GREEN, Graph::Bitmap::Operation::OP_OR);
     lB0.SetPixel(Graph::Point(0, 3),            0x804020, Graph::Bitmap::Operation::OP_SUB);
     lB0.SetPixel(Graph::Point(0, 4), Graph::Color::BLUE , Graph::Bitmap::Operation::OP_XOR);
+
+    // SetString
+    lB0.SetString("A\r\nB", Graph::Point(0, SIZE_Y_px - 1), Graph::Color::WHITE);
 
     // Scroll_Left
     lB0.Scroll_Left(1);

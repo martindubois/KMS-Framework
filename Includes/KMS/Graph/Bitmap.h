@@ -61,9 +61,13 @@ namespace KMS
             // aP1  Upper right corner
             void SetBox(Point aP0, Point aP1, Color aColor, Operation aOp = Operation::OP_COPY);
 
+            void SetChar(char aC, Point aPoint, Color aColor, Operation aOp = Operation::OP_COPY);
+
             void SetLine(Point aP0, Point aP1, Color aColor, Operation aOp = Operation::OP_COPY);
 
-            void SetPixel(Point aP, Color aColor, Operation aOp = Operation::OP_COPY );
+            void SetPixel(Point aP, Color aColor, Operation aOp = Operation::OP_COPY);
+
+            void SetString(const char* aStr, Point aPoint, Color aColor, Operation aOp = Operation::OP_COPY);
 
             void Scroll_Left (unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
             void Scroll_Right(unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
@@ -72,7 +76,7 @@ namespace KMS
 
             NO_COPY(Bitmap);
 
-            unsigned int ComputeOffset(Point aP) const;
+            unsigned int ComputeOffset(Point aPoint) const;
 
             uint8_t* mData;
 
