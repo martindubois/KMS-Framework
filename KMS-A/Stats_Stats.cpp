@@ -101,3 +101,15 @@ namespace KMS
 
     }
 }
+
+using namespace KMS;
+
+std::ostream& operator << (std::ostream& aOut, const Stats::Stats& aIn)
+{
+    aOut << "Data count      : " << aIn.GetDataCount() << "\n";
+    aOut << "Last data       : " << aIn.GetDataLast () << "\n";
+    aOut << "Min ; Avg ; Max : " << aIn.GetDataMin() << " ; " << aIn.GetDataAverage() << " ; " << aIn.GetDataMax() << "\n";
+    aOut << "Var. ; Std Dev. : " << aIn.GetDataVariance() << " ; " << aIn.GetDataStdDev() << std::endl;
+
+    return aOut;
+}

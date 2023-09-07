@@ -50,3 +50,5 @@ namespace KMS
 
     }
 }
+
+std::ostream& operator << (std::ostream&, const KMS::Stats::Stats& aIn);
