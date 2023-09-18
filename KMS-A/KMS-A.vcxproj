@@ -112,6 +112,7 @@
     <ClCompile Include="Proc_Process_W.cpp" />
     <ClCompile Include="RefCount.cpp" />
     <ClCompile Include="Result.cpp" />
+    <ClCompile Include="Saturated.cpp" />
     <ClCompile Include="ScaleAndOffset.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Stats_Stats.cpp" />

@@ -10,6 +10,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Saturated.h>
+
 #include <KMS/Graph/Bitmap.h>
 
 // Data type
@@ -350,28 +352,28 @@ namespace KMS
             case Operation::OP_ADD:
                 for (i = 0; i < PIXEL_SIZE_byte; i++)
                 {
-                    lData8[i] += lColor8[i];
+                    lData8[i] = Saturated::Add(lData8[i], lColor8[i]);
                 }
                 break;
 
             case Operation::OP_DIV:
                 for (i = 0; i < PIXEL_SIZE_byte; i++)
                 {
-                    lData8[i] /= lColor8[i];
+                    lData8[i] = Saturated::Div(lData8[i], lColor8[i]);
                 }
                 break;
 
             case Operation::OP_MULT:
                 for (i = 0; i < PIXEL_SIZE_byte; i++)
                 {
-                    lData8[i] *= lColor8[i];
+                    lData8[i] = Saturated::Mul(lData8[i], lColor8[i]);
                 }
                 break;
 
             case Operation::OP_SUB:
                 for (i = 0; i < PIXEL_SIZE_byte; i++)
                 {
-                    lData8[i] -= lColor8[i];
+                    lData8[i] = Saturated::Sub(lData8[i], lColor8[i]);
                 }
                 break;
 
