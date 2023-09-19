@@ -27,6 +27,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const Net::Address Socket_Client::REMOTE_ADDRESS_DEFAULT;
+
         Socket_Client::Socket_Client(Type aType) : Socket(aType)
         {
             AddEntry("RemoteAddress", &mRemoteAddress, false, &MD_REMOTE_ADDRESS);

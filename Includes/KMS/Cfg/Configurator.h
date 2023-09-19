@@ -31,6 +31,20 @@ namespace KMS
 
         public:
 
+            static const bool  DISPLAY_CONFIG_DEFAULT;
+            static const bool  HELP_DEFAULT;
+            static const char* SAVE_CONFIG_DEFAULT;
+
+        private:
+
+            DI::Array   mConfigFiles;
+            DI::Boolean mDisplayConfig;
+            DI::Boolean mHelp;
+            DI::Array   mOptionalConfigFiles;
+            DI::File    mSaveConfig;
+
+        public:
+
             Configurator();
 
             void AddConfigurable(DI::Dictionary* aC);
@@ -90,13 +104,6 @@ namespace KMS
             unsigned int mIgnoredCount;
 
             const char** mSilence;
-
-            // ===== Configurable attributes ================================
-            DI::Array   mConfigFiles;
-            DI::Boolean mDisplayConfig;
-            DI::Boolean mHelp;
-            DI::Array   mOptionalConfigFiles;
-            DI::File    mSaveConfig;
 
         };
 

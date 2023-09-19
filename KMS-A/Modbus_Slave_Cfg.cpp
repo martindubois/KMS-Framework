@@ -25,9 +25,9 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Slave_Cfg::Slave_Cfg(Slave* aSlave) : mDeviceAddress_Wrapper(&aSlave->mDeviceAddress)
+        Slave_Cfg::Slave_Cfg(Slave* aSlave) : mDeviceAddress(&aSlave->mDeviceAddress)
         {
-            AddEntry("DeviceAddress", &mDeviceAddress_Wrapper, false, &MD_DEVICE_ADDRESS);
+            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
         }
 
     }

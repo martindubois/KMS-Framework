@@ -29,6 +29,44 @@ namespace KMS
 
         public:
 
+            static const bool  DO_NOT_COMPILE_DEFAULT;
+            static const bool  DO_NOT_EXPORT_DEFAULT;
+            static const bool  DO_NOT_PACKAGE_DEFAULT;
+            static const bool  DO_NOT_TEST_DEFAULT;
+            static const char* EMBEDDED_DEFAULT;
+            static const char* EXPORT_FOLDER_DEFAULT;
+            static const bool  OS_INDEPENDENT_DEFAULT;
+            static const char* PRODUCT_DEFAULT;
+            static const char* VERSION_FILE_DEFAULT;
+
+            DI::Boolean mDoNotCompile;
+            DI::Boolean mDoNotExport;
+            DI::Boolean mDoNotPackage;
+            DI::Boolean mDoNotTest;
+            DI::String  mEmbedded;
+            DI::Folder  mExportFolder;
+            DI::Boolean mOSIndependent;
+            DI::String  mProduct;
+            DI::String  mVersionFile;
+
+        private:
+
+            DI::Array mBinaries;
+            DI::Array mConfigurations;
+            DI::Array mEditOperations;
+            DI::Array mFiles;
+            DI::Array mFolders;
+            DI::Array mLibraries;
+            DI::Array mPreBuildCmds;
+            DI::Array mProcessors;
+            DI::Array mTests;
+
+            #ifdef _KMS_WINDOWS_
+                DI::String mWindowsFile_MSI;
+            #endif
+
+        public:
+
             static int Main(int aCount, const char** aVector);
 
             Build();
@@ -49,17 +87,6 @@ namespace KMS
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
-
-            // ===== Configurable attributes ================================
-            DI::Boolean mDoNotCompile;
-            DI::Boolean mDoNotExport;
-            DI::Boolean mDoNotPackage;
-            DI::Boolean mDoNotTest;
-            DI::String  mEmbedded;
-            DI::Folder  mExportFolder;
-            DI::Boolean mOSIndependent;
-            DI::String  mProduct;
-            DI::String  mVersionFile;
 
         private:
 
@@ -98,21 +125,6 @@ namespace KMS
             File::Folder mTmp_Root;
             File::Folder mTmp_Binaries;
             File::Folder mTmp_Libraries;
-
-            // ===== Configurable attributes ================================
-            DI::Array    mBinaries;
-            DI::Array    mConfigurations;
-            DI::Array    mEditOperations;
-            DI::Array    mFiles;
-            DI::Array    mFolders;
-            DI::Array    mLibraries;
-            DI::Array    mPreBuildCmds;
-            DI::Array    mProcessors;
-            DI::Array    mTests;
-
-            #ifdef _KMS_WINDOWS_
-                DI::String mWindowsFile_MSI;
-            #endif
 
         };
 

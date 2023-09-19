@@ -16,14 +16,6 @@
 
 #include <KMS/Dbg/Log.h>
 
-// Configuration
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_CONSOLE_LEVEL (LogFile::Level::LEVEL_WARNING)
-#define DEFAULT_CONSOLE_MODE  (Log::ConsoleMode::MODE_USER)
-#define DEFAULT_FILE_LEVEL    (LogFile::Level::LEVEL_INFO)
-#define DEFAULT_FOLDER_NAME   ("KMS-Framework")
-
 namespace KMS
 {
     namespace Dbg
@@ -34,13 +26,24 @@ namespace KMS
 
         const char* Log::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
 
+        const LogFile::Level   Log::CONSOLE_LEVEL_DEFAULT = LogFile::Level::LEVEL_WARNING;
+        const Log::ConsoleMode Log::CONSOLE_MODE_DEFAULT  = Log::ConsoleMode::MODE_USER;
+        const LogFile::Level   Log::FILE_LEVEL_DEFAULT    = LogFile::Level::LEVEL_INFO;
+
+        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+            const char* Log::FOLDER_DEFAULT = "{$HOME}/KMS-Framework";
+        #endif
+        #ifdef _KMS_WINDOWS_
+            const char* Log::FOLDER_DEFAULT = "{$USERPROFILE}\\KMS-Framework";
+        #endif
+
         const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
 
         Log::Log()
-            : mConsoleLevel(DEFAULT_CONSOLE_LEVEL)
-            , mConsoleMode (DEFAULT_CONSOLE_MODE)
-            , mFileLevel   (DEFAULT_FILE_LEVEL)
-            , mFolder      (File::Folder(File::Folder::HOME, DEFAULT_FOLDER_NAME))
+            : mConsoleLevel(CONSOLE_LEVEL_DEFAULT)
+            , mConsoleMode (CONSOLE_MODE_DEFAULT)
+            , mFileLevel   (FILE_LEVEL_DEFAULT)
+            , mFolder      (File::Folder(File::Folder::HOME, "KMS-Framework"))
             , mCounter(0)
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())

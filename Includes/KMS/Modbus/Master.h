@@ -21,6 +21,12 @@ namespace KMS
 
         public:
 
+            static const uint8_t DEVICE_ADDRESS_DEFAULT;
+            static const uint8_t RETRY_COUNT_DEFAULT;
+
+            uint8_t mDeviceAddress;
+            uint8_t mRetryCount;
+
             void SetDeviceAddress(DeviceAddress aDA);
 
             Exception GetLastException() const;
@@ -42,10 +48,6 @@ namespace KMS
             bool WriteSingleCoil(Address aAddr, bool aValue);
 
             bool WriteSingleRegister(Address aAddr, RegisterValue aValue);
-
-            // ===== Configurable attributes - See Master_Cfg ===============
-            uint8_t mDeviceAddress;
-            uint8_t mRetryCount;
 
         protected:
 

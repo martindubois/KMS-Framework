@@ -24,6 +24,13 @@ namespace KMS
         class Tool : public CLI::Tool
         {
 
+        private:
+
+            DI::Dictionary mCoils;
+            DI::Dictionary mDiscreteInputs;
+            DI::Dictionary mHoldingRegisters;
+            DI::Dictionary mInputRegisters;
+
         public:
 
             static int Main(int aCount, const char** aVector);
@@ -70,12 +77,6 @@ namespace KMS
             NO_COPY(Tool);
 
             Master* mMaster;
-
-            // ===== Configurable attributes ====================================
-            DI::Dictionary mCoils;
-            DI::Dictionary mDiscreteInputs;
-            DI::Dictionary mHoldingRegisters;
-            DI::Dictionary mInputRegisters;
 
         };
 

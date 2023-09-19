@@ -23,6 +23,14 @@ namespace KMS
 
         public:
 
+            static const char* DATA_FILE_DEFAULT;
+
+        private:
+
+            DI::File mDataFile;
+
+        public:
+
             static const unsigned int FLAG_DISPLAY;
             static const unsigned int FLAG_DUMP;
             static const unsigned int FLAG_EXIT_ON_ERROR;
@@ -58,9 +66,6 @@ namespace KMS
             void ReceiveAndVerify_Hex(const char* aIn, unsigned int aFlags);
 
             void Send_Hex(const char* aIn, unsigned int aFlags);
-
-            // ===== Configurable attributes ================================
-            DI::File mDataFile;
 
         };
 

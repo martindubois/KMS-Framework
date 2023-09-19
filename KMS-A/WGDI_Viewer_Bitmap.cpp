@@ -16,9 +16,6 @@
 // Configurations
 // //////////////////////////////////////////////////////////////////////////
 
-#define ZOOM_MAX (8)
-#define ZOOM_MIN (1)
-
 static const KMS::Cfg::MetaData MD_FILE_NAME("FileName = {Path}");
 static const KMS::Cfg::MetaData MD_PERIOD_ms("Period_ms = {Period}");
 static const KMS::Cfg::MetaData MD_TITLE    ("Title = {Tilte}");
@@ -31,6 +28,8 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* Viewer_Bitmap::FILE_NAME_DEFAULT = "";
 
         int Viewer_Bitmap::Main(int aCount, const char** aVector)
         {
@@ -52,8 +51,8 @@ namespace KMS
         }
 
         Viewer_Bitmap::Viewer_Bitmap()
-            // ===== Configurable attribute =================================
-            : mPeriod_ms(&mWindow.mPeriod_ms)
+            : mFileName(FILE_NAME_DEFAULT)
+            , mPeriod_ms(&mWindow.mPeriod_ms)
             , mTitle    (&mWindow.mTitle)
             , mZoom     (&mWindow.mZoom)
         {
@@ -86,8 +85,8 @@ namespace KMS
 
             KMS_EXCEPTION_ASSERT(File::Folder::NONE.DoesFileExist(mFileName.Get()), RESULT_INVALID_CONFIG, "The bitmap file does not exist", mFileName.Get());
             KMS_EXCEPTION_ASSERT(!mTitle.GetString().empty(), RESULT_INVALID_CONFIG, "Empty window title", "");
-            KMS_EXCEPTION_ASSERT(ZOOM_MAX >= mZoom, RESULT_INVALID_CONFIG, "The zoom is not valid", mZoom);
-            KMS_EXCEPTION_ASSERT(ZOOM_MIN <= mZoom, RESULT_INVALID_CONFIG, "The zoom is not valid", mZoom);
+            KMS_EXCEPTION_ASSERT(Window_Bitmap::ZOOM_MAX >= mZoom, RESULT_INVALID_CONFIG, "The zoom is not valid", mZoom);
+            KMS_EXCEPTION_ASSERT(Window_Bitmap::ZOOM_MIN <= mZoom, RESULT_INVALID_CONFIG, "The zoom is not valid", mZoom);
         }
 
     }

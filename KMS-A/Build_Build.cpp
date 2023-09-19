@@ -28,13 +28,6 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
 #define CONFIG_FILE ("KMS-Build.cfg")
 
-#define DEFAULT_DO_NOT_COMPILE (false)
-#define DEFAULT_DO_NOT_EXPORT  (false)
-#define DEFAULT_DO_NOT_PACKAGE (false)
-#define DEFAULT_DO_NOT_TEST    (false)
-#define DEFAULT_OS_INDEPENDENT (false)
-#define DEFAULT_VERSION_FILE   ("Common" SLASH "Version.h")
-
 #define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
 
 // Constants
@@ -121,6 +114,22 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool  Build::DO_NOT_COMPILE_DEFAULT = false;
+        const bool  Build::DO_NOT_EXPORT_DEFAULT  = false;
+        const bool  Build::DO_NOT_PACKAGE_DEFAULT = false;
+        const bool  Build::DO_NOT_TEST_DEFAULT    = false;
+        const char* Build::EMBEDDED_DEFAULT       = "";
+        const bool  Build::OS_INDEPENDENT_DEFAULT = false;
+        const char* Build::PRODUCT_DEFAULT        = "";
+        const char* Build::VERSION_FILE_DEFAULT   = "Common" SLASH "Version.h";
+
+        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+            const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
+        #endif
+        #ifdef _KMS_WINDOWS_
+            const char* Build::EXPORT_FOLDER_DEFAULT = "K:\\Export";
+        #endif
+
         int Build::Main(int aCount, const char ** aVector)
         {
             KMS_MAIN_BEGIN;
@@ -146,18 +155,20 @@ namespace KMS
         }
 
         Build::Build()
-            : mDoNotCompile (DEFAULT_DO_NOT_COMPILE)
-            , mDoNotExport  (DEFAULT_DO_NOT_EXPORT)
-            , mDoNotPackage (DEFAULT_DO_NOT_PACKAGE)
-            , mDoNotTest    (DEFAULT_DO_NOT_TEST)
-            , mOSIndependent(DEFAULT_OS_INDEPENDENT)
-            , mVersionFile  (DEFAULT_VERSION_FILE)
+            : mDoNotCompile (DO_NOT_COMPILE_DEFAULT)
+            , mDoNotExport  (DO_NOT_EXPORT_DEFAULT)
+            , mDoNotPackage (DO_NOT_PACKAGE_DEFAULT)
+            , mDoNotTest    (DO_NOT_TEST_DEFAULT)
+            , mEmbedded     (EMBEDDED_DEFAULT)
+            , mOSIndependent(OS_INDEPENDENT_DEFAULT)
+            , mProduct      (PRODUCT_DEFAULT)
+            , mVersionFile  (VERSION_FILE_DEFAULT)
             , mTmp_Root(File::Folder::Id::TEMPORARY)
             #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
                 , mExportFolder(File::Folder(File::Folder::Id::HOME, "Export"))
             #endif
             #ifdef _KMS_WINDOWS_
-                , mExportFolder("K:\\Export")
+                , mExportFolder(EXPORT_FOLDER_DEFAULT)
             #endif
         {
             mBinaries      .SetCreator(DI::String::Create);

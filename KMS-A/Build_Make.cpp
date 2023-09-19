@@ -27,11 +27,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
 #define DEFAULT_CLEAN_EXCENTION "*.o"
 
-#define DEFAULT_CONFIGURATION "Debug"
-
 #define DEFAULT_INCLUDE "Includes"
-
-#define DEFAULT_MAKE "make"
 
 #define MAKE_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
 
@@ -88,6 +84,12 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Make::COMPONENT_DEFAULT      = "";
+        const char* Make::COMPONENT_TYPE_DEFAULT = "NONE";
+        const char* Make::CONFIGURATION_DEFAULT  = "Debug";
+        const char* Make::MAKE_DEFAULT           = "make";
+        const char* Make::PROCESSOR_DEFAULT      = "";
+
         const char* Make::SILENCE[]
         {
             NAME_OS "Processors",
@@ -137,10 +139,12 @@ namespace KMS
         }
 
         Make::Make()
-            : mComponentType(ComponentType::NONE)
-            , mConfiguration(DEFAULT_CONFIGURATION)
+            : mComponent    (COMPONENT_DEFAULT)
+            , mComponentType(ComponentType::NONE)
+            , mConfiguration(CONFIGURATION_DEFAULT)
+            , mMake         (MAKE_DEFAULT)
+            , mProcessor    (PROCESSOR_DEFAULT)
             , mF_Product(File::Folder::Id::CURRENT)
-            , mMake(DEFAULT_MAKE)
         {
             mCleanExtensions.SetCreator(DI::String::Create);
             mIncludes       .SetCreator(DI::String_Expand::Create);

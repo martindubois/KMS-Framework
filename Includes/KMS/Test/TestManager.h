@@ -21,6 +21,11 @@ namespace KMS
         class TestManager : public DI::Dictionary
         {
 
+        private:
+
+            DI::Array mGroups;
+            DI::Array mTests;
+
         public:
 
             static int Main(int aCount, const char** aVector);
@@ -53,10 +58,6 @@ namespace KMS
             unsigned int mErrorCount;
 
             Test::TestList mTestList;
-
-            // ===== Configurable attributes ================================
-            DI::Array mGroups;
-            DI::Array mTests;
 
         };
 

@@ -22,6 +22,12 @@ namespace KMS
         class Import : public DI::Dictionary
         {
 
+        private:
+
+            DI::Array mDependencies;
+            DI::Array mOSIndependentDeps;
+            DI::Array mRepositories;
+
         public:
 
             static int Main(int aCount, const char** aVector);
@@ -53,11 +59,6 @@ namespace KMS
             NO_COPY(Import);
 
             File::Folder mImport;
-
-            // ===== Configurable attributes ================================
-            DI::Array mDependencies;
-            DI::Array mOSIndependentDeps;
-            DI::Array mRepositories;
 
         };
 

@@ -25,13 +25,12 @@ namespace KMS
 
         public:
 
-            Log_Cfg(Log* aLog);
-
-            // ===== Configurable attributes ================================
             DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES   > mConsoleLevel;
             DI::Enum_Ptr<Log::ConsoleMode, Log::CONSOLE_MODE_NAMES> mConsoleMode;
             DI::Enum_Ptr<LogFile::Level  , LogFile::LEVEL_NAMES   > mFileLevel;
             DI::Folder_Ptr                                          mFolder;
+
+            Log_Cfg(Log* aLog);
 
         private:
 

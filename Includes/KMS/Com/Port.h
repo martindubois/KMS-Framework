@@ -40,6 +40,24 @@ namespace KMS
 
             static const char* PARITY_NAMES[];
 
+            static const bool     DTR_DEFAULT;
+            static const Parity   PARITY_DEFAULT;
+            static const uint32_t READ_TIMEOUT_DEFAULT_ms;
+            static const uint32_t READ_TIMEOUT_MAX_ms;
+            static const bool     RTS_DEFAULT;
+            static const uint32_t SPEED_DEFAULT_bps;
+            static const uint32_t SPEED_MAX_bps;
+            static const uint32_t SPEED_MIN_bps;
+            static const uint32_t WRITE_TIMEOUT_DEFAULT_ms;
+            static const uint32_t WRITE_TIMEOUT_MAX_ms;
+
+            DI::Boolean                    mDTR;
+            DI::Enum<Parity, PARITY_NAMES> mParity;
+            DI::UInt<uint32_t>             mReadTimeout_ms;
+            DI::Boolean                    mRTS;
+            DI::UInt<uint32_t>             mSpeed_bps;
+            DI::UInt<uint32_t>             mWriteTimeout_ms;
+
             Port();
 
             bool GetCTS() const;
@@ -66,14 +84,6 @@ namespace KMS
         // Internal
 
             void Display(std::ostream& aOut) const;
-
-            // ===== Configurable attributes ================================
-            DI::Boolean                    mDTR;
-            DI::Enum<Parity, PARITY_NAMES> mParity;
-            DI::UInt<uint32_t>             mReadTimeout_ms;
-            DI::Boolean                    mRTS;
-            DI::UInt<uint32_t>             mSpeed_bps;
-            DI::UInt<uint32_t>             mWriteTimeout_ms;
 
         protected:
 

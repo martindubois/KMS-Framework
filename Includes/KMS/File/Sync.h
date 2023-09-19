@@ -25,6 +25,17 @@ namespace KMS
 
         public:
 
+            static const bool VERBOSE_DEFAULT;
+
+            DI::Boolean mVerbose;
+
+        private:
+
+            DI::Dictionary mBidirectional;
+            DI::Array      mUnidirectional;
+
+        public:
+
             static int Main(int aCount, const char ** aVector);
 
             Sync();
@@ -37,9 +48,6 @@ namespace KMS
             // ===== DI::Object =============================================
             virtual ~Sync();
 
-            // ===== Configurable attributes ================================
-            DI::Boolean mVerbose;
-
         private:
 
             NO_COPY(Sync);
@@ -49,10 +57,6 @@ namespace KMS
 
             void Run_Bidirectional(const DI::Array& aGroup);
             void Run_Bidirectional(FileInfoList * aA, FileInfoList * aB);
-
-            // ===== Configurable attributes ================================
-            DI::Dictionary mBidirectional;
-            DI::Array      mUnidirectional;
 
         };
 

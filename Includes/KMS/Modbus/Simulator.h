@@ -27,6 +27,13 @@ namespace KMS
         class Simulator : public DI::Dictionary
         {
 
+        private:
+
+            DI::Array_Sparse mCoils;
+            DI::Array_Sparse mDiscreteInputs;
+            DI::Array_Sparse mHoldingRegisters;
+            DI::Array_Sparse mInputRegisters;
+
         public:
 
             static const unsigned int FLAG_VERBOSE_CHANGE;
@@ -95,12 +102,6 @@ namespace KMS
             unsigned int OnWriteSingleRegister (void* aSender, void* aData);
 
             Slave* mSlave;
-
-            // ===== Configurable attributes ================================
-            DI::Array_Sparse mCoils;
-            DI::Array_Sparse mDiscreteInputs;
-            DI::Array_Sparse mHoldingRegisters;
-            DI::Array_Sparse mInputRegisters;
 
         };
 

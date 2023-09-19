@@ -21,12 +21,11 @@ namespace KMS
 
         public:
 
+            DI::Array mAllowedRanges;
+
             Socket_Server(Type aType);
 
             Socket * Accept(unsigned int aTimeout_ms, Address* aFrom);
-
-            // ===== Configurable attributes ================================
-            DI::Array mAllowedRanges;
 
             // ===== Socket =================================================
             virtual ~Socket_Server();

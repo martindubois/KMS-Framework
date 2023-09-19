@@ -27,6 +27,24 @@ namespace KMS
 
         public:
 
+            static const char* COMPONENT_DEFAULT;
+            static const char* COMPONENT_TYPE_DEFAULT;
+            static const char* CONFIGURATION_DEFAULT;
+            static const char* MAKE_DEFAULT;
+            static const char* PROCESSOR_DEFAULT;
+
+            DI::Array         mCleanExtensions;
+            DI::String        mComponent;
+            DI::String        mConfiguration;
+            DI::Array         mIncludes;
+            DI::String_Expand mMake;
+            DI::String        mProcessor;
+
+            // ----- Build --------------------------------------------------
+            DI::Array mBinaries;
+            DI::Array mLibraries;
+            DI::Array mTests;
+
             static const char* SILENCE[];
 
             static int Main(int aCount, const char** aVector);
@@ -44,19 +62,6 @@ namespace KMS
             virtual void DisplayHelp(FILE* aFile);
             virtual void ExecuteCommand(const char* aC);
             virtual int  Run();
-
-            // ===== Configurable attributes ================================
-            DI::Array         mCleanExtensions;
-            DI::String        mComponent;
-            DI::String        mConfiguration;
-            DI::Array         mIncludes;
-            DI::String_Expand mMake;
-            DI::String        mProcessor;
-
-            // ----- Build --------------------------------------------------
-            DI::Array mBinaries;
-            DI::Array mLibraries;
-            DI::Array mTests;
 
         private:
 

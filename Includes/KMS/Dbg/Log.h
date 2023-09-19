@@ -39,6 +39,16 @@ namespace KMS
 
             static const char* CONSOLE_MODE_NAMES[];
 
+            static const LogFile::Level   CONSOLE_LEVEL_DEFAULT;
+            static const Log::ConsoleMode CONSOLE_MODE_DEFAULT;
+            static const LogFile::Level   FILE_LEVEL_DEFAULT;
+            static const char*            FOLDER_DEFAULT;
+
+            LogFile::Level mConsoleLevel;
+            ConsoleMode    mConsoleMode;
+            LogFile::Level mFileLevel;
+            File::Folder   mFolder;
+
             static const unsigned int FLAG_USER_REDUNDANT;
 
             Log();
@@ -60,12 +70,6 @@ namespace KMS
             void WriteException(const Exception& aException, unsigned int aFlags = 0);
 
             void WriteVersion(const char* aProduct, const Version& aVersion);
-
-            // ===== Configurable attributes ================================
-            LogFile::Level mConsoleLevel;
-            ConsoleMode    mConsoleMode;
-            LogFile::Level mFileLevel;
-            File::Folder   mFolder;
 
         // Internal
 

@@ -22,6 +22,10 @@ namespace KMS
         class Tool : public DI::Dictionary
         {
 
+        private:
+
+            DI::Array mCommands;
+
         public:
 
             void AddCommand(const char* aC);
@@ -59,9 +63,6 @@ namespace KMS
             void UntilCtrlC(const char* aC);
 
             unsigned int mExit;
-
-            // ===== Configurable attributes ================================
-            DI::Array mCommands;
 
         };
 

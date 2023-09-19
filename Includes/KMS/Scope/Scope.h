@@ -38,6 +38,23 @@ namespace KMS
                 QTY
             };
 
+            static const char* MODE_NAMES[];
+
+            static const uint32_t FREQUENCY_DEFAULT_Hz;
+            static const uint32_t FREQUENCY_MAX_Hz;
+            static const uint32_t FREQUENCY_MIN_Hz;
+            static const Mode     MODE_DEFAULT;
+            static const uint16_t POSITION_X_DEFAULT_px;
+            static const uint16_t POSITION_X_MAX_px;
+            static const uint32_t SCALE_X_DEFAULT_us_px;
+            static const uint32_t SCALE_X_MAX_us_px;
+            static const uint32_t SCALE_X_MIN_us_px;
+
+            uint32_t mFrequency_Hz;
+            Mode     mMode;
+            uint32_t mPositionX_px;
+            uint32_t mScaleX_us_px;
+
             // STOPPED <==+---------+
             //  |   |     |         |
             //  |   +--> WAITING    |
@@ -51,19 +68,6 @@ namespace KMS
 
                 QTY
             };
-
-            static const char* MODE_NAMES[];
-
-            // ===== Configurable attributes ================================
-            static const uint32_t FREQUENCY_DEFAULT_Hz;
-            static const uint32_t FREQUENCY_MAX_Hz;
-            static const uint32_t FREQUENCY_MIN_Hz;
-            static const Mode     MODE_DEFAULT;
-            static const uint16_t POSITION_X_DEFAULT_px;
-            static const uint16_t POSITION_X_MAX_px;
-            static const uint32_t SCALE_X_DEFAULT_us_px;
-            static const uint32_t SCALE_X_MAX_us_px;
-            static const uint32_t SCALE_X_MIN_us_px;
 
             const Callback<Scope> ON_ITERATE;
 
@@ -87,12 +91,6 @@ namespace KMS
 
             Callback_Ptr mOnFrame;
             Callback_Ptr mOnTrig;
-
-            // ===== Configurable attributes ================================
-            uint32_t mFrequency_Hz;
-            Mode     mMode;
-            uint32_t mPositionX_px;
-            uint32_t mScaleX_us_px;
 
         private:
 

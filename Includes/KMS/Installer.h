@@ -20,16 +20,15 @@ namespace KMS
 
     public:
 
+        static const bool ADD_TO_PATH_DEFAULT;
+
+        DI::Boolean mAddToPath;
+
         Installer();
 
         void AddToPath();
 
         void Run();
-
-    private:
-
-        // ===== Configurable attributes ====================================
-        DI::Boolean mAddToPath;
 
     };
 

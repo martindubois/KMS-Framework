@@ -21,6 +21,11 @@ namespace KMS
         class Master_Cfg : public DI::Dictionary
         {
 
+        private:
+
+            DI::UInt_Ptr<uint8_t> mDeviceAddress;
+            DI::UInt_Ptr<uint8_t> mRetryCount;
+
         public:
 
             Master_Cfg(Master* aMaster);
@@ -31,10 +36,6 @@ namespace KMS
         private:
 
             NO_COPY(Master_Cfg);
-
-            // ===== Configurable attributes ================================
-            DI::UInt_Ptr<uint8_t> mDeviceAddress;
-            DI::UInt_Ptr<uint8_t> mRetryCount;
 
         };
 

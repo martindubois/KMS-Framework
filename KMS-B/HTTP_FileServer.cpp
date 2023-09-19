@@ -28,8 +28,6 @@
 
 #define CONFIG_FILE ("KMS-FileServer.cfg")
 
-#define DEFAULT_ROOT (".")
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +55,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* FileServer::ROOT_DEFAULT    = ".";
+        const bool  FileServer::VERBOSE_DEFAULT = false;
 
         void FileServer::FileType_App_JS(Request* aRequest)
         {
@@ -136,8 +137,8 @@ namespace KMS
         }
 
         FileServer::FileServer()
-            : mRoot   (DEFAULT_ROOT)
-            , mVerbose(false)
+            : mRoot   (ROOT_DEFAULT)
+            , mVerbose(VERBOSE_DEFAULT)
             // ===== Callbacks ==============================================
             , ON_REQUEST(this, &FileServer::OnRequest)
         {

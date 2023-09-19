@@ -19,12 +19,6 @@
 KMS_RESULT_STATIC(RESULT_MODBUS_ERROR);
 KMS_RESULT_STATIC(RESULT_MODBUS_EXCEPTION);
 
-// Config
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_DEVICE_ADDRESS (BROADCAST)
-#define DEFAULT_RETRY_COUNT    (3)
-
 namespace KMS
 {
     namespace Modbus
@@ -32,6 +26,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const uint8_t Master::DEVICE_ADDRESS_DEFAULT = BROADCAST;
+        const uint8_t Master::RETRY_COUNT_DEFAULT    = 3;
 
         void Master::SetDeviceAddress(uint8_t aDA) { mDeviceAddress = aDA; }
 
@@ -245,8 +242,8 @@ namespace KMS
         const unsigned int Master::ERROR_SEND             = 0xfffffffa;
 
         Master::Master()
-            : mDeviceAddress(DEFAULT_DEVICE_ADDRESS)
-            , mRetryCount   (DEFAULT_RETRY_COUNT   )
+            : mDeviceAddress(DEVICE_ADDRESS_DEFAULT)
+            , mRetryCount   (RETRY_COUNT_DEFAULT)
             , mLastException(Exception::NO_EXCEPTION)
         {}
 

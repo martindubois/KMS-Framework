@@ -21,6 +21,10 @@ namespace KMS
         class Slave_Cfg : public DI::Dictionary
         {
 
+        private:
+
+            DI::UInt_Ptr<uint8_t> mDeviceAddress;
+
         public:
 
             Slave_Cfg(Slave* aSlave);
@@ -28,9 +32,6 @@ namespace KMS
         private:
 
             NO_COPY(Slave_Cfg);
-
-            // ===== Configurable attributes ================================
-            DI::UInt_Ptr<uint8_t> mDeviceAddress_Wrapper;
 
         };
 

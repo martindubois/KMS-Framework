@@ -12,16 +12,6 @@
 
 #include <KMS/Com/Port.h>
 
-// Configuration
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_DTR              (false)
-#define DEFAULT_PARITY           (Parity::NONE)
-#define DEFAULT_READ_TIMEOUT_ms  (1000)
-#define DEFAULT_RTS              (false)
-#define DEFAULT_SPEED_bps        (115200)
-#define DEFAULT_WRITE_TIMEOUT_ms (1000)
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -53,13 +43,24 @@ namespace KMS
             "SPACE",
         };
 
+        const bool         Port::DTR_DEFAULT              = false;
+        const Port::Parity Port::PARITY_DEFAULT           = Parity::NONE;
+        const uint32_t     Port::READ_TIMEOUT_DEFAULT_ms  =     1000;
+        const uint32_t     Port::READ_TIMEOUT_MAX_ms      =    90000;
+        const bool         Port::RTS_DEFAULT              =    false;
+        const uint32_t     Port::SPEED_DEFAULT_bps        =   115200;
+        const uint32_t     Port::SPEED_MAX_bps            = 10000000;
+        const uint32_t     Port::SPEED_MIN_bps            =       75;
+        const uint32_t     Port::WRITE_TIMEOUT_DEFAULT_ms =     1000;
+        const uint32_t     Port::WRITE_TIMEOUT_MAX_ms     =    90000;
+
         Port::Port()
-            : mDTR            (DEFAULT_DTR)
-            , mParity         (DEFAULT_PARITY)
-            , mRTS            (DEFAULT_RTS)
-            , mReadTimeout_ms (DEFAULT_READ_TIMEOUT_ms)
-            , mSpeed_bps      (DEFAULT_SPEED_bps)
-            , mWriteTimeout_ms(DEFAULT_WRITE_TIMEOUT_ms)
+            : mDTR            (DTR_DEFAULT)
+            , mParity         (PARITY_DEFAULT)
+            , mReadTimeout_ms (READ_TIMEOUT_DEFAULT_ms)
+            , mRTS            (RTS_DEFAULT)
+            , mSpeed_bps      (SPEED_DEFAULT_bps)
+            , mWriteTimeout_ms(WRITE_TIMEOUT_DEFAULT_ms)
             , mCTS(false)
             , mDSR(false)
         {

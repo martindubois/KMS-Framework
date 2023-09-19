@@ -36,7 +36,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Configurable attributes ====================================
         const uint32_t    Scope::FREQUENCY_DEFAULT_Hz  =      10;
         const uint32_t    Scope::FREQUENCY_MAX_Hz      =   10000;
         const uint32_t    Scope::FREQUENCY_MIN_Hz      =       1;

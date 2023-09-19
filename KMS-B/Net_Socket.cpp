@@ -17,16 +17,6 @@ KMS_RESULT_STATIC(RESULT_SOCKET_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
 
-// Configuration
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_KEEP_A_LIVE        (true)
-#define DEFAULT_LOCAL_ADDRESS      ("127.0.0.1")
-#define DEFAULT_NO_DELAY           (false)
-#define DEFAULT_RECEIVE_TIMEOUT_ms (1000)
-#define DEFAULT_REUSE_ADDR         (false)
-#define DEFAULT_SEND_TIMEOUT_ms    (1000)
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -62,13 +52,20 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool     Socket::KEEP_A_LIVE_DEFAULT        = true;
+        const char   * Socket::LOCAL_ADDRESS_DEFAULT      = "127.0.0.1";
+        const bool     Socket::NO_DELAY_DEFAULT           = false;
+        const uint32_t Socket::RECEIVE_TIMEOUT_DEFAULT_ms = 1000;
+        const bool     Socket::REUSE_ADDR_DEFAULT         = false;
+        const uint32_t Socket::SEND_TIMEOUT_DEFAULT_ms    = 1000;
+
         Socket::Socket(Type aType)
-            : mKeepALive        (DEFAULT_KEEP_A_LIVE)
-            , mLocalAddress     (DEFAULT_LOCAL_ADDRESS)
-            , mNoDelay          (DEFAULT_NO_DELAY)
-            , mReceiveTimeout_ms(DEFAULT_RECEIVE_TIMEOUT_ms)
-            , mReuseAddr        (DEFAULT_REUSE_ADDR)
-            , mSendTimeout_ms   (DEFAULT_SEND_TIMEOUT_ms)
+            : mKeepALive        (KEEP_A_LIVE_DEFAULT)
+            , mLocalAddress     (LOCAL_ADDRESS_DEFAULT)
+            , mNoDelay          (NO_DELAY_DEFAULT)
+            , mReceiveTimeout_ms(RECEIVE_TIMEOUT_DEFAULT_ms)
+            , mReuseAddr        (REUSE_ADDR_DEFAULT)
+            , mSendTimeout_ms   (SEND_TIMEOUT_DEFAULT_ms)
             , mBroadcastReceive(false)
             , mSocket(INVALID_SOCKET)
             , mState(State::CLOSED)

@@ -29,15 +29,17 @@ namespace KMS
 
         public:
 
+            static const bool  CONSOLE_DEFAULT;
+            static const char* FOLDER_DEFAULT;
+
+            DI::Boolean mConsole;
+            DI::Folder  mFolder;
+
             Stats();
 
             ~Stats();
 
             void Reset();
-
-            // ===== Configurable attributes ================================
-            DI::Boolean mConsole;
-            DI::Folder  mFolder;
 
         // Internal
 

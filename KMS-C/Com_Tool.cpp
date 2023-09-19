@@ -22,7 +22,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_DATA_FILE("DataFile = false|true");
+static const KMS::Cfg::MetaData MD_DATA_FILE("DataFile = {Name}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -42,6 +42,8 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* Tool::DATA_FILE_DEFAULT = "";
 
         const unsigned int Tool::FLAG_DISPLAY       = 0x00000001;
         const unsigned int Tool::FLAG_DUMP          = 0x00000002;
@@ -73,7 +75,7 @@ namespace KMS
             KMS_MAIN_RETURN;
         }
 
-        Tool::Tool() : mDataFile(nullptr, "")
+        Tool::Tool() : mDataFile(nullptr, DATA_FILE_DEFAULT)
         {
             mDataFile.SetMode("wb");
 

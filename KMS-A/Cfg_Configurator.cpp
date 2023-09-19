@@ -52,8 +52,15 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool  Configurator::DISPLAY_CONFIG_DEFAULT = false;
+        const bool  Configurator::HELP_DEFAULT           = false;
+        const char* Configurator::SAVE_CONFIG_DEFAULT    = "";
+
         Configurator::Configurator()
-            : mIgnoredCount(0)
+            : mDisplayConfig(DISPLAY_CONFIG_DEFAULT)
+            , mHelp         (HELP_DEFAULT)
+            , mSaveConfig   (nullptr, SAVE_CONFIG_DEFAULT)
+            , mIgnoredCount(0)
             , mSilence(nullptr)
             // ===== Callbacks ==============================================
             , ON_CONFIG_FILES_CHANGED         (this, &Configurator::OnConfigFilesChanged)

@@ -29,6 +29,12 @@ namespace KMS
 
         public:
 
+            static const char* ROOT_DEFAULT;
+            static const bool  VERBOSE_DEFAULT;
+
+            DI::Folder  mRoot;
+            DI::Boolean mVerbose;
+
             typedef void (*FileTypeFunction)(Request*);
 
             static void FileType_App_JS     (Request* aRequest);
@@ -57,10 +63,6 @@ namespace KMS
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
-
-            // ===== Configurable attributes ================================
-            DI::Folder  mRoot;
-            DI::Boolean mVerbose;
 
         private:
 

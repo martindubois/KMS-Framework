@@ -36,6 +36,20 @@ namespace KMS
 
         public:
 
+            static const bool     KEEP_A_LIVE_DEFAULT;
+            static const char   * LOCAL_ADDRESS_DEFAULT;
+            static const bool     NO_DELAY_DEFAULT;
+            static const uint32_t RECEIVE_TIMEOUT_DEFAULT_ms;
+            static const bool     REUSE_ADDR_DEFAULT;
+            static const uint32_t SEND_TIMEOUT_DEFAULT_ms;
+
+            DI::Boolean        mKeepALive;
+            DI::NetAddress     mLocalAddress;
+            DI::Boolean        mNoDelay;
+            DI::UInt<uint32_t> mReceiveTimeout_ms;
+            DI::Boolean        mReuseAddr;
+            DI::UInt<uint32_t> mSendTimeout_ms;
+
             enum class Type
             {
                 DGRAM,
@@ -78,14 +92,6 @@ namespace KMS
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
-
-            // ===== Configurable attributes ================================
-            DI::Boolean        mKeepALive;
-            DI::NetAddress     mLocalAddress;
-            DI::Boolean        mNoDelay;
-            DI::UInt<uint32_t> mReceiveTimeout_ms;
-            DI::Boolean        mReuseAddr;
-            DI::UInt<uint32_t> mSendTimeout_ms;
 
         // Internal
 

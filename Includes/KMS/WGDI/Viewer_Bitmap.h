@@ -23,6 +23,14 @@ namespace KMS
 
         public:
 
+            static const char* FILE_NAME_DEFAULT;
+
+            DI::String_Expand mFileName;
+
+            DI::UInt_Ptr<uint32_t> mPeriod_ms;
+            DI::String_Ptr         mTitle;
+            DI::UInt_Ptr<uint8_t>  mZoom;
+
             static int Main(int aCount, const char** aVector);
 
             Viewer_Bitmap();
@@ -33,13 +41,6 @@ namespace KMS
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
-
-            // ===== Configurable attributes ================================
-            DI::String_Expand mFileName;
-
-            DI::UInt_Ptr<uint32_t> mPeriod_ms;
-            DI::String_Ptr         mTitle;
-            DI::UInt_Ptr<uint8_t>  mZoom;
 
         private:
 

@@ -13,13 +13,10 @@
 // ===== Includes ===========================================================
 #include <KMS/WGDI/Window_Bitmap.h>
 
-// Configurations
+// Constant
 // //////////////////////////////////////////////////////////////////////////
 
 #define PERIOD_DISABLE (0)
-
-#define DEFAULT_PERIOD_ms PERIOD_DISABLE
-#define DEFAULT_ZOOM      (  1)
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -32,10 +29,15 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const uint32_t Window_Bitmap::PERIOD_DEFAULT_ms = PERIOD_DISABLE;
+        const uint32_t Window_Bitmap::PERIOD_MAX_ms     = 90000;
+        const uint8_t  Window_Bitmap::ZOOM_DEFAULT      = 1;
+        const uint8_t  Window_Bitmap::ZOOM_MAX          = 8;
+        const uint8_t  Window_Bitmap::ZOOM_MIN          = 1;
+
         Window_Bitmap::Window_Bitmap()
-            // ===== Configurable attributes ================================
-            : mPeriod_ms(DEFAULT_PERIOD_ms)
-            , mZoom     (DEFAULT_ZOOM)
+            : mPeriod_ms(PERIOD_DEFAULT_ms)
+            , mZoom     (ZOOM_DEFAULT)
         {
             assert(sizeof(BITMAPINFO) <= sizeof(mInternal));
 

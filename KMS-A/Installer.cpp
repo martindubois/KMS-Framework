@@ -23,7 +23,9 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
-    Installer::Installer()
+    const bool Installer::ADD_TO_PATH_DEFAULT = false;
+
+    Installer::Installer() : mAddToPath(ADD_TO_PATH_DEFAULT)
     {
         AddEntry("AddToPath", &mAddToPath, false, &MD_ADD_TO_PATH);
     }

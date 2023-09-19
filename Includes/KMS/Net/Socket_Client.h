@@ -21,14 +21,15 @@ namespace KMS
 
         public:
 
+            static const Net::Address REMOTE_ADDRESS_DEFAULT;
+
+            DI::NetAddress mRemoteAddress;
+
             Socket_Client(Type aType);
 
             void Connect();
 
             void Disconnect();
-
-            // ===== Configurable attributes ================================
-            DI::NetAddress mRemoteAddress;
 
             // ===== Socket =================================================
             virtual ~Socket_Client();

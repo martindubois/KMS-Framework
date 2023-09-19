@@ -19,12 +19,6 @@
 
 #include <KMS/Dbg/Stats.h>
 
-// Configuration
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_STATS_CONSOLE     (false)
-#define DEFAULT_STATS_FOLDER_NAME ("KMS-Framework")
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -39,9 +33,18 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool Stats::CONSOLE_DEFAULT = false;
+
+        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
+            const char* Stats::FOLDER_DEFAULT = "{$HOME}/KMS-Framework";
+        #endif
+        #ifdef _KMS_WINDOWS_
+            const char* Stats::FOLDER_DEFAULT = "{$USERPROFILE}\\KMS-Framework";
+        #endif
+
         Stats::Stats()
-            : mConsole(DEFAULT_STATS_CONSOLE)
-            , mFolder (File::Folder(File::Folder::HOME, DEFAULT_STATS_FOLDER_NAME))
+            : mConsole(CONSOLE_DEFAULT)
+            , mFolder (File::Folder(File::Folder::HOME, "KMS-Framework"))
         {
             DI::Dictionary::AddEntry("Stats_Console", &mConsole, false, &MD_STATS_CONSOLE);
             DI::Dictionary::AddEntry("Stats_Folder" , &mFolder , false, &MD_STATS_FOLDER );

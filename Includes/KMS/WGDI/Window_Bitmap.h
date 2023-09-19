@@ -21,6 +21,15 @@ namespace KMS
 
         public:
 
+            static const uint32_t PERIOD_DEFAULT_ms;
+            static const uint32_t PERIOD_MAX_ms;
+            static const uint8_t  ZOOM_DEFAULT;
+            static const uint8_t  ZOOM_MAX;
+            static const uint8_t  ZOOM_MIN;
+
+            uint32_t mPeriod_ms;
+            uint8_t  mZoom;
+
             Window_Bitmap();
 
             // ===== Window =================================================
@@ -28,10 +37,6 @@ namespace KMS
             virtual void Show();
 
             Graph::Bitmap mBitmap;
-
-            // ===== Configurable attribute =================================
-            uint32_t mPeriod_ms;
-            uint8_t  mZoom;
 
         // Internal
 

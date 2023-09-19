@@ -34,6 +34,28 @@ namespace KMS
 
         public:
 
+            static const uint8_t INDEX_DEFAULT;
+            static const char  * LINK_DEFAULT;
+
+            #ifdef _KMS_WINDOWS_
+                static const char* HARDWARE_ID_DEFAULT;
+                static const char* INTERFACE_DEFAULT;
+                static const char* LOCATION_DEFAULT;
+            #endif
+
+            DI::UInt<uint8_t> mIndex;
+            DI::String        mLink;
+
+        private:
+
+            #ifdef _KMS_WINDOWS_
+                DI::String mHardwareId;
+                DI::GUID   mInterface;
+                DI::String mLocation;
+            #endif
+
+        public:
+
             Device();
 
             virtual ~Device();
@@ -73,12 +95,6 @@ namespace KMS
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
             virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
 
-        // Internal
-
-            // ===== Configurable attributes ================================
-            DI::UInt<uint32_t> mIndex;
-            DI::String         mLink;
-
         protected:
 
             unsigned int GetIndex() const;
@@ -103,11 +119,6 @@ namespace KMS
 
                 HANDLE mHandle;
                 bool   mInterface_Valid;
-
-                // ===== Configurable attributes ============================
-                DI::String mHardwareId;
-                DI::GUID   mInterface;
-                DI::String mLocation;
 
             #endif
 

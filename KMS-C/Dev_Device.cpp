@@ -12,11 +12,6 @@
 
 #include <KMS/Dev/Device.h>
 
-// Configuration
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_INDEX (0)
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
@@ -34,8 +29,17 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const uint8_t Device::INDEX_DEFAULT = 0;
+        const char*   Device::LINK_DEFAULT  = "";
+
+        #ifdef _KMS_WINDOWS_
+            const char* Device::HARDWARE_ID_DEFAULT = "";
+            const char* Device::INTERFACE_DEFAULT   = "";
+            const char* Device::LOCATION_DEFAULT    = "";
+        #endif
+
         Device::Device()
-            : mIndex(DEFAULT_INDEX)
+            : mIndex(INDEX_DEFAULT)
             #ifdef _KMS_WINDOWS_
                 , mHandle(INVALID_HANDLE_VALUE)
             #endif

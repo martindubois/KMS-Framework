@@ -44,6 +44,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool Sync::VERBOSE_DEFAULT = false;
+
         int Sync::Main(int aCount, const char** aVector)
         {
             KMS_MAIN_BEGIN;
@@ -67,7 +69,7 @@ namespace KMS
             KMS_MAIN_RETURN;
         }
 
-        Sync::Sync()
+        Sync::Sync() : mVerbose(VERBOSE_DEFAULT)
         {
             mBidirectional .SetCreator(CreateGroup);
             mUnidirectional.SetCreator(DI::String_Expand::Create);
