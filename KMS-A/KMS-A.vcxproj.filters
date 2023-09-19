@@ -67,6 +67,9 @@
     <Filter Include="Source Files\WGDI">
       <UniqueIdentifier>{1cda7359-6c74-4c9c-b884-94b16e99a076}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scope">
+      <UniqueIdentifier>{02a575a6-160b-4a6b-924e-be5b93336304}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -362,6 +365,15 @@
     </ClCompile>
     <ClCompile Include="Saturated.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Scope_Scope.cpp">
+      <Filter>Source Files\Scope</Filter>
+    </ClCompile>
+    <ClCompile Include="Scope_Channel_Random.cpp">
+      <Filter>Source Files\Scope</Filter>
+    </ClCompile>
+    <ClCompile Include="Scope_Channel.cpp">
+      <Filter>Source Files\Scope</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

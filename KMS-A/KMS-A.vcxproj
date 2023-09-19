@@ -114,6 +114,9 @@
     <ClCompile Include="Result.cpp" />
     <ClCompile Include="Saturated.cpp" />
     <ClCompile Include="ScaleAndOffset.cpp" />
+    <ClCompile Include="Scope_Channel.cpp" />
+    <ClCompile Include="Scope_Channel_Random.cpp" />
+    <ClCompile Include="Scope_Scope.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Stats_Stats.cpp" />
     <ClCompile Include="Test_Test.cpp" />

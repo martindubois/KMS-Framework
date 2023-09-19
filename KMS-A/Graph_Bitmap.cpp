@@ -432,7 +432,7 @@ namespace KMS
 
             Point_Int lLast(mSizeX_px - 1, mSizeY_px - 1);
 
-            SetBox(Point(lLast.mX_px - aScroll_px, 0), lLast, aValue, aOp);
+            SetBox(Point(lLast.mX_px - aScroll_px + 1, 0), lLast, aValue, aOp);
         }
 
         void Bitmap::Scroll_Right(unsigned int aScroll_px, Color aValue, Operation aOp)
@@ -463,6 +463,37 @@ namespace KMS
             }
 
             SetBox(Point::ORIGIN, Point(aScroll_px, mSizeY_px - 1), aValue, aOp);
+        }
+
+        void Bitmap::Scroll_Left(Point aP0, Point aP1, unsigned int aScroll_px, Color aValue, Operation aOp)
+        {
+            assert(aP0.mX_px <= aP1.mX_px);
+            assert(aP0.mY_px <= aP1.mY_px);
+            assert(0 < aScroll_px);
+
+            assert(nullptr != mData);
+
+            assert(0 < mSizeX_px);
+
+            KMS_EXCEPTION_ASSERT(0 == (mFlags & FLAG_READ_ONLY), RESULT_DENIED, "The bitmap is read only", "");
+
+            auto lScroll_byte = aScroll_px * PIXEL_SIZE_byte;
+
+            auto lDst = mData + ComputeOffset(aP0);
+            auto lSrc = lDst + lScroll_byte;
+
+            unsigned int lLine_byte = mSizeX_px * PIXEL_SIZE_byte;
+            unsigned int lMove_byte = (aP1.mX_px - aP0.mX_px + 1) * PIXEL_SIZE_byte - lScroll_byte;
+
+            for (uint16_t y = aP0.mY_px; y <= aP1.mY_px; y++)
+            {
+                memmove(lDst, lSrc, lMove_byte);
+
+                lDst += lLine_byte;
+                lSrc += lLine_byte;
+            }
+
+            SetBox(Point(aP1.mX_px - aScroll_px, 0), aP1, aValue, aOp);
         }
 
         // Private

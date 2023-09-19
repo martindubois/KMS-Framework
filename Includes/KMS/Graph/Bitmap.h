@@ -72,6 +72,9 @@ namespace KMS
             void Scroll_Left (unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
             void Scroll_Right(unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
 
+            void Scroll_Left (Point aP0, Point aP1, unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
+            void Scroll_Right(Point aP0, Point aP1, unsigned int aScroll_px, Color aColor = Color::BLACK, Operation aOp = Operation::OP_COPY);
+
         private:
 
             NO_COPY(Bitmap);
