@@ -155,6 +155,9 @@ namespace KMS
     namespace Graph
     {
 
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
         Bitmap::Bitmap()
             : mData(nullptr)
             , mFlags(0)
@@ -261,12 +264,38 @@ namespace KMS
             assert(aP0.mX_px <= aP1.mX_px);
             assert(aP0.mY_px <= aP1.mY_px);
 
-            for (auto y = aP0.mY_px; y <= aP1.mY_px; y++)
+            assert(nullptr != mData);
+            assert(0 < mSizeX_px);
+            assert(0 < mSizeY_px);
+
+            if (mSizeX_px <= aP0.mX_px) { return; }
+            if (mSizeY_px <= aP0.mY_px) { return; }
+
+            auto lP1 = aP1;
+
+            if (mSizeX_px <= aP1.mX_px) { lP1.mX_px = mSizeX_px - 1; }
+            if (mSizeY_px <= aP1.mY_px) { lP1.mY_px = mSizeY_px - 1; }
+
+            SetBoxContext lContext;
+
+            lContext.mBoxSizeX_byte = (aP1.mX_px - aP0.mX_px + 1) * PIXEL_SIZE_byte;
+            lContext.mBoxSizeY_px   = (aP1.mY_px - aP0.mY_px + 1);
+            lContext.mColor         = reinterpret_cast<uint8_t*>(&aColor);
+            lContext.mData          = mData + ComputeOffset(aP0);
+            lContext.mSizeX_byte    = mSizeX_px * PIXEL_SIZE_byte;
+
+            switch (aOp)
             {
-                for (auto x = aP0.mX_px; x <= aP1.mX_px; x++)
-                {
-                    SetPixel(Point(x, y), aColor, aOp);
-                }
+            case Operation::OP_ADD : SetBox_ADD (&lContext); break;
+            case Operation::OP_AND : SetBox_AND (&lContext); break;
+            case Operation::OP_COPY: SetBox_COPY(&lContext); break;
+            case Operation::OP_DIV : SetBox_DIV (&lContext); break;
+            case Operation::OP_MULT: SetBox_MULT(&lContext); break;
+            case Operation::OP_OR  : SetBox_OR  (&lContext); break;
+            case Operation::OP_SUB : SetBox_SUB (&lContext); break;
+            case Operation::OP_XOR : SetBox_XOR (&lContext); break;
+
+            default: assert(false);
             }
         }
 
@@ -510,6 +539,134 @@ namespace KMS
             lResult_byte *= PIXEL_SIZE_byte;
 
             return lResult_byte;
+        }
+
+        void Bitmap::SetBox_ADD(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] = Saturated::Add(lData[x], lColor[x % PIXEL_SIZE_byte]);
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_AND(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] &= lColor[x % PIXEL_SIZE_byte];
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_COPY(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] = lColor[x % PIXEL_SIZE_byte];
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_DIV(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] = Saturated::Div(lData[x], lColor[x % PIXEL_SIZE_byte]);
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_MULT(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] = Saturated::Mul(lData[x], lColor[x % PIXEL_SIZE_byte]);
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_OR(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] |= lColor[x % PIXEL_SIZE_byte];
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_SUB(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData  = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] = Saturated::Sub(lData[x], lColor[x % PIXEL_SIZE_byte]);
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
+        }
+
+        void Bitmap::SetBox_XOR(SetBoxContext* aContext)
+        {
+            auto lColor = aContext->mColor;
+            auto lData = aContext->mData;
+
+            for (unsigned int y = 0; y < aContext->mBoxSizeY_px; y++)
+            {
+                for (unsigned int x = 0; x < aContext->mBoxSizeX_byte; x++)
+                {
+                    lData[x] ^= lColor[x % PIXEL_SIZE_byte];
+                }
+
+                lData += aContext->mSizeX_byte;
+            }
         }
 
     }

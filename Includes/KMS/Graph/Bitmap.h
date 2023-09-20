@@ -77,9 +77,28 @@ namespace KMS
 
         private:
 
+            typedef struct
+            {
+                unsigned int   mBoxSizeX_byte;
+                unsigned int   mBoxSizeY_px;
+                const uint8_t* mColor;
+                uint8_t      * mData;
+                unsigned int   mSizeX_byte;
+            }
+            SetBoxContext;
+
             NO_COPY(Bitmap);
 
             unsigned int ComputeOffset(Point aPoint) const;
+
+            void SetBox_ADD (SetBoxContext* aContext);
+            void SetBox_AND (SetBoxContext* aContext);
+            void SetBox_COPY(SetBoxContext* aContext);
+            void SetBox_DIV (SetBoxContext* aContext);
+            void SetBox_MULT(SetBoxContext* aContext);
+            void SetBox_OR  (SetBoxContext* aContext);
+            void SetBox_SUB (SetBoxContext* aContext);
+            void SetBox_XOR (SetBoxContext* aContext);
 
             uint8_t* mData;
 

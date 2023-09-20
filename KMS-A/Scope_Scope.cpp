@@ -47,16 +47,15 @@ namespace KMS
         const uint32_t    Scope::SCALE_X_MIN_us_px     =     100;
 
         Scope::Scope()
-            : ON_ITERATE(this, &Scope::OnIterate)
+            : mFrequency_Hz(FREQUENCY_DEFAULT_Hz)
+            , mMode(MODE_DEFAULT)
+            , mPositionX_px(POSITION_X_DEFAULT_px)
+            , mScaleX_us_px(SCALE_X_DEFAULT_us_px)
+            , ON_ITERATE(this, &Scope::OnIterate)
             , mFadeCount(0)
             , mPeriod_us(PERIOD_DEFAULT_us)
             , mX_frac(0)
-            , mX_px(0)
-            // ===== Configurable attributes ================================
-            , mFrequency_Hz(FREQUENCY_DEFAULT_Hz)
-            , mMode        (MODE_DEFAULT)
-            , mPositionX_px(POSITION_X_DEFAULT_px)
-            , mScaleX_us_px(SCALE_X_DEFAULT_us_px)
+            , mX_px(POSITION_X_DEFAULT_px)
         {
             State_STOPPED();
         }
@@ -188,7 +187,6 @@ namespace KMS
                     case Mode::CONTINUOUS_SCROLLING:
                     case Mode::SINGLE_SCROLLING:
                         Scroll(lSizeX_px - 1);
-                        mX_px--;
                         break;
 
                     case Mode::SINGLE:
@@ -218,11 +216,14 @@ namespace KMS
             {
                 mBitmap.SetBox(Graph::Point::ORIGIN, Graph::Point(0, lUR.mY_px), Graph::Color::BLACK);
             }
+
+            mX_px--;
         }
 
         void Scope::Wait(bool aTrig)
         {
             assert(POSITION_X_MAX_px >= mPositionX_px);
+            assert(mPositionX_px == mX_px);
 
             switch (mMode)
             {
@@ -245,14 +246,8 @@ namespace KMS
                 }
                 else
                 {
-                    if (mPositionX_px > mX_px)
-                    {
-                        NextX();
-                    }
-                    else
-                    {
-                        Scroll(mPositionX_px);
-                    }
+                    NextX();
+                    Scroll(mPositionX_px);
                 }
                 break;
 
@@ -276,10 +271,7 @@ namespace KMS
         {
             assert(State::QTY > mState);
 
-            NextX();
-
             mState = State::RUNNING;
-            mX_px  = mPositionX_px;
         }
 
         void Scope::State_STOPPED()
@@ -307,7 +299,7 @@ namespace KMS
             mState      = State::WAITING;
             mTime_100ns = OS::GetSystemTime();
             mWaitCount  = mBitmap.GetSizeX_px() * mScaleX_us_px / mPeriod_us;
-            mX_px       = 0;
+            mX_px       = mPositionX_px;
         }
 
         unsigned int Scope::OnIterate(void*, void*)

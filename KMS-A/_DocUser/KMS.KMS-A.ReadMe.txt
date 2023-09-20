@@ -7,7 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- Graph::Bitmap::SetBox - Optimisation
 - Saturated namespace
+- Scope::Scope - No discontinuity at trigger
 
 1.0.6 Windows 2023-09-07
 * DI::Container::Validate
