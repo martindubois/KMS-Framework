@@ -59,6 +59,8 @@ namespace KMS
 
     Result::Result() { mUnion.mCode = 0; }
 
+    Result::Result(uint32_t aValue) { mUnion.mCode = aValue; }
+
     Result::operator uint32_t () const { return mUnion.mCode; }
 
     bool Result::operator == (Result aIn) const { return mUnion.mCode == aIn.mUnion.mCode; }
