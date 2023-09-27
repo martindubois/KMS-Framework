@@ -60,20 +60,23 @@ namespace KMS
 
             for (unsigned int i = 0; i < lZoneQty; i++)
             {
-                auto lY_px = lZones[i] / mDivY;
-                if (lSizeY_px <= lY_px)
+                if (0 < lZones[i])
                 {
-                    mDivY++;
-                    Clear();
-                    Draw();
-                    break;
+                    auto lY_px = lZones[i] / mDivY;
+                    if (lSizeY_px <= lY_px)
+                    {
+                        mDivY++;
+                        Clear();
+                        Draw();
+                        break;
+                    }
+
+                    auto lX0_px = mX0_px + mStepX_px * i;
+                    auto lX1_px = mX1_px + mStepX_px * i;
+                    assert(lX0_px <= lX1_px);
+
+                    mBitmap.SetLine(Point(lX0_px, lY_px), Point(lX1_px, lY_px), Color::WHITE);
                 }
-
-                auto lX0_px = mX0_px + mStepX_px * i;
-                auto lX1_px = mX1_px + mStepX_px * i;
-                assert(lX0_px <= lX1_px);
-
-                mBitmap.SetLine(Point(lX0_px, lY_px), Point(lX1_px, lY_px), Color::WHITE);
             }
         }
 
@@ -97,9 +100,9 @@ namespace KMS
 
             char lStr[16];
 
-            sprintf_s(lStr, "%8u", lUR.mY_px * mDivY);
+            sprintf_s(lStr, "%8u", (lUR.mY_px + 1) * mDivY);
 
-            mBitmap.SetString(lStr, Point(lUR.mX_px - 90, lUR.mY_px - 15), 0x808080);
+            mBitmap.SetString(lStr, Point(lUR.mX_px - 70, lUR.mY_px - 15), 0x808080);
         }
 
         void Histogram::Draw()
@@ -113,12 +116,15 @@ namespace KMS
 
             for (unsigned int i = 0; i < lZoneQty; i++)
             {
-                auto lY_px = lZones[i] / mDivY;
+                if (0 < lZones[i])
+                {
+                    auto lY_px = lZones[i] / mDivY;
 
-                auto lX0_px = mX0_px + mStepX_px * i;
-                auto lX1_px = mX1_px + mStepX_px * i;
+                    auto lX0_px = mX0_px + mStepX_px * i;
+                    auto lX1_px = mX1_px + mStepX_px * i;
 
-                mBitmap.SetBox(Point(lX0_px, 0), Point(lX1_px, lY_px), 0xf0f0f0);
+                    mBitmap.SetBox(Point(lX0_px, 0), Point(lX1_px, lY_px), 0xf0f0f0);
+                }
             }
         }
 
