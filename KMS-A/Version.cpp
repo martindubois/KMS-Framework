@@ -58,8 +58,10 @@ namespace KMS
 
     #ifndef _KMS_EMBEDDED_
 
-        Version::Version(const char* aVersion)
+        Version::Version(const char* aVersion) : mDebug(false)
         {
+            Construct();
+
             unsigned int lMajor;
             unsigned int lMinor = 0;
             unsigned int lBuild = 0;
@@ -78,8 +80,10 @@ namespace KMS
             SetNumbers(lMajor, lMinor, lBuild, lCompat);
         }
 
-        Version::Version(const File::Folder& aFolder, const char* aFile)
+        Version::Version(const File::Folder& aFolder, const char* aFile) : mDebug(false)
         {
+            Construct();
+
             Text::File_ASCII lTF;
 
             lTF.Read(aFolder, aFile);
