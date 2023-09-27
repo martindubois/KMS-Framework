@@ -27,7 +27,7 @@ namespace KMS
         {
             uint64_t lResult;
 
-            GetSystemTimeAsFileTime(reinterpret_cast<FILETIME*>(&lResult));
+            GetSystemTimePreciseAsFileTime(reinterpret_cast<FILETIME*>(&lResult));
 
             return lResult;
         }
