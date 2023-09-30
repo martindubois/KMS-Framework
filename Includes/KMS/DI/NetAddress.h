@@ -25,6 +25,8 @@ namespace KMS
 
         public:
 
+            static const Net::Address DEFAULT_VALUE;
+
             static DI::Object* Create();
 
             NetAddress();

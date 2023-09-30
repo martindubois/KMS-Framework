@@ -27,6 +27,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool Boolean_Ptr::DEFAULT_VALUE = false;
+
         DI::Object* Boolean::Create() { return new Boolean; }
 
         Boolean_Ptr::Boolean_Ptr(bool* aPtr) : mPtr(aPtr)

@@ -12,11 +12,6 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/File.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define DEFAULT_MODE "rb"
-
 namespace KMS
 {
     namespace DI
@@ -24,6 +19,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* DI::File::DEFAULT_MODE  = "rb";
+        const char* DI::File::DEFAULT_VALUE = "";
 
         DI::Object* DI::File::Create() { return new File; }
 

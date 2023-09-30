@@ -15,11 +15,6 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/GUID.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-static const ::GUID DEFAULT_VALUE;
-
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
@@ -33,6 +28,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const ::GUID GUID::DEFAULT_VALUE;
+
         Object* GUID::Create() { return new GUID; }
 
         GUID_Ptr::GUID_Ptr(::GUID* aPtr) : mPtr(aPtr)
@@ -40,7 +37,7 @@ namespace KMS
             assert(nullptr != mPtr);
         }
 
-        GUID::GUID() : GUID_Ptr(&mInternal), mInternal(DEFAULT_VALUE) {}
+        GUID::GUID(const ::GUID& aG) : GUID_Ptr(&mInternal), mInternal(aG) {}
 
         void GUID_Ptr::operator = (const ::_GUID& aIn)
         {
@@ -54,6 +51,23 @@ namespace KMS
             assert(nullptr != mPtr);
 
             return *mPtr;
+        }
+
+        bool GUID_Ptr::IsValid() const
+        {
+            assert(nullptr != mPtr);
+
+            auto lPtr = reinterpret_cast<const uint8_t*>(mPtr);
+
+            for (unsigned int i = 0; i < sizeof(::GUID); i++)
+            {
+                if (0 != lPtr[i])
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         // ===== Value ======================================================

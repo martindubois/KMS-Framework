@@ -25,6 +25,8 @@ namespace KMS
 
         public:
 
+            static const T DEFAULT_VALUE;
+
             Float_Ptr(T* aPtr);
 
             void operator = (T aIn);
@@ -56,7 +58,7 @@ namespace KMS
 
             static DI::Object* Create();
 
-            Float(T aIn = 0.0);
+            Float(T aIn = Float_Ptr<T>::DEFAULT_VALUE);
 
             // ===== Float_Ptr ==============================================
             using Float_Ptr<T>::operator =;
@@ -71,6 +73,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        const T Float_Ptr<T>::DEFAULT_VALUE = 0.0;
 
         template <typename T>
         DI::Object* Float<T>::Create() { return new Float<T>; }

@@ -25,6 +25,8 @@ namespace KMS
 
         public:
 
+            static const bool DEFAULT_VALUE;
+
             Boolean_Ptr(bool* aPtr);
 
             void operator = (bool aIn);
@@ -55,7 +57,7 @@ namespace KMS
 
             static DI::Object* Create();
 
-            Boolean(bool aIn = false);
+            Boolean(bool aIn = DEFAULT_VALUE);
 
             // ===== Boolean_Ptr ============================================
             using Boolean_Ptr::operator =;

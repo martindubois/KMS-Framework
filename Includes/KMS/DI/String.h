@@ -28,6 +28,8 @@ namespace KMS
 
         public:
 
+            static const char* DEFAULT_VALUE;
+
             String_Ptr(std::string* aPtr);
 
             void operator = (const char* aIn);

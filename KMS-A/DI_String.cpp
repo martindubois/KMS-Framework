@@ -12,11 +12,6 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/String.h>
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-static std::string DEFAULT_VALUE;
-
 namespace KMS
 {
     namespace DI
@@ -24,6 +19,8 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        const char* String_Ptr::DEFAULT_VALUE = "";
 
         DI::Object* String::Create() { return new String; }
 

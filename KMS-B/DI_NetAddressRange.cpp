@@ -19,6 +19,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const Net::AddressRange NetAddressRange::DEFAULT_VALUE;
+
         DI::Object* NetAddressRange::Create() { return new NetAddressRange; }
 
         NetAddressRange::NetAddressRange() {}

@@ -19,6 +19,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const Net::Address NetAddress::DEFAULT_VALUE;
+
         DI::Object* NetAddress::Create() { return new NetAddress; }
 
         NetAddress::NetAddress() {}

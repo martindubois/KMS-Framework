@@ -27,7 +27,10 @@ namespace KMS
 
         public:
 
-            File_Ptr(FILE** aPtr, const char* aIn = "");
+            static const char* DEFAULT_MODE;
+            static const char* DEFAULT_VALUE;
+
+            File_Ptr(FILE** aPtr, const char* aIn = DEFAULT_VALUE);
 
             operator FILE * ();
 

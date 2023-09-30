@@ -28,6 +28,8 @@ namespace KMS
 
         public:
 
+            static const T DEFAULT_VALUE;
+
             Enum_Ptr(T* aPtr);
 
             void operator = (T aIn);
@@ -61,7 +63,7 @@ namespace KMS
 
             static DI::Object* Create();
 
-            Enum(T aIn);
+            Enum(T aIn = DEFAULT_VALUE);
 
             // ===== Enum_Ptr ===============================================
             using Enum_Ptr<T, N>::operator =;
@@ -76,6 +78,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        template <typename T, const char** N>
+        const T Enum_Ptr<T, N>::DEFAULT_VALUE = static_cast<T>(0);
 
         template <typename T, const char** N>
         DI::Object* Enum<T, N>::Create() { return new Enum<T, N>(static_cast<T>(0)); }

@@ -27,11 +27,15 @@ namespace KMS
 
         public:
 
+            static const ::GUID DEFAULT_VALUE;
+
             GUID_Ptr(::GUID* aPtr);
 
             void operator = (const ::GUID& aIn);
 
             operator const ::GUID& () const;
+
+            bool IsValid() const;
 
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
@@ -53,9 +57,7 @@ namespace KMS
 
             static DI::Object* Create();
 
-            GUID();
-
-            GUID(const ::GUID& aG);
+            GUID(const ::GUID& aG = DEFAULT_VALUE);
 
             // ===== GUID_Ptr ===============================================
             using GUID_Ptr::operator =;

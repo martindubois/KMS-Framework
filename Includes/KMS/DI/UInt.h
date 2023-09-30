@@ -26,6 +26,8 @@ namespace KMS
 
         public:
 
+            static const T DEFAULT_VALUE;
+
             UInt_Ptr(T* aPtr);
 
             void operator = (T aIn);
@@ -76,6 +78,9 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        const T UInt_Ptr<T>::DEFAULT_VALUE = 0;
 
         template <typename T>
         DI::Object* UInt<T>::Create() { return new UInt<T>; }
