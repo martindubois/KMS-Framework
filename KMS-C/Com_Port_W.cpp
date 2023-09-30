@@ -37,9 +37,9 @@ namespace KMS
         {
             char lLink[16];
 
-            sprintf_s(lLink, "COM%u", GetIndex());
+            sprintf_s(lLink, "COM%u", mIndex.Get());
 
-            SetLink(lLink);
+            mLink = lLink;
         }
 
         // Private

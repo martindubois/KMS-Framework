@@ -21,14 +21,19 @@ namespace KMS
 
             static const unsigned int FLAG_ACCESS_READ  = 0x00000001;
             static const unsigned int FLAG_ACCESS_WRITE = 0x00000002;
-            static const unsigned int FLAG_READ_ALL     = 0x00000004;
+            static const unsigned int FLAG_OVERLAPPED   = 0x00000004;
+            static const unsigned int FLAG_READ_ALL     = 0x00000008;
+
+            virtual bool IsConnected() const = 0;
 
             virtual void ClearReadBuffer() = 0;
 
-            // aFlags FLAG_ACCESS_READ, FLAG_ACCESS_WRITE
+            // aFlags FLAG_ACCESS_READ, FLAG_ACCESS_WRITE, FLAG_OVERLAPPED
             virtual bool Connect(unsigned int aFlags) = 0;
 
             virtual void Disconnect() = 0;
+
+            virtual unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
 
             // aFlags FLAG_READ_ALL
             //

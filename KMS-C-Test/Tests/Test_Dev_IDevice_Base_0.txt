@@ -1,0 +1,6 @@
+
+# Author    KMS - Martin Dubois, P. Eng.
+# Copyright (C) 2023 KMS
+# License   http://www.apache.org/licenses/LICENSE-2.0
+# Product   KMS-Framework
+# File      KMS-C-Test/Tests/Test_Dev_IDevice_Base_0.txt

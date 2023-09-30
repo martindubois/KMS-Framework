@@ -18,8 +18,6 @@
 static const KMS::Cfg::MetaData MD_INDEX      ("Index = {Numeber}");
 static const KMS::Cfg::MetaData MD_INTERFACE  ("Interface = {GUID}");
 static const KMS::Cfg::MetaData MD_LINK       ("Link = {Link}");
-static const KMS::Cfg::MetaData MD_HARDWARE_ID("HardwareId = {Id}");
-static const KMS::Cfg::MetaData MD_LOCATION   ("Location = {Location}");
 
 namespace KMS
 {
@@ -32,15 +30,11 @@ namespace KMS
         const uint8_t Device::INDEX_DEFAULT = 0;
         const char*   Device::LINK_DEFAULT  = "";
 
-        #ifdef _KMS_WINDOWS_
-            const char* Device::HARDWARE_ID_DEFAULT = "";
-            const char* Device::INTERFACE_DEFAULT   = "";
-            const char* Device::LOCATION_DEFAULT    = "";
-        #endif
-
         Device::Device()
             : mIndex(INDEX_DEFAULT)
+            , mLink (LINK_DEFAULT)
             #ifdef _KMS_WINDOWS_
+                , mInterface(INTERFACE_DEFAULT)
                 , mHandle(INVALID_HANDLE_VALUE)
             #endif
         {
@@ -48,11 +42,7 @@ namespace KMS
             AddEntry("Link" , &mLink , false, &MD_LINK);
 
             #ifdef _KMS_WINDOWS_
-                AddEntry("HardwareId", &mHardwareId, false, &MD_HARDWARE_ID);
                 AddEntry("Interface" , &mInterface , false, &MD_INTERFACE);
-                AddEntry("Location"  , &mLocation  , false, &MD_LOCATION);
-
-                ResetInterface();
             #endif
         }
 
@@ -63,9 +53,6 @@ namespace KMS
                 Disconnect();
             }
         }
-
-        void Device::SetIndex(unsigned int aI) { mIndex = aI; }
-        void Device::SetLink (const char * aL) { assert(nullptr != aL); mLink = aL; }
 
         // ===== DI::Container ==============================================
 
@@ -78,8 +65,6 @@ namespace KMS
 
         // Protected
         // //////////////////////////////////////////////////////////////////
-
-        unsigned int Device::GetIndex() const { return mIndex; }
 
         void Device::LinkFromIndex()
         {

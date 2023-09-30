@@ -21,7 +21,7 @@
 #include <KMS/Dev/IDevice.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/GUID.h>
-#include <KMS/DI/String.h>
+#include <KMS/DI/String_Expand.h>
 #include <KMS/DI/UInt.h>
 
 namespace KMS
@@ -38,20 +38,14 @@ namespace KMS
             static const char  * LINK_DEFAULT;
 
             #ifdef _KMS_WINDOWS_
-                static const char* HARDWARE_ID_DEFAULT;
-                static const char* INTERFACE_DEFAULT;
-                static const char* LOCATION_DEFAULT;
+                static const ::GUID INTERFACE_DEFAULT;
             #endif
 
             DI::UInt<uint8_t> mIndex;
-            DI::String        mLink;
-
-        private:
+            DI::String_Expand mLink;
 
             #ifdef _KMS_WINDOWS_
-                DI::String mHardwareId;
-                DI::GUID   mInterface;
-                DI::String mLocation;
+                DI::GUID mInterface;
             #endif
 
         public:
@@ -60,27 +54,9 @@ namespace KMS
 
             virtual ~Device();
 
-            bool IsConnected() const;
-
-            void SetIndex(unsigned int aI);
-
-            void SetLink(const char* aL);
-
-            unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
-
             #ifdef _KMS_WINDOWS_
 
                 operator HANDLE ();
-
-                const char* GetHardwareId() const;
-                void        SetHardwareId(const char* aHI);
-
-                const GUID* GetInterface() const;
-                void        ResetInterface();
-                void        SetInterface(const GUID& aI);
-
-                const char* GetLocation() const;
-                void        SetLocation(const char* aHI);
 
             #endif
 
@@ -88,23 +64,20 @@ namespace KMS
             virtual void Validate() const;
 
             // ===== IDevice ================================================
-
-            virtual bool Connect   (unsigned int aFlags);
-            virtual void Disconnect();
-
+            virtual bool         IsConnected() const;
+            virtual void         ClearReadBuffer();
+            virtual bool         Connect   (unsigned int aFlags);
+            virtual void         Disconnect();
+            virtual unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
             virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
 
         protected:
 
-            unsigned int GetIndex() const;
-
             virtual void LinkFromIndex();
 
             #ifdef _KMS_WINDOWS_
 
-                virtual void LinkFromHardwareIdAndIndex();
-                virtual void LinkFromHardwareIdLocationAndIndex();
                 virtual void LinkFromInterfaceAndIndex();
 
             #endif
@@ -118,7 +91,6 @@ namespace KMS
                 static GUID ToGUID(const char* aG);
 
                 HANDLE mHandle;
-                bool   mInterface_Valid;
 
             #endif
 
