@@ -54,12 +54,6 @@ namespace KMS
 
             virtual ~Device();
 
-            #ifdef _KMS_WINDOWS_
-
-                operator HANDLE ();
-
-            #endif
-
             // ===== DI::Container ==========================================
             virtual void Validate() const;
 
@@ -71,6 +65,12 @@ namespace KMS
             virtual unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
             virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
+
+            #ifdef _KMS_WINDOWS_
+
+                virtual operator HANDLE ();
+
+            #endif
 
         protected:
 

@@ -37,13 +37,6 @@ namespace KMS
 
         const ::GUID Device::INTERFACE_DEFAULT;
 
-        Device::operator HANDLE ()
-        {
-            assert(INVALID_HANDLE_VALUE != mHandle);
-
-            return mHandle;
-        }
-
         // ===== IDevice ====================================================
 
         bool Device::IsConnected() const { return INVALID_HANDLE_VALUE != mHandle; }
@@ -145,6 +138,13 @@ namespace KMS
 
             KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, RESULT_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
             return true;
+        }
+
+        Device::operator HANDLE ()
+        {
+            assert(INVALID_HANDLE_VALUE != mHandle);
+
+            return mHandle;
         }
 
         // Protected
