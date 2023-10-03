@@ -198,17 +198,21 @@ namespace KMS
             CLI::Tool::DisplayHelp(aOut);
         }
 
-        void Make::ExecuteCommand(const char* aC)
+        int Make::ExecuteCommand(const char* aC)
         {
             assert(nullptr != aC);
 
-            if      (0 == strcmp("Clean" , aC)) { Run_Clean (); }
-            else if (0 == strcmp("Depend", aC)) { Run_Depend(); }
-            else if (0 == strcmp("Make"  , aC)) { Run_Make  (); }
+            int lResult;
+
+            if      (0 == strcmp("Clean" , aC)) { lResult = Run_Clean (); }
+            else if (0 == strcmp("Depend", aC)) { lResult = Run_Depend(); }
+            else if (0 == strcmp("Make"  , aC)) { lResult = Run_Make  (); }
             else
             {
-                CLI::Tool::ExecuteCommand(aC);
+                lResult = CLI::Tool::ExecuteCommand(aC);
             }
+
+            return lResult;
         }
 
         int Make::Run()
@@ -457,7 +461,7 @@ namespace KMS
             if (!mF_Lib_Cfg.DoesExist()) { mF_Lib_Cfg.Create(); }
         }
 
-        void Make::Run_Clean()
+        int Make::Run_Clean()
         {
             switch (mComponentType)
             {
@@ -481,9 +485,12 @@ namespace KMS
 
             default: assert(false);
             }
+
+            // TODO
+            return 0;
         }
 
-        void Make::Run_Depend()
+        int Make::Run_Depend()
         {
             switch (mComponentType)
             {
@@ -499,9 +506,12 @@ namespace KMS
 
             default: assert(false);
             }
+
+            // TODO
+            return 0;
         }
 
-        void Make::Run_Make()
+        int Make::Run_Make()
         {
             switch (mComponentType)
             {
@@ -523,6 +533,9 @@ namespace KMS
 
             default: assert(false);
             }
+
+            // TODO
+            return 0;
         }
 
         void Make::VerifyConfig()

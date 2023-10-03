@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/CLI_Tool.cpp
 
-// TEST COVERAGE  2023-08-09  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-10-02  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -20,6 +20,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
+#include <KMS/Dbg/Log.h>
 #include <KMS/DI/Functions.h>
 #include <KMS/DI/String_Expand.h>
 #include <KMS/Text/File_ASCII.h>
@@ -59,7 +60,21 @@ namespace KMS
             mCommands.AddEntry(new DI::String(aC), true);
         }
 
-        void Tool::ExecuteCommands(FILE* aFile)
+        void Tool::ClearError() { mError_Code = 0; mError_Command = ""; }
+
+        int Tool::GetExitCode()
+        {
+            if (0 == mExit_Code)
+            {
+                mExit_Code = mError_Code;
+
+                mError_Code = 0;
+            }
+
+            return mExit_Code;
+        }
+
+        int Tool::ExecuteCommands(FILE* aFile)
         {
             assert(nullptr != aFile);
 
@@ -71,6 +86,8 @@ namespace KMS
                 mConsole.OutputStream() << "\n> " << std::flush;
             }
 
+            int lResult = 0;
+
             while (nullptr != fgets(lLine, sizeof(lLine), aFile))
             {
                 // NOT TESTED
@@ -78,15 +95,11 @@ namespace KMS
 
                 if (1 == sscanf_s(lLine, " %[^\n\r\t]", lCmd SizeInfo(lCmd)))
                 {
-                    try
-                    {
-                        ExecuteCommand(lCmd);
-                    }
-                    KMS_CATCH;
+                    CallExecuteCommand(lCmd);
 
-                    if (0 < mExit)
+                    if (0 < mExit_Count)
                     {
-                        mExit--;
+                        ExitCodeToErrorCode();
                         break;
                     }
                 }
@@ -96,9 +109,11 @@ namespace KMS
                     mConsole.OutputStream() << "\n> " << std::flush;
                 }
             }
+
+            return GetExitCode();
         }
 
-        void Tool::ExecuteScript(const char* aName)
+        int Tool::ExecuteScript(const char* aName)
         {
             Text::File_ASCII lScript;
 
@@ -109,18 +124,16 @@ namespace KMS
 
             for (const auto& lLine : lScript.mLines)
             {
-                try
-                {
-                    ExecuteCommand(lLine.c_str());
-                }
-                KMS_CATCH;
+                CallExecuteCommand(lLine.c_str());
 
-                if (0 < mExit)
+                if (0 < mExit_Count)
                 {
-                    mExit--;
+                    ExitCodeToErrorCode();
                     break;
                 }
             }
+
+            return GetExitCode();
         }
 
         void Tool::DisplayHelp(FILE* aOut) const
@@ -128,29 +141,32 @@ namespace KMS
             assert(nullptr != aOut);
 
             fprintf(aOut,
+                "AbortIfError\n"
+                "ClearError\n"
                 "Config {Name} [Op] [Value]\n"
                 "Delay {Delay_ms}\n"
                 "Echo {Message}\n"
-                "Exit\n"
                 "ExecuteScript {FileName}\n"
+                "Exit [Code]\n"
+                "ExitIfError\n"
                 "Help\n"
                 "Repeat {Count} {Command}\n"
                 "Shell\n"
                 "UntilCtrlC {Command}\n");
         }
 
-        void Tool::ExecuteCommand(const char* aC)
+        int Tool::ExecuteCommand(const char* aC)
         {
             unsigned int lCount;
             unsigned int lDelay_ms;
+            int          lResult = 0;
             char lValue[LINE_LENGTH];
-
-            if      (0 == strcmp(aC, "Exit")) { mExit++; }
-            else if (0 == strcmp(aC, "Help")) { DisplayHelp(mConsole.OutputFile()); }
-            else if (0 == strcmp(aC, "Shell")) { ExecuteCommands(stdin); }
+            
+            if      (0 == strcmp(aC, "AbortIfError")) { AbortIfError(); }
+            else if (0 == strcmp(aC, "ClearError"  )) { ClearError  (); }
             else if (1 == sscanf_s(aC, "Config %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
-                Config(lValue);
+                lResult = Config(lValue);
             }
             else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms))
             {
@@ -165,17 +181,24 @@ namespace KMS
             else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { mConsole.OutputStream() << lValue << std::endl; }
             else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
-                ExecuteScript(lValue);
+                lResult = ExecuteScript(lValue);
             }
+            else if (0 == strcmp(aC, "ExitIfError")) { ExitIfError(); }
+            else if (1 == sscanf_s(aC, "Exit %d", &mExit_Code)) { mExit_Count++; }
+            else if (0 == strcmp(aC, "Exit")) { mExit_Count++; }
+            else if (0 == strcmp(aC, "Help")) { DisplayHelp(mConsole.OutputFile()); }
             else if (2 == sscanf_s(aC, "Repeat %u %[^\n\r\t]", &lCount, lValue SizeInfo(lValue)))
             {
-                Repeat(lCount, lValue);
+                lResult = Repeat(lCount, lValue);
             }
-            else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", lValue SizeInfo(lValue))) { UntilCtrlC(lValue); }
+            else if (0 == strcmp(aC, "Shell")) { lResult = ExecuteCommands(stdin); }
+            else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", lValue SizeInfo(lValue))) { lResult = UntilCtrlC(lValue); }
             else
             {
                 KMS_EXCEPTION(RESULT_INVALID_COMMAND, "Invalid command", aC);
             }
+
+            return lResult;
         }
 
         int Tool::Run()
@@ -185,20 +208,16 @@ namespace KMS
                 auto lCommand = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(nullptr != lCommand);
 
-                try
-                {
-                    ExecuteCommand(lCommand->Get());
-                }
-                KMS_CATCH;
+                CallExecuteCommand(lCommand->Get());
 
-                if (0 < mExit)
+                if (0 < mExit_Count)
                 {
-                    mExit--;
+                    ExitCodeToErrorCode();
                     break;
                 }
             }
 
-            return 0;
+            return GetExitCode();
         }
 
         // ===== DI::Container ==============================================
@@ -219,7 +238,7 @@ namespace KMS
         // Protected
         // //////////////////////////////////////////////////////////////////
 
-        Tool::Tool() : mExit(0)
+        Tool::Tool() : mError_Code(0), mExit_Code(0), mExit_Count(0)
         {
             mCommands.SetCreator(DI::String_Expand::Create);
 
@@ -229,39 +248,148 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Tool::Config(const char* aOperation)
+        void Tool::AbortIfError()
         {
+            if (0 != mError_Code)
+            {
+                // NOT TESTED
+                KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
+                char lMsg[64];
+                sprintf_s(lMsg, "Abort on error (%d)", mError_Code);
+                Dbg::gLog.WriteMessage(lMsg);
+
+                exit(mError_Code);
+            }
+        }
+
+        int Tool::Config(const char* aOperation)
+        {
+            int lResult = 0;
+
             if (!DI::Execute_Operation(this, aOperation))
             {
-                mConsole.OutputStream() << Console::Color::YELLOW;
-                mConsole.OutputStream() << "WARNING  Ignored operation" << Console::Color::WHITE << std::endl;
+                lResult = __LINE__;
+            }
+
+            return lResult;
+        }
+
+        void Tool::ExitIfError()
+        {
+            if (0 != mError_Code)
+            {
+                // NOT TESTED
+                KMS_DBG_LOG_ERROR_F(Dbg::Log::FLAG_USER_REDUNDANT);
+                char lMsg[64];
+                sprintf_s(lMsg, "Exit on error (%d)", mError_Code);
+                Dbg::gLog.WriteMessage(lMsg);
+
+                mExit_Code  = mError_Code;
+                mError_Code = 0;
+
+                mExit_Count++;
             }
         }
 
-        void Tool::Repeat(unsigned int aCount, const char* aC)
+        int Tool::Repeat(unsigned int aCount, const char* aC)
         {
+            int lResult = 0;
+
             for (unsigned int i = 0; i < aCount; i++)
             {
-                ExecuteCommand(aC);
+                if (!CallExecuteCommand(aC))
+                {
+                    lResult = mError_Code;
+                    break;
+                }
             }
+
+            return lResult;
         }
 
-        void Tool::UntilCtrlC(const char* aC)
+        int Tool::UntilCtrlC(const char* aC)
         {
-            auto lHandler = signal(SIGINT, OnCtrlC);
-
             sContinue = true;
+
+            auto lHandler = signal(SIGINT, OnCtrlC);
+            int  lResult  = 0;
+
+            while (sContinue)
+            {
+                if (!CallExecuteCommand(aC))
+                {
+                    lResult = mError_Code;
+                    break;
+                }
+            }
+
+            signal(SIGINT, lHandler);
+
+            return lResult;
+        }
+
+        bool Tool::CallExecuteCommand(const char* aC)
+        {
+            assert(nullptr != aC);
+
+            char lMsg[64 + LINE_LENGTH];
+            auto lResult = false;
 
             try
             {
-                while (sContinue)
+                auto lRet = ExecuteCommand(aC);
+                if (0 == lRet)
                 {
-                    ExecuteCommand(aC);
+                    lResult = true;
+                }
+                else
+                {
+                    KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);
+                    sprintf_s(lMsg, "The command \"%s\" returned %d", aC, lRet);
+                    KMS::Dbg::gLog.WriteMessage(lMsg);
+                    mError_Code = lRet;
                 }
             }
-            KMS_CATCH;
+            catch (Exception eE)
+            {
+                KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);
+                sprintf_s(lMsg, "The command \"%s\" raised an Exception \"%s\"", aC, eE.what());
+                KMS::Dbg::gLog.WriteMessage(lMsg);
+                mError_Code = eE.GetCode();
+            }
+            catch (std::exception eE)
+            {
+                KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);
+                sprintf_s(lMsg, "The command \"%s\" raised a std::exception \"%s\"", aC, eE.what());
+                KMS::Dbg::gLog.WriteMessage(lMsg);
+                mError_Code = __LINE__;
+            }
+            catch (...)
+            {
+                KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);
+                sprintf_s(lMsg, "The command \"%s\" raised an unknown exception", aC);
+                KMS::Dbg::gLog.WriteMessage(lMsg);
+                mError_Code = __LINE__;
+            }
 
-            signal(SIGINT, lHandler);
+            if (!lResult)
+            {
+                mError_Command = aC;
+            }
+
+            return lResult;
+        }
+
+        void Tool::ExitCodeToErrorCode()
+        {
+            assert(0 < mExit_Count);
+
+            mError_Code    = mExit_Code;
+            mError_Command = "";
+
+            mExit_Code  = 0;
+
+            mExit_Count--;
         }
 
     }

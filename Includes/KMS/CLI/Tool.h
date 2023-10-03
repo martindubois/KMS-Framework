@@ -30,14 +30,18 @@ namespace KMS
 
             void AddCommand(const char* aC);
 
-            void ExecuteCommands(FILE* aF);
+            void ClearError();
 
-            void ExecuteScript(const char* aFileName);
+            int GetExitCode();
+
+            int ExecuteCommands(FILE* aF);
+
+            int ExecuteScript(const char* aFileName);
 
             virtual void DisplayHelp(FILE* aOut) const;
 
             // Exception  CLI_COMMAND_INVALID
-            virtual void ExecuteCommand(const char* aC);
+            virtual int ExecuteCommand(const char* aC);
 
             virtual int Run();
 
@@ -56,13 +60,25 @@ namespace KMS
 
             NO_COPY(Tool);
 
-            void Config(const char* aOperation);
+            void AbortIfError();
 
-            void Repeat(unsigned int aCount, const char* aC);
+            int Config(const char* aOperation);
 
-            void UntilCtrlC(const char* aC);
+            void ExitIfError();
 
-            unsigned int mExit;
+            int Repeat(unsigned int aCount, const char* aC);
+
+            int UntilCtrlC(const char* aC);
+
+            bool CallExecuteCommand(const char* aC);
+
+            void ExitCodeToErrorCode();
+
+            int         mError_Code;
+            std::string mError_Command;
+
+            int          mExit_Code;
+            unsigned int mExit_Count;
 
         };
 

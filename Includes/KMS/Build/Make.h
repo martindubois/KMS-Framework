@@ -60,7 +60,7 @@ namespace KMS
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile);
-            virtual void ExecuteCommand(const char* aC);
+            virtual int  ExecuteCommand(const char* aC);
             virtual int  Run();
 
         private:
@@ -96,9 +96,9 @@ namespace KMS
 
             void Prepare();
 
-            void Run_Clean();
-            void Run_Depend();
-            void Run_Make();
+            int Run_Clean();
+            int Run_Depend();
+            int Run_Make();
 
             void VerifyConfig();
 

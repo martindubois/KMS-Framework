@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+* CLI::Tool - Command result
+
 1.0.7 Windows 2023-09-27
 - Graph::Bitmap::SetBox - Optimisation
 - Saturated namespace

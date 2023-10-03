@@ -27,14 +27,21 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
     lT.mConsole.Set_Null();
 
     // AddCommand
+    lT.AddCommand("AbortIfError");
     lT.AddCommand("Config Invalid");
     lT.AddCommand("Echo Message");
     lT.AddCommand("ExecuteScript KMS-A-Test/Tests/Test_CLI_Tool_Base_0.txt");
+    lT.AddCommand("ExitIfError");
     lT.AddCommand("Help");
     lT.AddCommand("Repeat 0 Help");
     lT.AddCommand("Repeat 1 Help");
     lT.AddCommand("UntilCtrlC Invalid");
     lT.AddCommand("Exit");
+
+    // ClearError
+    lT.ClearError();
+
+    // GetExitCode
 
     // ExecuteCommands
     lT.ExecuteCommands(stdout);
@@ -46,8 +53,13 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
     // ExecuteCommand
 
     // Run
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
-    lT.Run();
+    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 8);
+    KMS_TEST_COMPARE(lT.Run(), 0);
+
+    // ===== DI::Container ==================================================
+
+    // Validate
+    lT.Validate();
 }
 
 KMS_TEST(CLI_Tool_Exception, "Auto", sTest_Exception)
