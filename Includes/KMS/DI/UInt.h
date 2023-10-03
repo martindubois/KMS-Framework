@@ -163,13 +163,13 @@ namespace KMS
             case 1:
                 if (0xff < lValue)
                 {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint8_t value" , aIn);
+                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint8_t value" , aIn);
                 }
                 break;
             case 2:
                 if (0xffff < lValue)
                 {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint16_t value", aIn);
+                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint16_t value", aIn);
                 }
                 break;
             case 4: break;
