@@ -11,6 +11,7 @@
 // ===== Includes ===========================================================
 #include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/Test/Test.h>
 
 namespace KMS
