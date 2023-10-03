@@ -75,6 +75,7 @@
     <ClCompile Include="DI_Object.cpp" />
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
+    <ClCompile Include="Exception_W.cpp" />
     <ClCompile Include="FileFormat_BMP.cpp" />
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Saturated.cpp" />
     <ClCompile Include="ScaleAndOffset.cpp" />
     <ClCompile Include="Scope_Channel.cpp" />
+    <ClCompile Include="Scope_Channel_DAQ.cpp" />
     <ClCompile Include="Scope_Channel_Random.cpp" />
     <ClCompile Include="Scope_Scope.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />

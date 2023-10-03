@@ -22,6 +22,10 @@ namespace KMS
 
     public:
 
+        static void* RegisterTranslator();
+
+        static void RestoreTranslator(void* aTranslator);
+
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg);
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg, const char * aInfo);
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg, uint64_t aInfo);

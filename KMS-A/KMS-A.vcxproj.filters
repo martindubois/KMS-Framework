@@ -375,6 +375,12 @@
     <ClCompile Include="Scope_Channel.cpp">
       <Filter>Source Files\Scope</Filter>
     </ClCompile>
+    <ClCompile Include="Scope_Channel_DAQ.cpp">
+      <Filter>Source Files\Scope</Filter>
+    </ClCompile>
+    <ClCompile Include="Exception_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
