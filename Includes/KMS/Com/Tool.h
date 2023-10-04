@@ -52,7 +52,7 @@ namespace KMS
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aOut) const;
-            virtual void ExecuteCommand(const char* aC);
+            virtual int  ExecuteCommand(const char* aC);
             virtual int  Run();
 
         private:

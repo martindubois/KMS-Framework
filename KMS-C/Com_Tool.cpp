@@ -249,10 +249,11 @@ namespace KMS
             CLI::Tool::DisplayHelp(aFile);
         }
 
-        void Tool::ExecuteCommand(const char* aC)
+        int Tool::ExecuteCommand(const char* aC)
         {
             char lData [LINE_LENGTH];
             char lFlags[LINE_LENGTH];
+            int  lResult = 0;
             unsigned int lSize_byte = 0;
 
             if      (0 == strcmp(aC, "ClearDTR"  )) { mPort.SetDTR(false); }
@@ -291,8 +292,10 @@ namespace KMS
             }
             else
             {
-                CLI::Tool::ExecuteCommand(aC);
+                lResult = CLI::Tool::ExecuteCommand(aC);
             }
+
+            return lResult;
         }
 
         int Tool::Run()

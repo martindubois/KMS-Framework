@@ -81,10 +81,11 @@ namespace KMS
             CLI::Tool::DisplayHelp(aOut);
         }
 
-        void Tool::ExecuteCommand(const char* aC)
+        int Tool::ExecuteCommand(const char* aC)
         {
             unsigned int lInstance;
             unsigned int lMask;
+            int          lResult = 0;
 
             if      (0 == strcmp(aC, "Connect"   ))
             {
@@ -101,8 +102,10 @@ namespace KMS
             else if (2 == sscanf_s(aC, "SendRequest %u %x", &lInstance, &lMask)) { SendRequest(lInstance, lMask); }
             else
             {
-                CLI::Tool::ExecuteCommand(aC);
+                lResult = CLI::Tool::ExecuteCommand(aC);
             }
+
+            return lResult;
         }
 
         // Private

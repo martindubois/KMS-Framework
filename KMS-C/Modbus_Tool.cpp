@@ -298,7 +298,7 @@ namespace KMS
             CLI::Tool::DisplayHelp(aOut);
         }
 
-        void Tool::ExecuteCommand(const char* aC)
+        int Tool::ExecuteCommand(const char* aC)
         {
             char lA[NAME_LENGTH];
             char lB[NAME_LENGTH];
@@ -307,7 +307,7 @@ namespace KMS
             switch (sscanf_s(aC, "%[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t]", lA SizeInfo(lA), lB SizeInfo(lB), lC SizeInfo(lC)))
             {
             case 1:
-                if (0 == strcmp("Dump", lA)) { Dump(stdout); return; }
+                if (0 == strcmp("Dump", lA)) { Dump(stdout); return 0; }
                 break;
 
             case 2:
@@ -315,34 +315,34 @@ namespace KMS
                 {
                     bool lRet = ReadCoil(lB);
                     std::cout << lRet << std::endl;
-                    return;
+                    return 0;
                 }
                 if (0 == strcmp("ReadDiscreteInput", lA))
                 {
                     bool lRet = ReadDiscreteInput(lB);
                     std::cout << lRet << std::endl;
-                    return;
+                    return 0;
                 }
                 if (0 == strcmp("ReadHoldingRegister", lA))
                 {
                     uint16_t lRet = ReadHoldingRegister(lB);
                     std::cout << lRet << std::endl;
-                    return;
+                    return 0;
                 }
                 if (0 == strcmp("ReadInputRegister", lA))
                 {
                     uint16_t lRet = ReadInputRegister(lB);
                     std::cout << lRet << std::endl;
-                    return;
+                    return 0;
                 }
                 break;
 
             case 3:
-                if (0 == strcmp("WriteSingleCoil"    , lA)) { WriteSingleCoil    (lB, Convert::ToBool  (lC)); return; }
-                if (0 == strcmp("WriteSingleRegister", lA)) { WriteSingleRegister(lB, Convert::ToUInt16(lC)); return; }
+                if (0 == strcmp("WriteSingleCoil"    , lA)) { WriteSingleCoil    (lB, Convert::ToBool  (lC)); return 0; }
+                if (0 == strcmp("WriteSingleRegister", lA)) { WriteSingleRegister(lB, Convert::ToUInt16(lC)); return 0; }
             }
 
-            CLI::Tool::ExecuteCommand(aC);
+            return CLI::Tool::ExecuteCommand(aC);
         }
 
         int Tool::Run()
