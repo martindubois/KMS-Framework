@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Address.h
@@ -36,8 +36,6 @@ namespace KMS
 
                 UNKNOWN,
             };
-
-            static const uint16_t PORT_ANY;
 
             Address();
 
@@ -106,10 +104,6 @@ namespace KMS
             mAddress;
 
             std::string mName;
-
-            unsigned int mSize_byte;
-
-            Type mType;
 
         };
 

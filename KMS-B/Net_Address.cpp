@@ -5,6 +5,10 @@
 // Product   KMS-Framework
 // File      KMS-B/Net_Address.cpp
 
+// TEST_COVERAGE  2023-10-12  KMS - Martin Dubois, P. Eng.
+
+// NOT TESTED  IPv6
+
 #include "Component.h"
 
 // ===== Windows ============================================================
@@ -31,41 +35,56 @@ namespace KMS
 
         void Address::Clear()
         {
-            mSize_byte = 0;
-            mType = Type::UNKNOWN;
-
             memset(&mAddress, 0, sizeof(mAddress));
         }
 
         uint16_t Address::GetPortNumber() const
         {
-            uint16_t lPort = 0;
+            uint16_t lResult = 0;
 
-            switch (mType)
+            switch (mAddress.mBase.sa_family)
             {
-            case Type::IPv4: lPort = ntohs(mAddress.mIPv4.sin_port ); break;
-            case Type::IPv6: lPort = ntohs(mAddress.mIPv6.sin6_port); break;
-
-            default: assert(false);
+            case AF_INET : lResult = ntohs(mAddress.mIPv4.sin_port ); break;
+            case AF_INET6: lResult = ntohs(mAddress.mIPv6.sin6_port); break;
             }
 
-            return lPort;
+            return lResult;
         }
 
-        Address::Type Address::GetType() const { return mType; }
+        Address::Type Address::GetType() const
+        {
+            auto lResult = Type::UNKNOWN;
+
+            switch (mAddress.mBase.sa_family)
+            {
+            case AF_INET : lResult = Type::IPv4; break;
+            case AF_INET6: lResult = Type::IPv6; break;
+            }
+
+            return lResult;
+        }
 
         void Address::SetPortNumber(uint16_t aP)
         {
-            switch (mType)
+            switch (mAddress.mBase.sa_family)
             {
-            case Type::IPv4: mAddress.mIPv4.sin_port  = htons(aP); break;
-            case Type::IPv6: mAddress.mIPv6.sin6_port = htons(aP); break;
+            case AF_INET : mAddress.mIPv4.sin_port  = htons(aP); break;
+            case AF_INET6: mAddress.mIPv6.sin6_port = htons(aP); break;
 
             default: assert(false);
             }
         }
 
-        void Address::SetType(Type aT) { mType = aT; }
+        void Address::SetType(Type aT)
+        {
+            switch (aT)
+            {
+            case Type::IPv4: mAddress.mBase.sa_family = AF_INET ; break;
+            case Type::IPv6: mAddress.mBase.sa_family = AF_INET6; break;
+
+            default: Clear();
+            }
+        }
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -79,10 +98,10 @@ namespace KMS
         {
             const void* lResult = nullptr;
 
-            switch (mType)
+            switch (mAddress.mBase.sa_family)
             {
-            case Type::IPv4: lResult = &mAddress.mIPv4.sin_addr; break;
-            case Type::IPv6: lResult = &mAddress.mIPv6.sin6_addr; break;
+            case AF_INET : lResult = &mAddress.mIPv4.sin_addr ; break;
+            case AF_INET6: lResult = &mAddress.mIPv6.sin6_addr; break;
             }
 
             return lResult;
@@ -90,7 +109,18 @@ namespace KMS
 
         int Address::GetInternalFamily() const { return mAddress.mBase.sa_family; }
 
-        int Address::GetInternalSize() const { return mSize_byte; }
+        int Address::GetInternalSize() const
+        {
+            int lResult_byte = 0;
+
+            switch (mAddress.mBase.sa_family)
+            {
+            case AF_INET : lResult_byte = sizeof(mAddress.mIPv4); break;
+            case AF_INET6: lResult_byte = sizeof(mAddress.mIPv6); break;
+            }
+
+            return lResult_byte;
+        }
 
         void Address::SetAddress(const char* aA)
         {
@@ -98,7 +128,11 @@ namespace KMS
 
             unsigned int lB[4];
 
-            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3)) { SetIPv4(lB); return; }
+            if (4 == sscanf_s(aA, "%u.%u.%u.%u", lB + 0, lB + 1, lB + 2, lB + 3))
+            {
+                SetIPv4(lB);
+                return;
+            }
 
             SetName(aA);
         }
@@ -118,22 +152,23 @@ namespace KMS
         {
             switch (aAddrSize_byte)
             {
-            case sizeof(mAddress.mIPv4) : mType = Type::IPv4; break;
-            case sizeof(mAddress.mIPv6) : mType = Type::IPv6; break;
+            case sizeof(mAddress.mIPv4) : mAddress.mBase.sa_family = AF_INET ; break;
+            case sizeof(mAddress.mIPv6) : mAddress.mBase.sa_family = AF_INET6; break;
 
             default: assert(false);
             }
-
-            mSize_byte = aAddrSize_byte;
 
             UpdateName();
         }
 
         void Address::SetPortNumber(unsigned int aP)
         {
-            char lMsg[64];
-            sprintf_s(lMsg, "%u is not a valid port number", aP);
-            KMS_EXCEPTION_ASSERT(0xffff >= aP, RESULT_INVALID_PORT, lMsg, "");
+            if (0xffff < aP)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid port number", aP);
+                KMS_EXCEPTION(RESULT_INVALID_PORT, lMsg, "");
+            }
 
             SetPortNumber(static_cast<uint16_t>(aP));
         }
@@ -156,9 +191,6 @@ namespace KMS
             mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b4 = aA[3];
             mAddress.mIPv4.sin_family = AF_INET;
 
-            mSize_byte = sizeof(mAddress.mIPv4);
-            mType      = Type::IPv4;
-
             UpdateName();
         }
 
@@ -166,13 +198,16 @@ namespace KMS
         {
             assert(nullptr != aN);
 
+            char lMsg[64 + NAME_LENGTH];
+
             addrinfo* lAddr;
 
             auto lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
-
-            char lMsg[64 + NAME_LENGTH];
-            sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
+            if (0 != lRet)
+            {
+                sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
+            }
 
             assert(nullptr != lAddr);
 
@@ -191,11 +226,13 @@ namespace KMS
                     return;
                 }
 
+                // NOT TESTED
                 lCurrent = lCurrent->ai_next;
             }
 
             freeaddrinfo(lAddr);
 
+            sprintf_s(lMsg, "Cannot resolve the network address \"%s\" (NOT TESTED)", aN);
             KMS_EXCEPTION(RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, "");
         }
 
@@ -205,14 +242,14 @@ namespace KMS
 
             char lName[32];
 
-            switch (mType)
+            switch (mAddress.mBase.sa_family)
             {
-            case Type::IPv4:
+            case AF_INET:
                 lB = &mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1;
                 sprintf_s(lName, "%u.%u.%u.%u", lB[0], lB[1], lB[2], lB[3]);
                 break;
 
-            case Type::IPv6:
+            case AF_INET6:
                 lB = reinterpret_cast<uint8_t*>(&mAddress.mIPv6.sin6_addr.u.Byte);
                 sprintf_s(lName, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", lB[0], lB[1], lB[2], lB[3], lB[4], lB[5], lB[6], lB[7]);
                 break;

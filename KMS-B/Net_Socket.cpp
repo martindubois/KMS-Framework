@@ -282,12 +282,15 @@ namespace KMS
         {
             assert(INVALID_SOCKET != mSocket);
 
-            if (0 != bind(mSocket, mLocalAddress.Get(), mLocalAddress.Get().GetInternalSize()))
+            auto lLA = mLocalAddress.Get();
+
+            auto lRet = bind(mSocket, lLA, lLA.GetInternalSize());
+            if (0 != lRet)
             {
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
 
-                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket", "");
+                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket", lRet);
             }
         }
 

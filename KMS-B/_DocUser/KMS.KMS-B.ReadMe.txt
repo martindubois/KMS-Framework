@@ -7,6 +7,8 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
+- HTTP::Client
+
 1.0.8-dev Windows 2023-10-03
 
 1.0.7 Windows 2023-09-27

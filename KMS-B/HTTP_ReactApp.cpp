@@ -99,7 +99,7 @@ namespace KMS
                 auto lRet = lIt->second->Send(this, aRequest);
                 if (!CALLBACK_SUCCESS(lRet))
                 {
-                    aRequest->SetResult(Request::Result::INTERNAL_SERVER_ERROR);
+                    aRequest->SetResult(Result::INTERNAL_SERVER_ERROR);
                 }
             }
 

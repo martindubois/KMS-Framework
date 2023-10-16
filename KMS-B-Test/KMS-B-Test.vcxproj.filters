@@ -13,21 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\HTTP">
+      <UniqueIdentifier>{61f7d12c-dee2-4d02-a1a5-9fef0fff1172}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-B-Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HTTP_Server.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Proc_Browser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HTTP_ReactApp.cpp">
+    <ClCompile Include="GUI_DynamicForm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI_DynamicForm.cpp">
+    <ClCompile Include="HTTP_ReactApp.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Server.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Client.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Address.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

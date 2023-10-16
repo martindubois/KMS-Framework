@@ -39,7 +39,9 @@
     <ClCompile Include="DI_NetAddress.cpp" />
     <ClCompile Include="DI_NetAddressRange.cpp" />
     <ClCompile Include="GUI_Form.cpp" />
+    <ClCompile Include="HTTP_Client.cpp" />
     <ClCompile Include="HTTP_FileServer.cpp" />
+    <ClCompile Include="HTTP_Result.cpp" />
     <ClCompile Include="HTTP_ReactApp.cpp" />
     <ClCompile Include="HTTP_Request.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />

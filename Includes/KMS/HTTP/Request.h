@@ -15,6 +15,7 @@
 #include <KMS/DI/Dictionary.h>
 #include <KMS/File/Binary.h>
 #include <KMS/File/Folder.h>
+#include <KMS/HTTP/Result.h>
 #include <KMS/Net/Socket.h>
 
 namespace KMS
@@ -26,22 +27,6 @@ namespace KMS
         {
 
         public:
-
-            enum class Result
-            {
-                OK                    = 200,
-                CREATED               = 201,
-                ACCEPTED              = 202,
-                NO_CONTENT            = 204,
-                RESET_CONTENT         = 205,
-                BAD_REQUEST           = 400,
-                FORBIDDEN             = 403,
-                NOT_FOUND             = 404,
-                METHOD_NOT_ALLOWED    = 405,
-                NOT_ACCEPTABLE        = 406,
-                REQUEST_TIMEOUT       = 408,
-                INTERNAL_SERVER_ERROR = 500,
-            };
 
             enum class Type
             {
@@ -122,7 +107,5 @@ namespace KMS
 }
 
 std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request& aR);
-
-std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request::Result& aR);
 
 std::ostream& operator << (std::ostream& aOut, const KMS::HTTP::Request::Type& aT);

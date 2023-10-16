@@ -180,7 +180,7 @@ namespace KMS
             {
             case Request::Type::GET: ProcessRequest_GET(aR, aPath); break;
 
-            default: aR->SetResult(Request::Result::METHOD_NOT_ALLOWED);
+            default: aR->SetResult(Result::METHOD_NOT_ALLOWED);
             }
 
             if (mVerbose)
@@ -200,20 +200,20 @@ namespace KMS
             auto lExt = strrchr(lPath, '.');
             if (nullptr == lExt)
             {
-                aR->SetResult(Request::Result::FORBIDDEN);
+                aR->SetResult(Result::FORBIDDEN);
                 return;
             }
 
             auto lIt = mFileTypes.find(lExt + 1);
             if (mFileTypes.end() == lIt)
             {
-                aR->SetResult(Request::Result::FORBIDDEN);
+                aR->SetResult(Result::FORBIDDEN);
                 return;
             }
 
             if (!mRoot.GetFolder().DoesFileExist(lPath + 1))
             {
-                aR->SetResult(Request::Result::NOT_FOUND);
+                aR->SetResult(Result::NOT_FOUND);
                 return;
             }
 

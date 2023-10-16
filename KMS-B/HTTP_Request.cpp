@@ -107,27 +107,7 @@ namespace KMS
 
         const char* Request::GetResultName() const
         {
-            const char* lResult = nullptr;
-
-            switch (mResult)
-            {
-            case Result::ACCEPTED             : lResult = "ACCEPTED"             ; break;
-            case Result::BAD_REQUEST          : lResult = "BAD_REQUEST"          ; break;
-            case Result::CREATED              : lResult = "CREATED"              ; break;
-            case Result::FORBIDDEN            : lResult = "FORBIDDEN"            ; break;
-            case Result::INTERNAL_SERVER_ERROR: lResult = "INTERNAL_SERVER_ERROR"; break;
-            case Result::METHOD_NOT_ALLOWED   : lResult = "METHOD_NOT_ALLOWED"   ; break;
-            case Result::NOT_ACCEPTABLE       : lResult = "NOT_ACCEPTABLE"       ; break;
-            case Result::NOT_FOUND            : lResult = "NOT_FOUND"            ; break;
-            case Result::NO_CONTENT           : lResult = "NO_CONTENT"           ; break;
-            case Result::OK                   : lResult = "OK"                   ; break;
-            case Result::REQUEST_TIMEOUT      : lResult = "REQUEST_TIMEOUT"      ; break;
-            case Result::RESET_CONTENT        : lResult = "RESET_CONTENT"        ; break;
-
-            default: assert(false);
-            }
-
-            return lResult;
+            return HTTP::GetResultName(mResult);
         }
 
         void Request::Display(std::ostream& aOut) const
