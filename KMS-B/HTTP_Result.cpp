@@ -28,6 +28,7 @@ namespace KMS
             case Result::BAD_REQUEST          : lResult = "BAD_REQUEST"          ; break;
             case Result::CREATED              : lResult = "CREATED"              ; break;
             case Result::FORBIDDEN            : lResult = "FORBIDDEN"            ; break;
+            case Result::FOUND                : lResult = "FOUND"                ; break;
             case Result::INTERNAL_SERVER_ERROR: lResult = "INTERNAL_SERVER_ERROR"; break;
             case Result::METHOD_NOT_ALLOWED   : lResult = "METHOD_NOT_ALLOWED"   ; break;
             case Result::MOVED_PERMANENTLY    : lResult = "MOVED_PERMANENTLY"    ; break;

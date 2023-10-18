@@ -8,9 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <WinSock2.h>
-
-// ===== Includes ===========================================================
 #include <KMS/HTTP/Client.h>
 
 using namespace KMS;
@@ -18,15 +15,70 @@ using namespace KMS;
 KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
 {
     File::Binary lOF0(File::Folder::CURRENT, "Test_HTTP_Client_Base_0.html", true);
-    File::Binary lOF1(File::Folder::CURRENT, "Test_HTTP_Client_Base_1.zip" , true);
+    File::Binary lOF1(File::Folder::CURRENT, "Test_HTTP_Client_Base_1.html", true);
+    File::Binary lOF2(File::Folder::CURRENT, "Test_HTTP_Client_Base_2.zip" , true);
 
     Net::Thread_Startup();
 
     // Constructor
-    HTTP::Client lC0;
+    HTTP::Client lC0(false);
+    HTTP::Client lC1(true);
+    HTTP::Client lC2(true);
 
     // Get
     lC0.Get("http://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF0);
+    lC1.Get("https://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF1);
+    lC2.Get("https://github.com/martindubois/KMS-Framework/releases/download/1.0.1_Windows/KMS-Framework_Windows_1.0.1.zip", &lOF2);
+
+    Net::Thread_Cleanup();
+
+    // ===== Cleanup ========================================================
+    File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_0.html");
+    File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_1.html");
+    File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_2.zip");
+}
+
+KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
+{
+    File::Binary lOF0(File::Folder::CURRENT, "Test_HTTP_Client_Exception_0.html", true);
+
+    Net::Thread_Startup();
+
+    HTTP::Client lC0(false);
+    HTTP::Client lC1(true);
+
+    // Get
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lC0.Get("https://localhost/index.htm", &lOF0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lC1.Get("http://localhost/index.htm", &lOF0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lC0.Get("http://localhost/index.htm", &lOF0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH_N("RESULT_SOCKET_CONNECT_FAILED");
+
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        lC1.Get("https://localhost/index.htm", &lOF0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH_N("RESULT_SOCKET_CONNECT_FAILED");
 
     Net::Thread_Cleanup();
 }

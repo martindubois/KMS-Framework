@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket.cpp
 
+// TEST COVERAGE  2023-10-17  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -15,7 +17,6 @@
 KMS_RESULT_STATIC(RESULT_SOCKET_BIND_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_FAILED);
 KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -31,23 +32,6 @@ namespace KMS
 {
     namespace Net
     {
-
-        // Functions
-        // //////////////////////////////////////////////////////////////////
-
-        void Thread_Startup()
-        {
-            WSADATA lData;
-
-            auto lRet = WSAStartup(MAKEWORD(2, 2), &lData);
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_STARTUP_FAILED, "WSAStartup failed", lRet);
-        }
-
-        void Thread_Cleanup()
-        {
-            auto lRet = WSACleanup();
-            assert(0 == lRet);
-        }
 
         // Public
         // //////////////////////////////////////////////////////////////////
@@ -83,15 +67,11 @@ namespace KMS
 
         uint16_t Socket::GetLocalPort() const { return mLocalAddress.Get().GetPortNumber(); }
 
-        void Socket::SetLocalAddress(const Address& aA) { mLocalAddress = aA; }
-
         void Socket::SetLocalPort(uint16_t aP) { mLocalAddress.Get().SetPortNumber(aP); }
-
-        void Socket::SetReceiveTimeout(unsigned int aRT_ms) { mReceiveTimeout_ms = aRT_ms; }
-        void Socket::SetSendTimeout(unsigned int aST_ms) { mSendTimeout_ms = aST_ms; }
 
         void Socket::Close() { VerifyState(State::CLOSED); }
 
+        // NOT TESTED  Type::DGRAM
         void Socket::Open()
         {
             VerifyState(State::CLOSED);
@@ -110,7 +90,7 @@ namespace KMS
             }
 
             mSocket = socket(mLocalAddress.Get().GetInternalFamily(), lType, lProt);
-            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, RESULT_SOCKET_FAILED, "socket failed", "");
+            KMS_EXCEPTION_ASSERT(INVALID_SOCKET != mSocket, RESULT_SOCKET_FAILED, "socket failed (NOT TESTED)", "");
 
             Configure();
 
@@ -160,6 +140,14 @@ namespace KMS
             while (sizeof(lBuffer) == lSize_byte);
         }
 
+        void Socket::Shutdown()
+        {
+            assert(INVALID_SOCKET != mSocket);
+            
+            auto lRet = shutdown(mSocket, SB_BOTH);
+            // assert(0 == lRet);
+        }
+
         // ===== DI::Container ==============================================
         void Socket::Validate() const
         {
@@ -203,7 +191,7 @@ namespace KMS
             {
             case State::CLOSED   : VerifyState_CLOSED   (aS); break;
             case State::CONNECTED: VerifyState_CONNECTED(aS); break;
-            case State::OPEN     : VerifyState_OPEN     (aS); break;
+            case State::OPEN     : VerifyState_OPEN     (aS); break; // NOT TESTED
 
             default: assert(false);
             }
@@ -214,8 +202,8 @@ namespace KMS
             switch (aS)
             {
             case State::CLOSED   : break;
-            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The oepration in impossible in the current state", static_cast<unsigned int>(aS));
-            case State::OPEN     : Open(); break;
+            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The oepration in impossible in the current state (NOT TESTED)", static_cast<unsigned int>(aS));
+            case State::OPEN     : Open(); break; // NOT TESTED
 
             default: assert(false);
             }
@@ -230,18 +218,19 @@ namespace KMS
 
             case State::LISTEN:
             case State::OPEN  :
-                KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
+                KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state (NOT TESTED)", static_cast<unsigned int>(aS));
 
             default: assert(false);
             }
         }
 
+        // NOT TESTED
         void Socket::VerifyState_OPEN(State aS)
         {
             switch (aS)
             {
             case State::CLOSED   : CloseSocket(); break;
-            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state", static_cast<unsigned int>(aS));
+            case State::CONNECTED: KMS_EXCEPTION(RESULT_INVALID_STATE, "The operation in impossible in the current state (NOT TESTED)", static_cast<unsigned int>(aS));
             case State::OPEN     : break;
 
             default: assert(false);
@@ -290,7 +279,7 @@ namespace KMS
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
 
-                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket", lRet);
+                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket (NOT TESTED)", lRet);
             }
         }
 
@@ -313,7 +302,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed (NOT TESTED)", lRet);
         }
 
         void Socket::SetOption_TCP(int aOptName, DWORD aValue)
@@ -321,7 +310,7 @@ namespace KMS
             assert(INVALID_SOCKET != mSocket);
 
             auto lRet = setsockopt(mSocket, IPPROTO_TCP, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed", lRet);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed (NOT TESTED)", lRet);
         }
 
     }

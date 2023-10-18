@@ -24,6 +24,7 @@ namespace KMS
             NO_CONTENT            = 204,
             RESET_CONTENT         = 205,
             MOVED_PERMANENTLY     = 301,
+            FOUND                 = 302,
             BAD_REQUEST           = 400,
             FORBIDDEN             = 403,
             NOT_FOUND             = 404,

@@ -9,6 +9,12 @@
 
 #include <KMS/Base.h>
 
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <WinSock2.h>
+    #include <Windows.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/Exception.h>

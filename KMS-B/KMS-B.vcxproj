@@ -52,7 +52,10 @@
     <ClCompile Include="Net_Server.cpp" />
     <ClCompile Include="Net_Socket.cpp" />
     <ClCompile Include="Net_Socket_Client.cpp" />
+    <ClCompile Include="NET_Socket_Client_TLS.cpp" />
+    <ClCompile Include="NET_Socket_Client_TLS_W.cpp" />
     <ClCompile Include="Net_Socket_Server.cpp" />
+    <ClCompile Include="Net_Socket_W.cpp" />
     <ClCompile Include="Proc_Browser.cpp" />
   </ItemGroup>
   <ItemGroup>

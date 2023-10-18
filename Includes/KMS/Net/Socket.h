@@ -66,29 +66,27 @@ namespace KMS
 
             Address  GetLocalAddress () const;
             uint16_t GetLocalPort    () const;
-            Address  GetRemoteAddress() const;
 
             void SetBroadcastReceive(bool aAllow = true);
 
             void SetLocalAddress(const Address& aA);
             void SetLocalPort   (uint16_t aP = 0);
 
-            void SetReceiveTimeout(unsigned int aRT_ms);
-            void SetSendTimeout   (unsigned int aST_ms);
-
             void Close();
 
             void Open();
 
-            unsigned int Receive(void* aOut, unsigned int aOutSize_byte);
+            virtual unsigned int Receive(void* aOut, unsigned int aOutSize_byte);
 
             unsigned int ReceiveFrom(void* aOut, unsigned int aOutSize_byte, Address* aFrom);
 
-            void Send(const void* aIn, unsigned int aInSize_byte);
+            virtual void Send(const void* aIn, unsigned int aInSize_byte);
 
             void Send(File::Binary* aFile);
 
             void SendTo(const Address& aAddress, const void* aIn, unsigned int aInSize_byte);
+
+            void Shutdown();
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;

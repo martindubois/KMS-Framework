@@ -81,6 +81,15 @@
     <ClCompile Include="HTTP_Result.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
+    <ClCompile Include="Net_Socket_W.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="NET_Socket_Client_TLS.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="NET_Socket_Client_TLS_W.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

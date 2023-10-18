@@ -9,11 +9,9 @@
 
 #include "Component.h"
 
-// ===== Windows ============================================================
-#include <WinSock2.h>
-
 // ===== Includes ===========================================================
 #include <KMS/HTTP/Result.h>
+#include <KMS/Net/Socket_Client_TLS.h>
 
 #include <KMS/HTTP/Client.h>
 
@@ -22,23 +20,41 @@ KMS_RESULT_STATIC(RESULT_HTTP_ERROR);
 // Data type
 // //////////////////////////////////////////////////////////////////////////
 
-typedef struct
-{
-    unsigned int mContentLength_byte;
-    unsigned int mResult;
-    unsigned int mSize_byte;
-}
-Header;
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
 #define EOL "\r\n"
 
-// Static function declaration
-// //////////////////////////////////////////////////////////////////////////
+#define URL_LENGTH (2048)
 
-static void ParseHeader(const char* aIn, unsigned int aInSize_byte, Header* aOut);
+class Header
+{
+
+public:
+
+    Header();
+
+    unsigned int GetContentLength() const;
+
+    const char* GetLocation() const;
+
+    KMS::HTTP::Result GetResult() const;
+
+    const char* GetResultName() const;
+
+    unsigned int GetSize() const;
+
+    bool Parse(const char* aIn, unsigned int aInSize_byte);
+
+private:
+
+    unsigned int mContentLength_byte;
+    unsigned int mResult;
+    unsigned int mSize_byte;
+
+    char mLocation[URL_LENGTH];
+
+};
 
 namespace KMS
 {
@@ -48,11 +64,27 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Client::Client() : mSocket(Net::Socket::Type::STREAM)
+        Client::Client(bool aSecure) : mSecure(aSecure)
         {
-            mSocket.mLocalAddress.Set("IPv4");
-            mSocket.mNoDelay           = true;
-            mSocket.mReceiveTimeout_ms = 10000; // 10 s
+            if (aSecure)
+            {
+                mSocket = new Net::Socket_Client_TLS;
+            }
+            else
+            {
+                mSocket = new Net::Socket_Client(Net::Socket::Type::STREAM);
+            }
+
+            mSocket->mLocalAddress.Set("IPv4");
+            mSocket->mNoDelay           = true;
+            mSocket->mReceiveTimeout_ms = 10000; // 10 s
+        }
+
+        Client::~Client()
+        {
+            assert(nullptr != mSocket);
+
+            delete mSocket;
         }
 
         void Client::Get(const char* aURL, File::Binary* aOutFile)
@@ -60,15 +92,27 @@ namespace KMS
             assert(nullptr != aURL);
             assert(nullptr != aOutFile);
 
-            char lHost[NAME_LENGTH];
-            char lPath[PATH_LENGTH];
+            KMS_DBG_LOG_NOISE();
+            Dbg::gLog.WriteMessage(aURL);
 
-            auto lRet = sscanf_s(aURL, "http://%[^/]/%s", lHost SizeInfo(lHost), lPath SizeInfo(lPath));
+            char lHost[NAME_LENGTH];
+            char lPath[URL_LENGTH];
+
+            int lRet;
+
+            if (mSecure)
+            {
+                lRet = sscanf_s(aURL, "https://%[^/]/%s", lHost SizeInfo(lHost), lPath SizeInfo(lPath));
+            }
+            else
+            {
+                lRet = sscanf_s(aURL, "http://%[^/]/%s", lHost SizeInfo(lHost), lPath SizeInfo(lPath));
+            }
             KMS_EXCEPTION_ASSERT(2 == lRet, RESULT_INVALID_FORMAT, "Invalid URL format", aURL);
 
             ConnectSocket(lHost);
 
-            char lBuffer[4096];
+            char lBuffer[8192];
 
             sprintf_s(lBuffer,
                 "GET /%s HTTP/1.1" EOL
@@ -83,25 +127,42 @@ namespace KMS
 
             auto lSize_byte = static_cast<unsigned int>(strlen(lBuffer));
 
-            mSocket.Send(lBuffer, lSize_byte);
+            mSocket->Send(lBuffer, lSize_byte);
 
             memset(&lBuffer, 0, sizeof(lBuffer));
 
-            lSize_byte = mSocket.Receive(lBuffer, sizeof(lBuffer));
-
             Header lHeader;
+            unsigned int lReceived_byte = 0;
 
-            ParseHeader(lBuffer, lSize_byte, &lHeader);
+            do
+            {
+                lReceived_byte += mSocket->Receive(lBuffer + lReceived_byte, sizeof(lBuffer) - lReceived_byte);
+            }
+            while (!lHeader.Parse(lBuffer, lReceived_byte));
 
-            KMS_EXCEPTION_ASSERT(HTTP::Result::OK == static_cast<HTTP::Result>(lHeader.mResult), RESULT_HTTP_ERROR, "HTTP Error", lHeader.mResult);
+            switch (lHeader.GetResult())
+            {
+            case HTTP::Result::OK:
+                // Write the part we already received
+                lSize_byte = lReceived_byte - lHeader.GetSize();
+                aOutFile->Write(lBuffer + lHeader.GetSize(), lSize_byte);
 
-            // Write the part we already received
-            lSize_byte -= lHeader.mSize_byte;
-            aOutFile->Write(lBuffer + lHeader.mSize_byte, lSize_byte);
+                ReceiveRestOfFile(lHeader.GetContentLength() - lSize_byte, aOutFile);
 
-            ReceiveRestOfFile(lHeader.mContentLength_byte - lSize_byte, aOutFile);
+                mSocket->Disconnect();
+                break;
 
-            mSocket.Disconnect();
+            case HTTP::Result::FOUND:
+                KMS_DBG_LOG_INFO();
+                Dbg::gLog.WriteMessage(lHeader.GetLocation());
+
+                mSocket->Disconnect();
+
+                Get(lHeader.GetLocation(), aOutFile);
+                break;
+
+            default: KMS_EXCEPTION(RESULT_HTTP_ERROR, "HTTP Error", lHeader.GetResultName());
+            }
         }
 
         // Private
@@ -113,11 +174,23 @@ namespace KMS
 
             char lRA[LINE_LENGTH];
 
-            sprintf_s(lRA, "IPv4:%s:80", aHost);
+            if (mSecure)
+            {
+                sprintf_s(lRA, "IPv4:%s:443", aHost);
 
-            mSocket.mRemoteAddress = lRA;
+                auto lSocket = dynamic_cast<Net::Socket_Client_TLS*>(mSocket);
+                assert(nullptr != lSocket);
 
-            mSocket.Connect();
+                lSocket->mRemoteName = aHost;
+            }
+            else
+            {
+                sprintf_s(lRA, "IPv4:%s:80", aHost);
+            }
+
+            mSocket->mRemoteAddress = lRA;
+
+            mSocket->Connect();
         }
 
         void Client::ReceiveRestOfFile(unsigned int aToRecv_byte, File::Binary* aOutFile)
@@ -130,7 +203,7 @@ namespace KMS
 
             while (0 < lToRecv_byte)
             {
-                auto lSize_byte = mSocket.Receive(lRest, lToRecv_byte);
+                auto lSize_byte = mSocket->Receive(lRest, lToRecv_byte);
 
                 aOutFile->Write(lRest, lSize_byte);
 
@@ -147,20 +220,29 @@ namespace KMS
 
 using namespace KMS;
 
-// Static function
+// Public
 // //////////////////////////////////////////////////////////////////////////
 
-void ParseHeader(const char* aIn, unsigned int aInSize_byte, Header* aOut)
+Header::Header() : mContentLength_byte(0), mResult(0), mSize_byte(0)
+{
+    memset(&mLocation, 0, sizeof(mLocation));
+}
+
+unsigned int Header::GetContentLength() const { return mContentLength_byte; }
+const char * Header::GetLocation     () const { return mLocation; }
+HTTP::Result Header::GetResult       () const { return static_cast<HTTP::Result>(mResult); }
+const char * Header::GetResultName   () const { return HTTP::GetResultName(mResult); }
+unsigned int Header::GetSize         () const { return mSize_byte; }
+
+bool Header::Parse(const char* aIn, unsigned int aInSize_byte)
 {
     assert(nullptr != aIn);
-    assert(0 < aInSize_byte);
-    assert(nullptr != aOut);
 
-    memset(aOut, 0, sizeof(Header));
+    KMS_EXCEPTION_ASSERT(4 < aInSize_byte, RESULT_INVALID_FORMAT, "Invalid HTTP response size", aInSize_byte);
 
-    char lDump[LINE_LENGTH];
+    char lDump[URL_LENGTH];
 
-    auto lRet = sscanf_s(aIn, "HTTP/1.1 %u %s" EOL, &aOut->mResult, lDump SizeInfo(lDump));
+    auto lRet = sscanf_s(aIn, "HTTP/1.1 %u %s" EOL, &mResult, lDump SizeInfo(lDump));
     KMS_EXCEPTION_ASSERT(2 == lRet, RESULT_INVALID_FORMAT, "Invalid HTTP response format", lRet);
 
     auto lInSize_byte = aInSize_byte - 2;
@@ -173,13 +255,14 @@ void ParseHeader(const char* aIn, unsigned int aInSize_byte, Header* aOut)
 
             if (0 == strncmp(lPtr, EOL, 2))
             {
-                aOut->mSize_byte = i + 2;
-                return;
+                mSize_byte = i + 3;
+                return true;
             }
 
-            lRet = sscanf_s(lPtr, "Content-Length: %u" EOL, &aOut->mContentLength_byte);
+            lRet = sscanf_s(lPtr, "Content-Length: %u" EOL, &mContentLength_byte);
+            lRet = sscanf_s(lPtr, "Location: %[^\r\n]" EOL, mLocation SizeInfo(mLocation));
         }
     }
 
-    KMS_EXCEPTION(RESULT_HTTP_ERROR, "Incomplete HTTP response (NOT TESTED)", aInSize_byte);
+    return false;
 }

@@ -8,9 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <WinSock2.h>
-
-// ===== Includes ===========================================================
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/HTTP/Request.h>

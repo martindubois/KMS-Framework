@@ -8,9 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <WinSock2.h>
-
-// ===== Includes ===========================================================
 #include <KMS/HTTP/Request.h>
 
 #include <KMS/HTTP/ReactApp.h>

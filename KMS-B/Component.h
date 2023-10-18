@@ -9,5 +9,13 @@
 
 #include <KMS/Base.h>
 
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #define SECURITY_WIN32
+    #include <WinSock2.h>
+    #include <Windows.h>
+    #include <security.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/Exception.h>

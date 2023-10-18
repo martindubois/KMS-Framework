@@ -27,9 +27,9 @@ namespace KMS
 
             Socket_Client(Type aType);
 
-            void Connect();
+            virtual void Connect();
 
-            void Disconnect();
+            virtual void Disconnect();
 
             // ===== Socket =================================================
             virtual ~Socket_Client();

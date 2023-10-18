@@ -23,9 +23,9 @@ namespace KMS
 
         public:
 
-            Net::Socket_Client mSocket;
+            Client(bool aSecure);
 
-            Client();
+            ~Client();
 
             void Get(const char* aURL, File::Binary* aOutFile);
 
@@ -34,6 +34,10 @@ namespace KMS
             void ConnectSocket(const char* aHost);
 
             void ReceiveRestOfFile(unsigned int aToRecv_byte, File::Binary* aOutFile);
+
+            bool mSecure;
+
+            Net::Socket_Client* mSocket;
 
         };
 
