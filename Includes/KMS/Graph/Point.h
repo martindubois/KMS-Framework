@@ -12,7 +12,7 @@ namespace KMS
     namespace Graph
     {
 
-        class Point
+        class Point final
         {
 
         public:

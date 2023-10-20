@@ -27,7 +27,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class LogFile
+        class LogFile final
         {
 
         public:

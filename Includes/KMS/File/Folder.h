@@ -17,7 +17,7 @@ namespace KMS
     namespace File
     {
 
-        class Folder
+        class Folder final
         {
 
         public:

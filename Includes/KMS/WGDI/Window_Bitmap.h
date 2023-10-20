@@ -16,7 +16,7 @@ namespace KMS
     namespace WGDI
     {
 
-        class Window_Bitmap : public Window
+        class Window_Bitmap final : public Window
         {
 
         public:

@@ -39,7 +39,7 @@ namespace KMS
 
     };
 
-    class Callback_Ptr
+    class Callback_Ptr final
     {
 
     public:
@@ -61,7 +61,7 @@ namespace KMS
     };
 
     template < class T >
-    class Callback : public ICallback
+    class Callback final : public ICallback
     {
 
     public:

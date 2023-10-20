@@ -15,7 +15,7 @@ namespace KMS
     namespace Thread
     {
 
-        class Gate
+        class Gate final
         {
 
         public:

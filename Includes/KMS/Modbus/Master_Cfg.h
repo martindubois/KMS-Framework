@@ -18,7 +18,7 @@ namespace KMS
 
         class Master;
 
-        class Master_Cfg : public DI::Dictionary
+        class Master_Cfg final : public DI::Dictionary
         {
 
         private:

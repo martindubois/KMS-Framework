@@ -52,7 +52,7 @@ namespace KMS
 
         };
 
-        class Folder : public Folder_Ptr
+        class Folder final : public Folder_Ptr
         {
 
         public:

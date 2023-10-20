@@ -19,7 +19,7 @@ namespace KMS
     namespace Test
     {
 
-        class TestManager : public DI::Dictionary
+        class TestManager final : public DI::Dictionary
         {
 
         private:

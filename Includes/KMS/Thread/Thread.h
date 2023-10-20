@@ -21,7 +21,7 @@ namespace KMS
     namespace Thread
     {
 
-        class Thread
+        class Thread final
         {
 
         public:

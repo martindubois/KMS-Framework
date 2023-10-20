@@ -12,7 +12,7 @@ namespace KMS
     namespace Text
     {
 
-        class WritePtr
+        class WritePtr final
         {
 
         public:

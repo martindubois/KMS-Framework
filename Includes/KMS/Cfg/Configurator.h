@@ -26,7 +26,7 @@ namespace KMS
     namespace Cfg
     {
 
-        class Configurator
+        class Configurator final
         {
 
         public:

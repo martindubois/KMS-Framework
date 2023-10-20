@@ -17,7 +17,7 @@ namespace KMS
 
         class IDigitalInputs;
 
-        class DigitalInput
+        class DigitalInput final
         {
 
         public:

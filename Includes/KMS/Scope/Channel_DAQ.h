@@ -19,7 +19,7 @@ namespace KMS
     namespace Scope
     {
 
-        class Channel_DAQ_AI : public Channel
+        class Channel_DAQ_AI final : public Channel
         {
 
         public:
@@ -37,7 +37,7 @@ namespace KMS
 
         };
 
-        class Channel_DAQ_AO : public Channel
+        class Channel_DAQ_AO final : public Channel
         {
 
         public:
@@ -55,7 +55,7 @@ namespace KMS
 
         };
 
-        class Channel_DAQ_DI : public Channel
+        class Channel_DAQ_DI final : public Channel
         {
 
         public:
@@ -73,7 +73,7 @@ namespace KMS
 
         };
 
-        class Channel_DAQ_DO : public Channel
+        class Channel_DAQ_DO final : public Channel
         {
 
         public:

@@ -24,7 +24,7 @@ namespace KMS
     namespace Net
     {
 
-        class Address
+        class Address final
         {
 
         public:

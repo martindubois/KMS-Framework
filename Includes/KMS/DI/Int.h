@@ -55,7 +55,7 @@ namespace KMS
 
         };
         template <typename T>
-        class Int : public Int_Ptr<T>
+        class Int final : public Int_Ptr<T>
         {
 
         public:

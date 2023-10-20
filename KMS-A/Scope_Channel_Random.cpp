@@ -26,10 +26,5 @@ namespace KMS
             Channel::Sample(aY_px, aTrig);
         }
 
-        // Public
-        // //////////////////////////////////////////////////////////////////
-
-        Channel_Random::Channel_Random() {}
-
     }
 }

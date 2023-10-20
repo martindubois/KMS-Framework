@@ -19,7 +19,7 @@ namespace KMS
 
         class Folder;
 
-        class Binary
+        class Binary final
         {
 
         public:

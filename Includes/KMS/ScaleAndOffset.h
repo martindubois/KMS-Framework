@@ -10,7 +10,7 @@
 namespace KMS
 {
 
-    class ScaleAndOffset
+    class ScaleAndOffset final
     {
 
     public:

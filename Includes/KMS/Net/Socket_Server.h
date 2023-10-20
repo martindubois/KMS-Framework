@@ -16,7 +16,7 @@ namespace KMS
     namespace Net
     {
 
-        class Socket_Server : public Socket
+        class Socket_Server final : public Socket
         {
 
         public:

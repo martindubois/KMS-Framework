@@ -16,7 +16,7 @@ namespace KMS
     {
 
         template <typename T>
-        class Channel_Variable : public Channel
+        class Channel_Variable final : public Channel
         {
 
         public:

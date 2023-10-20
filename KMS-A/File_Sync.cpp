@@ -79,8 +79,6 @@ namespace KMS
             AddEntry("Verbose"       , &mVerbose       , false, &MD_VERBOSE);
         }
 
-        Sync::~Sync() {}
-
         int Sync::Run()
         {
             Run_Bidirectional();
@@ -90,6 +88,8 @@ namespace KMS
         }
 
         // ===== DI::Dictionary =============================================
+
+        Sync::~Sync() {}
 
         void Sync::Validate() const
         {

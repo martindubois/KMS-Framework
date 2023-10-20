@@ -19,7 +19,7 @@ namespace KMS
     namespace FileFormat
     {
 
-        class ELF
+        class ELF final
         {
 
         public:

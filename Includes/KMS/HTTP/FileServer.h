@@ -24,7 +24,7 @@ namespace KMS
     {
         class Request;
 
-        class FileServer : public DI::Dictionary
+        class FileServer final : public DI::Dictionary
         {
 
         public:

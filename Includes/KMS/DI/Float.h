@@ -51,7 +51,7 @@ namespace KMS
         };
 
         template <typename T>
-        class Float : public Float_Ptr<T>
+        class Float final : public Float_Ptr<T>
         {
 
         public:

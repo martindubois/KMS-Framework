@@ -17,7 +17,7 @@ namespace KMS
 
         class IAnalogOutputs;
 
-        class AnalogOutput
+        class AnalogOutput final
         {
 
         public:

@@ -24,7 +24,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log
+        class Log final
         {
 
         public:

@@ -20,7 +20,7 @@ namespace KMS
     namespace DI
     {
 
-        class NetAddressRange : public String_Expand
+        class NetAddressRange final : public String_Expand
         {
 
         public:

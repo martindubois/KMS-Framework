@@ -21,7 +21,7 @@ namespace KMS
     namespace Text
     {
 
-        class File_ASCII
+        class File_ASCII final
         {
 
         public:

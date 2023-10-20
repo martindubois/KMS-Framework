@@ -15,7 +15,7 @@
 namespace KMS
 {
 
-    class Installer : public DI::Dictionary
+    class Installer final : public DI::Dictionary
     {
 
     public:

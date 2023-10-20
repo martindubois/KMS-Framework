@@ -24,7 +24,7 @@ namespace KMS
     {
         class Stats_Entry;
 
-        class Stats : public DI::Dictionary
+        class Stats final : public DI::Dictionary
         {
 
         public:

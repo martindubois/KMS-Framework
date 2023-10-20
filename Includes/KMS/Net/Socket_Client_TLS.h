@@ -16,7 +16,7 @@ namespace KMS
     namespace Net
     {
 
-        class Socket_Client_TLS : public Socket_Client
+        class Socket_Client_TLS final : public Socket_Client
         {
 
         public:

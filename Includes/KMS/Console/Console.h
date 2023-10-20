@@ -17,7 +17,7 @@ namespace KMS
     namespace Console
     {
 
-        class Console
+        class Console final
         {
 
         public:

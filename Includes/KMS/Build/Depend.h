@@ -17,7 +17,7 @@ namespace KMS
     namespace Build
     {
 
-        class Depend
+        class Depend final
         {
 
         public:

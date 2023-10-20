@@ -24,7 +24,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Simulator : public DI::Dictionary
+        class Simulator final : public DI::Dictionary
         {
 
         private:

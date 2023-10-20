@@ -16,7 +16,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Master_TCP : public Master
+        class Master_TCP final : public Master
         {
 
         public:

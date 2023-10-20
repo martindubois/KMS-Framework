@@ -23,7 +23,7 @@ namespace KMS
     namespace HTTP
     {
 
-        class Request
+        class Request final
         {
 
         public:

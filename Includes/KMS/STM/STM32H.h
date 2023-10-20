@@ -13,7 +13,7 @@ namespace KMS
     namespace STM
     {
 
-        class STM32H
+        class STM32H final
         {
 
         public:

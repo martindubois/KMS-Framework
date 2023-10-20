@@ -20,7 +20,7 @@ namespace KMS
 
         class System;
 
-        class Link_USART : public Embedded::WorkItem
+        class Link_USART final : public Embedded::WorkItem
         {
 
         public:

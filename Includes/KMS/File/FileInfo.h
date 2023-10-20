@@ -12,7 +12,7 @@ namespace KMS
     namespace File
     {
 
-        class FileInfo
+        class FileInfo final
         {
 
         public:

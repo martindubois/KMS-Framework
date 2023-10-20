@@ -19,12 +19,10 @@
 namespace KMS
 {
 
-    class Version
+    class Version final
     {
 
     public:
-
-        static const unsigned int FLAG_OS_INDEPENDENT;
 
         Version();
 
@@ -45,9 +43,6 @@ namespace KMS
             Version(const char* aVersion);
 
             Version(const File::Folder& aFolder, const char* aFile);
-
-            // aFlags FLAG_OS_INDEPENDENT
-            void GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0) const;
 
             void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3) const;
 

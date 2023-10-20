@@ -14,7 +14,7 @@ namespace KMS
 
         class Gate;
 
-        class Lock
+        class Lock final
         {
 
         public:

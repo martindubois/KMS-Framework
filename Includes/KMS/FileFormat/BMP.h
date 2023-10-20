@@ -16,14 +16,12 @@ namespace KMS
     namespace FileFormat
     {
 
-        class BMP
+        class BMP final
         {
 
         public:
 
             BMP(const File::Folder& aFolder, const char* aFile, bool aWrite = false);
-
-            ~BMP();
 
             const void* GetData() const;
                   void* GetData();

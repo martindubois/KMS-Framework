@@ -16,7 +16,7 @@ namespace KMS
 
         class IReceiver;
 
-        class Destination
+        class Destination final
         {
 
         public:

@@ -18,7 +18,7 @@ namespace KMS
     namespace DAQ
     {
 
-        class Dummy : public IAnalogInputs, public IAnalogOutputs, public IDigitalInputs, public IDigitalOutputs
+        class Dummy final : public IAnalogInputs, public IAnalogOutputs, public IDigitalInputs, public IDigitalOutputs
         {
 
         public:

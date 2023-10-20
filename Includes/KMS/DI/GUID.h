@@ -50,7 +50,7 @@ namespace KMS
 
         };
 
-        class GUID : public GUID_Ptr
+        class GUID final : public GUID_Ptr
         {
 
         public:

@@ -21,7 +21,7 @@ namespace KMS
 
         class Channel;
 
-        class Scope
+        class Scope final
         {
 
         public:

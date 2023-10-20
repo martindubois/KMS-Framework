@@ -20,7 +20,7 @@ namespace KMS
     // - Limited size
     // - No virtual method
     // - Copy allowed
-    class Result
+    class Result final
     {
 
     public:

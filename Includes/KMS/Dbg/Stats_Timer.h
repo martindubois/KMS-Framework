@@ -20,7 +20,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Stats_Timer : public Stats_Value<double>
+        class Stats_Timer final : public Stats_Value<double>
         {
 
         public:

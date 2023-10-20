@@ -33,7 +33,7 @@ namespace KMS
     namespace STM
     {
 
-        class STM32F : public DAQ::IDigitalInputs, public DAQ::IDigitalOutputs
+        class STM32F final : public DAQ::IDigitalInputs, public DAQ::IDigitalOutputs
         {
 
         public:

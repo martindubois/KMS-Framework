@@ -18,7 +18,7 @@ namespace KMS
     namespace Com
     {
 
-        class Tool : public CLI::Tool
+        class Tool final : public CLI::Tool
         {
 
         public:

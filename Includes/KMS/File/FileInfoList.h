@@ -21,7 +21,7 @@ namespace KMS
 
         class FileInfo;
 
-        class FileInfoList
+        class FileInfoList final
         {
 
         public:

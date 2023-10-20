@@ -18,7 +18,7 @@ namespace KMS
     namespace WGDI
     {
 
-        class Viewer_Bitmap : public DI::Dictionary
+        class Viewer_Bitmap final : public DI::Dictionary
         {
 
         public:
@@ -35,11 +35,10 @@ namespace KMS
 
             Viewer_Bitmap();
 
-            ~Viewer_Bitmap();
-
             int Run();
 
             // ===== DI::Container ==========================================
+            ~Viewer_Bitmap();
             virtual void Validate() const;
 
         private:

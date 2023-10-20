@@ -19,7 +19,7 @@ namespace KMS
 
         class Master;
 
-        class Monitor
+        class Monitor final
         {
 
         public:

@@ -38,8 +38,6 @@ namespace KMS
             , mHeader(nullptr)
         {}
 
-        BMP::~BMP() {}
-
         const void* BMP::GetData() const { return mData; }
               void* BMP::GetData()       { return mData; }
 

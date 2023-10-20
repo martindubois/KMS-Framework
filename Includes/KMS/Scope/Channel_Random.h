@@ -15,12 +15,10 @@ namespace KMS
     namespace Scope
     {
 
-        class Channel_Random : public Channel
+        class Channel_Random final : public Channel
         {
 
         public:
-
-            Channel_Random();
 
         // Internal
 

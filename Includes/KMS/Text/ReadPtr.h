@@ -12,7 +12,7 @@ namespace KMS
     namespace Text
     {
 
-        class ReadPtr
+        class ReadPtr final
         {
 
         public:

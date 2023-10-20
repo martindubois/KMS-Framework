@@ -17,7 +17,7 @@ namespace KMS
 
         class IAnalogInputs;
 
-        class AnalogInput
+        class AnalogInput final
         {
 
         public:

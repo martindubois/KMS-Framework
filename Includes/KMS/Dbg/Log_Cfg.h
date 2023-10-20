@@ -20,7 +20,7 @@ namespace KMS
     namespace Dbg
     {
 
-        class Log_Cfg : public DI::Dictionary
+        class Log_Cfg final : public DI::Dictionary
         {
 
         public:

@@ -16,7 +16,7 @@ namespace KMS
     namespace DAQ
     {
 
-        class AnalogOutputConverter : public AnalogConverter, public IAnalogOutputs
+        class AnalogOutputConverter final : public AnalogConverter, public IAnalogOutputs
         {
 
         public:

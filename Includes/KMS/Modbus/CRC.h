@@ -12,7 +12,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class CRC
+        class CRC final
         {
 
         public:

@@ -22,7 +22,7 @@ namespace KMS
     namespace Text
     {
 
-        class File_UTF16
+        class File_UTF16 final
         {
 
         public:

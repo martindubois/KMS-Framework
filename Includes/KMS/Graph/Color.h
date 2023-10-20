@@ -12,7 +12,7 @@ namespace KMS
     namespace Graph
     {
 
-        class Color
+        class Color final
         {
 
         public:

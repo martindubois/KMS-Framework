@@ -16,7 +16,7 @@ namespace KMS
     namespace Proc
     {
 
-        class Process
+        class Process final
         {
 
         public:

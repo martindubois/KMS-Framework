@@ -56,7 +56,7 @@ namespace KMS
         };
 
         template <typename T>
-        class UInt : public UInt_Ptr<T>
+        class UInt final : public UInt_Ptr<T>
         {
 
         public:

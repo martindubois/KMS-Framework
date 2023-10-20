@@ -56,7 +56,7 @@ namespace KMS
         };
 
         template <typename T, const char** N>
-        class Enum : public Enum_Ptr<T, N>
+        class Enum final : public Enum_Ptr<T, N>
         {
 
         public:

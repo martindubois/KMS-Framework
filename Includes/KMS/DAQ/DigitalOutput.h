@@ -17,7 +17,7 @@ namespace KMS
 
         class IDigitalOutputs;
 
-        class DigitalOutput
+        class DigitalOutput final
         {
 
         public:

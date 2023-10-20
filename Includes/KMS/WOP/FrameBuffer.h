@@ -15,7 +15,7 @@ namespace KMS
     namespace WOP
     {
 
-        class FrameBuffer
+        class FrameBuffer final
         {
 
         public:

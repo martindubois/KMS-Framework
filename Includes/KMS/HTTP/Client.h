@@ -18,7 +18,7 @@ namespace KMS
     namespace HTTP
     {
 
-        class Client
+        class Client final
         {
 
         public:

@@ -18,7 +18,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Slave_Cfg : public DI::Dictionary
+        class Slave_Cfg final : public DI::Dictionary
         {
 
         private:

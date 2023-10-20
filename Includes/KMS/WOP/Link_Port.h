@@ -20,7 +20,7 @@ namespace KMS
 
         class System;
 
-        class Link_Port
+        class Link_Port final
         {
 
         public:

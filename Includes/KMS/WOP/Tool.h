@@ -19,7 +19,7 @@ namespace KMS
     namespace WOP
     {
 
-        class Tool : public CLI::Tool
+        class Tool final : public CLI::Tool
         {
 
         public:

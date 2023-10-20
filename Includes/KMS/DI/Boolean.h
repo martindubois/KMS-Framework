@@ -50,7 +50,7 @@ namespace KMS
 
         };
 
-        class Boolean : public Boolean_Ptr
+        class Boolean final : public Boolean_Ptr
         {
 
         public:

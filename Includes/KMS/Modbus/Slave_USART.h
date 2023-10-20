@@ -19,7 +19,7 @@ namespace KMS
     namespace Modbus
     {
 
-        class Slave_USART : public Slave_Serial, public Embedded::WorkItem
+        class Slave_USART final : public Slave_Serial, public Embedded::WorkItem
         {
 
         public:

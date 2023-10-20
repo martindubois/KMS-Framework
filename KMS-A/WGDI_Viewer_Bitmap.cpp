@@ -62,8 +62,6 @@ namespace KMS
             AddEntry("Zoom"     , &mZoom     , false, &MD_ZOOM     );
         }
 
-        Viewer_Bitmap::~Viewer_Bitmap() {}
-
         int Viewer_Bitmap::Run()
         {
             FileFormat::BMP lFile(File::Folder::NONE, mFileName);
@@ -78,6 +76,8 @@ namespace KMS
         }
 
         // ===== DI::Container ==============================================
+
+        Viewer_Bitmap::~Viewer_Bitmap() {}
 
         void Viewer_Bitmap::Validate() const
         {

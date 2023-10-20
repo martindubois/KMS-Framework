@@ -20,7 +20,7 @@ namespace KMS
 
         class FileInfoList;
 
-        class Sync : public DI::Dictionary
+        class Sync final : public DI::Dictionary
         {
 
         public:

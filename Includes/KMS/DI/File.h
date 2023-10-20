@@ -60,7 +60,7 @@ namespace KMS
 
         };
 
-        class File : public File_Ptr
+        class File final : public File_Ptr
         {
 
         public:

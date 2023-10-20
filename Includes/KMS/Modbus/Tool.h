@@ -21,7 +21,7 @@ namespace KMS
 
         class Master;
         
-        class Tool : public CLI::Tool
+        class Tool final : public CLI::Tool
         {
 
         private:

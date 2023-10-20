@@ -11,7 +11,7 @@ namespace KMS
 {
 
     template <typename T, const char** N>
-    class Enum
+    class Enum final
     {
 
     public:

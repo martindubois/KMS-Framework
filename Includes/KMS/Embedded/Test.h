@@ -21,7 +21,7 @@ namespace KMS
     namespace Embedded
     {
 
-        class Test : public IInterruptHandler
+        class Test final : public IInterruptHandler
         {
 
         public:
