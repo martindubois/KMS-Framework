@@ -12,6 +12,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Net/Socket.h>
 
+#pragma comment (lib, "ws2_32.lib")
+
 KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
 
 namespace KMS

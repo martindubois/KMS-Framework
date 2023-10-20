@@ -15,6 +15,8 @@
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device.h>
 
+#pragma comment (lib, "setupapi.lib")
+
 KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
 KMS_RESULT_STATIC(RESULT_SETUP_API_ERROR);
 

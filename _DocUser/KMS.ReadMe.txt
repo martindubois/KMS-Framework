@@ -7,6 +7,9 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+* Use #pragma comment(lib, ) for needed Windows library
+* Use /EHa option on Windows
+
 1.0.8-dev Windows 2023-10-03
 
 1.0.7 Windows 2023-09-27
