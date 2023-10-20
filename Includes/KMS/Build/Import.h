@@ -4,13 +4,14 @@
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Import.h
-// Library   KMS-A
+// Library   KMS-B
 
 #pragma once
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
+#include <KMS/DI/Folder.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 
@@ -18,8 +19,10 @@ namespace KMS
 {
     namespace Build
     {
+
+        class Package;
         
-        class Import : public DI::Dictionary
+        class Import final : public DI::Dictionary
         {
 
         private:
@@ -27,23 +30,13 @@ namespace KMS
             DI::Array mDependencies;
             DI::Array mOSIndependentDeps;
             DI::Array mRepositories;
+            DI::Array mServers;
 
         public:
 
             static int Main(int aCount, const char** aVector);
 
             Import();
-
-            ~Import();
-
-            // aD  The dependecy format is {Product} ; {Version}
-            //     (Ex: KMS-framework;0.0.14-front-end)
-            void AddDependency       (const char* aD);
-            void AddOSIndependentDeps(const char* aD);
-
-            // aR  Complete repositorty path
-            //     (can include environment variable)
-            void AddRepository(const char* aR);
 
             // aDependency  The dependecy format is {Product} ; {Version}
             //              (Ex: KMS-framework;0.0.14-front-end)
@@ -58,7 +51,11 @@ namespace KMS
 
             NO_COPY(Import);
 
+            bool ImportDependency_Folder(const Package& aPackage, const DI::Folder* aFolder, const char* aFileName);
+            bool ImportDependency_Server(const Package& aPackage, const char* aServer      , const char* aFileName);
+
             File::Folder mImport;
+            File::Folder mTmpFolder;
 
         };
 

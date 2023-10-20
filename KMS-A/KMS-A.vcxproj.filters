@@ -120,9 +120,6 @@
     <ClCompile Include="Build_Depend.cpp">
       <Filter>Source Files\Build</Filter>
     </ClCompile>
-    <ClCompile Include="Build_Import.cpp">
-      <Filter>Source Files\Build</Filter>
-    </ClCompile>
     <ClCompile Include="Build_Make.cpp">
       <Filter>Source Files\Build</Filter>
     </ClCompile>
@@ -380,6 +377,9 @@
     </ClCompile>
     <ClCompile Include="Exception_W.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Package.cpp">
+      <Filter>Source Files\Build</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

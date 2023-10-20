@@ -8,8 +8,11 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Build/Package.h>
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/HTTP/Client.h>
 #include <KMS/Main.h>
+#include <KMS/Net/Socket.h>
 #include <KMS/Version.h>
 
 #include <KMS/Build/Import.h>
@@ -27,6 +30,7 @@ KMS_RESULT_STATIC(RESULT_DEPENDENCY_NOT_FOUND);
 static const KMS::Cfg::MetaData MD_DEPENDENCIES       ("Dependencies += {Product};{Version}");
 static const KMS::Cfg::MetaData MD_OS_INDEPENDENT_DEPS("OSIndependentDeps += {Product};{Version}");
 static const KMS::Cfg::MetaData MD_REPOSITORIES       ("Repositories += {Path}");
+static const KMS::Cfg::MetaData MD_SERVERS            ("Servers += {URL}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
@@ -65,6 +69,8 @@ namespace KMS
 
         int Import::Main(int aCount, const char** aVector)
         {
+            Net::Thread_Startup();
+
             KMS_MAIN_BEGIN;
             {
                 Build::Import lI;
@@ -84,18 +90,22 @@ namespace KMS
             }
             KMS_MAIN_END;
 
+            Net::Thread_Cleanup();
+
             KMS_MAIN_RETURN;
         }
 
-        Import::Import() : mImport("Import")
+        Import::Import() : mImport("Import"), mTmpFolder(File::Folder::Id::TEMPORARY)
         {
             mDependencies     .SetCreator(DI::String::Create);
             mOSIndependentDeps.SetCreator(DI::String::Create);
             mRepositories     .SetCreator(DI::Folder::Create);
+            mServers          .SetCreator(DI::String_Expand::Create);
 
             AddEntry("Dependencies"     , &mDependencies     , false, &MD_DEPENDENCIES);
             AddEntry("OSIndependentDeps", &mOSIndependentDeps, false, &MD_OS_INDEPENDENT_DEPS);
             AddEntry("Repositories"     , &mRepositories     , false, &MD_REPOSITORIES);
+            AddEntry("Servers"          , &mServers          , false, &MD_SERVERS);
 
             AddEntry(NAME_OS "Dependencies", &mDependencies, false, &MD_OS_DEPENDENCIES);
 
@@ -108,50 +118,41 @@ namespace KMS
             #endif
 
             mRepositories.AddEntry(new DI::Folder(lExport), true);
+
+            mServers.AddEntry(new DI::String_Expand("https://github.com/martindubois/"), true);
         }
-
-        Import::~Import() {}
-
-        void Import::AddDependency       (const char* aD) { mDependencies     .AddEntry(new DI::String(aD), true); }
-        void Import::AddOSIndependentDeps(const char* aD) { mOSIndependentDeps.AddEntry(new DI::String(aD), true); }
-        void Import::AddRepository       (const char* aR) { mRepositories     .AddEntry(new DI::Folder(aR), true); }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)
         {
-            char lProduct[NAME_LENGTH];
-            char lVersion[NAME_LENGTH];
+            Package lPackage(aOSIndependent);
 
-            if (2 != sscanf_s(aDependency, "%[^;] ; %[^\n\r]", lProduct SizeInfo(lProduct), lVersion SizeInfo(lVersion)))
-            {
-                KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid dependency", aDependency);
-            }
+            lPackage.Parse(aDependency);
 
-            Version lV(lVersion);
+            char lFileName[FILE_LENGTH];
 
-            unsigned int lFlags = aOSIndependent ? Version::FLAG_OS_INDEPENDENT : 0;
-
-            char lPackage[FILE_LENGTH];
-
-            lV.GetPackageName(lProduct, lPackage, sizeof(lPackage), lFlags);
+            lPackage.GetFileName(lFileName, sizeof(lFileName));
 
             for (const auto& lEntry : mRepositories.mInternal)
             {
                 assert(nullptr != lEntry);
 
                 auto lR = dynamic_cast<const DI::Folder*>(lEntry.Get());
-                assert(nullptr != lR);
 
-                if (lR->GetFolder().DoesFolderExist(lProduct))
+                if (ImportDependency_Folder(lPackage, lR, lFileName))
                 {
-                    File::Folder lProductFolder(*lR, lProduct);
+                    return;
+                }
+            }
 
-                    if (lProductFolder.DoesFileExist(lPackage))
-                    {
-                        std::cout << "Importing " << lProduct << " " << lVersion << " from " << *lR << std::endl;
+            for (const auto& lEntry : mServers.mInternal)
+            {
+                assert(nullptr != lEntry);
 
-                        mImport.Uncompress(lProductFolder, lPackage);
-                        return;
-                    }
+                auto lS = dynamic_cast<const DI::String_Expand*>(lEntry.Get());
+
+                if (ImportDependency_Server(lPackage, lS->Get(), lFileName))
+                {
+                    return;
                 }
             }
 
@@ -221,6 +222,66 @@ namespace KMS
 
                 KMS_EXCEPTION_ASSERT(!lS->GetString().empty(), RESULT_INVALID_CONFIG, "Empty dependency", "");
             }
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        bool Import::ImportDependency_Folder(const Package& aPackage, const DI::Folder* aR, const char* aFileName)
+        {
+            assert(nullptr != aR);
+
+            auto lResult = false;
+
+            File::Folder lProductFolder(*aR, aPackage.GetProductName());
+            if (lProductFolder.DoesExist())
+            {
+                if (lProductFolder.DoesFileExist(aFileName))
+                {
+                    std::cout << "Importing " << aPackage.GetProductName() << " " << aPackage.GetVersion() << " from " << *aR << std::endl;
+
+                    mImport.Uncompress(lProductFolder, aFileName);
+
+                    lResult = true;
+                }
+            }
+
+            return lResult;
+        }
+
+        bool Import::ImportDependency_Server(const Package& aPackage, const char* aServer, const char* aFileName)
+        {
+            assert(nullptr != aServer);
+            assert(nullptr != aFileName);
+
+            auto lSecure = strcmp("https://", aServer);
+
+            HTTP::Client lClient(lSecure);
+
+            char lTag[LINE_LENGTH];
+            char lURL[LINE_LENGTH];
+
+            aPackage.GetTagName(lTag, sizeof(lTag));
+
+            sprintf_s(lURL, "%s%s/releases/download/%s/%s", aServer, aPackage.GetProductName(), lTag, aFileName);
+
+            auto lResult = false;
+
+            File::Binary lOutFile(mTmpFolder, aFileName);
+
+            try
+            {
+                std::cout << "Trying to import " << aPackage.GetProductName() << " " << aPackage.GetVersion() << " from " << aServer << std::endl;
+
+                lClient.Get(lURL, &lOutFile);
+
+                mImport.Uncompress(mTmpFolder, aFileName);
+
+                lResult = true;
+            }
+            KMS_CATCH;
+
+            return lResult;
         }
 
     }

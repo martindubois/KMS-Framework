@@ -24,8 +24,6 @@ namespace KMS
     // Public
     // //////////////////////////////////////////////////////////////////////
 
-    const unsigned int Version::FLAG_OS_INDEPENDENT = 0x00000001;
-
     Version::Version() : mMajor(0), mMinor(0), mBuild(0), mCompat(0), mDebug(false)
     {
         Construct();
@@ -136,38 +134,6 @@ namespace KMS
             }
 
             KMS_EXCEPTION(RESULT_CORRUPTED_FILE, "Incomplet version file (NOT TESTED)", aFile);
-        }
-
-        void Version::GetPackageName(const char* aProduct, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags) const
-        {
-            assert(nullptr != aProduct);
-            assert(nullptr != aOut);
-            assert(0 < aOutSize_byte);
-
-            auto lTypePresent = 0 < strlen(mType);
-
-            if (0 == (aFlags & FLAG_OS_INDEPENDENT))
-            {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s.zip", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild, mType);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u.zip", aProduct, OS_NAME_PROC, mMajor, mMinor, mBuild);
-                }
-            }
-            else
-            {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s.zip", aProduct, mMajor, mMinor, mBuild, mType);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u.zip", aProduct, mMajor, mMinor, mBuild);
-                }
-            }
         }
 
         void Version::GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement) const

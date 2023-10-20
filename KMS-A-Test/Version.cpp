@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Version.cpp
@@ -14,15 +14,34 @@ using namespace KMS;
 
 KMS_TEST(Version_Base, "Auto", sTest_Base)
 {
+    // Constructor
     Version lV0("0.0");
     Version lV1("0.0-Test");
     Version lV2(File::Folder::CURRENT, "Common" SLASH "Version.h");
 
-    char lPackage[FILE_LENGTH];
+    // GetDate
+    KMS_TEST_ASSERT(0 == strcmp("", lV0.GetDate()));
 
-    lV0.GetPackageName("Product", lPackage, sizeof(lPackage));
+    // GetType
+    KMS_TEST_ASSERT(0 == strcmp(""    , lV0.GetType()));
+    KMS_TEST_ASSERT(0 == strcmp("Test", lV1.GetType()));
 
-    lV1.GetPackageName("Product", lPackage, sizeof(lPackage));
+    // GetDebug
+    KMS_TEST_ASSERT(!lV0.GetDebug());
+
+    // GetMajor
+    KMS_TEST_COMPARE(lV0.GetMajor(), 0U);
+
+    // GetMinor
+    KMS_TEST_COMPARE(lV0.GetMinor(), 0U);
+
+    // GetBuild
+    KMS_TEST_COMPARE(lV0.GetBuild(), 0U);
+
+    // GetCompat
+    KMS_TEST_COMPARE(lV0.GetCompat(), 0U);
+
+    // GetString
 
     char lString[NAME_LENGTH];
 
@@ -45,6 +64,8 @@ KMS_TEST(Version_Base, "Auto", sTest_Base)
 
 KMS_TEST(Version_Fail, "Auto", sTest_Fail)
 {
+    // Constructor
+
     try
     {
         Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
