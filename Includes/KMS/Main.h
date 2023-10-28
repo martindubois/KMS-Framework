@@ -13,7 +13,7 @@
 #include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
-#include <KMS/Installer.h>
+#include <KMS/Install/Installer.h>
 
 // Macros
 // //////////////////////////////////////////////////////////////////////////
@@ -24,9 +24,9 @@
     lET->Start();                                               \
     try                                                         \
     {                                                           \
-        KMS::Cfg::Configurator lConfigurator;                   \
-        KMS::Installer         lInstaller;                      \
-        KMS::Dbg::Log_Cfg      lLogCfg(&KMS::Dbg::gLog);        \
+        KMS::Cfg::Configurator  lConfigurator;                  \
+        KMS::Install::Installer lInstaller;                     \
+        KMS::Dbg::Log_Cfg       lLogCfg(&KMS::Dbg::gLog);       \
         lConfigurator.AddConfigurable(&lInstaller);             \
         lConfigurator.AddConfigurable(&lLogCfg);                \
         lConfigurator.AddConfigurable(&Dbg::gStats)

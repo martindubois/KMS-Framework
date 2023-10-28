@@ -70,6 +70,9 @@
     <Filter Include="Source Files\Scope">
       <UniqueIdentifier>{02a575a6-160b-4a6b-924e-be5b93336304}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Install">
+      <UniqueIdentifier>{1b845fbe-3074-461b-a68f-9f36a1afe549}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -102,13 +105,7 @@
     <ClCompile Include="GUI_MetaData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Installer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CLI_Tool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Installer_W.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Build_Build.cpp">
@@ -380,6 +377,12 @@
     </ClCompile>
     <ClCompile Include="Build_Package.cpp">
       <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Install_Installer.cpp">
+      <Filter>Source Files\Install</Filter>
+    </ClCompile>
+    <ClCompile Include="Install_Installer_W.cpp">
+      <Filter>Source Files\Install</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

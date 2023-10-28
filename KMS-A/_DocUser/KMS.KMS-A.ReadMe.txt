@@ -8,6 +8,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 EDIT ON BUILD
 
 - Build::Package
+- Install namespace
 
 1.0.8-dev Windows 2023-10-03
 * CLI::Tool - Command result
