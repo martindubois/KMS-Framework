@@ -61,12 +61,7 @@ namespace KMS
             auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
-                #ifdef _KMS_LINUX_
-                    "Z\t%016lx\n",
-                #endif
-                #ifdef _KMS_WINDOWS_
-                    "Z\t%016llx\n",
-                #endif
+                "Z\t" PRINTF_64_X "\n",
                 lTimeStamp);
 
             fclose(mFile);
@@ -112,12 +107,7 @@ namespace KMS
             auto lTimeStamp = OS::GetSystemTime();
 
             fprintf(mFile,
-                #ifdef _KMS_LINUX_
-                    "%c\t%016lx\t%u\t%u\t%s\t%s\n",
-                #endif
-                #ifdef _KMS_WINDOWS_
-                    "%c\t%016llx\t%u\t%u\t%s\t%s\n",
-                #endif
+                "%c\t" PRINTF_64_X "\t%u\t%u\t%s\t%s\n",
                 lET,
                 lTimeStamp,
                 aCounter,

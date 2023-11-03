@@ -283,6 +283,7 @@
     <ClCompile Include="DI_Folder.cpp" />
     <ClCompile Include="DI_Functions.cpp" />
     <ClCompile Include="DI_Value.cpp" />
+    <ClCompile Include="DI_Value_W.cpp" />
     <ClCompile Include="FileFormat_BMP.cpp" />
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="File_Binary.cpp" />

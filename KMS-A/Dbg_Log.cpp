@@ -30,13 +30,6 @@ namespace KMS
         const Log::ConsoleMode Log::CONSOLE_MODE_DEFAULT  = Log::ConsoleMode::MODE_USER;
         const LogFile::Level   Log::FILE_LEVEL_DEFAULT    = LogFile::Level::LEVEL_INFO;
 
-        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-            const char* Log::FOLDER_DEFAULT = "{$HOME}/KMS-Framework";
-        #endif
-        #ifdef _KMS_WINDOWS_
-            const char* Log::FOLDER_DEFAULT = "{$USERPROFILE}\\KMS-Framework";
-        #endif
-
         const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
 
         Log::Log()

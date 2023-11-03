@@ -10,11 +10,6 @@
 // ===== C ==================================================================
 #include <stdint.h>
 
-#ifdef _KMS_WINDOWS_
-    // ===== Windows ========================================================
-    #include <Windows.h>
-#endif
-
 // ===== Includes ===========================================================
 #include <KMS/Enum.h>
 
@@ -48,13 +43,7 @@ namespace KMS
 
         char lInfo[64];
 
-        #ifdef _KMS_WINDOWS_
-            sprintf_s(lInfo, "%llu 0x%llx", aInfo, aInfo);
-        #endif
-
-        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUS_ )
-            sprintf_s(lInfo, "%lu 0x%lx", aInfo, aInfo);
-        #endif
+        sprintf_s(lInfo, PRINTF_64_U " 0x" PRINTF_64_X, aInfo, aInfo);
 
         mInfo = lInfo;
 
@@ -115,13 +104,7 @@ namespace KMS
         mLine      = aLine;
         mMessage   = aMsg;
 
-        #ifdef _KMS_WINDOWS_
-            mLastError = ::GetLastError();
-        #endif
-
-        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-            mLastError = errno;
-        #endif
+        Construct_OSDep();
     }
 
 }

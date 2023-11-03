@@ -67,6 +67,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* Import::SERVER_DEFAULT = "https://github.com/martindubois/";
+
         int Import::Main(int aCount, const char** aVector)
         {
             Net::Thread_Startup();
@@ -109,17 +111,9 @@ namespace KMS
 
             AddEntry(NAME_OS "Dependencies", &mDependencies, false, &MD_OS_DEPENDENCIES);
 
-            #ifdef _KMS_LINUX_
-                File::Folder lExport(File::Folder::Id::HOME, "Export");
-            #endif
+            mRepositories.AddEntry(new DI::Folder(REPOSITORY_DEFAULT), true);
 
-            #ifdef _KMS_WINDOWS_
-                File::Folder lExport("K:\\Export");
-            #endif
-
-            mRepositories.AddEntry(new DI::Folder(lExport), true);
-
-            mServers.AddEntry(new DI::String_Expand("https://github.com/martindubois/"), true);
+            mServers.AddEntry(new DI::String_Expand(SERVER_DEFAULT), true);
         }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)

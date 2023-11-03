@@ -86,6 +86,8 @@ namespace KMS
 
             NO_COPY(Device);
 
+            void Construct_OSDep();
+
             #ifdef _KMS_WINDOWS_
 
                 static GUID ToGUID(const char* aG);

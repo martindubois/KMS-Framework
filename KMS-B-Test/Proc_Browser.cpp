@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/Proc_Browser.cpp
@@ -12,7 +12,7 @@
 
 using namespace KMS;
 
-// Static variable
+// Tests
 // //////////////////////////////////////////////////////////////////////////
 
 KMS_TEST(Proc_Browser_Base, "Auto", sTest_Base)
@@ -91,15 +91,3 @@ KMS_TEST(Proc_Browser_Interactive, "Interactive", sTest_Interactive)
 
     lB.Start(File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test1.html");
 }
-
-#ifdef _KMS_WINDOWS_
-
-    KMS_TEST(Proc_Browser_Window, "Auto", sTest_Windows)
-    {
-        Proc::Browser lB;
-
-        lB.SetPrefered(Proc::Browser::Type::EDGE);
-        lB.Open(File::Folder::CURRENT, "KMS-B-Test" SLASH "Tests" SLASH "Test0.html", "KMS-B-Test/Tests/Test0.html");
-    }
-
-#endif

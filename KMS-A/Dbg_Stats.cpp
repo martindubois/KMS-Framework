@@ -35,13 +35,6 @@ namespace KMS
 
         const bool Stats::CONSOLE_DEFAULT = false;
 
-        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-            const char* Stats::FOLDER_DEFAULT = "{$HOME}/KMS-Framework";
-        #endif
-        #ifdef _KMS_WINDOWS_
-            const char* Stats::FOLDER_DEFAULT = "{$USERPROFILE}\\KMS-Framework";
-        #endif
-
         Stats::Stats()
             : mConsole(CONSOLE_DEFAULT)
             , mFolder (File::Folder(File::Folder::HOME, "KMS-Framework"))

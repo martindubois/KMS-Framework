@@ -25,6 +25,11 @@ namespace KMS
         class Import final : public DI::Dictionary
         {
 
+        public:
+
+            static const File::Folder REPOSITORY_DEFAULT;
+            static const char       * SERVER_DEFAULT;
+
         private:
 
             DI::Array mDependencies;

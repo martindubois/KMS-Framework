@@ -48,6 +48,8 @@ namespace KMS
 
         void Construct(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg);
 
+        void Construct_OSDep();
+
         Result mCode;
 
         std::string mFile;

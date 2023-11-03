@@ -40,11 +40,17 @@
 
     #define SLASH   "\\"
     #define SLASH_C '\\'
+
+    #define PRINTF_64_U "%llu"
+    #define PRINTF_64_X "%016llx"
 #endif
 
 #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
     #define SLASH   "/"
     #define SLASH_C '/'
+
+    #define PRINTF_64_U "%lu"
+    #define PRINTF_64_X "%lx"
 #endif
 
 #ifdef OS_PROC

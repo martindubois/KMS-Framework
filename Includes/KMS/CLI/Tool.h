@@ -64,6 +64,8 @@ namespace KMS
 
             int Config(const char* aOperation);
 
+            void Delay(unsigned int aDelay_ms);
+
             void ExitIfError();
 
             int Repeat(unsigned int aCount, const char* aC);

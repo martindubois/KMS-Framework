@@ -13,12 +13,19 @@
 #include <SetupAPI.h>
 
 // ===== Includes ===========================================================
+#include <KMS/Cfg/MetaData.h>
+
 #include <KMS/Dev/Device.h>
 
 #pragma comment (lib, "setupapi.lib")
 
 KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
 KMS_RESULT_STATIC(RESULT_SETUP_API_ERROR);
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::Cfg::MetaData MD_INTERFACE("Interface = {GUID}");
 
 // Static fonction declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -197,6 +204,16 @@ namespace KMS
             }
 
             DestroyDeviceInfoList(lDevInfo);
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        void Device::Construct_OSDep()
+        {
+            mHandle = INVALID_HANDLE_VALUE;
+
+            AddEntry("Interface", &mInterface, false, &MD_INTERFACE);
         }
 
     }

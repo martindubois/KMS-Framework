@@ -16,12 +16,12 @@
     <Filter Include="Source Files\HTTP">
       <UniqueIdentifier>{61f7d12c-dee2-4d02-a1a5-9fef0fff1172}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Proc">
+      <UniqueIdentifier>{95d15474-c036-459c-8e30-3bda9ef98d45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-B-Test.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Proc_Browser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GUI_DynamicForm.cpp">
@@ -38,6 +38,12 @@
     </ClCompile>
     <ClCompile Include="Net_Address.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Browser.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Browser_W.cpp">
+      <Filter>Source Files\Proc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -15,9 +15,8 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_INDEX      ("Index = {Numeber}");
-static const KMS::Cfg::MetaData MD_INTERFACE  ("Interface = {GUID}");
-static const KMS::Cfg::MetaData MD_LINK       ("Link = {Link}");
+static const KMS::Cfg::MetaData MD_INDEX("Index = {Numeber}");
+static const KMS::Cfg::MetaData MD_LINK ("Link = {Link}");
 
 namespace KMS
 {
@@ -33,17 +32,11 @@ namespace KMS
         Device::Device()
             : mIndex(INDEX_DEFAULT)
             , mLink (LINK_DEFAULT)
-            #ifdef _KMS_WINDOWS_
-                , mInterface(INTERFACE_DEFAULT)
-                , mHandle(INVALID_HANDLE_VALUE)
-            #endif
         {
             AddEntry("Index", &mIndex, false, &MD_INDEX);
             AddEntry("Link" , &mLink , false, &MD_LINK);
 
-            #ifdef _KMS_WINDOWS_
-                AddEntry("Interface" , &mInterface , false, &MD_INTERFACE);
-            #endif
+            Construct_OSDep();
         }
 
         Device::~Device()

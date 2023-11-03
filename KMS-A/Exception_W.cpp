@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ====== Windows ===========================================================
+#include <Windows.h>
+
 KMS_RESULT_STATIC(RESULT_ACCESS_VIOLATION);
 KMS_RESULT_STATIC(RESULT_INTEGER_DIVIDE_BY_ZERO);
 KMS_RESULT_STATIC(RESULT_STRUCTURED_EXCEPTION);
@@ -20,6 +23,9 @@ static void TranslateException(unsigned int aCode, struct _EXCEPTION_POINTERS* a
 namespace KMS
 {
 
+    // Public
+    // //////////////////////////////////////////////////////////////////////
+
     void* Exception::RegisterTranslator()
     {
         return _set_se_translator(TranslateException);
@@ -29,6 +35,14 @@ namespace KMS
     {
         auto lTranslator = _set_se_translator(reinterpret_cast<_se_translator_function>(aTranslator));
         assert(TranslateException == lTranslator);
+    }
+
+    // Private
+    // //////////////////////////////////////////////////////////////////////
+
+    void Exception::Construct_OSDep()
+    {
+        mLastError = ::GetLastError();
     }
 
 }

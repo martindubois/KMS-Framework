@@ -280,6 +280,7 @@
     <ClCompile Include="KMS-B-Test.cpp" />
     <ClCompile Include="Net_Address.cpp" />
     <ClCompile Include="Proc_Browser.cpp" />
+    <ClCompile Include="Proc_Browser_W.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />

@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Build_Import.cpp" />
+    <ClCompile Include="Build_Import_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="DI_NetAddress.cpp" />
     <ClCompile Include="DI_NetAddressRange.cpp" />

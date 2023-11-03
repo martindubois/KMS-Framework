@@ -117,6 +117,9 @@
     <ClCompile Include="Scope_Scope.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DI_Value_W.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

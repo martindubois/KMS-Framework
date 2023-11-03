@@ -12,11 +12,6 @@
 // ===== C ==================================================================
 #include <signal.h>
 
-#ifdef _KMS_WINDOWS_
-    // ===== Windows ========================================================
-    #include <Windows.h>
-#endif
-
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
@@ -170,13 +165,7 @@ namespace KMS
             }
             else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms))
             {
-                #ifdef _KMS_LINUX_
-                    sleep(1 + lDelay_ms / 1000);
-                #endif
-
-                #ifdef _KMS_WINDOWS_
-                    Sleep(lDelay_ms);
-                #endif
+                Delay(lDelay_ms);
             }
             else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { mConsole.OutputStream() << lValue << std::endl; }
             else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
