@@ -25,6 +25,9 @@
     <Filter Include="Source Files\WOP">
       <UniqueIdentifier>{b0e41837-e0a8-4660-b62a-24e212306118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Install">
+      <UniqueIdentifier>{15a3e706-5e67-403e-b815-8e4ea14356de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Com_Port.cpp">
@@ -56,6 +59,15 @@
     </ClCompile>
     <ClCompile Include="WOP_Tool.cpp">
       <Filter>Source Files\WOP</Filter>
+    </ClCompile>
+    <ClCompile Include="Install_DriverInstaller.cpp">
+      <Filter>Source Files\Install</Filter>
+    </ClCompile>
+    <ClCompile Include="Install_DriverInstaller_W.cpp">
+      <Filter>Source Files\Install</Filter>
+    </ClCompile>
+    <ClCompile Include="SetupDi.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

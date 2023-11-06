@@ -40,9 +40,12 @@
     <ClCompile Include="Com_Tool.cpp" />
     <ClCompile Include="Dev_Device_W.cpp" />
     <ClCompile Include="Dev_Device.cpp" />
+    <ClCompile Include="Install_DriverInstaller.cpp" />
+    <ClCompile Include="Install_DriverInstaller_W.cpp" />
     <ClCompile Include="Modbus_Simulator.cpp" />
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="Modbus_Tool.cpp" />
+    <ClCompile Include="SetupDi.cpp" />
     <ClCompile Include="WOP_Link_Port.cpp" />
     <ClCompile Include="WOP_Tool.cpp" />
   </ItemGroup>

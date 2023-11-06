@@ -17,24 +17,15 @@
 
 #include <KMS/Dev/Device.h>
 
-#pragma comment (lib, "setupapi.lib")
+#include "SetupDi.h"
 
 KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
-KMS_RESULT_STATIC(RESULT_SETUP_API_ERROR);
+KMS_RESULT_STATIC(RESULT_NO_DEVICE);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
 static const KMS::Cfg::MetaData MD_INTERFACE("Interface = {GUID}");
-
-// Static fonction declarations
-// //////////////////////////////////////////////////////////////////////////
-
-static void     DestroyDeviceInfoList(HDEVINFO aDevInfo);
-static void     EnumDeviceInfo       (HDEVINFO aDevInfo, unsigned int aIndex, SP_DEVINFO_DATA* aDevInfoData);
-static bool     EnumDeviceInterfaces (HDEVINFO aDevInfo, SP_DEVINFO_DATA* aDevInfoData, const ::GUID& aInterface, SP_DEVICE_INTERFACE_DATA* aDevIntData);
-static HDEVINFO GetClassDevs(const ::GUID& aInterface);
-static void     GetDeviceInterfaceDetail(HDEVINFO aDevInfo, SP_DEVICE_INTERFACE_DATA* aDevIntData, SP_DEVICE_INTERFACE_DETAIL_DATA* aDetail, unsigned int aSize_byte);
 
 namespace KMS
 {
@@ -162,7 +153,7 @@ namespace KMS
         // NOT TESTED
         void Device::LinkFromInterfaceAndIndex()
         {
-            auto lDevInfo = GetClassDevs(mInterface);
+            auto lDevInfo = SetupDi::GetClassDevs_Interface(mInterface);
             assert(INVALID_HANDLE_VALUE != lDevInfo);
 
             try
@@ -173,11 +164,12 @@ namespace KMS
                 {
                     SP_DEVINFO_DATA lDevInfoData;
 
-                    EnumDeviceInfo(lDevInfo, i, &lDevInfoData);
+                    auto lRet = SetupDi::EnumDeviceInfo(lDevInfo, i, &lDevInfoData);
+                    KMS_EXCEPTION_ASSERT(lRet, RESULT_NO_DEVICE, "No device", "");
 
                     SP_DEVICE_INTERFACE_DATA lDevIntData;
 
-                    if (EnumDeviceInterfaces(lDevInfo, &lDevInfoData, mInterface, &lDevIntData))
+                    if (SetupDi::EnumDeviceInterfaces(lDevInfo, &lDevInfoData, mInterface, &lDevIntData))
                     {
                         if (mIndex > lIndex)
                         {
@@ -188,7 +180,7 @@ namespace KMS
                         uint8_t lBuffer[PATH_LENGTH];
                         auto lDetail = reinterpret_cast<SP_DEVICE_INTERFACE_DETAIL_DATA*>(lBuffer);
 
-                        GetDeviceInterfaceDetail(lDevInfo, &lDevIntData, lDetail, sizeof(lBuffer));
+                        SetupDi::GetDeviceInterfaceDetail(lDevInfo, &lDevIntData, lDetail, sizeof(lBuffer));
 
                         mLink = lDetail->DevicePath;
 
@@ -198,12 +190,12 @@ namespace KMS
             }
             catch (...)
             {
-                SetupDiDestroyDeviceInfoList(lDevInfo);
+                SetupDi::DestroyDeviceInfoList(lDevInfo);
 
                 throw;
             }
 
-            DestroyDeviceInfoList(lDevInfo);
+            SetupDi::DestroyDeviceInfoList(lDevInfo);
         }
 
         // Private
@@ -217,75 +209,4 @@ namespace KMS
         }
 
     }
-}
-
-// Static fonctions
-// //////////////////////////////////////////////////////////////////////////
-
-// NOT TESTED
-
-void DestroyDeviceInfoList(HDEVINFO aDevInfo)
-{
-    assert(INVALID_HANDLE_VALUE != aDevInfo);
-
-    auto lRet = SetupDiDestroyDeviceInfoList(aDevInfo);
-    KMS_EXCEPTION_ASSERT(lRet, RESULT_SETUP_API_ERROR, "SetupDiDestroyDeviceInfoList failed", "");
-}
-
-void EnumDeviceInfo(HDEVINFO aDevInfo, unsigned int aIndex, SP_DEVINFO_DATA* aDevInfoData)
-{
-    assert(INVALID_HANDLE_VALUE != aDevInfo);
-    assert(nullptr != aDevInfoData);
-
-    unsigned int lSize_byte = sizeof(SP_DEVINFO_DATA);
-
-    memset(aDevInfoData, 0, lSize_byte);
-
-    aDevInfoData->cbSize = lSize_byte;
-
-    auto lRet = SetupDiEnumDeviceInfo(aDevInfo, aIndex, aDevInfoData);
-    KMS_EXCEPTION_ASSERT(lRet, RESULT_SETUP_API_ERROR, "SetupDiEnumDeviceInfo failed", aIndex);
-}
-
-bool EnumDeviceInterfaces(HDEVINFO aDevInfo, SP_DEVINFO_DATA* aDevInfoData, const ::GUID& aInterface, SP_DEVICE_INTERFACE_DATA* aDevIntData)
-{
-    assert(INVALID_HANDLE_VALUE != aDevInfo);
-    assert(nullptr != aDevInfoData);
-    assert(nullptr != aDevIntData);
-
-    unsigned int lSize_byte = sizeof(SP_DEVICE_INTERFACE_DATA);
-
-    memset(aDevIntData, 0, lSize_byte);
-
-    aDevIntData->cbSize = lSize_byte;
-
-    return (TRUE == SetupDiEnumDeviceInterfaces(aDevInfo, aDevInfoData, &aInterface, 0, aDevIntData));
-}
-
-HDEVINFO GetClassDevs(const ::GUID& aInterface)
-{
-    auto lResult = SetupDiGetClassDevs(&aInterface, NULL, NULL, DIGCF_DEVICEINTERFACE | DIGCF_PRESENT);
-    KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != lResult, RESULT_SETUP_API_ERROR, "SetupDiGetClassDevs failed", "");
-
-    return lResult;
-}
-
-void GetDeviceInterfaceDetail(HDEVINFO aDevInfo, SP_DEVICE_INTERFACE_DATA* aDevIntData, SP_DEVICE_INTERFACE_DETAIL_DATA* aDetail, unsigned int aSize_byte)
-{
-    assert(INVALID_HANDLE_VALUE != aDevInfo);
-    assert(nullptr != aDevIntData);
-    assert(nullptr != aDetail);
-    assert(sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA) < aSize_byte);
-
-    memset(aDetail, 0, aSize_byte);
-
-    aDetail->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
-
-    DWORD lInfo_byte;
-
-    auto lRet = SetupDiGetDeviceInterfaceDetail(aDevInfo, aDevIntData, aDetail, aSize_byte, &lInfo_byte, NULL);
-    KMS_EXCEPTION_ASSERT(lRet, RESULT_SETUP_API_ERROR, "SetupDiGetDeviceInterfaceDetail failed", "");
-
-    assert(sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA) <= lInfo_byte);
-    assert(aSize_byte >= lInfo_byte);
 }
