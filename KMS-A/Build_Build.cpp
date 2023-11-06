@@ -24,12 +24,14 @@
 KMS_RESULT_STATIC(RESULT_COMMAND_FAILED);
 KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
+#define FILE_EXT_A   ".a"
+#define FILE_EXT_CFG ".cfg"
+#define FILE_EXT_ELF ".elf"
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
-#define CONFIG_FILE ("KMS-Build.cfg")
-
-#define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define CONFIG_FILE ("KMS-Build" FILE_EXT_CFG)
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -70,9 +72,6 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     #define NAME_OS "Windows"
     #define NO_OS_0 "Darwin"
     #define NO_OS_1 "Linux"
-
-    static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1   ("CertificatSHA1 = {SHA1}");
-    static const KMS::Cfg::MetaData MD_WINDOWS_FILE_MSI  ("WindowsFile_MSI = {Path}");
 #endif
 
 static const KMS::Cfg::MetaData MD_OS_BINARIES      (NAME_OS "Binaries += {Name}");
@@ -95,10 +94,6 @@ static const char* SILENCE[] =
     NO_OS_0 "PreBuildCmds"  , NO_OS_1 "PreBuildCmds"  ,
     NO_OS_0 "Processors"    , NO_OS_1 "Processors"    ,
     NO_OS_0 "Tests"         , NO_OS_1 "Tests"         ,
-
-    #if defined(_KMS_DARWIN_) || defined(_KMS_LINUX_)
-        "WindowsFile_MSI"  ,
-    #endif
 
     nullptr
 };
@@ -126,10 +121,6 @@ namespace KMS
         const bool  Build::OS_INDEPENDENT_DEFAULT = false;
         const char* Build::PRODUCT_DEFAULT        = "";
         const char* Build::VERSION_FILE_DEFAULT   = "Common" SLASH "Version.h";
-
-        #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-            const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
-        #endif
 
         int Build::Main(int aCount, const char ** aVector)
         {
@@ -165,13 +156,6 @@ namespace KMS
             , mProduct      (PRODUCT_DEFAULT)
             , mVersionFile  (VERSION_FILE_DEFAULT)
             , mTmp_Root(File::Folder::Id::TEMPORARY)
-            #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
-                , mExportFolder(File::Folder(File::Folder::Id::HOME, "Export"))
-            #endif
-            #ifdef _KMS_WINDOWS_
-                , mCertificatSHA1(CERTIFICAT_SHA1_DEFAULT)
-                , mExportFolder  (EXPORT_FOLDER_DEFAULT)
-            #endif
         {
             mBinaries      .SetCreator(DI::String::Create);
             mConfigurations.SetCreator(DI::String::Create);
@@ -185,7 +169,6 @@ namespace KMS
             mTests         .SetCreator(DI::String::Create);
 
             AddEntry("Binaries"      , &mBinaries      , false, &MD_BINARIES);
-            AddEntry("CertificatSHA1", &mCertificatSHA1, false, &MD_CERTIFICAT_SHA1);
             AddEntry("Configurations", &mConfigurations, false, &MD_CONFIGURATIONS);
             AddEntry("Drivers"       , &mDrivers       , false, &MD_DRIVERS);
             AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
@@ -218,6 +201,8 @@ namespace KMS
             mTmp_Binaries  = File::Folder(mTmp_Root, "Binaries" );
             mTmp_Drivers   = File::Folder(mTmp_Root, "Drivers"  );
             mTmp_Libraries = File::Folder(mTmp_Root, "Libraries");
+
+            Construct_OSDep();
         }
 
         int Build::Run()
@@ -336,8 +321,8 @@ namespace KMS
 
             lC.AddConfigurable(&lLogCfg);
 
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Build.cfg");
-            lC.ParseFile(File::Folder::CURRENT, "KMS-Make.cfg");
+            lC.ParseFile(File::Folder::CURRENT, CONFIG_FILE);
+            lC.ParseFile(File::Folder::CURRENT, "KMS-Make" FILE_EXT_CFG);
 
             lM.mConfiguration.Set(aC);
             lM.mProcessor    .Set(aP);
@@ -498,7 +483,7 @@ namespace KMS
                     {
                         auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
 
-                        lBin_Src.Copy(lBin, (lB->GetString() + ".elf").c_str());
+                        lBin_Src.Copy(lBin, (lB->GetString() + FILE_EXT_ELF).c_str());
                     }
                 }
 
@@ -513,7 +498,7 @@ namespace KMS
                     {
                         auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
 
-                        lLib_Src.Copy(lLib, (lL->GetString() + ".a").c_str());
+                        lLib_Src.Copy(lLib, (lL->GetString() + FILE_EXT_A).c_str());
                     }
                 }
             }

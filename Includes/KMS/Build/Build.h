@@ -80,6 +80,8 @@ namespace KMS
 
             NO_COPY(Build);
 
+            void Construct_OSDep();
+
             bool IsEmbedded() const;
 
             void Compile();
@@ -103,8 +105,10 @@ namespace KMS
             void Test(const char* aC);
             void Test(const char* aC, const char* aP);
 
+            void Validate_OSDep();
+
             #ifdef _KMS_WINDOWS_
-                void CreateDriverCab(const char* aC, const char* aCabFile);
+                void CreateDriverCab(const char* aD, const char* aCabFile);
                 void CreateInstaller(const char* aP);
             #endif
 

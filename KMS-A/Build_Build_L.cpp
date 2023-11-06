@@ -14,6 +14,8 @@
 
 KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 
+#define FILE_EXT_A ".a"
+
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
@@ -23,6 +25,16 @@ namespace KMS
 {
     namespace Build
     {
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
+
+        void Build::Contruct_OSDep()
+        {
+            mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
+        }
 
         // Private
         // //////////////////////////////////////////////////////////////////
@@ -66,7 +78,7 @@ namespace KMS
                 auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(nullptr != lL);
 
-                lLib_Src.Copy(lLib, (lL->GetString() + ".a").c_str());
+                lLib_Src.Copy(lLib, (lL->GetString() + FILE_EXT_A).c_str());
             }
         }
 

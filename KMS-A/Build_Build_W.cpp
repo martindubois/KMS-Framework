@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Proc/Process.h>
 #include <KMS/Dbg/Stats_Timer.h>
 
@@ -15,15 +16,30 @@
 
 KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 KMS_RESULT_STATIC(RESULT_INNO_SETUP_FAILED);
+KMS_RESULT_STATIC(RESULT_INNO_SETUP_MISSING);
 KMS_RESULT_STATIC(RESULT_MAKECAB_FAILED);
 KMS_RESULT_STATIC(RESULT_SIGNTOOL_FAILED);
 KMS_RESULT_STATIC(RESULT_TEST_FAILED);
+KMS_RESULT_STATIC(RESULT_VISUAL_STUDIO_MISSING);
+KMS_RESULT_STATIC(RESULT_WDK_MISSING);
+
+#define FILE_EXT_CAB ".cab"
+#define FILE_EXT_DDF ".ddf"
+#define FILE_EXT_EXE ".exe"
+#define FILE_EXT_ISS ".iss"
+#define FILE_EXT_LIB ".lib"
+#define FILE_EXT_PDB ".pdb"
+#define FILE_EXT_SLN ".sln"
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
+#define INNO_SETUP_EXE    ("Compil32" FILE_EXT_EXE)
 #define INNO_SETUP_FOLDER ("Inno Setup 6")
+#define INSTALLER_FOLDER  ("Installer")
+#define MSBUILD_EXE       ("MSBuild" FILE_EXT_EXE)
 #define MSBUILD_FOLDER    ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define SIGNTOOL_EXE      ("signtool" FILE_EXT_EXE)
 #define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.19401\\x64")
 
 #define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) // 5 minutes
@@ -31,6 +47,20 @@ KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 #define MSBUILD_ALLOWED_TIME_ms    (1000 * 60 * 10) // 10 minutes
 #define SIGNTOOL_ALLOWED_TIME_ms   (1000 * 60 * 10) // 10 minutes
 #define TEST_ALLOWED_TIME_ms       (1000 * 60 *  5) //  5 minutes
+
+// Constants
+// /////////////////////////////////////////////////////////////////////////
+
+static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1("CertificatSHA1 = {SHA1}");
+
+// Static function declaration
+// /////////////////////////////////////////////////////////////////////////
+
+static void CAB_FileName(const char* aDriver   , char* aOut, unsigned int aOutSize_byte);
+static bool DDF_FileName(const char* aDriver   , char* aOut, unsigned int aOutSize_byte);
+static bool ISS_FileName(const char* aProcessor, char* aOut, unsigned int aOutSize_byte);
+
+static const char* SLN_FILE_NAME = "Solution" FILE_EXT_SLN;
 
 namespace KMS
 {
@@ -40,8 +70,16 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* Build::CERTIFICAT_SHA1_DEFAULT = "TODO";
+        const char* Build::CERTIFICAT_SHA1_DEFAULT = "B71CF3BCD4E228FEFD58B2FE3353EF31106C1754";
         const char* Build::EXPORT_FOLDER_DEFAULT   = "K:\\Export";
+
+        void Build::Construct_OSDep()
+        {
+            mCertificatSHA1 = CERTIFICAT_SHA1_DEFAULT;
+            mExportFolder   = EXPORT_FOLDER_DEFAULT;
+
+            AddEntry("CertificatSHA1", &mCertificatSHA1, false, &MD_CERTIFICAT_SHA1);
+        }
 
         // Private
         // //////////////////////////////////////////////////////////////////
@@ -65,12 +103,11 @@ namespace KMS
 
         void Build::Compile_VisualStudio(const char* aC, const char* aP)
         {
-            File::Folder lProgramFiles(File::Folder::Id::PROGRAM_FILES);
-            File::Folder lBin(lProgramFiles, MSBUILD_FOLDER);
+            File::Folder lBin(File::Folder::PROGRAM_FILES, MSBUILD_FOLDER);
 
-            Proc::Process lProcess(lBin, "MSBuild.exe");
+            Proc::Process lProcess(lBin, MSBUILD_EXE);
 
-            lProcess.AddArgument("Solution.sln");
+            lProcess.AddArgument(SLN_FILE_NAME);
             lProcess.AddArgument("/target:rebuild");
 
             lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
@@ -129,8 +166,8 @@ namespace KMS
                     auto lB = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(nullptr != lB);
 
-                    lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
-                    lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
+                    lOut_Src.Copy(lBin, (std::string(*lB) + FILE_EXT_EXE).c_str());
+                    lOut_Src.Copy(lBin, (std::string(*lB) + FILE_EXT_PDB).c_str());
                 }
             }
 
@@ -147,13 +184,13 @@ namespace KMS
                     auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(nullptr != lD);
 
-                    char lCab[PATH_LENGTH];
+                    char lFileName[PATH_LENGTH];
 
-                    sprintf_s(lCab, "disk1\\%s.cab", lD->Get());
+                    CAB_FileName(*lD, lFileName, sizeof(lFileName));
 
-                    CreateDriverCab(lD->Get(), lCab);
+                    CreateDriverCab(lD->Get(), lFileName);
 
-                    File::Folder::CURRENT.Copy(lDrv, lCab);
+                    File::Folder::CURRENT.Copy(lDrv, lFileName);
                 }
             }
 
@@ -170,8 +207,8 @@ namespace KMS
                     auto lL = dynamic_cast<const DI::String*>(lEntry.Get());
                     assert(nullptr != lL);
 
-                    lOut_Src.Copy(lLib, (std::string(*lL) + ".lib").c_str());
-                    lOut_Src.Copy(lLib, (std::string(*lL) + ".pdb").c_str());
+                    lOut_Src.Copy(lLib, (std::string(*lL) + FILE_EXT_LIB).c_str());
+                    lOut_Src.Copy(lLib, (std::string(*lL) + FILE_EXT_PDB).c_str());
                 }
             }
         }
@@ -192,7 +229,7 @@ namespace KMS
                 auto lT = dynamic_cast<const DI::String*>(lEntry.Get());
                 assert(nullptr != lT);
 
-                Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + ".exe").c_str());
+                Proc::Process lProcess(lOutDir.c_str(), (std::string(*lT) + FILE_EXT_EXE).c_str());
 
                 lProcess.AddArgument("Groups+=Auto");
 
@@ -203,48 +240,83 @@ namespace KMS
             }
         }
 
-        void Build::CreateDriverCab(const char* aC, const char* aCabFile)
+        void Build::Validate_OSDep()
         {
-            assert(nullptr != aC);
+            if ((!mDoNotCompile) && (0 == mEmbedded.GetLength()))
+            {
+                File::Folder lBin(File::Folder::PROGRAM_FILES, MSBUILD_FOLDER);
+
+                KMS_EXCEPTION_ASSERT(lBin.DoesFileExist(MSBUILD_EXE), RESULT_VISUAL_STUDIO_MISSING, "Visual Studio 2022 is not installed", "");
+            }
+
+            for (const auto& lEntry : mProcessors.mInternal)
+            {
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lP);
+
+                char lFileName[PATH_LENGTH];
+
+                if (ISS_FileName(*lP, lFileName, sizeof(lFileName)))
+                {
+                    File::Folder lBin(File::Folder::PROGRAM_FILES_X86, INNO_SETUP_FOLDER);
+
+                    KMS_EXCEPTION_ASSERT(lBin.DoesFileExist(INNO_SETUP_EXE), RESULT_INNO_SETUP_MISSING, "Inno Setup 6.2 is not installed", "");
+
+                    break;
+                }
+            }
+
+            if (!mDrivers.IsEmpty())
+            {
+                File::Folder lBin(File::Folder::PROGRAM_FILES_X86, WDK_TOOL_FOLDER);
+                
+                KMS_EXCEPTION_ASSERT(lBin.DoesFileExist(SIGNTOOL_EXE), RESULT_WDK_MISSING, "The WDK 10.0.19401 is not installed", "");
+            }
+
+        }
+
+        void Build::CreateDriverCab(const char* aD, const char* aCabFile)
+        {
+            assert(nullptr != aD);
             assert(nullptr != aCabFile);
 
             char lDDF[PATH_LENGTH];
 
-            sprintf_s(lDDF, "%s.ddf", aC);
+            if (DDF_FileName(aD, lDDF, sizeof(lDDF)))
+            {
+                Proc::Process lP0(File::Folder::NONE, "makecab" FILE_EXT_EXE);
 
-            Proc::Process lP0(File::Folder::NONE, "makecab.exe");
+                lP0.AddArgument("-f");
+                lP0.AddArgument(lDDF);
 
-            lP0.AddArgument("-f");
-            lP0.AddArgument(lDDF);
+                lP0.Run(MAKECAB_ALLOWED_TIME_ms);
 
-            lP0.Run(MAKECAB_ALLOWED_TIME_ms);
+                auto lRet = lP0.GetExitCode();
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_MAKECAB_FAILED, "Cannot create the cabinet file", lP0.GetCmdLine());
 
-            auto lRet = lP0.GetExitCode();
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_MAKECAB_FAILED, "Cannot create the cabinet file", lP0.GetCmdLine());
+                Proc::Process lP1(File::Folder(File::Folder::PROGRAM_FILES_X86, WDK_TOOL_FOLDER), SIGNTOOL_EXE);
 
-            Proc::Process lP1(File::Folder(File::Folder::PROGRAM_FILES_X86, WDK_TOOL_FOLDER), "signtool.exe");
+                lP1.AddArgument("sign");
+                lP1.AddArgument("/fd");
+                lP1.AddArgument("sha256");
+                lP1.AddArgument("/sha1");
+                lP1.AddArgument(mCertificatSHA1);
+                lP1.AddArgument(aCabFile);
 
-            lP1.AddArgument("sign");
-            lP1.AddArgument("/fd");
-            lP1.AddArgument("sha256");
-            lP1.AddArgument("/sha1");
-            lP1.AddArgument(mCertificatSHA1);
-            lP1.AddArgument(aCabFile);
+                lP1.Run(SIGNTOOL_ALLOWED_TIME_ms);
 
-            lP1.Run(SIGNTOOL_ALLOWED_TIME_ms);
-
-            lRet = lP1.GetExitCode();
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SIGNTOOL_FAILED, "Cannot sign the cabinet file", lP1.GetCmdLine());
+                lRet = lP1.GetExitCode();
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SIGNTOOL_FAILED, "Cannot sign the cabinet file", lP1.GetCmdLine());
+            }
         }
 
         void Build::CreateInstaller(const char* aP)
         {
             char lFileName[PATH_LENGTH];
 
-            sprintf_s(lFileName, "Product_%s.iss", aP);
-            if (File::Folder::CURRENT.DoesFileExist(lFileName))
+            if (ISS_FileName(aP, lFileName, sizeof(lFileName)))
             {
-                Proc::Process lP0(File::Folder(File::Folder::PROGRAM_FILES_X86, INNO_SETUP_FOLDER), "Compil32.exe");
+                Proc::Process lP0(File::Folder(File::Folder::PROGRAM_FILES_X86, INNO_SETUP_FOLDER), INNO_SETUP_EXE);
 
                 lP0.AddArgument("/cc");
                 lP0.AddArgument(lFileName);
@@ -261,18 +333,54 @@ namespace KMS
                 auto lType = mVersion.GetType();
                 if (0 == strlen(lType))
                 {
-                    sprintf_s(lFileName, "%s_%u.%u.%u_%s.exe", lProduct, lMa, lMi, lBu, aP);
+                    sprintf_s(lFileName, "%s_%u.%u.%u_%s" FILE_EXT_EXE, lProduct, lMa, lMi, lBu, aP);
                 }
                 else
                 {
-                    sprintf_s(lFileName, "%s_%u.%u.%u-%s_%s.exe", lProduct, lMa, lMi, lBu, lType, aP);
+                    sprintf_s(lFileName, "%s_%u.%u.%u-%s_%s" FILE_EXT_EXE, lProduct, lMa, lMi, lBu, lType, aP);
                 }
 
-                File::Folder lInstaller(File::Folder::Id::CURRENT, "Installer");
+                File::Folder lInstaller(File::Folder::Id::CURRENT, INSTALLER_FOLDER);
 
                 lInstaller.Copy(mProductFolder, lFileName);
             }
         }
 
     }
+}
+
+using namespace KMS;
+
+// Static function declaration
+// /////////////////////////////////////////////////////////////////////////
+
+void CAB_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)
+{
+    assert(nullptr != aDriver);
+    assert(nullptr != aOut);
+    assert(0 < aOutSize_byte);
+
+    sprintf_s(aOut, aOutSize_byte, "disk1\\%s" FILE_EXT_CAB, aDriver);
+}
+
+bool DDF_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)
+{
+    assert(nullptr != aDriver);
+    assert(nullptr != aOut);
+    assert(0 < aOutSize_byte);
+
+    sprintf_s(aOut, aOutSize_byte, "%s" FILE_EXT_DDF, aDriver);
+
+    return File::Folder::CURRENT.DoesFileExist(aOut);
+}
+
+bool ISS_FileName(const char* aProcessor, char* aOut, unsigned int aOutSize_byte)
+{
+    assert(nullptr != aProcessor);
+    assert(nullptr != aOut);
+    assert(0 < aOutSize_byte);
+
+    sprintf_s(aOut, aOutSize_byte, "Product_%s" FILE_EXT_ISS, aProcessor);
+
+    return File::Folder::CURRENT.DoesFileExist(aOut);
 }
