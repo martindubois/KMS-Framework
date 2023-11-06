@@ -22,7 +22,7 @@ namespace KMS
 
         class Depend;
 
-        class Make : public CLI::Tool
+        class Make final : public CLI::Tool
         {
 
         public:
@@ -42,6 +42,7 @@ namespace KMS
 
             // ----- Build --------------------------------------------------
             DI::Array mBinaries;
+            DI::Array mDrivers;
             DI::Array mLibraries;
             DI::Array mTests;
 
@@ -50,13 +51,6 @@ namespace KMS
             static int Main(int aCount, const char** aVector);
 
             Make();
-
-            ~Make();
-
-            void AddBinary (const char* aB);
-            void AddInclude(const char* aI);
-            void AddLibrary(const char* aL);
-            void AddTest   (const char* aT);
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile);
@@ -68,6 +62,7 @@ namespace KMS
             enum class ComponentType
             {
                 BINARY,
+                DRIVER,
                 LIBRARY,
                 NONE,
                 TEST,

@@ -38,7 +38,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
 static const KMS::Cfg::MetaData MD_CLEAN_EXTENSIONS("CleanExtensions += {Name}");
 static const KMS::Cfg::MetaData MD_COMPONENT       ("Component = {Name}");
-static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | LIBRARY | NONE | TEST");
+static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | DRIVER | LIBRARY | NONE | TEST");
 static const KMS::Cfg::MetaData MD_CONFIGURATION   ("Configuration = {Name}");
 static const KMS::Cfg::MetaData MD_INCLUDES        ("Includes += {Name}");
 static const KMS::Cfg::MetaData MD_MAKE            ("Make = {Path}");
@@ -47,6 +47,7 @@ static const KMS::Cfg::MetaData MD_PROCESSOR       ("Processor = {Name}");
 // ----- Build --------------------------------------------------------------
 
 static const KMS::Cfg::MetaData MD_BINARIES  ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_DRIVERS   ("Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_LIBRARIES ("Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
 
@@ -69,7 +70,9 @@ static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
 #endif
 
 static const KMS::Cfg::MetaData MD_OS_BINARIES (NAME_OS "Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_DRIVERS  (NAME_OS "Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_OS_LIBRARIES(NAME_OS "Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_TESTS    (NAME_OS "Tests += {Name}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -112,7 +115,7 @@ namespace KMS
             nullptr
         };
 
-        const char* Make::COMPONENT_TYPE_NAMES[] = { "BINARY", "LIBRARY", "NONE", "TEST" };
+        const char* Make::COMPONENT_TYPE_NAMES[] = { "BINARY", "DRIVER", "LIBRARY", "NONE", "TEST" };
 
         int Make::Main(int aCount, const char ** aVector)
         {
@@ -163,26 +166,23 @@ namespace KMS
             // ----- Build --------------------------------------------------
 
             mBinaries .SetCreator(DI::String::Create);
+            mDrivers  .SetCreator(DI::String::Create);
             mLibraries.SetCreator(DI::String::Create);
             mTests    .SetCreator(DI::String::Create);
 
             AddEntry("Binaries" , &mBinaries , false, &MD_BINARIES);
+            AddEntry("Drivers"  , &mDrivers  , false, &MD_DRIVERS);
             AddEntry("Libraries", &mLibraries, false, &MD_LIBRARIES);
             AddEntry("Tests"    , &mTests    , false, &MD_TESTS);
 
             AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
+            AddEntry(NAME_OS "Drivers"  , &mDrivers  , false, &MD_OS_DRIVERS);
             AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
+            AddEntry(NAME_OS "Tests"    , &mTests    , false, &MD_OS_TESTS);
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
         }
-
-        Make::~Make() {}
-
-        void Make::AddBinary   (const char* aB) { mBinaries  .AddEntry(new DI::String(aB), true); }
-        void Make::AddInclude  (const char* aI) { mIncludes  .AddEntry(new DI::String_Expand(aI), true); }
-        void Make::AddLibrary  (const char* aL) { mLibraries .AddEntry(new DI::String(aL), true); }
-        void Make::AddTest     (const char* aT) { mTests     .AddEntry(new DI::String(aT), true); }
 
         // ===== CLI::Tool ==================================================
 
@@ -472,6 +472,11 @@ namespace KMS
                 Clean_Component(mComponent.Get());
                 break;
 
+            case ComponentType::DRIVER:
+                Clean_Libraries();
+                Clean_Component(mComponent.Get());
+                break;
+
             case ComponentType::LIBRARY:
                 Clean_Library(mComponent.Get());
                 Clean_Component(mComponent.Get());
@@ -495,11 +500,13 @@ namespace KMS
             switch (mComponentType)
             {
             case ComponentType::BINARY:
+            case ComponentType::DRIVER:
             case ComponentType::LIBRARY:
             case ComponentType::TEST: Depend_Component(mComponent.Get()); break;
 
             case ComponentType::NONE:
                 Depend_Components(mBinaries);
+                Depend_Components(mDrivers);
                 Depend_Components(mLibraries);
                 Depend_Components(mTests);
                 break;
@@ -516,6 +523,7 @@ namespace KMS
             switch (mComponentType)
             {
             case ComponentType::BINARY:
+            case ComponentType::DRIVER:
             case ComponentType::TEST:
                 Make_Components(mLibraries);
                 Make_Component(mComponent.Get());
@@ -545,6 +553,7 @@ namespace KMS
                 auto lComponent = mComponent.Get();
 
                 if      (DoesContain(mBinaries , lComponent)) { mComponentType = ComponentType::BINARY ; }
+                else if (DoesContain(mDrivers  , lComponent)) { mComponentType = ComponentType::DRIVER ; }
                 else if (DoesContain(mLibraries, lComponent)) { mComponentType = ComponentType::LIBRARY; }
                 else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else

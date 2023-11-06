@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Build/Make.h>
+#include <KMS/Build/Package.h>
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
 #include <KMS/Main.h>
@@ -39,6 +40,7 @@ static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true"
 static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_TEST    ("DoNotTest = false | true");
+static const KMS::Cfg::MetaData MD_DRIVERS        ("Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_EDIT_OPERATIONS("EditOperations += {Operation}");
 static const KMS::Cfg::MetaData MD_EMBEDDED       ("Embedded = false | true");
 static const KMS::Cfg::MetaData MD_EXPORT_FOLDER  ("ExportFolder = {Path}");
@@ -69,11 +71,13 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     #define NO_OS_0 "Darwin"
     #define NO_OS_1 "Linux"
 
+    static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1   ("CertificatSHA1 = {SHA1}");
     static const KMS::Cfg::MetaData MD_WINDOWS_FILE_MSI  ("WindowsFile_MSI = {Path}");
 #endif
 
 static const KMS::Cfg::MetaData MD_OS_BINARIES      (NAME_OS "Binaries += {Name}");
 static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS(NAME_OS "Configurations += {Name}");
+static const KMS::Cfg::MetaData MD_OS_DRIVERS       (NAME_OS "Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_OS_FILES         (NAME_OS "Files += {Path}");
 static const KMS::Cfg::MetaData MD_OS_FOLDERS       (NAME_OS "Folders += {Path}");
 static const KMS::Cfg::MetaData MD_OS_LIBRARIES     (NAME_OS "Libraries += {Name}");
@@ -126,9 +130,6 @@ namespace KMS
         #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
             const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
         #endif
-        #ifdef _KMS_WINDOWS_
-            const char* Build::EXPORT_FOLDER_DEFAULT = "K:\\Export";
-        #endif
 
         int Build::Main(int aCount, const char ** aVector)
         {
@@ -168,11 +169,13 @@ namespace KMS
                 , mExportFolder(File::Folder(File::Folder::Id::HOME, "Export"))
             #endif
             #ifdef _KMS_WINDOWS_
-                , mExportFolder(EXPORT_FOLDER_DEFAULT)
+                , mCertificatSHA1(CERTIFICAT_SHA1_DEFAULT)
+                , mExportFolder  (EXPORT_FOLDER_DEFAULT)
             #endif
         {
             mBinaries      .SetCreator(DI::String::Create);
             mConfigurations.SetCreator(DI::String::Create);
+            mDrivers       .SetCreator(DI::String::Create);
             mEditOperations.SetCreator(DI::String::Create);
             mFiles         .SetCreator(DI::String::Create);
             mFolders       .SetCreator(DI::String::Create);
@@ -182,7 +185,9 @@ namespace KMS
             mTests         .SetCreator(DI::String::Create);
 
             AddEntry("Binaries"      , &mBinaries      , false, &MD_BINARIES);
+            AddEntry("CertificatSHA1", &mCertificatSHA1, false, &MD_CERTIFICAT_SHA1);
             AddEntry("Configurations", &mConfigurations, false, &MD_CONFIGURATIONS);
+            AddEntry("Drivers"       , &mDrivers       , false, &MD_DRIVERS);
             AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
             AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
             AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
@@ -202,6 +207,7 @@ namespace KMS
 
             AddEntry(NAME_OS "Binaries"      , &mBinaries      , false, &MD_OS_BINARIES);
             AddEntry(NAME_OS "Configurations", &mConfigurations, false, &MD_OS_CONFIGURATIONS);
+            AddEntry(NAME_OS "Drivers"       , &mDrivers       , false, &MD_OS_DRIVERS);
             AddEntry(NAME_OS "Files"         , &mFiles         , false, &MD_OS_FILES);
             AddEntry(NAME_OS "Folders"       , &mFolders       , false, &MD_OS_FOLDERS);
             AddEntry(NAME_OS "Libraries"     , &mLibraries     , false, &MD_OS_LIBRARIES);
@@ -209,25 +215,10 @@ namespace KMS
             AddEntry(NAME_OS "Processors"    , &mProcessors    , false, &MD_OS_PROCESSORS);
             AddEntry(NAME_OS "Tests"         , &mTests         , false, &MD_OS_TESTS);
 
-            #ifdef _KMS_WINDOWS_
-                AddEntry("WindowsFile_MSI"  , &mWindowsFile_MSI  , false, &MD_WINDOWS_FILE_MSI);
-            #endif
-
             mTmp_Binaries  = File::Folder(mTmp_Root, "Binaries" );
+            mTmp_Drivers   = File::Folder(mTmp_Root, "Drivers"  );
             mTmp_Libraries = File::Folder(mTmp_Root, "Libraries");
         }
-
-        Build::~Build() {}
-
-        void Build::AddBinary       (const char* aB) { assert(nullptr != aB); mBinaries      .AddEntry(new DI::String(aB), true); }
-        void Build::AddConfiguration(const char* aC) { assert(nullptr != aC); mConfigurations.AddEntry(new DI::String(aC), true); }
-        void Build::AddEditOperation(const char* aE) { assert(nullptr != aE); mEditOperations.AddEntry(new DI::String(aE), true); }
-        void Build::AddFile         (const char* aF) { assert(nullptr != aF); mFiles         .AddEntry(new DI::String(aF), true); }
-        void Build::AddFolder       (const char* aF) { assert(nullptr != aF); mFolders       .AddEntry(new DI::String(aF), true); }
-        void Build::AddLibrary      (const char* aL) { assert(nullptr != aL); mLibraries     .AddEntry(new DI::String(aL), true); }
-        void Build::AddPreBuildCmd  (const char* aC) { assert(nullptr != aC); mPreBuildCmds  .AddEntry(new DI::String(aC), true); }
-        void Build::AddProcessor    (const char* aP) { assert(nullptr != aP); mProcessors    .AddEntry(new DI::String(aP), true); }
-        void Build::AddTest         (const char* aT) { assert(nullptr != aT); mTests         .AddEntry(new DI::String(aT), true); }
 
         int Build::Run()
         {
@@ -242,6 +233,8 @@ namespace KMS
             if (!mDoNotPackage) { Package(); }
             if (!mDoNotExport ) { Export (); }
 
+            CreateInstaller();
+
             return 0;
         }
 
@@ -251,7 +244,7 @@ namespace KMS
         {
             DI::Dictionary::Validate();
 
-            if ((!mBinaries.IsEmpty()) || (!mLibraries.IsEmpty()))
+            if ((!mBinaries.IsEmpty()) || (!mDrivers.IsEmpty()) || (!mLibraries.IsEmpty()) || (!mTests.IsEmpty()))
             {
                 if (!mDoNotCompile)
                 {
@@ -266,6 +259,13 @@ namespace KMS
 
                     KMS_EXCEPTION_ASSERT(0 < mProduct.GetLength(), RESULT_INVALID_CONFIG, "Invalid product name", "");
                 }
+
+                KMS_EXCEPTION_ASSERT(!mOSIndependent, RESULT_INVALID_CONFIG, "OS independent binary, driver, library or test are not supported", "");
+            }
+
+            if (!mDrivers.IsEmpty())
+            {
+                KMS_EXCEPTION_ASSERT(0 == mEmbedded.GetLength(), RESULT_INVALID_CONFIG, "Embedded driver are not supported", "");
             }
 
             KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()      , RESULT_INVALID_CONFIG, "No processor", "");
@@ -425,17 +425,15 @@ namespace KMS
                 mProductFolder.Create();
             }
 
-            unsigned int lFlags = (IsEmbedded() || mOSIndependent) ? Version::FLAG_OS_INDEPENDENT : 0;
+            KMS::Build::Package lPackage(IsEmbedded() || mOSIndependent);
 
-            char lPackage[FILE_LENGTH];
+            lPackage.Set(mProduct.Get(), mVersion);
 
-            mVersion.GetPackageName(mProduct, lPackage, sizeof(lPackage), lFlags);
+            char lFileName[FILE_LENGTH];
 
-            mTmp_Root.Compress(mProductFolder, lPackage);
+            lPackage.GetFileName(lFileName, sizeof(lFileName));
 
-            #ifdef _KMS_WINDOWS_
-                Export_WindowsFile_MSI();
-            #endif
+            mTmp_Root.Compress(mProductFolder, lFileName);
         }
 
         void Build::Package()
@@ -448,6 +446,7 @@ namespace KMS
         void Build::Package_Components()
         {
             if (!mBinaries .IsEmpty()) { mTmp_Binaries .Create(); }
+            if (!mDrivers  .IsEmpty()) { mTmp_Drivers  .Create(); }
             if (!mLibraries.IsEmpty()) { mTmp_Libraries.Create(); }
 
             for (const auto& lEntry : mConfigurations.mInternal)

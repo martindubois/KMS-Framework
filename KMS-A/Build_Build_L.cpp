@@ -53,6 +53,14 @@ namespace KMS
                 lBin_Src.Copy(lBin, lB->Get());
             }
 
+            for (const auto& lEntry : mDrivers.mInternal)
+            {
+                auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lD);
+
+                // TODO
+            }
+
             for (const auto& lEntry : mLibraries.mInternal)
             {
                 auto lL = dynamic_cast<const DI::String*>(lEntry.Get());

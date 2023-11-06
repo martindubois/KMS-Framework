@@ -6,6 +6,7 @@
 # File      .gitignore
 
 /Import/
+/Installer/
 
 /Test_*
 

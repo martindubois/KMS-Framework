@@ -24,7 +24,7 @@ namespace KMS
     namespace Build
     {
         
-        class Build : public DI::Dictionary
+        class Build final : public DI::Dictionary
         {
 
         public:
@@ -39,30 +39,30 @@ namespace KMS
             static const char* PRODUCT_DEFAULT;
             static const char* VERSION_FILE_DEFAULT;
 
+            DI::Array   mBinaries;
+            DI::Array   mConfigurations;
             DI::Boolean mDoNotCompile;
             DI::Boolean mDoNotExport;
             DI::Boolean mDoNotPackage;
             DI::Boolean mDoNotTest;
+            DI::Array   mDrivers;
+            DI::Array   mEditOperations;
             DI::String  mEmbedded;
             DI::Folder  mExportFolder;
+            DI::Array   mFiles;
+            DI::Array   mFolders;
+            DI::Array   mLibraries;
             DI::Boolean mOSIndependent;
+            DI::Array   mPreBuildCmds;
+            DI::Array   mProcessors;
             DI::String  mProduct;
             DI::String  mVersionFile;
-
-        private:
-
-            DI::Array mBinaries;
-            DI::Array mConfigurations;
-            DI::Array mEditOperations;
-            DI::Array mFiles;
-            DI::Array mFolders;
-            DI::Array mLibraries;
-            DI::Array mPreBuildCmds;
-            DI::Array mProcessors;
-            DI::Array mTests;
+            DI::Array   mTests;
 
             #ifdef _KMS_WINDOWS_
-                DI::String mWindowsFile_MSI;
+                static const char* CERTIFICAT_SHA1_DEFAULT;
+
+                DI::String_Expand mCertificatSHA1;
             #endif
 
         public:
@@ -70,18 +70,6 @@ namespace KMS
             static int Main(int aCount, const char** aVector);
 
             Build();
-
-            ~Build();
-
-            void AddBinary       (const char* aB);
-            void AddConfiguration(const char* aC);
-            void AddEditOperation(const char* aC);
-            void AddFile         (const char* aF);
-            void AddFolder       (const char* aF);
-            void AddLibrary      (const char* aL);
-            void AddPreBuildCmd  (const char* aC);
-            void AddProcessor    (const char* aP);
-            void AddTest         (const char* aT);
 
             int Run();
 
@@ -99,6 +87,7 @@ namespace KMS
             void Compile_Make(const char* aC, const char* aP);
             void Compile_VisualStudio(const char* aC);
             void Compile_VisualStudio(const char* aC, const char* aP);
+            void CreateInstaller();
             void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
             void Export();
@@ -115,16 +104,18 @@ namespace KMS
             void Test(const char* aC, const char* aP);
 
             #ifdef _KMS_WINDOWS_
-                void Export_WindowsFile_MSI();
+                void CreateDriverCab(const char* aC, const char* aCabFile);
+                void CreateInstaller(const char* aP);
             #endif
 
             File::Folder mProductFolder;
             Version      mVersion;
 
             // ===== Folders ================================================
-            File::Folder mTmp_Root;
             File::Folder mTmp_Binaries;
+            File::Folder mTmp_Drivers;
             File::Folder mTmp_Libraries;
+            File::Folder mTmp_Root;
 
         };
 

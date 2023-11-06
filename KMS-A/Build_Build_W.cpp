@@ -13,21 +13,35 @@
 
 #include <KMS/Build/Build.h>
 
-KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
+KMS_RESULT_STATIC(RESULT_INNO_SETUP_FAILED);
+KMS_RESULT_STATIC(RESULT_MAKECAB_FAILED);
+KMS_RESULT_STATIC(RESULT_SIGNTOOL_FAILED);
+KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
-#define MSBUILD_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define INNO_SETUP_FOLDER ("Inno Setup 6")
+#define MSBUILD_FOLDER    ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.19401\\x64")
 
-#define MSBUILD_ALLOWER_TIME_ms (1000 * 60 * 10) // 10 minutes
-#define TEST_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
+#define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) // 5 minutes
+#define MAKECAB_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
+#define MSBUILD_ALLOWED_TIME_ms    (1000 * 60 * 10) // 10 minutes
+#define SIGNTOOL_ALLOWED_TIME_ms   (1000 * 60 * 10) // 10 minutes
+#define TEST_ALLOWED_TIME_ms       (1000 * 60 *  5) //  5 minutes
 
 namespace KMS
 {
     namespace Build
     {
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        const char* Build::CERTIFICAT_SHA1_DEFAULT = "TODO";
+        const char* Build::EXPORT_FOLDER_DEFAULT   = "K:\\Export";
 
         // Private
         // //////////////////////////////////////////////////////////////////
@@ -62,10 +76,27 @@ namespace KMS
             lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
             lProcess.AddArgument(("/property:Platform=" + std::string(aP)).c_str());
 
-            lProcess.Run(MSBUILD_ALLOWER_TIME_ms);
+            lProcess.Run(MSBUILD_ALLOWED_TIME_ms);
 
             auto lRet = lProcess.GetExitCode();
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "The compilation failed", lProcess.GetCmdLine());
+        }
+
+        void Build::CreateInstaller()
+        {
+            auto lCT = new Dbg::Stats_Timer("CreateInstallerTime.Processor");
+
+            for (const auto& lEntry : mProcessors.mInternal)
+            {
+                lCT->Start();
+
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lP);
+
+                CreateInstaller(*lP);
+
+                lCT->Stop();
+            }
         }
 
         void Build::Package_Components(const char* aC, const char* aP)
@@ -100,6 +131,29 @@ namespace KMS
 
                     lOut_Src.Copy(lBin, (std::string(*lB) + ".exe").c_str());
                     lOut_Src.Copy(lBin, (std::string(*lB) + ".pdb").c_str());
+                }
+            }
+
+            if (!mDrivers.IsEmpty())
+            {
+                File::Folder lDrv(mTmp_Drivers, lCP.c_str());
+
+                lDrv.Create();
+
+                for (const auto& lEntry : mDrivers.mInternal)
+                {
+                    assert(nullptr != lEntry);
+
+                    auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
+                    assert(nullptr != lD);
+
+                    char lCab[PATH_LENGTH];
+
+                    sprintf_s(lCab, "disk1\\%s.cab", lD->Get());
+
+                    CreateDriverCab(lD->Get(), lCab);
+
+                    File::Folder::CURRENT.Copy(lDrv, lCab);
                 }
             }
 
@@ -144,25 +198,79 @@ namespace KMS
 
                 lProcess.Run(TEST_ALLOWED_TIME_ms);
 
-                if (0 != lProcess.GetExitCode())
-                {
-                    KMS_EXCEPTION(RESULT_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
-                }
+                auto lRet = lProcess.GetExitCode();
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_TEST_FAILED, "The test failed", lProcess.GetCmdLine());
             }
         }
 
-        // Private
-        // //////////////////////////////////////////////////////////////////
-
-        void Build::Export_WindowsFile_MSI()
+        void Build::CreateDriverCab(const char* aC, const char* aCabFile)
         {
-            if (0 < mWindowsFile_MSI.GetLength())
+            assert(nullptr != aC);
+            assert(nullptr != aCabFile);
+
+            char lDDF[PATH_LENGTH];
+
+            sprintf_s(lDDF, "%s.ddf", aC);
+
+            Proc::Process lP0(File::Folder::NONE, "makecab.exe");
+
+            lP0.AddArgument("-f");
+            lP0.AddArgument(lDDF);
+
+            lP0.Run(MAKECAB_ALLOWED_TIME_ms);
+
+            auto lRet = lP0.GetExitCode();
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_MAKECAB_FAILED, "Cannot create the cabinet file", lP0.GetCmdLine());
+
+            Proc::Process lP1(File::Folder(File::Folder::PROGRAM_FILES_X86, WDK_TOOL_FOLDER), "signtool.exe");
+
+            lP1.AddArgument("sign");
+            lP1.AddArgument("/fd");
+            lP1.AddArgument("sha256");
+            lP1.AddArgument("/sha1");
+            lP1.AddArgument(mCertificatSHA1);
+            lP1.AddArgument(aCabFile);
+
+            lP1.Run(SIGNTOOL_ALLOWED_TIME_ms);
+
+            lRet = lP1.GetExitCode();
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SIGNTOOL_FAILED, "Cannot sign the cabinet file", lP1.GetCmdLine());
+        }
+
+        void Build::CreateInstaller(const char* aP)
+        {
+            char lFileName[PATH_LENGTH];
+
+            sprintf_s(lFileName, "Product_%s.iss", aP);
+            if (File::Folder::CURRENT.DoesFileExist(lFileName))
             {
-                char lDstName[PATH_LENGTH];
+                Proc::Process lP0(File::Folder(File::Folder::PROGRAM_FILES_X86, INNO_SETUP_FOLDER), "Compil32.exe");
 
-                sprintf_s(lDstName, "%s_%u.%u.%u.msi", mProduct.Get(), mVersion.GetMajor(), mVersion.GetMinor(), mVersion.GetBuild());
+                lP0.AddArgument("/cc");
+                lP0.AddArgument(lFileName);
 
-                File::Folder::CURRENT.Copy(mProductFolder, mWindowsFile_MSI.Get(), lDstName);
+                lP0.Run(INNO_SETUP_ALLOWED_TIME_ms);
+
+                auto lRet = lP0.GetExitCode();
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_INNO_SETUP_FAILED, "Inno Setup failed", lP0.GetCmdLine());
+
+                auto lProduct = mProduct.Get();
+                auto lMa = mVersion.GetMajor();
+                auto lMi = mVersion.GetMinor();
+                auto lBu = mVersion.GetBuild();
+                auto lType = mVersion.GetType();
+                if (0 == strlen(lType))
+                {
+                    sprintf_s(lFileName, "%s_%u.%u.%u_%s.exe", lProduct, lMa, lMi, lBu, aP);
+                }
+                else
+                {
+                    sprintf_s(lFileName, "%s_%u.%u.%u-%s_%s.exe", lProduct, lMa, lMi, lBu, lType, aP);
+                }
+
+                File::Folder lInstaller(File::Folder::Id::CURRENT, "Installer");
+
+                lInstaller.Copy(mProductFolder, lFileName);
             }
         }
 
