@@ -9,8 +9,10 @@
 
 #pragma once
 
-// ===== Windows ============================================================
-#include <Windows.h>
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
 
 namespace KMS
 {
@@ -48,11 +50,20 @@ namespace KMS
 
         private:
 
-            HANDLE       mHandle;
+            void Construct_OSDep(const char* aPath);
+
             unsigned int mMappedSize_byte;
-            HANDLE       mMapping;
             void       * mView;
             bool         mWrite;
+
+            #ifdef _KMS_LINUX_
+                int mHandle;
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                HANDLE mHandle;
+                HANDLE mMapping;
+            #endif
 
         };
 

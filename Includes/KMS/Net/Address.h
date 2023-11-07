@@ -15,9 +15,17 @@
 #include <ostream>
 #include <string>
 
-// ===== Windows ============================================================
-#include <winsock2.h>
-#include <ws2ipdef.h>
+#ifdef _KMS_LINUX_
+    // ===== System =========================================================
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+#endif
+
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <winsock2.h>
+    #include <ws2ipdef.h>
+#endif
 
 namespace KMS
 {
@@ -94,6 +102,8 @@ namespace KMS
             void SetName(const char* aN);
 
             void UpdateName();
+
+            void SetIPv4_OSDep(const unsigned int* aA);
 
             union
             {

@@ -31,13 +31,15 @@ namespace KMS
 
         const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
 
-        void Build::Contruct_OSDep()
+        void Build::Construct_OSDep()
         {
             mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        void Build::CreateInstaller() {}
 
         void Build::Package_Components(const char* aC, const char* aP)
         {

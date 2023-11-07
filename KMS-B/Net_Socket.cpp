@@ -9,6 +9,11 @@
 
 #include "Component.h"
 
+#ifdef _KMS_LINUX_
+    // ===== System =========================================================
+    #include <netinet/tcp.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
 
@@ -297,7 +302,7 @@ namespace KMS
             }
         }
 
-        void Socket::SetOption(int aOptName, DWORD aValue)
+        void Socket::SetOption(int aOptName, uint32_t aValue)
         {
             assert(INVALID_SOCKET != mSocket);
 
@@ -305,7 +310,7 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed (NOT TESTED)", lRet);
         }
 
-        void Socket::SetOption_TCP(int aOptName, DWORD aValue)
+        void Socket::SetOption_TCP(int aOptName, uint32_t aValue)
         {
             assert(INVALID_SOCKET != mSocket);
 

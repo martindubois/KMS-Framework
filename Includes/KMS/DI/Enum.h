@@ -63,7 +63,7 @@ namespace KMS
 
             static DI::Object* Create();
 
-            Enum(T aIn = DEFAULT_VALUE);
+            Enum(T aIn = Enum<T, N>::DEFAULT_VALUE);
 
             // ===== Enum_Ptr ===============================================
             using Enum_Ptr<T, N>::operator =;

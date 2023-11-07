@@ -11,12 +11,17 @@
 
 #include "Component.h"
 
-// ===== Windows ============================================================
-#include <WS2tcpip.h>
+#ifdef _KMS_LINUX_
+    // ===== C ==============================================================
+    #include <netdb.h>
+#endif
+
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <WS2tcpip.h>
+#endif
 
 // ===== Includes ===========================================================
-#include <KMS/SafeAPI.h>
-
 #include <KMS/Net/Address.h>
 
 KMS_RESULT_STATIC(RESULT_ADDRESS_RESOLUTION_FAILED);
@@ -185,10 +190,8 @@ namespace KMS
                 KMS_EXCEPTION_ASSERT(0xff >= aA[i], RESULT_INVALID_ADDRESS, "Invalid IPv4 address", aA[i]);
             }
 
-            mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1 = aA[0];
-            mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b2 = aA[1];
-            mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b3 = aA[2];
-            mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b4 = aA[3];
+            SetIPv4_OSDep(aA);
+
             mAddress.mIPv4.sin_family = AF_INET;
 
             UpdateName();
@@ -234,30 +237,6 @@ namespace KMS
 
             sprintf_s(lMsg, "Cannot resolve the network address \"%s\" (NOT TESTED)", aN);
             KMS_EXCEPTION(RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, "");
-        }
-
-        void Address::UpdateName()
-        {
-            const uint8_t* lB;
-
-            char lName[32];
-
-            switch (mAddress.mBase.sa_family)
-            {
-            case AF_INET:
-                lB = &mAddress.mIPv4.sin_addr.S_un.S_un_b.s_b1;
-                sprintf_s(lName, "%u.%u.%u.%u", lB[0], lB[1], lB[2], lB[3]);
-                break;
-
-            case AF_INET6:
-                lB = reinterpret_cast<uint8_t*>(&mAddress.mIPv6.sin6_addr.u.Byte);
-                sprintf_s(lName, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", lB[0], lB[1], lB[2], lB[3], lB[4], lB[5], lB[6], lB[7]);
-                break;
-
-            default: assert(false);
-            }
-
-            mName = lName;
         }
 
     }

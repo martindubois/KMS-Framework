@@ -9,7 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Di/Dictionary.h>
+#include <KMS/DI/Dictionary.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Modbus/Slave.h>
 

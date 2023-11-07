@@ -253,7 +253,7 @@ namespace KMS
             HTTP::Client lClient(lSecure);
 
             char lTag[LINE_LENGTH];
-            char lURL[LINE_LENGTH];
+            char lURL[LINE_LENGTH * 2];
 
             aPackage.GetTagName(lTag, sizeof(lTag));
 

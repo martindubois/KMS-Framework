@@ -20,8 +20,8 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* DI::File::DEFAULT_MODE  = "rb";
-        const char* DI::File::DEFAULT_VALUE = "";
+        const char* DI::File_Ptr::DEFAULT_MODE  = "rb";
+        const char* DI::File_Ptr::DEFAULT_VALUE = "";
 
         DI::Object* DI::File::Create() { return new File; }
 

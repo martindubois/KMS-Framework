@@ -12,5 +12,6 @@ PROCESSOR = $(shell uname -p)
 CFLAGS = -DOS_NAME=\"$(UNAME)\" -DOS_PROC=\"$(PROCESSOR)\" @../Args/$(CONFIG).args @../Args/$(PROCESSOR).args
 
 KMS_A_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-A.a
+KMS_B_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-B.a
 
 INCLUDES = -I ../Includes

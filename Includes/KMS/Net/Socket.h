@@ -11,8 +11,10 @@
 // ===== C ===============================================================
 #include <stdint.h>
 
-// ===== Windows =========================================================
-#include <winsock2.h>
+#ifdef _KMS_WINDOWS_
+    // ===== Windows =====================================================
+    #include <winsock2.h>
+#endif
 
 // ===== Includes ========================================================
 #include <KMS/DI/Array.h>
@@ -134,9 +136,9 @@ namespace KMS
 
             void Configure();
 
-            void SetOption(int aOptName, DWORD aValue);
+            void SetOption(int aOptName, uint32_t aValue);
 
-            void SetOption_TCP(int aOptName, DWORD aValue);
+            void SetOption_TCP(int aOptName, uint32_t aValue);
 
             bool mBroadcastReceive;
 

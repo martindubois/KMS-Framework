@@ -3,12 +3,24 @@
 // Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Base.h
+// File      Includes/KMS/WindowsOnLinux.h
 
 #pragma once
 
 // ===== C ==================================================================
 #include <string.h>
+#include <unistd.h>
+
+// Data types
+// //////////////////////////////////////////////////////////////////////////
+
+typedef int SOCKET;
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+#define INVALID_SOCKET (-1)
+#define SB_BOTH        SHUT_RDWR
 
 // Macros
 // //////////////////////////////////////////////////////////////////////////
@@ -17,7 +29,10 @@
 
 #define _crt_signal_t sighandler_t
 
-#define _stricmp strcasecmp
+#define _stricmp  strcasecmp
+#define _strnicmp strncasecmp
+
+#define closesocket close
 
 // ===== ..._s ==============================================================
 
