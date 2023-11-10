@@ -31,6 +31,8 @@ namespace KMS
 
         private:
 
+            NO_COPY(Form);
+
             // ===== Callbacks ==============================================
             const Callback<Form> ON_GET_DATA;
             const Callback<Form> ON_GET_META_DATA;

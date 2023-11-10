@@ -21,48 +21,6 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Address::SetName(const char* aN)
-        {
-            assert(nullptr != aN);
-
-            char lMsg[64 + NAME_LENGTH];
-
-            addrinfo* lAddr;
-
-            auto lRet = getaddrinfo(aN, NULL, NULL, &lAddr);
-            if (0 != lRet)
-            {
-                sprintf_s(lMsg, "Cannot resolve the network address \"%s\"", aN);
-                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, lRet);
-            }
-
-            assert(nullptr != lAddr);
-
-            auto lCurrent = lAddr;
-
-            while (nullptr != lCurrent)
-            {
-                if ((AF_INET == lCurrent->ai_family) || (AF_INET6 == lCurrent->ai_family))
-                {
-                    SetInternal(lAddr->ai_addr, static_cast<unsigned int>(lAddr->ai_addrlen));
-
-                    freeaddrinfo(lAddr);
-
-                    mName = aN;
-
-                    return;
-                }
-
-                // NOT TESTED
-                lCurrent = lCurrent->ai_next;
-            }
-
-            freeaddrinfo(lAddr);
-
-            sprintf_s(lMsg, "Cannot resolve the network address \"%s\" (NOT TESTED)", aN);
-            KMS_EXCEPTION(RESULT_ADDRESS_RESOLUTION_FAILED, lMsg, "");
-        }
-
         void Address::UpdateName()
         {
             const uint8_t* lB;

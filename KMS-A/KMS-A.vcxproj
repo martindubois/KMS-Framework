@@ -81,6 +81,7 @@
     <ClCompile Include="Exception_W.cpp" />
     <ClCompile Include="FileFormat_BMP.cpp" />
     <ClCompile Include="FileFormat_ELF.cpp" />
+    <ClCompile Include="File_Binary_W.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
     <ClCompile Include="Graph_Color.cpp" />
     <ClCompile Include="Graph_Histogram.cpp" />

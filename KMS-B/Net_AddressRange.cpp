@@ -8,8 +8,6 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/SafeAPI.h>
-
 #include <KMS/Net/AddressRange.h>
 
 KMS_RESULT_STATIC(RESULT_INVALID_ADDRESS_RANGE);

@@ -7,6 +7,11 @@
 
 #include "Component.h"
 
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/Modbus/CRC.h>
 

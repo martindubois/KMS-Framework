@@ -10,6 +10,10 @@
 // ===== Includes ===========================================================
 #include <KMS/File/Binary.h>
 
+KMS_RESULT_STATIC(RESULT_ACCESS_FAILED);
+KMS_RESULT_STATIC(RESULT_MAPPING_FAILED);
+KMS_RESULT_STATIC(RESULT_TOO_SHORT);
+
 namespace KMS
 {
     namespace File

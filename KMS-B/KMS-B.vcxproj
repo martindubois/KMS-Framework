@@ -51,6 +51,7 @@
     <ClCompile Include="Net_Address.cpp" />
     <ClCompile Include="Net_AddressRange.cpp" />
     <ClCompile Include="Net_AddressRangeList.cpp" />
+    <ClCompile Include="Net_Address_W.cpp" />
     <ClCompile Include="Net_Server.cpp" />
     <ClCompile Include="Net_Socket.cpp" />
     <ClCompile Include="Net_Socket_Client.cpp" />
