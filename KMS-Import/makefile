@@ -25,7 +25,7 @@ OBJECTS = $(SOURCES:.cpp=.o)
 # ===== Targets =============================================================
 
 $(OUTPUT) : $(OBJECTS) $(LIBRARIES)
-	g++ -o $@ $^
+	g++ -o $@ $^ -lssl -lcrypto
 
 depend:
 	makedepend -T $(INCLUDES) $(SOURCES)

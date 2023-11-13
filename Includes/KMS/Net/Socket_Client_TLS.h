@@ -8,6 +8,11 @@
 
 #pragma once
 
+#ifdef _KMS_LINUX_
+    // ===== OpenSSL ========================================================
+    #include <openssl/ssl.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/Net/Socket_Client.h>
 
@@ -29,13 +34,30 @@ namespace KMS
 
             ~Socket_Client_TLS();
 
-            // ===== Socket_Client ==========================================
-            virtual void         Connect();
-            virtual void         Disconnect();
+            // ===== Socket =================================================
             virtual unsigned int Receive(void* aOut, unsigned int aOutSize_byte);
             virtual void         Send(const void* aIn, unsigned int aInSize_byte);
 
+            #ifdef _KMS_LINUX_
+                virtual void Open();
+            #endif
+
+        protected:
+
+            void Construct_OSDep();
+
+            // ===== Socket_Client ==========================================
+            virtual void Connect_Internal();
+
+            // ===== Socket =================================================
+            virtual void CloseSocket();
+
         private:
+
+            #ifdef _KMS_LINUX_
+                BIO    * mConnect;
+                SSL_CTX* mContext;
+            #endif
 
             #ifdef _KMS_WINDOWS_
                 void ClearInternal();

@@ -302,14 +302,6 @@ namespace KMS
             }
         }
 
-        void Socket::SetOption(int aOptName, uint32_t aValue)
-        {
-            assert(INVALID_SOCKET != mSocket);
-
-            auto lRet = setsockopt(mSocket, SOL_SOCKET, aOptName, reinterpret_cast<char*>(&aValue), sizeof(aValue));
-            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SOCKET_OPTION_FAILED, "setsockopt failed (NOT TESTED)", lRet);
-        }
-
         void Socket::SetOption_TCP(int aOptName, uint32_t aValue)
         {
             assert(INVALID_SOCKET != mSocket);

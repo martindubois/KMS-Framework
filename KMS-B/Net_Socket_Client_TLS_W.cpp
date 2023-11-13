@@ -54,144 +54,6 @@ namespace KMS
 
         // ===== Socket_Client ==============================================
 
-        void Socket_Client_TLS::Connect()
-        {
-            ClearInternal();
-
-            Socket_Client::Connect();
-
-            SCHANNEL_CRED lCred;
-
-            memset(&lCred, 0, sizeof(lCred));
-
-            lCred.dwFlags               = SCH_USE_STRONG_CRYPTO | SCH_CRED_AUTO_CRED_VALIDATION | SCH_CRED_NO_DEFAULT_CREDS;
-            lCred.dwVersion             = SCHANNEL_CRED_VERSION;
-            lCred.grbitEnabledProtocols = SP_PROT_TLS1_2;
-
-            auto lRet = AcquireCredentialsHandle(nullptr, const_cast<SEC_CHAR*>(UNISP_NAME), SECPKG_CRED_OUTBOUND, nullptr, &lCred, nullptr, nullptr, &mHandle, nullptr);
-            KMS_EXCEPTION_ASSERT(SEC_E_OK == lRet, RESULT_SOCKET_SECURITY_ERROR, "AcquireCredentialsHandle failed (NOT TESTED)", lRet);
-
-            CtxtHandle* lContext = nullptr;
-            DWORD       lFlags = ISC_REQ_USE_SUPPLIED_CREDS | ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT | ISC_REQ_STREAM;
-
-            for (;;)
-            {
-                SecBuffer lInBuffers [2] = { 0 };
-                SecBuffer lOutBuffers[1] = { 0 };
-
-                SecBufferDesc lInDesc  = { SECBUFFER_VERSION, ARRAYSIZE(lInBuffers ), lInBuffers  };
-                SecBufferDesc lOutDesc = { SECBUFFER_VERSION, ARRAYSIZE(lOutBuffers), lOutBuffers };
-
-                Buffers_Clear(&lInDesc );
-                Buffers_Clear(&lOutDesc);
-
-                lInBuffers[0].BufferType = SECBUFFER_TOKEN;
-                lInBuffers[0].pvBuffer   = mIncoming;
-                lInBuffers[0].cbBuffer   = mReceived_byte;
-                lInBuffers[1].BufferType = SECBUFFER_EMPTY;
-
-                if (nullptr == lContext)
-                {
-                    lRet = InitializeSecurityContext(&mHandle, nullptr, const_cast<SEC_CHAR*>(mRemoteName.Get()),
-                        lFlags, 0, 0, nullptr,
-                        0, &mContext,
-                        &lOutDesc, &lFlags, nullptr);
-                }
-                else
-                {
-                    lRet = InitializeSecurityContext(&mHandle, lContext, nullptr,
-                        lFlags, 0, 0, &lInDesc,
-                        0, nullptr,
-                        &lOutDesc, &lFlags, nullptr);
-                }
-
-                SEC_Dump("InitializeSecurityContext", lRet);
-                Buffers_Dump(lInDesc);
-
-                lContext = &mContext;
-
-                switch (lInBuffers[1].BufferType)
-                {
-                case SECBUFFER_EXTRA:
-                    memmove(&mIncoming, mIncoming + mReceived_byte - lInBuffers[1].cbBuffer, lInBuffers[1].cbBuffer);
-                    // TODO  Erase moved data
-                    mReceived_byte = lInBuffers[1].cbBuffer;
-                    break;
-
-                case SECBUFFER_MISSING: break;
-
-                default: mReceived_byte = 0;
-                }
-
-                if (SEC_E_OK == lRet)
-                {
-                    break;
-                }
-
-                KMS_EXCEPTION_ASSERT(SEC_I_INCOMPLETE_CREDENTIALS != lRet, RESULT_SOCKET_SECURITY_ERROR, "InitializeSecurityContext failed (NOT TESTED)", "");
-
-                if (SEC_I_CONTINUE_NEEDED == lRet)
-                {
-                    if (0 < lOutBuffers[0].cbBuffer)
-                    {
-                        Socket_Client::Send(lOutBuffers[0].pvBuffer, lOutBuffers[0].cbBuffer);
-
-                        // Erase sent data before releasing the buffer
-                        Buffer_Clear(lOutBuffers + 0);
-
-                        FreeContextBuffer(lOutBuffers[0].pvBuffer);
-                    }
-                }
-                else
-                {
-                    KMS_EXCEPTION_ASSERT(SEC_E_INCOMPLETE_MESSAGE != lRet, RESULT_SOCKET_SECURITY_ERROR, "InitializeSecurityContext failed (NOT TESTED)", "");
-                }
-
-                KMS_EXCEPTION_ASSERT(mReceived_byte < sizeof(mIncoming), RESULT_SOCKET_SECURITY_ERROR, "Received too many data (NOT TESTED)", mReceived_byte);
-
-                auto lReceived_byte = Socket_Client::Receive(mIncoming + mReceived_byte, sizeof(mIncoming) - mReceived_byte);
-                KMS_EXCEPTION_ASSERT(0 != lReceived_byte, RESULT_SOCKET_SECURITY_ERROR, "Server disconnect (NOT TESTED)", "");
-
-                mReceived_byte += lReceived_byte;
-            }
-
-            QueryContextAttributes(&mContext, SECPKG_ATTR_STREAM_SIZES, &mStreamSizes);
-        }
-
-        void Socket_Client_TLS::Disconnect()
-        {
-            DWORD lFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT | ISC_REQ_STREAM;
-
-            SecBuffer lOutBuffers[1];
-            SecBufferDesc lOutDesc = { SECBUFFER_VERSION, ARRAYSIZE(lOutBuffers), lOutBuffers };
-
-            Buffers_Clear(&lOutDesc);
-
-            lOutBuffers[0].BufferType = SECBUFFER_TOKEN;
-
-            auto lRet = InitializeSecurityContext(&mHandle, &mContext, nullptr, lFlags, 0, 0, &lOutDesc, 0, nullptr, &lOutDesc, &lFlags, nullptr);
-            SEC_Dump("InitializeSecurityContext", lRet);
-
-            if (SEC_E_OK == lRet)
-            {
-                Socket_Client::Send(lOutBuffers[0].pvBuffer, lOutBuffers[0].cbBuffer);
-
-                // Erase sent data before releasing the buffer
-                Buffer_Clear(lOutBuffers + 0);
-
-                FreeContextBuffer(lOutBuffers[0].pvBuffer);
-            }
-
-            Shutdown();
-
-            DeleteSecurityContext(&mContext);
-            FreeCredentialsHandle(&mHandle);
-
-            ClearInternal();
-
-            Socket_Client::Disconnect();
-        }
-
         unsigned int Socket_Client_TLS::Receive(void* aOut, unsigned int aOutSize_byte)
         {
             assert(nullptr != aOut);
@@ -342,6 +204,156 @@ namespace KMS
                 lIn          += lUse_byte;
                 lInSize_byte -= lUse_byte;
             }
+        }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        void Socket_Client_TLS::Construct_OSDep()
+        {
+            ClearInternal();
+        }
+
+        // ===== Socket_Client ==============================================
+
+        void Socket_Client_TLS::Connect_Internal()
+        {
+            ClearInternal();
+
+            Socket_Client::Connect_Internal();
+
+            SCHANNEL_CRED lCred;
+
+            memset(&lCred, 0, sizeof(lCred));
+
+            lCred.dwFlags               = SCH_USE_STRONG_CRYPTO | SCH_CRED_AUTO_CRED_VALIDATION | SCH_CRED_NO_DEFAULT_CREDS;
+            lCred.dwVersion             = SCHANNEL_CRED_VERSION;
+            lCred.grbitEnabledProtocols = SP_PROT_TLS1_2;
+
+            auto lRet = AcquireCredentialsHandle(nullptr, const_cast<SEC_CHAR*>(UNISP_NAME), SECPKG_CRED_OUTBOUND, nullptr, &lCred, nullptr, nullptr, &mHandle, nullptr);
+            KMS_EXCEPTION_ASSERT(SEC_E_OK == lRet, RESULT_SOCKET_SECURITY_ERROR, "AcquireCredentialsHandle failed (NOT TESTED)", lRet);
+
+            CtxtHandle* lContext = nullptr;
+            DWORD       lFlags = ISC_REQ_USE_SUPPLIED_CREDS | ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT | ISC_REQ_STREAM;
+
+            for (;;)
+            {
+                SecBuffer lInBuffers [2] = { 0 };
+                SecBuffer lOutBuffers[1] = { 0 };
+
+                SecBufferDesc lInDesc  = { SECBUFFER_VERSION, ARRAYSIZE(lInBuffers ), lInBuffers  };
+                SecBufferDesc lOutDesc = { SECBUFFER_VERSION, ARRAYSIZE(lOutBuffers), lOutBuffers };
+
+                Buffers_Clear(&lInDesc );
+                Buffers_Clear(&lOutDesc);
+
+                lInBuffers[0].BufferType = SECBUFFER_TOKEN;
+                lInBuffers[0].pvBuffer   = mIncoming;
+                lInBuffers[0].cbBuffer   = mReceived_byte;
+                lInBuffers[1].BufferType = SECBUFFER_EMPTY;
+
+                if (nullptr == lContext)
+                {
+                    lRet = InitializeSecurityContext(&mHandle, nullptr, const_cast<SEC_CHAR*>(mRemoteName.Get()),
+                        lFlags, 0, 0, nullptr,
+                        0, &mContext,
+                        &lOutDesc, &lFlags, nullptr);
+                }
+                else
+                {
+                    lRet = InitializeSecurityContext(&mHandle, lContext, nullptr,
+                        lFlags, 0, 0, &lInDesc,
+                        0, nullptr,
+                        &lOutDesc, &lFlags, nullptr);
+                }
+
+                SEC_Dump("InitializeSecurityContext", lRet);
+                Buffers_Dump(lInDesc);
+
+                lContext = &mContext;
+
+                switch (lInBuffers[1].BufferType)
+                {
+                case SECBUFFER_EXTRA:
+                    memmove(&mIncoming, mIncoming + mReceived_byte - lInBuffers[1].cbBuffer, lInBuffers[1].cbBuffer);
+                    // TODO  Erase moved data
+                    mReceived_byte = lInBuffers[1].cbBuffer;
+                    break;
+
+                case SECBUFFER_MISSING: break;
+
+                default: mReceived_byte = 0;
+                }
+
+                if (SEC_E_OK == lRet)
+                {
+                    break;
+                }
+
+                KMS_EXCEPTION_ASSERT(SEC_I_INCOMPLETE_CREDENTIALS != lRet, RESULT_SOCKET_SECURITY_ERROR, "InitializeSecurityContext failed (NOT TESTED)", "");
+
+                if (SEC_I_CONTINUE_NEEDED == lRet)
+                {
+                    if (0 < lOutBuffers[0].cbBuffer)
+                    {
+                        Socket_Client::Send(lOutBuffers[0].pvBuffer, lOutBuffers[0].cbBuffer);
+
+                        // Erase sent data before releasing the buffer
+                        Buffer_Clear(lOutBuffers + 0);
+
+                        FreeContextBuffer(lOutBuffers[0].pvBuffer);
+                    }
+                }
+                else
+                {
+                    KMS_EXCEPTION_ASSERT(SEC_E_INCOMPLETE_MESSAGE != lRet, RESULT_SOCKET_SECURITY_ERROR, "InitializeSecurityContext failed (NOT TESTED)", "");
+                }
+
+                KMS_EXCEPTION_ASSERT(mReceived_byte < sizeof(mIncoming), RESULT_SOCKET_SECURITY_ERROR, "Received too many data (NOT TESTED)", mReceived_byte);
+
+                auto lReceived_byte = Socket_Client::Receive(mIncoming + mReceived_byte, sizeof(mIncoming) - mReceived_byte);
+                KMS_EXCEPTION_ASSERT(0 != lReceived_byte, RESULT_SOCKET_SECURITY_ERROR, "Server disconnect (NOT TESTED)", "");
+
+                mReceived_byte += lReceived_byte;
+            }
+
+            QueryContextAttributes(&mContext, SECPKG_ATTR_STREAM_SIZES, &mStreamSizes);
+        }
+
+        // ===== Socket =====================================================
+
+        void Socket_Client_TLS::CloseSocket()
+        {
+            DWORD lFlags = ISC_REQ_ALLOCATE_MEMORY | ISC_REQ_CONFIDENTIALITY | ISC_REQ_REPLAY_DETECT | ISC_REQ_SEQUENCE_DETECT | ISC_REQ_STREAM;
+
+            SecBuffer lOutBuffers[1];
+            SecBufferDesc lOutDesc = { SECBUFFER_VERSION, ARRAYSIZE(lOutBuffers), lOutBuffers };
+
+            Buffers_Clear(&lOutDesc);
+
+            lOutBuffers[0].BufferType = SECBUFFER_TOKEN;
+
+            auto lRet = InitializeSecurityContext(&mHandle, &mContext, nullptr, lFlags, 0, 0, &lOutDesc, 0, nullptr, &lOutDesc, &lFlags, nullptr);
+            SEC_Dump("InitializeSecurityContext", lRet);
+
+            if (SEC_E_OK == lRet)
+            {
+                Socket_Client::Send(lOutBuffers[0].pvBuffer, lOutBuffers[0].cbBuffer);
+
+                // Erase sent data before releasing the buffer
+                Buffer_Clear(lOutBuffers + 0);
+
+                FreeContextBuffer(lOutBuffers[0].pvBuffer);
+            }
+
+            Shutdown();
+
+            DeleteSecurityContext(&mContext);
+            FreeCredentialsHandle(&mHandle);
+
+            ClearInternal();
+
+            Socket_Client::CloseSocket();
         }
 
         // Private

@@ -76,7 +76,7 @@ namespace KMS
 
             void Close();
 
-            void Open();
+            virtual void Open();
 
             virtual unsigned int Receive(void* aOut, unsigned int aOutSize_byte);
 
@@ -114,7 +114,7 @@ namespace KMS
                 OPEN,
             };
 
-            void CloseSocket();
+            virtual void CloseSocket();
 
             bool Select(unsigned int aTimeout_ms);
 

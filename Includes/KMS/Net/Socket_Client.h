@@ -27,22 +27,19 @@ namespace KMS
 
             Socket_Client(Type aType);
 
-            virtual void Connect();
-
-            virtual void Disconnect();
+            void Connect();
+            void Disconnect();
 
             // ===== Socket =================================================
             virtual ~Socket_Client();
 
         protected:
 
+            virtual void Connect_Internal();
+
             // ===== Socket =================================================
             virtual void VerifyState_CLOSED(State aS);
             virtual void VerifyState_OPEN  (State aS);
-
-        private:
-
-            void Connect_Internal();
 
         };
 
