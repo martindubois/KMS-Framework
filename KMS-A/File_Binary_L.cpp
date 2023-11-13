@@ -24,7 +24,7 @@ namespace KMS
 
         void Binary::Close()
         {
-            if(-1 != mHandle);
+            if (-1 != mHandle)
             {
                 auto lRet = close(mHandle);
                 assert(0 == lRet);
@@ -65,13 +65,16 @@ namespace KMS
             if (mWrite)
             {
                 lFlags |= O_CREAT | O_RDWR;
+
+                mHandle = open(aPath, lFlags, S_IRUSR | S_IWUSR | S_IRGRP);
             }
             else
             {
                 lFlags |= O_RDONLY;
+
+                mHandle = open(aPath, lFlags);
             }
 
-            mHandle = open(aPath, lFlags);
             if (-1 == mHandle)
             {
                 char lMsg[64 + PATH_LENGTH];
