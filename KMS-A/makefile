@@ -96,6 +96,10 @@ SOURCES = Build_Build_L.cpp       \
 		  Text_File_UTF16.cpp     \
 		  Text_ReadPtr.cpp        \
 		  Text_WritePtr.cpp       \
+		  Thread_Gate_L.cpp       \
+		  Thread_Lock.cpp         \
+		  Thread_Thread_L.cpp     \
+		  Thread_Thread.cpp       \
           Version.cpp             \
 		  WOP_FrameBuffer.cpp     \
 		  WOP_Object_Dynamic.cpp  \
@@ -209,6 +213,10 @@ Text_File_ASCII.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Inclu
 Text_File_UTF16.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/File_UTF16.h ../Includes/KMS/Types.h Component.h
 Text_ReadPtr.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/ReadPtr.h Component.h
 Text_WritePtr.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/WritePtr.h Component.h
+Thread_Gate_L.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Thread/Gate.h Component.h
+Thread_Lock.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Thread/Gate.h ../Includes/KMS/Thread/Lock.h Component.h
+Thread_Thread.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Thread/Gate.h ../Includes/KMS/Thread/Lock.h ../Includes/KMS/Thread/Thread.h Component.h
+Thread_Thread_L.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Thread/Gate.h ../Includes/KMS/Thread/Thread.h Component.h
 Version.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/File_ASCII.h ../Includes/KMS/Types.h ../Includes/KMS/Version.h Component.h
 WOP_FrameBuffer.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/WOP.h Component.h
 WOP_Object.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/WOP/FrameBuffer.h ../Includes/KMS/WOP/Object.h ../Includes/KMS/WOP/WOP.h Component.h

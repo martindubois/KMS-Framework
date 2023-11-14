@@ -9,9 +9,6 @@
 
 #pragma once
 
-// ===== Windows ============================================================
-#include <Windows.h>
-
 // ===== Includes ===========================================================
 #include <KMS/Callback.h>
 #include <KMS/Thread/Gate.h>
@@ -34,6 +31,9 @@ namespace KMS
             void Start();
             void Stop();
             void StopAndWait(unsigned int aTimeout_ms);
+
+            // LIMITATION  On Linux, the method igores aTimeout_ms and wait
+            //             for ever.
             void Wait(unsigned int aTimeout_ms);
 
             Gate mGate;
@@ -65,11 +65,21 @@ namespace KMS
                 STARTING,
             };
 
+            void Construct_OSDep();
+
             void CloseIfNeeded();
 
-            HANDLE mHandle;
+            void Wait_OSDep(unsigned int aTimeout_ms);
 
             State mState;
+
+            #ifdef _KMS_LINUX_
+                pthread_t mThread;
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                HANDLE mHandle;
+            #endif
 
         };
 

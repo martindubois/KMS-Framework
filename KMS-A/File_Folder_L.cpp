@@ -22,6 +22,7 @@ KMS_RESULT_STATIC(RESULT_COPY_FAILED);
 KMS_RESULT_STATIC(RESULT_CREATE_FAILED);
 KMS_RESULT_STATIC(RESULT_COMPRESS_FAILED);
 KMS_RESULT_STATIC(RESULT_DELETE_FAILED);
+KMS_RESULT_STATIC(RESULT_FOLDER_CHANGE_FAILED);
 KMS_RESULT_STATIC(RESULT_INIT_FAILED);
 KMS_RESULT_STATIC(RESULT_REMOVE_FAILED);
 KMS_RESULT_STATIC(RESULT_RENAME_FAILED);
@@ -42,6 +43,21 @@ namespace KMS
 
         // Public
         // //////////////////////////////////////////////////////////////////
+
+        void Folder::ChangeCurrentDirectory(const Folder& aNew)
+        {
+            auto lNew = aNew.GetPath();
+
+            auto lRet = chdir(lNew);
+            if (0 != lRet)
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot change the current directory for %s", lNew);
+                KMS_EXCEPTION(RESULT_FOLDER_CHANGE_FAILED, lMsg, lRet);
+            }
+
+            CURRENT.Init_Current();
+        }
 
         bool Folder::DoesExist() const
         {

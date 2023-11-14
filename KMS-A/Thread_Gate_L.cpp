@@ -1,11 +1,9 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-A/Thread_Gate.cpp
-
-// TEST COVERAGE 2022-06-09 KMS - Martin Dubois, P. Eng.
+// File      KMS-A/Thread_Gate_L.cpp
 
 #include "Component.h"
 
@@ -20,13 +18,13 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Gate::Gate() { InitializeCriticalSection(&mInternal); }
+        Gate::Gate() { pthread_mutex_init(&mInternal, nullptr); }
 
-        Gate::~Gate() { DeleteCriticalSection(&mInternal); }
+        Gate::~Gate() { pthread_mutex_destroy(&mInternal); }
 
-        void Gate::Lock() { EnterCriticalSection(&mInternal); }
+        void Gate::Lock() { pthread_mutex_lock(&mInternal); }
 
-        void Gate::Unlock() { LeaveCriticalSection(&mInternal); }
+        void Gate::Unlock() { pthread_mutex_unlock(&mInternal); }
 
     }
 }
