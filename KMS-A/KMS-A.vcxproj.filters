@@ -258,9 +258,6 @@
     <ClCompile Include="WOP_System.cpp">
       <Filter>Source Files\WOP</Filter>
     </ClCompile>
-    <ClCompile Include="Thread_Gate.cpp">
-      <Filter>Source Files\Thread</Filter>
-    </ClCompile>
     <ClCompile Include="Thread_Lock.cpp">
       <Filter>Source Files\Thread</Filter>
     </ClCompile>
@@ -398,6 +395,12 @@
     </ClCompile>
     <ClCompile Include="File_Binary_W.cpp">
       <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Gate_W.cpp">
+      <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Thread_Thread_W.cpp">
+      <Filter>Source Files\Thread</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

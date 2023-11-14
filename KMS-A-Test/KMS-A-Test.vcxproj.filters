@@ -120,6 +120,9 @@
     <ClCompile Include="DI_Value_W.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
+    <ClCompile Include="File_Folder_W.cpp">
+      <Filter>Source Files\File</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

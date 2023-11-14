@@ -288,6 +288,7 @@
     <ClCompile Include="FileFormat_ELF.cpp" />
     <ClCompile Include="File_Binary.cpp" />
     <ClCompile Include="File_Folder.cpp" />
+    <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
     <ClCompile Include="Graph_Bitmap.cpp" />
     <ClCompile Include="Graph_Histogram.cpp" />
