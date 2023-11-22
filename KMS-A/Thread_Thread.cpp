@@ -103,54 +103,58 @@ namespace KMS
 
         void Thread::Run()
         {
-            unsigned int lRet = mOnStarting.Send(this);
-            if (CALLBACK_SUCCESS_OR_WARNING(lRet))
+            try
             {
-                Lock lLock(&mGate);
-
-                if (State::STARTING == mState)
+                unsigned int lRet = mOnStarting.Send(this);
+                if (CALLBACK_SUCCESS_OR_WARNING(lRet))
                 {
-                    mState = State::RUNNING;
+                    Lock lLock(&mGate);
 
-                    if (mOnRun.IsSet())
+                    if (State::STARTING == mState)
                     {
-                        lLock.Unlock();
-                        {
-                            lRet = mOnRun.Send(this);
-                            assert(CALLBACK_SUCCESS(lRet));
-                        }
-                        lLock.Relock();
+                        mState = State::RUNNING;
 
-                        mState = State::STOPPING;
-                    }
-                    else
-                    {
-                        while (State::RUNNING == mState)
+                        if (mOnRun.IsSet())
                         {
                             lLock.Unlock();
                             {
-                                lRet = mOnIterate.Send(this);
+                                lRet = mOnRun.Send(this);
+                                assert(CALLBACK_SUCCESS(lRet));
                             }
                             lLock.Relock();
 
-                            if (!CALLBACK_SUCCESS(lRet))
+                            mState = State::STOPPING;
+                        }
+                        else
+                        {
+                            while (State::RUNNING == mState)
                             {
-                                break;
-                            }
+                                lLock.Unlock();
+                                {
+                                    lRet = mOnIterate.Send(this);
+                                }
+                                lLock.Relock();
 
-                            if (0 != (lRet & ICallback::FLAG_ACTION_STOP))
-                            {
-                                break;
+                                if (!CALLBACK_SUCCESS(lRet))
+                                {
+                                    break;
+                                }
+
+                                if (0 != (lRet & ICallback::FLAG_ACTION_STOP))
+                                {
+                                    break;
+                                }
                             }
                         }
+
+                        lLock.Unlock();
+
+                        lRet = mOnStopping.Send(this);
+                        assert(CALLBACK_SUCCESS_OR_WARNING(lRet));
                     }
-
-                    lLock.Unlock();
-
-                    lRet = mOnStopping.Send(this);
-                    assert(CALLBACK_SUCCESS_OR_WARNING(lRet));
                 }
             }
+            KMS_CATCH
 
             mState = State::STOPPED;
         }

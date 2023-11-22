@@ -22,7 +22,7 @@
 
 #define FULL_HEADER_SIZE_byte (14 + INFO_HEADER_SIZE_byte)
 
-#define MAGIC 'MB'
+#define MAGIC 0x4D42 // 'MB'
 
 namespace KMS
 {

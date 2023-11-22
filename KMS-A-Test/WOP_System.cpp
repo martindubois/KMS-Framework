@@ -29,7 +29,7 @@ KMS_TEST(WOP_System_Base, "Auto", sTest_Base)
     lInstances[1] = &lVA0;
 
     // Constructor
-    WOP::System lS0(VERSION, 'tseT', 0x00);
+    WOP::System lS0(VERSION, 0x74736554, 0x00); // 'tseT'
 
     lS0.mConsole.Set_Null();
 

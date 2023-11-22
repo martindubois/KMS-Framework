@@ -10,6 +10,9 @@
 // ===== C ==================================================================
 #include <unistd.h>
 
+// ===== System =============================================================
+#include <sys/wait.h>
+
 // ===== Includes ===========================================================
 #include <KMS/Proc/Process.h>
 
@@ -25,6 +28,45 @@ namespace KMS
 {
     namespace Proc
     {
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        bool Process::IsRunning()
+        {
+            bool lResult = false;
+
+            if (0 < mHandle)
+            {
+                int lStatus;
+
+                auto lRet = waitpid(mHandle, &lStatus, WNOHANG);
+                KMS_EXCEPTION_ASSERT(0 <= lRet, RESULT_ACCESS_FAILED, "waitpid failed", lRet);
+
+                if (0 == lRet)
+                {
+                    lResult = true;
+                }
+                else
+                {
+                    mExitCode = lStatus;
+                    mHandle = 0;
+                }
+            }
+
+            return lResult;
+        }
+
+        void Process::Detach() { mHandle = 0; }
+
+        void Process::Terminate()
+        {
+            if (0 < mHandle)
+            {
+                auto lRet = kill(mHandle, SIGINT);
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_ACCESS_FAILED, "kill failed", lRet);
+            }
+        }
 
         // Pirvate
         // //////////////////////////////////////////////////////////////////

@@ -276,8 +276,6 @@ namespace KMS
 
         void Scope::State_STOPPED()
         {
-            assert(State::QTY > mState);
-
             mState = State::STOPPED;
             mX_px  = 0;
         }

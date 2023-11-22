@@ -48,7 +48,6 @@ KMS_TEST(FileFormat_BMP_Main, "Auto", sTest_Base)
     // Open
     lBMP0.Open();
 
-
     // GetData *
     KMS_TEST_ASSERT(nullptr != lBMP0.GetData());
 

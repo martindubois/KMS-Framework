@@ -63,7 +63,11 @@ SOURCES = Build_Build_L.cpp       \
 		  File_Folder_L.cpp       \
           File_Folder.cpp         \
 		  File_Sync.cpp           \
+		  FileFormat_BMP.cpp      \
+		  FileFormat_ELF.cpp      \
+		  Graph_Bitmap.cpp        \
 		  Graph_Color.cpp         \
+		  Graph_Histogram.cpp     \
 		  Graph_Point.cpp         \
 		  HTTP.cpp                \
 		  Install_Installer.cpp   \
@@ -88,6 +92,10 @@ SOURCES = Build_Build_L.cpp       \
 		  Result.cpp              \
 		  Saturated.cpp           \
 		  ScaleAndOffset.cpp      \
+		  Scope_Channel_DAQ.cpp   \
+		  Scope_Channel_Random.cpp \
+		  Scope_Channel.cpp       \
+		  Scope_Scope.cpp         \
 		  Stats_Histogram.cpp     \
 		  Stats_Stats.cpp         \
 		  Test_Test.cpp           \
@@ -175,12 +183,16 @@ Environment.o: ../Includes/KMS/Base.h ../Includes/KMS/Environment.h ../Includes/
 Environment_L.o: ../Includes/KMS/Base.h ../Includes/KMS/Environment.h ../Includes/KMS/SafeAPI.h Component.h
 Exception.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Console.h ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h ../Includes/KMS/Enum.h ../Includes/KMS/Exception.h ../Includes/KMS/File/Folder.h ../Includes/KMS/Result.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Version.h Component.h
 Exception_L.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h Component.h
+FileFormat_BMP.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/FileFormat/BMP.h ../Includes/KMS/SafeAPI.h Component.h
+FileFormat_ELF.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/FileFormat/ELF.h ../Includes/KMS/SafeAPI.h Component.h
 File_Binary.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h Component.h
 File_Binary_L.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/SafeAPI.h Component.h
 File_Folder.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Color.h ../Includes/KMS/Environment.h ../Includes/KMS/File/Folder.h ../Includes/KMS/SafeAPI.h Component.h
 File_Folder_L.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Folder.h ../Includes/KMS/Proc/Process.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h Component.h
 File_Sync.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/Configurator.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/Console/Console.h ../Includes/KMS/DI/Array.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Enum.h ../Includes/KMS/DI/File.h ../Includes/KMS/DI/Folder.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/String_Expand.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Dbg/Log.h ../Includes/KMS/Dbg/LogFile.h ../Includes/KMS/Dbg/Log_Cfg.h ../Includes/KMS/Dbg/Stats.h ../Includes/KMS/Dbg/Stats_Entry.h ../Includes/KMS/Dbg/Stats_Timer.h ../Includes/KMS/Dbg/Stats_Value.h ../Includes/KMS/Enum.h ../Includes/KMS/Exception.h ../Includes/KMS/File/FileInfoList.h ../Includes/KMS/File/Folder.h ../Includes/KMS/File/Sync.h ../Includes/KMS/Install/Installer.h ../Includes/KMS/Main.h ../Includes/KMS/Result.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Types.h ../Includes/KMS/Version.h Component.h
+Graph_Bitmap.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/FileFormat/BMP.h ../Includes/KMS/Graph/Bitmap.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/Graph/Point.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Saturated.h Component.h
 Graph_Color.o: ../Includes/KMS/Base.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/SafeAPI.h Component.h
+Graph_Histogram.o: ../Includes/KMS/Base.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/FileFormat/BMP.h ../Includes/KMS/Graph/Bitmap.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/Graph/Histogram.h ../Includes/KMS/Graph/Point.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Stats/Histogram.h ../Includes/KMS/Stats/Stats.h Component.h
 Graph_Point.o: ../Includes/KMS/Base.h ../Includes/KMS/Graph/Point.h ../Includes/KMS/SafeAPI.h Component.h
 HTTP.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Convert.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/String.h ../Includes/KMS/DI/UInt.h ../Includes/KMS/DI/Value.h ../Includes/KMS/HTTP/HTTP.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Text/ReadPtr.h ../Includes/KMS/Text/WritePtr.h ../Includes/KMS/Types.h Component.h
 Install_Installer.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/Cfg/MetaData.h ../Includes/KMS/DI/Boolean.h ../Includes/KMS/DI/Container.h ../Includes/KMS/DI/Dictionary.h ../Includes/KMS/DI/MetaData.h ../Includes/KMS/DI/Object.h ../Includes/KMS/DI/Value.h ../Includes/KMS/Install/Installer.h ../Includes/KMS/SafeAPI.h Component.h
@@ -205,6 +217,10 @@ RefCount.o: ../Includes/KMS/Base.h ../Includes/KMS/RefCount.h ../Includes/KMS/Sa
 Result.o: ../Includes/KMS/Base.h ../Includes/KMS/Result.h ../Includes/KMS/SafeAPI.h Component.h
 Saturated.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Saturated.h Component.h
 ScaleAndOffset.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/ScaleAndOffset.h Component.h
+Scope_Channel.o: ../Includes/KMS/Base.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Scope/Channel.h ../Includes/KMS/Stats/Stats.h Component.h
+Scope_Channel_DAQ.o: ../Includes/KMS/Base.h ../Includes/KMS/DAQ/AnalogInput.h ../Includes/KMS/DAQ/AnalogOutput.h ../Includes/KMS/DAQ/DAQ.h ../Includes/KMS/DAQ/DigitalInput.h ../Includes/KMS/DAQ/DigitalOutput.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Scope/Channel.h ../Includes/KMS/Scope/Channel_DAQ.h ../Includes/KMS/Stats/Stats.h Component.h
+Scope_Channel_Random.o: ../Includes/KMS/Base.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Scope/Channel.h ../Includes/KMS/Scope/Channel_Random.h ../Includes/KMS/Stats/Stats.h Component.h
+Scope_Scope.o: ../Includes/KMS/Base.h ../Includes/KMS/Callback.h ../Includes/KMS/File/Binary.h ../Includes/KMS/File/Folder.h ../Includes/KMS/FileFormat/BMP.h ../Includes/KMS/Graph/Bitmap.h ../Includes/KMS/Graph/Color.h ../Includes/KMS/Graph/Point.h ../Includes/KMS/OS.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Scope/Channel.h ../Includes/KMS/Scope/Scope.h ../Includes/KMS/Stats/Stats.h Component.h
 Stats_Histogram.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Stats/Histogram.h ../Includes/KMS/Stats/Stats.h Component.h
 Stats_Stats.o: ../Includes/KMS/Base.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Stats/Stats.h Component.h
 Test_Test.o: ../Includes/KMS/Base.h ../Includes/KMS/Console/Color.h ../Includes/KMS/Console/Console.h ../Includes/KMS/Result.h ../Includes/KMS/SafeAPI.h ../Includes/KMS/Test/Test.h Component.h
