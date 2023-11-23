@@ -25,11 +25,11 @@
     <Filter Include="Source Files\Build">
       <UniqueIdentifier>{e5cf3037-e835-4d11-a3bc-134ae9c1ab93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Proc">
+      <UniqueIdentifier>{8e1e0b70-b760-4923-8784-618f1587cb05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Proc_Browser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GUI_Form.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -101,6 +101,15 @@
     </ClCompile>
     <ClCompile Include="Net_Address_W.cpp">
       <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Request_W.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Browser.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="Proc_Browser_W.cpp">
+      <Filter>Source Files\Proc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

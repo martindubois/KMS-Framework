@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Base.h
@@ -25,6 +25,10 @@
 
 #if defined( _KMS_DARWIN_ ) || defined( _KMS_LINUX_ )
     #include <KMS/WindowsOnLinux.h>
+#endif
+
+#ifdef _KMS_WINDOWS_
+    #include <KMS/LinuxOnWindows.h>
 #endif
 
 // Constants

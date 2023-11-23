@@ -47,7 +47,7 @@ namespace KMS
 
             SetSample(mAI->Read());
 
-            Sample(aY_px, aTrig);
+            Channel::Sample(aY_px, aTrig);
         }
 
         void Channel_DAQ_AO::Sample(unsigned int* aY_px, bool* aTrig)
@@ -56,7 +56,7 @@ namespace KMS
 
             SetSample(mAO->Get());
 
-            Sample(aY_px, aTrig);
+            Channel::Sample(aY_px, aTrig);
         }
 
         void Channel_DAQ_DI::Sample(unsigned int* aY_px, bool* aTrig)
@@ -65,7 +65,7 @@ namespace KMS
 
             SetSample(mDI->Read());
 
-            Sample(aY_px, aTrig);
+            Channel::Sample(aY_px, aTrig);
         }
 
         void Channel_DAQ_DO::Sample(unsigned int* aY_px, bool* aTrig)
@@ -74,7 +74,7 @@ namespace KMS
 
             SetSample(mDO->Get());
 
-            Sample(aY_px, aTrig);
+            Channel::Sample(aY_px, aTrig);
         }
 
     }

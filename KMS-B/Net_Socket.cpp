@@ -266,7 +266,7 @@ namespace KMS
             lTimeout.tv_sec  =  aTimeout_ms / 1000;
             lTimeout.tv_usec = (aTimeout_ms % 1000) * 1000;
 
-            return 1 == select(mSocket + 1, &lSet, NULL, NULL, &lTimeout);
+            return 1 == select(static_cast<int>(mSocket) + 1, &lSet, NULL, NULL, &lTimeout);
         }
 
         // Private

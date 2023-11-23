@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Proc/Process.h>
+
 #include <KMS/Proc/Browser.h>
 
 namespace KMS
