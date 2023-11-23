@@ -31,6 +31,7 @@ namespace KMS
                 CHROME = 0,
                 DEFAULT,
                 EDGE,
+                FIREFOX,
                 NONE,
 
                 QTY
@@ -74,11 +75,14 @@ namespace KMS
 
             bool BuildExpectedWindowsTitle(const char* aTitle, char* aOut, unsigned int aOutSize_byte);
 
+            void Close_OSDep();
+
             void Create(const char* aURL);
 
             void CreateProcess_Chrome (const char* aURL);
             void CreateProcess_Default(const char* aURL);
             void CreateProcess_Edge   (const char* aURL);
+            void CreateProcess_FireFox(const char* aURL);
 
             void RetrieveWindow(const char* aTitle);
 

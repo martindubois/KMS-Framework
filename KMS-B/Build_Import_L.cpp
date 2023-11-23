@@ -18,7 +18,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const File::Folder Import::REPOSITORY_DEFAULT("K:\\Export");
+        const File::Folder Import::REPOSITORY_DEFAULT(File::Folder(File::Folder::Id::HOME), "Export");
 
     }
 }

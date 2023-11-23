@@ -43,6 +43,8 @@ namespace KMS
             memset(&mAddress, 0, sizeof(mAddress));
         }
 
+        const char* Address::GetName() const { return mName.c_str(); }
+
         uint16_t Address::GetPortNumber() const
         {
             uint16_t lResult = 0;

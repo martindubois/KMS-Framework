@@ -56,6 +56,7 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 
     lRA.AddFunction("/Version/GetData", &lTA.ON_GET_VERSION);
 
+    lRA.mServer.mSocket.SetLocalPort(8080);
     lRA.mServer.mThread.Start();
 
     lB.SetPrefered(Proc::Browser::Type::EDGE);
@@ -66,7 +67,13 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 
     for (unsigned int i = 0; i < 10; i++)
     {
-        Sleep(1000);
+        #ifdef _KMS_LINUX_
+            sleep(1);
+        #endif
+
+        #ifdef _KMS_WINDOWS_
+            Sleep(1000);
+        #endif
 
         if (lTA.GetResult())
         {

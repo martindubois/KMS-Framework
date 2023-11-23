@@ -227,12 +227,19 @@ namespace KMS
 
             auto lResult = false;
 
-            File::Folder lProductFolder(*aR, aPackage.GetProductName());
+            auto lProductName = aPackage.GetProductName();
+
+            KMS_DBG_LOG_INFO();
+            Dbg::gLog.WriteMessage(aR->GetFolder().GetPath());
+            Dbg::gLog.WriteMessage(lProductName);
+            Dbg::gLog.WriteMessage(aFileName);
+
+            File::Folder lProductFolder(*aR, lProductName);
             if (lProductFolder.DoesExist())
             {
                 if (lProductFolder.DoesFileExist(aFileName))
                 {
-                    std::cout << "Importing " << aPackage.GetProductName() << " " << aPackage.GetVersion() << " from " << *aR << std::endl;
+                    std::cout << "Importing " << lProductName << " " << aPackage.GetVersion() << " from " << *aR << std::endl;
 
                     mImport.Uncompress(lProductFolder, aFileName);
 
@@ -258,6 +265,9 @@ namespace KMS
             aPackage.GetTagName(lTag, sizeof(lTag));
 
             sprintf_s(lURL, "%s%s/releases/download/%s/%s", aServer, aPackage.GetProductName(), lTag, aFileName);
+
+            KMS_DBG_LOG_INFO();
+            Dbg::gLog.WriteMessage(lURL);
 
             auto lResult = false;
 

@@ -81,6 +81,8 @@ namespace KMS
 
             bool Parse();
 
+            void RetrieveTime(char* aOut, unsigned int aOutSize_byte);
+
             char mBuffer[1024];
 
             const void * mData;

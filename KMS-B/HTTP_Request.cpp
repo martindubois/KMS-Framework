@@ -117,24 +117,26 @@ namespace KMS
 
         bool Request::Receive()
         {
+            KMS_DBG_LOG_NOISE();
+
             auto lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
             if ((0 >= lSize_byte) || (sizeof(mBuffer) <= lSize_byte))
             {
                 return false;
             }
 
+            KMS_DBG_LOG_INFO();
+            Dbg::gLog.WriteMessage(mBuffer);
+
             return Parse();
         }
 
         void Request::Reply()
         {
-            static const char* DAY_NAMES[7] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-            static const char* MONTH_NAMES[13] = { nullptr, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dev" };
-
-            char lData[1024];
-
             if (!mResponseData.IsEmpty())
             {
+                char lData[1024];
+
                 unsigned int lSize_byte = JSON::Encode_Dictionary(&mResponseData, lData, sizeof(lData));
 
                 mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte), true);
@@ -144,15 +146,15 @@ namespace KMS
                 SetData(lData, lSize_byte);
             }
 
-            SYSTEMTIME lST;
+            char lTime[64];
 
-            GetSystemTime(&lST);
+            RetrieveTime(lTime, sizeof(lTime));
 
             auto lSize_byte = sprintf_s(mBuffer,
                 "HTTP/1.1 %u %s\r\n"
-                "Date: %s, %u %s %u %u:%02u:%02u GMT\r\n",
-                mResult, GetResultName(),
-                DAY_NAMES[lST.wDayOfWeek], lST.wDay, MONTH_NAMES[lST.wMonth], lST.wYear, lST.wHour, lST.wMinute, lST.wSecond);
+                "Date: %s\r\n",
+                static_cast<unsigned int>(mResult), GetResultName(),
+                lTime);
 
             lSize_byte += HTTP::Encode_Dictionary(&mResponseHeader, mBuffer + lSize_byte, sizeof(mBuffer) - lSize_byte);
 

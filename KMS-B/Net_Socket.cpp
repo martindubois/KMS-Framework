@@ -266,7 +266,7 @@ namespace KMS
             lTimeout.tv_sec  =  aTimeout_ms / 1000;
             lTimeout.tv_usec = (aTimeout_ms % 1000) * 1000;
 
-            return 1 == select(0, &lSet, NULL, NULL, &lTimeout);
+            return 1 == select(mSocket + 1, &lSet, NULL, NULL, &lTimeout);
         }
 
         // Private
@@ -284,7 +284,9 @@ namespace KMS
                 closesocket(mSocket);
                 mSocket = INVALID_SOCKET;
 
-                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, "Cannot bind the socket (NOT TESTED)", lRet);
+                char lMsg[LINE_LENGTH];
+                sprintf_s(lMsg, "Cannot bind the socket to %s:%u (NOT TESTED)", lLA.GetName(), lLA.GetPortNumber());
+                KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, lMsg, lRet);
             }
         }
 

@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/NET/Address.h>
+#include <KMS/Net/Address.h>
 
 using namespace KMS;
 

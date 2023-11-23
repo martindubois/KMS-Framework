@@ -25,7 +25,7 @@ KMS_RESULT_STATIC(RESULT_START_FAILED);
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_PREFERED("Prefered = CHROME | DEFAULT | EDGE | NONE");
+static const KMS::Cfg::MetaData MD_PREFERED("Prefered = CHROME | DEFAULT | EDGE | FIREFOX | NONE");
 
 namespace KMS
 {
@@ -35,7 +35,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* Browser::TYPE_NAMES[] = { "CHROME", "DEFAULT", "EDGE", "NONE" };
+        const char* Browser::TYPE_NAMES[] = { "CHROME", "DEFAULT", "EDGE", "FIREFOX", "NONE" };
 
         Browser::Browser()
             : mPrefered(DEFAULT_PREFERED)
@@ -58,16 +58,6 @@ namespace KMS
             }
         }
 
-        bool Browser::IsOpen() const
-        {
-            if (0 != mWindow)
-            {
-                return IsWindow(reinterpret_cast<HWND>(mWindow));
-            }
-
-            return (nullptr != mProcess) && mProcess->IsRunning();
-        }
-
         void Browser::SetAppMode(bool aAM) { mAppMode = aAM; }
 
         void Browser::SetKioskMode(bool aKM) { mKioskMode = aKM; }
@@ -76,15 +66,7 @@ namespace KMS
 
         void Browser::Close()
         {
-            if (0 != mWindow)
-            {
-                assert(nullptr != mProcess);
-
-                if (PostMessage(reinterpret_cast<HWND>(mWindow), WM_CLOSE, 0, 0))
-                {
-                    mProcess->Wait(1000 * 2);
-                }
-            }
+            Close_OSDep();
 
             if (nullptr != mProcess)
             {
@@ -146,24 +128,6 @@ namespace KMS
             Detach();
         }
 
-        void Browser::Wait(unsigned int aTimeout_ms)
-        {
-            unsigned int lTime_ms = 0;
-
-            while (aTimeout_ms >= lTime_ms)
-            {
-                if (!IsOpen())
-                {
-                    return;
-                }
-
-                Sleep(100); // ms
-                lTime_ms += 100;
-            }
-
-            KMS_EXCEPTION(RESULT_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
-        }
-
         // Private
         // //////////////////////////////////////////////////////////////////
 
@@ -193,7 +157,8 @@ namespace KMS
                 break;
 
             case Type::DEFAULT:
-                // TODO Does not work it the default browser is Chrome
+            case Type::FIREFOX:
+                // TODO  Does not work it the default browser is Chrome
                 sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s", aTitle);
                 lResult = true;
                 break;
@@ -221,6 +186,7 @@ namespace KMS
             case Type::CHROME : CreateProcess_Chrome (aURL); break;
             case Type::DEFAULT: CreateProcess_Default(aURL); break;
             case Type::EDGE   : CreateProcess_Edge   (aURL); break;
+            case Type::FIREFOX: CreateProcess_FireFox(aURL); break;
 
             case Type::NONE: break;
 
@@ -228,97 +194,19 @@ namespace KMS
             }
         }
 
-        void Browser::CreateProcess_Chrome(const char* aURL)
-        {
-            assert(nullptr == mProcess);
-
-            File::Folder lPF(File::Folder::Id::PROGRAM_FILES);
-
-            mProcess = new Process(File::Folder(lPF, "Google\\Chrome\\Application"), "chrome.exe");
-
-            mProcess->AddArgument("--disable-background-mode");
-            mProcess->AddArgument("--disable-plugins");
-            mProcess->AddArgument("--start-maximized");
-
-            if (mKioskMode)
-            {
-                mProcess->AddArgument("--kiosk");
-                mProcess->AddArgument(aURL);
-            }
-            else if (mAppMode)
-            {
-                char lApp[NAME_LENGTH];
-
-                sprintf_s(lApp, "--app=%s", aURL);
-
-                mProcess->AddArgument(lApp);
-            }
-            else
-            {
-                mProcess->AddArgument("--new-windows");
-                mProcess->AddArgument(aURL);
-            }
-        }
-
-        void Browser::CreateProcess_Default(const char* aURL)
-        {
-            assert(nullptr == mProcess);
-
-            mProcess = new Process(File::Folder(File::Folder::Id::NONE), aURL);
-
-            mProcess->SetVerb("open");
-        }
-
-        void Browser::CreateProcess_Edge(const char* aURL)
-        {
-            assert(nullptr == mProcess);
-
-            File::Folder lPF(File::Folder::Id::PROGRAM_FILES_X86);
-
-            mProcess = new Process(File::Folder(lPF, "Microsoft\\Edge\\Application"), "msedge.exe");
-
-            if (mKioskMode)
-            {
-                // NOT TESTED
-                mProcess->AddArgument("--kiosk");
-                mProcess->AddArgument(aURL);
-                mProcess->AddArgument("--edge-kiosk-type=fullscreen");
-                mProcess->AddArgument("--no-first-run");
-            }
-            else
-            {
-                mProcess->AddArgument(aURL);
-                mProcess->AddArgument("--new-window");
-                mProcess->AddArgument("--no-first-run");
-            }
-        }
-
-        void Browser::RetrieveWindow(const char* aTitle)
-        {
-            assert(0 == mWindow);
-
-            char lTitle[NAME_LENGTH];
-
-            if ((nullptr != aTitle) && BuildExpectedWindowsTitle(aTitle, lTitle, sizeof(lTitle)))
-            {
-                for (unsigned int i = 0; (0 == mWindow) && (i < 20); i++)
-                {
-                    Sleep(500);
-
-                    mWindow = reinterpret_cast<uint64_t>(FindWindow(NULL, lTitle));
-                }
-            }
-        }
-
         void Browser::Open(const char* aURL)
         {
             static const Browser::Type ORDER[static_cast<unsigned int>(Browser::Type::QTY)][static_cast<unsigned int>(Browser::Type::QTY) - 1] =
             {
-                { Browser::Type::CHROME , Browser::Type::EDGE  , Browser::Type::DEFAULT },
-                { Browser::Type::DEFAULT, Browser::Type::EDGE  , Browser::Type::CHROME  },
-                { Browser::Type::EDGE   , Browser::Type::CHROME, Browser::Type::DEFAULT },
+                { Browser::Type::CHROME , Browser::Type::EDGE  , Browser::Type::DEFAULT, Browser::Type::FIREFOX },
+                { Browser::Type::DEFAULT, Browser::Type::EDGE  , Browser::Type::CHROME , Browser::Type::FIREFOX },
+                { Browser::Type::EDGE   , Browser::Type::CHROME, Browser::Type::DEFAULT, Browser::Type::FIREFOX },
+                { Browser::Type::FIREFOX, Browser::Type::CHROME, Browser::Type::DEFAULT, Browser::Type::EDGE    },
                 { Browser::Type::NONE }
             };
+
+            KMS_DBG_LOG_INFO();
+            Dbg::gLog.WriteMessage(aURL);
 
             for (unsigned int i = 0; i < static_cast<unsigned int>(Type::NONE) - 1; i++)
             {

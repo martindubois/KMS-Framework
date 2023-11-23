@@ -120,7 +120,9 @@ namespace KMS
 
                 char lLine[LINE_LENGTH];
 
-                fgets(lLine, sizeof(lLine), stdin);
+                auto lRet = fgets(lLine, sizeof(lLine), stdin);
+                assert(nullptr != lRet);
+                (void)lRet;
 
                 lS.mThread.StopAndWait(2000);
 

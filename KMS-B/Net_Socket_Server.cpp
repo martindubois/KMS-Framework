@@ -47,7 +47,7 @@ namespace KMS
 
             if (Select(aTimeout_ms))
             {
-                int lSize_byte = Address::INTERNAL_SIZE_byte;
+                socklen_t lSize_byte = Address::INTERNAL_SIZE_byte;
                 assert(0 < lSize_byte);
 
                 auto lSocket = accept(mSocket, *aFrom, &lSize_byte);
