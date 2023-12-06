@@ -33,6 +33,31 @@ namespace KMS
     namespace HTTP
     {
 
+        const char* FIELD_NAME_ACCEPT                      = "Accept";
+        const char* FIELD_NAME_ACCEPT_ENCODING             = "Accept-Encoding";
+        const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+        const char* FIELD_NAME_CONNECTION                  = "Connection";
+        const char* FIELD_NAME_CONTENT_DISPOSITION         = "Content-Disposition";
+        const char* FIELD_NAME_CONTENT_LENGTH              = "Content-Length";
+        const char* FIELD_NAME_CONTENT_TYPE                = "Content-Type";
+        const char* FIELD_NAME_HOST                        = "Host";
+        const char* FIELD_NAME_SERVER                      = "Server";
+        const char* FIELD_NAME_USER_AGENT                  = "User-Agent";
+
+        const DI::String FIELD_VALUE_ACCEPT_ENCODING_DEFLATE("deflate");
+
+        const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL("*");
+
+        const DI::String FIELD_VALUE_CONNECTION("keep-alive");
+
+        const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE("inline");
+
+        const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT("application/javascript");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON          ("image/x-icon");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS              ("text/css");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML             ("text/html; charset=utf-8");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN            ("text/plain; charset=utf-8");
+
         // Functions
         // //////////////////////////////////////////////////////////////////
 

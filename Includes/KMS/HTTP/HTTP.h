@@ -15,6 +15,31 @@ namespace KMS
     namespace HTTP
     {
 
+        extern const char* FIELD_NAME_ACCEPT;
+        extern const char* FIELD_NAME_ACCEPT_ENCODING;
+        extern const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN;
+        extern const char* FIELD_NAME_CONNECTION;
+        extern const char* FIELD_NAME_CONTENT_DISPOSITION;
+        extern const char* FIELD_NAME_CONTENT_LENGTH;
+        extern const char* FIELD_NAME_CONTENT_TYPE;
+        extern const char* FIELD_NAME_HOST;
+        extern const char* FIELD_NAME_SERVER;
+        extern const char* FIELD_NAME_USER_AGENT;
+
+        extern const DI::String FIELD_VALUE_ACCEPT_ENCODING_DEFLATE;
+
+        extern const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL;
+
+        extern const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE;
+
+        extern const DI::String FIELD_VALUE_CONNECTION;
+
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN;
+
         extern unsigned int Decode_Dictionary(DI::Dictionary* aDictionary, const char* aIn, unsigned int aInSize_byte);
 
         extern unsigned int Encode_Dictionary(const DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte);

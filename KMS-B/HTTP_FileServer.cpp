@@ -14,6 +14,7 @@
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
+#include <KMS/HTTP/HTTP.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
 #include <KMS/Main.h>
@@ -31,20 +32,6 @@
 static const KMS::Cfg::MetaData MD_ROOT   ("Root = {Path}");
 static const KMS::Cfg::MetaData MD_VERBOSE("Verbose = false | true");
 
-#define NAME_CONTENT_DISPOSITION "content-disposition"
-
-static const KMS::DI::String INLINE("inline");
-
-#define NAME_CONTENT_LENGTH "content-length"
-
-#define NAME_CONTENT_TYPE "content-type"
-
-static const KMS::DI::String APPLICATION_JAVASCRIPT("application/javascript");
-static const KMS::DI::String IMAGE_X_ICON          ("image/x-icon");
-static const KMS::DI::String TEXT_CSS              ("text/css");
-static const KMS::DI::String TEXT_HTML             ("text/html; charset=utf-8");
-static const KMS::DI::String TEXT_PLAIN            ("text/plain; charset=utf-8");
-
 namespace KMS
 {
     namespace HTTP
@@ -60,36 +47,36 @@ namespace KMS
         {
             assert(nullptr != aRequest);
 
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &APPLICATION_JAVASCRIPT);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Request* aRequest)
         {
             assert(nullptr != aRequest);
 
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &IMAGE_X_ICON);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Request* aRequest)
         {
             assert(nullptr != aRequest);
 
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_CSS);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Request* aRequest)
         {
             assert(nullptr != aRequest);
 
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_HTML);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Request* aRequest)
         {
             assert(nullptr != aRequest);
 
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &INLINE);
-            aRequest->mResponseHeader.AddConstEntry(NAME_CONTENT_TYPE, &TEXT_PLAIN);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_DISPOSITION, &FIELD_VALUE_CONTENT_DISPOSITION_INLINE);
+            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -225,7 +212,7 @@ namespace KMS
             assert(nullptr != lFile);
 
             auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
-            aR->mResponseHeader.AddEntry(NAME_CONTENT_LENGTH, lValue, true);
+            aR->mResponseHeader.AddEntry(FIELD_NAME_CONTENT_LENGTH, lValue, true);
 
             aR->SetFile(lFile);
         }

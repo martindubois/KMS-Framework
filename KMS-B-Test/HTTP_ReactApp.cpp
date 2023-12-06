@@ -11,6 +11,7 @@
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/NetAddressRange.h>
 #include <KMS/DI/String.h>
+#include <KMS/HTTP/HTTP.h>
 #include <KMS/HTTP/Request.h>
 #include <KMS/Proc/Browser.h>
 
@@ -109,7 +110,6 @@ bool TestApp::GetResult() const
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
-#define NAME_ACCESS_CONTROL_ALLOW_ORIGIN "Access-Control-Allow-Origin"
 #define NAME_VERSION                     "Version"
 
 static const DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
@@ -128,7 +128,7 @@ unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 
     VERSION.GetString(lVersion, sizeof(lVersion));
 
-    lRequest->mResponseHeader.AddConstEntry(NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
+    lRequest->mResponseHeader.AddConstEntry(HTTP::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
 
     lRequest->mResponseData.AddEntry(NAME_VERSION, new DI::String(lVersion), true);
 
