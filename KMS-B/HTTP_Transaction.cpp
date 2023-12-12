@@ -3,7 +3,7 @@
 // Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      KMS-B/HTTP_Request.cpp
+// File      KMS-B/HTTP_Transaction.cpp
 
 // TEST COVERAGE  2023-12-12  KMS - Martin Dubois, P. Eng.
 
@@ -324,7 +324,7 @@ namespace KMS
 
             char lResultName[NAME_LENGTH];
 
-            auto lRet = sscanf_s(mBuffer, "HTTP/%u.%u %u %[^\n\r]", &mMajor, &mMinor, &mResult, lResultName SizeInfo(lResultName));
+            auto lRet = sscanf_s(mBuffer, "HTTP/%u.%u %u %[^\n\r]", &mMajor, &mMinor, reinterpret_cast<unsigned int*>(&mResult), lResultName SizeInfo(lResultName));
             KMS_EXCEPTION_ASSERT(4 == lRet, RESULT_INVALID_FORMAT, "Invalid HTTP header format", lRet);
 
             auto lPtr = strchr(mBuffer, '\n');
