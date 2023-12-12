@@ -45,6 +45,7 @@ namespace KMS
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
+            virtual bool         Set_Try(const char* aIn);
 
             // ===== Object =================================================
             virtual bool Clear();
@@ -140,10 +141,10 @@ namespace KMS
 
             KMS::Enum<T, N> lInternal(*mPtr);
 
-            const char* lName = lInternal.GetName();
+            auto lName = lInternal.GetName();
             assert(nullptr != lName);
 
-            unsigned int lResult_byte = static_cast<unsigned int>(strlen(lName));
+            auto lResult_byte = static_cast<unsigned int>(strlen(lName));
 
             if (aOutSize_byte <= lResult_byte + 1)
             {
@@ -170,6 +171,26 @@ namespace KMS
             }
         }
 
+        template <typename T, const char** N>
+        bool Enum_Ptr<T, N>::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            KMS::Enum<T, N> lInternal(*mPtr);
+
+            bool lChanged;
+
+            auto lResult = lInternal.SetName_Try(aIn, &lChanged);
+            if (lResult && lChanged)
+            {
+                *mPtr = lInternal;
+
+                Send_OnChanged(const_cast<char*>(aIn));
+            }
+
+            return lResult;
+        }
+
         // ===== Object =====================================================
 
         template <typename T, const char** N>
@@ -177,7 +198,7 @@ namespace KMS
         {
             assert(nullptr != mPtr);
 
-            bool lResult = *mPtr != static_cast<T>(0);
+            auto lResult = *mPtr != static_cast<T>(0);
 
             *mPtr = static_cast<T>(0);
 

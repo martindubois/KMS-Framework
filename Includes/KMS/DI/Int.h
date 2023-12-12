@@ -43,6 +43,7 @@ namespace KMS
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
+            virtual bool         Set_Try(const char* aIn);
 
             // ===== Object =================================================
             virtual bool Clear();
@@ -155,27 +156,36 @@ namespace KMS
         {
             assert(nullptr != mPtr);
 
-            int32_t lValue = Convert::ToInt32(aIn, mRadix);
+            #pragma warning( push )
+            #pragma warning( disable : 4244 )
+                switch (sizeof(T))
+                {
+                case 1: *mPtr = Convert::ToInt8 (aIn); break;
+                case 2: *mPtr = Convert::ToInt16(aIn); break;
+                case 4: *mPtr = Convert::ToInt32(aIn); break;
+
+                default: assert(false);
+                }
+            #pragma warning(pop)
+        }
+
+        template <typename T>
+        bool Int_Ptr<T>::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            auto lResult = false;
 
             switch (sizeof(T))
             {
-            case 1:
-                if ((0x7f < lValue) || (-128 > lValue))
-                {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid int8_t value" , aIn);
-                }
-                break;
-            case 2:
-                if ((0x7fff < lValue) || (-32768 < lValue))
-                {
-                    throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid int16_t value", aIn);
-                }
-                break;
-            case 4: break;
+            case 1: lResult = Convert::ToInt8_Try (aIn, reinterpret_cast<int8_t *>(mPtr)); break;
+            case 2: lResult = Convert::ToInt16_Try(aIn, reinterpret_cast<int16_t*>(mPtr)); break;
+            case 4: lResult = Convert::ToInt32_Try(aIn, reinterpret_cast<int32_t*>(mPtr)); break;
+
             default: assert(false);
             }
 
-            *mPtr = lValue;
+            return lResult;
         }
 
         // ===== Object =====================================================
@@ -185,7 +195,7 @@ namespace KMS
         {
             assert(nullptr != mPtr);
 
-            bool lResult = *mPtr != 0;
+            auto lResult = *mPtr != 0;
 
             *mPtr = 0;
 

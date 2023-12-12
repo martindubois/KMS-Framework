@@ -76,15 +76,15 @@
     <Filter Include="Source Files\CLI">
       <UniqueIdentifier>{77008561-ad7d-493a-9d58-baa5daa3c829}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Convert">
+      <UniqueIdentifier>{f4f57339-e103-423d-845f-632c514e0b03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Version.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Convert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Environment_W.cpp">
@@ -401,6 +401,12 @@
     </ClCompile>
     <ClCompile Include="Thread_Thread_W.cpp">
       <Filter>Source Files\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Convert.cpp">
+      <Filter>Source Files\Convert</Filter>
+    </ClCompile>
+    <ClCompile Include="Convert_W.cpp">
+      <Filter>Source Files\Convert</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

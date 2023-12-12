@@ -43,11 +43,14 @@ namespace KMS
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
+            virtual bool         Set_Try(const char* aIn);
 
             // ===== Object =================================================
             virtual bool Clear();
 
         private:
+
+            static bool IsValueValid(uint32_t aIn);
 
             T* mPtr;
 
@@ -156,27 +159,36 @@ namespace KMS
         {
             assert(nullptr != mPtr);
 
-            auto lValue = Convert::ToUInt32(aIn, mRadix);
+            #pragma warning( push )
+            #pragma warning( disable : 4244 )
+            switch (sizeof(T))
+                {
+                case 1: *mPtr = Convert::ToUInt8 (aIn, mRadix); break;
+                case 2: *mPtr = Convert::ToUInt16(aIn, mRadix); break;
+                case 4: *mPtr = Convert::ToUInt32(aIn, mRadix); break;
+
+                default: assert(false);
+                }
+            #pragma warning(pop)
+        }
+
+        template <typename T>
+        bool UInt_Ptr<T>::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            auto lResult = false;
 
             switch (sizeof(T))
             {
-            case 1:
-                if (0xff < lValue)
-                {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint8_t value" , aIn);
-                }
-                break;
-            case 2:
-                if (0xffff < lValue)
-                {
-                    throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_VALUE, "Invalid uint16_t value", aIn);
-                }
-                break;
-            case 4: break;
+            case 1: lResult = Convert::ToUInt8_Try (aIn, reinterpret_cast<uint8_t *>(mPtr), mRadix); break;
+            case 2: lResult = Convert::ToUInt16_Try(aIn, reinterpret_cast<uint16_t*>(mPtr), mRadix); break;
+            case 4: lResult = Convert::ToUInt32_Try(aIn, reinterpret_cast<uint32_t*>(mPtr), mRadix); break;
+
             default: assert(false);
             }
 
-            *mPtr = lValue;
+            return lResult;
         }
 
         // ===== Object =====================================================
@@ -189,6 +201,26 @@ namespace KMS
             auto lResult = *mPtr != 0;
 
             *mPtr = 0;
+
+            return lResult;
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        template <typename T>
+        bool UInt_Ptr<T>::IsValueValid(uint32_t aIn)
+        {
+            bool lResult = false;
+
+            switch (sizeof(T))
+            {
+            case 1: lResult = 0xff   >= aIn; break;
+            case 2: lResult = 0xffff >= aIn; break;
+            case 4: lResult = true; break;
+
+            default: assert(false);
+            }
 
             return lResult;
         }

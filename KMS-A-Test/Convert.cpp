@@ -38,9 +38,15 @@ KMS_TEST(Convert_Base, "Auto", sTest_Base)
     int lRet = fclose(lFile);
     KMS_TEST_COMPARE(lRet, 0);
 
+    // ToInt16
+    KMS_TEST_COMPARE(-1, Convert::ToInt16("-1"));
+
     // ToInt32
     KMS_TEST_COMPARE(-1, Convert::ToInt32("-1"));
     KMS_TEST_COMPARE( 1, Convert::ToInt32("0x1"));
+
+    // ToInt8
+    KMS_TEST_COMPARE(-1, Convert::ToInt8("-1"));
 
     // ToUInt16
     KMS_TEST_COMPARE(0     , Convert::ToUInt16("0"));
@@ -113,6 +119,15 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_OPEN_FAILED);
+
+    // ToInt16
+    try
+    {
+        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
+        Convert::ToInt16("32769");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     // ToInt32
     try

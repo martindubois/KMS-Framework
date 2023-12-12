@@ -13,12 +13,12 @@
 #include <Windows.h>
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
+
 #include <KMS/DI/GUID.h>
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
-
-static ::GUID ToGUID(const char* aIn);
 
 namespace KMS
 {
@@ -91,7 +91,14 @@ namespace KMS
         {
             assert(nullptr != mPtr);
 
-            *mPtr = ToGUID(aIn);
+            *mPtr = Convert::ToGUID(aIn);
+        }
+
+        bool GUID_Ptr::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            return Convert::ToGUID_Try(aIn, mPtr);
         }
 
         // ===== Object =====================================================
@@ -108,80 +115,4 @@ namespace KMS
         }
 
     }
-}
-
-using namespace KMS;
-
-// Static functions
-// //////////////////////////////////////////////////////////////////////////
-
-GUID ToGUID(const char* aIn)
-{
-    assert(nullptr != aIn);
-
-    GUID lResult;
-
-    memset(&lResult, 0, sizeof(lResult));
-
-    // {00000000-0000-0000-0000-000000000000}
-    // 01234567890123456789012345678901234567
-    //           1         2         3
-
-    uint32_t lValue = 0;
-
-    for (unsigned int i = 1; i <= 36; i++)
-    {
-        lValue <<= 8;
-
-        switch (aIn[i])
-        {
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9': lValue |= aIn[i] - '0'; break;
-
-        case 'a':
-        case 'b':
-        case 'c':
-        case 'd':
-        case 'e':
-        case 'f': lValue |= aIn[i] - 'a' + 10; break;
-
-        case 'A':
-        case 'B':
-        case 'C':
-        case 'D':
-        case 'E':
-        case 'F': lValue |= aIn[i] - 'A' + 10; break;
-
-        case '-': break;
-
-        default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid GUID format", aIn);
-        }
-
-        switch (i)
-        {
-        case  8: lResult.Data1 = lValue; lValue = 0; break;
-        case 13: lResult.Data2 = lValue; lValue = 0; break;
-        case 18: lResult.Data3 = lValue; lValue = 0; break;
-
-        case 21:
-        case 23: lResult.Data4[(i - 21) / 2] = lValue; lValue = 0; break;
-
-        case 26:
-        case 28:
-        case 30:
-        case 32:
-        case 34:
-        case 36: lResult.Data4[2 + (i - 26) / 2] = lValue; lValue = 0; break;
-        }
-    }
-
-    return lResult;
 }

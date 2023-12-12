@@ -104,6 +104,8 @@ namespace KMS
             }
         }
 
+        bool String_Ptr::Set_Try(const char* aIn) { Set(aIn); return true; }
+
         // ===== Object =====================================================
 
         bool String_Ptr::Clear()

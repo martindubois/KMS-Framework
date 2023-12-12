@@ -203,6 +203,33 @@ namespace KMS
             mValue = lValue;
         }
 
+        bool Simulator::Item::Set_Try(const char* aIn)
+        {
+            assert(nullptr != aIn);
+
+            char lN[64];
+            char lV[64];
+            char lF[64];
+
+            unsigned int          lFlags = 0;
+            Modbus::RegisterValue lValue = 0;
+
+            switch (sscanf_s(aIn, "%[^;];%[^;];%[^\n\r\t]", lN SizeInfo(lN), lV SizeInfo(lV), lF SizeInfo(lF)))
+            {
+            case 3: lFlags = Convert::ToUInt32(lF);
+            case 2: lValue = ToRegisterValue(lV);
+            case 1: break;
+
+            default: return false;
+            }
+
+            mFlags = lFlags;
+            mName = lN;
+            mValue = lValue;
+
+            return true;
+        }
+
         // ===== DI::Object =================================================
 
         Simulator::Item::~Item() {}

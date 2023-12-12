@@ -54,6 +54,8 @@ namespace KMS
             // Exception  CONVERT_FORMAT_INVALID
             virtual void Set(const char* aIn) = 0;
 
+            virtual bool Set_Try(const char* aIn) = 0;
+
         protected:
 
             Value();

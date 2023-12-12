@@ -32,6 +32,8 @@ namespace KMS
 
         bool SetName(const char* aName);
 
+        bool SetName_Try(const char* aName, bool* aChanged = nullptr);
+
     private:
 
         T mValue;
@@ -97,6 +99,29 @@ namespace KMS
         }
 
         throw Exception(__FILE__, __FUNCTION__, __LINE__, KMS::RESULT_INVALID_NAME, "Invalid enumeration value name");
+    }
+
+    template <typename T, const char** N>
+    bool Enum<T, N>::SetName_Try(const char* aName, bool* aChanged)
+    {
+        assert(nullptr != aName);
+
+        for (unsigned int i = 0; i < static_cast<unsigned int>(T::QTY); i++)
+        {
+            if (0 == strcmp(aName, N[i]))
+            {
+                auto lChanged = Set(static_cast<T>(i));
+
+                if (nullptr != aChanged)
+                {
+                    *aChanged = lChanged;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }

@@ -47,6 +47,7 @@ namespace KMS
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
+            virtual bool         Set_Try(const char* aIn);
 
             // ===== Object =================================================
             virtual bool Clear();

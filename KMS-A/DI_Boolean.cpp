@@ -103,6 +103,23 @@ namespace KMS
             }
         }
 
+        bool Boolean_Ptr::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            bool lIn;
+
+            auto lResult = Convert::ToBool_Try(aIn, &lIn);
+            if (lResult && (*mPtr != lIn))
+            {
+                *mPtr = lIn;
+
+                Send_OnChanged(const_cast<char*>(aIn));
+            }
+
+            return lResult;
+        }
+
         // ===== Object =====================================================
 
         bool Boolean_Ptr::Clear()

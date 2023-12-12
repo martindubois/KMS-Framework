@@ -131,6 +131,8 @@ KMS_TEST(DI_Value_Base, "Auto", sTest_Base)
     KMS_TEST_ASSERT( lSE0I == "TestE 3");
     KMS_TEST_ASSERT( lUI0I == 2);
 
+    // Set_Try
+
     // operator =
     lB0  = true;
     lB1  = true;
@@ -299,7 +301,7 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
         lI0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_DATA_TYPE);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     try
     {
@@ -323,7 +325,7 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
         lUI0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_DATA_TYPE);
+    KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     try
     {

@@ -40,6 +40,7 @@ namespace KMS
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
             virtual void         Set(const char* aIn);
+            virtual bool         Set_Try(const char* aIn);
 
             // ===== Object =================================================
             virtual bool Clear();
@@ -139,6 +140,14 @@ namespace KMS
             assert(nullptr != mPtr);
 
             *mPtr = Convert::ToDouble(aIn);
+        }
+
+        template <typename T>
+        bool Float_Ptr<T>::Set_Try(const char* aIn)
+        {
+            assert(nullptr != mPtr);
+
+            return Convert::ToDouble_Try(aIn, mPtr);
         }
 
         // ===== Object =====================================================

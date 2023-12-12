@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Convert.cpp
 
-// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE  2023-12-11  KMS - Martin Dubois, P. Eng.
 
 #include "Component.h"
 
@@ -14,6 +14,8 @@
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
+
+static const char* DetectHex(const char* aASCII, KMS::Radix* aRadix);
 
 static uint8_t ToDigitValue(char aC);
 
@@ -29,32 +31,117 @@ namespace KMS
         {
             assert(nullptr != aASCII);
 
+            bool lResult;
+
+            if (!ToBool_Try(aASCII, &lResult))
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid boolean value", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_FORMAT, lMsg, "");
+            }
+
+            return lResult;
+        }
+
+        bool ToBool_Try(const char* aASCII, bool* aOut)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            auto lResult = false;
+
             if ((0 == _stricmp(aASCII, "true")) || (0 == strcmp(aASCII, "1")))
             {
-                return true;
+                *aOut = true;
+                lResult = true;
             }
-
-            if ((0 == _stricmp(aASCII, "false")) || (0 == strcmp(aASCII, "0")))
+            else if ((0 == _stricmp(aASCII, "false")) || (0 == strcmp(aASCII, "0")))
             {
-                return false;
+                *aOut = false;
+                lResult = true;
             }
 
-            KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid boolean value", aASCII);
+            return lResult;
+        }
+
+        uint8_t ToDigitValue(char aC)
+        {
+            uint8_t lResult;
+
+            if (!ToDigitValue_Try(aC, &lResult))
+            {
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid digit", aC);
+            }
+
+            return lResult;
+        }
+
+        bool ToDigitValue_Try(char aC, uint8_t* aOut)
+        {
+            bool lResult = true;
+
+            switch (aC)
+            {
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9': *aOut = aC - '0'; break;
+
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F': *aOut = aC - 'A' + 10; break;
+
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f': *aOut = aC - 'a' + 10; break;
+
+            default: lResult = false;
+            }
+
+            return lResult;
         }
 
         double ToDouble(const char* aASCII)
         {
             assert(nullptr != aASCII);
 
-            char* lPtr;
+            double lResult;
 
-            auto lResult = strtod(aASCII, &lPtr);
-
-            if ('\0' != *lPtr)
+            if (!ToDouble_Try(aASCII, &lResult))
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "\"%s\" is not a valid floating point value", aASCII);
                 KMS_EXCEPTION(RESULT_INVALID_FORMAT, lMsg, "");
+            }
+
+            return lResult;
+        }
+
+        bool ToDouble_Try(const char* aASCII, double* aOut)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            char* lPtr;
+
+            auto lOut = strtod(aASCII, &lPtr);
+
+            auto lResult = ('\0' == *lPtr);
+            if (lResult)
+            {
+                *aOut = lOut;
             }
 
             return lResult;
@@ -72,7 +159,6 @@ namespace KMS
             FILE* lResult;
 
             auto lRet = fopen_s(&lResult, aASCII, aMode);
-
             if (0 != lRet)
             {
                 char lMsg[64 + PATH_LENGTH];
@@ -85,96 +171,220 @@ namespace KMS
             return lResult;
         }
 
+        int16_t ToInt16(const char* aASCII, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+
+            int16_t lResult;
+
+            if (!ToInt16_Try(aASCII, &lResult, aRadix))
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "\"%s\" is not valid for the expected type (int16_t)", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, lMsg, "");
+            }
+
+            return lResult;
+        }
+
+        bool ToInt16_Try(const char* aASCII, int16_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aOut);
+
+            int32_t lOut;
+
+            auto lResult = ToInt32_Try(aASCII, &lOut, aRadix);
+            if (lResult)
+            {
+                lResult = (0x7fff >= lOut) && (-32768 <= lOut);
+                if (lResult)
+                {
+                    *aOut = lOut;
+                }
+            }
+
+            return lResult;
+        }
+
         int32_t ToInt32(const char* aASCII, Radix aRadix)
         {
             assert(nullptr != aASCII);
 
-            const char* lASCII;
-            Radix       lRadix;
+            int32_t lResult;
 
-            if (0 == strncmp("0x", aASCII, 2))
-            {
-                lASCII = aASCII + 2;
-                lRadix = Radix::HEXADECIMAL;
-            }
-            else
-            {
-                lASCII = aASCII;
-                lRadix = aRadix;
-            }
-
-            char* lPtr;
-
-            auto lResult = strtol(lASCII, &lPtr, static_cast<int>(lRadix));
-
-            if ('\0' != *lPtr)
+            if (!ToInt32_Try(aASCII, &lResult, aRadix))
             {
                 char lMsg[64 + NAME_LENGTH];
-                sprintf_s(lMsg, "\"%s\" is not a valid integer value", lASCII);
+                sprintf_s(lMsg, "\"%s\" is not a valid integer value", aASCII);
                 KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
             }
 
-            return static_cast<int32_t>(lResult);
+            return lResult;
+        }
+
+        bool ToInt32_Try(const char* aASCII, int32_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            auto lRadix = aRadix;
+
+            auto lASCII = DetectHex(aASCII, &lRadix);
+
+            char* lPtr;
+
+            auto lOut = strtol(lASCII, &lPtr, static_cast<int>(lRadix));
+
+            auto lResult = ('\0' == *lPtr);
+            if (lResult)
+            {
+                *aOut = lOut;
+            }
+
+            return lResult;
+        }
+
+        int8_t ToInt8(const char* aASCII, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+
+            int8_t lResult;
+
+            if (!ToInt8_Try(aASCII, &lResult, aRadix))
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "\"%s\" is not valid for the expected type (int8_t)", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, lMsg, aASCII);
+            }
+
+            return lResult;
+        }
+
+        bool ToInt8_Try(const char* aASCII, int8_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aOut);
+
+            int32_t lOut;
+
+            auto lResult = ToInt32_Try(aASCII, &lOut, aRadix);
+            if (lResult)
+            {
+                lResult = (0x7f >= lOut) && (-128 <= lOut);
+                if (lResult)
+                {
+                    *aOut = lOut;
+                }
+            }
+
+            return lResult;
         }
 
         uint16_t ToUInt16(const char* aASCII, Radix aRadix)
         {
-            auto lResult = ToUInt32(aASCII, aRadix);
+            assert(nullptr != aASCII);
 
-            if (0xffff < lResult)
+            uint16_t lResult;
+
+            if (!ToUInt16_Try(aASCII, &lResult, aRadix))
             {
                 char lMsg[64];
-                sprintf_s(lMsg, "%u is too large for the expected type (uint16_t)", lResult);
-                KMS_EXCEPTION(RESULT_INVALID_VALUE, lMsg, aASCII);
+                sprintf_s(lMsg, "\"%s\" is not valid for the expected type (uint16_t)", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, lMsg, "");
             }
 
-            return static_cast<uint16_t>(lResult);
+            return lResult;
+        }
+
+        bool ToUInt16_Try(const char* aASCII, uint16_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aOut);
+
+            uint32_t lOut;
+
+            auto lResult = ToUInt32_Try(aASCII, &lOut, aRadix);
+            if (lResult)
+            {
+                lResult = 0xffff >= lOut;
+                if (lResult)
+                {
+                    *aOut = lOut;
+                }
+            }
+
+            return lResult;
         }
 
         uint32_t ToUInt32(const char* aASCII, Radix aRadix)
         {
             assert(nullptr != aASCII);
 
-            const char* lASCII;
-            Radix       lRadix;
+            uint32_t lResult;
 
-            if (0 == strncmp("0x", aASCII, 2))
-            {
-                lASCII = aASCII + 2;
-                lRadix = Radix::HEXADECIMAL;
-            }
-            else
-            {
-                lASCII = aASCII;
-                lRadix = aRadix;
-            }
-
-            char* lPtr;
-
-            auto lResult = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
-
-            if ('\0' != *lPtr)
+            if (!ToUInt32_Try(aASCII, &lResult, aRadix))
             {
                 char lMsg[64 + NAME_LENGTH];
                 sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
                 KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
             }
 
-            return static_cast<uint32_t>(lResult);
+            return lResult;
+        }
+
+        bool ToUInt32_Try(const char* aASCII, uint32_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            auto lRadix = aRadix;
+
+            auto lASCII = DetectHex(aASCII, &lRadix);
+
+            char* lPtr;
+
+            auto lOut = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
+
+            auto lResult = '\0' == *lPtr;
+            if (lResult)
+            {
+                *aOut = lOut;
+            }
+
+            return lResult;
         }
 
         uint8_t ToUInt8(const char* aASCII, Radix aRadix)
         {
-            auto lResult = ToUInt32(aASCII, aRadix);
+            assert(nullptr != aASCII);
 
-            if (0xff < lResult)
+            uint8_t lResult;
+
+            if (!ToUInt8_Try(aASCII, &lResult, aRadix))
             {
                 char lMsg[64];
-                sprintf_s(lMsg, "%u is too large for the expected type (uint8_t)", lResult);
-                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, aASCII);
+                sprintf_s(lMsg, "\"%s\" is not valid for the expected type (uint8_t)", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
             }
 
-            return static_cast<uint8_t>(lResult);
+            return lResult;
+        }
+
+        bool ToUInt8_Try(const char* aASCII, uint8_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aOut);
+
+            uint32_t lOut;
+
+            auto lResult = ToUInt32_Try(aASCII, &lOut, aRadix);
+            if (lResult)
+            {
+                lResult = 0xff >= lOut;
+                if (lResult)
+                {
+                    *aOut = lOut;
+                }
+            }
+
+            return lResult;
         }
 
         unsigned int ToASCII(const wchar_t* aUTF16, char* aOut, unsigned int aOutSize_byte)
@@ -335,38 +545,21 @@ using namespace KMS;
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-uint8_t ToDigitValue(char aC)
+const char* DetectHex(const char* aASCII, Radix* aRadix)
 {
-    uint8_t lResult;
+    assert(nullptr != aASCII);
+    assert(nullptr != aRadix);
 
-    switch (aC)
+    const char* lResult;
+
+    if (0 == strncmp("0x", aASCII, 2))
     {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9': lResult = aC - '0'; break;
-
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F': lResult = aC - 'A' + 10; break;
-
-    case 'a':
-    case 'b':
-    case 'c':
-    case 'd':
-    case 'e':
-    case 'f': lResult = aC - 'a' + 10; break;
-
-    default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid digit", aC);
+        lResult = aASCII + 2;
+        *aRadix = Radix::HEXADECIMAL;
+    }
+    else
+    {
+        lResult = aASCII;
     }
 
     return lResult;
