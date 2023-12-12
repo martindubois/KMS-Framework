@@ -22,7 +22,7 @@ namespace KMS
 {
     namespace HTTP
     {
-        class Request;
+        class Transaction;
 
         class FileServer final : public DI::Dictionary
         {
@@ -35,13 +35,13 @@ namespace KMS
             DI::Folder  mRoot;
             DI::Boolean mVerbose;
 
-            typedef void (*FileTypeFunction)(Request*);
+            typedef void (*FileTypeFunction)(Transaction*);
 
-            static void FileType_App_JS     (Request* aRequest);
-            static void FileType_Image_XIcon(Request* aRequest);
-            static void FileType_Text_CSS   (Request* aRequest);
-            static void FileType_Text_HTML  (Request* aRequest);
-            static void FileType_Text_Plain (Request* aRequest);
+            static void FileType_App_JS     (Transaction* aRequest);
+            static void FileType_Image_XIcon(Transaction* aRequest);
+            static void FileType_Text_CSS   (Transaction* aRequest);
+            static void FileType_Text_HTML  (Transaction* aRequest);
+            static void FileType_Text_Plain (Transaction* aRequest);
 
             static int Main(int aCount, const char** aVector);
 
@@ -57,9 +57,9 @@ namespace KMS
 
             void SetVerbose(bool aV = true);
 
-            void ProcessRequest(Request* aR, const char* aPath = nullptr);
+            void ProcessRequest(Transaction* aR, const char* aPath = nullptr);
 
-            void ProcessRequest_GET(Request* aR, const char* aPath = nullptr);
+            void ProcessRequest_GET(Transaction* aR, const char* aPath = nullptr);
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;

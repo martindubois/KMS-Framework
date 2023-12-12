@@ -12,7 +12,7 @@
 #include <KMS/DI/NetAddressRange.h>
 #include <KMS/DI/String.h>
 #include <KMS/HTTP/HTTP.h>
-#include <KMS/HTTP/Request.h>
+#include <KMS/HTTP/Transaction.h>
 #include <KMS/Proc/Browser.h>
 
 #include <KMS/HTTP/ReactApp.h>
@@ -112,13 +112,11 @@ bool TestApp::GetResult() const
 
 #define NAME_VERSION                     "Version"
 
-static const DI::String ACCESS_CONTROL_ALLOW_ORIGIN("*");
-
 unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 {
     assert(nullptr != aData);
 
-    auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+    auto lTransaction = reinterpret_cast<HTTP::Transaction*>(aData);
 
     std::cout << "MSG_GET_VERSION" << std::endl;
 
@@ -128,9 +126,9 @@ unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 
     VERSION.GetString(lVersion, sizeof(lVersion));
 
-    lRequest->mResponseHeader.AddConstEntry(HTTP::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &ACCESS_CONTROL_ALLOW_ORIGIN);
+    lTransaction->mResponse_Header.AddConstEntry(HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &HTTP::Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL);
 
-    lRequest->mResponseData.AddEntry(NAME_VERSION, new DI::String(lVersion), true);
+    lTransaction->mResponse_Data.AddEntry(NAME_VERSION, new DI::String(lVersion), true);
 
     return 0;
 }

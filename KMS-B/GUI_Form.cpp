@@ -13,7 +13,7 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/UInt.h>
 #include <KMS/GUI/MetaData.h>
-#include <KMS/HTTP/Request.h>
+#include <KMS/HTTP/Transaction.h>
 
 #include <KMS/GUI/Form.h>
 
@@ -93,7 +93,7 @@ namespace KMS
         {
             assert(nullptr != aData);
 
-            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+            auto lTransaction = reinterpret_cast<HTTP::Transaction*>(aData);
 
             /* TODO mData.Clear();
 
@@ -124,9 +124,9 @@ namespace KMS
         {
             assert(nullptr != aData);
 
-            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+            auto lTransaction = reinterpret_cast<HTTP::Transaction*>(aData);
 
-            lRequest->mResponseData.AddEntry("Fields", &mFields, false);
+            lTransaction->mResponse_Data.AddEntry("Fields", &mFields, false);
 
             return 0;
         }
@@ -135,7 +135,7 @@ namespace KMS
         {
             assert(nullptr != aData);
 
-            auto lRequest = reinterpret_cast<HTTP::Request*>(aData);
+            auto lTransaction = reinterpret_cast<HTTP::Transaction*>(aData);
 
             // TODO
             return 0;

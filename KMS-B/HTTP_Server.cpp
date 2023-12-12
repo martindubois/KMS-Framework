@@ -10,7 +10,8 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
-#include <KMS/HTTP/Request.h>
+#include <KMS/HTTP/HTTP.h>
+#include <KMS/HTTP/Transaction.h>
 
 #include <KMS/HTTP/Server.h>
 
@@ -22,10 +23,6 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define NAME_SERVER "Server"
-
-static const KMS::DI::String SERVER("KMS-Framework");
-
 namespace KMS
 {
     namespace HTTP
@@ -36,7 +33,7 @@ namespace KMS
 
         Server::Server()
         {
-            mResponseHeader.AddConstEntry(NAME_SERVER, &SERVER);
+            mResponseHeader.AddConstEntry(Response::FIELD_NAME_SERVER, &Response::FIELD_VALUE_SERVER);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }
@@ -48,16 +45,16 @@ namespace KMS
         {
             try
             {
-                Request lRequest(aSocket);
+                Transaction lTransaction(aSocket, true);
 
-                lRequest.mResponseHeader = mResponseHeader;
+                lTransaction.mResponse_Header = mResponseHeader;
 
-                if (lRequest.Receive())
+                if (lTransaction.Request_Receive())
                 {
-                    auto lRet = mOnRequest.Send(this, &lRequest);
+                    auto lRet = mOnRequest.Send(this, &lTransaction);
                     if (CALLBACK_SUCCESS(lRet))
                     {
-                        lRequest.Reply();
+                        lTransaction.Response_Reply();
                     }
                 }
             }

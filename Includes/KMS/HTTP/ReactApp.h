@@ -45,7 +45,7 @@ namespace KMS
 
             void LocateFrontEnd();
 
-            unsigned int OnFunction(Request* aRequest);
+            unsigned int OnFunction(Transaction* aTransaction);
 
             // ===== Callbacks ==============================================
             const Callback<ReactApp> ON_REQUEST;

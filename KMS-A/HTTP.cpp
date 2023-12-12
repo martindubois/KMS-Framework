@@ -5,6 +5,8 @@
 // Product   KMS-Framework
 // File      KMS-A/HTTP.cpp
 
+// TEST COVERAGE  2023-12-11  KMS - Martin Dubois, P. Eng.
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -23,6 +25,7 @@ static void Decode(KMS::DI::Object** aObject, KMS::Text::ReadPtr* aPtr);
 
 static void Decode_Dictionary(KMS::DI::Dictionary* aDictionary, KMS::Text::ReadPtr* aPtr);
 static void Decode_Value     (KMS::DI::Value     * aValue     , KMS::Text::ReadPtr* aPtr);
+static bool Decode_Value_Try (KMS::DI::Value     * aValue     , KMS::Text::ReadPtr* aPtr);
 
 static void Encode(const KMS::DI::Object* aObject, KMS::Text::WritePtr* aPtr);
 
@@ -33,30 +36,50 @@ namespace KMS
     namespace HTTP
     {
 
-        const char* FIELD_NAME_ACCEPT                      = "Accept";
-        const char* FIELD_NAME_ACCEPT_ENCODING             = "Accept-Encoding";
-        const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
-        const char* FIELD_NAME_CONNECTION                  = "Connection";
-        const char* FIELD_NAME_CONTENT_DISPOSITION         = "Content-Disposition";
-        const char* FIELD_NAME_CONTENT_LENGTH              = "Content-Length";
-        const char* FIELD_NAME_CONTENT_TYPE                = "Content-Type";
-        const char* FIELD_NAME_HOST                        = "Host";
-        const char* FIELD_NAME_SERVER                      = "Server";
-        const char* FIELD_NAME_USER_AGENT                  = "User-Agent";
+        namespace Request
+        {
 
-        const DI::String FIELD_VALUE_ACCEPT_ENCODING_DEFLATE("deflate");
+            const char* FIELD_NAME_ACCEPT          = "Accept";
+            const char* FIELD_NAME_ACCEPT_ENCODING = "Accept-Encoding";
+            const char* FIELD_NAME_CONNECTION      = "Connection";
+            const char* FIELD_NAME_HOST            = "Host";
+            const char* FIELD_NAME_USER_AGENT      = "User-Agent";
 
-        const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL("*");
+            const DI::String FIELD_VALUE_ACCEPT_TEXT_HTML("text/html");
 
-        const DI::String FIELD_VALUE_CONNECTION("keep-alive");
+            const DI::String FIELD_VALUE_ACCEPT_ENCODING_DEFLATE("deflate");
 
-        const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE("inline");
+            const DI::String FIELD_VALUE_CONNECTION("keep-alive");
 
-        const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT("application/javascript");
-        const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON          ("image/x-icon");
-        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS              ("text/css");
-        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML             ("text/html; charset=utf-8");
-        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN            ("text/plain; charset=utf-8");
+            const DI::String FIELD_VALUE_USER_AGENT("KMS-Framework");
+
+        }
+
+        namespace Response
+        {
+
+            const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
+            const char* FIELD_NAME_CONTENT_DISPOSITION         = "Content-Disposition";
+            const char* FIELD_NAME_CONTENT_LENGTH              = "Content-Length";
+            const char* FIELD_NAME_CONTENT_TYPE                = "Content-Type";
+            const char* FIELD_NAME_DATE                        = "Date";
+            const char* FIELD_NAME_LOCATION                    = "Location";
+            const char* FIELD_NAME_SERVER                      = "Server";
+
+            const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL("*");
+
+            const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE("inline");
+
+            const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT("application/javascript");
+            const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON      ("application/json");
+            const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON          ("image/x-icon");
+            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS              ("text/css");
+            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML             ("text/html; charset=utf-8");
+            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN            ("text/plain; charset=utf-8");
+
+            const DI::String FIELD_VALUE_SERVER("KMS-Framework");
+
+        }
 
         // Functions
         // //////////////////////////////////////////////////////////////////
@@ -87,6 +110,7 @@ using namespace KMS;
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
+// NOT TESTED
 void Decode(DI::Object* aObject, Text::ReadPtr* aPtr)
 {
     assert(nullptr != aObject);
@@ -130,8 +154,19 @@ void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
     case '8':
     case '9':
         lUInt32 = new DI::UInt<uint32_t>;
-        Decode_Value(lUInt32, &lPtr);
-        *aObject = lUInt32;
+
+        if (Decode_Value_Try(lUInt32, &lPtr))
+        {
+            *aObject = lUInt32;
+        }
+        else
+        {
+            delete lUInt32;
+
+            lString = new DI::String;
+            Decode_Value(lString, &lPtr);
+            *aObject = lString;
+        }
         break;
 
     default:
@@ -164,6 +199,7 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
         auto lObject = aDictionary->GetEntry_RW(lName);
         if (nullptr != lObject)
         {
+            // NOT TESTED
             Decode(lObject, &lPtr);
         }
         else
@@ -189,15 +225,39 @@ void Decode_Value(DI::Value* aValue, Text::ReadPtr* aPtr)
 
     lPtr.SkipBlank();
 
-    char lStr[LINE_LENGTH];
+    char lStr[4096];
 
-    lPtr.ExtractUntil("\n\r", lStr, sizeof(lStr));
+    lPtr.ExtractUntil(HTTP_EOL, lStr, sizeof(lStr));
 
     aValue->Set(lStr);
 
     lPtr.SkipBlank();
 
     *aPtr = lPtr;
+}
+
+bool Decode_Value_Try(KMS::DI::Value* aValue, KMS::Text::ReadPtr* aPtr)
+{
+    assert(nullptr != aValue);
+    assert(nullptr != aPtr);
+
+    Text::ReadPtr lPtr(*aPtr);
+
+    lPtr.SkipBlank();
+
+    char lStr[4096];
+
+    lPtr.ExtractUntil(HTTP_EOL, lStr, sizeof(lStr));
+
+    auto lResult = aValue->Set_Try(lStr);
+    if (lResult)
+    {
+        lPtr.SkipBlank();
+
+        *aPtr = lPtr;
+    }
+
+    return lResult;
 }
 
 void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
@@ -208,6 +268,7 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
     auto lDictionary = dynamic_cast<const DI::Dictionary*>(aObject);
     if (nullptr != lDictionary)
     {
+        // NOT TESTED
         Encode_Dictionary(lDictionary, aPtr);
     }
     else
@@ -219,7 +280,7 @@ void Encode(const DI::Object* aObject, Text::WritePtr* aPtr)
         }
         else
         {
-            KMS_EXCEPTION(RESULT_NOT_IMPLEMENTED, "HTTP do not support this data type", "");
+            KMS_EXCEPTION(RESULT_NOT_IMPLEMENTED, "HTTP do not support this data type (NOT TESTED)", "");
         }
     }
 }
@@ -241,10 +302,10 @@ void Encode_Dictionary(const DI::Dictionary* aDictionary, Text::WritePtr* aPtr)
 
         Encode(lVT.second, &lPtr);
 
-        lPtr.Write("\r\n", 2);
+        lPtr.Write(HTTP_EOL, 2);
     }
 
-    lPtr.Write("\r\n", 2);
+    lPtr.Write(HTTP_EOL, 2);
 
     *aPtr = lPtr;
 }

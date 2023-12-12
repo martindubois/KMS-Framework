@@ -15,8 +15,8 @@
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/HTTP/HTTP.h>
-#include <KMS/HTTP/Request.h>
 #include <KMS/HTTP/Server.h>
+#include <KMS/HTTP/Transaction.h>
 #include <KMS/Main.h>
 
 #include <KMS/HTTP/FileServer.h>
@@ -43,40 +43,40 @@ namespace KMS
         const char* FileServer::ROOT_DEFAULT    = ".";
         const bool  FileServer::VERBOSE_DEFAULT = false;
 
-        void FileServer::FileType_App_JS(Request* aRequest)
+        void FileServer::FileType_App_JS(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
         }
 
-        void FileServer::FileType_Image_XIcon(Request* aRequest)
+        void FileServer::FileType_Image_XIcon(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
         }
 
-        void FileServer::FileType_Text_CSS(Request* aRequest)
+        void FileServer::FileType_Text_CSS(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
         }
 
-        void FileServer::FileType_Text_HTML(Request* aRequest)
+        void FileServer::FileType_Text_HTML(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
         }
 
-        void FileServer::FileType_Text_Plain(Request* aRequest)
+        void FileServer::FileType_Text_Plain(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_DISPOSITION, &FIELD_VALUE_CONTENT_DISPOSITION_INLINE);
-            aRequest->mResponseHeader.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_DISPOSITION, &Response::FIELD_VALUE_CONTENT_DISPOSITION_INLINE);
+            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -158,63 +158,63 @@ namespace KMS
 
         void FileServer::SetVerbose(bool aV) { mVerbose = aV; }
 
-        void FileServer::ProcessRequest(Request* aR, const char* aPath)
+        void FileServer::ProcessRequest(Transaction* aT, const char* aPath)
         {
-            assert(nullptr != aR);
+            assert(nullptr != aT);
 
-            switch (aR->GetType())
+            switch (aT->GetType())
             {
-            case Request::Type::GET: ProcessRequest_GET(aR, aPath); break;
+            case Transaction::Type::GET: ProcessRequest_GET(aT, aPath); break;
 
-            default: aR->SetResult(Result::METHOD_NOT_ALLOWED);
+            default: aT->SetResult(Result::METHOD_NOT_ALLOWED);
             }
 
             if (mVerbose)
             {
-                std::cout << *aR;
+                std::cout << *aT;
             }
         }
 
-        void FileServer::ProcessRequest_GET(Request* aR, const char* aPath)
+        void FileServer::ProcessRequest_GET(Transaction* aT, const char* aPath)
         {
-            assert(nullptr != aR);
+            assert(nullptr != aT);
 
-            auto lPath = (nullptr == aPath) ? aR->GetPath() : aPath;
+            auto lPath = (nullptr == aPath) ? aT->GetPath() : aPath;
 
             // TODO Protect against .. in path.
 
             auto lExt = strrchr(lPath, '.');
             if (nullptr == lExt)
             {
-                aR->SetResult(Result::FORBIDDEN);
+                aT->SetResult(Result::FORBIDDEN);
                 return;
             }
 
             auto lIt = mFileTypes.find(lExt + 1);
             if (mFileTypes.end() == lIt)
             {
-                aR->SetResult(Result::FORBIDDEN);
+                aT->SetResult(Result::FORBIDDEN);
                 return;
             }
 
             if (!mRoot.GetFolder().DoesFileExist(lPath + 1))
             {
-                aR->SetResult(Result::NOT_FOUND);
+                aT->SetResult(Result::NOT_FOUND);
                 return;
             }
 
             KMS_DBG_LOG_INFO_F(Dbg::Log::FLAG_USER_REDUNDANT);
             Dbg::gLog.WriteMessage(lPath);
 
-            lIt->second(aR);
+            lIt->second(aT);
 
             auto lFile = new File::Binary(mRoot, lPath + 1);
             assert(nullptr != lFile);
 
             auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
-            aR->mResponseHeader.AddEntry(FIELD_NAME_CONTENT_LENGTH, lValue, true);
+            aT->mResponse_Header.AddEntry(Response::FIELD_NAME_CONTENT_LENGTH, lValue, true);
 
-            aR->SetFile(lFile);
+            aT->SetFile(lFile, true);
         }
 
         // ===== DI::Container ==============================================
@@ -233,7 +233,7 @@ namespace KMS
 
         unsigned int FileServer::OnRequest(void*, void* aData)
         {
-            ProcessRequest(reinterpret_cast<Request*>(aData));
+            ProcessRequest(reinterpret_cast<Transaction*>(aData));
 
             return 0;
         }

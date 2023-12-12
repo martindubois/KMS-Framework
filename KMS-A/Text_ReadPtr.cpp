@@ -83,7 +83,7 @@ namespace KMS
 
             while (mSize_byte > mIndex_byte)
             {
-                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", aStr);
+                KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte + 2, RESULT_OUTPUT_TOO_SHORT, "The output buffer is too short", mIndex_byte);
 
                 if (NULL != strchr(aStr, mBase[mIndex_byte]))
                 {

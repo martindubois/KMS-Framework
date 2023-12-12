@@ -12,8 +12,9 @@
 #include <KMS/DI/String.h>
 #include <KMS/GUI/Form.h>
 #include <KMS/GUI/MetaData.h>
+#include <KMS/HTTP/HTTP.h>
 #include <KMS/HTTP/ReactApp.h>
-#include <KMS/HTTP/Request.h>
+#include <KMS/HTTP/Transaction.h>
 #include <KMS/Proc/Browser.h>
 
 using namespace KMS;
@@ -107,15 +108,15 @@ unsigned int TestApp1::OnVersionGetData(void*, void* aData)
 {
     assert(nullptr != aData);
 
-    HTTP::Request* lRequest = reinterpret_cast<HTTP::Request*>(aData);
+    HTTP::Transaction* lTransaction = reinterpret_cast<HTTP::Transaction*>(aData);
 
     char lVersion[16];
 
     VERSION.GetString(lVersion, sizeof(lVersion));
 
-    lRequest->mResponseHeader.AddEntry("Access-Control-Allow-Origin", new DI::String("*"), true);
+    lTransaction->mResponse_Header.AddConstEntry(HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &HTTP::Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL);
 
-    lRequest->mResponseData.AddEntry("Version", new DI::String(lVersion), true);
+    lTransaction->mResponse_Data.AddEntry("Version", new DI::String(lVersion), true);
 
     return 0;
 }

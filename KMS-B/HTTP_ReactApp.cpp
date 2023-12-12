@@ -8,7 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/HTTP/Request.h>
+#include <KMS/HTTP/Transaction.h>
 
 #include <KMS/HTTP/ReactApp.h>
 
@@ -80,23 +80,23 @@ namespace KMS
             }
         }
 
-        unsigned int ReactApp::OnFunction(Request* aRequest)
+        unsigned int ReactApp::OnFunction(Transaction* aTransaction)
         {
-            assert(nullptr != aRequest);
+            assert(nullptr != aTransaction);
 
-            auto lPath = aRequest->GetPath();
+            auto lPath = aTransaction->GetPath();
 
             auto lIt = mFunctions.find(lPath);
             if (mFunctions.end() == lIt)
             {
-                mFileServer.ProcessRequest(aRequest);
+                mFileServer.ProcessRequest(aTransaction);
             }
             else
             {
-                auto lRet = lIt->second->Send(this, aRequest);
+                auto lRet = lIt->second->Send(this, aTransaction);
                 if (!CALLBACK_SUCCESS(lRet))
                 {
-                    aRequest->SetResult(Result::INTERNAL_SERVER_ERROR);
+                    aTransaction->SetResult(Result::INTERNAL_SERVER_ERROR);
                 }
             }
 
@@ -109,18 +109,18 @@ namespace KMS
         {
             assert(nullptr != aData);
 
-            auto lRequest = reinterpret_cast<Request*>(aData);
+            auto lTransaction = reinterpret_cast<Transaction*>(aData);
 
-            auto lPath = lRequest->GetPath();
+            auto lPath = lTransaction->GetPath();
 
             auto lIt = mRoutes.find(lPath);
             if (mRoutes.end() == lIt)
             {
-                OnFunction(lRequest);
+                OnFunction(lTransaction);
             }
             else
             {
-                mFileServer.ProcessRequest(lRequest, "/index.html");
+                mFileServer.ProcessRequest(lTransaction, "/index.html");
             }
 
             return 0;

@@ -10,51 +10,18 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
-#include <KMS/HTTP/Result.h>
+#include <KMS/HTTP/HTTP.h>
+#include <KMS/HTTP/Transaction.h>
 #include <KMS/Net/Socket_Client_TLS.h>
 
 #include <KMS/HTTP/Client.h>
 
 KMS_RESULT_STATIC(RESULT_HTTP_ERROR);
 
-// Data type
-// //////////////////////////////////////////////////////////////////////////
-
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define EOL "\r\n"
-
 #define URL_LENGTH (2048)
-
-class Header
-{
-
-public:
-
-    Header();
-
-    unsigned int GetContentLength() const;
-
-    const char* GetLocation() const;
-
-    KMS::HTTP::Result GetResult() const;
-
-    const char* GetResultName() const;
-
-    unsigned int GetSize() const;
-
-    bool Parse(const char* aIn, unsigned int aInSize_byte);
-
-private:
-
-    unsigned int mContentLength_byte;
-    unsigned int mResult;
-    unsigned int mSize_byte;
-
-    char mLocation[URL_LENGTH];
-
-};
 
 namespace KMS
 {
@@ -112,56 +79,46 @@ namespace KMS
 
             ConnectSocket(lHost);
 
-            char lBuffer[8192];
+            Transaction lTransaction(mSocket, false);
 
-            sprintf_s(lBuffer,
-                "GET /%s HTTP/1.1" EOL
-                "Host: %s" EOL
-                "Connection: keep - alive" EOL
-                "User-Agent: KMS-Framework" EOL
-                "Accept: text/html" EOL
-                "Accept-Encoding: deflate" EOL
-                EOL,
-                lPath,
-                lHost);
+            lTransaction.SetType(Transaction::Type::GET);
+            lTransaction.SetPath(lPath);
 
-            auto lSize_byte = static_cast<unsigned int>(strlen(lBuffer));
+            lTransaction.mRequest_Header.AddEntry     (Request::FIELD_NAME_HOST           , new DI::String(lHost), true);
+            lTransaction.mRequest_Header.AddConstEntry(Request::FIELD_NAME_CONNECTION     , &Request::FIELD_VALUE_CONNECTION);
+            lTransaction.mRequest_Header.AddConstEntry(Request::FIELD_NAME_USER_AGENT     , &Request::FIELD_VALUE_USER_AGENT);
+            lTransaction.mRequest_Header.AddConstEntry(Request::FIELD_NAME_ACCEPT         , &Request::FIELD_VALUE_ACCEPT_TEXT_HTML);
+            lTransaction.mRequest_Header.AddConstEntry(Request::FIELD_NAME_ACCEPT_ENCODING, &Request::FIELD_VALUE_ACCEPT_ENCODING_DEFLATE);
 
-            mSocket->Send(lBuffer, lSize_byte);
+            lTransaction.Request_Send();
 
-            memset(&lBuffer, 0, sizeof(lBuffer));
+            lTransaction.SetFile(aOutFile, false);
 
-            Header lHeader;
-            unsigned int lReceived_byte = 0;
+            lTransaction.Response_Receive();
 
-            do
+            switch (lTransaction.GetResult())
             {
-                lReceived_byte += mSocket->Receive(lBuffer + lReceived_byte, sizeof(lBuffer) - lReceived_byte);
-            }
-            while (!lHeader.Parse(lBuffer, lReceived_byte));
-
-            switch (lHeader.GetResult())
-            {
-            case HTTP::Result::OK:
-                // Write the part we already received
-                lSize_byte = lReceived_byte - lHeader.GetSize();
-                aOutFile->Write(lBuffer + lHeader.GetSize(), lSize_byte);
-
-                ReceiveRestOfFile(lHeader.GetContentLength() - lSize_byte, aOutFile);
-
-                mSocket->Disconnect();
-                break;
+            case HTTP::Result::OK: break;
 
             case HTTP::Result::FOUND:
-                KMS_DBG_LOG_INFO();
-                Dbg::gLog.WriteMessage(lHeader.GetLocation());
+                {
+                    auto lObj = lTransaction.mResponse_Header.GetEntry_R(Response::FIELD_NAME_LOCATION);
+                    KMS_EXCEPTION_ASSERT(nullptr != lObj, RESULT_HTTP_ERROR, "Redirection without location", "");
 
-                mSocket->Disconnect();
+                    auto lLocation = dynamic_cast<const DI::String*>(lObj);
+                    KMS_EXCEPTION_ASSERT(nullptr != lLocation, RESULT_HTTP_ERROR, "Redirection format error", "");
 
-                Get(lHeader.GetLocation(), aOutFile);
+                    KMS_DBG_LOG_INFO();
+                    Dbg::gLog.WriteMessage(lLocation->Get());
+
+                    mSocket->Disconnect();
+
+                    // TODO  Protect against infinite recursion
+                    Get(lLocation->Get(), aOutFile);
+                }
                 break;
 
-            default: KMS_EXCEPTION(RESULT_HTTP_ERROR, "HTTP Error", lHeader.GetResultName());
+            default: assert(false);
             }
         }
 
@@ -216,53 +173,4 @@ namespace KMS
         }
 
     }
-}
-
-using namespace KMS;
-
-// Public
-// //////////////////////////////////////////////////////////////////////////
-
-Header::Header() : mContentLength_byte(0), mResult(0), mSize_byte(0)
-{
-    memset(&mLocation, 0, sizeof(mLocation));
-}
-
-unsigned int Header::GetContentLength() const { return mContentLength_byte; }
-const char * Header::GetLocation     () const { return mLocation; }
-HTTP::Result Header::GetResult       () const { return static_cast<HTTP::Result>(mResult); }
-const char * Header::GetResultName   () const { return HTTP::GetResultName(mResult); }
-unsigned int Header::GetSize         () const { return mSize_byte; }
-
-bool Header::Parse(const char* aIn, unsigned int aInSize_byte)
-{
-    assert(nullptr != aIn);
-
-    KMS_EXCEPTION_ASSERT(4 < aInSize_byte, RESULT_INVALID_FORMAT, "Invalid HTTP response size", aInSize_byte);
-
-    char lDump[URL_LENGTH];
-
-    auto lRet = sscanf_s(aIn, "HTTP/1.1 %u %s" EOL, &mResult, lDump SizeInfo(lDump));
-    KMS_EXCEPTION_ASSERT(2 == lRet, RESULT_INVALID_FORMAT, "Invalid HTTP response format", lRet);
-
-    auto lInSize_byte = aInSize_byte - 2;
-
-    for (unsigned int i = 10; i < lInSize_byte; i++)
-    {
-        if ('\n' == aIn[i])
-        {
-            auto lPtr = aIn + i + 1;
-
-            if (0 == strncmp(lPtr, EOL, 2))
-            {
-                mSize_byte = i + 3;
-                return true;
-            }
-
-            lRet = sscanf_s(lPtr, "Content-Length: %u" EOL, &mContentLength_byte);
-            lRet = sscanf_s(lPtr, "Location: %[^\r\n]" EOL, mLocation SizeInfo(mLocation));
-        }
-    }
-
-    return false;
 }

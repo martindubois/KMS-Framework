@@ -51,9 +51,6 @@
     <ClCompile Include="HTTP_ReactApp.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
-    <ClCompile Include="HTTP_Request.cpp">
-      <Filter>Source Files\HTTP</Filter>
-    </ClCompile>
     <ClCompile Include="HTTP_Server.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
@@ -102,14 +99,17 @@
     <ClCompile Include="Net_Address_W.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="HTTP_Request_W.cpp">
-      <Filter>Source Files\HTTP</Filter>
-    </ClCompile>
     <ClCompile Include="Proc_Browser.cpp">
       <Filter>Source Files\Proc</Filter>
     </ClCompile>
     <ClCompile Include="Proc_Browser_W.cpp">
       <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Transaction.cpp">
+      <Filter>Source Files\HTTP</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Transaction_W.cpp">
+      <Filter>Source Files\HTTP</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -43,11 +43,11 @@
     <ClCompile Include="GUI_Form.cpp" />
     <ClCompile Include="HTTP_Client.cpp" />
     <ClCompile Include="HTTP_FileServer.cpp" />
-    <ClCompile Include="HTTP_Request_W.cpp" />
     <ClCompile Include="HTTP_Result.cpp" />
     <ClCompile Include="HTTP_ReactApp.cpp" />
-    <ClCompile Include="HTTP_Request.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />
+    <ClCompile Include="HTTP_Transaction.cpp" />
+    <ClCompile Include="HTTP_Transaction_W.cpp" />
     <ClCompile Include="Modbus_Master_TCP.cpp" />
     <ClCompile Include="Net_Address.cpp" />
     <ClCompile Include="Net_AddressRange.cpp" />
