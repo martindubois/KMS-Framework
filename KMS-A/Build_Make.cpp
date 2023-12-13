@@ -491,7 +491,6 @@ namespace KMS
             default: assert(false);
             }
 
-            // TODO
             return 0;
         }
 
@@ -514,7 +513,6 @@ namespace KMS
             default: assert(false);
             }
 
-            // TODO
             return 0;
         }
 
@@ -542,7 +540,6 @@ namespace KMS
             default: assert(false);
             }
 
-            // TODO
             return 0;
         }
 
