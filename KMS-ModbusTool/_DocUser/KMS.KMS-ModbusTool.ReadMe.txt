@@ -7,7 +7,7 @@ File      KMS-ModbusTool/_DocUser/KMS.KMS-ModbusTool.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.1.1-dev Windows 2023-12-13
+1.1.2-dev Windows 2023-12-21
 
 1.0.7 Windows 2023-09-27
 

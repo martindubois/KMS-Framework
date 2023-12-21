@@ -7,6 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+1.1.2-dev Windows 2023-12-21
+- Modbus::LinkAndMaster_Cfg
+
 1.1.1-dev Windows 2023-12-13
 - Build::Package
 - Install namespace
