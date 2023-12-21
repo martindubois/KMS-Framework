@@ -42,6 +42,7 @@
     <ClCompile Include="Dev_Device.cpp" />
     <ClCompile Include="Install_DriverInstaller.cpp" />
     <ClCompile Include="Install_DriverInstaller_W.cpp" />
+    <ClCompile Include="Modbus_LinkAndMaster_Cfg.cpp" />
     <ClCompile Include="Modbus_Simulator.cpp" />
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="Modbus_Tool.cpp" />

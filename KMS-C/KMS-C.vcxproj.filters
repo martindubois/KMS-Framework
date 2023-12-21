@@ -69,5 +69,8 @@
     <ClCompile Include="SetupDi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Modbus_LinkAndMaster_Cfg.cpp">
+      <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

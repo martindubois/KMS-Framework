@@ -12,14 +12,11 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
-#include <KMS/Com/Port.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Convert.h>
 #include <KMS/Main.h>
-#include <KMS/Modbus/Master_CFG.h>
-#include <KMS/Modbus/Master_IDevice.h>
-#include <KMS/Modbus/Master_TCP.h>
+#include <KMS/Modbus/LinkAndMaster_Cfg.h>
 
 #include <KMS/Modbus/Tool.h>
 
@@ -58,47 +55,14 @@ namespace KMS
 
             KMS_MAIN_BEGIN;
             {
-                unsigned int           lArgStart = 1;
-                Com::Port              lPort;
+                LinkAndMaster_Cfg lLAMC(&lConfigurator, LinkAndMaster_Cfg::Link::COM);
+                Modbus::Tool      lT;
 
-                Modbus::Master_IDevice lMC(&lPort);
-                Modbus::Master_TCP     lMT;
-                Modbus::Tool           lT;
-
-                // Be default, the tool runs in COM mode. This keep backward
-                // compatibility.
-                Modbus::Master* lM = &lMC;
-
-                if (2 < aCount)
-                {
-                    if      (0 == strcmp("COM", aVector[1]))
-                    {
-                        lArgStart = 2;
-                        lConfigurator.AddConfigurable(&lPort);
-                    }
-                    else if (0 == strcmp("TCP", aVector[1]))
-                    {
-                        lM        = &lMT;
-                        lArgStart = 2;
-
-                        lConfigurator.AddConfigurable(lMT.GetSocket());
-                    }
-                    else
-                    {
-                        lConfigurator.AddConfigurable(&lPort);
-                    }
-                }
-                else
-                {
-                    lConfigurator.AddConfigurable(&lPort);
-                }
-
-                Modbus::Master_Cfg lCfg(lM);
-
-                lConfigurator.AddConfigurable(&lCfg);
                 lConfigurator.AddConfigurable(&lT);
 
-                lT.InitMaster(lM);
+                auto lArgStart = lLAMC.ParseArguments(aCount, aVector);
+
+                lT.InitMaster(lLAMC.GetMaster());
 
                 lConfigurator.ParseFile(File::Folder::EXECUTABLE, CONFIG_FILE);
                 lConfigurator.ParseFile(File::Folder::HOME      , CONFIG_FILE);
