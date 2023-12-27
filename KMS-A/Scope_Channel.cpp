@@ -19,12 +19,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== Configurable attribute =================================
-        const Graph::Color Channel::COLOR_DEFAULT      = Graph::Color::RED;
-        const double       Channel::SCALE_Y_DEFAULT    = 1.0;
-        const double       Channel::TRIG_LEVEL_DEFAULT = 1.0;
-        const uint16_t     Channel::Y_DEFAULT_px       =  128;
-        const uint16_t     Channel::Y_MAX_px           = 2048;
+        const char* Channel::EDGE_TYPE_NAMES[] = { "BOTH", "FALLING", "NONE", "RAISING" };
+
+        const Graph::Color      Channel::COLOR_DEFAULT      = Graph::Color::RED;
+        const Channel::EdgeType Channel::EDGE_TYPE_DEFAULT  = Channel::EdgeType::BOTH;
+        const double            Channel::SCALE_Y_DEFAULT    = 1.0;
+        const double            Channel::TRIG_LEVEL_DEFAULT = 1.0;
+        const uint16_t          Channel::Y_DEFAULT_px       =  128;
+        const uint16_t          Channel::Y_MAX_px           = 2048;
 
         // Internal
         // //////////////////////////////////////////////////////////////////
@@ -38,14 +40,22 @@ namespace KMS
 
             *aY_px = mY_px + static_cast<unsigned int>(lLast * mScaleY);
 
-            // TODO  Implement rasing/falling trigger
-            if ((lLast < mTrigLevel) && (mPrevious >= mTrigLevel))
+            if (2 <= mStats.GetDataCount())
             {
-                *aTrig = true;
-            }
-            else if ((lLast > mTrigLevel) && (mPrevious <= mTrigLevel))
-            {
-                *aTrig = true;
+                if ((lLast < mTrigLevel) && (mPrevious >= mTrigLevel))
+                {
+                    if ((EdgeType::BOTH == mEdgeType) || (EdgeType::FALLING == mEdgeType))
+                    {
+                        *aTrig = true;
+                    }
+                }
+                else if ((lLast > mTrigLevel) && (mPrevious <= mTrigLevel))
+                {
+                    if ((EdgeType::BOTH == mEdgeType) || (EdgeType::RAISING == mEdgeType))
+                    {
+                        *aTrig = true;
+                    }
+                }
             }
         }
 
@@ -53,12 +63,12 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Channel::Channel()
-            : mPrevious(0.0)
-            // ===== Configurable attributes ================================
-            , mColor    (COLOR_DEFAULT)
+            : mColor    (COLOR_DEFAULT)
+            , mEdgeType (EDGE_TYPE_DEFAULT)
             , mScaleY   (SCALE_Y_DEFAULT)
             , mTrigLevel(TRIG_LEVEL_DEFAULT)
             , mY_px     (Y_DEFAULT_px)
+            , mPrevious(0.0)
         {}
 
         void Channel::SetSample(double aValue)

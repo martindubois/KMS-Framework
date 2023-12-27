@@ -12,7 +12,9 @@
 #include <KMS/CLI/Tool.h>
 #include <KMS/DI/Array.h>
 #include <KMS/Modbus/Modbus.h>
+#include <KMS/Scope/Channel_Modbus.h>
 #include <KMS/Types.h>
+#include <KMS/WGDI/Scope_Module.h>
 
 namespace KMS
 {
@@ -72,6 +74,10 @@ namespace KMS
         private:
 
             NO_COPY(Tool);
+
+            void Scope_Channel(Scope::Channel_Modbus* aChannel, const char* aAddrOrName, const DI::Dictionary& aMap);
+
+            WGDI::Scope_Module mScope;
 
             Master* mMaster;
 

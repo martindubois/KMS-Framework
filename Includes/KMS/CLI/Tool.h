@@ -3,13 +3,17 @@
 // Copyright (C) 2022-2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Banner.h
+// File      Includes/KMS/Tool.h
 // Status    PROD_READY
 // Library   KMS-A
 
 #pragma once
 
+// ===== C++ ================================================================
+#include <list>
+
 // ===== Includes ===========================================================
+#include <KMS/CLI/Module.h>
 #include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
@@ -29,6 +33,11 @@ namespace KMS
         public:
 
             void AddCommand(const char* aC);
+
+            // The modules parse the command before the the base class parse
+            // the default command. This way, a module could replace a default
+            // command.
+            void AddModule(Module* aModule);
 
             void ClearError();
 
@@ -58,6 +67,8 @@ namespace KMS
 
         private:
 
+            typedef std::list<Module*> ModuleList;
+
             NO_COPY(Tool);
 
             void AbortIfError();
@@ -81,6 +92,8 @@ namespace KMS
 
             int          mExit_Code;
             unsigned int mExit_Count;
+
+            ModuleList mModules;
 
         };
 

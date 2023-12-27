@@ -38,10 +38,12 @@ namespace KMS
             int Run();
 
             // ===== DI::Container ==========================================
-            ~Viewer_Bitmap();
+            virtual ~Viewer_Bitmap();
             virtual void Validate() const;
 
         private:
+
+            Graph::Bitmap mBitmap;
 
             Window_Bitmap mWindow;
 

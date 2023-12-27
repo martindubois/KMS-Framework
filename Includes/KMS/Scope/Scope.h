@@ -40,20 +40,23 @@ namespace KMS
 
             static const char* MODE_NAMES[];
 
-            static const uint32_t FREQUENCY_DEFAULT_Hz;
-            static const uint32_t FREQUENCY_MAX_Hz;
-            static const uint32_t FREQUENCY_MIN_Hz;
+            static const uint16_t FREQUENCY_DEFAULT_Hz;
+            static const uint16_t FREQUENCY_MAX_Hz;
+            static const uint16_t FREQUENCY_MIN_Hz;
             static const Mode     MODE_DEFAULT;
+            static const uint16_t PERSISTENCE_DEFAULT;
+            static const uint16_t PERSISTENCE_MIN;
             static const uint16_t POSITION_X_DEFAULT_px;
             static const uint16_t POSITION_X_MAX_px;
-            static const uint32_t SCALE_X_DEFAULT_us_px;
-            static const uint32_t SCALE_X_MAX_us_px;
-            static const uint32_t SCALE_X_MIN_us_px;
+            static const uint16_t SCALE_X_DEFAULT_ms_px;
+            static const uint16_t SCALE_X_MAX_ms_px;
+            static const uint16_t SCALE_X_MIN_ms_px;
 
-            uint32_t mFrequency_Hz;
+            uint16_t mFrequency_Hz;
             Mode     mMode;
-            uint32_t mPositionX_px;
-            uint32_t mScaleX_us_px;
+            uint16_t mPersistence;
+            uint16_t mPositionX_px;
+            uint16_t mScaleX_ms_px;
 
             // STOPPED <==+---------+
             //  |   |     |         |
@@ -73,6 +76,10 @@ namespace KMS
 
             Scope();
 
+            ~Scope();
+
+            const char* GetModeName() const;
+
             void Clear();
 
             void ForceTrig();
@@ -83,14 +90,20 @@ namespace KMS
 
             void Stop();
 
+            // aChannel  The Channel instance is deleted when the Scope
+            //           instance is deleted.
             void Channel_Add(Channel* aChannel);
 
             void Channel_Remove(Channel* aChannel);
+
+            unsigned int Channels_GetCount() const;
 
             Graph::Bitmap mBitmap;
 
             Callback_Ptr mOnFrame;
             Callback_Ptr mOnTrig;
+
+            Stats::Stats mStats_InterSample;
 
         private:
 

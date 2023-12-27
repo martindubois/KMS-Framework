@@ -44,6 +44,7 @@
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
     <ClCompile Include="Click_Master.cpp" />
+    <ClCompile Include="CLI_Module.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="CLI_Tool_W.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="ScaleAndOffset.cpp" />
     <ClCompile Include="Scope_Channel.cpp" />
     <ClCompile Include="Scope_Channel_DAQ.cpp" />
+    <ClCompile Include="Scope_Channel_Modbus.cpp" />
     <ClCompile Include="Scope_Channel_Random.cpp" />
     <ClCompile Include="Scope_Scope.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
@@ -137,6 +139,8 @@
     <ClCompile Include="Thread_Thread.cpp" />
     <ClCompile Include="Thread_Thread_W.cpp" />
     <ClCompile Include="Version.cpp" />
+    <ClCompile Include="WGDI_Scope.cpp" />
+    <ClCompile Include="WGDI_Scope_Module.cpp" />
     <ClCompile Include="WGDI_Window_Bitmap.cpp" />
     <ClCompile Include="WGDI_Viewer_Bitmap.cpp" />
     <ClCompile Include="WGDI_Window.cpp" />

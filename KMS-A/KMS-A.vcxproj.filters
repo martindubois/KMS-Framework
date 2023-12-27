@@ -408,6 +408,18 @@
     <ClCompile Include="Convert_W.cpp">
       <Filter>Source Files\Convert</Filter>
     </ClCompile>
+    <ClCompile Include="Scope_Channel_Modbus.cpp">
+      <Filter>Source Files\Scope</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI_Module.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="WGDI_Scope_Module.cpp">
+      <Filter>Source Files\WGDI</Filter>
+    </ClCompile>
+    <ClCompile Include="WGDI_Scope.cpp">
+      <Filter>Source Files\WGDI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

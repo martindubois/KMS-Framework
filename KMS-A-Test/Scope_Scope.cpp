@@ -59,6 +59,7 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     FileFormat::BMP lF1(File::Folder::CURRENT, "Test_Scope_Scope_Base_1.bmp", true);
     lF1.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS1;
+    lS1.mFrequency_Hz = 1000;
     lS1.mBitmap.Init(&lF1);
     lS1.Channel_Add(&lC0);
     lS1.Start();
@@ -66,11 +67,13 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     {
         lS1.Sample();
     }
+    lS1.Channel_Remove(&lC0);
 
     FileFormat::BMP lF2(File::Folder::CURRENT, "Test_Scope_Scope_Base_2.bmp", true);
     lF2.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS2;
-    lS2.mScaleX_us_px = 200000;
+    lS2.mFrequency_Hz = 1000;
+    lS2.mScaleX_ms_px = 200;
     lS2.mBitmap.Init(&lF2);
     lS2.Channel_Add(&lC0);
     lS2.Start();
@@ -78,12 +81,14 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     {
         lS2.Sample();
     }
+    lS2.Channel_Remove(&lC0);
 
     FileFormat::BMP lF3(File::Folder::CURRENT, "Test_Scope_Scope_Base_3.bmp", true);
     lF3.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS3;
-    lS3.mScaleX_us_px = 200000;
+    lS3.mFrequency_Hz = 1000;
     lS3.mMode = Scope::Scope::Mode::CONTINUOUS;
+    lS3.mScaleX_ms_px = 200;
     lS3.mBitmap.Init(&lF3);
     lS3.Channel_Add(&lC0);
     lS3.Start();
@@ -91,12 +96,14 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     {
         lS3.Sample();
     }
+    lS3.Channel_Remove(&lC0);
 
     FileFormat::BMP lF4(File::Folder::CURRENT, "Test_Scope_Scope_Base_4.bmp", true);
     lF4.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS4;
-    lS4.mScaleX_us_px = 200000;
+    lS4.mFrequency_Hz = 1000;
     lS4.mMode = Scope::Scope::Mode::SINGLE;
+    lS4.mScaleX_ms_px = 200;
     lS4.mBitmap.Init(&lF4);
     lS4.Channel_Add(&lC0);
     lS4.Start();
@@ -104,13 +111,15 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     {
         lS4.Sample();
     }
+    lS4.Channel_Remove(&lC0);
 
     FileFormat::BMP lF5(File::Folder::CURRENT, "Test_Scope_Scope_Base_5.bmp", true);
     lF5.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS5;
-    lS5.mScaleX_us_px = 200000;
+    lS5.mFrequency_Hz = 1000;
     lS5.mMode = Scope::Scope::Mode::SINGLE;
     lS5.mPositionX_px = 2;
+    lS5.mScaleX_ms_px = 200;
     lS5.mBitmap.Init(&lF5);
     lS5.Channel_Add(&lC0);
     lS5.Start();
@@ -118,19 +127,22 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
     {
         lS5.Sample();
     }
+    lS5.Channel_Remove(&lC0);
 
     FileFormat::BMP lF6(File::Folder::CURRENT, "Test_Scope_Scope_Base_6.bmp", true);
     lF6.Create(SIZE_X_px, SIZE_Y_px);
     Scope::Scope lS6;
-    lS6.mScaleX_us_px = 200000;
+    lS6.mFrequency_Hz = 1000;
     lS6.mMode = Scope::Scope::Mode::AUTO;
     lS6.mPositionX_px = 2;
-    lS6.mBitmap.Init(&lF6);
+    lS6.mScaleX_ms_px = 200;
     lC0.mTrigLevel = 1000.0;
+    lS6.mBitmap.Init(&lF6);
     lS6.Channel_Add(&lC0);
     lS6.Start();
     for (unsigned int i = 0; i < SIZE_X_px * 4; i++)
     {
         lS6.Sample();
     }
+    lS6.Channel_Remove(&lC0);
 }

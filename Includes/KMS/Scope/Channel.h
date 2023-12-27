@@ -21,20 +21,32 @@ namespace KMS
 
         public:
 
-            // ===== Configurable attribute =================================
+            static const char* EDGE_TYPE_NAMES[];
+
+            enum class EdgeType
+            {
+                BOTH = 0,
+                FALLING,
+                NONE,
+                RAISING,
+
+                QTY
+            };
+
             static const Graph::Color COLOR_DEFAULT;
+            static const EdgeType     EDGE_TYPE_DEFAULT;
             static const double       SCALE_Y_DEFAULT;
             static const double       TRIG_LEVEL_DEFAULT;
             static const uint16_t     Y_DEFAULT_px;
             static const uint16_t     Y_MAX_px;
 
-            Stats::Stats mStats;
-
-            // ===== Configurable attribute =================================
             Graph::Color mColor;
+            EdgeType     mEdgeType;
             double       mScaleY;
             double       mTrigLevel;
             uint16_t     mY_px;
+
+            Stats::Stats mStats;
 
         // Internal:
 

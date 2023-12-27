@@ -37,6 +37,13 @@ namespace KMS
         {
             assert(nullptr != aConfigurator);
             assert(Link::QTY > aDefault);
+
+            mPort.SetSpeed(38400);
+
+            auto lSocket = mM_TCP.GetSocket();
+            assert(nullptr != lSocket);
+
+            lSocket->mLocalAddress.Set("0.0.0.0");
         }
 
         LinkAndMaster_Cfg::~LinkAndMaster_Cfg()

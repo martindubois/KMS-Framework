@@ -32,11 +32,10 @@ namespace KMS
 
             Window_Bitmap();
 
+            void SetBitmap(Graph::Bitmap* aBitmap);
+
             // ===== Window =================================================
             virtual ~Window_Bitmap();
-            virtual void Show();
-
-            Graph::Bitmap mBitmap;
 
         // Internal
 
@@ -45,13 +44,18 @@ namespace KMS
 
         protected:
 
+            Graph::Bitmap* GetBitmap();
+
             // ===== Window =================================================
+            virtual unsigned int OnStarting(void* aSender, void* aData);
             virtual void Paint(HDC aDC);
             virtual void ValidateConfig();
 
         private:
 
             LRESULT On_WM_TIMER();
+
+            Graph::Bitmap* mBitmap;
 
             uint8_t mInternal[48];
 

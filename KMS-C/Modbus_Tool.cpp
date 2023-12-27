@@ -92,9 +92,18 @@ namespace KMS
             AddEntry("DiscreteInputs"  , &mDiscreteInputs  , false, &MD_DISCRETE_INPUTS);
             AddEntry("HoldingRegisters", &mHoldingRegisters, false, &MD_HOLDING_REGISTERS);
             AddEntry("InputRegisters"  , &mInputRegisters  , false, &MD_INPUT_REGISTERS);
+
+            AddModule(&mScope);
         }
 
-        void Tool::InitMaster(Master* aMaster) { assert(nullptr != aMaster); mMaster = aMaster; }
+        void Tool::InitMaster(Master* aMaster)
+        {
+            assert(nullptr != aMaster);
+
+            assert(nullptr == mMaster);
+
+            mMaster = aMaster;
+        }
 
         void Tool::AddCoil           (const char* aN, uint16_t aA) { mCoils           .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
         void Tool::AddDiscreteInput  (const char* aN, uint16_t aA) { mDiscreteInputs  .AddEntry(aN, new DI::UInt<uint16_t>(aA), true); }
@@ -256,6 +265,10 @@ namespace KMS
                 "ReadDiscreteInput {AddrOrName}\n"
                 "ReadHoldingRegister {AddrOrName}\n"
                 "ReadInputRegister {AddrOrName}\n"
+                "Scope Channel Coil {AddrOrName}\n"
+                "Scope Channel DiscreteInput {AddrOrName}\n"
+                "Scope Channel HoldingRegister {AddOrName}\n"
+                "Scope Channel InputRegister {AddOrName}\n"
                 "WriteSingleCoil {AddrOrName} {false|true}\n"
                 "WriteSingleRegister {AddrOrName} {Value}\n");
 
@@ -267,8 +280,9 @@ namespace KMS
             char lA[NAME_LENGTH];
             char lB[NAME_LENGTH];
             char lC[NAME_LENGTH];
+            char lD[NAME_LENGTH];
 
-            switch (sscanf_s(aC, "%[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t]", lA SizeInfo(lA), lB SizeInfo(lB), lC SizeInfo(lC)))
+            switch (sscanf_s(aC, "%[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t] %[^ \n\r\t]", lA SizeInfo(lA), lB SizeInfo(lB), lC SizeInfo(lC), lD SizeInfo(lD)))
             {
             case 1:
                 if (0 == strcmp("Dump", lA)) { Dump(stdout); return 0; }
@@ -304,6 +318,17 @@ namespace KMS
             case 3:
                 if (0 == strcmp("WriteSingleCoil"    , lA)) { WriteSingleCoil    (lB, Convert::ToBool  (lC)); return 0; }
                 if (0 == strcmp("WriteSingleRegister", lA)) { WriteSingleRegister(lB, Convert::ToUInt16(lC)); return 0; }
+                break;
+
+            case 4:
+                if ((0 == strcmp("Scope", lA)) && (0 == strcmp("Channel", lB)))
+                {
+                    if (0 == strcmp("Coil"           , lC)) { Scope_Channel(new Scope::Channel_Modbus_Coil           (), lD, mCoils           ); return 0; }
+                    if (0 == strcmp("DiscreteInput"  , lC)) { Scope_Channel(new Scope::Channel_Modbus_DiscreteInput  (), lD, mDiscreteInputs  ); return 0; }
+                    if (0 == strcmp("HoldingRegister", lC)) { Scope_Channel(new Scope::Channel_Modbus_HoldingRegister(), lD, mHoldingRegisters); return 0; }
+                    if (0 == strcmp("InputRegister"  , lC)) { Scope_Channel(new Scope::Channel_Modbus_InputRegister  (), lD, mInputRegisters  ); return 0; }
+                }
+                break;
             }
 
             return CLI::Tool::ExecuteCommand(aC);
@@ -318,6 +343,18 @@ namespace KMS
             Disconnect();
 
             return lRet;
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        void Tool::Scope_Channel(Scope::Channel_Modbus* aChannel, const char* aAddrOrName, const DI::Dictionary& aMap)
+        {
+            assert(nullptr != aChannel);
+
+            aChannel->Init(mMaster, ToAddress(aMap, aAddrOrName));
+
+            mScope.AddChannel(aChannel);
         }
 
     }

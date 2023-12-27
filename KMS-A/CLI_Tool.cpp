@@ -55,6 +55,15 @@ namespace KMS
             mCommands.AddEntry(new DI::String(aC), true);
         }
 
+        void Tool::AddModule(Module* aModule)
+        {
+            assert(nullptr != aModule);
+
+            aModule->SetConsole(&mConsole);
+
+            mModules.push_back(aModule);
+        }
+
         void Tool::ClearError() { mError_Code = 0; mError_Command = ""; }
 
         int Tool::GetExitCode()
@@ -135,6 +144,13 @@ namespace KMS
         {
             assert(nullptr != aOut);
 
+            for (auto lModule : mModules)
+            {
+                assert(nullptr != lModule);
+
+                lModule->DisplayHelp(aOut);
+            }
+
             fprintf(aOut,
                 "AbortIfError\n"
                 "ClearError\n"
@@ -152,6 +168,17 @@ namespace KMS
 
         int Tool::ExecuteCommand(const char* aC)
         {
+            for (auto lModule : mModules)
+            {
+                assert(nullptr != lModule);
+
+                auto lRet = lModule->ExecuteCommand(aC);
+                if (Module::UNKNOWN_COMMAND != lRet)
+                {
+                    return lRet;
+                }
+            }
+
             unsigned int lCount;
             unsigned int lDelay_ms;
             int          lResult = 0;

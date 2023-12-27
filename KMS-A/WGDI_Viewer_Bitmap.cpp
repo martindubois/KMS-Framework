@@ -60,6 +60,8 @@ namespace KMS
             AddEntry("Period_ms", &mPeriod_ms, false, &MD_PERIOD_ms);
             AddEntry("Title"    , &mTitle    , false, &MD_TITLE    );
             AddEntry("Zoom"     , &mZoom     , false, &MD_ZOOM     );
+
+            mWindow.SetBitmap(&mBitmap);
         }
 
         int Viewer_Bitmap::Run()
@@ -68,9 +70,9 @@ namespace KMS
 
             lFile.Open();
 
-            mWindow.mBitmap.Init(&lFile);
+            mBitmap.Init(&lFile);
 
-            mWindow.Show();
+            mWindow.Run();
 
             return 0;
         }

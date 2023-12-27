@@ -522,7 +522,7 @@ namespace KMS
                 lSrc += lLine_byte;
             }
 
-            SetBox(Point(aP1.mX_px - aScroll_px, 0), aP1, aValue, aOp);
+            SetBox(Point(aP1.mX_px - aScroll_px + 1, 0), aP1, aValue, aOp);
         }
 
         // Private

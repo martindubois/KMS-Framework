@@ -10,6 +10,9 @@
 // ===== C++ ================================================================
 #include <string>
 
+// ===== Includes ===========================================================
+#include <KMS/Callback.h>
+
 namespace KMS
 {
     namespace WGDI
@@ -20,13 +23,22 @@ namespace KMS
 
         public:
 
+            const Callback<Window> ON_ITERATE;
+            const Callback<Window> ON_STARTING;
+            const Callback<Window> ON_STOPPING;
+
             Window();
 
             virtual ~Window();
 
             void SetTitle(const char* aTitle);
 
-            virtual void Show();
+            // Call this method if the program use the main thread to create
+            // the windows and process message. If it uses a dedicated
+            // thread, connect the thread to ON_ITERATE, ON_STARTING and
+            // ON_STOPPING. This method returns when the user close the
+            // window.
+            void Run();
 
             // ===== Configurable attribute =================================
             uint16_t    mSizeX_px;
@@ -43,17 +55,20 @@ namespace KMS
 
             void Create();
 
-            void Run();
-
             virtual void Paint(HDC aDC);
 
             virtual void ValidateConfig();
 
             virtual LRESULT On_WM_PAINT();
 
+            virtual unsigned int OnStarting(void* aSender, void* aData);
+
         private:
 
             NO_COPY(Window);
+
+            unsigned int OnIterate (void* aSender, void* aData);
+            unsigned int OnStopping(void* aSender, void* aData);
 
             HINSTANCE mInstance;
             HWND      mWindow;

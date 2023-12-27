@@ -40,7 +40,10 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Window::Window()
-            : mInstance(GetModuleHandle(NULL))
+            : ON_ITERATE (this, &Window::OnIterate )
+            , ON_STARTING(this, &Window::OnStarting)
+            , ON_STOPPING(this, &Window::OnStopping)
+            , mInstance(GetModuleHandle(NULL))
             , mWindow(nullptr)
             // ===== Configurable attributes ================================
             , mTitle(DEFAULT_TITLE)
@@ -65,16 +68,9 @@ namespace KMS
         Window::~Window()
         {
             assert(nullptr != mInstance);
+            assert(nullptr == mWindow);
 
-            BOOL lRet;
-
-            if (nullptr != mWindow)
-            {
-                lRet = DestroyWindow(mWindow);
-                assert(lRet);
-            }
-
-            lRet = UnregisterClass(CLASS_NAME, mInstance);
+            auto lRet = UnregisterClass(CLASS_NAME, mInstance);
             assert(lRet);
         }
 
@@ -90,13 +86,27 @@ namespace KMS
             }
         }
 
-        void Window::Show()
+        void Window::Run()
         {
-            ValidateConfig();
+            auto lRet = OnStarting(this, nullptr);
+            KMS_EXCEPTION_ASSERT(CALLBACK_SUCCESS(lRet), RESULT_CREATE_FAILED, "Cannot create the window", "");
 
-            Create();
+            for (;;)
+            {
+                auto lRet = OnIterate(this, nullptr);
+                if (!CALLBACK_SUCCESS(lRet))
+                {
+                    break;
+                }
 
-            Run();
+                if (0 != (lRet & ICallback::FLAG_ACTION_STOP))
+                {
+                    break;
+                }
+            }
+
+            lRet = OnStopping(this, nullptr);
+            assert(CALLBACK_SUCCESS(lRet));
         }
 
         // Internal
@@ -151,28 +161,6 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(lRetB, RESULT_CREATE_FAILED, "Cannot create window", "");
         }
 
-        void Window::Run()
-        {
-            MSG lMsg;
-
-            for (;;)
-            {
-                if (!IsWindow(mWindow))
-                {
-                    mWindow = nullptr;
-                    break;
-                }
-
-                if (0 >= GetMessage(&lMsg, nullptr, 0, 0))
-                {
-                    break;
-                }
-
-                TranslateMessage(&lMsg);
-                DispatchMessage (&lMsg);
-            }
-        }
-
         void Window::Paint(HDC) {}
 
         void Window::ValidateConfig()
@@ -193,6 +181,58 @@ namespace KMS
                 Paint(lDC);
             }
             EndPaint(mWindow, &lPaint);
+
+            return 0;
+        }
+
+        unsigned int Window::OnStarting(void* aSender, void* aData)
+        {
+            ValidateConfig();
+
+            Create();
+
+            return 0;
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        unsigned int Window::OnIterate(void* aSender, void* aData)
+        {
+            unsigned int lResult = 0;
+
+            if (!IsWindow(mWindow))
+            {
+                mWindow = nullptr;
+                lResult |= ICallback::FLAG_ACTION_STOP;
+            }
+            else
+            {
+                MSG lMsg;
+
+                if (0 >= GetMessage(&lMsg, mWindow, 0, 0))
+                {
+                    lResult |= ICallback::FLAG_ACTION_STOP;
+                }
+                else
+                {
+                    TranslateMessage(&lMsg);
+                    DispatchMessage (&lMsg);
+                }
+            }
+
+            return lResult;
+        }
+
+        unsigned int Window::OnStopping(void* aSender, void* aData)
+        {
+            if (nullptr != mWindow)
+            {
+                auto lRet = DestroyWindow(mWindow);
+                assert(lRet);
+
+                mWindow = nullptr;
+            }
 
             return 0;
         }
