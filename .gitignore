@@ -27,7 +27,6 @@ Test.txt
 /.vs/
 
 Debug/
-Debug_Static/
 Release/
 Release_Static/
 x64/

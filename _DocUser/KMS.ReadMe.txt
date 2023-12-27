@@ -7,6 +7,8 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+- Remove Debug_Static configuration
+
 1.1.2-dev Windows 2023-12-21
 
 1.1.1-dev Windows 2023-12-13
