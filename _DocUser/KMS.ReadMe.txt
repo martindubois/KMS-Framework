@@ -7,7 +7,8 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
-- KMS-ModbusSim and KMS-ModbusTool moved to the KMS-Tools product
+- KMS-ComTool, KMS-ModbusSim and KMS-ModbusTool moved to the KMS-Tools
+  product
 
 1.2.3-dev Windows 2023-12-27
 - Remove Debug_Static configuration

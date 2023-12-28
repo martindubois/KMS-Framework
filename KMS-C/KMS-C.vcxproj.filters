@@ -36,22 +36,13 @@
     <ClCompile Include="Com_Port_W.cpp">
       <Filter>Source Files\Com</Filter>
     </ClCompile>
-    <ClCompile Include="Com_Tool.cpp">
-      <Filter>Source Files\Com</Filter>
-    </ClCompile>
     <ClCompile Include="Dev_Device.cpp">
       <Filter>Source Files\Dev</Filter>
     </ClCompile>
     <ClCompile Include="Dev_Device_W.cpp">
       <Filter>Source Files\Dev</Filter>
     </ClCompile>
-    <ClCompile Include="Modbus_Simulator.cpp">
-      <Filter>Source Files\Modbus</Filter>
-    </ClCompile>
     <ClCompile Include="Modbus_Slave_Com.cpp">
-      <Filter>Source Files\Modbus</Filter>
-    </ClCompile>
-    <ClCompile Include="Modbus_Tool.cpp">
       <Filter>Source Files\Modbus</Filter>
     </ClCompile>
     <ClCompile Include="WOP_Link_Port.cpp">
