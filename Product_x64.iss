@@ -93,7 +93,6 @@ Source: "KMS-FileServer\_DocUser\KMS.KMS-FileServer.ReadMe.txt" ; DestDir: "{app
 Source: "KMS-Import\_DocUser\KMS.KMS-Import.ReadMe.txt"         ; DestDir: "{app}"
 Source: "KMS-Make\_DocUser\KMS.KMS-Make.ReadMe.txt"             ; DestDir: "{app}"
 Source: "KMS-Sync\_DocUser\KMS.KMS-Sync.ReadMe.txt"             ; DestDir: "{app}"
-Source: "KMS-WOP\_DocUser\KMS.KMS-WOP.ReadMe.txt"               ; DestDir: "{app}"
 Source: "Release\*.lib"                                         ; DestDir: "{app}\Libraries\Release_x86"
 Source: "Release\KMS-A.pdb"                                     ; DestDir: "{app}\Libraries\Release_x86"
 Source: "Release\KMS-B.pdb"                                     ; DestDir: "{app}\Libraries\Release_x86"
@@ -119,4 +118,3 @@ Source: "x64\Release_Static\KMS-FileServer.exe"                 ; DestDir: "{app
 Source: "x64\Release_Static\KMS-Import.exe"                     ; DestDir: "{app}"
 Source: "x64\Release_Static\KMS-Make.exe"                       ; DestDir: "{app}"
 Source: "x64\Release_Static\KMS-Sync.exe"                       ; DestDir: "{app}"
-Source: "x64\Release_Static\KMS-WOP.exe"                        ; DestDir: "{app}"

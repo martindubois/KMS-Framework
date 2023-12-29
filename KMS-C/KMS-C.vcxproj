@@ -37,7 +37,6 @@
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="SetupDi.cpp" />
     <ClCompile Include="WOP_Link_Port.cpp" />
-    <ClCompile Include="WOP_Tool.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

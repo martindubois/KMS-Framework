@@ -48,9 +48,6 @@
     <ClCompile Include="WOP_Link_Port.cpp">
       <Filter>Source Files\WOP</Filter>
     </ClCompile>
-    <ClCompile Include="WOP_Tool.cpp">
-      <Filter>Source Files\WOP</Filter>
-    </ClCompile>
     <ClCompile Include="Install_DriverInstaller.cpp">
       <Filter>Source Files\Install</Filter>
     </ClCompile>
