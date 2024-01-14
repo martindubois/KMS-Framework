@@ -7,9 +7,10 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
+1.1.4-dev Windows 2024-01-14
 - HTTP - POST request
 
-1.2.3-dev Windows 2023-12-27
+1.1.3-dev Windows 2023-12-27
 
 1.1.1-dev Windows 2023-12-13
 - HTTP::Client
