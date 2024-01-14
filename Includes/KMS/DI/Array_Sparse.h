@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Array_Sparse.h
@@ -13,6 +13,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Container.h>
+#include <KMS/Ptr.h>
 
 namespace KMS
 {
@@ -34,7 +35,13 @@ namespace KMS
 
             const Object* GetEntry_R(int aIndex) const;
 
+            template <typename T>
+            const T* GetEntry_R(int aIndex) const;
+
             Object* GetEntry_RW(int aIndex);
+
+            template <typename T>
+            T* GetEntry_RW(int aIndex);
 
             // ===== Container ==============================================
             virtual unsigned int GetCount() const;
@@ -48,11 +55,28 @@ namespace KMS
 
         // Internal
 
-            typedef std::map<int, Container::Entry> Internal;
+            typedef std::map<int, Ptr_OF<DI::Object>> Internal;
 
             Internal mInternal;
 
         };
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        // TODO  Add exception and _Try version
+
+        template <typename T>
+        const T* Array_Sparse::GetEntry_R(int aIndex) const
+        {
+            return dynamic_cast<const T*>(GetEntry_R(aIndex));
+        }
+
+        template <typename T>
+        T* Array_Sparse::GetEntry_RW(int aIndex)
+        {
+            return dynamic_cast<T*>(GetEntry_RW(aIndex));
+        }
 
     }
 }

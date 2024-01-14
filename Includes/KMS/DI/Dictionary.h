@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Array.h
@@ -15,6 +15,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Container.h>
+#include <KMS/Ptr.h>
 
 namespace KMS
 {
@@ -30,6 +31,10 @@ namespace KMS
 
             static DI::Object* Create();
 
+            Dictionary();
+
+            void operator += (const Dictionary& aIn);
+
             void AddConstEntry(const char* aName, const Object* aE, const MetaData* aMD = nullptr);
 
             void AddEntry(const char* aName, Object* aE, bool aDelete, const MetaData* aMD = nullptr);
@@ -38,7 +43,13 @@ namespace KMS
 
             const Object* GetEntry_R(const char* aName) const;
 
+            template <typename T>
+            const T* GetEntry_R(const char* aName) const;
+
             Object* GetEntry_RW(const char* aName);
+
+            template <typename T>
+            T* GetEntry_RW(const char* aName);
 
             // ===== Container ==============================================
             virtual bool         Clear();
@@ -52,14 +63,16 @@ namespace KMS
 
         // Internal
 
-            class Entry : public Container::Entry
+            class Entry : public Ptr_OF<DI::Object>
             {
 
             public:
 
-                Entry(const Object* aObject, const MetaData* aMD);
+                Entry();
 
-                Entry(Object* aObject, bool aDelete, const MetaData* aMD);
+                void Set(const Object* aObject, const MetaData* aMD);
+
+                void Set(Object* aObject, bool aDelete, const MetaData* aMD);
 
                 const MetaData* mMetaData;
 
@@ -69,7 +82,28 @@ namespace KMS
 
             Internal mInternal;
 
+        private:
+
+            NO_COPY(Dictionary);
+
         };
+
+        // Public
+        // //////////////////////////////////////////////////////////////////
+
+        // TODO  Add Exception and _Try version
+
+        template <typename T>
+        const T* Dictionary::GetEntry_R(const char* aName) const
+        {
+            return dynamic_cast<const T*>(GetEntry_R(aName));
+        }
+
+        template <typename T>
+        T* Dictionary::GetEntry_RW(const char* aName)
+        {
+            return dynamic_cast<T*>(GetEntry_RW(aName));
+        }
 
     }
 }

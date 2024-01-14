@@ -12,6 +12,11 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Dictionary.h>
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static KMS::DI::Dictionary::Entry EMPTY_ENTRY;
+
 namespace KMS
 {
     namespace DI
@@ -22,6 +27,16 @@ namespace KMS
 
         Object* Dictionary::Create() { return new Dictionary; }
 
+        Dictionary::Dictionary() {}
+
+        void Dictionary::operator += (const Dictionary& aIn)
+        {
+            for (auto& lEntry : aIn.mInternal)
+            {
+                AddConstEntry(lEntry.first.c_str(), lEntry.second.Get());
+            }
+        }
+
         void Dictionary::AddConstEntry(const char* aName, const Object* aObject, const MetaData* aMD)
         {
             assert(nullptr != aName);
@@ -29,12 +44,12 @@ namespace KMS
             auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
-                mInternal.insert(Internal::value_type(aName, Entry(const_cast<Object*>(aObject), aMD)));
+                auto lRet = mInternal.insert(Internal::value_type(aName, EMPTY_ENTRY));
+                lRet.first->second.Set(aObject, aMD);
             }
             else
             {
-                lIt->second.mMetaData = aMD;
-                lIt->second.Set(aObject);
+                lIt->second.Set(aObject, aMD);
             }
         }
 
@@ -45,12 +60,12 @@ namespace KMS
             auto lIt = mInternal.find(aName);
             if (mInternal.end() == lIt)
             {
-                mInternal.insert(Internal::value_type(aName, Entry(aObject, aDelete, aMD)));
+                auto lRet = mInternal.insert(Internal::value_type(aName, EMPTY_ENTRY));
+                lRet.first->second.Set(aObject, aDelete, aMD);
             }
             else
             {
-                lIt->second.mMetaData = aMD;
-                lIt->second.Set(aObject, aDelete);
+                lIt->second.Set(aObject, aDelete, aMD);
             }
         }
 
@@ -187,13 +202,21 @@ namespace KMS
         // Internal
         // //////////////////////////////////////////////////////////////////
 
-        Dictionary::Entry::Entry(const Object* aObject, const MetaData* aMD)
-            : Container::Entry(aObject), mMetaData(aMD)
-        {}
+        Dictionary::Entry::Entry() : mMetaData(nullptr) {}
 
-        Dictionary::Entry::Entry(Object* aObject, bool aDelete, const MetaData* aMD)
-            : Container::Entry(aObject, aDelete), mMetaData(aMD)
-        {}
+        void Dictionary::Entry::Set(const Object* aObject, const MetaData* aMD)
+        {
+            Ptr_OF::Set(aObject);
+
+            mMetaData = aMD;
+        }
+
+        void Dictionary::Entry::Set(Object* aObject, bool aDelete, const MetaData* aMD)
+        {
+            Ptr_OF::Set(aObject, aDelete);
+
+            mMetaData = aMD;
+        }
 
     }
 }

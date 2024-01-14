@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Array.cpp
@@ -12,6 +12,11 @@
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
 
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static KMS::Ptr_OF<KMS::DI::Object> EMPTY_ENTRY;
+
 namespace KMS
 {
     namespace DI
@@ -20,9 +25,23 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array::AddConstEntry(const Object* aO) { assert(nullptr != aO); mInternal.push_back(Container::Entry(aO)); }
+        void Array::AddConstEntry(const Object* aO)
+        {
+            assert(nullptr != aO);
 
-        void Array::AddEntry(Object* aO, bool aDelete) { assert(nullptr != aO); mInternal.push_back(Container::Entry(aO, aDelete)); }
+            mInternal.push_back(EMPTY_ENTRY);
+
+            mInternal.back().Set(aO);
+        }
+
+        void Array::AddEntry(Object* aO, bool aDelete)
+        {
+            assert(nullptr != aO);
+
+            mInternal.push_back(EMPTY_ENTRY);
+
+            mInternal.back().Set(aO, aDelete);
+        }
 
         DI::Object* Array::CreateEntry()
         {

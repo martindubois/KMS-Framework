@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_Array_Sparse.cpp
@@ -9,6 +9,11 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Array_Sparse.h>
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static KMS::Ptr_OF<KMS::DI::Object> EMPTY_ENTRY;
 
 namespace KMS
 {
@@ -25,7 +30,8 @@ namespace KMS
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
             {
-                mInternal.insert(Internal::value_type(aIndex, Entry(aO)));
+                auto lRet = mInternal.insert(Internal::value_type(aIndex, EMPTY_ENTRY));
+                lRet.first->second.Set(aO);
             }
             else
             {
@@ -40,7 +46,8 @@ namespace KMS
             auto lIt = mInternal.find(aIndex);
             if (mInternal.end() == lIt)
             {
-                mInternal.insert(Internal::value_type(aIndex, Entry(aO, aDelete)));
+                auto lRet = mInternal.insert(Internal::value_type(aIndex, EMPTY_ENTRY));
+                lRet.first->second.Set(aO, aDelete);
             }
             else
             {

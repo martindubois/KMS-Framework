@@ -9,6 +9,7 @@ EDIT ON BUILD
 
 - KMS-ComTool, KMS-ModbusSim, KMS-ModbusTool and KMS-WOP moved to the
   KMS-Tools product
+- Ptr_OF
 
 1.2.3-dev Windows 2023-12-27
 - Remove Debug_Static configuration

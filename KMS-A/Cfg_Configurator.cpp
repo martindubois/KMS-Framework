@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
@@ -234,10 +234,7 @@ namespace KMS
             auto lCount = mConfigFiles.GetCount();
             if (0 < lCount)
             {
-                auto lObject = mConfigFiles.GetEntry_R(lCount - 1);
-                assert(nullptr != lObject);
-
-                auto lString = dynamic_cast<const DI::String*>(lObject);
+                auto lString = mConfigFiles.GetEntry_R<DI::String>(lCount - 1);
                 assert(nullptr != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), true);
@@ -282,10 +279,7 @@ namespace KMS
             auto lCount = mOptionalConfigFiles.GetCount();
             if (0 < lCount)
             {
-                auto lObject = mOptionalConfigFiles.GetEntry_R(lCount - 1);
-                assert(nullptr != lObject);
-
-                auto lString = dynamic_cast<const DI::String*>(lObject);
+                auto lString = mOptionalConfigFiles.GetEntry_R<DI::String>(lCount - 1);
                 assert(nullptr != lString);
 
                 ParseFile(File::Folder::NONE, lString->Get(), false);
