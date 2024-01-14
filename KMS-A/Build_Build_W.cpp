@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build_W.cpp
@@ -88,7 +88,7 @@ namespace KMS
         {
             auto lCT = new Dbg::Stats_Timer("CompileTime.Processor");
 
-            for (const DI::Container::Entry& lEntry : mProcessors.mInternal)
+            for (const auto& lEntry : mProcessors.mInternal)
             {
                 lCT->Start();
 

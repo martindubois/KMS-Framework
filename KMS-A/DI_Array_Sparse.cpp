@@ -164,11 +164,6 @@ namespace KMS
         {
             auto lResult = !mInternal.empty();
 
-            for (auto& lVT : mInternal)
-            {
-                lVT.second.Release();
-            }
-
             mInternal.clear();
 
             return lResult;
