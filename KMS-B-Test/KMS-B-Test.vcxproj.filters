@@ -24,9 +24,6 @@
     <ClCompile Include="KMS-B-Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GUI_DynamicForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="HTTP_ReactApp.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
