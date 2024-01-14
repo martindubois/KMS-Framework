@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/HTTP.h
@@ -14,11 +14,23 @@
 #define HTTP_EOH        "\r\n\r\n"
 #define HTTP_EOH_LENGTH (4)
 #define HTTP_EOL        "\r\n"
+#define HTTP_EOL_LENGTH (2)
 
 namespace KMS
 {
     namespace HTTP
     {
+
+        extern const char* FIELD_NAME_CONTENT_LENGTH;
+        extern const char* FIELD_NAME_CONTENT_TYPE;
+
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML;
+        extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN;
+
         namespace Request
         {
 
@@ -52,13 +64,6 @@ namespace KMS
             extern const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL;
 
             extern const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE;
-
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT;
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON;
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON;
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS;
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML;
-            extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN;
 
             extern const DI::String FIELD_VALUE_SERVER;
 

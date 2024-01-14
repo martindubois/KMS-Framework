@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Transaction.h
@@ -37,6 +37,14 @@ namespace KMS
                 QTY
             };
 
+            static const bool GetValue_UInt32(const DI::Dictionary& aDictionary, const char* aName, uint32_t* aOut);
+
+            static const char* GetValue_String(const DI::Dictionary& aDictionary, const char* aName);
+
+            Transaction(Net::Socket* aSocket, bool aDelete);
+
+            ~Transaction();
+
             const char* GetPath() const;
 
             Type GetType() const;
@@ -51,29 +59,27 @@ namespace KMS
 
             void SetPath(const char* aP);
 
+            void SetRequestData(DI::Object* aData, bool aDelete);
+
             void SetType(Type aType);
 
             DI::Dictionary mRequest_Header;
 
             // ===== Response ===============================================
 
-            void AddData(const DI::Dictionary& aD);
-            void AddData(const File::Folder& aF, const char* aFile);
+            const DI::Object* DetachResponseData();
 
             Result GetResult() const;
 
             void SetData(const void* aData, unsigned int aDataSize_byte);
 
+            void SetResponseData(DI::Object* aData);
+
             void SetResult(Result aR);
 
-            DI::Dictionary mResponse_Data;
             DI::Dictionary mResponse_Header;
 
         // Internal
-
-            Transaction(Net::Socket* aSocket, bool aDelete);
-
-            ~Transaction();
 
             const char* GetResultName() const;
 
@@ -91,17 +97,34 @@ namespace KMS
 
             NO_COPY(Transaction);
 
+            void Buffer_Clear();
+
+            void Buffer_Discard(unsigned int aSize_byte);
+
+            bool Buffer_Receive(unsigned int aSize_byte = 0xffffffff);
+
+            void Data_Send();
+
             void File_Receive(unsigned int aSize_byte);
 
-            unsigned int Header_Receive(unsigned int* aSize_byte);
+            unsigned int Header_Receive();
 
-            bool Request_Parse();
+            void JSON_Encode(DI::Dictionary* aHeader, const DI::Object* aIn);
+
+            void JSON_ReceiveAndDecode(const DI::Dictionary& aHeader, DI::Object** aOut);
+
+            void Request_DeleteData();
+
+            bool Request_Parse(unsigned int* aHeaderSize_byte);
+
+            void Response_DeleteData();
 
             void Response_Parse(unsigned int aSize_byte);
 
             void RetrieveTime(char* aOut, unsigned int aOutSize_byte);
 
-            char mBuffer[8192];
+            char         mBuffer[8192];
+            unsigned int mBuffer_byte;
 
             File::Binary* mFile;
             bool          mFile_Delete;
@@ -116,10 +139,16 @@ namespace KMS
 
             Type mType;
 
+            // ===== Request ================================================
+            DI::Object* mRequest_Data;
+            bool        mRequest_Data_Delete;
+
             // ===== Response ===============================================
 
             const void * mData;
             unsigned int mDataSize_byte;
+
+            DI::Object* mResponse_Data;
 
             Result mResult;
 

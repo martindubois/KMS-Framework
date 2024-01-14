@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/HTTP_Client.cpp
@@ -24,11 +24,44 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
     HTTP::Client lC0(false);
     HTTP::Client lC1(true);
     HTTP::Client lC2(true);
+    HTTP::Client lC3(false);
+    HTTP::Client lC4(false);
+    HTTP::Client lC5(false);
+    HTTP::Client lC6(false);
+
+    // GetResponseData
+    KMS_TEST_ASSERT(nullptr == lC0.GetResponseData());
 
     // Get
     lC0.Get("http://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF0);
     lC1.Get("https://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF1);
     lC2.Get("https://github.com/martindubois/KMS-Framework/releases/download/1.0.1_Windows/KMS-Framework_Windows_1.0.1.zip", &lOF2);
+    lC3.Get("http://www.kms-quebec.com/back-end/index.php/version/get");
+    lC4.Get("http://www.kms-quebec.com/back-end/index.php/card/get?Date=2024-01-10&Language=fr");
+
+    auto lObj = lC3.GetResponseData();
+    KMS_TEST_ASSERT(nullptr != lObj);
+
+    auto lDict = dynamic_cast<const DI::Dictionary*>(lObj);
+    KMS_TEST_ASSERT(nullptr != lDict);
+    KMS_TEST_COMPARE(lDict->GetCount(), 1U);
+
+    lObj = lC4.GetResponseData();
+    KMS_TEST_ASSERT(nullptr != lObj);
+
+    auto lArray = dynamic_cast<const DI::Array*>(lObj);
+    KMS_TEST_ASSERT(nullptr != lArray);
+    KMS_TEST_COMPARE(lArray->GetCount(), 1U);
+
+    // Post
+    DI::Dictionary lData;
+    lData.AddEntry("Billed"     , new DI::UInt<uint32_t>(0)   , true);
+    lData.AddEntry("Client"     , new DI::String("KMS")       , true);
+    lData.AddEntry("Date"       , new DI::String("2024-01-12"), true);
+    lData.AddEntry("Description", new DI::String("Test")      , true);
+    lData.AddEntry("Distance_km", new DI::UInt<uint32_t>(0)   , true);
+    lData.AddEntry("Hidden"     , new DI::UInt<uint32_t>(0)   , true);
+    lC5.Post("http://www.kms-quebec.com/back-end/index.php/travel/new", &lData);
 
     Net::Thread_Cleanup();
 

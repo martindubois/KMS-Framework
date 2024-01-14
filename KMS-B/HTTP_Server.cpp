@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -47,7 +47,7 @@ namespace KMS
             {
                 Transaction lTransaction(aSocket, true);
 
-                lTransaction.mResponse_Header = mResponseHeader;
+                lTransaction.mResponse_Header += mResponseHeader;
 
                 if (lTransaction.Request_Receive())
                 {

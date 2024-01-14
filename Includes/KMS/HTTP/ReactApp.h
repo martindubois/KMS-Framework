@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
@@ -15,6 +15,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Callback.h>
+#include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 #include <KMS/HTTP/FileServer.h>
 #include <KMS/HTTP/Server.h>
@@ -30,12 +31,18 @@ namespace KMS
 
         public:
 
+            static const char* DEFAULT_ROUTE;
+
+            KMS::DI::Array mRoutes;
+
             ReactApp();
 
             void AddFunction(const char* aPath, const ICallback* aCallback);
-            void AddRoute   (const char* aPath);
 
-            Server mServer;
+            void LocateFrontEnd();
+
+            FileServer mFileServer;
+            Server     mServer;
 
         private:
 
@@ -43,17 +50,13 @@ namespace KMS
 
             NO_COPY(ReactApp);
 
-            void LocateFrontEnd();
-
             unsigned int OnFunction(Transaction* aTransaction);
 
             // ===== Callbacks ==============================================
             const Callback<ReactApp> ON_REQUEST;
             unsigned int OnRequest(void* aSender, void* aData);
 
-            FileServer      mFileServer;
-            FunctionMap     mFunctions;
-            StringSet_ASCII mRoutes;
+            FunctionMap mFunctions;
 
         };
 

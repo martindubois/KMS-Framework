@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -8,11 +8,17 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/HTTP/Transaction.h>
 
 #include <KMS/HTTP/ReactApp.h>
 
 KMS_RESULT_STATIC(RESULT_INSTALLATION_ERROR);
+
+// Constantes
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::Cfg::MetaData MD_ROUTES("Routes += {RelPath}");
 
 namespace KMS
 {
@@ -22,11 +28,16 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const char* ReactApp::DEFAULT_ROUTE = "/";
+
         ReactApp::ReactApp()
-            // ===== Callbacks ==============================================
             : ON_REQUEST(this, &ReactApp::OnRequest)
         {
+            mRoutes.SetCreator(DI::String_Expand::Create);
+            mRoutes.AddEntry(new DI::String_Expand(DEFAULT_ROUTE), true);
+
             AddEntry("FileServer", &mFileServer, false);
+            AddEntry("Routes", &mRoutes, false, &MD_ROUTES);
 
             LocateFrontEnd();
 
@@ -36,13 +47,6 @@ namespace KMS
         void ReactApp::AddFunction(const char* aPath, const ICallback* aCallback)
         {
             mFunctions.insert(FunctionMap::value_type(aPath, const_cast<ICallback*>(aCallback)));
-        }
-
-        void ReactApp::AddRoute(const char* aPath)
-        {
-            assert(nullptr != aPath);
-
-            mRoutes.insert(aPath);
         }
 
         // Private
@@ -72,10 +76,11 @@ namespace KMS
                 }
                 else
                 {
-                    File::Folder lC(lExec, "front-end" SLASH "build");
-                    KMS_EXCEPTION_ASSERT(lC.DoesExist(), RESULT_INSTALLATION_ERROR, "The front-end files are not available", lC.GetPath());
-
-                    mFileServer.SetRoot(lB);
+                    File::Folder lC("front-end" SLASH "build");
+                    if (lC.DoesExist())
+                    {
+                        mFileServer.SetRoot(lB);
+                    }
                 }
             }
         }
@@ -113,16 +118,17 @@ namespace KMS
 
             auto lPath = lTransaction->GetPath();
 
-            auto lIt = mRoutes.find(lPath);
-            if (mRoutes.end() == lIt)
+            for (const auto& lEntry : mRoutes.mInternal)
             {
-                OnFunction(lTransaction);
-            }
-            else
-            {
-                mFileServer.ProcessRequest(lTransaction, "/index.html");
+                auto lRoute = dynamic_cast<const DI::String_Expand*>(lEntry.Get());
+                if (*lRoute == lPath)
+                {
+                    mFileServer.ProcessRequest(lTransaction, "/index.html");
+                    return 0;
+                }
             }
 
+            OnFunction(lTransaction);
             return 0;
         }
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Transaction.cpp
@@ -33,6 +33,76 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool Transaction::GetValue_UInt32(const DI::Dictionary& aDictionary, const char* aName, uint32_t* aOut)
+        {
+            assert(nullptr != aName);
+            assert(nullptr != aOut);
+
+            bool lResult = false;
+
+            auto lUInt = aDictionary.GetEntry_R<DI::UInt<uint32_t>>(aName);
+            if (nullptr != lUInt)
+            {
+                *aOut = lUInt->Get();
+                lResult = true;
+            }
+
+            return lResult;
+        }
+
+        const char* Transaction::GetValue_String(const DI::Dictionary& aDictionary, const char* aName)
+        {
+            assert(nullptr != aName);
+
+            const char* lResult = nullptr;
+
+            auto lString = aDictionary.GetEntry_R<DI::String>(aName);
+            if (nullptr != lString)
+            {
+                lResult = lString->Get();
+            }
+
+            return lResult;
+        }
+
+        Transaction::Transaction(Net::Socket* aSocket, bool aDelete)
+            : mData(nullptr)
+            , mDataSize_byte(0)
+            , mFile(nullptr)
+            , mMajor(1)
+            , mMinor(1)
+            , mRequest_Data(nullptr)
+            , mRequest_Data_Delete(false)
+            , mResponse_Data(nullptr)
+            , mResult(Result::OK)
+            , mSocket(aSocket)
+            , mSocket_Delete(aDelete)
+        {
+            assert(nullptr != aSocket);
+
+            Buffer_Clear();
+
+            // mRequest_Header.SetCreator(DI::String::Create);
+        }
+
+        Transaction::~Transaction()
+        {
+            assert(nullptr != mSocket);
+
+            if ((nullptr != mFile) && mFile_Delete)
+            {
+                delete mFile;
+            }
+
+            Request_DeleteData();
+            Response_DeleteData();
+
+            if (mSocket_Delete)
+            {
+                delete mSocket;
+            }
+        }
+
         const char* Transaction::GetPath() const { return mPath.c_str(); }
 
         Transaction::Type Transaction::GetType() const { return mType; }
@@ -58,9 +128,28 @@ namespace KMS
 
         void Transaction::SetPath(const char* aP) { assert(nullptr != aP); mPath = aP; }
 
+        void Transaction::SetRequestData(DI::Object* aData, bool aDelete)
+        {
+            assert(nullptr != aData);
+
+            assert(nullptr == mRequest_Data);
+
+            mRequest_Data        = aData;
+            mRequest_Data_Delete = aDelete;
+        }
+
         void Transaction::SetType(Type aT) { mType = aT; }
 
         // ===== Response ===================================================
+
+        const DI::Object* Transaction::DetachResponseData()
+        {
+            const DI::Object* lResult = mResponse_Data;
+
+            mResponse_Data = nullptr;
+
+            return lResult;
+        }
 
         Result Transaction::GetResult() const { return mResult; }
 
@@ -72,40 +161,17 @@ namespace KMS
 
         void Transaction::SetResult(Result aR) { mResult = aR; }
 
+        void Transaction::SetResponseData(DI::Object* aData)
+        {
+            assert(nullptr != aData);
+
+            assert(nullptr == mResponse_Data);
+
+            mResponse_Data = aData;
+        }
+
         // Internal
         // //////////////////////////////////////////////////////////////////
-
-        Transaction::Transaction(Net::Socket* aSocket, bool aDelete)
-            : mData(nullptr)
-            , mDataSize_byte(0)
-            , mFile(nullptr)
-            , mMajor(1)
-            , mMinor(1)
-            , mResult(Result::OK)
-            , mSocket(aSocket)
-            , mSocket_Delete(aDelete)
-        {
-            assert(nullptr != aSocket);
-
-            memset(&mBuffer, 0, sizeof(mBuffer));
-
-            // mRequest_Header.SetCreator(DI::String::Create);
-        }
-
-        Transaction::~Transaction()
-        {
-            assert(nullptr != mSocket);
-
-            if ((nullptr != mFile) && mFile_Delete)
-            {
-                delete mFile;
-            }
-
-            if (mSocket_Delete)
-            {
-                delete mSocket;
-            }
-        }
 
         const char* Transaction::GetResultName() const { return HTTP::GetResultName(mResult); }
 
@@ -122,20 +188,30 @@ namespace KMS
         {
             KMS_DBG_LOG_NOISE();
 
-            auto lSize_byte = mSocket->Receive(mBuffer, sizeof(mBuffer) - 1);
-            if ((0 >= lSize_byte) || (sizeof(mBuffer) <= lSize_byte))
+            auto lResult = Buffer_Receive();
+            if (lResult)
             {
-                return false;
+                KMS_DBG_LOG_INFO();
+                Dbg::gLog.WriteMessage(mBuffer);
+
+                unsigned int lHeaderSize_byte;
+
+                lResult = Request_Parse(&lHeaderSize_byte);
+                if (lResult)
+                {
+                    Buffer_Discard(lHeaderSize_byte);
+
+                    JSON_ReceiveAndDecode(mRequest_Header, &mRequest_Data);
+                }
             }
 
-            KMS_DBG_LOG_INFO();
-            Dbg::gLog.WriteMessage(mBuffer);
-
-            return Request_Parse();
+            return lResult;
         }
 
         void Transaction::Request_Send()
         {
+            JSON_Encode(&mRequest_Header, mRequest_Data);
+
             auto lSize_byte = sprintf_s(mBuffer,
                 "%s /%s HTTP/1.1" HTTP_EOL,
                 GetTypeName(),
@@ -144,36 +220,36 @@ namespace KMS
             lSize_byte += HTTP::Encode_Dictionary(&mRequest_Header, mBuffer + lSize_byte, sizeof(mBuffer) - lSize_byte);
 
             mSocket->Send(mBuffer, lSize_byte);
+
+            Data_Send();
         }
 
         void Transaction::Response_Receive()
         {
-            unsigned int lSize_byte;
-
-            auto lHeader_byte = Header_Receive(&lSize_byte);
+            auto lHeader_byte = Header_Receive();
                 
             Response_Parse(lHeader_byte);
+
+            Buffer_Discard(lHeader_byte + HTTP_EOH_LENGTH);
+
+            JSON_ReceiveAndDecode(mResponse_Header, &mResponse_Data);
 
             switch (mResult)
             {
             case Result::OK:
                 if (nullptr != mFile)
                 {
-                    lHeader_byte += HTTP_EOH_LENGTH;
-
-                    auto lChunk_byte = lSize_byte - lHeader_byte;
-                    if (0 < lChunk_byte)
+                    if (0 < mBuffer_byte)
                     {
-                        mFile->Write(mBuffer + lHeader_byte, lChunk_byte);
+                        mFile->Write(mBuffer, mBuffer_byte);
                     }
 
-                    auto lObj = mResponse_Header.GetEntry_R(Response::FIELD_NAME_CONTENT_LENGTH);
-                    if (nullptr != lObj)
-                    {
-                        auto lContentLength = dynamic_cast<const DI::UInt<uint32_t>*>(lObj);
-                        assert(nullptr != lContentLength);
+                    uint32_t lLength_byte;
 
-                        File_Receive(lContentLength->Get() - lChunk_byte);
+                    auto lRet = GetValue_UInt32(mResponse_Header, FIELD_NAME_CONTENT_LENGTH, &lLength_byte);
+                    if (lRet && (mBuffer_byte < lLength_byte))
+                    {
+                        File_Receive(lLength_byte - mBuffer_byte);
                     }
                 }
                 break;
@@ -186,18 +262,7 @@ namespace KMS
 
         void Transaction::Response_Reply()
         {
-            if (!mResponse_Data.IsEmpty())
-            {
-                char lData[1024];
-
-                auto lSize_byte = JSON::Encode_Dictionary(&mResponse_Data, lData, sizeof(lData));
-
-                mResponse_Header.AddEntry(Response::FIELD_NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte), true);
-
-                mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON);
-
-                SetData(lData, lSize_byte);
-            }
+            JSON_Encode(&mResponse_Header, mResponse_Data);
 
             char lTime[64];
 
@@ -214,6 +279,70 @@ namespace KMS
 
             mSocket->Send(mBuffer, lSize_byte);
 
+            Data_Send();
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        void Transaction::Buffer_Clear()
+        {
+            memset(&mBuffer, 0, sizeof(mBuffer));
+
+            mBuffer_byte = 0;
+        }
+
+        void Transaction::Buffer_Discard(unsigned int aSize_byte)
+        {
+            assert(mBuffer_byte >= aSize_byte);
+
+            if (mBuffer_byte == aSize_byte)
+            {
+                Buffer_Clear();
+            }
+            else
+            {
+                mBuffer_byte -= aSize_byte;
+
+                memmove(mBuffer, mBuffer + aSize_byte, mBuffer_byte);
+                memset(mBuffer + mBuffer_byte, 0, sizeof(mBuffer) - mBuffer_byte);
+            }
+        }
+
+        bool Transaction::Buffer_Receive(unsigned int aSize_byte)
+        {
+            bool lResult = true;
+
+            if (0 < aSize_byte)
+            {
+                lResult = false;
+
+                unsigned int lSize_byte = sizeof(mBuffer) - mBuffer_byte - 1;
+                if (0 < lSize_byte)
+                {
+                    if (0xffffffff != aSize_byte)
+                    {
+                        if (lSize_byte < aSize_byte) { return false; }
+
+                        lSize_byte = aSize_byte;
+                    }
+
+                    auto lRet_byte = mSocket->Receive(mBuffer + mBuffer_byte, lSize_byte);
+                    if ((0 < lRet_byte) && (lSize_byte >= lRet_byte))
+                    {
+                        mBuffer_byte += lRet_byte;
+                        lResult = true;
+                    }
+                }
+            }
+
+            return lResult;
+        }
+
+        void Transaction::Data_Send()
+        {
+            assert(nullptr != mSocket);
+
             if (0 < mDataSize_byte)
             {
                 assert(nullptr != mData);
@@ -225,9 +354,6 @@ namespace KMS
                 mSocket->Send(mFile);
             }
         }
-
-        // Private
-        // //////////////////////////////////////////////////////////////////
 
         // aSize_byte  The size of data to read in byte. This size may be
         //             smaller than the file size because part of data may
@@ -256,40 +382,108 @@ namespace KMS
             mFile->Close();
         }
 
-        // aSize_byte  The function put the total received size there.
-        //
         // Return  Header size (in byte) without the end of header mark
         //         (HTTP_EOH_LENGTH)
-        unsigned int Transaction::Header_Receive(unsigned int* aSize_byte)
+        unsigned int Transaction::Header_Receive()
         {
-            assert(nullptr != aSize_byte);
+            Buffer_Clear();
 
-            memset(&mBuffer, 0, sizeof(mBuffer));
-
-            char       * lEnd;
-            unsigned int lSize_byte = 0;
+            char* lEnd;
 
             do
             {
-                auto lToRead_byte = sizeof(mBuffer) - lSize_byte - 1;
-
-                KMS_EXCEPTION_ASSERT(0 < lToRead_byte, RESULT_HTTP_ERROR, "HTTP header too long", lToRead_byte);
-
-                auto lRet_byte = mSocket->Receive(mBuffer + lSize_byte, static_cast<unsigned int>(lToRead_byte));
-                KMS_EXCEPTION_ASSERT((0 < lRet_byte) || (sizeof(mBuffer) > lRet_byte), RESULT_RECEIVE_FAILED, "Socket::Receive failed", lRet_byte);
-
-                lSize_byte += lRet_byte;
+                auto lRet = Buffer_Receive();
+                KMS_EXCEPTION_ASSERT(lRet, RESULT_RECEIVE_FAILED, "Socket::Receive failed", "");
             }
             while (nullptr == (lEnd = strstr(mBuffer, HTTP_EOH)));
-
-            *aSize_byte = lSize_byte;
 
             return static_cast<unsigned int>(lEnd - mBuffer);
         }
 
-        // Return  false  NOT TESTED
-        bool Transaction::Request_Parse()
+        void Transaction::JSON_Encode(DI::Dictionary* aHeader, const DI::Object* aIn)
         {
+            assert(nullptr != aHeader);
+
+            if (nullptr != aIn)
+            {
+                char lData[8192];
+
+                auto lDictionary = dynamic_cast<const DI::Dictionary*>(aIn);
+                assert(nullptr != lDictionary);
+
+                auto lSize_byte = JSON::Encode_Dictionary(lDictionary, lData, sizeof(lData));
+
+                aHeader->AddEntry(FIELD_NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte), true);
+
+                aHeader->AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON);
+
+                SetData(lData, lSize_byte);
+            }
+        }
+
+        void Transaction::JSON_ReceiveAndDecode(const DI::Dictionary& aHeader, DI::Object** aOut)
+        {
+            assert(nullptr != aOut);
+
+            auto lType = GetValue_String(aHeader, HTTP::FIELD_NAME_CONTENT_TYPE);
+            if ((nullptr != lType) && (0 == strcmp(lType, HTTP::FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON)))
+            {
+                uint32_t lLength_byte = 0;
+
+                auto lRet = GetValue_UInt32(aHeader, HTTP::FIELD_NAME_CONTENT_LENGTH, &lLength_byte);
+                if ((!lRet) && (0 < mBuffer_byte))
+                {
+                    char* lEnd = nullptr;
+
+                    lLength_byte = strtoul(mBuffer, &lEnd, 16);
+                    assert(nullptr != lEnd);
+
+                    auto lParsed_byte = static_cast<unsigned int>(lEnd - mBuffer) + 4;
+
+                    Buffer_Discard(lParsed_byte);
+                }
+
+                if (0 < lLength_byte)
+                {
+                    bool lRet = true;
+
+                    if (lLength_byte > mBuffer_byte)
+                    {
+                        auto lToRead_byte = lLength_byte - mBuffer_byte;
+
+                        lRet = Buffer_Receive(lToRead_byte);
+                    }
+
+                    if (lRet)
+                    {
+                        auto lRet_byte = JSON::Decode(aOut, mBuffer, lLength_byte);
+                        assert(lLength_byte >= lRet_byte);
+
+                        Buffer_Discard(lLength_byte);
+                    }
+                }
+            }
+        }
+
+        void Transaction::Request_DeleteData()
+        {
+            if (nullptr != mRequest_Data)
+            {
+                if (mRequest_Data_Delete)
+                {
+                    delete mRequest_Data;
+                    mRequest_Data_Delete = false;
+                }
+
+                mRequest_Data = nullptr;
+            }
+        }
+
+        // Return  false  NOT TESTED
+        bool Transaction::Request_Parse(unsigned int* aHeaderSize_byte)
+        {
+            assert(nullptr != aHeaderSize_byte);
+
             char lPath[PATH_LENGTH];
             char lCmd[1024];
 
@@ -308,14 +502,29 @@ namespace KMS
             mPath = lPath;
             mType = lType;
 
-            auto lPtr = strchr(mBuffer, '\n');
-            assert(nullptr != lPtr);
+            auto lPtr = strstr(mBuffer, HTTP_EOL);
+            if (nullptr == lPtr) { return false; }
 
-            auto lIndex = static_cast<unsigned int>((lPtr - mBuffer) + 1);
+            auto lEnd = strstr(lPtr, HTTP_EOH);
+            if (nullptr == lEnd) { return false; }
 
-            HTTP::Decode_Dictionary(&mRequest_Header, mBuffer + lIndex, sizeof(mBuffer) - lIndex);
+            auto lIndex = static_cast<unsigned int>((lPtr - mBuffer) + HTTP_EOL_LENGTH);
+            auto lSize_byte = static_cast<unsigned int>(lEnd - lPtr) - HTTP_EOL_LENGTH;
+
+            *aHeaderSize_byte = static_cast<unsigned int>(lEnd - mBuffer) + HTTP_EOH_LENGTH;
+
+            HTTP::Decode_Dictionary(&mRequest_Header, mBuffer + lIndex,lSize_byte);
 
             return true;
+        }
+
+        void Transaction::Response_DeleteData()
+        {
+            if (nullptr != mResponse_Data)
+            {
+                delete mResponse_Data;
+                mResponse_Data = nullptr;
+            }
         }
 
         void Transaction::Response_Parse(unsigned int aSize_byte)

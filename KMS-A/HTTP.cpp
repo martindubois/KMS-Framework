@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/HTTP.cpp
@@ -36,6 +36,16 @@ namespace KMS
     namespace HTTP
     {
 
+        const char* FIELD_NAME_CONTENT_LENGTH = "Content-Length";
+        const char* FIELD_NAME_CONTENT_TYPE   = "Content-Type";
+
+        const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT("application/javascript");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON      ("application/json");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON          ("image/x-icon");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS              ("text/css");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML             ("text/html; charset=utf-8");
+        const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN            ("text/plain; charset=utf-8");
+
         namespace Request
         {
 
@@ -60,8 +70,6 @@ namespace KMS
 
             const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
             const char* FIELD_NAME_CONTENT_DISPOSITION         = "Content-Disposition";
-            const char* FIELD_NAME_CONTENT_LENGTH              = "Content-Length";
-            const char* FIELD_NAME_CONTENT_TYPE                = "Content-Type";
             const char* FIELD_NAME_DATE                        = "Date";
             const char* FIELD_NAME_LOCATION                    = "Location";
             const char* FIELD_NAME_SERVER                      = "Server";
@@ -69,13 +77,6 @@ namespace KMS
             const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL("*");
 
             const DI::String FIELD_VALUE_CONTENT_DISPOSITION_INLINE("inline");
-
-            const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT("application/javascript");
-            const DI::String FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON      ("application/json");
-            const DI::String FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON          ("image/x-icon");
-            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_CSS              ("text/css");
-            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML             ("text/html; charset=utf-8");
-            const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN            ("text/plain; charset=utf-8");
 
             const DI::String FIELD_VALUE_SERVER("KMS-Framework");
 

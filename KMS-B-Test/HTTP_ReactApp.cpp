@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/HTTP_ReactApp.cpp
@@ -52,8 +52,6 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
     TestApp lTA;
 
     lRA.mServer.mSocket.mAllowedRanges.AddEntry(new DI::NetAddressRange("127.0.0.1"), true);
-
-    lRA.AddRoute("/");
 
     lRA.AddFunction("/Version/GetData", &lTA.ON_GET_VERSION);
 
@@ -128,7 +126,11 @@ unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 
     lTransaction->mResponse_Header.AddConstEntry(HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &HTTP::Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL);
 
-    lTransaction->mResponse_Data.AddEntry(NAME_VERSION, new DI::String(lVersion), true);
+    auto lData = new DI::Dictionary;
+
+    lData->AddEntry(NAME_VERSION, new DI::String(lVersion), true);
+
+    lTransaction->SetResponseData(lData);
 
     return 0;
 }

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_FileServer.cpp
@@ -47,28 +47,28 @@ namespace KMS
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
+            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
         }
 
         void FileServer::FileType_Image_XIcon(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
+            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
         }
 
         void FileServer::FileType_Text_CSS(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
+            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
         }
 
         void FileServer::FileType_Text_HTML(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
+            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
         }
 
         void FileServer::FileType_Text_Plain(Transaction* aTransaction)
@@ -76,7 +76,7 @@ namespace KMS
             assert(nullptr != aTransaction);
 
             aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_DISPOSITION, &Response::FIELD_VALUE_CONTENT_DISPOSITION_INLINE);
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_TYPE, &Response::FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
+            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -212,7 +212,7 @@ namespace KMS
             assert(nullptr != lFile);
 
             auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
-            aT->mResponse_Header.AddEntry(Response::FIELD_NAME_CONTENT_LENGTH, lValue, true);
+            aT->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_LENGTH, lValue, true);
 
             aT->SetFile(lFile, true);
         }
