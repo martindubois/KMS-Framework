@@ -7,6 +7,7 @@ File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 EDIT ON BUILD
 
+1.1.4-dev Linux 2024-01-15
 1.1.4-dev Windows 2024-01-14
 
 1.0.7 Windows 2023-09-27

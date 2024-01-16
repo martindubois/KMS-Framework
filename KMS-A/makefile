@@ -1,6 +1,6 @@
 
 # Author    KMS - Martin Dubois, P. Eng.
-# Copyright (C) 2022-2023 KMS
+# Copyright (C) 2022-2024 KMS
 # License   http://www.apache.org/licenses/LICENSE-2.0
 # Product   KMS-Framework
 # File      KMS-A/makefile
@@ -17,6 +17,7 @@ SOURCES = Build_Build_L.cpp       \
 		  Callback.cpp            \
 		  Cfg_Configurator.cpp    \
 		  Cfg_MetaData.cpp        \
+		  CLI_Module.cpp          \
 		  CLI_Tool_L.cpp          \
 		  CLI_Tool.cpp            \
           Console_Color_L.cpp     \

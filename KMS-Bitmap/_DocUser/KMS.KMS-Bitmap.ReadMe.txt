@@ -5,7 +5,7 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Build/_DocUser/KMS.KMS-Bitmap.ReadMe.txt
 
-EDIT ON BUILD
+EDIT ON BUILD - Windows
 
 1.1.4-dev Windows 2024-01-14
 
