@@ -7,6 +7,8 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
+- When building OSIndependent project, Processors are not required.
+
 1.1.4-dev Linux 2024-01-15
 1.1.4-dev Windows 2024-01-14
 
