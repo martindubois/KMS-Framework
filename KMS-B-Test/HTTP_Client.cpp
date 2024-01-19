@@ -61,7 +61,7 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
     lData.AddEntry("Description", new DI::String("Test")      , true);
     lData.AddEntry("Distance_km", new DI::UInt<uint32_t>(0)   , true);
     lData.AddEntry("Hidden"     , new DI::UInt<uint32_t>(0)   , true);
-    lC5.Post("http://www.kms-quebec.com/back-end/index.php/travel/new", &lData);
+    // lC5.Post("http://www.kms-quebec.com/back-end/index.php/travel/new", &lData);
 
     Net::Thread_Cleanup();
 

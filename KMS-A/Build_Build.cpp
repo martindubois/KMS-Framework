@@ -253,7 +253,11 @@ namespace KMS
                 KMS_EXCEPTION_ASSERT(0 == mEmbedded.GetLength(), RESULT_INVALID_CONFIG, "Embedded driver are not supported", "");
             }
 
-            KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty()      , RESULT_INVALID_CONFIG, "No processor", "");
+            if (!mOSIndependent)
+            {
+                KMS_EXCEPTION_ASSERT(!mProcessors.IsEmpty(), RESULT_INVALID_CONFIG, "No processor", "");
+            }
+
             KMS_EXCEPTION_ASSERT(0 < mVersionFile.GetLength(), RESULT_INVALID_CONFIG, "Invalid version file", "");
         }
 

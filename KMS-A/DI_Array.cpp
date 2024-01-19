@@ -15,7 +15,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::Ptr_OF<KMS::DI::Object> EMPTY_ENTRY;
+static const KMS::Ptr_OF<KMS::DI::Object> EMPTY_ENTRY(nullptr, false);
 
 namespace KMS
 {

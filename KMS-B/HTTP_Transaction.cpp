@@ -77,6 +77,7 @@ namespace KMS
             , mResult(Result::OK)
             , mSocket(aSocket)
             , mSocket_Delete(aDelete)
+            , mType(Type::GET)
         {
             assert(nullptr != aSocket);
 

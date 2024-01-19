@@ -5,8 +5,11 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
-EDIT ON BUILD - Windows
+EDIT ON BUILD
 
+1.1.5-dev Linux 2024-01-18
+
+1.1.4-dev Linux 2024-01-15
 1.1.4-dev Windows 2024-01-14
 - HTTP - POST request
 

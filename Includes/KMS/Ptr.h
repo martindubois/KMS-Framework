@@ -114,7 +114,7 @@ namespace KMS
 
     // Internal
 
-        Ptr_OF(Ptr_OF& aIn);
+        Ptr_OF(const Ptr_OF& aIn);
 
         void operator = (Ptr_OF& aIn);
 
@@ -302,11 +302,14 @@ namespace KMS
     // //////////////////////////////////////////////////////////////////////
 
     template <typename T>
-    Ptr_OF<T>::Ptr_OF(Ptr_OF& aIn)
+    Ptr_OF<T>::Ptr_OF(const Ptr_OF& aIn)
     {
         mFlags.mConst = aIn.mFlags.mConst;
         mFlags.mDelete = aIn.mFlags.mDelete;
-        mInternal = aIn.Detach();
+
+        auto lIn = const_cast<Ptr_OF*>(&aIn);
+
+        mInternal = lIn->Detach();
     }
 
     template <typename T>

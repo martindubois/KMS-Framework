@@ -15,7 +15,7 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static KMS::DI::Dictionary::Entry EMPTY_ENTRY;
+static const KMS::DI::Dictionary::Entry EMPTY_ENTRY;
 
 namespace KMS
 {
