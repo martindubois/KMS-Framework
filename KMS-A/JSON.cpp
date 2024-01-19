@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
+#include <KMS/DI/Boolean.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
 #include <KMS/Text/ReadPtr.h>
@@ -132,6 +133,7 @@ void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
     lPtr.SkipBlank();
 
     DI::Array         * lArray;
+    DI::Boolean       * lBoolean;
     DI::Dictionary    * lDictionary;
     DI::String        * lString;
     DI::UInt<uint32_t>* lUInt32;
@@ -169,6 +171,13 @@ void Decode(DI::Object** aObject, Text::ReadPtr* aPtr)
         lUInt32 = new DI::UInt<uint32_t>;
         Decode_Value(lUInt32, &lPtr);
         *aObject = lUInt32;
+        break;
+
+    case 'f':
+    case 't':
+        lBoolean = new DI::Boolean;
+        Decode_Value(lBoolean, &lPtr);
+        *aObject = lBoolean;
         break;
 
     default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid JSON format", "");
