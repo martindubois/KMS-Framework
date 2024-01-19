@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS
+
 1.1.6-dev Windows 2024-01-18
 
 1.1.5-dev Linux 2024-01-18
