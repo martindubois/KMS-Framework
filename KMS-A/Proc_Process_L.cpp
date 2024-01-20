@@ -68,6 +68,26 @@ namespace KMS
             }
         }
 
+        void Process::Wait(unsigned int aTimeout_ms)
+        {
+            unsigned int lTimeout_ms = aTimeout_ms;
+
+            while (IsRunning())
+            {
+                KMS_EXCEPTION_ASSERT(0 < lTimeout_ms, RESULT_TIMEOUT, "The process did not complete in the allowed time", aTimeout_ms);
+
+                unsigned int lSleep_ms = 100;
+                if (lTimeout_ms < lSleep_ms)
+                {
+                    lSleep_ms = lTimeout_ms;
+                }
+
+                usleep(lSleep_ms * 1000);
+
+                lTimeout_ms -= lSleep_ms;
+            }
+        }
+
         // Pirvate
         // //////////////////////////////////////////////////////////////////
 
