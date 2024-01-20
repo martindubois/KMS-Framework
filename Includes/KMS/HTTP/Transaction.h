@@ -55,7 +55,7 @@ namespace KMS
 
             // ===== Request ================================================
 
-            const DI::Dictionary& GetParameters() const;
+            const DI::Object* GetRequestData() const;
 
             void SetPath(const char* aP);
 

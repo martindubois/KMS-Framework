@@ -68,11 +68,14 @@ namespace KMS
         namespace Response
         {
 
-            const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
-            const char* FIELD_NAME_CONTENT_DISPOSITION         = "Content-Disposition";
-            const char* FIELD_NAME_DATE                        = "Date";
-            const char* FIELD_NAME_LOCATION                    = "Location";
-            const char* FIELD_NAME_SERVER                      = "Server";
+            const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS = "Access-Control-Allow-Headers";
+            const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN  = "Access-Control-Allow-Origin";
+            const char* FIELD_NAME_CONTENT_DISPOSITION          = "Content-Disposition";
+            const char* FIELD_NAME_DATE                         = "Date";
+            const char* FIELD_NAME_LOCATION                     = "Location";
+            const char* FIELD_NAME_SERVER                       = "Server";
+
+            const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT("Origin, X-Requested-With, Content-Type, Accept");
 
             const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL("*");
 

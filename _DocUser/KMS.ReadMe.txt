@@ -9,6 +9,8 @@ EDIT ON BUILD
 
 - Add Args folder to Linux export
 
+1.1.7-dev Windows 2024-01-19
+
 1.1.5-dev Linux 2024-01-18
 
 1.1.4-dev Linux 2024-01-15

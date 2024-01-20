@@ -53,6 +53,7 @@ namespace KMS
         namespace Response
         {
 
+            extern const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS;
             extern const char* FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN;
             extern const char* FIELD_NAME_CONTENT_DISPOSITION;
             extern const char* FIELD_NAME_CONTENT_LENGTH;
@@ -60,6 +61,8 @@ namespace KMS
             extern const char* FIELD_NAME_DATE;
             extern const char* FIELD_NAME_LOCATION;
             extern const char* FIELD_NAME_SERVER;
+
+            extern const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT;
 
             extern const DI::String FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL;
 

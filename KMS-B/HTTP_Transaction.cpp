@@ -127,6 +127,8 @@ namespace KMS
 
         // ===== Request ====================================================
 
+        const DI::Object* Transaction::GetRequestData() const { return mRequest_Data; }
+
         void Transaction::SetPath(const char* aP) { assert(nullptr != aP); mPath = aP; }
 
         void Transaction::SetRequestData(DI::Object* aData, bool aDelete)

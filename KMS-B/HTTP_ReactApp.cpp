@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/HTTP/HTTP.h>
 #include <KMS/HTTP/Transaction.h>
 
 #include <KMS/HTTP/ReactApp.h>
@@ -98,10 +99,18 @@ namespace KMS
             }
             else
             {
-                auto lRet = lIt->second->Send(this, aTransaction);
-                if (!CALLBACK_SUCCESS(lRet))
+                switch (aTransaction->GetType())
                 {
-                    aTransaction->SetResult(Result::INTERNAL_SERVER_ERROR);
+                case Transaction::Type::OPTIONS:
+                    aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS, &Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT);
+                    break;
+
+                default:
+                    auto lRet = lIt->second->Send(this, aTransaction);
+                    if (!CALLBACK_SUCCESS(lRet))
+                    {
+                        aTransaction->SetResult(Result::INTERNAL_SERVER_ERROR);
+                    }
                 }
             }
 
