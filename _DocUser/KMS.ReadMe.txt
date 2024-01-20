@@ -7,6 +7,7 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
+1.1.7-dev Linux 2024-01-20
 - Add Args folder to Linux export
 
 1.1.7-dev Windows 2024-01-19

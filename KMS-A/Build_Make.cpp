@@ -95,11 +95,13 @@ namespace KMS
 
         const char* Make::SILENCE[]
         {
+            NAME_OS "Folders",
             NAME_OS "Processors",
 
             NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
             NO_OS_0 "Configurations", NO_OS_1 "Configurations",
             NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
+            NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
             NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
             NO_OS_0 "Processors"    , NO_OS_1 "Processors"    ,
             NO_OS_0 "Tests"         , NO_OS_1 "Tests"         ,

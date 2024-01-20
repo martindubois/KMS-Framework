@@ -7,6 +7,8 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD
 
+1.1.7-dev Linux 2024-01-20
+
 1.1.7-dev Windows 2024-01-19
 - HTTP::ReactApp processes OPTIONS request
 
