@@ -9,6 +9,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <thread>
+
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Proc/Process.h>
@@ -126,6 +129,25 @@ namespace KMS
             Open(aFolder, aFile, nullptr);
 
             Detach();
+        }
+
+        void Browser::Wait(unsigned int aTimeout_ms)
+        {
+            unsigned int lTime_ms = 0;
+
+            while (aTimeout_ms >= lTime_ms)
+            {
+                if (!IsOpen())
+                {
+                    return;
+                }
+
+                std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+                lTime_ms += 100;
+            }
+
+            KMS_EXCEPTION(RESULT_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
         }
 
         // Private

@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <thread>
+
 // ===== Includes ===========================================================
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/NetAddressRange.h>
@@ -66,13 +69,7 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 
     for (unsigned int i = 0; i < 10; i++)
     {
-        #ifdef _KMS_LINUX_
-            sleep(1);
-        #endif
-
-        #ifdef _KMS_WINDOWS_
-            Sleep(1000);
-        #endif
+        std::this_thread::sleep_for(std::chrono::seconds(1));
 
         if (lTA.GetResult())
         {

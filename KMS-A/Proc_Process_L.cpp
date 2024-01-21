@@ -13,6 +13,9 @@
 // ===== System =============================================================
 #include <sys/wait.h>
 
+// ===== C++ ================================================================
+#include <thread>
+
 // ===== Includes ===========================================================
 #include <KMS/Proc/Process.h>
 
@@ -82,7 +85,7 @@ namespace KMS
                     lSleep_ms = lTimeout_ms;
                 }
 
-                usleep(lSleep_ms * 1000);
+                std::this_thread::sleep_for(std::chrono::milliseconds(lSleep_ms));
 
                 lTimeout_ms -= lSleep_ms;
             }

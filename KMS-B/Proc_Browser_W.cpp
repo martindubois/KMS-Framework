@@ -30,24 +30,6 @@ namespace KMS
             return (nullptr != mProcess) && mProcess->IsRunning();
         }
 
-        void Browser::Wait(unsigned int aTimeout_ms)
-        {
-            unsigned int lTime_ms = 0;
-
-            while (aTimeout_ms >= lTime_ms)
-            {
-                if (!IsOpen())
-                {
-                    return;
-                }
-
-                Sleep(100); // ms
-                lTime_ms += 100;
-            }
-
-            KMS_EXCEPTION(RESULT_TIMEOUT, "The browser dit not close in allowed time", aTimeout_ms);
-        }
-
         // Private
         // //////////////////////////////////////////////////////////////////
 

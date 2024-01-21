@@ -18,7 +18,6 @@ SOURCES = Build_Build_L.cpp       \
 		  Cfg_Configurator.cpp    \
 		  Cfg_MetaData.cpp        \
 		  CLI_Module.cpp          \
-		  CLI_Tool_L.cpp          \
 		  CLI_Tool.cpp            \
           Console_Color_L.cpp     \
 		  Console_Console.cpp     \

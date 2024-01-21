@@ -12,6 +12,9 @@
 // ===== C ==================================================================
 #include <signal.h>
 
+// ===== C++ ================================================================
+#include <thread>
+
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
 #include <KMS/Console/Color.h>
@@ -288,6 +291,11 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        void Tool::Delay(unsigned int aDelay_ms)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(aDelay_ms));
         }
 
         void Tool::ExitIfError()
