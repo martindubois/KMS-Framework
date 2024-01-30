@@ -58,8 +58,7 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 
     lRA.AddFunction("/Version/GetData", &lTA.ON_GET_VERSION);
 
-    lRA.mServer.mSocket.SetLocalPort(8080);
-    lRA.mServer.mThread.Start();
+    lRA.mServer.Start();
 
     lB.SetPrefered(Proc::Browser::Type::EDGE);
 
@@ -83,7 +82,7 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
 
     lB.Close();
 
-    lRA.mServer.mThread.StopAndWait(2000);
+    lRA.mServer.StopAndWait(2000);
 
     KMS_TEST_OUTPUT_END();
 }

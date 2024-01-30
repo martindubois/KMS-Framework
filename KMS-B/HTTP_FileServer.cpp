@@ -101,7 +101,7 @@ namespace KMS
 
                 KMS_MAIN_VALIDATE;
 
-                lS.mThread.Start();
+                lS.Start();
 
                 std::cout << "Press ENTER to stop the file server" << std::endl;
 
@@ -111,7 +111,7 @@ namespace KMS
                 assert(nullptr != lRet);
                 (void)lRet;
 
-                lS.mThread.StopAndWait(2000);
+                lS.StopAndWait(2000);
 
                 lResult = 0;
             }

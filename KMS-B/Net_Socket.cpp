@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket.cpp
@@ -288,6 +288,13 @@ namespace KMS
                 sprintf_s(lMsg, "Cannot bind the socket to %s:%u (NOT TESTED)", lLA.GetName(), lLA.GetPortNumber());
                 KMS_EXCEPTION(RESULT_SOCKET_BIND_FAILED, lMsg, lRet);
             }
+
+            socklen_t lSize_byte = lLA.GetInternalSize();
+
+            lRet = getsockname(mSocket, lLA, &lSize_byte);
+            KMS_EXCEPTION_ASSERT((0 == lRet) && (lLA.GetInternalSize() == lSize_byte), RESULT_SOCKET_BIND_FAILED, "getsockname failed", lSize_byte);
+
+            mLocalAddress = lLA;
         }
 
         void Socket::Configure()

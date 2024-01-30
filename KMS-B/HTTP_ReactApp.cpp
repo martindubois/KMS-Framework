@@ -77,7 +77,7 @@ namespace KMS
                 }
                 else
                 {
-                    File::Folder lC("front-end" SLASH "build");
+                    File::Folder lC(lProduct, "front-end" SLASH "build");
                     if (lC.DoesExist())
                     {
                         mFileServer.SetRoot(lB);
