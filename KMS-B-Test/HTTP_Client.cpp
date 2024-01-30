@@ -37,7 +37,7 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
     lC1.Get("https://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF1);
     lC2.Get("https://github.com/martindubois/KMS-Framework/releases/download/1.0.1_Windows/KMS-Framework_Windows_1.0.1.zip", &lOF2);
     lC3.Get("http://www.kms-quebec.com/back-end/index.php/version/get");
-    lC4.Get("http://www.kms-quebec.com/back-end/index.php/card/get?Date=2024-01-10&Language=fr");
+    lC4.Get("http://www.kms-quebec.com/back-end/index.php/card/get?Date=2024-01-10");
 
     auto lObj = lC3.GetResponseData();
     KMS_TEST_ASSERT(nullptr != lObj);
@@ -51,7 +51,7 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
 
     auto lArray = dynamic_cast<const DI::Array*>(lObj);
     KMS_TEST_ASSERT(nullptr != lArray);
-    KMS_TEST_COMPARE(lArray->GetCount(), 1U);
+    KMS_TEST_COMPARE(lArray->GetCount(), 2U);
 
     // Post
     DI::Dictionary lData;
