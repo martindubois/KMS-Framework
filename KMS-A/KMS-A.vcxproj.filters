@@ -387,9 +387,6 @@
     <ClCompile Include="CLI_Tool.cpp">
       <Filter>Source Files\CLI</Filter>
     </ClCompile>
-    <ClCompile Include="CLI_Tool_W.cpp">
-      <Filter>Source Files\CLI</Filter>
-    </ClCompile>
     <ClCompile Include="File_Binary_W.cpp">
       <Filter>Source Files\File</Filter>
     </ClCompile>
