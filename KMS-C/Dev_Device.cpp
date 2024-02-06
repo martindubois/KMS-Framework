@@ -32,6 +32,7 @@ namespace KMS
         Device::Device()
             : mIndex(INDEX_DEFAULT)
             , mLink (LINK_DEFAULT)
+            , mHandle(INVALID_HANDLE_VALUE)
         {
             AddEntry("Index", &mIndex, false, &MD_INDEX);
             AddEntry("Link" , &mLink , false, &MD_LINK);
@@ -46,6 +47,12 @@ namespace KMS
                 Disconnect();
             }
         }
+
+        // ===== IDevice ====================================================
+
+        bool Device::IsConnected() const { return INVALID_HANDLE_VALUE != mHandle; }
+
+        void Device::ClearReadBuffer() { assert(false); }
 
         // ===== DI::Container ==============================================
 

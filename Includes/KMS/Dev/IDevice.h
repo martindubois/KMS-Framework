@@ -43,6 +43,12 @@ namespace KMS
 
             virtual bool Write(const void* aIn, unsigned int aInSize_byte) = 0;
 
+            #ifdef _KMS_LINUX_
+
+                virtual operator int () = 0;
+
+            #endif
+
             #ifdef _KMS_WINDOWS_
 
                 virtual operator HANDLE () = 0;

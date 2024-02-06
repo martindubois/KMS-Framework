@@ -13,5 +13,6 @@ CFLAGS = -DOS_NAME=\"$(UNAME)\" -DOS_PROC=\"$(PROCESSOR)\" @../Args/$(CONFIG).ar
 
 KMS_A_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-A.a
 KMS_B_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-B.a
+KMS_C_A = ../Libraries/$(CONFIG)_$(PROCESSOR)/KMS-C.a
 
 INCLUDES = -I ../Includes
