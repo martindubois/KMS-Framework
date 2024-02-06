@@ -38,7 +38,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
 static const KMS::Cfg::MetaData MD_CLEAN_EXTENSIONS("CleanExtensions += {Name}");
 static const KMS::Cfg::MetaData MD_COMPONENT       ("Component = {Name}");
-static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | DRIVER | LIBRARY | NONE | TEST");
+static const KMS::Cfg::MetaData MD_COMPONENT_TYPE  ("ComponentType = BINARY | LIBRARY | NONE | TEST");
 static const KMS::Cfg::MetaData MD_CONFIGURATION   ("Configuration = {Name}");
 static const KMS::Cfg::MetaData MD_INCLUDES        ("Includes += {Name}");
 static const KMS::Cfg::MetaData MD_MAKE            ("Make = {Path}");
@@ -47,7 +47,6 @@ static const KMS::Cfg::MetaData MD_PROCESSOR       ("Processor = {Name}");
 // ----- Build --------------------------------------------------------------
 
 static const KMS::Cfg::MetaData MD_BINARIES  ("Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_DRIVERS   ("Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_LIBRARIES ("Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
 
@@ -70,7 +69,6 @@ static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
 #endif
 
 static const KMS::Cfg::MetaData MD_OS_BINARIES (NAME_OS "Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_OS_DRIVERS  (NAME_OS "Drivers += {Name}");
 static const KMS::Cfg::MetaData MD_OS_LIBRARIES(NAME_OS "Libraries += {Name}");
 static const KMS::Cfg::MetaData MD_OS_TESTS    (NAME_OS "Tests += {Name}");
 
@@ -95,11 +93,13 @@ namespace KMS
 
         const char* Make::SILENCE[]
         {
+            NAME_OS "Drivers",
             NAME_OS "Folders",
             NAME_OS "Processors",
 
             NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
             NO_OS_0 "Configurations", NO_OS_1 "Configurations",
+            NO_OS_0 "Drivers"       , NO_OS_1 "Drivers"       ,
             NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
             NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
             NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
@@ -108,6 +108,7 @@ namespace KMS
 
             "Configurations"  ,
             "EditOperations"  ,
+            "Drivers"         ,
             "Embedded"        ,
             "Files"           ,
             "Folders"         ,
@@ -168,17 +169,14 @@ namespace KMS
             // ----- Build --------------------------------------------------
 
             mBinaries .SetCreator(DI::String::Create);
-            mDrivers  .SetCreator(DI::String::Create);
             mLibraries.SetCreator(DI::String::Create);
             mTests    .SetCreator(DI::String::Create);
 
             AddEntry("Binaries" , &mBinaries , false, &MD_BINARIES);
-            AddEntry("Drivers"  , &mDrivers  , false, &MD_DRIVERS);
             AddEntry("Libraries", &mLibraries, false, &MD_LIBRARIES);
             AddEntry("Tests"    , &mTests    , false, &MD_TESTS);
 
             AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
-            AddEntry(NAME_OS "Drivers"  , &mDrivers  , false, &MD_OS_DRIVERS);
             AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
             AddEntry(NAME_OS "Tests"    , &mTests    , false, &MD_OS_TESTS);
 
@@ -507,7 +505,6 @@ namespace KMS
 
             case ComponentType::NONE:
                 Depend_Components(mBinaries);
-                Depend_Components(mDrivers);
                 Depend_Components(mLibraries);
                 Depend_Components(mTests);
                 break;
@@ -552,7 +549,6 @@ namespace KMS
                 auto lComponent = mComponent.Get();
 
                 if      (DoesContain(mBinaries , lComponent)) { mComponentType = ComponentType::BINARY ; }
-                else if (DoesContain(mDrivers  , lComponent)) { mComponentType = ComponentType::DRIVER ; }
                 else if (DoesContain(mLibraries, lComponent)) { mComponentType = ComponentType::LIBRARY; }
                 else if (DoesContain(mTests    , lComponent)) { mComponentType = ComponentType::TEST   ; }
                 else
