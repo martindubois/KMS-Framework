@@ -88,9 +88,11 @@ static const char* SILENCE[] =
 {
     NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
     NO_OS_0 "Configurations", NO_OS_1 "Configurations",
+    NO_OS_0 "Drivers"       , NO_OS_1 "Drivers"       ,
     NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
     NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
     NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
+    NO_OS_0 "Packages"      , NO_OS_1 "Packages"      ,
     NO_OS_0 "PreBuildCmds"  , NO_OS_1 "PreBuildCmds"  ,
     NO_OS_0 "Processors"    , NO_OS_1 "Processors"    ,
     NO_OS_0 "Tests"         , NO_OS_1 "Tests"         ,
@@ -338,6 +340,23 @@ namespace KMS
 
             auto lRet = lM.Run();
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "KMS::Build::Make::Run failed", lRet);
+        }
+
+        void Build::CreateInstaller()
+        {
+            auto lCT = new Dbg::Stats_Timer("CreateInstallerTime.Processor");
+
+            for (const auto& lEntry : mProcessors.mInternal)
+            {
+                lCT->Start();
+
+                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
+                assert(nullptr != lP);
+
+                CreateInstaller(*lP);
+
+                lCT->Stop();
+            }
         }
 
         void Build::Edit()
