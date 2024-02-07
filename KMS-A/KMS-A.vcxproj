@@ -38,7 +38,6 @@
     <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="CLI_Module.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
-    <ClCompile Include="CLI_Tool_W.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Console_Console.cpp" />
     <ClCompile Include="Convert.cpp" />
