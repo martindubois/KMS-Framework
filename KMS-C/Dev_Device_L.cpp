@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C ==================================================================
+#include <fcntl.h>
+
 // ===== System =============================================================
 #include <sys/ioctl.h>
 
@@ -27,8 +30,29 @@ namespace KMS
 
         bool Device::Connect(unsigned int aFlags)
         {
-            // TODO
-            return false;
+            if (IsConnected())
+            {
+                Disconnect();
+            }
+
+            assert(INVALID_HANDLE_VALUE == mHandle);
+
+            int lFlags = 0;
+
+            switch (lFlags & (FLAG_ACCESS_READ | FLAG_ACCESS_WRITE))
+            {
+            case FLAG_ACCESS_READ : lFlags |= O_RDONLY; break;
+            case FLAG_ACCESS_WRITE: lFlags |= O_WRONLY; break;
+
+            case FLAG_ACCESS_READ | FLAG_ACCESS_WRITE: lFlags |= O_RDWR; break;
+
+            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid flags", aFlags);
+            }
+
+            mHandle = open(mLink, lFlags);
+            KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, RESULT_CONNECT_FAILED, "open failed", mLink);
+
+            return true;
         }
 
         void Device::Disconnect()
