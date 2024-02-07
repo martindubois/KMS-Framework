@@ -7,6 +7,8 @@ File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 EDIT ON BUILD
 
+1.1.13-dev Linux 2024-02-07
+
 1.1.12-dev Linux 2024-02-07
 - Do not compile driver on Linux
 
