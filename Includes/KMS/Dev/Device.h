@@ -20,9 +20,12 @@
 // ===== Includes ===========================================================
 #include <KMS/Dev/IDevice.h>
 #include <KMS/DI/Dictionary.h>
-#include <KMS/DI/GUID.h>
 #include <KMS/DI/String_Expand.h>
 #include <KMS/DI/UInt.h>
+
+#ifdef _KMS_WINDOWS_
+    #include <KMS/DI/GUID.h>
+#endif
 
 namespace KMS
 {
@@ -66,6 +69,12 @@ namespace KMS
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
             virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
 
+            #ifdef _KMS_LINUX_
+
+                virtual operator int ();
+
+            #endif
+
             #ifdef _KMS_WINDOWS_
 
                 virtual operator HANDLE ();
@@ -87,6 +96,12 @@ namespace KMS
             NO_COPY(Device);
 
             void Construct_OSDep();
+
+            #ifdef _KMS_LINUX_
+
+                int mHandle;
+
+            #endif
 
             #ifdef _KMS_WINDOWS_
 

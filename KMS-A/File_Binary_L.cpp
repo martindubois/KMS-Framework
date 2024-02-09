@@ -22,11 +22,6 @@ KMS_RESULT_STATIC(RESULT_ACCESS_FAILED);
 KMS_RESULT_STATIC(RESULT_MAPPING_FAILED);
 KMS_RESULT_STATIC(RESULT_TOO_SHORT);
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define INVALID_HANDLE_VALUE (-1)
-
 namespace KMS
 {
     namespace File

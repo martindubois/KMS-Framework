@@ -119,23 +119,6 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "The compilation failed", lProcess.GetCmdLine());
         }
 
-        void Build::CreateInstaller()
-        {
-            auto lCT = new Dbg::Stats_Timer("CreateInstallerTime.Processor");
-
-            for (const auto& lEntry : mProcessors.mInternal)
-            {
-                lCT->Start();
-
-                auto lP = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(nullptr != lP);
-
-                CreateInstaller(*lP);
-
-                lCT->Stop();
-            }
-        }
-
         void Build::Package_Components(const char* aC, const char* aP)
         {
             assert(nullptr != aC);
@@ -351,7 +334,7 @@ namespace KMS
 
 using namespace KMS;
 
-// Static function declaration
+// Static functions
 // /////////////////////////////////////////////////////////////////////////
 
 void CAB_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)

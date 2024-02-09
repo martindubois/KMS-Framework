@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Build.h
@@ -59,6 +59,10 @@ namespace KMS
             DI::String  mVersionFile;
             DI::Array   mTests;
 
+            #ifdef _KMS_LINUX_
+                DI::Array mPackages;
+            #endif
+
             #ifdef _KMS_WINDOWS_
                 static const char* CERTIFICAT_SHA1_DEFAULT;
 
@@ -90,6 +94,7 @@ namespace KMS
             void Compile_VisualStudio(const char* aC);
             void Compile_VisualStudio(const char* aC, const char* aP);
             void CreateInstaller();
+            void CreateInstaller(const char* aP);
             void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
             void Export();
@@ -109,7 +114,6 @@ namespace KMS
 
             #ifdef _KMS_WINDOWS_
                 void CreateDriverCab(const char* aD, const char* aCabFile);
-                void CreateInstaller(const char* aP);
             #endif
 
             File::Folder mProductFolder;

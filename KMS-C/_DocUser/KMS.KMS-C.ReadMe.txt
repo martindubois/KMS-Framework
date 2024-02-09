@@ -5,7 +5,10 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
-EDIT ON BUILD - Windows
+EDIT ON BUILD
+
+1.1.13-dev Linux 2024-02-07
+- Dev::Device::Connect on Linux
 
 1.1.10-dev Windows 2023-01-31
 

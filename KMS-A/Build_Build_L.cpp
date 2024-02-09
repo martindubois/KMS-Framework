@@ -8,18 +8,36 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Cfg/MetaData.h>
 #include <KMS/Proc/Process.h>
 
 #include <KMS/Build/Build.h>
 
+KMS_RESULT_STATIC(RESULT_SH_FAILED);
 KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 
-#define FILE_EXT_A ".a"
+#define FILE_EXT_A   ".a"
+#define FILE_EXT_DEB ".deb"
+#define FILE_EXT_SH  ".sh"
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
+#define PACKAGES_FOLDER ("Packages")
+
+#define SH_ALLOWED_TIME_ms   (1000 * 60 * 5) // 5 minutes
 #define TEST_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+
+// Constants
+// //////////////////////////////////////////////////////////////////////////
+
+static const KMS::Cfg::MetaData MD_OS_PACKAGES("LinuxPackages += {Name}");
+
+// Static function declarations
+// //////////////////////////////////////////////////////////////////////////
+
+static void DEB_FileName(const char* aPackage, const KMS::Version& aVersion, char* aOut, unsigned int aOutSize_byte);
+static bool SH_FileName (const char* aProcessor, char* aOut, unsigned int aOutSize_byte);
 
 namespace KMS
 {
@@ -33,13 +51,42 @@ namespace KMS
 
         void Build::Construct_OSDep()
         {
+            mPackages.SetCreator(DI::String_Expand::Create);
+
+            AddEntry("LinuxPackages", &mPackages, false, &MD_OS_PACKAGES);
+
             mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Build::CreateInstaller() {}
+        void Build::CreateInstaller(const char* aP)
+        {
+            char lFileName[PATH_LENGTH];
+
+            if (SH_FileName(aP, lFileName, sizeof(lFileName)))
+            {
+                Proc::Process lP0(File::Folder::CURRENT, lFileName);
+
+                lP0.Run(SH_ALLOWED_TIME_ms);
+
+                auto lRet = lP0.GetExitCode();
+                KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_SH_FAILED, "Script failed", lP0.GetCmdLine());
+
+                for (auto lPackage : mPackages.mInternal)
+                {
+                    auto lString = dynamic_cast<const DI::String*>(lPackage.Get());
+                    assert(nullptr != lString);
+
+                    DEB_FileName(lString->GetString().c_str(), mVersion, lFileName, sizeof(lFileName));
+
+                    File::Folder lPackages(File::Folder::Id::CURRENT, PACKAGES_FOLDER);
+
+                    lPackages.Copy(mProductFolder, lFileName);
+                }
+            }
+        }
 
         void Build::Package_Components(const char* aC, const char* aP)
         {
@@ -65,14 +112,6 @@ namespace KMS
                 assert(nullptr != lB);
 
                 lBin_Src.Copy(lBin, lB->Get());
-            }
-
-            for (const auto& lEntry : mDrivers.mInternal)
-            {
-                auto lD = dynamic_cast<const DI::String*>(lEntry.Get());
-                assert(nullptr != lD);
-
-                // TODO
             }
 
             for (const auto& lEntry : mLibraries.mInternal)
@@ -111,3 +150,31 @@ namespace KMS
     }
 }
 
+using namespace KMS;
+
+// Static functions
+// /////////////////////////////////////////////////////////////////////////
+
+void DEB_FileName(const char* aPackage, const KMS::Version& aVersion, char* aOut, unsigned int aOutSize_byte)
+{
+    assert(nullptr != aPackage);
+    assert(nullptr != aOut);
+    assert(0 < aOutSize_byte);
+
+    auto lMa = aVersion.GetMajor();
+    auto lMi = aVersion.GetMinor();
+    auto lBu = aVersion.GetBuild();
+    
+    sprintf(aOut, "%s_%u.%u-%u" FILE_EXT_DEB, aPackage, lMa, lMi, lBu);
+}
+
+bool SH_FileName(const char* aProcessor, char* aOut, unsigned int aOutSize_byte)
+{
+    assert(nullptr != aProcessor);
+    assert(nullptr != aOut);
+    assert(0 < aOutSize_byte);
+
+    sprintf(aOut, "Product_%s" FILE_EXT_SH, aProcessor);
+
+    return File::Folder::CURRENT.DoesFileExist(aOut);
+}

@@ -17,6 +17,7 @@
 
 #include <KMS/Dev/Device.h>
 
+// ===== Local ==============================================================
 #include "SetupDi.h"
 
 KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
@@ -38,10 +39,6 @@ namespace KMS
         const ::GUID Device::INTERFACE_DEFAULT;
 
         // ===== IDevice ====================================================
-
-        bool Device::IsConnected() const { return INVALID_HANDLE_VALUE != mHandle; }
-
-        void Device::ClearReadBuffer() { assert(false); }
 
         bool Device::Connect(unsigned int aFlags)
         {
@@ -203,8 +200,6 @@ namespace KMS
 
         void Device::Construct_OSDep()
         {
-            mHandle = INVALID_HANDLE_VALUE;
-
             AddEntry("Interface", &mInterface, false, &MD_INTERFACE);
         }
 
