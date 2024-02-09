@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket.cpp
 
-// TEST COVERAGE  2023-10-17  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-10-17 Martin Dubois
 
 #include "Component.h"
 

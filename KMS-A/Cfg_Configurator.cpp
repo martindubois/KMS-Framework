@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/Cfg_Configurator.cpp
 
-// TEST COVERAGE  2023-08-06  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-08-06 Martin Dubois
 
 #include "Component.h"
 

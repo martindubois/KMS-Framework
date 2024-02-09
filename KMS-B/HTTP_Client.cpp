@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Client.cpp
 
-// TEST COVERAGE  2023-11-12  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-11-12 Martin Dubois
 
 #include "Component.h"
 

@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-B/Net_Address.cpp
 
-// TEST_COVERAGE  2023-10-12  KMS - Martin Dubois, P. Eng.
+// TEST_COVERAGE 2023-10-12 Martin Dubois
 
 // NOT TESTED  IPv6
 

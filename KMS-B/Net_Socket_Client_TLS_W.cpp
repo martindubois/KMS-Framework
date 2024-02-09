@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket_Client_TLS_W.cpp
@@ -8,7 +8,7 @@
 // This source code is based on
 // https://gist.github.com/mmozeiko/c0dfcc8fec527a90a02145d2cc0bfb6d
 
-// TEST COVERAGE  2023-11-18  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-11-18 Martin Dubois
 
 // CONFIG _CFG_TRACE_
 // #define _CFG_TRACE_

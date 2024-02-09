@@ -1,11 +1,11 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Proc_Browser.cpp
 
-// TEST COVERAGE 2022-06-19 KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2022-06-19 Martin Dubois
 
 #include "Component.h"
 

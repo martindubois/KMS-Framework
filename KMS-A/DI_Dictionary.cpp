@@ -5,7 +5,7 @@
 // Product   KMS-Framework
 // File      KMS-A/DI_Dictionary.cpp
 
-// TEST COVERAGE  2023-07-28  KMS - Martin Dubois, P. Eng.
+// TEST COVERAGE 2023-07-28 Martin Dubois
 
 #include "Component.h"
 
