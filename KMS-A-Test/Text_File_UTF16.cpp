@@ -83,7 +83,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // GetLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetLine(0);
         KMS_TEST_ASSERT(false);
     }
@@ -92,7 +91,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // GetUserLineNo
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetUserLineNo(0);
         KMS_TEST_ASSERT(false);
     }
@@ -101,7 +99,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // InsertLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.InsertLine(1, L"");
         KMS_TEST_ASSERT(false);
     }
@@ -110,7 +107,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // RemoveLines
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.RemoveLines(0, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -119,7 +115,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // ReplaceLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.ReplaceLine(0, L"");
         KMS_TEST_ASSERT(false);
     }
@@ -128,7 +123,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // Read
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Read(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -137,7 +131,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // Write
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_0");
         KMS_TEST_ASSERT(false);
     }
@@ -146,7 +139,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // Write_ASCII
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Write_ASCII(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_UTF16_Exception_1");
         KMS_TEST_ASSERT(false);
     }
@@ -157,7 +149,6 @@ KMS_TEST(Text_File_UTF16_Exception, "Auto", sTest_Exception)
     // GetLine2
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetLine2(0);
         KMS_TEST_ASSERT(false);
     }

@@ -74,7 +74,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // GetLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetLine(0);
         KMS_TEST_ASSERT(false);
     }
@@ -83,7 +82,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // GetUserLineNo
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.GetUserLineNo(0);
         KMS_TEST_ASSERT(false);
     }
@@ -92,7 +90,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // InsertLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.InsertLine(1, "");
         KMS_TEST_ASSERT(false);
     }
@@ -101,7 +98,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // RemoveLines
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.RemoveLines(0, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -110,7 +106,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // ReplaceLine
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.ReplaceLine(0, "");
         KMS_TEST_ASSERT(false);
     }
@@ -119,7 +114,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // Read
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Read(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -128,7 +122,6 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
     // Write
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Write(File::Folder(File::Folder::Id::CURRENT, "DoesNotExist"), "Test_Text_File_ASCII_Excpetion_0");
         KMS_TEST_ASSERT(false);
     }

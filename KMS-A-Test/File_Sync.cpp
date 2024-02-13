@@ -26,7 +26,6 @@ KMS_TEST(File_Sync_Main, "Auto", sTest_Main)
 
     KMS_TEST_COMPARE(File::Sync::Main(3, VECTOR_A), 0);
 
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 4);
     KMS_TEST_COMPARE(File::Sync::Main(6, VECTOR_A), 0);
 
     static const char* VECTOR_B[] =
@@ -55,6 +54,5 @@ KMS_TEST(File_Sync_Main_Fail, "Auto", sTest_Fail)
         "Bidirectional.Default+=DoesNotExist_A",
     };
 
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 4);
     KMS_TEST_ASSERT(0 != File::Sync::Main(2, VECTOR_A));
 }

@@ -44,7 +44,6 @@ KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
     // Execute_Operation
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         DI::Execute_Operation(&lD0, "");
         KMS_TEST_ASSERT(false);
     }
@@ -52,7 +51,6 @@ KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         DI::Execute_Operation(&lD0, "Boolean+=Ignored");
         KMS_TEST_ASSERT(false);
     }
@@ -60,7 +58,6 @@ KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         DI::Execute_Operation(&lD0, "Array=Ignored");
         KMS_TEST_ASSERT(false);
     }
@@ -68,7 +65,6 @@ KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         DI::Execute_Operation(&lD0, "Array");
         KMS_TEST_ASSERT(false);
     }

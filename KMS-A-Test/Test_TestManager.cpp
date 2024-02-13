@@ -34,7 +34,6 @@ KMS_TEST(Test_TestManager_Fail, "Auto", sTest_Fail)
         "Unknown+=0"
     };
 
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 2);
     lC.ParseArguments(5, lVector);
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 1U);
@@ -58,7 +57,6 @@ KMS_TEST(Test_TestManager_Fail0, "Fail", sTest_Fail0)
 
 KMS_TEST(Test_TestManager_Fail1, "Fail", sTest_Fail1)
 {
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
     KMS_EXCEPTION(RESULT_ERROR, "Test", "");
 }
 

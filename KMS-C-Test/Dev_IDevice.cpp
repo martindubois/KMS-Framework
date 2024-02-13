@@ -72,7 +72,6 @@ KMS_TEST(Dev_IDevice_Exception, "Auto", sTest_Exception)
     // Connect
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lD0.Connect(Dev::IDevice::FLAG_ACCESS_READ);
         KMS_TEST_ASSERT(false);
     }
@@ -83,7 +82,6 @@ KMS_TEST(Dev_IDevice_Exception, "Auto", sTest_Exception)
     lID0->Connect(Dev::IDevice::FLAG_ACCESS_READ);
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lD0.Control(0, nullptr, 0, nullptr, 0);
         KMS_TEST_ASSERT(false);
     }
@@ -93,7 +91,6 @@ KMS_TEST(Dev_IDevice_Exception, "Auto", sTest_Exception)
     lID0->Connect(Dev::IDevice::FLAG_ACCESS_WRITE);
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lD0.Read(lBuffer, sizeof(lBuffer));
         KMS_TEST_ASSERT(false);
     }
@@ -102,7 +99,6 @@ KMS_TEST(Dev_IDevice_Exception, "Auto", sTest_Exception)
     lID0->Connect(Dev::IDevice::FLAG_ACCESS_READ);
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lD0.Read(lBuffer, sizeof(lBuffer), Dev::IDevice::FLAG_READ_ALL);
         KMS_TEST_ASSERT(false);
     }

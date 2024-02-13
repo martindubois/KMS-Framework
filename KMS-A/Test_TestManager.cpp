@@ -37,6 +37,8 @@ namespace KMS
             assert(1 <= aCount);
             assert(nullptr != aVector);
 
+            KMS::Dbg::gLog.mConsoleLevel = Dbg::LogFile::Level::LEVEL_NONE;
+
             KMS_MAIN_BEGIN;
             {
                 TestManager lTM;

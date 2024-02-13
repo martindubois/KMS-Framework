@@ -53,7 +53,6 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
     // ExecuteCommand
 
     // Run
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 8);
     KMS_TEST_COMPARE(lT.Run(), 0);
 
     // ===== DI::Container ==================================================
@@ -69,7 +68,6 @@ KMS_TEST(CLI_Tool_Exception, "Auto", sTest_Exception)
     // ExecuteCommand
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lT.ExecuteCommand("Invalid");
         KMS_TEST_ASSERT(false);
     }

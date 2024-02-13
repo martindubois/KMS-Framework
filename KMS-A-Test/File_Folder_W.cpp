@@ -33,7 +33,6 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
     // Compress
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder lF("DoesNotExist");
         KMS_TEST_OUTPUT_BEGIN();
         lF.Compress(File::Folder::CURRENT, "Test_File_Folder_Exception_0.zip");
@@ -45,7 +44,6 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
     // Uncompress
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder lF("Test_File_Folder_Exception_2");
         KMS_TEST_OUTPUT_BEGIN();
         lF.Uncompress(File::Folder::CURRENT, "DoesNotExist.zip");

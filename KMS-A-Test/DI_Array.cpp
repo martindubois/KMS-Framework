@@ -65,7 +65,6 @@ KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
     // RemoveEntry
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.RemoveEntry(0);
         KMS_TEST_ASSERT(false);
     }
@@ -74,7 +73,6 @@ KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
     // SetEntry
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.SetEntry(1, &lS0, false);
         KMS_TEST_ASSERT(false);
     }
@@ -85,7 +83,6 @@ KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
     // FindObject_RW
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.FindObject_RW("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -93,7 +90,6 @@ KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.FindObject_RW("1");
         KMS_TEST_ASSERT(false);
     }

@@ -83,7 +83,6 @@ KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
     // Get
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lC0.Get("https://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }
@@ -91,7 +90,6 @@ KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lC1.Get("http://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }
@@ -99,7 +97,6 @@ KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lC0.Get("http://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }
@@ -107,7 +104,6 @@ KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lC1.Get("https://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }

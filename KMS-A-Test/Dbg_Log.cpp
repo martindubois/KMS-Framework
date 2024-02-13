@@ -22,7 +22,6 @@ KMS_TEST(Dbg_Log_Base, "Auto", sTest_Base)
     lL.mConsole.Set_Null();
 
     // SetHideCount
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
     Exception lE(__FILE__, __FUNCTION__, __LINE__, RESULT_ERROR, "Test");
 
     // CloseLogFiles
@@ -75,8 +74,6 @@ KMS_TEST(Dbg_Log_Base, "Auto", sTest_Base)
     lL.WriteData(&lL, sizeof(lL));
     lL.WriteException(lE);
     lL.WriteMessage("Test");
-
-    lL.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 2);
 
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
     lL.WriteData(&lL, sizeof(lL));

@@ -74,15 +74,12 @@ unsigned int TestReceiver::Receive(void* aSender, unsigned int aCode, void* aDat
     case 2: lResult = Msg::IReceiver::MSG_ACTION_CLEAR; break;
 
     case 3:
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 4);
         KMS_EXCEPTION(RESULT_ERROR, "Test exception", "");
 
     case 4:
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         throw std::exception();
 
     case 5:
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         throw "Test unknown exception";
 
     default: assert(false);

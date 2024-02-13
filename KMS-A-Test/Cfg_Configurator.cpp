@@ -32,7 +32,6 @@ KMS_TEST(Cfg_Configurator_Base, "Auto", sTest_Base)
     lC.SetSilence(SILENCED);
 
     // AddConfigFile *
-    Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_WARNING, 6);
     lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
 
     // AddOptionalConfigFile *

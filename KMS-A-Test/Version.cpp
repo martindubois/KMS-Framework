@@ -68,7 +68,6 @@ KMS_TEST(Version_Fail, "Auto", sTest_Fail)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Version lV0("0");
         KMS_TEST_ASSERT(false);
     }
@@ -76,7 +75,6 @@ KMS_TEST(Version_Fail, "Auto", sTest_Fail)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Version lV0("0.0.0.256");
         KMS_TEST_ASSERT(false);
     }

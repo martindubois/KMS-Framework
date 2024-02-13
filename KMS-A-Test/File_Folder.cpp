@@ -61,7 +61,6 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
     // ChangeCurrentDirectory
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder::ChangeCurrentDirectory("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -72,7 +71,6 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
     // Delete
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder::CURRENT.Delete("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -80,7 +78,6 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder lF("DoesNotExist");
         lF.Delete();
         KMS_TEST_ASSERT(false);
@@ -90,7 +87,6 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
     // Rename
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Folder::CURRENT.Rename("DoesNotExist", "Test_File_Folder_Exception_1.zip");
         KMS_TEST_ASSERT(false);
     }

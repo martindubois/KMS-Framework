@@ -256,7 +256,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lS0.Get(lBuffer, 5);
         KMS_TEST_ASSERT(false);
     }
@@ -265,7 +264,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
     // Set
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lB0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -273,7 +271,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lE0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -281,7 +278,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lF0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -289,7 +285,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lFi0.Set("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -297,7 +292,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lI0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -305,7 +299,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lI0.Set("128");
         KMS_TEST_ASSERT(false);
     }
@@ -313,7 +306,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lSE0.Set("{$DoesNotExist}");
         KMS_TEST_ASSERT(false);
     }
@@ -321,7 +313,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lUI0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -329,7 +320,6 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lUI0.Set("256");
         KMS_TEST_ASSERT(false);
     }

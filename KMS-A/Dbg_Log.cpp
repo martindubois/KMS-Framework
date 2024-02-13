@@ -16,6 +16,8 @@
 
 #include <KMS/Dbg/Log.h>
 
+KMS_RESULT_STATIC(RESULT_UNEXPECTED_EXCEPTION);
+
 namespace KMS
 {
     namespace Dbg
@@ -41,23 +43,12 @@ namespace KMS
             , mEntryLevel(LogFile::Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
         {
-            memset(&mHideCounts, 0, sizeof(mHideCounts));
-
             CloseLogFiles();
         }
 
         Log::~Log() { CloseLogFiles(); }
 
         bool Log::IsFileEnabled() const { return mEnabled; }
-
-        void Log::SetHideCount(LogFile::Level aLevel, unsigned int aIn)
-        {
-            WriteEntry(__FILE__, __FUNCTION__, __LINE__, LogFile::Level::LEVEL_INFO);
-            WriteData(&aLevel, sizeof(aLevel));
-            WriteData(&aIn, sizeof(aIn));
-
-            mHideCounts[static_cast<unsigned int>(aLevel)] = aIn;
-        }
 
         void Log::CloseLogFiles()
         {
@@ -72,22 +63,17 @@ namespace KMS
         }
 
         #define IF_FILE       if (mEnabled && (mFileLevel >= mEntryLevel))
-        #define IF_CONSOLE(F) if ((0 == ((F) & FLAG_USER_REDUNDANT)) && (((!mEnabled) && (LogFile::Level::LEVEL_WARNING >= mEntryLevel)) || (mConsoleLevel >= mEntryLevel)))
+        #define IF_CONSOLE(F) if ((0 == ((F) & FLAG_USER_REDUNDANT)) && (mConsoleLevel >= mEntryLevel))
 
         void Log::WriteData(const void* aData, unsigned int aSize_byte, unsigned int aFlags)
         {
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(nullptr != lLF);
-
-                lLF->WriteData(aData, aSize_byte);
-            }
-
-            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
-            {
-                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
-                return;
+                if (nullptr != lLF)
+                {
+                    lLF->WriteData(aData, aSize_byte);
+                }
             }
 
             IF_CONSOLE(aFlags)
@@ -131,15 +117,10 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(nullptr != lLF);
-
-                lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
-            }
-
-            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
-            {
-                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
-                return;
+                if (nullptr != lLF)
+                {
+                    lLF->WriteEntry(mCounter, aFile, aFunction, aLine, aLevel);
+                }
             }
 
             IF_CONSOLE(aFlags)
@@ -178,15 +159,10 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(nullptr != lLF);
-
-                lLF->WriteException(aException);
-            }
-
-            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
-            {
-                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
-                return;
+                if (nullptr != lLF)
+                {
+                    lLF->WriteException(aException);
+                }
             }
 
             IF_CONSOLE(aFlags)
@@ -221,15 +197,10 @@ namespace KMS
             IF_FILE
             {
                 auto lLF = FindLogFile();
-                assert(nullptr != lLF);
-
-                lLF->WriteMessage(aMsg);
-            }
-
-            if (0 < mHideCounts[static_cast<unsigned int>(mEntryLevel)])
-            {
-                mHideCounts[static_cast<unsigned int>(mEntryLevel)]--;
-                return;
+                if (nullptr != lLF)
+                {
+                    lLF->WriteMessage(aMsg);
+                }
             }
 
             IF_CONSOLE(aFlags)
@@ -324,23 +295,31 @@ namespace KMS
 
         LogFile* Log::FindLogFile()
         {
-            LogFile* lResult;
+            LogFile* lResult = nullptr;
 
             auto lThreadId = OS::GetThreadId();
 
             auto lIt = mFiles.find(lThreadId);
             if (mFiles.end() == lIt)
             {
-                lResult = new LogFile(mFolder, mProcessId, lThreadId);
+                try
+                {
+                    lResult = new LogFile(mFolder, mProcessId, lThreadId);
 
-                mFiles.insert(FileMap::value_type(lThreadId, lResult));
+                    mFiles.insert(FileMap::value_type(lThreadId, lResult));
+                }
+                catch (Exception eE)
+                {
+                    KMS_EXCEPTION_ASSERT(RESULT_OPEN_FAILED == eE.GetCode(), RESULT_UNEXPECTED_EXCEPTION, "Unexpected exception", "");
+                }
             }
             else
             {
+                assert(nullptr != lIt->second);
+                
                 lResult = lIt->second;
             }
 
-            assert(nullptr != lResult);
             return lResult;
         }
 

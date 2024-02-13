@@ -57,8 +57,6 @@ namespace KMS
 
             bool IsFileEnabled() const;
 
-            void SetHideCount(LogFile::Level aLevel, unsigned int aIn);
-
             void CloseLogFiles();
 
             void WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, LogFile::Level aLevel, unsigned int aFlags = 0);
@@ -91,7 +89,6 @@ namespace KMS
             bool           mEnabled;
             LogFile::Level mEntryLevel;
             FileMap        mFiles;
-            unsigned int   mHideCounts[static_cast<unsigned int>(LogFile::Level::QTY)];
             unsigned int   mProcessId;
 
         };

@@ -64,7 +64,6 @@ KMS_TEST(DI_Value_Windows_Exception, "Auto", sTest_Windows_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lG0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }

@@ -96,7 +96,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToBool
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToBool("Invalid");
         KMS_TEST_ASSERT(false);
     }
@@ -105,7 +104,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToDouble
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToDouble("0.0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -114,7 +112,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToFile
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToFile("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -123,7 +120,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToInt16
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToInt16("32769");
         KMS_TEST_ASSERT(false);
     }
@@ -132,7 +128,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToInt32
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToInt32("-1 ");
         KMS_TEST_ASSERT(false);
     }
@@ -141,7 +136,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToUInt16
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt16("0x10000");
         KMS_TEST_ASSERT(false);
     }
@@ -150,7 +144,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToUInt32
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt32("0 ");
         KMS_TEST_ASSERT(false);
     }
@@ -159,7 +152,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToUInt8
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt8("0x100");
         KMS_TEST_ASSERT(false);
     }
@@ -168,7 +160,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToASCII
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToASCII(L"AB", lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -177,7 +168,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToUTF16
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUTF16("AB", lUTF16, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -186,7 +176,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToDisplay
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToDisplay("AB", 2, lASCII, 2);
         KMS_TEST_ASSERT(false);
     }
@@ -195,7 +184,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
     // ToUInt8Array
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt8Array("G", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -203,7 +191,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt8Array("FG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }
@@ -211,7 +198,6 @@ KMS_TEST(Convert_Fail, "Auto", sTest_Fail)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         Convert::ToUInt8Array("EFG", "", "", lArray, 1);
         KMS_TEST_ASSERT(false);
     }

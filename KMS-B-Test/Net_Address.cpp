@@ -81,7 +81,6 @@ KMS_TEST(NET_Address_Exception, "Auto", sTest_Exception)
     // SetAddress
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.SetAddress("192.168.0.256");
         KMS_TEST_ASSERT(false);
     }
@@ -89,7 +88,6 @@ KMS_TEST(NET_Address_Exception, "Auto", sTest_Exception)
 
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.SetAddress("doesnotexist.kms-quebec.com");
         KMS_TEST_ASSERT(false);
     }
@@ -98,7 +96,6 @@ KMS_TEST(NET_Address_Exception, "Auto", sTest_Exception)
     // SetPortNumber
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lA0.SetPortNumber(static_cast<unsigned int>(0x10000));
         KMS_TEST_ASSERT(false);
     }

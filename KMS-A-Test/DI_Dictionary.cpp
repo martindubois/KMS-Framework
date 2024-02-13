@@ -60,7 +60,6 @@ KMS_TEST(DI_Dictionary_Exception, "Auto", sTest_Exception)
     // FindObject_RW
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         lD0.FindObject_RW("");
         KMS_TEST_ASSERT(false);
     }

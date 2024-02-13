@@ -46,7 +46,6 @@ KMS_TEST(File_Binary_Exception, "Auto", sTest_Exception)
     // Constructor
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Binary lB(File::Folder::CURRENT, "DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
@@ -57,7 +56,6 @@ KMS_TEST(File_Binary_Exception, "Auto", sTest_Exception)
     // Write
     try
     {
-        Dbg::gLog.SetHideCount(Dbg::LogFile::Level::LEVEL_ERROR, 2);
         File::Binary lB(File::Folder::CURRENT, ".gitignore", false);
         lB.Write(" ", 1);
         KMS_TEST_ASSERT(false);
