@@ -7,6 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- Console::Redirection
+- Dbg::Log::SetHideCount removed
+
 1.1.13-dev Linux 2024-02-07
 
 1.1.10-dev Windows 2023-01-31

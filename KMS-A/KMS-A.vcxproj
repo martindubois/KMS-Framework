@@ -40,6 +40,8 @@
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
     <ClCompile Include="Console_Console.cpp" />
+    <ClCompile Include="Console_Redirection.cpp" />
+    <ClCompile Include="Console_Redirection_W.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Convert_W.cpp" />
     <ClCompile Include="DAQ_AnalogConverter.cpp" />
