@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/File_Folder_W.cpp
@@ -21,7 +21,11 @@ KMS_TEST(File_Folder_Windows, "Auto", sTest_Windows)
     File::Folder lF1(File::Folder::Id::TEMPORARY);
 
     // Copy
-    lF0.Copy(lF1, "DoesNotExist", "Test_File_Folder_Base_2.txt", File::Folder::FLAG_IGNORE_ERROR | File::Folder::FLAG_VERBOSE);
+    KMS_TEST_OUTPUT_BEGIN();
+    {
+        lF0.Copy(lF1, "DoesNotExist", "Test_File_Folder_Base_2.txt", File::Folder::FLAG_IGNORE_ERROR | File::Folder::FLAG_VERBOSE);
+    }
+    KMS_TEST_OUTPUT_END();
 
     // DoesFolderExist
     KMS_TEST_ASSERT(!lF0.DoesFolderExist(".gitignore"));
@@ -35,7 +39,9 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
     {
         File::Folder lF("DoesNotExist");
         KMS_TEST_OUTPUT_BEGIN();
-        lF.Compress(File::Folder::CURRENT, "Test_File_Folder_Exception_0.zip");
+        {
+            lF.Compress(File::Folder::CURRENT, "Test_File_Folder_Exception_0.zip");
+        }
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
@@ -46,7 +52,9 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
     {
         File::Folder lF("Test_File_Folder_Exception_2");
         KMS_TEST_OUTPUT_BEGIN();
-        lF.Uncompress(File::Folder::CURRENT, "DoesNotExist.zip");
+        {
+            lF.Uncompress(File::Folder::CURRENT, "DoesNotExist.zip");
+        }
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }

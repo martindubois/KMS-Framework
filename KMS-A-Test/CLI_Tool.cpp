@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/CLI_Tool.cpp
@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/CLI/Tool.h>
+#include <KMS/Console/Redirection.h>
 
 using namespace KMS;
 
@@ -23,8 +24,6 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
 {
     // Constructor
     Test_Tool lT;
-
-    lT.mConsole.Set_Null();
 
     // AddCommand
     lT.AddCommand("AbortIfError");
@@ -53,7 +52,13 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
     // ExecuteCommand
 
     // Run
-    KMS_TEST_COMPARE(lT.Run(), 0);
+    int lRet;
+    Console::Redirection lR(Console::Redirection::What::WHAT_STDOUT);
+    {
+        lRet = lT.Run();
+    }
+    lR.Restore();
+    KMS_TEST_COMPARE(lRet, 0);
 
     // ===== DI::Container ==================================================
 

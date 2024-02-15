@@ -63,27 +63,27 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
     lB.SetPrefered(Proc::Browser::Type::EDGE);
 
     KMS_TEST_OUTPUT_BEGIN();
-
-    lB.Open(lRA.mServer, "", "KMS-Framework");
-
-    for (unsigned int i = 0; i < 10; i++)
     {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        lB.Open(lRA.mServer, "", "KMS-Framework");
 
-        if (lTA.GetResult())
+        for (unsigned int i = 0; i < 10; i++)
         {
-            break;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            if (lTA.GetResult())
+            {
+                break;
+            }
+
+            std::cout << "1 second" << std::endl;
         }
 
-        std::cout << "1 second" << std::endl;
+        KMS_TEST_ASSERT(lTA.GetResult());
+
+        lB.Close();
+
+        lRA.mServer.StopAndWait(2000);
     }
-
-    KMS_TEST_ASSERT(lTA.GetResult());
-
-    lB.Close();
-
-    lRA.mServer.StopAndWait(2000);
-
     KMS_TEST_OUTPUT_END();
 }
 

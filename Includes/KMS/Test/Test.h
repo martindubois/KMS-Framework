@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Test/Test.h
@@ -13,7 +13,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
-#include <KMS/Console/Console.h>
 #include <KMS/Result.h>
 
 namespace KMS
@@ -56,8 +55,6 @@ namespace KMS
             void CallRun();
 
             void Display(std::ostream& aOut) const;
-
-            Console::Console mConsole;
 
         protected:
 
@@ -126,31 +123,31 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
         if (!Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ )) { return; } \
     }
 
-#define KMS_TEST_OUTPUT_BEGIN()                                        \
-    mConsole.OutputStream() << KMS::Console::Color::BLUE;              \
-    mConsole.OutputStream() << "TEST OUTPUT BEGIN";                    \
-    mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl
+#define KMS_TEST_OUTPUT_BEGIN()                          \
+    std::cout << KMS::Console::Color::BLUE;              \
+    std::cout << "TEST OUTPUT BEGIN";                    \
+    std::cout << KMS::Console::Color::WHITE << std::endl
 
-#define KMS_TEST_OUTPUT_END()                                          \
-    mConsole.OutputStream() << KMS::Console::Color::BLUE;              \
-    mConsole.OutputStream() << "TEST OUTPUT END";                      \
-    mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl
+#define KMS_TEST_OUTPUT_END()                            \
+    std::cout << KMS::Console::Color::BLUE;              \
+    std::cout << "TEST OUTPUT END";                      \
+    std::cout << KMS::Console::Color::WHITE << std::endl
 
-#define KMS_TEST_CATCH_OUTPUT_END(C)                                         \
-    catch(KMS::Exception eE)                                                 \
-    {                                                                        \
-        mConsole.OutputStream() << KMS::Console::Color::BLUE;                \
-        mConsole.OutputStream() << "TEST OUTPUT END";                        \
-        mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl;  \
+#define KMS_TEST_CATCH_OUTPUT_END(C)                           \
+    catch(KMS::Exception eE)                                   \
+    {                                                          \
+        std::cout << KMS::Console::Color::BLUE;                \
+        std::cout << "TEST OUTPUT END";                        \
+        std::cout << KMS::Console::Color::WHITE << std::endl;  \
         Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ ); \
     }
 
 #define KMS_TEST_CATCH_OUTPUT_END_N(N)                                                \
     catch(KMS::Exception eE)                                                          \
     {                                                                                 \
-        mConsole.OutputStream() << KMS::Console::Color::BLUE;                         \
-        mConsole.OutputStream() << "TEST OUTPUT END";                                 \
-        mConsole.OutputStream() << KMS::Console::Color::WHITE << std::endl;           \
+        std::cout << KMS::Console::Color::BLUE;                                       \
+        std::cout << "TEST OUTPUT END";                                               \
+        std::cout << KMS::Console::Color::WHITE << std::endl;                         \
         auto lC = eE.GetCode();                                                       \
         Compare(lC.GetName(), (N), __FILE__, __LINE__);                               \
         Assert(lC.GetLevel() == KMS::Result::Level::LEVEL_ERROR, __FILE__, __LINE__); \

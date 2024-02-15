@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/File_Folder.cpp
@@ -35,8 +35,10 @@ KMS_TEST(File_Folder_Base, "Auto", sTest_Base)
     lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_0.txt");
     lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_0.txt", File::Folder::FLAG_BACKUP);
     KMS_TEST_OUTPUT_BEGIN();
-    lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_1.txt", File::Folder::FLAG_VERBOSE);
-    lF2.Copy(File::Folder(lF1, "Folder2"));
+    {
+        lF0.Copy(lF1, ".gitignore"  , "Test_File_Folder_Base_1.txt", File::Folder::FLAG_VERBOSE);
+        lF2.Copy(File::Folder(lF1, "Folder2"));
+    }
     KMS_TEST_OUTPUT_END();
 
     // Delete
@@ -46,7 +48,9 @@ KMS_TEST(File_Folder_Base, "Auto", sTest_Base)
 
     // DeleteFiles
     KMS_TEST_OUTPUT_BEGIN();
-    File::Folder::CURRENT.DeleteFiles("DoesNotExist");
+    {
+        File::Folder::CURRENT.DeleteFiles("DoesNotExist");
+    }
     KMS_TEST_OUTPUT_END();
 
     // DoesFolderExist

@@ -105,12 +105,6 @@ namespace KMS
                     auto lRet = _close(mFileNos[i]);
                     assert(0 == lRet);
                 }
-
-                if (INVALID_HANDLE_VALUE != mFiles[i])
-                {
-                    auto lRet = CloseHandle(mFiles[i]);
-                    assert(lRet);
-                }
             }
         }
 

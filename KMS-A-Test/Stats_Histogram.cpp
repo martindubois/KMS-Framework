@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Stats_Histogram.cpp
@@ -8,15 +8,13 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Redirection.h>
 #include <KMS/Stats/Histogram.h>
 
 using namespace KMS;
 
 KMS_TEST(Stats_Histogram_Base, "Auto", sTest_Base)
 {
-    Console::Console lConsole;
-    lConsole.Set_Null();
-
     // Constructor
     Stats::Histogram lH0(0.0, 10.0, 10);
 
@@ -93,5 +91,9 @@ KMS_TEST(Stats_Histogram_Base, "Auto", sTest_Base)
     KMS_TEST_COMPARE(lH0.GetDataVariance(), 0.0);
 
     // operator <<
-    lConsole.OutputStream() << lH0;
+    Console::Redirection lR(Console::Redirection::What::WHAT_STDOUT);
+    {
+        std::cout << lH0;
+    }
+    lR.Restore();
 }

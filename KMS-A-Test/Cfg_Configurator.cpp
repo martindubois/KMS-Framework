@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Cfg_Configurator.cpp
@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/Console/Redirection.h>
 
 using namespace KMS;
 
@@ -22,8 +23,6 @@ KMS_TEST(Cfg_Configurator_Base, "Auto", sTest_Base)
     // Constructor
     Cfg::Configurator lC;
 
-    lC.mConsole.Set_Null();
-
     // AddConfigurable
 
     // GetIgnoredCount
@@ -32,16 +31,28 @@ KMS_TEST(Cfg_Configurator_Base, "Auto", sTest_Base)
     lC.SetSilence(SILENCED);
 
     // AddConfigFile *
-    lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
+    Console::Redirection lR(Console::Redirection::What::WHAT_STDOUT);
+    {
+        lC.AddConfigFile("KMS-A-Test/Tests/Test1.cfg");
+    }
+    lR.Restore();
 
     // AddOptionalConfigFile *
     lC.AddOptionalConfigFile("DoesNotExist.cfg");
 
     // DisplayConfig
-    lC.DisplayConfig();
+    lR.Redirect();
+    {
+        lC.DisplayConfig();
+    }
+    lR.Restore();
 
     // Help
-    lC.Help(lC.mConsole.OutputFile());
+    lR.Redirect();
+    {
+        lC.Help(stdout);
+    }
+    lR.Restore();
 
     // ParseArguments
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/WOP_System.cpp
@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Redirection.h>
 #include <KMS/WOP/BitArray.h>
 #include <KMS/WOP/System.h>
 #include <KMS/WOP/ValueArray.h>
@@ -30,8 +31,6 @@ KMS_TEST(WOP_System_Base, "Auto", sTest_Base)
 
     // Constructor
     WOP::System lS0(VERSION, 0x74736554, 0x00); // 'tseT'
-
-    lS0.mConsole.Set_Null();
 
     // GetResult
     KMS_TEST_ASSERT(0 == lS0.GetResult());
@@ -104,7 +103,11 @@ KMS_TEST(WOP_System_Base, "Auto", sTest_Base)
     lS0.AddTrace("Trace\r\n", 7);
     lF0 = lS0.PrepareFrame();
     KMS_TEST_ASSERT(nullptr != lF0);
-    lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
+    Console::Redirection lR(Console::Redirection::What::WHAT_STDOUT);
+    {
+        lS0.AddReceivedBytes(reinterpret_cast<const uint8_t*>(lF0->GetRawFrame()), lF0->GetFrameSize_byte());
+    }
+    lR.Restore();
     KMS_TEST_ASSERT(nullptr == lS0.PrepareFrame());
 
     // AddTrace
@@ -112,5 +115,9 @@ KMS_TEST(WOP_System_Base, "Auto", sTest_Base)
     lS0.AddTrace("Very long trace\r\n", 17);
 
     // Dump
-    lS0.Dump();
+    lR.Redirect();
+    {
+        lS0.Dump();
+    }
+    lR.Restore();
 }

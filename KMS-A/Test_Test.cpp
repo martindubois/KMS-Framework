@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Test_Test.cpp
@@ -31,7 +31,7 @@ namespace KMS
             if (!aCondition)
             {
                 DisplayTestName();
-                mConsole.ErrorStream() << "Assert failure at line " << aLine << " of " << aFileName << Console::Color::WHITE << std::endl;
+                std::cerr << "Assert failure at line " << aLine << " of " << aFileName << Console::Color::WHITE << std::endl;
                 mErrorCount++;
             }
 
@@ -40,17 +40,17 @@ namespace KMS
 
         void Test::Cleanup() {};
 
-        #define COMPARE(T)                                                                                          \
-            bool Test::Compare(T aValue, T aExpected, const char* aFileName, unsigned int aLine)                    \
-            {                                                                                                       \
-                auto lResult = Assert(aValue == aExpected, aFileName, aLine);                                       \
-                if (!lResult)                                                                                       \
-                {                                                                                                   \
-                    mConsole.ErrorStream() << Console::Color::RED;                                                  \
-                    mConsole.ErrorStream() << "    Value    : " << aValue    << "\n";                               \
-                    mConsole.ErrorStream() << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
-                }                                                                                                   \
-                return lResult;                                                                                     \
+        #define COMPARE(T)                                                                             \
+            bool Test::Compare(T aValue, T aExpected, const char* aFileName, unsigned int aLine)       \
+            {                                                                                          \
+                auto lResult = Assert(aValue == aExpected, aFileName, aLine);                          \
+                if (!lResult)                                                                          \
+                {                                                                                      \
+                    std::cerr << Console::Color::RED;                                                  \
+                    std::cerr << "    Value    : " << aValue    << "\n";                               \
+                    std::cerr << "    Expected : " << aExpected << Console::Color::WHITE << std::endl; \
+                }                                                                                      \
+                return lResult;                                                                        \
             }
 
         COMPARE(bool        );
@@ -67,9 +67,9 @@ namespace KMS
             auto lResult = Assert(0 == strcmp(aValue, aExpected), aFileName, aLine);
             if (!lResult)
             {
-                mConsole.ErrorStream() << Console::Color::RED;
-                mConsole.ErrorStream() << "    Value    : " << aValue << "\n";
-                mConsole.ErrorStream() << "    Expected : " << aExpected << Console::Color::WHITE << std::endl;
+                std::cerr << Console::Color::RED;
+                std::cerr << "    Value    : " << aValue << "\n";
+                std::cerr << "    Expected : " << aExpected << Console::Color::WHITE << std::endl;
             }
 
             return lResult;
@@ -90,33 +90,33 @@ namespace KMS
         {
             try
             {
-                mConsole.OutputStream() << "Executing " << mName << " ..." << std::endl;
+                std::cout << "Executing " << mName << " ..." << std::endl;
                 Run();
                 Cleanup();
             }
             catch (Exception eE)
             {
                 DisplayTestName();
-                mConsole.ErrorStream() << "EXCEPTION" << "\n";
-                mConsole.ErrorStream() << eE;
-                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
+                std::cerr << "EXCEPTION" << "\n";
+                std::cerr << eE;
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
             catch (std::exception eE)
             {
                 DisplayTestName();
-                mConsole.ErrorStream() << "EXCEPTION" << "\n";
-                mConsole.ErrorStream() << eE.what() << "\n";
-                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
+                std::cerr << "EXCEPTION" << "\n";
+                std::cerr << eE.what() << "\n";
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
             catch (...)
             {
                 DisplayTestName();
-                mConsole.ErrorStream() << "UNKNOWN EXCEPTION" << "\n";
-                mConsole.ErrorStream() << Console::Color::WHITE << std::endl;
+                std::cerr << "UNKNOWN EXCEPTION" << "\n";
+                std::cerr << Console::Color::WHITE << std::endl;
 
                 mErrorCount++;
             }
@@ -166,7 +166,7 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Test::DisplayTestName() { mConsole.ErrorStream() << Console::Color::RED << "Test : " << mName << std::endl; }
+        void Test::DisplayTestName() { std::cerr << Console::Color::RED << "Test : " << mName << std::endl; }
 
     }
 }

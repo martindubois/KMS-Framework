@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/WGDI_Scope_Module.cpp
@@ -225,16 +225,14 @@ namespace KMS
         {
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
-            auto& lOut = mConsole->OutputStream();
+            std::cout << mScope->mScope.Channels_GetCount() << " channels\n";
+            std::cout << "Sample frequency : " << mScope->mScope.mFrequency_Hz << " Hz\n";
+            std::cout << "Mode             : " << mScope->mScope.GetModeName() << "\n";
+            std::cout << "Position X       : " << mScope->mScope.mPositionX_px << " px\n";
+            std::cout << "Scale X          : " << mScope->mScope.mScaleX_ms_px << " ms/px\n";
+            std::cout << "----- Inter sample time (ms) -----\n";
 
-            lOut << mScope->mScope.Channels_GetCount() << " channels\n";
-            lOut << "Sample frequency : " << mScope->mScope.mFrequency_Hz << " Hz\n";
-            lOut << "Mode             : " << mScope->mScope.GetModeName() << "\n";
-            lOut << "Position X       : " << mScope->mScope.mPositionX_px << " px\n";
-            lOut << "Scale X          : " << mScope->mScope.mScaleX_ms_px << " ms/px\n";
-            lOut << "----- Inter sample time (ms) -----\n";
-
-            lOut << mScope->mScope.mStats_InterSample << std::endl;
+            std::cout << mScope->mScope.mStats_InterSample << std::endl;
         }
 
         void Scope_Module::Mode(const char* aMode)

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Test_TestManager.cpp
@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Color.h>
+#include <KMS/Console/Redirection.h>
 #include <KMS/Test/TestManager.h>
 
 using namespace KMS;
@@ -20,8 +21,6 @@ KMS_TEST(Test_TestManager_Fail, "Auto", sTest_Fail)
 {
     Cfg::Configurator      lC;
     KMS::Test::TestManager lTM;
-
-    lTM.mConsole.Set_Null();
 
     lC.AddConfigurable(&lTM);
 
@@ -38,9 +37,21 @@ KMS_TEST(Test_TestManager_Fail, "Auto", sTest_Fail)
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 1U);
 
-    KMS_TEST_COMPARE(lTM.Run(), 98);
+    int lRet;
 
-    lTM.mConsole.OutputStream() << lTM;
+    Console::Redirection lR(Console::Redirection::What::WHAT_ALL);
+    {
+        lRet = lTM.Run();
+    }
+    lR.Restore();
+
+    KMS_TEST_COMPARE(lRet, 98);
+
+    lR.Redirect();
+    {
+        std::cout << lTM;
+    }
+    lR.Restore();
 
     KMS_TEST_COMPARE(lTM.GetErrorCount(), 6U);
 }

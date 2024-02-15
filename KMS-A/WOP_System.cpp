@@ -185,10 +185,10 @@ namespace KMS
 
             void System::Dump()
             {
-                mConsole.OutputStream() << "System:\n";
-                mConsole.OutputStream() << "  Result In  : " << static_cast<unsigned int>(mResult_In ) << "\n";
-                mConsole.OutputStream() << "  Result Out : " << static_cast<unsigned int>(mResult_Out) << "\n";
-                mConsole.OutputStream() << "  Version In : " << mVersion_In << std::endl;
+                std::cout << "System:\n";
+                std::cout << "  Result In  : " << static_cast<unsigned int>(mResult_In ) << "\n";
+                std::cout << "  Result Out : " << static_cast<unsigned int>(mResult_Out) << "\n";
+                std::cout << "  Version In : " << mVersion_In << std::endl;
             }
 
         #endif
@@ -252,7 +252,7 @@ namespace KMS
                     char lData[256];
                     memset(&lData, 0, sizeof(lData));
                     aIn->GetData(lData, sizeof(lData) - 1);
-                    mConsole.OutputStream() << "WOP TRACE " << lData << std::endl;
+                    std::cout << "WOP TRACE " << lData << std::endl;
                 #endif
                 lResult = KMS_WOP_RESULT_OK;
                 break;

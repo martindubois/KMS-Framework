@@ -62,8 +62,6 @@ namespace KMS
         {
             assert(nullptr != aModule);
 
-            aModule->SetConsole(&mConsole);
-
             mModules.push_back(aModule);
         }
 
@@ -90,7 +88,7 @@ namespace KMS
             if (stdin == aFile)
             {
                 // NOT TESTED
-                mConsole.OutputStream() << "\n> " << std::flush;
+                std::cout << "\n> " << std::flush;
             }
 
             int lResult = 0;
@@ -113,7 +111,7 @@ namespace KMS
 
                 if (stdin == aFile)
                 {
-                    mConsole.OutputStream() << "\n> " << std::flush;
+                    std::cout << "\n> " << std::flush;
                 }
             }
 
@@ -197,7 +195,7 @@ namespace KMS
             {
                 Delay(lDelay_ms);
             }
-            else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { mConsole.OutputStream() << lValue << std::endl; }
+            else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { std::cout << lValue << std::endl; }
             else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
                 lResult = ExecuteScript(lValue);
@@ -205,7 +203,7 @@ namespace KMS
             else if (0 == strcmp(aC, "ExitIfError")) { ExitIfError(); }
             else if (1 == sscanf_s(aC, "Exit %d", &mExit_Code)) { mExit_Count++; }
             else if (0 == strcmp(aC, "Exit")) { mExit_Count++; }
-            else if (0 == strcmp(aC, "Help")) { DisplayHelp(mConsole.OutputFile()); }
+            else if (0 == strcmp(aC, "Help")) { DisplayHelp(stdout); }
             else if (2 == sscanf_s(aC, "Repeat %u %[^\n\r\t]", &lCount, lValue SizeInfo(lValue)))
             {
                 lResult = Repeat(lCount, lValue);

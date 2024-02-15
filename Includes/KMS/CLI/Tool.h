@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Tool.h
@@ -14,7 +14,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/CLI/Module.h>
-#include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
 
@@ -56,10 +55,6 @@ namespace KMS
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
-
-        // Internal
-
-            Console::Console mConsole;
 
         protected:
 

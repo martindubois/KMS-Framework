@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Cfg/Configurator.h
@@ -14,7 +14,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Callback.h>
-#include <KMS/Console/Console.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
@@ -70,10 +69,6 @@ namespace KMS
             void SaveConfig(const char* aPath);
 
             void Validate() const;
-
-        // Internal
-
-            Console::Console mConsole;
 
         private:
 

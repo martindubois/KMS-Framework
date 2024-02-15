@@ -309,9 +309,6 @@
     <ClCompile Include="Console_Color_W.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
-    <ClCompile Include="Console_Console.cpp">
-      <Filter>Source Files\Console</Filter>
-    </ClCompile>
     <ClCompile Include="Callback.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

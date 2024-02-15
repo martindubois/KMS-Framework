@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Dbg_Log.cpp
@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Console/Redirection.h>
 #include <KMS/Dbg/Log.h>
 
 using namespace KMS;
@@ -19,21 +20,31 @@ KMS_TEST(Dbg_Log_Base, "Auto", sTest_Base)
 {
     // Constructor
     Dbg::Log  lL;
-    lL.mConsole.Set_Null();
 
     // SetHideCount
     Exception lE(__FILE__, __FUNCTION__, __LINE__, RESULT_ERROR, "Test");
 
     // CloseLogFiles
-
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+    Console::Redirection lR(Console::Redirection::What::WHAT_STDERR);
+    {
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+    }
+    lR.Restore();
     lL.WriteData(&lL, sizeof(lL));
-    lL.WriteException(lE);
-    lL.WriteMessage("Test");
+    lR.Redirect();
+    {
+        lL.WriteException(lE);
+        lL.WriteMessage("Test");
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    }
+    lR.Restore();
     lL.WriteData(&lL, sizeof(lL));
-    lL.WriteMessage("Test");
+    lR.Redirect();
+    {
+        lL.WriteMessage("Test");
+    }
+    lR.Restore();
 
     lL.mFolder = File::Folder("DoesNotExist");
     lL.CloseLogFiles();
@@ -55,28 +66,44 @@ KMS_TEST(Dbg_Log_Base, "Auto", sTest_Base)
     lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_NOISE);
     lL.WriteData(&lL, sizeof(lL));
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    lR.Redirect();
+    {
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+    }
+    lR.Restore();
     lL.WriteData(&lL, sizeof(lL));
-    lL.WriteException(lE);
+    lR.Redirect();
+    {
+        lL.WriteException(lE);
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+    }
+    lR.Restore();
     lL.WriteData(&lL, sizeof(lL));
-    lL.WriteException(lE);
-    lL.WriteMessage("Test");
+    lR.Redirect();
+    {
+        lL.WriteException(lE);
+        lL.WriteMessage("Test");
+    }
+    lR.Restore();
 
     lL.mConsoleMode = Dbg::Log::ConsoleMode::MODE_DEBUG;
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
-    lL.WriteData(&lL, sizeof(lL));
-    lL.WriteException(lE);
+    lR.Redirect();
+    {
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+        lL.WriteData(&lL, sizeof(lL));
+        lL.WriteException(lE);
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
-    lL.WriteData(&lL, sizeof(lL));
-    lL.WriteException(lE);
-    lL.WriteMessage("Test");
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_ERROR);
+        lL.WriteData(&lL, sizeof(lL));
+        lL.WriteException(lE);
+        lL.WriteMessage("Test");
 
-    lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
-    lL.WriteData(&lL, sizeof(lL));
+        lL.WriteEntry(__FILE__, __FUNCTION__, __LINE__, Dbg::LogFile::Level::LEVEL_WARNING);
+        lL.WriteData(&lL, sizeof(lL));
+    }
+    lR.Restore();
 
     KMS_DBG_LOG_INFO();
     Dbg::gLog.WriteData(&lL, sizeof(lL));

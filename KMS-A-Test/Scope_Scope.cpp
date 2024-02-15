@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Scope_Scope.cpp
@@ -145,4 +145,18 @@ KMS_TEST(Scope_Scope_Base, "Auto", sTest_Base)
         lS6.Sample();
     }
     lS6.Channel_Remove(&lC0);
+
+    // ===== Cleanup ========================================================
+    lF1.Close();
+    lF2.Close();
+    lF3.Close();
+    lF4.Close();
+    lF5.Close();
+    lF6.Close();
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_1.bmp");
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_2.bmp");
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_3.bmp");
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_4.bmp");
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_5.bmp");
+    File::Folder::CURRENT.Delete("Test_Scope_Scope_Base_6.bmp");
 }

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WOP/System.h
@@ -10,7 +10,6 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/Console/Console.h>
 #include <KMS/Version.h>
 #include <KMS/WOP/FrameBuffer.h>
 #include <KMS/WOP/Object.h>
@@ -54,12 +53,6 @@ namespace KMS
             // ===== Object =================================================
             virtual bool    PrepareFrame(FrameBuffer* aOut, uint8_t aInstance);
             virtual uint8_t WriteData(const FrameBuffer* aIn);
-
-        // Internal
-
-            #ifndef _KMS_EMBEDDED_
-                Console::Console mConsole;
-            #endif
 
         private:
 

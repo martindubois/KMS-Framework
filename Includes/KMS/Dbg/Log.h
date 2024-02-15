@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Log.h
@@ -13,7 +13,6 @@
 #include <map>
 
 // ===== Includes ===========================================================
-#include <KMS/Console/Console.h>
 #include <KMS/Dbg/LogFile.h>
 #include <KMS/Enum.h>
 #include <KMS/File/Folder.h>
@@ -68,10 +67,6 @@ namespace KMS
             void WriteException(const Exception& aException, unsigned int aFlags = 0);
 
             void WriteVersion(const char* aProduct, const Version& aVersion);
-
-        // Internal
-
-            Console::Console mConsole;
 
         private:
 
