@@ -7,6 +7,6 @@ File      KMS-Build/_DocUser/KMS.KMS-Bitmap.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.1.10-dev Windows 2023-01-31
+1.1.14-dev Windows 2024-02-15
 
 1.0.3 Windows 2023-09-04
