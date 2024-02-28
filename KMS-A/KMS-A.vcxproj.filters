@@ -417,6 +417,9 @@
     <ClCompile Include="Console_Redirection_W.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
+    <ClCompile Include="Console_HumanScript.cpp">
+      <Filter>Source Files\Console</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

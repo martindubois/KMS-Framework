@@ -39,6 +39,7 @@
     <ClCompile Include="CLI_Module.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
+    <ClCompile Include="Console_HumanScript.cpp" />
     <ClCompile Include="Console_Redirection.cpp" />
     <ClCompile Include="Console_Redirection_W.cpp" />
     <ClCompile Include="Convert.cpp" />
