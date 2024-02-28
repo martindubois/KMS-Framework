@@ -114,6 +114,7 @@ namespace KMS
 
             #ifdef _KMS_WINDOWS_
                 void CreateDriverCab(const char* aD, const char* aCabFile);
+                bool SignDriver(const char* aCabFile, const char* aSigned);
             #endif
 
             File::Folder mProductFolder;

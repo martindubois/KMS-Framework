@@ -7,6 +7,8 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
+- Instruction for getting driver signed by Microsoft
+
 1.1.14-dev Windows 2024-02-15
 
 1.1.13-dev Linux 2024-02-07

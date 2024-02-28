@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/Console/HumanScript.h>
 #include <KMS/Proc/Process.h>
 #include <KMS/Dbg/Stats_Timer.h>
 
@@ -34,6 +35,7 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 
+#define DISK1_FOLDER      ("disk1")
 #define INNO_SETUP_EXE    ("Compil32" FILE_EXT_EXE)
 #define INNO_SETUP_FOLDER ("Inno Setup 6")
 #define INSTALLER_FOLDER  ("Installer")
@@ -56,9 +58,9 @@ static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1("CertificatSHA1 = {SHA1}");
 // Static function declaration
 // /////////////////////////////////////////////////////////////////////////
 
-static void CAB_FileName(const char* aDriver   , char* aOut, unsigned int aOutSize_byte);
-static bool DDF_FileName(const char* aDriver   , char* aOut, unsigned int aOutSize_byte);
-static bool ISS_FileName(const char* aProcessor, char* aOut, unsigned int aOutSize_byte);
+static void CAB_FileName(const char* aDriver   , const char* aFolder, char* aOut, unsigned int aOutSize_byte);
+static bool DDF_FileName(const char* aDriver   ,                      char* aOut, unsigned int aOutSize_byte);
+static bool ISS_FileName(const char* aProcessor,                      char* aOut, unsigned int aOutSize_byte);
 
 static const char* SLN_FILE_NAME = "Solution" FILE_EXT_SLN;
 
@@ -154,7 +156,7 @@ namespace KMS
                 }
             }
 
-            if (!mDrivers.IsEmpty())
+            if ((!mDrivers.IsEmpty()) && (0 != strcmp("Debug", aC)))
             {
                 File::Folder lDrv(mTmp_Drivers, lCP.c_str());
 
@@ -169,11 +171,27 @@ namespace KMS
 
                     char lFileName[PATH_LENGTH];
 
-                    CAB_FileName(*lD, lFileName, sizeof(lFileName));
+                    CAB_FileName(*lD, DISK1_FOLDER, lFileName, sizeof(lFileName));
 
                     CreateDriverCab(lD->Get(), lFileName);
 
-                    File::Folder::CURRENT.Copy(lDrv, lFileName);
+                    char lSigned[PATH_LENGTH];
+                    sprintf_s(lSigned, "Signed\\%s", lD->GetString().c_str());
+
+                    if (SignDriver(lFileName, lSigned))
+                    {
+                        File::Folder lSrcF(File::Folder::CURRENT, lSigned);
+
+                        lSrcF.Copy(lDrv);
+                    }
+                    else
+                    {
+                        File::Folder lDisk1(File::Folder::CURRENT, DISK1_FOLDER);
+
+                        CAB_FileName(*lD, nullptr, lFileName, sizeof(lFileName));
+
+                        lDisk1.Copy(lDrv, lFileName);
+                    }
                 }
             }
 
@@ -329,6 +347,41 @@ namespace KMS
             }
         }
 
+        bool Build::SignDriver(const char* aCabFile, const char* aSigned)
+        {
+            assert(nullptr != aCabFile);
+            assert(nullptr != aSigned);
+
+            Console::HumanScript lHS;
+
+            lHS.Begin("Signing by Microsoft");
+            lHS.Line("Tool - WEB navigator - https://partner.microsoft.com/en-us/dashboard/home");
+            lHS.Step("- Click \"Hardware\"");
+            lHS.Step("- Click \"Submit new hardware\"");
+            lHS.Step("- Enter the product name");
+
+            char lStep[LINE_LENGTH];
+            sprintf_s(lStep, "- Upload the signed cabinet file (%s)", aCabFile);
+            lHS.Step(lStep);
+
+            lHS.Step("- Select the appropriate platforms");
+            lHS.Step("- Click \"Submit\"");
+            lHS.Step("- Wait for Microsoft to sign the driver");
+            lHS.Step("- Download the Microsoft signed driver");
+            lHS.Line("");
+
+            sprintf_s(lStep, "- Uncompress the downloaded file into the \"Signed\\%s\" folder", aSigned);
+            lHS.Step(lStep);
+
+            lHS.Line("");
+
+            auto lResult = lHS.Wait(Console::HumanScript::RESULT_OK, "eno");
+
+            lHS.End();
+
+            return Console::HumanScript::RESULT_OK == lResult;
+        }
+
     }
 }
 
@@ -337,13 +390,20 @@ using namespace KMS;
 // Static functions
 // /////////////////////////////////////////////////////////////////////////
 
-void CAB_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)
+void CAB_FileName(const char* aDriver, const char* aFolder, char* aOut, unsigned int aOutSize_byte)
 {
     assert(nullptr != aDriver);
     assert(nullptr != aOut);
     assert(0 < aOutSize_byte);
 
-    sprintf_s(aOut, aOutSize_byte, "disk1\\%s" FILE_EXT_CAB, aDriver);
+    if (nullptr == aFolder)
+    {
+        sprintf_s(aOut, aOutSize_byte, "%s" FILE_EXT_CAB, aDriver);
+    }
+    else
+    {
+        sprintf_s(aOut, aOutSize_byte, "%s\\%s" FILE_EXT_CAB, aFolder, aDriver);
+    }
 }
 
 bool DDF_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)
