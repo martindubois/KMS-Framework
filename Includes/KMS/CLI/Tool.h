@@ -68,6 +68,8 @@ namespace KMS
 
             void AbortIfError();
 
+            void ChangeDir(const char* aDir);
+
             int Config(const char* aOperation);
 
             void Delay(unsigned int aDelay_ms);

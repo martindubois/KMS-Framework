@@ -7,7 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-- Console::HumanScript
+- CLI::Tool - Command ChangeDir (KF-54)
+- Console::HumanScript (KF-52)
 
 1.1.14-dev Windows 2024-02-15
 - Console::Redirection

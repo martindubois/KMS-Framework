@@ -154,6 +154,7 @@ namespace KMS
 
             fprintf(aOut,
                 "AbortIfError\n"
+                "ChangeDir\n"
                 "ClearError\n"
                 "Config {Name} [Op] [Value]\n"
                 "Delay {Delay_ms}\n"
@@ -186,6 +187,10 @@ namespace KMS
             char lValue[LINE_LENGTH];
             
             if      (0 == strcmp(aC, "AbortIfError")) { AbortIfError(); }
+            else if (1 == sscanf_s(aC, "ChangeDir %[^\n\r\t]", lValue SizeInfo(lValue)))
+            {
+                ChangeDir(lValue);
+            }
             else if (0 == strcmp(aC, "ClearError"  )) { ClearError  (); }
             else if (1 == sscanf_s(aC, "Config %[^\n\r\t]", lValue SizeInfo(lValue)))
             {
@@ -277,6 +282,11 @@ namespace KMS
 
                 exit(mError_Code);
             }
+        }
+
+        void Tool::ChangeDir(const char* aDir)
+        {
+            File::Folder::ChangeCurrentDirectory(File::Folder(File::Folder::NONE, aDir));
         }
 
         int Tool::Config(const char* aOperation)

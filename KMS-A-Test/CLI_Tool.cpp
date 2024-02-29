@@ -27,6 +27,8 @@ KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
 
     // AddCommand
     lT.AddCommand("AbortIfError");
+    lT.AddCommand("ChangeDir KMS-A-Test");
+    lT.AddCommand("ChangeDir ..");
     lT.AddCommand("Config Invalid");
     lT.AddCommand("Echo Message");
     lT.AddCommand("ExecuteScript KMS-A-Test/Tests/Test_CLI_Tool_Base_0.txt");
