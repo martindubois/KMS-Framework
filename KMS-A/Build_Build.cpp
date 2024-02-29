@@ -38,6 +38,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 
 static const KMS::Cfg::MetaData MD_BINARIES       ("Binaries += {Name}");
 static const KMS::Cfg::MetaData MD_CONFIGURATIONS ("Configurations += {Name}");
+static const KMS::Cfg::MetaData MD_DO_NOT_CLEAN   ("DoNotRebuild = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_COMPILE ("DoNotCompile = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_EXPORT  ("DoNotExport = false | true");
 static const KMS::Cfg::MetaData MD_DO_NOT_PACKAGE ("DoNotPackage = false | true");
@@ -115,6 +116,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
+        const bool  Build::DO_NOT_CLEAN_DEFAULT   = false;
         const bool  Build::DO_NOT_COMPILE_DEFAULT = false;
         const bool  Build::DO_NOT_EXPORT_DEFAULT  = false;
         const bool  Build::DO_NOT_PACKAGE_DEFAULT = false;
@@ -149,7 +151,8 @@ namespace KMS
         }
 
         Build::Build()
-            : mDoNotCompile (DO_NOT_COMPILE_DEFAULT)
+            : mDoNotClean   (DO_NOT_CLEAN_DEFAULT)
+            , mDoNotCompile (DO_NOT_COMPILE_DEFAULT)
             , mDoNotExport  (DO_NOT_EXPORT_DEFAULT)
             , mDoNotPackage (DO_NOT_PACKAGE_DEFAULT)
             , mDoNotTest    (DO_NOT_TEST_DEFAULT)
@@ -173,6 +176,7 @@ namespace KMS
             AddEntry("Binaries"      , &mBinaries      , false, &MD_BINARIES);
             AddEntry("Configurations", &mConfigurations, false, &MD_CONFIGURATIONS);
             AddEntry("Drivers"       , &mDrivers       , false, &MD_DRIVERS);
+            AddEntry("DoNotClean"    , &mDoNotClean    , false, &MD_DO_NOT_CLEAN);
             AddEntry("DoNotCompile"  , &mDoNotCompile  , false, &MD_DO_NOT_COMPILE);
             AddEntry("DoNotExport"   , &mDoNotExport   , false, &MD_DO_NOT_EXPORT);
             AddEntry("DoNotPackage"  , &mDoNotPackage  , false, &MD_DO_NOT_PACKAGE);
@@ -333,7 +337,11 @@ namespace KMS
             lM.mConfiguration.Set(aC);
             lM.mProcessor    .Set(aP);
 
-            lM.AddCommand("Clean");
+            if (!mDoNotClean.Get())
+            {
+                lM.AddCommand("Clean");
+            }
+
             lM.AddCommand("Make");
 
             lC.Validate();

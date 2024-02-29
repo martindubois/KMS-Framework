@@ -29,6 +29,7 @@ namespace KMS
 
         public:
 
+            static const bool  DO_NOT_CLEAN_DEFAULT;
             static const bool  DO_NOT_COMPILE_DEFAULT;
             static const bool  DO_NOT_EXPORT_DEFAULT;
             static const bool  DO_NOT_PACKAGE_DEFAULT;
@@ -41,6 +42,7 @@ namespace KMS
 
             DI::Array   mBinaries;
             DI::Array   mConfigurations;
+            DI::Boolean mDoNotClean;
             DI::Boolean mDoNotCompile;
             DI::Boolean mDoNotExport;
             DI::Boolean mDoNotPackage;

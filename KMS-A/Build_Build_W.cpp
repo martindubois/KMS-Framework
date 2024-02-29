@@ -44,7 +44,7 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 #define SIGNTOOL_EXE      ("signtool" FILE_EXT_EXE)
 #define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.22621.0\\x64")
 
-#define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) // 5 minutes
+#define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) //  5 minutes
 #define MAKECAB_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
 #define MSBUILD_ALLOWED_TIME_ms    (1000 * 60 * 10) // 10 minutes
 #define SIGNTOOL_ALLOWED_TIME_ms   (1000 * 60 * 10) // 10 minutes
@@ -110,7 +110,15 @@ namespace KMS
             Proc::Process lProcess(lBin, MSBUILD_EXE);
 
             lProcess.AddArgument(SLN_FILE_NAME);
-            lProcess.AddArgument("/target:rebuild");
+
+            if (mDoNotClean.Get())
+            {
+                lProcess.AddArgument("/target:build");
+            }
+            else
+            {
+                lProcess.AddArgument("/target:rebuild");
+            }
 
             lProcess.AddArgument((std::string("/Property:Configuration=") + aC).c_str());
             lProcess.AddArgument(("/property:Platform=" + std::string(aP)).c_str());
