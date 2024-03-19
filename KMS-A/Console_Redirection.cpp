@@ -7,8 +7,10 @@
 
 #include "Component.h"
 
-// ===== C ==================================================================
-#include <io.h>
+#ifdef _KMS_WINDOWS_
+    // ===== C ==============================================================
+    #include <io.h>
+#endif
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Redirection.h>
@@ -139,13 +141,13 @@ void RedirectIfNeeded(const int aRedirect[INDEX_QTY])
     {
         fflush(stderr);
         lRet = _dup2(aRedirect[INDEX_STDERR], HANDLE_STDERR);
-        assert(0 == lRet);
+        assert(-1 != lRet);
     }
 
     if (HANDLE_INVALID != aRedirect[INDEX_STDOUT])
     {
         fflush(stdout);
         lRet = _dup2(aRedirect[INDEX_STDOUT], HANDLE_STDOUT);
-        assert(0 == lRet);
+        assert(-1 != lRet);
     }
 }

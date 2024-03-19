@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== C ==================================================================
+#include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -35,8 +36,12 @@ typedef int SOCKET;
 
 #define closesocket close
 
+#define _dup  dup
+#define _dup2 dup2
+
 // ===== ..._s ==============================================================
 
+#define gets_s(B) fgets((B), sizeof(B), stdin)
 #define sprintf_s sprintf
 #define sscanf_s  sscanf
 #define strcat_s  strcat
