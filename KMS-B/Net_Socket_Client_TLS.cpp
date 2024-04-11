@@ -30,7 +30,9 @@ namespace KMS
 
         Socket_Client_TLS::Socket_Client_TLS() : Socket_Client(Socket::Type::STREAM)
         {
-            AddEntry("RemoteName", &mRemoteName, false, &MD_REMOTE_NAME);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mRemoteName, false); AddEntry("RemoteName", lEntry, &MD_REMOTE_NAME);
 
             Construct_OSDep();
         }

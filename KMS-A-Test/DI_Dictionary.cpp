@@ -15,8 +15,9 @@ using namespace KMS;
 
 KMS_TEST(DI_Dictionary_Base, "Auto", sTest_Base)
 {
-    DI::Dictionary lD0;
-    DI::String     lS0;
+    DI::Dictionary     lD0;
+    Ptr_OF<DI::Object> lEntry;
+    DI::String         lS0;
 
     // Create
     DI::Object* lO0 = DI::Dictionary::Create();
@@ -24,11 +25,11 @@ KMS_TEST(DI_Dictionary_Base, "Auto", sTest_Base)
     delete lO0;
 
     // AddConstEntry
-    lD0.AddConstEntry("Test0", &lS0);
-    lD0.AddConstEntry("Test0", &lS0);
+    lEntry.Set(&lS0); lD0.AddEntry("Test0", lEntry);
+    lEntry.Set(&lS0); lD0.AddEntry("Test0", lEntry);
 
     // AddEntry
-    lD0.AddEntry("Test0", &lS0, false);
+    lEntry.Set(&lS0, false); lD0.AddEntry("Test0", lEntry);
 
     // CreateEntry
 

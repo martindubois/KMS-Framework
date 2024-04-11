@@ -41,10 +41,12 @@ namespace KMS
         {
             mFolder.mOnChanged = &ON_FOLDER_CHANGED;
 
-            AddEntry("Log_ConsoleLevel", &mConsoleLevel, false, &MD_LOG_CONSOLE_LEVEL);
-            AddEntry("Log_ConsoleMode" , &mConsoleMode , false, &MD_LOG_CONSOLE_MODE);
-            AddEntry("Log_FileLevel"   , &mFileLevel   , false, &MD_LOG_FILE_LEVEL);
-            AddEntry("Log_Folder"      , &mFolder      , false, &MD_LOG_FOLDER);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mConsoleLevel, false); AddEntry("Log_ConsoleLevel", lEntry, &MD_LOG_CONSOLE_LEVEL);
+            lEntry.Set(&mConsoleMode , false); AddEntry("Log_ConsoleMode" , lEntry, &MD_LOG_CONSOLE_MODE);
+            lEntry.Set(&mFileLevel   , false); AddEntry("Log_FileLevel"   , lEntry, &MD_LOG_FILE_LEVEL);
+            lEntry.Set(&mFolder      , false); AddEntry("Log_Folder"      , lEntry, &MD_LOG_FOLDER);
         }
 
         // Private

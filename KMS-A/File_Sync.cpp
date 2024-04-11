@@ -74,9 +74,11 @@ namespace KMS
             mBidirectional .SetCreator(CreateGroup);
             mUnidirectional.SetCreator(DI::String_Expand::Create);
 
-            AddEntry("Bidirectional" , &mBidirectional , false, &MD_BIDIRECTIONAL);
-            AddEntry("Unidirectional", &mUnidirectional, false, &MD_UNIDIRECTIONAL);
-            AddEntry("Verbose"       , &mVerbose       , false, &MD_VERBOSE);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mBidirectional , false); AddEntry("Bidirectional" , lEntry, &MD_BIDIRECTIONAL);
+            lEntry.Set(&mUnidirectional, false); AddEntry("Unidirectional", lEntry, &MD_UNIDIRECTIONAL);
+            lEntry.Set(&mVerbose       , false); AddEntry("Verbose"       , lEntry, &MD_VERBOSE);
         }
 
         int Sync::Run()

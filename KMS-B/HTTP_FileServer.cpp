@@ -47,36 +47,46 @@ namespace KMS
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
+            Ptr_OF<DI::Object> lEntry(&FIELD_VALUE_CONTENT_TYPE_APPLICATION_JAVASCRIPT);
+
+            aTransaction->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_TYPE, lEntry);
         }
 
         void FileServer::FileType_Image_XIcon(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
+            Ptr_OF<DI::Object> lEntry(&FIELD_VALUE_CONTENT_TYPE_IMAGE_X_ICON);
+
+            aTransaction->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_TYPE, lEntry);
         }
 
         void FileServer::FileType_Text_CSS(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
+            Ptr_OF<DI::Object> lEntry(&FIELD_VALUE_CONTENT_TYPE_TEXT_CSS);
+
+            aTransaction->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_TYPE, lEntry);
         }
 
         void FileServer::FileType_Text_HTML(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
+            Ptr_OF<DI::Object> lEntry(&FIELD_VALUE_CONTENT_TYPE_TEXT_HTML);
+
+            aTransaction->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_TYPE, lEntry);
         }
 
         void FileServer::FileType_Text_Plain(Transaction* aTransaction)
         {
             assert(nullptr != aTransaction);
 
-            aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_CONTENT_DISPOSITION, &Response::FIELD_VALUE_CONTENT_DISPOSITION_INLINE);
-            aTransaction->mResponse_Header.AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&Response::FIELD_VALUE_CONTENT_DISPOSITION_INLINE); aTransaction->mResponse_Header.AddEntry(Response::FIELD_NAME_CONTENT_DISPOSITION, lEntry);
+            lEntry.Set(&          FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN   ); aTransaction->mResponse_Header.AddEntry(          FIELD_NAME_CONTENT_TYPE       , lEntry);
         }
 
         int FileServer::Main(int aCount, const char** aVector)
@@ -128,8 +138,10 @@ namespace KMS
             // ===== Callbacks ==============================================
             , ON_REQUEST(this, &FileServer::OnRequest)
         {
-            AddEntry("Root"   , &mRoot   , false, &MD_ROOT);
-            AddEntry("Verbose", &mVerbose, false, &MD_VERBOSE);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mRoot   , false); AddEntry("Root"   , lEntry, &MD_ROOT);
+            lEntry.Set(&mVerbose, false); AddEntry("Verbose", lEntry, &MD_VERBOSE);
 
             SetFileType("css" , FileType_Text_CSS);
             SetFileType("htm" , FileType_Text_HTML);
@@ -208,13 +220,12 @@ namespace KMS
 
             lIt->second(aT);
 
-            auto lFile = new File::Binary(mRoot, lPath + 1);
-            assert(nullptr != lFile);
+            Ptr_OF<File::Binary> lFile(new File::Binary(mRoot, lPath + 1), true);
 
-            auto lValue = new DI::UInt<uint32_t>(lFile->GetSize());
-            aT->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_LENGTH, lValue, true);
+            Ptr_OF<DI::Object> lEntry(new DI::UInt<uint32_t>(lFile->GetSize()), true);
+            aT->mResponse_Header.AddEntry(FIELD_NAME_CONTENT_LENGTH, lEntry);
 
-            aT->SetFile(lFile, true);
+            aT->SetFile(lFile);
         }
 
         // ===== DI::Container ==============================================

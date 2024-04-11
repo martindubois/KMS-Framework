@@ -27,7 +27,9 @@ namespace KMS
 
         Slave_Cfg::Slave_Cfg(Slave* aSlave) : mDeviceAddress(&aSlave->mDeviceAddress)
         {
-            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mDeviceAddress, false); AddEntry("DeviceAddress", lEntry, &MD_DEVICE_ADDRESS);
         }
 
     }

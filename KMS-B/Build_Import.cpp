@@ -104,16 +104,18 @@ namespace KMS
             mRepositories     .SetCreator(DI::Folder::Create);
             mServers          .SetCreator(DI::String_Expand::Create);
 
-            AddEntry("Dependencies"     , &mDependencies     , false, &MD_DEPENDENCIES);
-            AddEntry("OSIndependentDeps", &mOSIndependentDeps, false, &MD_OS_INDEPENDENT_DEPS);
-            AddEntry("Repositories"     , &mRepositories     , false, &MD_REPOSITORIES);
-            AddEntry("Servers"          , &mServers          , false, &MD_SERVERS);
+            Ptr_OF<DI::Object> lEntry;
 
-            AddEntry(NAME_OS "Dependencies", &mDependencies, false, &MD_OS_DEPENDENCIES);
+            lEntry.Set(&mDependencies     , false); AddEntry("Dependencies"     , lEntry, &MD_DEPENDENCIES);
+            lEntry.Set(&mOSIndependentDeps, false); AddEntry("OSIndependentDeps", lEntry, &MD_OS_INDEPENDENT_DEPS);
+            lEntry.Set(&mRepositories     , false); AddEntry("Repositories"     , lEntry, &MD_REPOSITORIES);
+            lEntry.Set(&mServers          , false); AddEntry("Servers"          , lEntry, &MD_SERVERS);
 
-            mRepositories.AddEntry(new DI::Folder(REPOSITORY_DEFAULT), true);
+            lEntry.Set(&mDependencies, false);  AddEntry(NAME_OS "Dependencies", lEntry, &MD_OS_DEPENDENCIES);
 
-            mServers.AddEntry(new DI::String_Expand(SERVER_DEFAULT), true);
+            lEntry.Set(new DI::Folder(REPOSITORY_DEFAULT), true);  mRepositories.AddEntry(lEntry);
+
+            lEntry.Set(new DI::String_Expand(SERVER_DEFAULT), true); mServers.AddEntry(lEntry);
         }
 
         void Import::ImportDependency(const char* aDependency, bool aOSIndependent)

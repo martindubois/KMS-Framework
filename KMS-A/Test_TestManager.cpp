@@ -63,8 +63,10 @@ namespace KMS
             mGroups.SetCreator(DI::String::Create);
             mTests .SetCreator(DI::String::Create);
 
-            AddEntry("Groups", &mGroups, false, &MD_GROUPS);
-            AddEntry("Tests" , &mTests , false, &MD_TESTS);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mGroups, false); AddEntry("Groups", lEntry, &MD_GROUPS);
+            lEntry.Set(&mTests , false); AddEntry("Tests" , lEntry, &MD_TESTS);
         }
 
         void TestManager::AddGroup(const char * aGroup)

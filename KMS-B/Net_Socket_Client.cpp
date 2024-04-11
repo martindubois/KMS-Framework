@@ -31,7 +31,9 @@ namespace KMS
 
         Socket_Client::Socket_Client(Type aType) : Socket(aType)
         {
-            AddEntry("RemoteAddress", &mRemoteAddress, false, &MD_REMOTE_ADDRESS);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mRemoteAddress, false); AddEntry("RemoteAddress", lEntry, &MD_REMOTE_ADDRESS);
         }
 
         void Socket_Client::Connect   () { VerifyState(State::CONNECTED); }

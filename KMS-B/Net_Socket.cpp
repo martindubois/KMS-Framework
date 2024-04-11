@@ -60,12 +60,14 @@ namespace KMS
             , mState(State::CLOSED)
             , mType(aType)
         {
-            AddEntry("KeepALive"     , &mKeepALive        , false, &MD_KEEP_A_LIVE);
-            AddEntry("LocalAddress"  , &mLocalAddress     , false, &MD_LOCAL_ADDRESS);
-            AddEntry("NoDelay"       , &mNoDelay          , false, &MD_NO_DELAY);
-            AddEntry("ReceiveTimeout", &mReceiveTimeout_ms, false, &MD_RECEIVER_TIMEOUT);
-            AddEntry("ReuseAddr"     , &mReuseAddr        , false, &MD_REUSE_ADDR);
-            AddEntry("SendTimeout"   , &mSendTimeout_ms   , false, &MD_SEND_TIMEOUT);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mKeepALive        , false); AddEntry("KeepALive"     , lEntry, &MD_KEEP_A_LIVE);
+            lEntry.Set(&mLocalAddress     , false); AddEntry("LocalAddress"  , lEntry, &MD_LOCAL_ADDRESS);
+            lEntry.Set(&mNoDelay          , false); AddEntry("NoDelay"       , lEntry, &MD_NO_DELAY);
+            lEntry.Set(&mReceiveTimeout_ms, false); AddEntry("ReceiveTimeout", lEntry, &MD_RECEIVER_TIMEOUT);
+            lEntry.Set(&mReuseAddr        , false); AddEntry("ReuseAddr"     , lEntry, &MD_REUSE_ADDR);
+            lEntry.Set(&mSendTimeout_ms   , false); AddEntry("SendTimeout"   , lEntry, &MD_SEND_TIMEOUT);
         }
 
         Socket::~Socket() { VerifyState(State::CLOSED); }

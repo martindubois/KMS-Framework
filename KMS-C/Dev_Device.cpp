@@ -34,8 +34,10 @@ namespace KMS
             , mLink (LINK_DEFAULT)
             , mHandle(INVALID_HANDLE_VALUE)
         {
-            AddEntry("Index", &mIndex, false, &MD_INDEX);
-            AddEntry("Link" , &mLink , false, &MD_LINK);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mIndex, false); AddEntry("Index", lEntry, &MD_INDEX);
+            lEntry.Set(&mLink , false); AddEntry("Link" , lEntry, &MD_LINK);
 
             Construct_OSDep();
         }

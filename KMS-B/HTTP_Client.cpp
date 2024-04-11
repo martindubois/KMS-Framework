@@ -72,20 +72,26 @@ namespace KMS
 
             ConnectSocket(lHost);
 
-            Transaction lTransaction(mSocket, false);
+            Ptr_OF<Net::Socket> lSocket(mSocket, false);
+
+            Transaction lTransaction(lSocket);
 
             InitTransaction(&lTransaction);
 
             lTransaction.SetType(Transaction::Type::GET);
             lTransaction.SetPath(lPath);
 
-            lTransaction.mRequest_Header.AddEntry(Request::FIELD_NAME_HOST, new DI::String(lHost), true);
+            Ptr_OF<DI::Object> lEntry(new DI::String(lHost), true);
+
+            lTransaction.mRequest_Header.AddEntry(Request::FIELD_NAME_HOST, lEntry);
 
             lTransaction.Request_Send();
 
             if (nullptr != aOutFile)
             {
-                lTransaction.SetFile(aOutFile, false);
+                Ptr_OF<File::Binary> lOutFile(aOutFile, false);
+
+                lTransaction.SetFile(lOutFile);
             }
 
             lTransaction.Response_Receive();
@@ -128,18 +134,24 @@ namespace KMS
 
             ConnectSocket(lHost);
 
-            Transaction lTransaction(mSocket, false);
+            Ptr_OF<Net::Socket> lSocket(mSocket, false);
+
+            Transaction lTransaction(lSocket);
 
             InitTransaction(&lTransaction);
 
             lTransaction.SetType(Transaction::Type::POST);
             lTransaction.SetPath(lPath);
 
-            lTransaction.mRequest_Header.AddEntry(Request::FIELD_NAME_HOST, new DI::String(lHost), true);
+            Ptr_OF<DI::Object> lEntry(new DI::String(lHost), true);
+
+            lTransaction.mRequest_Header.AddEntry(Request::FIELD_NAME_HOST, lEntry);
 
             if (nullptr != aData)
             {
-                lTransaction.SetRequestData(const_cast<DI::Object*>(aData), false);
+                Ptr_OF<DI::Object> lData(const_cast<DI::Object*>(aData), false);
+
+                lTransaction.SetRequestData(lData);
             }
 
             lTransaction.Request_Send();
@@ -266,8 +278,10 @@ void InitTransaction(HTTP::Transaction* aTransaction)
 {
     assert(nullptr != aTransaction);
 
-    aTransaction->mRequest_Header.AddConstEntry(HTTP::Request::FIELD_NAME_CONNECTION     , &HTTP::Request::FIELD_VALUE_CONNECTION);
-    aTransaction->mRequest_Header.AddConstEntry(HTTP::Request::FIELD_NAME_USER_AGENT     , &HTTP::Request::FIELD_VALUE_USER_AGENT);
-    aTransaction->mRequest_Header.AddConstEntry(HTTP::Request::FIELD_NAME_ACCEPT         , &HTTP::Request::FIELD_VALUE_ACCEPT_TEXT_HTML);
-    aTransaction->mRequest_Header.AddConstEntry(HTTP::Request::FIELD_NAME_ACCEPT_ENCODING, &HTTP::Request::FIELD_VALUE_ACCEPT_ENCODING_DEFLATE);
+    Ptr_OF<DI::Object> lEntry;
+
+    lEntry.Set(&HTTP::Request::FIELD_VALUE_CONNECTION             ); aTransaction->mRequest_Header.AddEntry(HTTP::Request::FIELD_NAME_CONNECTION     , lEntry);
+    lEntry.Set(&HTTP::Request::FIELD_VALUE_USER_AGENT             ); aTransaction->mRequest_Header.AddEntry(HTTP::Request::FIELD_NAME_USER_AGENT     , lEntry);
+    lEntry.Set(&HTTP::Request::FIELD_VALUE_ACCEPT_TEXT_HTML       ); aTransaction->mRequest_Header.AddEntry(HTTP::Request::FIELD_NAME_ACCEPT         , lEntry);
+    lEntry.Set(&HTTP::Request::FIELD_VALUE_ACCEPT_ENCODING_DEFLATE); aTransaction->mRequest_Header.AddEntry(HTTP::Request::FIELD_NAME_ACCEPT_ENCODING, lEntry);
 }

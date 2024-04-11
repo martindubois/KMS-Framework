@@ -80,7 +80,9 @@ namespace KMS
             mCertificatSHA1 = CERTIFICAT_SHA1_DEFAULT;
             mExportFolder   = EXPORT_FOLDER_DEFAULT;
 
-            AddEntry("CertificatSHA1", &mCertificatSHA1, false, &MD_CERTIFICAT_SHA1);
+            Ptr_OF<DI::Object> lEntry(&mCertificatSHA1, false);
+
+            AddEntry("CertificatSHA1", lEntry, &MD_CERTIFICAT_SHA1);
         }
 
         // Private

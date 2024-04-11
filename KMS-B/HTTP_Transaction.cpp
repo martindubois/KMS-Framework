@@ -65,44 +65,19 @@ namespace KMS
             return lResult;
         }
 
-        Transaction::Transaction(Net::Socket* aSocket, bool aDelete)
+        Transaction::Transaction(Ptr_OF<Net::Socket>& aSocket)
             : mData(nullptr)
             , mDataSize_byte(0)
-            , mFile(nullptr)
             , mMajor(1)
             , mMinor(1)
-            , mRequest_Data(nullptr)
-            , mRequest_Data_Delete(false)
-            , mResponse_Data(nullptr)
             , mResult(Result::OK)
             , mSocket(aSocket)
-            , mSocket_Delete(aDelete)
             , mType(Type::GET)
         {
-            assert(nullptr != aSocket);
-
             Buffer_Clear();
-
-            // mRequest_Header.SetCreator(DI::String::Create);
         }
 
-        Transaction::~Transaction()
-        {
-            assert(nullptr != mSocket);
-
-            if ((nullptr != mFile) && mFile_Delete)
-            {
-                delete mFile;
-            }
-
-            Request_DeleteData();
-            Response_DeleteData();
-
-            if (mSocket_Delete)
-            {
-                delete mSocket;
-            }
-        }
+        Transaction::~Transaction() {}
 
         const char* Transaction::GetPath() const { return mPath.c_str(); }
 
@@ -117,13 +92,7 @@ namespace KMS
             return lType.GetName();
         }
 
-        void Transaction::SetFile(File::Binary* aF, bool aDelete)
-        {
-            assert(nullptr != aF);
-
-            mFile = aF;
-            mFile_Delete = aDelete;
-        }
+        void Transaction::SetFile(Ptr_OF<File::Binary>& aF) { mFile.Set(aF); }
 
         // ===== Request ====================================================
 
@@ -131,28 +100,13 @@ namespace KMS
 
         void Transaction::SetPath(const char* aP) { assert(nullptr != aP); mPath = aP; }
 
-        void Transaction::SetRequestData(DI::Object* aData, bool aDelete)
-        {
-            assert(nullptr != aData);
-
-            assert(nullptr == mRequest_Data);
-
-            mRequest_Data        = aData;
-            mRequest_Data_Delete = aDelete;
-        }
+        void Transaction::SetRequestData(Ptr_OF<DI::Object>& aData) { mRequest_Data = aData; }
 
         void Transaction::SetType(Type aT) { mType = aT; }
 
         // ===== Response ===================================================
 
-        const DI::Object* Transaction::DetachResponseData()
-        {
-            const DI::Object* lResult = mResponse_Data;
-
-            mResponse_Data = nullptr;
-
-            return lResult;
-        }
+        const DI::Object* Transaction::DetachResponseData() { return mResponse_Data.Detach(); }
 
         Result Transaction::GetResult() const { return mResult; }
 
@@ -164,12 +118,8 @@ namespace KMS
 
         void Transaction::SetResult(Result aR) { mResult = aR; }
 
-        void Transaction::SetResponseData(DI::Object* aData)
+        void Transaction::SetResponseData(Ptr_OF<DI::Object>& aData)
         {
-            assert(nullptr != aData);
-
-            assert(nullptr == mResponse_Data);
-
             mResponse_Data = aData;
         }
 
@@ -204,7 +154,11 @@ namespace KMS
                 {
                     Buffer_Discard(lHeaderSize_byte);
 
-                    JSON_ReceiveAndDecode(mRequest_Header, &mRequest_Data);
+                    DI::Object* lRequestData = nullptr;
+
+                    JSON_ReceiveAndDecode(mRequest_Header, &lRequestData);
+
+                    mRequest_Data.Set(lRequestData, true);
                 }
             }
 
@@ -235,7 +189,11 @@ namespace KMS
 
             Buffer_Discard(lHeader_byte + HTTP_EOH_LENGTH);
 
-            JSON_ReceiveAndDecode(mResponse_Header, &mResponse_Data);
+            DI::Object* lResponse_Data = nullptr;
+
+            JSON_ReceiveAndDecode(mResponse_Header, &lResponse_Data);
+
+            mResponse_Data.Set(lResponse_Data, true);
 
             switch (mResult)
             {
@@ -416,9 +374,11 @@ namespace KMS
 
                 auto lSize_byte = JSON::Encode_Dictionary(lDictionary, lData, sizeof(lData));
 
-                aHeader->AddEntry(FIELD_NAME_CONTENT_LENGTH, new DI::UInt<uint32_t>(lSize_byte), true);
+                Ptr_OF<DI::Object> lEntry;
 
-                aHeader->AddConstEntry(FIELD_NAME_CONTENT_TYPE, &FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON);
+                lEntry.Set(new DI::UInt<uint32_t>(lSize_byte), true); aHeader->AddEntry(FIELD_NAME_CONTENT_LENGTH, lEntry);
+
+                lEntry.Set(&FIELD_VALUE_CONTENT_TYPE_APPLICATION_JSON); aHeader->AddEntry(FIELD_NAME_CONTENT_TYPE, lEntry);
 
                 SetData(lData, lSize_byte);
             }
@@ -468,20 +428,6 @@ namespace KMS
             }
         }
 
-        void Transaction::Request_DeleteData()
-        {
-            if (nullptr != mRequest_Data)
-            {
-                if (mRequest_Data_Delete)
-                {
-                    delete mRequest_Data;
-                    mRequest_Data_Delete = false;
-                }
-
-                mRequest_Data = nullptr;
-            }
-        }
-
         // Return  false  NOT TESTED
         bool Transaction::Request_Parse(unsigned int* aHeaderSize_byte)
         {
@@ -519,15 +465,6 @@ namespace KMS
             HTTP::Decode_Dictionary(&mRequest_Header, mBuffer + lIndex,lSize_byte);
 
             return true;
-        }
-
-        void Transaction::Response_DeleteData()
-        {
-            if (nullptr != mResponse_Data)
-            {
-                delete mResponse_Data;
-                mResponse_Data = nullptr;
-            }
         }
 
         void Transaction::Response_Parse(unsigned int aSize_byte)

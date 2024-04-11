@@ -56,10 +56,12 @@ namespace KMS
             , mTitle    (&mWindow.mTitle)
             , mZoom     (&mWindow.mZoom)
         {
-            AddEntry("FileName" , &mFileName , false, &MD_FILE_NAME);
-            AddEntry("Period_ms", &mPeriod_ms, false, &MD_PERIOD_ms);
-            AddEntry("Title"    , &mTitle    , false, &MD_TITLE    );
-            AddEntry("Zoom"     , &mZoom     , false, &MD_ZOOM     );
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mFileName , false); AddEntry("FileName" , lEntry, &MD_FILE_NAME);
+            lEntry.Set(&mPeriod_ms, false); AddEntry("Period_ms", lEntry, &MD_PERIOD_ms);
+            lEntry.Set(&mTitle    , false); AddEntry("Title"    , lEntry, &MD_TITLE    );
+            lEntry.Set(&mZoom     , false); AddEntry("Zoom"     , lEntry, &MD_ZOOM     );
 
             mWindow.SetBitmap(&mBitmap);
         }

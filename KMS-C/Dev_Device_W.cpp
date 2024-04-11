@@ -200,7 +200,9 @@ namespace KMS
 
         void Device::Construct_OSDep()
         {
-            AddEntry("Interface", &mInterface, false, &MD_INTERFACE);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mInterface, false);  AddEntry("Interface", lEntry, &MD_INTERFACE);
         }
 
     }

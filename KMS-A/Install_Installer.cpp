@@ -33,9 +33,11 @@ namespace KMS
 
         Installer::Installer() : mAddToPath(ADD_TO_PATH_DEFAULT)
         {
-            AddEntry("AddToPath"     , &mAddToPath     , false, &MD_ADD_TO_PATH);
-            AddEntry("RemoveFromPath", &mRemoveFromPath, false, &MD_REMOVE_FROM_PATH);
-            AddEntry("Uninstall"     , &mUninstall     , false, &MD_UNINSTALL);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mAddToPath     , false); AddEntry("AddToPath"     , lEntry, &MD_ADD_TO_PATH);
+            lEntry.Set(&mRemoveFromPath, false); AddEntry("RemoveFromPath", lEntry, &MD_REMOVE_FROM_PATH);
+            lEntry.Set(&mUninstall     , false); AddEntry("Uninstall"     , lEntry, &MD_UNINSTALL);
         }
 
         void Installer::Run()

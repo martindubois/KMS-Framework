@@ -64,12 +64,14 @@ namespace KMS
             , mCTS(false)
             , mDSR(false)
         {
-            AddEntry("DTR"         , &mDTR            , false, &MD_DTR);
-            AddEntry("Parity"      , &mParity         , false, &MD_PARITY);
-            AddEntry("RTS"         , &mRTS            , false, &MD_RTS);
-            AddEntry("ReadTimeout" , &mReadTimeout_ms , false, &MD_READ_TIMEOUT);
-            AddEntry("Speed"       , &mSpeed_bps      , false, &MD_SPEED);
-            AddEntry("WriteTimeout", &mWriteTimeout_ms, false, &MD_WRITE_TIMEOUT);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mDTR            , false); AddEntry("DTR"         , lEntry, &MD_DTR);
+            lEntry.Set(&mParity         , false); AddEntry("Parity"      , lEntry, &MD_PARITY);
+            lEntry.Set(&mRTS            , false); AddEntry("RTS"         , lEntry, &MD_RTS);
+            lEntry.Set(&mReadTimeout_ms , false); AddEntry("ReadTimeout" , lEntry, &MD_READ_TIMEOUT);
+            lEntry.Set(&mSpeed_bps      , false); AddEntry("Speed"       , lEntry, &MD_SPEED);
+            lEntry.Set(&mWriteTimeout_ms, false); AddEntry("WriteTimeout", lEntry, &MD_WRITE_TIMEOUT);
         }
 
         bool Port::GetCTS() const { if (IsConnected()) { UpdateSignals(); } return mCTS; }

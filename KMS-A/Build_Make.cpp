@@ -157,16 +157,18 @@ namespace KMS
             mCleanExtensions.SetCreator(DI::String::Create);
             mIncludes       .SetCreator(DI::String_Expand::Create);
 
-            AddEntry("CleanExtensions", &mCleanExtensions, false, &MD_CLEAN_EXTENSIONS);
-            AddEntry("Component"      , &mComponent      , false, &MD_COMPONENT);
-            AddEntry("ComponentType"  , &mComponentType  , false, &MD_COMPONENT_TYPE);
-            AddEntry("Configuration"  , &mConfiguration  , false, &MD_CONFIGURATION);
-            AddEntry("Includes"       , &mIncludes       , false, &MD_INCLUDES);
-            AddEntry("Make"           , &mMake           , false, &MD_MAKE);
-            AddEntry("Processor"      , &mProcessor      , false, &MD_PROCESSOR);
+            Ptr_OF<DI::Object> lEntry;
 
-            mCleanExtensions.AddEntry(new DI::String(DEFAULT_CLEAN_EXCENTION), true);
-            mIncludes       .AddEntry(new DI::String(DEFAULT_INCLUDE        ), true);
+            lEntry.Set(&mCleanExtensions, false); AddEntry("CleanExtensions", lEntry, &MD_CLEAN_EXTENSIONS);
+            lEntry.Set(&mComponent      , false); AddEntry("Component"      , lEntry, &MD_COMPONENT);
+            lEntry.Set(&mComponentType  , false); AddEntry("ComponentType"  , lEntry, &MD_COMPONENT_TYPE);
+            lEntry.Set(&mConfiguration  , false); AddEntry("Configuration"  , lEntry, &MD_CONFIGURATION);
+            lEntry.Set(&mIncludes       , false); AddEntry("Includes"       , lEntry, &MD_INCLUDES);
+            lEntry.Set(&mMake           , false); AddEntry("Make"           , lEntry, &MD_MAKE);
+            lEntry.Set(&mProcessor      , false); AddEntry("Processor"      , lEntry, &MD_PROCESSOR);
+
+            lEntry.Set(new DI::String(DEFAULT_CLEAN_EXCENTION), true); mCleanExtensions.AddEntry(lEntry);
+            lEntry.Set(new DI::String(DEFAULT_INCLUDE        ), true); mIncludes       .AddEntry(lEntry);
 
             // ----- Build --------------------------------------------------
 
@@ -174,13 +176,13 @@ namespace KMS
             mLibraries.SetCreator(DI::String::Create);
             mTests    .SetCreator(DI::String::Create);
 
-            AddEntry("Binaries" , &mBinaries , false, &MD_BINARIES);
-            AddEntry("Libraries", &mLibraries, false, &MD_LIBRARIES);
-            AddEntry("Tests"    , &mTests    , false, &MD_TESTS);
+            lEntry.Set(&mBinaries , false); AddEntry("Binaries" , lEntry, &MD_BINARIES);
+            lEntry.Set(&mLibraries, false); AddEntry("Libraries", lEntry, &MD_LIBRARIES);
+            lEntry.Set(&mTests    , false); AddEntry("Tests"    , lEntry, &MD_TESTS);
 
-            AddEntry(NAME_OS "Binaries" , &mBinaries , false, &MD_OS_BINARIES);
-            AddEntry(NAME_OS "Libraries", &mLibraries, false, &MD_OS_LIBRARIES);
-            AddEntry(NAME_OS "Tests"    , &mTests    , false, &MD_OS_TESTS);
+            lEntry.Set(&mBinaries , false); AddEntry(NAME_OS "Binaries" , lEntry, &MD_OS_BINARIES);
+            lEntry.Set(&mLibraries, false); AddEntry(NAME_OS "Libraries", lEntry, &MD_OS_LIBRARIES);
+            lEntry.Set(&mTests    , false); AddEntry(NAME_OS "Tests"    , lEntry, &MD_OS_TESTS);
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");

@@ -55,7 +55,9 @@ namespace KMS
 
         void Tool::AddCommand(const char* aC)
         {
-            mCommands.AddEntry(new DI::String(aC), true);
+            Ptr_OF<DI::Object> lEntry(new DI::String(aC), true);
+
+            mCommands.AddEntry(lEntry);
         }
 
         void Tool::AddModule(Module* aModule)
@@ -264,7 +266,9 @@ namespace KMS
         {
             mCommands.SetCreator(DI::String_Expand::Create);
 
-            AddEntry("Commands", &mCommands, false, &MD_COMMANDS);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mCommands, false); AddEntry("Commands", lEntry, &MD_COMMANDS);
         }
 
         // Private

@@ -54,7 +54,8 @@ KMS_TEST(HTTP_ReactApp_Base, "Auto", sTest_Base)
     HTTP::ReactApp lRA;
     TestApp lTA;
 
-    lRA.mServer.mSocket.mAllowedRanges.AddEntry(new DI::NetAddressRange("127.0.0.1"), true);
+    Ptr_OF<DI::Object> lEntry(new DI::NetAddressRange("127.0.0.1"), true);
+    lRA.mServer.mSocket.mAllowedRanges.AddEntry(lEntry);
 
     lRA.AddFunction("/Version/GetData", &lTA.ON_GET_VERSION);
 
@@ -120,13 +121,21 @@ unsigned int TestApp::OnGetVersion(void* aSender, void* aData)
 
     VERSION.GetString(lVersion, sizeof(lVersion));
 
-    lTransaction->mResponse_Header.AddConstEntry(HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, &HTTP::Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL);
+    Ptr_OF<DI::Object> lEntry;
+
+    lEntry.Set(&HTTP::Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_ORIGIN_ALL);
+
+    lTransaction->mResponse_Header.AddEntry(HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_ORIGIN, lEntry);
 
     auto lData = new DI::Dictionary;
 
-    lData->AddEntry(NAME_VERSION, new DI::String(lVersion), true);
+    lEntry.Set(new DI::String(lVersion), true);
 
-    lTransaction->SetResponseData(lData);
+    lData->AddEntry(NAME_VERSION, lEntry);
+
+    Ptr_OF<DI::Object> lResponseData(lData, true);
+
+    lTransaction->SetResponseData(lResponseData);
 
     return 0;
 }

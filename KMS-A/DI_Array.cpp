@@ -25,29 +25,20 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array::AddConstEntry(const Object* aO)
+        void Array::AddEntry(Ptr_OF<Object>& aO)
         {
-            assert(nullptr != aO);
-
             mInternal.push_back(EMPTY_ENTRY);
 
             mInternal.back().Set(aO);
         }
 
-        void Array::AddEntry(Object* aO, bool aDelete)
+        Object* Array::CreateEntry()
         {
-            assert(nullptr != aO);
+            Ptr_OF<Object> lEntry(CallCreator(), true);
 
-            mInternal.push_back(EMPTY_ENTRY);
+            Object* lResult = lEntry;
 
-            mInternal.back().Set(aO, aDelete);
-        }
-
-        DI::Object* Array::CreateEntry()
-        {
-            auto lResult = CallCreator();
-
-            AddEntry(lResult, true);
+            AddEntry(lEntry);
 
             return lResult;
         }
@@ -96,13 +87,13 @@ namespace KMS
             mInternal.erase(lIt);
         }
 
-        void Array::SetEntry(int aIndex, Object* aE, bool aDelete)
+        void Array::SetEntry(int aIndex, Ptr_OF<Object>& aE)
         {
             assert(0 <= aIndex);
 
             if (mInternal.size() == aIndex)
             {
-                AddEntry(aE, aDelete);
+                AddEntry(aE);
             }
             else
             {
@@ -113,7 +104,7 @@ namespace KMS
                     KMS_EXCEPTION(RESULT_INVALID_INDEX, lMsg, mInternal.size());
                 }
 
-                mInternal[aIndex].Set(aE, aDelete);
+                mInternal[aIndex].Set(aE);
             }
         }
 

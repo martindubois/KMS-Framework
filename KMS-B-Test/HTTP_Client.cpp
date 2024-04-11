@@ -55,12 +55,13 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
 
     // Post
     DI::Dictionary lData;
-    lData.AddEntry("Billed"     , new DI::UInt<uint32_t>(0)   , true);
-    lData.AddEntry("Client"     , new DI::String("KMS")       , true);
-    lData.AddEntry("Date"       , new DI::String("2024-01-12"), true);
-    lData.AddEntry("Description", new DI::String("Test")      , true);
-    lData.AddEntry("Distance_km", new DI::UInt<uint32_t>(0)   , true);
-    lData.AddEntry("Hidden"     , new DI::UInt<uint32_t>(0)   , true);
+    Ptr_OF<DI::Object> lEntry;
+    lEntry.Set(new DI::UInt<uint32_t>(0)   , true); lData.AddEntry("Billed"     , lEntry);
+    lEntry.Set(new DI::String("KMS")       , true); lData.AddEntry("Client"     , lEntry);
+    lEntry.Set(new DI::String("2024-01-12"), true); lData.AddEntry("Date"       , lEntry);
+    lEntry.Set(new DI::String("Test")      , true); lData.AddEntry("Description", lEntry);
+    lEntry.Set(new DI::UInt<uint32_t>(0)   , true); lData.AddEntry("Distance_km", lEntry);
+    lEntry.Set(new DI::UInt<uint32_t>(0)   , true); lData.AddEntry("Hidden"     , lEntry);
     // lC5.Post("http://www.kms-quebec.com/back-end/index.php/travel/new", &lData);
 
     Net::Thread_Cleanup();

@@ -28,9 +28,9 @@ namespace KMS
 
             static DI::Object* Create();
 
-            void AddConstEntry(const Object* aE);
-
-            void AddEntry(Object* aE, bool aDelete);
+            // aE  The value passed here is reset to nullptr when the method
+            //     returns.
+            void AddEntry(Ptr_OF<Object>& aE);
 
             DI::Object* CreateEntry();
 
@@ -48,7 +48,7 @@ namespace KMS
             void RemoveEntry(int aIndex);
 
             // Exception  DI_INDEX_INVALID
-            void SetEntry(int aIndex, Object* aE, bool aDelete);
+            void SetEntry(int aIndex, Ptr_OF<Object>& aE);
 
             // ===== Container ==============================================
             virtual unsigned int GetCount() const;

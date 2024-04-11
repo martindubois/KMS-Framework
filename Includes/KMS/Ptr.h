@@ -82,40 +82,93 @@ namespace KMS
 
         Ptr_OF();
 
+        // aInit  The instance keep the pointer, protect the data against
+        //        modification (const) and is not responsible for deleting
+        //        the T instance.
         Ptr_OF(const T* aInit);
 
+        // aInit    The instance keep the pointer.
+        // aDelete  false  The instance is not responsible for deleting the
+        //                 T instance
+        //          true   The instance is responsible for deleting the T
+        //                 instance
         Ptr_OF(T* aInit, bool aDelete);
 
+        // Release the T instance if the current instance is responsible for
+        // doing that.
         ~Ptr_OF();
 
         const T* operator -> () const;
         
+        // Exception  RESULT_DENIED
         T* operator -> ();
 
         operator const T* () const;
 
+        // Exception  RESULT_DENIED
         operator T* ();
 
+        // aSet  The instance keep the pointer, protect the data against
+        //       modification (const) and is not responsible for deleting
+        //       the T instance.
+        //
+        // This method can cause previous pointed T instance to be deleted.
         void operator = (const T* aSet);
 
         const T* Get() const;
 
+        // Exception  RESULT_DENIED
         T* Get();
 
         bool IsConst() const;
 
+        // aSet  The value passed here is reset to nullptr when the method
+        //       returns.
+        //       If aSet is responsible for deleting the T instance, the
+        //       current instance become responsible for deleting the T
+        //       instance.
+        //
+        // This method can cause previous pointed T instance to be deleted.
+        void Set(Ptr_OF<T>& aSet);
+
+        // aSet  The instance keep the pointer, protect the data against
+        //       modification (const) and is not responsible for deleting
+        //       the T instance.
+        //
+        // This method can cause previous pointed T instance to be deleted.
         void Set(const T* aSet);
 
+        // aSet     The instance keep the pointer.
+        // aDelete  false  The instance is not responsible for deleting the
+        //                 T instance
+        //          true   The instance is responsible for deleting the T
+        //                 instance
+        //
+        // This method can cause previous pointed T instance to be deleted.
         void Set(T* aSet, bool aDelete);
 
+        // This method reset the instance to nullptr.
         T* Detach();
 
+        // Release the T instance if the current instance is responsible for
+        // doing that.
+        // This method reset the instance to nullptr.
         void Release();
 
     // Internal
 
+        // aSet  The value passed here is reset to nullptr when the method
+        //       returns.
+        //       If aSet is responsible for deleting the T instance, the
+        //       current instance become responsible for deleting the T
+        //       instance.
+        //
+        // This method can cause previous pointed T instance to be deleted.
         Ptr_OF(const Ptr_OF& aIn);
 
+        // aIn  Must contain nullptr.
+        //
+        // Exception  RESULT_NOT_IMPLEMENTED
         void operator = (Ptr_OF& aIn);
 
     private:
@@ -254,8 +307,20 @@ namespace KMS
     bool Ptr_OF<T>::IsConst() const { return mFlags.mConst; }
 
     template <typename T>
+    void Ptr_OF<T>::Set(Ptr_OF<T>& aSet)
+    {
+        Release();
+        
+        mFlags.mConst = aSet.mFlags.mConst;
+        mFlags.mDelete = aSet.mFlags.mDelete;
+        mInternal = aSet.Detach();
+    }
+
+    template <typename T>
     void Ptr_OF<T>::Set(const T* aSet)
     {
+        Release();
+
         mFlags.mConst = true;
         mFlags.mDelete = false;
         mInternal = const_cast<T*>(aSet);
@@ -286,10 +351,8 @@ namespace KMS
     template <typename T>
     void Ptr_OF<T>::Release()
     {
-        if (mFlags.mDelete)
+        if (mFlags.mDelete && (nullptr != mInternal))
         {
-            assert(nullptr != mInternal);
-
             delete mInternal;
         }
 

@@ -95,8 +95,10 @@ namespace KMS
 
         void DriverInstaller::Construct_OSDep()
         {
-            AddEntry("DeleteDeviceClass", &mDeleteDeviceClass, false, &MD_DELETE_DEVICE_CLASS);
-            AddEntry("DeviceClass"      , &mDeviceClass      , false, &MD_DEVICE_CLASS);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mDeleteDeviceClass, false); AddEntry("DeleteDeviceClass", lEntry, &MD_DELETE_DEVICE_CLASS);
+            lEntry.Set(&mDeviceClass      , false); AddEntry("DeviceClass"      , lEntry, &MD_DEVICE_CLASS);
         }
 
         void DriverInstaller::Run_OSDep()

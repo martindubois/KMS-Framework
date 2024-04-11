@@ -23,7 +23,7 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        void Array_Sparse::AddConstEntry(int aIndex, const Object* aO)
+        void Array_Sparse::AddEntry(int aIndex, Ptr_OF<Object>& aO)
         {
             assert(nullptr != aO);
 
@@ -39,28 +39,13 @@ namespace KMS
             }
         }
 
-        void Array_Sparse::AddEntry(int aIndex, Object* aO, bool aDelete)
+        Object* Array_Sparse::CreateEntry(int aIndex)
         {
-            assert(nullptr != aO);
+            Ptr_OF<Object> lEntry(CallCreator(), true);
 
-            auto lIt = mInternal.find(aIndex);
-            if (mInternal.end() == lIt)
-            {
-                auto lRet = mInternal.insert(Internal::value_type(aIndex, EMPTY_ENTRY));
-                lRet.first->second.Set(aO, aDelete);
-            }
-            else
-            {
-                lIt->second.Set(aO, aDelete);
-            }
-        }
+            Object* lResult = lEntry;
 
-        DI::Object* Array_Sparse::CreateEntry(int aIndex)
-        {
-            auto lResult = CallCreator();
-            assert(nullptr != lResult);
-
-            AddEntry(aIndex, lResult, true);
+            AddEntry(aIndex, lEntry);
 
             return lResult;
         }

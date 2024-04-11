@@ -80,11 +80,13 @@ namespace KMS
 
             mSaveConfig.SetMode("wb");
 
-            mDictionary.AddEntry("ConfigFiles"        , &mConfigFiles        , false, &MD_CONFIG_FILES);
-            mDictionary.AddEntry("DisplayConfig"      , &mDisplayConfig      , false, &MD_DISPLAY_CONFIG);
-            mDictionary.AddEntry("Help"               , &mHelp               , false, &MD_HELP);
-            mDictionary.AddEntry("OptionalConfigFiles", &mOptionalConfigFiles, false, &MD_OPTIONAL_CONFIG_FILES);
-            mDictionary.AddEntry("SaveConfig"         , &mSaveConfig         , false, &MD_SAVE_CONFIG);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mConfigFiles        , false); mDictionary.AddEntry("ConfigFiles"        , lEntry, &MD_CONFIG_FILES);
+            lEntry.Set(&mDisplayConfig      , false); mDictionary.AddEntry("DisplayConfig"      , lEntry, &MD_DISPLAY_CONFIG);
+            lEntry.Set(&mHelp               , false); mDictionary.AddEntry("Help"               , lEntry, &MD_HELP);
+            lEntry.Set(&mOptionalConfigFiles, false); mDictionary.AddEntry("OptionalConfigFiles", lEntry, &MD_OPTIONAL_CONFIG_FILES);
+            lEntry.Set(&mSaveConfig         , false); mDictionary.AddEntry("SaveConfig"         , lEntry, &MD_SAVE_CONFIG);
 
             mConfigurables.push_back(&mDictionary);
         }
@@ -98,14 +100,18 @@ namespace KMS
 
         void Configurator::AddConfigFile(const char* aPath)
         {
-            mConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
+            Ptr_OF<DI::Object> lEntry(new DI::String_Expand(aPath), true);
+
+            mConfigFiles.AddEntry(lEntry);
 
             OnConfigFilesChanged(this, nullptr);
         }
 
         void Configurator::AddOptionalConfigFile(const char* aPath)
         {
-            mOptionalConfigFiles.AddEntry(new DI::String_Expand(aPath), true);
+            Ptr_OF<DI::Object> lEntry(new DI::String_Expand(aPath), true);
+
+            mOptionalConfigFiles.AddEntry(lEntry);
 
             OnOptionalConfigFilesChanged(this, nullptr);
         }

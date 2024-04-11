@@ -35,9 +35,9 @@ namespace KMS
 
             void operator += (const Dictionary& aIn);
 
-            void AddConstEntry(const char* aName, const Object* aE, const MetaData* aMD = nullptr);
-
-            void AddEntry(const char* aName, Object* aE, bool aDelete, const MetaData* aMD = nullptr);
+            // aE  The value passed here is reset to nullptr when the method
+            //     returns.
+            void AddEntry(const char* aName, Ptr_OF<Object>& aE, const MetaData* aMD = nullptr);
 
             DI::Object* CreateEntry(const char* aName, const MetaData* aMD = nullptr);
 
@@ -70,9 +70,7 @@ namespace KMS
 
                 Entry();
 
-                void Set(const Object* aObject, const MetaData* aMD);
-
-                void Set(Object* aObject, bool aDelete, const MetaData* aMD);
+                void Set(Ptr_OF<Object>& aObject, const MetaData* aMD);
 
                 const MetaData* mMetaData;
 

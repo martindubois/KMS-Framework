@@ -30,7 +30,9 @@ namespace KMS
         DriverInstaller::DriverInstaller()
             : mUninstallDriver(UNINSTALL_DRIVER_DEFAULT)
         {
-            AddEntry("UninstallDriver", &mUninstallDriver, false, &MD_UNINSTALL_DRIVER);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mUninstallDriver, false);  AddEntry("UninstallDriver", lEntry, &MD_UNINSTALL_DRIVER);
 
             Construct_OSDep();
         }

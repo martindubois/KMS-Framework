@@ -17,6 +17,7 @@
 #include <KMS/File/Folder.h>
 #include <KMS/HTTP/Result.h>
 #include <KMS/Net/Socket.h>
+#include <KMS/Ptr.h>
 
 namespace KMS
 {
@@ -41,7 +42,9 @@ namespace KMS
 
             static const char* GetValue_String(const DI::Dictionary& aDictionary, const char* aName);
 
-            Transaction(Net::Socket* aSocket, bool aDelete);
+            // aSocket  The value passed here is reset to nullptr when the
+            //          method returns.
+            Transaction(Ptr_OF<Net::Socket>& aSocket);
 
             ~Transaction();
 
@@ -51,7 +54,9 @@ namespace KMS
 
             const char* GetTypeName() const;
 
-            void SetFile(File::Binary* aF, bool aDelete);
+            // aF  The value passed here is reset to nullptr when the method
+            //     returns.
+            void SetFile(Ptr_OF<File::Binary>& aF);
 
             // ===== Request ================================================
 
@@ -59,7 +64,9 @@ namespace KMS
 
             void SetPath(const char* aP);
 
-            void SetRequestData(DI::Object* aData, bool aDelete);
+            // aData  The value passed here is reset to nullptr when the
+            //        method returns.
+            void SetRequestData(Ptr_OF<DI::Object>& aData);
 
             void SetType(Type aType);
 
@@ -73,7 +80,9 @@ namespace KMS
 
             void SetData(const void* aData, unsigned int aDataSize_byte);
 
-            void SetResponseData(DI::Object* aData);
+            // aData  The value passed here is reset to nullptr when the
+            //        method returns.
+            void SetResponseData(Ptr_OF<DI::Object>& aData);
 
             void SetResult(Result aR);
 
@@ -113,11 +122,7 @@ namespace KMS
 
             void JSON_ReceiveAndDecode(const DI::Dictionary& aHeader, DI::Object** aOut);
 
-            void Request_DeleteData();
-
             bool Request_Parse(unsigned int* aHeaderSize_byte);
-
-            void Response_DeleteData();
 
             void Response_Parse(unsigned int aSize_byte);
 
@@ -126,29 +131,26 @@ namespace KMS
             char         mBuffer[8192];
             unsigned int mBuffer_byte;
 
-            File::Binary* mFile;
-            bool          mFile_Delete;
+            Ptr_OF<File::Binary> mFile;
 
             unsigned int mMajor;
             unsigned int mMinor;
 
             std::string mPath;
 
-            Net::Socket* mSocket;
-            bool         mSocket_Delete;
+            Ptr_OF<Net::Socket> mSocket;
 
             Type mType;
 
             // ===== Request ================================================
-            DI::Object* mRequest_Data;
-            bool        mRequest_Data_Delete;
+            Ptr_OF<DI::Object> mRequest_Data;
 
             // ===== Response ===============================================
 
             const void * mData;
             unsigned int mDataSize_byte;
 
-            DI::Object* mResponse_Data;
+            Ptr_OF<DI::Object> mResponse_Data;
 
             Result mResult;
 

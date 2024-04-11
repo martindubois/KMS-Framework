@@ -15,15 +15,17 @@ using namespace KMS;
 
 KMS_TEST(DI_Array_Base, "Auto", sTest_Base)
 {
-    DI::Array lA0;
-
-    DI::String lS0;
+    DI::Array          lA0;
+    Ptr_OF<DI::Object> lEntry;
+    DI::String         lS0;
 
     // AddConstEntry
-    lA0.AddConstEntry(&lS0);
+    lEntry.Set(&lS0);
+    lA0.AddEntry(lEntry);
 
     // AddEntry
-    lA0.AddEntry(&lS0, false);
+    lEntry.Set(&lS0, false);
+    lA0.AddEntry(lEntry);
 
     // CreateEntry
 
@@ -36,8 +38,8 @@ KMS_TEST(DI_Array_Base, "Auto", sTest_Base)
     lA0.RemoveEntry(1);
 
     // SetEntry
-    lA0.SetEntry(0, &lS0, false);
-    lA0.SetEntry(1, &lS0, false);
+    lEntry.Set(&lS0, false); lA0.SetEntry(0, lEntry);
+    lEntry.Set(&lS0, false); lA0.SetEntry(1, lEntry);
 
     // ===== Container ======================================================
 
@@ -73,7 +75,8 @@ KMS_TEST(DI_Array_Exception, "Auto", sTest_Exception)
     // SetEntry
     try
     {
-        lA0.SetEntry(1, &lS0, false);
+        Ptr_OF<DI::Object> lEntry(&lS0, false);
+        lA0.SetEntry(1, lEntry);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_INVALID_INDEX);

@@ -211,7 +211,9 @@ void Decode_Dictionary(DI::Dictionary* aDictionary, Text::ReadPtr* aPtr)
             Decode(&lObject, &lPtr);
             assert(nullptr != lObject);
 
-            aDictionary->AddEntry(lName, lObject, true);
+            Ptr_OF<DI::Object> lEntry(lObject, true);
+
+            aDictionary->AddEntry(lName, lEntry);
         }
 
         lPtr.SkipBlank();

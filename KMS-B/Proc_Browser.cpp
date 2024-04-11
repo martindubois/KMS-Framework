@@ -48,7 +48,9 @@ namespace KMS
             , mType(Type::NONE)
             , mWindow(0)
         {
-            AddEntry("Prefered", &mPrefered, false, &MD_PREFERED);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mPrefered, false); AddEntry("Prefered", lEntry, &MD_PREFERED);
         }
 
         Browser::~Browser()

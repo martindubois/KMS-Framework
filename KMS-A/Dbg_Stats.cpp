@@ -39,8 +39,10 @@ namespace KMS
             : mConsole(CONSOLE_DEFAULT)
             , mFolder (File::Folder(File::Folder::HOME, "KMS-Framework"))
         {
-            DI::Dictionary::AddEntry("Stats_Console", &mConsole, false, &MD_STATS_CONSOLE);
-            DI::Dictionary::AddEntry("Stats_Folder" , &mFolder , false, &MD_STATS_FOLDER );
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mConsole, false); DI::Dictionary::AddEntry("Stats_Console", lEntry, &MD_STATS_CONSOLE);
+            lEntry.Set(&mFolder , false); DI::Dictionary::AddEntry("Stats_Folder" , lEntry, &MD_STATS_FOLDER );
         }
 
         Stats::~Stats()

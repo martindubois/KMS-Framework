@@ -33,11 +33,13 @@ namespace KMS
         {
             for (auto& lEntry : aIn.mInternal)
             {
-                AddConstEntry(lEntry.first.c_str(), lEntry.second.Get());
+                Ptr_OF<DI::Object> lNewEntry(lEntry.second.Get());
+
+                AddEntry(lEntry.first.c_str(), lNewEntry);
             }
         }
 
-        void Dictionary::AddConstEntry(const char* aName, const Object* aObject, const MetaData* aMD)
+        void Dictionary::AddEntry(const char* aName, Ptr_OF<Object>& aObject, const MetaData* aMD)
         {
             assert(nullptr != aName);
 
@@ -53,28 +55,13 @@ namespace KMS
             }
         }
 
-        void Dictionary::AddEntry(const char* aName, Object* aObject, bool aDelete, const MetaData* aMD)
-        {
-            assert(nullptr != aName);
-
-            auto lIt = mInternal.find(aName);
-            if (mInternal.end() == lIt)
-            {
-                auto lRet = mInternal.insert(Internal::value_type(aName, EMPTY_ENTRY));
-                lRet.first->second.Set(aObject, aDelete, aMD);
-            }
-            else
-            {
-                lIt->second.Set(aObject, aDelete, aMD);
-            }
-        }
-
         Object* Dictionary::CreateEntry(const char* aName, const MetaData* aMD)
         {
-            auto lResult = CallCreator();
-            assert(nullptr != lResult);
+            Ptr_OF<Object> lEntry(CallCreator(), true);
 
-            AddEntry(aName, lResult, true, aMD);
+            Object* lResult = lEntry;
+
+            AddEntry(aName, lEntry, aMD);
 
             return lResult;
         }
@@ -199,16 +186,9 @@ namespace KMS
 
         Dictionary::Entry::Entry() : mMetaData(nullptr) {}
 
-        void Dictionary::Entry::Set(const Object* aObject, const MetaData* aMD)
+        void Dictionary::Entry::Set(Ptr_OF<Object>& aObject, const MetaData* aMD)
         {
-            Ptr_OF::Set(aObject);
-
-            mMetaData = aMD;
-        }
-
-        void Dictionary::Entry::Set(Object* aObject, bool aDelete, const MetaData* aMD)
-        {
-            Ptr_OF::Set(aObject, aDelete);
+            Ptr_OF<Object>::Set(aObject);
 
             mMetaData = aMD;
         }

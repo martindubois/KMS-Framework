@@ -33,7 +33,9 @@ namespace KMS
 
         Server::Server()
         {
-            mResponseHeader.AddConstEntry(Response::FIELD_NAME_SERVER, &Response::FIELD_VALUE_SERVER);
+            Ptr_OF<DI::Object> lEntry(&Response::FIELD_VALUE_SERVER);
+
+            mResponseHeader.AddEntry(Response::FIELD_NAME_SERVER, lEntry);
 
             mSocket.SetLocalPort(DEFAULT_LOCAL_PORT);
         }
@@ -45,7 +47,9 @@ namespace KMS
         {
             try
             {
-                Transaction lTransaction(aSocket, true);
+                Ptr_OF<Net::Socket> lSocket(aSocket, true);
+
+                Transaction lTransaction(lSocket);
 
                 lTransaction.mResponse_Header += mResponseHeader;
 

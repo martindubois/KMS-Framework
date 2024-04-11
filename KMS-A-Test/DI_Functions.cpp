@@ -16,14 +16,15 @@ using namespace KMS;
 
 KMS_TEST(DI_Functions_Base, "Auto", sTest_Base)
 {
-    DI::Array      lA0;
-    DI::Boolean    lB0;
-    DI::Dictionary lD0;
-    DI::String     lS0;
+    DI::Array          lA0;
+    DI::Boolean        lB0;
+    DI::Dictionary     lD0;
+    Ptr_OF<DI::Object> lEntry;
+    DI::String         lS0;
 
-    lD0.AddEntry("Array"  , &lA0, false);
-    lD0.AddEntry("Boolean", &lB0, false);
-    lD0.AddEntry("String" , &lS0, false);
+    lEntry.Set(&lA0, false); lD0.AddEntry("Array"  , lEntry);
+    lEntry.Set(&lB0, false); lD0.AddEntry("Boolean", lEntry);
+    lEntry.Set(&lS0, false); lD0.AddEntry("String" , lEntry);
 
     // Execute_Operation
     KMS_TEST_ASSERT(DI::Execute_Operation(&lD0, "Array="));
@@ -34,12 +35,13 @@ KMS_TEST(DI_Functions_Base, "Auto", sTest_Base)
 
 KMS_TEST(DI_Functions_Exception, "Auto", sTest_Exception)
 {
-    DI::Array      lA0;
-    DI::Boolean    lB0;
-    DI::Dictionary lD0;
+    DI::Array          lA0;
+    DI::Boolean        lB0;
+    DI::Dictionary     lD0;
+    Ptr_OF<DI::Object> lEntry;
 
-    lD0.AddEntry("Array"  , &lA0, false);
-    lD0.AddEntry("Boolean", &lB0, false);
+    lEntry.Set(&lA0, false); lD0.AddEntry("Array"  , lEntry);
+    lEntry.Set(&lB0, false); lD0.AddEntry("Boolean", lEntry);
 
     // Execute_Operation
     try

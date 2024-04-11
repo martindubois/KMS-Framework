@@ -33,8 +33,10 @@ namespace KMS
             : mDeviceAddress(&aMaster->mDeviceAddress)
             , mRetryCount   (&aMaster->mRetryCount)
         {
-            AddEntry("DeviceAddress", &mDeviceAddress, false, &MD_DEVICE_ADDRESS);
-            AddEntry("RetryCount"   , &mRetryCount   , false, &MD_RETRY_COUNT);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mDeviceAddress, false); AddEntry("DeviceAddress", lEntry, &MD_DEVICE_ADDRESS);
+            lEntry.Set(&mRetryCount   , false); AddEntry("RetryCount"   , lEntry, &MD_RETRY_COUNT);
         }
 
         // ===== DI::Container ==============================================

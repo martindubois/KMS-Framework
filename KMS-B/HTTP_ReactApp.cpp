@@ -35,10 +35,13 @@ namespace KMS
             : ON_REQUEST(this, &ReactApp::OnRequest)
         {
             mRoutes.SetCreator(DI::String_Expand::Create);
-            mRoutes.AddEntry(new DI::String_Expand(DEFAULT_ROUTE), true);
 
-            AddEntry("FileServer", &mFileServer, false);
-            AddEntry("Routes", &mRoutes, false, &MD_ROUTES);
+            Ptr_OF < DI::Object> lEntry;
+
+            lEntry.Set(new DI::String_Expand(DEFAULT_ROUTE), true); mRoutes.AddEntry(lEntry);
+
+            lEntry.Set(&mFileServer, false); AddEntry("FileServer", lEntry);
+            lEntry.Set(&mRoutes    , false); AddEntry("Routes"    , lEntry, &MD_ROUTES);
 
             LocateFrontEnd();
 
@@ -99,10 +102,12 @@ namespace KMS
             }
             else
             {
+                Ptr_OF<DI::Object> lEntry(&Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT);
+
                 switch (aTransaction->GetType())
                 {
                 case Transaction::Type::OPTIONS:
-                    aTransaction->mResponse_Header.AddConstEntry(Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS, &Response::FIELD_VALUE_ACCESS_CONTROL_ALLOW_HEADERS_DEFAULT);
+                    aTransaction->mResponse_Header.AddEntry(Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS, lEntry);
                     break;
 
                 default:

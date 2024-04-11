@@ -32,7 +32,9 @@ namespace KMS
         {
             mAllowedRanges.SetCreator(DI::NetAddressRange::Create);
 
-            AddEntry("AllowedRanges", &mAllowedRanges, false, &MD_ALLOWED_RANGES);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mAllowedRanges, false); AddEntry("AllowedRanges", lEntry, &MD_ALLOWED_RANGES);
         }
 
         Socket* Socket_Server::Accept(unsigned int aTimeout_ms, Address* aFrom)
