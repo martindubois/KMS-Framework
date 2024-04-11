@@ -29,7 +29,17 @@ namespace KMS
 
         public:
 
-            Stats_Value(const char* aName, const char* aUnit = nullptr);
+            // aName      See Stats_Entry
+            // aUnit
+            // aRegister  See Stats entry
+            Stats_Value(const char* aName, const char* aUnit = nullptr, bool aRegister = true);
+
+            double       GetAverage() const;
+            unsigned int GetCount  () const;
+            T            GetLast   () const;
+            T            GetMax    () const;
+            T            GetMin    () const;
+            double       GetStdDev () const;
 
             void Set(T aIn);
 
@@ -40,15 +50,6 @@ namespace KMS
 
             // ===== Stats_Entry ============================================
             virtual void Display(std::ostream& aOut) const;
-
-        protected:
-
-            double       GetAverage() const;
-            unsigned int GetCount  () const;
-            T            GetLast   () const;
-            T            GetMax    () const;
-            T            GetMin    () const;
-            double       GetStdDev () const;
 
         private:
 
@@ -69,9 +70,39 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <class T>
-        Stats_Value<T>::Stats_Value(const char* aName, const char* aUnit) : Stats_Entry(aName), mUnit(aUnit)
+        Stats_Value<T>::Stats_Value(const char* aName, const char* aUnit, bool aRegister)
+            : Stats_Entry(aName, aRegister), mUnit(aUnit)
         {
             Reset();
+        }
+
+        template <class T>
+        double Stats_Value<T>::GetAverage() const
+        {
+            double lDiv = mCount;
+
+            return mSum / lDiv;
+        }
+
+        template <class T>
+        unsigned int Stats_Value<T>::GetCount() const { return mCount; }
+
+        template <class T>
+        T Stats_Value<T>::GetLast() const { return mLast; }
+
+        template <class T>
+        T Stats_Value<T>::GetMax() const { return mMax; }
+
+        template <class T>
+        T Stats_Value<T>::GetMin() const { return mMin; }
+
+        template <class T>
+        double Stats_Value<T>::GetStdDev() const
+        {
+            double lDivA = mCount;
+            double lDivB = mCount - 1;
+
+            return sqrt((mSum2 - ((mSum * mSum) / lDivA)) / lDivB);
         }
 
         template <class T>
@@ -127,40 +158,13 @@ namespace KMS
             }
         }
 
-        // Protected
-        // //////////////////////////////////////////////////////////////////
-
-        template <class T>
-        double Stats_Value<T>::GetAverage() const
-        {
-            double lDiv = mCount;
-
-            return mSum / lDiv;
-        }
-
-        template <class T>
-        unsigned int Stats_Value<T>::GetCount() const { return mCount; }
-
-        template <class T>
-        T Stats_Value<T>::GetLast() const { return mLast; }
-
-        template <class T>
-        T Stats_Value<T>::GetMax() const { return mMax; }
-
-        template <class T>
-        T Stats_Value<T>::GetMin() const { return mMin; }
-
-        template <class T>
-        double Stats_Value<T>::GetStdDev() const
-        {
-            double lDivA = mCount;
-            double lDivB = mCount - 1;
-
-            return sqrt((mSum2 - ((mSum * mSum) / lDivA)) / lDivB);
-        }
-
     }
 }
 
 template <class T>
-std::ostream& operator << (std::ostream& aOut, const KMS::Dbg::Stats_Value<T>& aIn);
+std::ostream& operator << (std::ostream& aOut, const KMS::Dbg::Stats_Value<T>& aIn)
+{
+    aIn.Display(aOut);
+
+    return aOut;
+}

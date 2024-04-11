@@ -22,11 +22,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Stats_Entry::Stats_Entry(const char* aName) : mName(aName)
+        Stats_Entry::Stats_Entry(const char* aName, bool aRegister) : mName(aName)
         {
             assert(nullptr != aName);
 
-            gStats.AddEntry(this);
+            if (aRegister)
+            {
+                gStats.AddEntry(this);
+            }
         }
 
         Stats_Entry::~Stats_Entry() {}

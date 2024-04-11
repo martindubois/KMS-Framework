@@ -34,7 +34,12 @@ namespace KMS
 
         protected:
 
-            Stats_Entry(const char* aName);
+            // aName      Entry's name
+            // aRegister  false  Does not register the instance into the
+            //                   global statistics list
+            //            true   Register the instance into the global
+            //                   statistics list
+            Stats_Entry(const char* aName, bool aRegister = true);
 
         private:
 
