@@ -8,7 +8,6 @@
 #include "Component.h"
 
 // ===== C ==================================================================
-#include <io.h>
 
 // ===== Includes ===========================================================
 #include <KMS/Console/Redirection.h>
@@ -72,7 +71,7 @@ namespace KMS
                 assert(0 == lRet);
             }
 
-            return (nullptr != mFiles[FILE_FILE]) ? _fileno(mFiles[FILE_FILE]) : HANDLE_INVALID;
+            return (nullptr != mFiles[FILE_FILE]) ? fileno(mFiles[FILE_FILE]) : HANDLE_INVALID;
         }
 
         int Redirection::OpenNullIfNeeded()
@@ -83,7 +82,7 @@ namespace KMS
                 assert(0 == lRet);
             }
 
-            return (nullptr != mFiles[FILE_NULL]) ? _fileno(mFiles[FILE_NULL]) : HANDLE_INVALID;
+            return (nullptr != mFiles[FILE_NULL]) ? fileno(mFiles[FILE_NULL]) : HANDLE_INVALID;
         }
 
         void Redirection::Redirect_OSDep() {}

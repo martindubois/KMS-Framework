@@ -130,7 +130,8 @@ namespace KMS
 
             char lLine[LINE_LENGTH];
 
-            gets_s(lLine);
+            auto lRet = gets_s(lLine);
+            KMS_EXCEPTION_ASSERT(nullptr != lRet, RESULT_READ_FAILED, "gets_s failed", "");
         }
 
         char HumanScript::Wait(char aDefault, const char* aResponses)
