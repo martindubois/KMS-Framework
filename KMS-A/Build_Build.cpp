@@ -75,21 +75,23 @@ static const KMS::Cfg::MetaData MD_VERSION_FILE   ("VersionFile = {Path}");
     #define NO_OS_1 "Linux"
 #endif
 
-static const KMS::Cfg::MetaData MD_OS_BINARIES      (NAME_OS "Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS(NAME_OS "Configurations += {Name}");
-static const KMS::Cfg::MetaData MD_OS_DRIVERS       (NAME_OS "Drivers += {Name}");
-static const KMS::Cfg::MetaData MD_OS_FILES         (NAME_OS "Files += {Path}");
-static const KMS::Cfg::MetaData MD_OS_FOLDERS       (NAME_OS "Folders += {Path}");
-static const KMS::Cfg::MetaData MD_OS_LIBRARIES     (NAME_OS "Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS(NAME_OS "PreBuildCmds += {Command}");
-static const KMS::Cfg::MetaData MD_OS_PROCESSORS    (NAME_OS "Processors += x64 | x86 | ...");
-static const KMS::Cfg::MetaData MD_OS_TESTS         (NAME_OS "Tests += {Name}");
+static const KMS::Cfg::MetaData MD_OS_BINARIES       (NAME_OS "Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_CONFIGURATIONS (NAME_OS "Configurations += {Name}");
+static const KMS::Cfg::MetaData MD_OS_DRIVERS        (NAME_OS "Drivers += {Name}");
+static const KMS::Cfg::MetaData MD_OS_EDIT_OPERATIONS(NAME_OS "EditOperations += {Operation}");
+static const KMS::Cfg::MetaData MD_OS_FILES          (NAME_OS "Files += {Path}");
+static const KMS::Cfg::MetaData MD_OS_FOLDERS        (NAME_OS "Folders += {Path}");
+static const KMS::Cfg::MetaData MD_OS_LIBRARIES      (NAME_OS "Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_PRE_BUILD_CMDS (NAME_OS "PreBuildCmds += {Command}");
+static const KMS::Cfg::MetaData MD_OS_PROCESSORS     (NAME_OS "Processors += x64 | x86 | ...");
+static const KMS::Cfg::MetaData MD_OS_TESTS          (NAME_OS "Tests += {Name}");
 
 static const char* SILENCE[] =
 {
     NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
     NO_OS_0 "Configurations", NO_OS_1 "Configurations",
     NO_OS_0 "Drivers"       , NO_OS_1 "Drivers"       ,
+    NO_OS_0 "EditOperations", NO_OS_1 "EditOperations",
     NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
     NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
     NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,
@@ -199,6 +201,7 @@ namespace KMS
             lEntry.Set(&mBinaries      , false); AddEntry(NAME_OS "Binaries"      , lEntry, &MD_OS_BINARIES);
             lEntry.Set(&mConfigurations, false); AddEntry(NAME_OS "Configurations", lEntry, &MD_OS_CONFIGURATIONS);
             lEntry.Set(&mDrivers       , false); AddEntry(NAME_OS "Drivers"       , lEntry, &MD_OS_DRIVERS);
+            lEntry.Set(&mEditOperations, false); AddEntry(NAME_OS "EditOperations", lEntry, &MD_OS_EDIT_OPERATIONS);
             lEntry.Set(&mFiles         , false); AddEntry(NAME_OS "Files"         , lEntry, &MD_OS_FILES);
             lEntry.Set(&mFolders       , false); AddEntry(NAME_OS "Folders"       , lEntry, &MD_OS_FOLDERS);
             lEntry.Set(&mLibraries     , false); AddEntry(NAME_OS "Libraries"     , lEntry, &MD_OS_LIBRARIES);
