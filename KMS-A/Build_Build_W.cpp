@@ -188,7 +188,7 @@ namespace KMS
                     char lSigned[PATH_LENGTH];
                     sprintf_s(lSigned, "Signed\\%s", lD->GetString().c_str());
 
-                    if (SignDriver(lFileName, lSigned))
+                    if (SignDriver(lFileName, lSigned, aC, aP))
                     {
                         File::Folder lSrcF(File::Folder::CURRENT, lSigned);
 
@@ -357,30 +357,35 @@ namespace KMS
             }
         }
 
-        bool Build::SignDriver(const char* aCabFile, const char* aSigned)
+        bool Build::SignDriver(const char* aCabFile, const char* aSigned, const char* aComponent, const char* aProcessor)
         {
             assert(nullptr != aCabFile);
             assert(nullptr != aSigned);
 
             Console::HumanScript lHS;
 
+            char lStep[LINE_LENGTH];
+
             lHS.Begin("Signing by Microsoft");
             lHS.Line("Tool - WEB navigator - https://partner.microsoft.com/en-us/dashboard/home");
             lHS.Step("- Click \"Hardware\"");
             lHS.Step("- Click \"Submit new hardware\"");
-            lHS.Step("- Enter the product name");
 
-            char lStep[LINE_LENGTH];
+            sprintf_s(lStep, "- Enter \"%s\" as product name", aComponent);
+            lHS.Step(lStep);
+
             sprintf_s(lStep, "- Upload the signed cabinet file (%s)", aCabFile);
             lHS.Step(lStep);
 
-            lHS.Step("- Select the appropriate platforms");
+            sprintf_s(lStep, "- Select the appropriate platforms (%s)", aProcessor);
+            lHS.Step(lStep);
+
             lHS.Step("- Click \"Submit\"");
             lHS.Step("- Wait for Microsoft to sign the driver");
             lHS.Step("- Download the Microsoft signed driver");
             lHS.Line("");
 
-            sprintf_s(lStep, "- Uncompress the downloaded file into the \"Signed\\%s\" folder", aSigned);
+            sprintf_s(lStep, "Uncompress the downloaded file into the \"Signed\\%s\" folder", aSigned);
             lHS.Step(lStep);
 
             lHS.Line("");
