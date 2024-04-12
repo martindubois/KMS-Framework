@@ -7,18 +7,16 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD
 
-1.1.15-dev Linux 2023-03-19
-1.1.15-dev Windows 2024-02-28
+1.2.0-dev Windows 2024-04-12
 
-1.1.13-dev Linux 2024-02-07
+1.1.15-dev Linux 2023-04-19
+1.1.15-dev Windows 2024-02-28
 
 1.1.10-dev Windows 2023-01-31
 1.1.10-dev Linux 2024-01-30
 - Net::Server::Start and StopAndWait
 
 1.1.9-dev Linux 2024-01-21
-
-1.1.7-dev Linux 2024-01-20
 
 1.1.7-dev Windows 2024-01-19
 - HTTP::ReactApp processes OPTIONS request

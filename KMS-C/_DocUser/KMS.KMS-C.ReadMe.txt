@@ -7,7 +7,9 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD
 
-1.1.15-dev Linux 2023-03-19
+1.2.0-dev Windows 2024-04-12
+
+1.1.15-dev Linux 2024-03-19
 1.1.15-dev Windows 2024-02-28
 
 1.1.13-dev Linux 2024-02-07
