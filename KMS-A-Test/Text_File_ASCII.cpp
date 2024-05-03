@@ -63,6 +63,11 @@ KMS_TEST(Text_File_ASCII_Base, "Auto", sTest_Base)
     // ReplaceLines *
     KMS_TEST_COMPARE(lF0.ReplaceLines("^Test$", "Replaced"), 1U);
 
+    // ===== Internal =======================================================
+
+    // GetLine2
+    lF0.GetLine2(0);
+
     // ===== Cleanup ========================================================
     File::Folder::CURRENT.Delete("Test_Text_File_ASCII_Base_0.txt");
 }
@@ -126,4 +131,14 @@ KMS_TEST(Text_File_ASCII_Exception, "Auto", sTest_Exception)
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_OPEN_FAILED);
+
+    // ===== Internal =======================================================
+
+    // GetLine2
+    try
+    {
+        lF0.GetLine2(0);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_LINE_NO);
 }

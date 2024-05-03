@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_UTF16.h
@@ -14,7 +14,7 @@
 #include <vector>
 
 // ===== Includes ===========================================================
-#include <KMS/File/Folder.h>
+#include <KMS/Text/File.h>
 #include <KMS/Types.h>
 
 namespace KMS
@@ -22,7 +22,7 @@ namespace KMS
     namespace Text
     {
 
-        class File_UTF16 final
+        class File_UTF16 final : public File
         {
 
         public:
@@ -31,23 +31,11 @@ namespace KMS
 
             void AddLine(const wchar_t* aLine);
 
-            void Clear();
-
             // Exception  TEXT_ARGUMENT_INVALID
             const wchar_t* GetLine(unsigned int aNo) const;
 
-            unsigned int GetLineCount() const;
-
-            // Exception  TEXT_ARGUMENT_INVALID
-            unsigned int GetUserLineNo(unsigned int aNo) const;
-
             // Exception  TEXT_ARGUMENT_INVALID
             void InsertLine(unsigned int aNo, const wchar_t* aLine);
-
-            unsigned int RemoveEmptyLines();
-
-            // Exception  TEXT_ARGUMENT_INVALID
-            void RemoveLines(unsigned int aNo, unsigned int aCount);
 
             // Exception  TEXT_ARGUMENT_INVALID
             void ReplaceLine(unsigned int aNo, const wchar_t* aLine);
@@ -55,18 +43,22 @@ namespace KMS
             unsigned int ReplaceLines(const wchar_t* aRegEx, const wchar_t* aReplace);
 
             // Exception  TEXT_OPEN_FAILED
-            void Read(const File::Folder& aFolder, const char* aFileName);
+            void Write(const KMS::File::Folder& aFolder, const char* aFileName, const wchar_t* aEOL = L"\n");
 
             // Exception  TEXT_OPEN_FAILED
-            void Write(const File::Folder& aFolder, const char* aFileName, const wchar_t* aEOL = L"\n");
-
-            // Exception  TEXT_OPEN_FAILED
-            void Write_ASCII(const File::Folder& aFolder, const char* aFileName, const char* aEOL = "\n");
+            void Write_ASCII(const KMS::File::Folder& aFolder, const char* aFileName, const char* aEOL = "\n");
 
             unsigned int CountOccurrence(const wchar_t* aStr) const;
 
-            unsigned int RemoveComments_CPP   ();
-            unsigned int RemoveComments_Script();
+            // ===== File ===================================================
+            virtual void Clear();
+            virtual unsigned int GetLineCount() const;
+            virtual unsigned int GetUserLineNo(unsigned int aNo) const;
+            virtual unsigned int RemoveEmptyLines();
+            virtual void RemoveLines(unsigned int aNo, unsigned int aCount);
+            virtual void Read(const KMS::File::Folder& aFolder, const char* aFileName, unsigned int aFlags = 0);
+            virtual unsigned int RemoveComments_CPP   ();
+            virtual unsigned int RemoveComments_Script();
 
         // Internal
 

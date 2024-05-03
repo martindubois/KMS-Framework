@@ -154,7 +154,17 @@ namespace KMS
 
         void Version::Display(std::ostream& aOut) const
         {
-            aOut << GetMajor() << "." << GetMinor() << "." << GetBuild() << "." << GetCompat() << " " << GetType();
+            aOut << GetMajor() << "." << GetMinor() << "." << GetBuild();
+
+            if (0 != mCompat)
+            {
+                aOut << "." << mCompat;
+            }
+
+            if (0 < strlen(mType))
+            {
+                aOut << "-" << mType;
+            }
 
             if (0 < strlen(mDate))
             {

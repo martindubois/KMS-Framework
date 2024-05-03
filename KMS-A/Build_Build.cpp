@@ -396,7 +396,7 @@ namespace KMS
 
                 Text::File_ASCII lText;
 
-                lText.Read(File::Folder::CURRENT, lFile);
+                lText.Read(KMS::File::Folder::CURRENT, lFile);
 
                 auto lCount = lText.ReplaceLines(lRegEx, lReplaceStr.c_str());
                 if (0 == lCount)
@@ -413,7 +413,7 @@ namespace KMS
 
                     File::Folder::CURRENT.Backup(lFile);
 
-                    lText.Write(File::Folder::CURRENT, lFile);
+                    lText.Write(KMS::File::Folder::CURRENT, lFile);
                 }
 
                 std::cout << std::endl;

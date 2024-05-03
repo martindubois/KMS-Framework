@@ -33,8 +33,6 @@ namespace KMS
             mLines.push_back(aLine);
         }
 
-        void File_UTF16::Clear() { mLines.clear(); }
-
         const wchar_t* File_UTF16::GetLine(unsigned int aNo) const
         {
             if (mLines.size() <= aNo)
@@ -45,20 +43,6 @@ namespace KMS
             }
 
             return mLines[aNo].c_str();
-        }
-
-        unsigned int File_UTF16::GetLineCount() const { return static_cast<unsigned int>(mLines.size()); }
-
-        unsigned int File_UTF16::GetUserLineNo(unsigned int aNo) const
-        {
-            if (mLines.size() <= aNo)
-            {
-                char lMsg[64];
-                sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
-            }
-
-            return mLines[aNo].GetUserLineNo();
         }
 
         void File_UTF16::InsertLine(unsigned int aNo, const wchar_t* aLine)
@@ -77,23 +61,6 @@ namespace KMS
             lIt += aNo;
 
             mLines.insert(lIt, aLine);
-        }
-
-        unsigned int File_UTF16::RemoveEmptyLines() { return RemoveLines(std::wregex(L"[ \t]*$")); }
-
-        void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
-        {
-            if (mLines.size() < aNo + aCount)
-            {
-                char lMsg[64];
-                sprintf_s(lMsg, "%u is not a valid line number", aNo);
-                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
-            }
-
-            auto lFirst = mLines.begin() + aNo;
-            auto lLast  = lFirst + aCount;
-
-            mLines.erase(lFirst, lLast);
         }
 
         void File_UTF16::ReplaceLine(unsigned int aNo, const wchar_t* aLine)
@@ -131,42 +98,7 @@ namespace KMS
             return lResult;
         }
 
-        void File_UTF16::Read(const File::Folder& aFolder, const char* aFile)
-        {
-            assert(nullptr != aFile);
-
-            char lPath[PATH_LENGTH];
-
-            aFolder.GetPath(aFile, lPath, sizeof(lPath));
-
-            std::wifstream lStream(lPath, std::ios::binary);
-            if (!lStream.is_open())
-            {
-                char lMsg[64 + PATH_LENGTH];
-                sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
-                KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, "");
-            }
-
-            lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
-
-            std::wstring lLine;
-            unsigned int lLineNo = 0;
-
-            while (getline(lStream, lLine))
-            {
-                if ((!lLine.empty()) && (L'\r' == lLine.back()))
-                {
-                    // NOT TESTED
-                    lLine.pop_back();
-                }
-
-                mLines.push_back(Line(lLine, lLineNo));
-
-                lLineNo++;
-            }
-        }
-
-        void File_UTF16::Write(const File::Folder& aFolder, const char* aFile, const wchar_t* aEOL)
+        void File_UTF16::Write(const KMS::File::Folder& aFolder, const char* aFile, const wchar_t* aEOL)
         {
             assert(nullptr != aEOL);
 
@@ -190,7 +122,7 @@ namespace KMS
             }
         }
 
-        void File_UTF16::Write_ASCII(const File::Folder& aFolder, const char* aFile, const char* aEOL)
+        void File_UTF16::Write_ASCII(const KMS::File::Folder& aFolder, const char* aFile, const char* aEOL)
         {
             assert(nullptr != aEOL);
 
@@ -232,6 +164,76 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        // ===== File =======================================================
+
+        void File_UTF16::Clear() { mLines.clear(); }
+
+        unsigned int File_UTF16::GetLineCount() const { return static_cast<unsigned int>(mLines.size()); }
+
+        unsigned int File_UTF16::GetUserLineNo(unsigned int aNo) const
+        {
+            if (mLines.size() <= aNo)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
+            }
+
+            return mLines[aNo].GetUserLineNo();
+        }
+
+        unsigned int File_UTF16::RemoveEmptyLines() { return RemoveLines(std::wregex(L"[ \t]*$")); }
+
+        void File_UTF16::RemoveLines(unsigned int aNo, unsigned int aCount)
+        {
+            if (mLines.size() < aNo + aCount)
+            {
+                char lMsg[64];
+                sprintf_s(lMsg, "%u is not a valid line number", aNo);
+                KMS_EXCEPTION(RESULT_INVALID_LINE_NO, lMsg, mLines.size());
+            }
+
+            auto lFirst = mLines.begin() + aNo;
+            auto lLast  = lFirst + aCount;
+
+            mLines.erase(lFirst, lLast);
+        }
+
+        void File_UTF16::Read(const KMS::File::Folder& aFolder, const char* aFile, unsigned int aFlags)
+        {
+            assert(nullptr != aFile);
+
+            char lPath[PATH_LENGTH];
+
+            aFolder.GetPath(aFile, lPath, sizeof(lPath));
+
+            std::wifstream lStream(lPath, std::ios::binary);
+            if (!lStream.is_open())
+            {
+                char lMsg[64 + PATH_LENGTH];
+                sprintf_s(lMsg, "Cannot open \"%s\" for reading", lPath);
+                KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, "");
+            }
+
+            lStream.imbue(std::locale(lStream.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
+
+            std::wstring lLine;
+            unsigned int lLineNo = 0;
+
+            while (getline(lStream, lLine))
+            {
+                if ((!lLine.empty()) && (L'\r' == lLine.back()) && (0 == (FLAG_DO_NOT_REMOVE_CR & aFlags)))
+                {
+                    // NOT TESTED
+                    lLine.pop_back();
+                }
+
+                mLines.push_back(Line(lLine, lLineNo));
+
+                lLineNo++;
+            }
         }
 
         unsigned int File_UTF16::RemoveComments_CPP   () { return RemoveLines(std::wregex(L"[ \t]*//.*")); }

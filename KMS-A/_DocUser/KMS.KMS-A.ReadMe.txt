@@ -7,6 +7,9 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+1.2.1-dev Windows 2024-05-03
+- Text::File base class
+
 1.2.0-dev Windows 2024-04-12
 - Dbg::State_Entry - Register or not (KF-60)
 - Dbg::Stats_Value - Make accessors public (KF-59)
