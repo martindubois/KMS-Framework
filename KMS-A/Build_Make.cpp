@@ -94,6 +94,7 @@ namespace KMS
         const char* Make::SILENCE[]
         {
             NAME_OS "Drivers",
+            NAME_OS "EditOperations",
             NAME_OS "Folders",
             NAME_OS "Packages",
             NAME_OS "Processors",
@@ -101,6 +102,7 @@ namespace KMS
             NO_OS_0 "Binaries"      , NO_OS_1 "Binaries"      ,
             NO_OS_0 "Configurations", NO_OS_1 "Configurations",
             NO_OS_0 "Drivers"       , NO_OS_1 "Drivers"       ,
+            NO_OS_0 "EditOperations", NO_OS_1 "EditOperations",
             NO_OS_0 "Files"         , NO_OS_1 "Files"         ,
             NO_OS_0 "Folders"       , NO_OS_1 "Folders"       ,
             NO_OS_0 "Libraries"     , NO_OS_1 "Libraries"     ,

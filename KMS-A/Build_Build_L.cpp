@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build_L.cpp
@@ -53,7 +53,9 @@ namespace KMS
         {
             mPackages.SetCreator(DI::String_Expand::Create);
 
-            AddEntry("LinuxPackages", &mPackages, false, &MD_OS_PACKAGES);
+            Ptr_OF<DI::Object> lEntry;
+
+            lEntry.Set(&mPackages, false); AddEntry("LinuxPackages", lEntry, &MD_OS_PACKAGES);
 
             mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
         }

@@ -7,22 +7,17 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.1-dev Windows 2024-05-03
+1.2.1-dev 2024-05-06
 
-1.1.15-dev Linux 2024-03-19
-1.1.15-dev Windows 2024-02-28
+1.1.15-dev 2024-03-19
 
 1.1.13-dev Linux 2024-02-07
 - Dev::Device::Connect on Linux
 
 1.1.10-dev Windows 2023-01-31
 
-1.1.4-dev Windows 2024-01-14
-
 1.0.8-dev Windows 2023-10-03
 - Dev::IDevice::operator HANDLE ()
-
-1.0.7 Windows 2023-09-27
 
 0.1.76-dev Windows 2023-07-19
 
@@ -32,12 +27,8 @@ EDIT ON BUILD
 0.1.60-dev Windows 2023-03-16
 - Modbus::Master_Com - Clear receive buffer before sending a command
 
-0.1.58-dev Windows 2023-03-14
-
 0.1.52-dev Windows 2022-12-05
 - Thread::Thread - Fix destructor when the thread runs
-
-0.1.29-dev Windows 2022-12-01
 
 0.0.6-dev Windows 2022-07-27
 * Com::Port

@@ -7,35 +7,21 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.1-dev Windows 2024-05-03
+1.2.1-dev 2024-05-06
 
 1.2.0-dev Windows 2024-04-12
 - Linux/Windows EditOperations (KF-62)
 - Windows signing procedure improved (KF-61)
 
-1.1.15-dev Linux 2023-03-19
-1.1.15-dev Windows 2024-02-28
+1.1.15-dev 2023-03-19
 - DoNotClean argument
 - Instruction for getting driver signed by Microsoft
-
-1.1.14-dev Windows 2024-02-15
-
-1.1.13-dev Linux 2024-02-07
 
 1.1.12-dev Linux 2024-02-07
 - LinuxPackages argument
 
-1.1.10-dev Windows 2023-01-31
-1.1.10-dev Linux 2024-01-30
-
-1.1.7-dev Linux 2024-01-20
-1.1.7-dev Windows 2024-01-19
-
 1.1.5-dev Linux 2024-01-18
 - When building OSIndependent project, Processors are not required.
-
-1.1.4-dev Linux 2024-01-15
-1.1.4-dev Windows 2024-01-14
 
 1.1.1-dev Windows 2023-12-13
 * Check needed software
@@ -43,8 +29,6 @@ EDIT ON BUILD
 1.0.7 Windows 2023-09-27
 
 1.0.2 Linux 2023-08-22
-
-1.0.1 Windows 2023-08-06
 
 0.1.76-dev Windows 2023-07-19
 - Build::Build - Compile time by processor in statistics (KF-47)
@@ -62,16 +46,10 @@ EDIT ON BUILD
 0.1.57-dev Windows 2022-12-26
 - Build::Build - Fix an error occuring when a product has no library
 
-0.1.55-dev Windows 2022-12-19
-
 0.1.5-dev Linux x86_64 2022-10-19
 
 0.1.4-dev Windows 2022-10-17
 * Build::Build * WindowsFile_MSI
-
-0.1.3-dev Windows 2022-10-11
-
-0.1.1-dev Linux x86_64 2022-10-03
 
 0.0.6-dev Windows 2022-07-27
 * Build::Build
@@ -83,5 +61,3 @@ EDIT ON BUILD
 
 0.0.3 Windows 2022-06-01
 * Build::Build * EditOperations attribute
-
-0.0.2 Windows 2022-05-21

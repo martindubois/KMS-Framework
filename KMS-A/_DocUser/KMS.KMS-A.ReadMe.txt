@@ -7,7 +7,7 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.1-dev Windows 2024-05-03
+1.2.1-dev 2024-05-06
 - Text::File base class
 
 1.2.0-dev Windows 2024-04-12
@@ -15,8 +15,7 @@ EDIT ON BUILD
 - Dbg::Stats_Value - Make accessors public (KF-59)
 - Ptr_OF used where appropriate (KF-63)
 
-1.1.15-dev Linux 2023-03-19
-1.1.15-dev Windows 2024-02-28
+1.1.15-dev 2023-03-19
 - CLI::Tool - Command ChangeDir (KF-54)
 - Console::HumanScript (KF-52)
 
@@ -24,29 +23,15 @@ EDIT ON BUILD
 - Console::Redirection
 - Dbg::Log::SetHideCount removed
 
-1.1.13-dev Linux 2024-02-07
-
-1.1.10-dev Windows 2023-01-31
-1.1.10-dev Linux 2024-01-30
-
 1.1.9-dev Linux 2024-01-21
 - Proc::Browser::Wait on Linux
 
 1.1.8-dev Linux 2024-01-20
 - Proc::Process::Wait on Linux
 
-1.1.7-dev Linux 2024-01-20
-
 1.1.7-dev Windows 2024-01-19
 - HTTP::Response::FIELD_NAME_ACCESS_CONTROL_ALLOW_HEADERS
 - JSON decode boolean
-
-1.1.6-dev Windows 2024-01-18
-
-1.1.5-dev Linux 2024-01-18
-
-1.1.4-dev Linux 2024-01-15
-1.1.4-dev Windows 2024-01-14
 
 1.1.3-dev Windows 2023-12-27
 - WGDI::Scope_Module
@@ -105,20 +90,12 @@ EDIT ON BUILD
 0.1.73-stm32f373xC 2023-06-15
 0.1.73-stm32h743xx_m7, -stm32h747xx_m7 2023-06-14
 
-0.1.72-stm32f373vctx 2023-06-14
-
-0.1.71-dev Windows 2023-06-01
-
-0.1.70-stm32f373vctx 2023-05-31
-
 0.1.70-dev Windows 2023-05-31
 * File::Folder::Delete fix (KF-42)
 - Text::File_ASCII and Text::File_UTF16 - User line number
 
 0.1.70-dev Windows 2023-05-31
 - File::Folder::Delete fix (KF-42)
-
-0.1.69-stm32f373vctx 2023-05-31
 
 0.1.68-dev Windows 2023-05-25
 - Cfg::Configurator::DisplayConfig (KF-28)
@@ -129,8 +106,6 @@ EDIT ON BUILD
 0.1.66-dev Windows 2023-04-14
 * Click::Master
 * Dbg::Stats
-
-0.1.65-dev Windows 2023-04-03
 
 0.1.64-dev Windows 2023-03-30
 - Modbus::Master::mRetryCount
@@ -149,8 +124,6 @@ EDIT ON BUILD
 * FileFormat::ELF
 - Modbus::Slave - Fix bugs
 
-0.1.60-dev Windows 2023-03-16
-
 0.1.59-stm32f373vctx 2022-12-30
 - Embedded::AssertFailure
 
@@ -167,16 +140,12 @@ EDIT ON BUILD
 0.1.51-stm32f373vctx
 - Embedded::SPI::ISlave::FLAG_WORD_...
 
-0.1.29-dev Windows 2022-12-01
-
 0.1.17-dev Windows 2022-11-28
 - Build::Depend - Embedded project support
 - Embedded - Test
 - WOP
     - Link_Port
     - Link_USART
-
-0.1.12-dev Windows 2022-11-21
 
 0.1.11-dev Windows 2022-11-15
 - Depend - Compile on Windows
@@ -194,8 +163,6 @@ EDIT ON BUILD
     - ToDisplay
     - ToUInt8Array
 - Text::File_UTF16::Write_ASCII
-
-0.1.6-edv Windows 2022-10-20
 
 0.1.5-dev Linux x86_64 2022-10-19
 
@@ -293,5 +260,3 @@ EDIT ON BUILD
 
 0.0.3 Windows 2022-06-01
 * File::FileInfo
-
-0.0.1-dev Windows 2022-05-20

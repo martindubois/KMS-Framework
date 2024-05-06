@@ -7,33 +7,20 @@ File      _DocUser/KMS.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.1-dev Windows 2024-05-03
+1.2.1-dev 2024-05-06
 
-1.1.15-dev Linux 2024-03-19
-1.1.15-dev Windows 2024-02-28
-
-1.1.13-dev Linux 2024-02-07
-
-1.1.10-dev Windows 2023-01-31
-1.1.10-dev Linux 2024-01-30
+1.1.15-dev 2024-03-19
 
 1.1.7-dev Linux 2024-01-20
 - Add Args folder to Linux export
 
-1.1.7-dev Windows 2024-01-19
-
-1.1.5-dev Linux 2024-01-18
-
-1.1.4-dev Linux 2024-01-15
-1.1.4-dev Windows 2024-01-14
+1.1.4-dev 2024-01-15
 - KMS-ComTool, KMS-ModbusSim, KMS-ModbusTool and KMS-WOP moved to the
   KMS-Tools product
 - Ptr_OF
 
 1.1.3-dev Windows 2023-12-27
 - Remove Debug_Static configuration
-
-1.1.2-dev Windows 2023-12-21
 
 1.1.1-dev Windows 2023-12-13
 * Use #pragma comment(lib, ) for needed Windows library
@@ -47,11 +34,7 @@ EDIT ON BUILD
 1.0.6 Windows 2023-09-07
 * KMS/Main.h
 
-1.0.5 Windows 2023-09-06
-
 1.0.2 Linux 2023-08-22
-
-1.0.1 Windows 2023-08-06
 
 0.1.76-dev Windows 2023-07-19
 
@@ -71,7 +54,6 @@ EDIT ON BUILD
 0.1.11-dev Windows 2022-11-15
 * KMS-Make on Windows
 
-0.1.9-dev Windows 2022-11-14
 
 0.1.5-dev Linux x86_64 2022-10-19
 
