@@ -117,6 +117,7 @@ namespace KMS
             "Files"           ,
             "Folders"         ,
             "Product"         ,
+            "Stats_Console"   ,
             "VersionFile"     ,
 
             nullptr

@@ -7,6 +7,8 @@ File      KMS-Make/_DocUser/KMS.KMS-Make.ReadMe.txt
 
 EDIT ON BUILD
 
+- Silence Stats_Console is prensent in KMS-Build.Cfg (KF-64)
+
 1.2.1-dev 2024-05-06
 
 1.1.15-dev 2024-03-19
