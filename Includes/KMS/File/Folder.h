@@ -73,8 +73,10 @@ namespace KMS
             // aFlags FLAG_BACKUP_RENAME (see Copy and Rename)
             void Backup(const char * aFile, unsigned int aFlags = 0) const;
 
-            void Compress  (const Folder &aFolder, const char * aFile);
-            void Uncompress(const Folder &aFolder, const char * aFile);
+            void Compress(const Folder &aFolder, const char * aFile);
+
+            // aFlags FLAG_OVERWRITE
+            void Uncompress(const Folder &aFolder, const char * aFile, unsigned int aFlags = 0);
 
             // aFlags FLAG_BACKUP, FLAG_IGNORE_ERROR, FLAG_OVERWRITE, FLAG_RED, FLAG_VERBOSE
             void Copy(const char* aSrc, const char* aDst, unsigned int aFlags = 0) const;

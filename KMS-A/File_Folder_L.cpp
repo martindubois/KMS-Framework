@@ -107,7 +107,7 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(0 == lP.GetExitCode(), RESULT_COMPRESS_FAILED, "Cannot compress the folder's elements", lP.GetCmdLine());
         }
 
-        void Folder::Uncompress(const Folder& aFolder, const char* aFile)
+        void Folder::Uncompress(const Folder& aFolder, const char* aFile, unsigned int aFlags)
         {
             char lSrc[PATH_LENGTH];
 
@@ -118,6 +118,11 @@ namespace KMS
             lP.AddArgument(lSrc);
             lP.AddArgument("-d");
             lP.AddArgument(mPath.c_str());
+
+            if (0 != (aFlags & FLAG_OVERWRITE))
+            {
+                lP.AddArgument("-o");
+            }
 
             lP.Run(UNZIP_ALLOWED_TIME_ms);
 

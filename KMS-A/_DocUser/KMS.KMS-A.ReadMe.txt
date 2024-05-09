@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- File::Folder::Uncompress - FLAG_OVERWRITE (KF-50)
+
 1.2.1-dev 2024-05-06
 - Text::File base class
 

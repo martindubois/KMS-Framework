@@ -243,7 +243,7 @@ namespace KMS
                 {
                     std::cout << "Importing " << lProductName << " " << aPackage.GetVersion() << " from " << *aR << std::endl;
 
-                    mImport.Uncompress(lProductFolder, aFileName);
+                    mImport.Uncompress(lProductFolder, aFileName, File::Folder::FLAG_OVERWRITE);
 
                     lResult = true;
                 }
@@ -281,7 +281,7 @@ namespace KMS
 
                 lClient.Get(lURL, &lOutFile);
 
-                mImport.Uncompress(mTmpFolder, aFileName);
+                mImport.Uncompress(mTmpFolder, aFileName, File::Folder::FLAG_OVERWRITE);
 
                 lResult = true;
             }
