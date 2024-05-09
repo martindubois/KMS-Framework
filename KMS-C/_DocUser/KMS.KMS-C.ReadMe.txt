@@ -7,6 +7,8 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD
 
+- Dev::device fix connection on Linux
+
 1.2.1-dev 2024-05-06
 
 1.1.15-dev 2024-03-19

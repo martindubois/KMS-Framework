@@ -39,7 +39,7 @@ namespace KMS
 
             int lFlags = 0;
 
-            switch (lFlags & (FLAG_ACCESS_READ | FLAG_ACCESS_WRITE))
+            switch (aFlags & (FLAG_ACCESS_READ | FLAG_ACCESS_WRITE))
             {
             case FLAG_ACCESS_READ : lFlags |= O_RDONLY; break;
             case FLAG_ACCESS_WRITE: lFlags |= O_WRONLY; break;
