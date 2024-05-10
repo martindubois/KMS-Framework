@@ -13,6 +13,7 @@
 
 #include <KMS/Build/Build.h>
 
+KMS_RESULT_STATIC(RESULT_DOXYGEN_FAILED);
 KMS_RESULT_STATIC(RESULT_SH_FAILED);
 KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 
@@ -25,8 +26,9 @@ KMS_RESULT_STATIC(RESULT_TEST_FAILED);
 
 #define PACKAGES_FOLDER ("Packages")
 
-#define SH_ALLOWED_TIME_ms   (1000 * 60 * 5) // 5 minutes
-#define TEST_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+#define DOXYGEN_ALLOWED_TIME_ms (1000 * 60 * 5) // 5 minutes
+#define SH_ALLOWED_TIME_ms      (1000 * 60 * 5) // 5 minutes
+#define TEST_ALLOWED_TIME_ms    (1000 * 60 * 5) // 5 minutes
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -88,6 +90,18 @@ namespace KMS
                     lPackages.Copy(mProductFolder, lFileName);
                 }
             }
+        }
+
+        void Build::ExecuteDoxygen(const char* aFileName)
+        {
+            Proc::Process lP0(File::Folder::NONE, "doxygen");
+
+            lP0.AddArgument(aFileName);
+
+            lP0.Run(DOXYGEN_ALLOWED_TIME_ms);
+
+            auto lRet = lP0.GetExitCode();
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_DOXYGEN_FAILED, "doxygen failed", lP0.GetCmdLine());
         }
 
         void Build::Package_Components(const char* aC, const char* aP)

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Build.cpp
@@ -27,6 +27,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 #define FILE_EXT_A   ".a"
 #define FILE_EXT_CFG ".cfg"
 #define FILE_EXT_ELF ".elf"
+#define FILE_EXT_TXT ".txt"
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
@@ -226,6 +227,9 @@ namespace KMS
 
             if (!mDoNotCompile) { Compile(); }
             if (!mDoNotTest   ) { Test   (); }
+
+            GenerateDoc();
+
             if (!mDoNotPackage) { Package(); }
             if (!mDoNotExport ) { Export (); }
 
@@ -455,6 +459,26 @@ namespace KMS
             lPackage.GetFileName(lFileName, sizeof(lFileName));
 
             mTmp_Root.Compress(mProductFolder, lFileName);
+        }
+
+        void Build::GenerateDoc()
+        {
+            GenerateDoc("en");
+            GenerateDoc("fr");
+        }
+
+        void Build::GenerateDoc(const char* aLanguage)
+        {
+            assert(nullptr != aLanguage);
+
+            char lFileName[PATH_LENGTH];
+
+            sprintf_s(lFileName, "DoxyFile_%s" FILE_EXT_TXT, aLanguage);
+
+            if (File::Folder::CURRENT.DoesFileExist(lFileName))
+            {
+                ExecuteDoxygen(lFileName);
+            }
         }
 
         void Build::Package()

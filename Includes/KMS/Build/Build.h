@@ -99,7 +99,10 @@ namespace KMS
             void CreateInstaller(const char* aP);
             void Edit();
             void ExecuteCommands(const DI::Array& aCommands);
+            void ExecuteDoxygen(const char* aFileName);
             void Export();
+            void GenerateDoc();
+            void GenerateDoc(const char* aLanguage);
             void Package();
             void Package_Components();
             void Package_Components(const char* aC);

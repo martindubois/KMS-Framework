@@ -16,6 +16,7 @@
 #include <KMS/Build/Build.h>
 
 KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
+KMS_RESULT_STATIC(RESULT_DOXYGEN_FAILED);
 KMS_RESULT_STATIC(RESULT_INNO_SETUP_FAILED);
 KMS_RESULT_STATIC(RESULT_INNO_SETUP_MISSING);
 KMS_RESULT_STATIC(RESULT_MAKECAB_FAILED);
@@ -36,6 +37,8 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 // //////////////////////////////////////////////////////////////////////////
 
 #define DISK1_FOLDER      ("disk1")
+#define DOXYGEN_EXE       ("doxygen.exe")
+#define DOXYGEN_FOLDER    ("doxygen\bin")
 #define INNO_SETUP_EXE    ("Compil32" FILE_EXT_EXE)
 #define INNO_SETUP_FOLDER ("Inno Setup 6")
 #define INSTALLER_FOLDER  ("Installer")
@@ -44,6 +47,7 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 #define SIGNTOOL_EXE      ("signtool" FILE_EXT_EXE)
 #define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.22621.0\\x64")
 
+#define DOXYGEN_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
 #define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) //  5 minutes
 #define MAKECAB_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
 #define MSBUILD_ALLOWED_TIME_ms    (1000 * 60 * 10) // 10 minutes
@@ -129,6 +133,20 @@ namespace KMS
 
             auto lRet = lProcess.GetExitCode();
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "The compilation failed", lProcess.GetCmdLine());
+        }
+
+        void Build::ExecuteDoxygen(const char* aFileName)
+        {
+            File::Folder lBin(File::Folder::PROGRAM_FILES, DOXYGEN_FOLDER);
+
+            Proc::Process lP0(lBin, DOXYGEN_EXE);
+
+            lP0.AddArgument(aFileName);
+
+            lP0.Run(DOXYGEN_ALLOWED_TIME_ms);
+
+            auto lRet = lP0.GetExitCode();
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_DOXYGEN_FAILED, "doxygen failed", lP0.GetCmdLine());
         }
 
         void Build::Package_Components(const char* aC, const char* aP)
