@@ -7,6 +7,7 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
+1.2.2-dev Linux 2024-06-08
 * Doxygen (KF-53)
 
 1.2.1-dev 2024-05-06
