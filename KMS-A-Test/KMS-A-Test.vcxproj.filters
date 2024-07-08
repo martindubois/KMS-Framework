@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Graph">
       <UniqueIdentifier>{7483aa91-1dc3-4e34-a3ab-e453cf26079e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\CLI">
+      <UniqueIdentifier>{917ea89f-b5b1-4ffa-89c7-3956cfef857b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-A-Test.cpp">
@@ -90,9 +93,6 @@
     <ClCompile Include="File_Binary.cpp">
       <Filter>Source Files\File</Filter>
     </ClCompile>
-    <ClCompile Include="CLI_Tool.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DI_Dictionary.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
@@ -122,6 +122,12 @@
     </ClCompile>
     <ClCompile Include="File_Folder_W.cpp">
       <Filter>Source Files\File</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI_Tool.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI_InstanceList.cpp">
+      <Filter>Source Files\CLI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

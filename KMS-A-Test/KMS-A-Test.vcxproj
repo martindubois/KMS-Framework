@@ -215,6 +215,7 @@
   <ItemGroup>
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Click_Master.cpp" />
+    <ClCompile Include="CLI_InstanceList.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
