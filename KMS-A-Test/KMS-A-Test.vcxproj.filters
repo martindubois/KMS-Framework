@@ -129,6 +129,9 @@
     <ClCompile Include="CLI_InstanceList.cpp">
       <Filter>Source Files\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="CLI_Macros.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

@@ -114,13 +114,13 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
 #define KMS_TEST_CATCH_BREAK(C)                                                              \
     catch(KMS::Exception eE)                                                                 \
     {                                                                                        \
-        if (!Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ )) { break; } \
+        if (!Compare(eE.GetCode(), (C), __FILE__, __LINE__ )) { break; } \
     }
 
 #define KMS_TEST_CATCH_RETURN(C)                                                              \
     catch(KMS::Exception eE)                                                                  \
     {                                                                                         \
-        if (!Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ )) { return; } \
+        if (!Compare(eE.GetCode(), (C), __FILE__, __LINE__ )) { return; } \
     }
 
 #define KMS_TEST_OUTPUT_BEGIN()                          \
@@ -139,7 +139,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Test::Test& aT);
         std::cout << KMS::Console::Color::BLUE;                \
         std::cout << "TEST OUTPUT END";                        \
         std::cout << KMS::Console::Color::WHITE << std::endl;  \
-        Compare(eE.GetCode(), KMS::Exception::Code::C, __FILE__, __LINE__ ); \
+        Compare(eE.GetCode(), (C), __FILE__, __LINE__ ); \
     }
 
 #define KMS_TEST_CATCH_OUTPUT_END_N(N)                                                \

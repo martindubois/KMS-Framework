@@ -16,50 +16,141 @@ namespace KMS
     namespace CLI
     {
 
-        template <typename T>
-        class InstanceList
+        class InstanceList_Base
         {
 
         public:
 
-            InstanceList();
+            static const unsigned int CMD_DELETE;
+            static const unsigned int CMD_DELETE_ALL;
+            static const unsigned int CMD_LIST;
+            static const unsigned int CMD_SELECT;
 
-            ~InstanceList();
+            static const unsigned int CMD_NONE;
+            static const unsigned int CMD_ALL;
 
-            void Add(const char* aName, T* aInstance);
+            InstanceList_Base();
 
-            const T* Get(const char* aName) const;
+            // Exception  RESULT_INVALID_STATE
+            const char* GetSelectedName() const;
 
-            T* Get(const char* aName);
+            bool IsInstanceSelected() const;
 
-            const T* GetSelected(const char* aName) const;
-
-            T* GetSelected();
-
-            int Delete(const char* aName);
+            // aCmds  See CMD_...
+            void SetAllowedCmds(unsigned int aCmds);
 
             void DeleteAll();
 
+            // Exception  RESULT_INVALID_NAME
+            void DeleteByName(const char* aName);
+
+            // Exception  RESULT_INVALID_STATE
+            void DeleteSelected();
+
+            // Exception  RESULT_DENIED
+            //            RESULT_INVALID_NAME
+            //            RESULT_INVALID_STATE
+            //            RESULT_INVALID_VALUE
             int ExecuteCommand(const char* aCmd);
 
             void List(std::ostream& aOut) const;
 
-            T* Remove(const char* aName);
+            // Exception  RESULT_INVALID_STATE
+            void VerifyInstanceSelected() const;
 
-            T* Select(const char* aName);
+            void Unselect();
+
+            typedef std::map<std::string, void*> InstanceMap;
+
+            InstanceMap mInstances;
+
+        protected:
+
+            void Internal_Add(const char* aName, void* aInstance);
+
+            const void* Internal_GetByName(const char* aName) const;
+
+            void* Internal_GetByName(const char* aName);
+
+            const void* Internal_GetByName_Try(const char* aName) const;
+
+            void* Internal_GetByName_Try(const char* aName);
+
+            void* Internal_GetSelected();
+
+            void Internal_Delete(void* aInstance);
+
+            void Internal_Remove(void* aInstance);
+
+            void* Internal_RemoveByName(const char* aName);
+
+            void* Internal_RemoveSelected();
+
+            void* Internal_SelectByName(const char* aName);
+
+            virtual void Typed_Delete(void* aInstance) = 0;
+
+            unsigned int mAllowedCmds;
+
+            InstanceMap::iterator mSelected;
 
         private:
 
-            int Cmd_Delete(const char* aName);
+            int Cmd_Delete();
             int Cmd_Delete_All();
             int Cmd_List() const;
             int Cmd_Select(const char* aName);
 
-            typedef std::map<std::string, T*> InstanceMap;
+            void Unselect(void* aInstance);
 
-            InstanceMap mInstances;
+        };
 
-            T* mSelected;
+        template <typename T>
+        class InstanceList : public InstanceList_Base
+        {
+
+        public:
+
+            ~InstanceList();
+
+            // Exception  RESULT_INVALID_NAME
+            void Add(const char* aName, T* aInstance);
+
+            // Exception  RESULT_INVALID_NAME
+            const T* GetByName(const char* aName) const;
+
+            // Exception  RESULT_INVALID_NAME
+            T* GetByName(const char* aName);
+
+            const T* GetByName_Try(const char* aName) const;
+
+            T* GetByName_Try(const char* aName);
+
+            // Exception  RESULT_INVALID_STATE
+            const T* GetSelected() const;
+
+            // Exception  RESULT_INVALID_STATE
+            T* GetSelected();
+
+            // Exception  RESULT_INVALID_VALUE
+            void Delete(T* aInstance);
+
+            // Exception  RESULT_INVALID_VALUE
+            void Remove(T* aInstance);
+
+            // Exception  RESULT_INVALID_NAME
+            T* RemoveByName(const char* aName);
+
+            // Exception  RESULT_INVALID_STATE
+            T* RemoveSelected();
+
+            // Exception  RESULT_INVALID_NAME
+            T* SelectByName(const char* aName);
+
+        protected:
+
+            // ===== InstanceList_Base ======================================
+            virtual void Typed_Delete(void* aInstance);
 
         };
 
@@ -67,193 +158,85 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         template <typename T>
-        InstanceList<T>::InstanceList() : mSelected(nullptr) {}
-
-        template <typename T>
         InstanceList<T>::~InstanceList() { DeleteAll(); }
 
         template <typename T>
         void InstanceList<T>::Add(const char* aName, T* aInstance)
         {
-            assert(nullptr != aInstance);
-
-            mInstances.insert(InstanceMap::value_type(aName, aInstance));
+            Internal_Add(aName, aInstance);
         }
 
         template <typename T>
-        T* InstanceList<T>::Get(const char* aName)
+        const T* InstanceList<T>::GetByName(const char* aName) const
         {
-            assert(nullptr != aName);
-
-            auto lIt = mInstances.find(aName);
-            if (mInstances.end() == lIt)
-            {
-                return nullptr;
-            }
-
-            assert(nullptr != lIt->second);
-
-            return lIt->second;
+            return reinterpret_cast<T*>(Internal_GetByName(aName));
         }
 
         template <typename T>
-        T* InstanceList<T>::GetSelected() { return mSelected; }
-
-        template <typename T>
-        int InstanceList<T>::Delete(const char* aName)
+        T* InstanceList<T>::GetByName(const char* aName)
         {
-            int lResult = -2;
-
-            auto lInstance = Remove(aName);
-            if (nullptr != lInstance)
-            {
-                delete lInstance;
-
-                lResult = 0;
-            }
-
-            return lResult;
+            return reinterpret_cast<T*>(Internal_GetByName(aName));
         }
 
         template <typename T>
-        void InstanceList<T>::DeleteAll()
+        const T* InstanceList<T>::GetByName_Try(const char* aName) const
         {
-            for (auto lIt : mInstances)
-            {
-                assert(nullptr != lIt.second);
-
-                delete lIt.second;
-            }
-
-            mInstances.clear();
-            mSelected = nullptr;
+            return reinterpret_cast<T*>(Internal_GetByName_Try(aName));
         }
 
         template <typename T>
-        int InstanceList<T>::ExecuteCommand(const char* aCmd)
+        T* InstanceList<T>::GetByName_Try(const char* aName)
         {
-            int lResult = -4;
-
-            char lName[NAME_LENGTH];
-
-            if      (0 == _stricmp(aCmd, "Delete All")) { Cmd_Delete_All(); lResult = 0; }
-            else if (0 == _stricmp(aCmd, "List"      )) { Cmd_List      (); lResult = 0; }
-            else if (1 == sscanf_s(aCmd, "Delete %s", lName SizeInfo(lName))) { lResult = Cmd_Delete(lName); }
-            else if (1 == sscanf_s(aCmd, "Select %s", lName SizeInfo(lName))) { lResult = Cmd_Select(lName); }
-            else
-            {
-                std::cerr << "Invalid command" << std::endl;
-            }
-
-            return lResult;
+            return reinterpret_cast<T*>(Internal_GetByName_Try(aName));
         }
 
         template <typename T>
-        void InstanceList<T>::List(std::ostream& aOut) const
+        const T* InstanceList<T>::GetSelected() const { return reinterpret_cast<T*>(Internal_GetSelected()); }
+
+        template <typename T>
+        T* InstanceList<T>::GetSelected() { return reinterpret_cast<T*>(Internal_GetSelected()); }
+
+        template <typename T>
+        void InstanceList<T>::Delete(T* aInstance)
         {
-            for (auto lIt : mInstances)
-            {
-                aOut << lIt.first << "\n";
-            }
+            Internal_Delete(aInstance);
         }
 
         template <typename T>
-        T* InstanceList<T>::Remove(const char* aName)
+        void InstanceList<T>::Remove(T* aInstance)
         {
-            assert(nullptr != aName);
-
-            T* lResult = nullptr;
-
-            auto lIt = mInstances.find(aName);
-            if (mInstances.end() != lIt)
-            {
-                assert(nullptr != lIt->second);
-
-                lResult = lIt->second;
-
-                mInstances.erase(lIt);
-            }
-
-            if (mSelected == lResult)
-            {
-                mSelected = nullptr;
-            }
-
-            return lResult;
+            Internal_Remove(aInstance);
         }
 
         template <typename T>
-        T* InstanceList<T>::Select(const char* aName)
+        T* InstanceList<T>::RemoveByName(const char* aName)
         {
-            mSelected = Get(aName);
-            
-            return mSelected;
+            return reinterpret_cast<T*>(Internal_RemoveByName(aName));
         }
 
-        // Private
+        template <typename T>
+        T* InstanceList<T>::RemoveSelected()
+        {
+            return reinterpret_cast<T*>(Internal_RemoveSelected());
+        }
+
+        template <typename T>
+        T* InstanceList<T>::SelectByName(const char* aName)
+        {
+            return reinterpret_cast<T*>(Internal_SelectByName(aName));
+        }
+
+        // Protected
         // //////////////////////////////////////////////////////////////////
 
-        template <typename T>
-        int InstanceList<T>::Cmd_Delete(const char* aName)
-        {
-            std::cout << aName << " ";
-
-            int lResult = Delete(aName);
-            if (0 == lResult)
-            {
-                std::cout << "deleted";
-            }
-            else
-            {
-                std::cerr << "does not exist";
-            }
-
-            std::cerr << std::endl;
-
-            return lResult;
-        }
+        // ===== InstanceList_Base ==========================================
 
         template <typename T>
-        int InstanceList<T>::Cmd_Delete_All()
+        void InstanceList<T>::Typed_Delete(void* aInstance)
         {
-            DeleteAll();
+            assert(nullptr != aInstance);
 
-            std::cout << "Deleted" << std::endl;
-
-            return 0;
-        }
-
-        template <typename T>
-        int InstanceList<T>::Cmd_List() const
-        {
-            List(std::cout);
-
-            std::cout << mInstances.size() << " instances" << std::endl;
-
-            return 0;
-        }
-
-        template <typename T>
-        int InstanceList<T>::Cmd_Select(const char* aName)
-        {
-            std::cout << aName << " ";
-
-            int lResult = -3;
-
-            auto lI = Select(aName);
-            if (nullptr != lI)
-            {
-                std::cout << "selected";
-                lResult = 0;
-            }
-            else
-            {
-                std::cerr << "does not exist";
-            }
-
-            std::cerr << std::endl;
-
-            return lResult;
+            delete reinterpret_cast<T*>(aInstance);
         }
 
     }

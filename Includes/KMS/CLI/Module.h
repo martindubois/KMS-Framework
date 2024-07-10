@@ -8,12 +8,15 @@
 
 #pragma once
 
+// ===== Includes ===========================================================
+#include <KMS/CLI/ICommandParser.h>
+
 namespace KMS
 {
     namespace CLI
     {
 
-        class Module
+        class Module : public ICommandParser
         {
 
         public:
@@ -21,13 +24,6 @@ namespace KMS
             static const int UNKNOWN_COMMAND;
 
             virtual void DisplayHelp(FILE* aOut) const = 0;
-
-            // Return  0                OK
-            //         UNKNOWN_COMMAND  Continue parsing
-            //         Other            Error
-            //
-            // Exception  ...
-            virtual int ExecuteCommand(const char* aC) = 0;
 
         protected:
 

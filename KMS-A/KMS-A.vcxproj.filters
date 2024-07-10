@@ -420,6 +420,18 @@
     <ClCompile Include="Console_HumanScript.cpp">
       <Filter>Source Files\Console</Filter>
     </ClCompile>
+    <ClCompile Include="CLI_Macros.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI_Macro.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="DAQ_AnalogInputModule.cpp">
+      <Filter>Source Files\DAQ</Filter>
+    </ClCompile>
+    <ClCompile Include="CLI_InstanceList_Base.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

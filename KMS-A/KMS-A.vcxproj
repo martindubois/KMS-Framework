@@ -36,6 +36,9 @@
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
     <ClCompile Include="Click_Master.cpp" />
+    <ClCompile Include="CLI_InstanceList_Base.cpp" />
+    <ClCompile Include="CLI_Macro.cpp" />
+    <ClCompile Include="CLI_Macros.cpp" />
     <ClCompile Include="CLI_Module.cpp" />
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Console_Color_W.cpp" />
@@ -47,6 +50,7 @@
     <ClCompile Include="DAQ_AnalogConverter.cpp" />
     <ClCompile Include="DAQ_AnalogInput.cpp" />
     <ClCompile Include="DAQ_AnalogInputConverter.cpp" />
+    <ClCompile Include="DAQ_AnalogInputModule.cpp" />
     <ClCompile Include="DAQ_AnalogOutput.cpp" />
     <ClCompile Include="DAQ_AnalogOutputConverter.cpp" />
     <ClCompile Include="DAQ_DigitalInput.cpp" />

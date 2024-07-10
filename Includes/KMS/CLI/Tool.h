@@ -13,6 +13,7 @@
 #include <list>
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/ICommandParser.h>
 #include <KMS/CLI/Module.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Dictionary.h>
@@ -22,7 +23,7 @@ namespace KMS
     namespace CLI
     {
 
-        class Tool : public DI::Dictionary
+        class Tool : public DI::Dictionary, public ICommandParser
         {
 
         private:
@@ -48,10 +49,10 @@ namespace KMS
 
             virtual void DisplayHelp(FILE* aOut) const;
 
-            // Exception  CLI_COMMAND_INVALID
-            virtual int ExecuteCommand(const char* aC);
-
             virtual int Run();
+
+            // ===== ICommandParser =========================================
+            virtual int ExecuteCommand(const char* aC);
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
