@@ -7,7 +7,7 @@ File      KMS-FileServer/_DocUser/KMS.KMS-FileServer.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.2.1-dev 2024-05-06
+1.2.2-dev Windows 2024-07-12
 
 1.1.15-dev Windows 2024-02-28
 

@@ -7,7 +7,7 @@ File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.2.1-dev Windows 2024-05-03
+1.2.2-dev Windows 2024-07-12
 
 1.1.15-dev Windows 2024-02-28
 
