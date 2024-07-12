@@ -23,19 +23,12 @@ namespace KMS
             mAnalogInputs.SetAllowedCmds(mAnalogInputs.CMD_SELECT);
         }
 
-        int AnalogInputModule::Display(std::ostream& aOut)
+        void AnalogInputModule::DisplaySelected(std::ostream& aOut)
         {
-            int lResult = __LINE__;
-
             auto lAI = mAnalogInputs.GetSelected();
-            if (nullptr != lAI)
-            {
-                aOut << lAI->Read() << std::endl;
+            assert(nullptr != lAI);
 
-                lResult = 0;
-            }
-
-            return lResult;
+            aOut << lAI->Read() << std::endl;
         }
 
         void AnalogInputModule::List(std::ostream& aOut) const
@@ -83,13 +76,7 @@ namespace KMS
 
         int AnalogInputModule::Cmd_Display()
         {
-            if (!mAnalogInputs.IsInstanceSelected())
-            {
-                std::cerr << "ERROR  No analog intput selected\n" << std::endl;
-                return __LINE__;
-            }
-
-            Display(std::cout);
+            DisplaySelected(std::cout);
 
             return 0;
         }

@@ -3,7 +3,7 @@
 // Copyright (C) 2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/DAQ/AnalogInputModule.h
+// File      Includes/KMS/DAQ/DigitalInputModule.h
 // Library   KMS-A
 
 #pragma once
@@ -11,19 +11,19 @@
 // ===== Includes ===========================================================
 #include <KMS/CLI/InstanceList.h>
 #include <KMS/CLI/Module.h>
-#include <KMS/DAQ/AnalogInput.h>
+#include <KMS/DAQ/DigitalInput.h>
 
 namespace KMS
 {
     namespace DAQ
     {
 
-        class AnalogInputModule : public CLI::Module
+        class DigitalInputModule : public CLI::Module
         {
 
         public:
 
-            AnalogInputModule();
+            DigitalInputModule();
 
             // Exception  RESULT_INVALID_STATE
             void DisplaySelected(std::ostream& aOut);
@@ -36,7 +36,7 @@ namespace KMS
             // ===== Module =================================================
             virtual void DisplayHelp(FILE* aOut) const;
 
-            CLI::InstanceList<AnalogInput> mAnalogInputs;
+            CLI::InstanceList<DigitalInput> mDigitalInputs;
 
         private:
 
