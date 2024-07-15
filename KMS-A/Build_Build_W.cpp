@@ -38,7 +38,7 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 
 #define DISK1_FOLDER      ("disk1")
 #define DOXYGEN_EXE       ("doxygen.exe")
-#define DOXYGEN_FOLDER    ("doxygen\bin")
+#define DOXYGEN_FOLDER    ("doxygen\\bin")
 #define INNO_SETUP_EXE    ("Compil32" FILE_EXT_EXE)
 #define INNO_SETUP_FOLDER ("Inno Setup 6")
 #define INSTALLER_FOLDER  ("Installer")
@@ -403,7 +403,7 @@ namespace KMS
             lHS.Step("- Download the Microsoft signed driver");
             lHS.Line("");
 
-            sprintf_s(lStep, "Uncompress the downloaded file into the \"Signed\\%s\" folder", aSigned);
+            sprintf_s(lStep, "Uncompress the downloaded file into the \"%s\" folder", aSigned);
             lHS.Step(lStep);
 
             lHS.Line("");
