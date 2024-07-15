@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_Slave_Com.cpp
@@ -24,6 +24,8 @@ namespace KMS
         Slave_IDevice::Slave_IDevice(Dev::IDevice* aDevice) : mDevice(aDevice)
         {
             assert(nullptr != aDevice);
+
+            mDevice->SetConnectFlags(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
         }
 
         // ===== Slave ======================================================
@@ -32,7 +34,7 @@ namespace KMS
         {
             assert(nullptr != mDevice);
 
-            bool lResult = mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
+            bool lResult = mDevice->Connect();
             if (lResult)
             {
                 mDevice->Write("a", 1);

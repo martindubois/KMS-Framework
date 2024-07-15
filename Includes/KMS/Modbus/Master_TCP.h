@@ -21,13 +21,7 @@ namespace KMS
 
         public:
 
-            Master_TCP();
-
-            Net::Socket_Client* GetSocket();
-
-            // ===== Master =================================================
-            virtual bool Connect();
-            virtual void Disconnect();
+            Master_TCP(Net::Socket_Client* aSocket);
 
         protected:
 
@@ -57,8 +51,6 @@ namespace KMS
             void Answer_Receive(Buffer* aBuffer, unsigned int aSize_byte);
 
             void Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte);
-
-            Net::Socket_Client mSocket;
 
             uint16_t mTransactionId;
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Modbus_Master_TCP.cpp
@@ -28,19 +28,14 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Master_TCP::Master_TCP() : mSocket(Net::Socket::Type::STREAM), mTransactionId(0)
+        Master_TCP::Master_TCP(Net::Socket_Client* aSocket) : Master(aSocket), mTransactionId(0)
         {
-            mSocket.mKeepALive = true;
-            mSocket.mNoDelay   = true;
-            mSocket.mReuseAddr = true;
+            assert(nullptr != aSocket);
+
+            aSocket->mKeepALive = true;
+            aSocket->mNoDelay   = true;
+            aSocket->mReuseAddr = true;
         }
-
-        Net::Socket_Client* Master_TCP::GetSocket() { return &mSocket; }
-
-        // ===== Master =====================================================
-
-        bool Master_TCP::Connect   () { mSocket.Connect   (); return true; }
-        void Master_TCP::Disconnect() { mSocket.Disconnect(); }
 
         // Protected
         // //////////////////////////////////////////////////////////////////
@@ -51,6 +46,8 @@ namespace KMS
         {
             assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
+
+            assert(nullptr != mStream);
 
             unsigned int lResult_byte = 0;
 
@@ -69,12 +66,12 @@ namespace KMS
                 lResult_byte = lBuffer.mLength_byte - 3; // Device address + Function code + Byte count
                 KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, RESULT_OUTPUT_TOO_SHORT, "Output too short", lResult_byte);
 
-                auto lRet_byte = mSocket.Receive(aOut, lResult_byte);
+                auto lRet_byte = mStream->Read(aOut, lResult_byte);
                 KMS_EXCEPTION_ASSERT(lResult_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete answer", lRet_byte);
             }
             catch (...)
             {
-                mSocket.Disconnect();
+                Disconnect();
                 throw;
             }
 
@@ -83,6 +80,8 @@ namespace KMS
 
         unsigned int Master_TCP::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
+            assert(nullptr != mStream);
+
             unsigned int lResult_byte = 0;
 
             try
@@ -109,13 +108,13 @@ namespace KMS
 
                     lSize_byte = lResult_byte - 1; // First data byte alread read
 
-                    auto lRet_byte = mSocket.Receive(lOut + 1, lSize_byte);
+                    auto lRet_byte = mStream->Read(lOut + 1, lSize_byte);
                     KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete answer", lRet_byte);
                 }
             }
             catch (...)
             {
-                mSocket.Disconnect();
+                Disconnect();
                 throw;
             }
 
@@ -159,7 +158,9 @@ namespace KMS
             assert(nullptr != aBuffer);
             assert(HEADER_SIZE_byte < aSize_byte);
 
-            auto lRet_byte = mSocket.Receive(aBuffer, aSize_byte);
+            assert(nullptr != mStream);
+
+            auto lRet_byte = mStream->Read(aBuffer, aSize_byte);
             KMS_EXCEPTION_ASSERT(aSize_byte == lRet_byte, RESULT_RECV_ERROR, "Incomplete header", lRet_byte);
 
             aBuffer->mLength_byte   = ntohs(aBuffer->mLength_byte);
@@ -175,6 +176,8 @@ namespace KMS
 
         void Master_TCP::Request_Send(Function aFunction, const void* aIn, unsigned int aInSize_byte)
         {
+            assert(nullptr != mStream);
+
             mTransactionId++;
 
             union
@@ -192,7 +195,7 @@ namespace KMS
 
             memcpy(lBuffer.mBytes + HEADER_SIZE_byte + 1, aIn, aInSize_byte); // Function code
 
-            mSocket.Send(lBuffer.mBytes, HEADER_SIZE_byte + 1 + aInSize_byte);
+            mStream->Write(lBuffer.mBytes, HEADER_SIZE_byte + 1 + aInSize_byte);
         }
 
     }

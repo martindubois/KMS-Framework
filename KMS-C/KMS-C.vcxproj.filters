@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Install">
       <UniqueIdentifier>{15a3e706-5e67-403e-b815-8e4ea14356de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Stream">
+      <UniqueIdentifier>{a1deacde-c950-45d5-b652-1303c9591435}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Com_Port.cpp">
@@ -59,6 +62,9 @@
     </ClCompile>
     <ClCompile Include="Modbus_LinkAndMaster_Cfg.cpp">
       <Filter>Source Files\Modbus</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream_Stream_Cfg.cpp">
+      <Filter>Source Files\Stream</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

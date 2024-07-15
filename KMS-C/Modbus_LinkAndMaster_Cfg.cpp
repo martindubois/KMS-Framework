@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_LinkAndMaster_Cfg.cpp
@@ -28,29 +28,24 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        LinkAndMaster_Cfg::LinkAndMaster_Cfg(Cfg::Configurator* aConfigurator, Link aDefault)
-            : mConfigurator(aConfigurator)
-            , mLink(aDefault)
+        LinkAndMaster_Cfg::LinkAndMaster_Cfg(Cfg::Configurator* aConfigurator, Stream::StreamType aDefault)
+            : Stream_Cfg(aConfigurator, aDefault)
             , mMaster(nullptr)
             , mM_Cfg(nullptr)
-            , mM_Com(&mPort)
         {
-            assert(nullptr != aConfigurator);
-            assert(Link::QTY > aDefault);
-
             mPort.SetSpeed(38400);
-
-            auto lSocket = mM_TCP.GetSocket();
-            assert(nullptr != lSocket);
-
-            lSocket->mLocalAddress.Set("0.0.0.0");
         }
 
         LinkAndMaster_Cfg::~LinkAndMaster_Cfg()
         {
-            if (nullptr != mM_Cfg)
+            if (nullptr != mMaster)
             {
-                delete mM_Cfg;
+                if (nullptr != mM_Cfg)
+                {
+                    delete mM_Cfg;
+                }
+
+                delete mMaster;
             }
         }
 
@@ -61,43 +56,23 @@ namespace KMS
             assert(1 <= aCount);
             assert(nullptr != aVector);
 
-            assert(nullptr != mConfigurator);
-            assert(Link::QTY > mLink);
+            auto lResult = Stream_Cfg::ParseArguments(aCount, aVector);
+
             assert(nullptr == mMaster);
             assert(nullptr == mM_Cfg);
 
-            unsigned int lResult = 1;
 
-            if (2 < aCount)
+            switch (GetStreamType())
             {
-                KMS::Enum<Link, LINK_NAMES> lLink(mLink);
-
-                if (lLink.SetName_Try(aVector[1]))
-                {
-                    lResult = 2;
-
-                    mLink = lLink;
-                }
-            }
-
-            switch (mLink)
-            {
-            case Link::COM:
-                mMaster = &mM_Com;
-                mConfigurator->AddConfigurable(&mPort);
-                break;
-
-            case Link::TCP:
-                mMaster = &mM_TCP;
-                mConfigurator->AddConfigurable(mM_TCP.GetSocket());
-                break;
+            case Stream::StreamType::COM: mMaster = new Master_IDevice(&mPort  ); break;
+            case Stream::StreamType::TCP: mMaster = new Master_TCP    (&mSocket); break;
 
             default: assert(false);
             }
 
             mM_Cfg = new Master_Cfg(mMaster);
 
-            mConfigurator->AddConfigurable(mM_Cfg);
+            GetConfigurator()->AddConfigurable(mM_Cfg);
 
             return lResult;
         }

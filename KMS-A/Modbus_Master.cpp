@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Modbus_Master.cpp
@@ -31,6 +31,9 @@ namespace KMS
         const uint8_t Master::RETRY_COUNT_DEFAULT    = 3;
 
         void Master::SetDeviceAddress(uint8_t aDA) { mDeviceAddress = aDA; }
+
+        bool Master::Connect   () { assert(nullptr != mStream); return mStream->Connect(); }
+        void Master::Disconnect() { assert(nullptr != mStream); mStream->Disconnect(); }
 
         // ===== Modbus functions ===========================================
 
@@ -241,11 +244,14 @@ namespace KMS
         const unsigned int Master::ERROR_READ             = 0xffffffff;
         const unsigned int Master::ERROR_SEND             = 0xfffffffa;
 
-        Master::Master()
+        Master::Master(Stream::IStream* aStream)
             : mDeviceAddress(DEVICE_ADDRESS_DEFAULT)
             , mRetryCount   (RETRY_COUNT_DEFAULT)
             , mLastException(Exception::NO_EXCEPTION)
-        {}
+            , mStream(aStream)
+        {
+            assert(nullptr != aStream);
+        }
 
         bool Master::VerifyDeviceAddress(const uint8_t* aData)
         {

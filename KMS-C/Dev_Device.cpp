@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Dev_Device.cpp
@@ -30,7 +30,8 @@ namespace KMS
         const char*   Device::LINK_DEFAULT  = "";
 
         Device::Device()
-            : mIndex(INDEX_DEFAULT)
+            : mConnectFlags(IDevice::FLAG_ACCESS_READ | IDevice::FLAG_ACCESS_WRITE)
+            , mIndex(INDEX_DEFAULT)
             , mLink (LINK_DEFAULT)
             , mHandle(INVALID_HANDLE_VALUE)
         {
@@ -50,9 +51,13 @@ namespace KMS
             }
         }
 
-        // ===== IDevice ====================================================
+        // ===== Stream::IStream ============================================
 
         bool Device::IsConnected() const { return INVALID_HANDLE_VALUE != mHandle; }
+
+        // ===== IDevice ====================================================
+
+        void Device::SetConnectFlags(unsigned int aFlags) { mConnectFlags = aFlags; }
 
         void Device::ClearReadBuffer() { assert(false); }
 

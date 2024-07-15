@@ -61,11 +61,14 @@ namespace KMS
             virtual void Validate() const;
 
             // ===== IDevice ================================================
-            virtual bool         IsConnected() const;
+            virtual void         SetConnectFlags(unsigned int aFlags);
             virtual void         ClearReadBuffer();
-            virtual bool         Connect   (unsigned int aFlags);
-            virtual void         Disconnect();
             virtual unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte);
+
+            // ===== Stream::IStream ========================================
+            virtual bool         IsConnected() const;
+            virtual bool         Connect();
+            virtual void         Disconnect();
             virtual unsigned int Read (void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
             virtual bool         Write(const void* aIn, unsigned int aInSize_byte);
 
@@ -96,6 +99,8 @@ namespace KMS
             NO_COPY(Device);
 
             void Construct_OSDep();
+
+            unsigned int mConnectFlags;
 
             #ifdef _KMS_LINUX_
 

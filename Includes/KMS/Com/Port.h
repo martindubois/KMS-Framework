@@ -76,10 +76,12 @@ namespace KMS
 
             void Wait();
 
-            // ===== Dev::IDevice ===========================================
-            virtual void ClearReadBuffer();
+            // ===== Stream::IStream ========================================
+            virtual bool Connect();
 
-            virtual bool Connect(unsigned int aFlags);
+            // ===== Dev::IDevice ===========================================
+            virtual void SetConnectFlags(unsigned int aFlags);
+            virtual void ClearReadBuffer();
 
         // Internal
 

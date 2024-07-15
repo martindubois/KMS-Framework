@@ -10,13 +10,14 @@
 
 // ===== Includes ========================================================
 #include <KMS/Net/Socket.h>
+#include <KMS/Stream/IStream.h>
 
 namespace KMS
 {
     namespace Net
     {
 
-        class Socket_Client : public Socket
+        class Socket_Client : public Socket, public Stream::IStream
         {
 
         public:
@@ -27,8 +28,12 @@ namespace KMS
 
             Socket_Client(Type aType);
 
-            void Connect();
-            void Disconnect();
+            // ===== Stream::IStream ========================================
+            virtual bool IsConnected() const;
+            virtual bool Connect();
+            virtual void Disconnect();
+            virtual unsigned int Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0);
+            virtual bool Write(const void* aIn, unsigned int aInSize_byte);
 
             // ===== Socket =================================================
             virtual ~Socket_Client();

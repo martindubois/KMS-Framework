@@ -7,41 +7,28 @@
 
 #pragma once
 
+#include <KMS/Stream/IStream.h>
+
 namespace KMS
 {
     namespace Dev
     {
 
-        class IDevice
+        class IDevice : public Stream::IStream
         {
 
         public:
 
-            static const unsigned int ERROR_READ = 0xffffffff;
-
             static const unsigned int FLAG_ACCESS_READ  = 0x00000001;
             static const unsigned int FLAG_ACCESS_WRITE = 0x00000002;
             static const unsigned int FLAG_OVERLAPPED   = 0x00000004;
-            static const unsigned int FLAG_READ_ALL     = 0x00000008;
 
-            virtual bool IsConnected() const = 0;
+            // aFlags  FLAG_ACCESS_READ, FLAG_ACCESS_WRITE, FLAG_OVERLAPPED
+            virtual void SetConnectFlags(unsigned int aFlags) = 0;
 
             virtual void ClearReadBuffer() = 0;
 
-            // aFlags FLAG_ACCESS_READ, FLAG_ACCESS_WRITE, FLAG_OVERLAPPED
-            virtual bool Connect(unsigned int aFlags) = 0;
-
-            virtual void Disconnect() = 0;
-
             virtual unsigned int Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
-
-            // aFlags FLAG_READ_ALL
-            //
-            // Return ERROR_READ
-            //        Other      The size of read data in byte
-            virtual unsigned int Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags = 0) = 0;
-
-            virtual bool Write(const void* aIn, unsigned int aInSize_byte) = 0;
 
             #ifdef _KMS_LINUX_
 

@@ -10,6 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Modbus/Modbus.h>
+#include <KMS/Stream/IStream.h>
 
 namespace KMS
 {
@@ -31,9 +32,9 @@ namespace KMS
 
             Exception GetLastException() const;
 
-            virtual bool Connect() = 0;
+            virtual bool Connect();
 
-            virtual void Disconnect() = 0;
+            virtual void Disconnect();
 
             // ===== Modbus functions ===========================================
 
@@ -58,7 +59,7 @@ namespace KMS
             static const unsigned int ERROR_READ;
             static const unsigned int ERROR_SEND;
 
-            Master();
+            Master(Stream::IStream* aStream);
 
             bool VerifyDeviceAddress(const uint8_t* aData);
 
@@ -95,6 +96,8 @@ namespace KMS
 
             // aFunction     READ_FIFO_QUEUE
             virtual unsigned int Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte) = 0;
+
+            Stream::IStream* mStream;
 
         private:
 

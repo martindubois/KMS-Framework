@@ -13,26 +13,19 @@
 #include <KMS/Modbus/Master_CFG.h>
 #include <KMS/Modbus/Master_IDevice.h>
 #include <KMS/Modbus/Master_TCP.h>
+#include <KMS/Stream/Stream_Cfg.h>
 
 namespace KMS
 {
     namespace Modbus
     {
 
-        class LinkAndMaster_Cfg
+        class LinkAndMaster_Cfg : public Stream::Stream_Cfg
         {
 
         public:
 
-            enum class Link
-            {
-                COM = 0,
-                TCP,
-
-                QTY
-            };
-
-            LinkAndMaster_Cfg(Cfg::Configurator* aConfigurator, Link aDefault);
+            LinkAndMaster_Cfg(Cfg::Configurator* aConfigurator, Stream::StreamType aDefault);
 
             ~LinkAndMaster_Cfg();
 
@@ -42,13 +35,8 @@ namespace KMS
 
         private:
 
-            Cfg::Configurator* mConfigurator;
-            Link               mLink;
-            Master           * mMaster;
-            Master_Cfg       * mM_Cfg;
-            Master_IDevice     mM_Com;
-            Master_TCP         mM_TCP;
-            Com::Port          mPort;
+            Master    * mMaster;
+            Master_Cfg* mM_Cfg;
 
         };
 

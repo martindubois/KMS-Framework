@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Dev_Device_W.cpp
@@ -38,9 +38,9 @@ namespace KMS
 
         const ::GUID Device::INTERFACE_DEFAULT;
 
-        // ===== IDevice ====================================================
+        // ===== Stream::IStream ============================================
 
-        bool Device::Connect(unsigned int aFlags)
+        bool Device::Connect()
         {
             if (IsConnected())
             {
@@ -65,9 +65,9 @@ namespace KMS
             DWORD lAccess = 0;
             DWORD lFlags  = 0;
 
-            if (0 != (aFlags & FLAG_ACCESS_READ )) { lAccess |= GENERIC_READ; }
-            if (0 != (aFlags & FLAG_ACCESS_WRITE)) { lAccess |= GENERIC_WRITE; }
-            if (0 != (aFlags & FLAG_OVERLAPPED  )) { lFlags |= FILE_FLAG_OVERLAPPED; }
+            if (0 != (mConnectFlags & FLAG_ACCESS_READ)) { lAccess |= GENERIC_READ; }
+            if (0 != (mConnectFlags & FLAG_ACCESS_WRITE)) { lAccess |= GENERIC_WRITE; }
+            if (0 != (mConnectFlags & FLAG_OVERLAPPED)) { lFlags |= FILE_FLAG_OVERLAPPED; }
 
             mHandle = CreateFile(mLink, lAccess, 0, NULL, OPEN_EXISTING, lFlags, NULL);
             KMS_EXCEPTION_ASSERT(INVALID_HANDLE_VALUE != mHandle, RESULT_CONNECT_FAILED, "CreateFile failed", mLink);
@@ -85,26 +85,11 @@ namespace KMS
             mHandle = INVALID_HANDLE_VALUE;
         }
 
-        unsigned int Device::Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
-        {
-            assert(INVALID_HANDLE_VALUE != mHandle);
-
-            DWORD lResult_byte;
-
-            auto lRet = DeviceIoControl(mHandle, aCode, const_cast<void*>(aIn), aInSize_byte, aOut, aOutSize_byte, &lResult_byte, NULL);
-            KMS_EXCEPTION_ASSERT(lRet, RESULT_CONTROL_FAILED, "DeviceIoControl failed", aCode);
-
-            // NOT TESTED
-            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, RESULT_CONTROL_FAILED, "Invalid control result (NOT TESTED)", lResult_byte);
-
-            return lResult_byte;
-        }
-
         unsigned int Device::Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags)
         {
             assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
-            assert(0 == (aFlags & ~FLAG_READ_ALL));
+            assert(0 == (aFlags & ~Stream::IStream::FLAG_READ_ALL));
 
             assert(INVALID_HANDLE_VALUE != mHandle);
 
@@ -113,7 +98,7 @@ namespace KMS
             auto lRet = ReadFile(mHandle, aOut, aOutSize_byte, &lResult_byte, NULL);
             KMS_EXCEPTION_ASSERT(lRet, RESULT_READ_FAILED, "Cannot read from the device", aOutSize_byte);
 
-            if (0 != (aFlags && FLAG_READ_ALL))
+            if (0 != (aFlags && Stream::IStream::FLAG_READ_ALL))
             {
                 KMS_EXCEPTION_ASSERT(aOutSize_byte == lResult_byte, RESULT_READ_FAILED, "The device did not return the expected amount of data", lResult_byte);
             }
@@ -135,6 +120,23 @@ namespace KMS
 
             KMS_EXCEPTION_ASSERT(aInSize_byte == lInfo_byte, RESULT_WRITE_FAILED, "The device did not acceps the expected amount of data", lInfo_byte);
             return true;
+        }
+
+        // ===== IDevice ====================================================
+
+        unsigned int Device::Control(unsigned int aCode, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
+        {
+            assert(INVALID_HANDLE_VALUE != mHandle);
+
+            DWORD lResult_byte;
+
+            auto lRet = DeviceIoControl(mHandle, aCode, const_cast<void*>(aIn), aInSize_byte, aOut, aOutSize_byte, &lResult_byte, NULL);
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_CONTROL_FAILED, "DeviceIoControl failed", aCode);
+
+            // NOT TESTED
+            KMS_EXCEPTION_ASSERT(aOutSize_byte >= lResult_byte, RESULT_CONTROL_FAILED, "Invalid control result (NOT TESTED)", lResult_byte);
+
+            return lResult_byte;
         }
 
         Device::operator HANDLE ()

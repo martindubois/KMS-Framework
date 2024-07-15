@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket_Client.cpp
@@ -36,11 +36,28 @@ namespace KMS
             lEntry.Set(&mRemoteAddress, false); AddEntry("RemoteAddress", lEntry, &MD_REMOTE_ADDRESS);
         }
 
-        void Socket_Client::Connect   () { VerifyState(State::CONNECTED); }
+        // ===== Stream::IStream ============================================
+
+        bool Socket_Client::IsConnected() const { return State::CONNECTED == mState; };
+
+        bool Socket_Client::Connect   () { VerifyState(State::CONNECTED); return true; }
         void Socket_Client::Disconnect() { VerifyState(State::CLOSED   ); }
 
-        // ===== Socket =====================================================
+        unsigned int Socket_Client::Read(void* aOut, unsigned int aOutSize_byte, unsigned int aFlags)
+        {
+            assert(0 == aFlags);
 
+            return Receive(aOut, aOutSize_byte);
+        }
+
+        bool Socket_Client::Write(const void* aIn, unsigned int aInSize_byte)
+        {
+            Send(aIn, aInSize_byte);
+
+            return true;
+        }
+
+        // ===== Socket =====================================================
         Socket_Client::~Socket_Client() {}
 
         // Protected

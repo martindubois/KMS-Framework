@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Modbus_Master_IDevice.cpp
@@ -33,25 +33,11 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        Master_IDevice::Master_IDevice(Dev::IDevice* aDevice) : mDevice(aDevice)
+        Master_IDevice::Master_IDevice(Dev::IDevice* aDevice) : Master(aDevice)
         {
             assert(nullptr != aDevice);
-        }
 
-        // ===== Master =====================================================
-
-        bool Master_IDevice::Connect()
-        {
-            assert(nullptr != mDevice);
-
-            return mDevice->Connect(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
-        }
-
-        void Master_IDevice::Disconnect()
-        {
-            assert(nullptr != mDevice);
-
-            mDevice->Disconnect();
+            aDevice->SetConnectFlags(Dev::IDevice::FLAG_ACCESS_READ | Dev::IDevice::FLAG_ACCESS_WRITE);
         }
 
         // Protected
@@ -64,13 +50,13 @@ namespace KMS
             assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
-            assert(nullptr != mDevice);
+            assert(nullptr != mStream);
 
             if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
 
-            unsigned int lResult_byte = mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+            unsigned int lResult_byte = mStream->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
             if (MIN_SIZE_byte == lResult_byte)
             {
                 if (!VerifyDeviceAddress(lBuffer))           { return ERROR_DEVICE_ADDRESS; }
@@ -78,7 +64,7 @@ namespace KMS
 
                 unsigned int lSize_byte = lBuffer[2] + CRC_SIZE_byte;
 
-                unsigned int lResult_byte = mDevice->Read(lBuffer + MIN_SIZE_byte, lSize_byte, Dev::IDevice::FLAG_READ_ALL);
+                unsigned int lResult_byte = mStream->Read(lBuffer + MIN_SIZE_byte, lSize_byte, Dev::IDevice::FLAG_READ_ALL);
                 if (lSize_byte == lResult_byte)
                 {
                     if (!CRC::Verify(lBuffer, MIN_SIZE_byte + lBuffer[2] + CRC_SIZE_byte)) { return ERROR_BAD_CRC; }
@@ -100,7 +86,7 @@ namespace KMS
 
         unsigned int Master_IDevice::Request_B(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            assert(nullptr != mDevice);
+            assert(nullptr != mStream);
 
             if (!Request_Send(aFunction, aIn, aInSize_byte)) { return ERROR_SEND; }
 
@@ -112,7 +98,7 @@ namespace KMS
 
                 uint8_t lBuffer[BUFFER_SIZE_byte];
 
-                lResult_byte = mDevice->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
+                lResult_byte = mStream->Read(lBuffer, MIN_SIZE_byte, Dev::IDevice::FLAG_READ_ALL);
                 if (MIN_SIZE_byte == lResult_byte)
                 {
                     if (!VerifyDeviceAddress(lBuffer))           { return ERROR_DEVICE_ADDRESS; }
@@ -120,7 +106,7 @@ namespace KMS
 
                     unsigned int lSize_byte = aOutSize_byte - 1 + CRC_SIZE_byte;
 
-                    lResult_byte = mDevice->Read(lBuffer + MIN_SIZE_byte, lSize_byte);
+                    lResult_byte = mStream->Read(lBuffer + MIN_SIZE_byte, lSize_byte);
                     if (lSize_byte == lResult_byte)
                     {
                         if (!CRC::Verify(lBuffer, MIN_SIZE_byte - 1 + aOutSize_byte + CRC_SIZE_byte)) { return ERROR_BAD_CRC; }
@@ -178,7 +164,10 @@ namespace KMS
             assert(aInSize_byte > 0);
             assert(aInSize_byte <= BUFFER_SIZE_byte - 4);
 
-            assert(nullptr != mDevice);
+            assert(nullptr != mStream);
+
+            auto lDevice = dynamic_cast<Dev::IDevice*>(mStream);
+            assert(nullptr != lDevice);
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
 
@@ -191,9 +180,9 @@ namespace KMS
 
             CRC::Add(lBuffer, lSize_byte);
 
-            mDevice->ClearReadBuffer();
+            lDevice->ClearReadBuffer();
 
-            return mDevice->Write(lBuffer, lSize_byte);
+            return mStream->Write(lBuffer, lSize_byte);
         }
 
     }

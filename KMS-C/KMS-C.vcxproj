@@ -36,6 +36,7 @@
     <ClCompile Include="Modbus_LinkAndMaster_Cfg.cpp" />
     <ClCompile Include="Modbus_Slave_Com.cpp" />
     <ClCompile Include="SetupDi.cpp" />
+    <ClCompile Include="Stream_Stream_Cfg.cpp" />
     <ClCompile Include="WOP_Link_Port.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
