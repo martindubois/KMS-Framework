@@ -48,7 +48,7 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 #define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.22621.0\\x64")
 
 #define DOXYGEN_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
-#define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 *  5) //  5 minutes
+#define INNO_SETUP_ALLOWED_TIME_ms (1000 * 60 * 10) // 10 minutes
 #define MAKECAB_ALLOWED_TIME_ms    (1000 * 60 *  5) //  5 minutes
 #define MSBUILD_ALLOWED_TIME_ms    (1000 * 60 * 10) // 10 minutes
 #define SIGNTOOL_ALLOWED_TIME_ms   (1000 * 60 * 10) // 10 minutes
