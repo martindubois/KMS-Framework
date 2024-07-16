@@ -36,6 +36,7 @@
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Cfg_MetaData.cpp" />
     <ClCompile Include="Click_Master.cpp" />
+    <ClCompile Include="CLI_CommandLine.cpp" />
     <ClCompile Include="CLI_InstanceList_Base.cpp" />
     <ClCompile Include="CLI_Macro.cpp" />
     <ClCompile Include="CLI_Macros.cpp" />

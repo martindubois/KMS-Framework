@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+
 #include <KMS/DAQ/AnalogInputModule.h>
 
 namespace KMS
@@ -45,17 +47,14 @@ namespace KMS
 
         // ===== CLI::ICommandParser ========================================
 
-        int AnalogInputModule::ExecuteCommand(const char* aCmd)
+        int AnalogInputModule::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             assert(nullptr != aCmd);
 
-            int lResult = UNKNOWN_COMMAND;
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
 
-            char lCmd[LINE_LENGTH];
-
-            if      (0 == strcmp(aCmd, "AnalogInput Display")) { lResult = Cmd_Display(); }
-            else if (0 == strcmp(aCmd, "AnalogInput List"   )) { lResult = Cmd_List   (); }
-            else if (1 == sscanf_s(aCmd, "AnalogInput %[^\n\r]", lCmd SizeInfo(lCmd))) { lResult = mAnalogInputs.ExecuteCommand(lCmd); }
+            if (0 == _stricmp(lCmd, "AnalogInput")) { aCmd->Next(); lResult = Cmd(aCmd); }
 
             return lResult;
         }
@@ -74,15 +73,40 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int AnalogInputModule::Cmd_Display()
+        int AnalogInputModule::Cmd(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Display")) { aCmd->Next(); lResult = Cmd_Display(aCmd); }
+            else if (0 == _stricmp(lCmd, "List"   )) { aCmd->Next(); lResult = Cmd_List   (aCmd); }
+            else
+            {
+                lResult = mAnalogInputs.ExecuteCommand(aCmd);
+            }
+
+            return lResult;
+        }
+
+        int AnalogInputModule::Cmd_Display(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             DisplaySelected(std::cout);
 
             return 0;
         }
 
-        int AnalogInputModule::Cmd_List()
+        int AnalogInputModule::Cmd_List(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             List(std::cout);
 
             std::cout << mAnalogInputs.mInstances.size() << " analog inputs" << std::endl;

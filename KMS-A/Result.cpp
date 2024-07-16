@@ -33,11 +33,12 @@ namespace KMS
     const Result RESULT_WARNING("RESULT_WARNING", Result::Level::LEVEL_WARNING, Result::Type::TYPE_GLOBAL, 0);
     const Result RESULT_ERROR  ("RESULT_ERROR"  , Result::Level::LEVEL_ERROR  , Result::Type::TYPE_GLOBAL, 0);
 
-    const Result RESULT_CONNECT_FAILED   ("RESULT_CONNECT_FAILED"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffe9);
-    const Result RESULT_CRC_ERROR        ("RESULT_CONNECT_FAILED"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffea);
-    const Result RESULT_DENIED           ("RESULT_DENIED"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffeb);
-    const Result RESULT_FILE_FORMAT_ERROR("RESULT_FILE_FORMAT_ERROR", Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffec);
-    const Result RESULT_INVALID_CLASS    ("RESULT_INVALID_CLASS"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffed);
+    const Result RESULT_CONNECT_FAILED   ("RESULT_CONNECT_FAILED"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffe8);
+    const Result RESULT_CRC_ERROR        ("RESULT_CONNECT_FAILED"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffe9);
+    const Result RESULT_DENIED           ("RESULT_DENIED"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffea);
+    const Result RESULT_FILE_FORMAT_ERROR("RESULT_FILE_FORMAT_ERROR", Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffeb);
+    const Result RESULT_INVALID_CLASS    ("RESULT_INVALID_CLASS"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffec);
+    const Result RESULT_INVALID_COMMAND  ("RESULT_INVALID_COMMAND"  , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffed);
     const Result RESULT_INVALID_CONFIG   ("RESULT_INVALID_CONFIG"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffee);
     const Result RESULT_INVALID_DATA_TYPE("RESULT_INVALID_DATA_TYPE", Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffef);
     const Result RESULT_INVALID_FORMAT   ("RESULT_INVALID_FORMAT"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffff0);

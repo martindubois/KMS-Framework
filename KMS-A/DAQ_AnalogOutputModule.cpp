@@ -8,6 +8,9 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+#include <KMS/Convert.h>
+
 #include <KMS/DAQ/AnalogOutputModule.h>
 
 namespace KMS
@@ -53,19 +56,15 @@ namespace KMS
 
         // ===== CLI::ICommandParser ========================================
 
-        int AnalogOutputModule::ExecuteCommand(const char* aCmd)
+        int AnalogOutputModule::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             assert(nullptr != aCmd);
 
-            int lResult = UNKNOWN_COMMAND;
+            auto lResult = UNKNOWN_COMMAND;
 
-            char   lCmd[LINE_LENGTH];
-            double lValue;
+            auto lCmd = aCmd->GetCurrent();
 
-            if      (0 == strcmp(aCmd, "AnalogOutput Display")) { lResult = Cmd_Display(); }
-            else if (0 == strcmp(aCmd, "AnalogOutput List"   )) { lResult = Cmd_List   (); }
-            else if (1 == sscanf_s(aCmd, "AnalogOutput Write %lf", &lValue)) { lResult = Cmd_Write(lValue); }
-            else if (1 == sscanf_s(aCmd, "AnalogOutput %[^\n\r]", lCmd SizeInfo(lCmd))) { lResult = mAnalogOutputs.ExecuteCommand(lCmd); }
+            if (0 == _stricmp(lCmd, "AnalogOutput")) { aCmd->Next(); lResult = Cmd(aCmd); }
 
             return lResult;
         }
@@ -85,15 +84,41 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int AnalogOutputModule::Cmd_Display()
+        int AnalogOutputModule::Cmd(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Display")) { aCmd->Next(); lResult = Cmd_Display(aCmd); }
+            else if (0 == _stricmp(lCmd, "List"   )) { aCmd->Next(); lResult = Cmd_List   (aCmd); }
+            else if (0 == _stricmp(lCmd, "Write"  )) { aCmd->Next(); lResult = Cmd_Write  (aCmd); }
+            else
+            {
+                lResult = mAnalogOutputs.ExecuteCommand(aCmd);
+            }
+
+            return lResult;
+        }
+
+        int AnalogOutputModule::Cmd_Display(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             DisplaySelected(std::cout);
 
             return 0;
         }
 
-        int AnalogOutputModule::Cmd_List()
+        int AnalogOutputModule::Cmd_List(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             List(std::cout);
 
             std::cout << mAnalogOutputs.mInstances.size() << " analog outputs" << std::endl;
@@ -101,9 +126,17 @@ namespace KMS
             return 0;
         }
 
-        int AnalogOutputModule::Cmd_Write(double aValue)
+        int AnalogOutputModule::Cmd_Write(CLI::CommandLine* aCmd)
         {
-            WriteSelected(aValue);
+            assert(nullptr != aCmd);
+
+            auto lValue = Convert::ToDouble(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            WriteSelected(lValue);
 
             return 0;
         }

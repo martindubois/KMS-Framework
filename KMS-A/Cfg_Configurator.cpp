@@ -147,13 +147,15 @@ namespace KMS
             }
         }
 
-        void Configurator::ParseArguments(int aCount, const char** aVector)
+        void Configurator::ParseArguments(CLI::CommandLine* aCmdLine)
         {
-            assert(nullptr != aVector);
+            assert(nullptr != aCmdLine);
 
-            for (int i = 0; i < aCount; i++)
+            while (!aCmdLine->IsAtEnd())
             {
-                ParseLine(aVector[i]);
+                ParseLine(aCmdLine->GetCurrent());
+
+                aCmdLine->Next();
             }
         }
 

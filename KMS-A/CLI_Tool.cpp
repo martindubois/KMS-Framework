@@ -17,15 +17,15 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/MetaData.h>
+#include <KMS/CLI/CommandLine.h>
 #include <KMS/Console/Color.h>
+#include <KMS/Convert.h>
 #include <KMS/Dbg/Log.h>
 #include <KMS/DI/Functions.h>
 #include <KMS/DI/String_Expand.h>
 #include <KMS/Text/File_ASCII.h>
 
 #include <KMS/CLI/Tool.h>
-
-KMS_RESULT_STATIC(RESULT_INVALID_COMMAND);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -170,56 +170,39 @@ namespace KMS
                 "UntilCtrlC {Command}\n");
         }
 
-        int Tool::ExecuteCommand(const char* aC)
+        int Tool::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             for (auto lModule : mModules)
             {
                 assert(nullptr != lModule);
 
-                auto lRet = lModule->ExecuteCommand(aC);
+                auto lRet = lModule->ExecuteCommand(aCmd);
                 if (Module::UNKNOWN_COMMAND != lRet)
                 {
                     return lRet;
                 }
             }
 
-            unsigned int lCount;
-            unsigned int lDelay_ms;
-            int          lResult = 0;
-            char lValue[LINE_LENGTH];
+            int  lResult = 0;
+
+            auto lCmd = aCmd->GetCurrent();
             
-            if      (0 == strcmp(aC, "AbortIfError")) { AbortIfError(); }
-            else if (1 == sscanf_s(aC, "ChangeDir %[^\n\r\t]", lValue SizeInfo(lValue)))
-            {
-                ChangeDir(lValue);
-            }
-            else if (0 == strcmp(aC, "ClearError"  )) { ClearError  (); }
-            else if (1 == sscanf_s(aC, "Config %[^\n\r\t]", lValue SizeInfo(lValue)))
-            {
-                lResult = Config(lValue);
-            }
-            else if (1 == sscanf_s(aC, "Delay %u", &lDelay_ms))
-            {
-                Delay(lDelay_ms);
-            }
-            else if (1 == sscanf_s(aC, "Echo %[^\n\r\t]", lValue SizeInfo(lValue))) { std::cout << lValue << std::endl; }
-            else if (1 == sscanf_s(aC, "ExecuteScript %[^\n\r\t]", lValue SizeInfo(lValue)))
-            {
-                lResult = ExecuteScript(lValue);
-            }
-            else if (0 == strcmp(aC, "ExitIfError")) { ExitIfError(); }
-            else if (1 == sscanf_s(aC, "Exit %d", &mExit_Code)) { mExit_Count++; }
-            else if (0 == strcmp(aC, "Exit")) { mExit_Count++; }
-            else if (0 == strcmp(aC, "Help")) { DisplayHelp(stdout); }
-            else if (2 == sscanf_s(aC, "Repeat %u %[^\n\r\t]", &lCount, lValue SizeInfo(lValue)))
-            {
-                lResult = Repeat(lCount, lValue);
-            }
-            else if (0 == strcmp(aC, "Shell")) { lResult = ExecuteCommands(stdin); }
-            else if (1 == sscanf_s(aC, "UntilCtrlC %[^\n\r\t]", lValue SizeInfo(lValue))) { lResult = UntilCtrlC(lValue); }
+            if      (0 == _stricmp(lCmd, "AbortIfError" )) { aCmd->Next(); lResult = Cmd_AbortIfError (aCmd); }
+            else if (0 == _stricmp(lCmd, "ChangeDir"    )) { aCmd->Next(); lResult = Cmd_ChangeDir    (aCmd); }
+            else if (0 == _stricmp(lCmd, "ClearError"   )) { aCmd->Next(); lResult = Cmd_ClearError   (aCmd); }
+            else if (0 == _stricmp(lCmd, "Config"       )) { aCmd->Next(); lResult = Cmd_Config       (aCmd); }
+            else if (0 == _stricmp(lCmd, "Delay"        )) { aCmd->Next(); lResult = Cmd_Delay        (aCmd); }
+            else if (0 == _stricmp(lCmd, "Echo"         )) { aCmd->Next(); lResult = Cmd_Echo         (aCmd); }
+            else if (0 == _stricmp(lCmd, "ExecuteScript")) { aCmd->Next(); lResult = Cmd_ExecuteScript(aCmd); }
+            else if (0 == _stricmp(lCmd, "ExitIfError"  )) { aCmd->Next(); lResult = Cmd_ExitIfError  (aCmd); }
+            else if (0 == _stricmp(lCmd, "Exit"         )) { aCmd->Next(); lResult = Cmd_Exit         (aCmd); }
+            else if (0 == _stricmp(lCmd, "Help"         )) { aCmd->Next(); lResult = Cmd_Help         (aCmd); }
+            else if (0 == _stricmp(lCmd, "Repeat"       )) { aCmd->Next(); lResult = Cmd_Repeat       (aCmd); }
+            else if (0 == _stricmp(lCmd, "Shell"        )) { aCmd->Next(); lResult = Cmd_Shell        (aCmd); }
+            else if (0 == _stricmp(lCmd, "UntilCtrlC"   )) { aCmd->Next(); lResult = Cmd_UntilCtrlC   (aCmd); }
             else
             {
-                KMS_EXCEPTION(RESULT_INVALID_COMMAND, "Invalid command", aC);
+                KMS_EXCEPTION(RESULT_INVALID_COMMAND, "Invalid command", lCmd);
             }
 
             return lResult;
@@ -274,8 +257,12 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        void Tool::AbortIfError()
+        int Tool::Cmd_AbortIfError(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             if (0 != mError_Code)
             {
                 // NOT TESTED
@@ -286,18 +273,47 @@ namespace KMS
 
                 exit(mError_Code);
             }
+
+            return 0;
         }
 
-        void Tool::ChangeDir(const char* aDir)
+        int Tool::Cmd_ChangeDir(CLI::CommandLine* aCmd)
         {
-            File::Folder::ChangeCurrentDirectory(File::Folder(File::Folder::NONE, aDir));
+            assert(nullptr != aCmd);
+
+            auto lDir = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            File::Folder::ChangeCurrentDirectory(File::Folder(File::Folder::NONE, lDir));
+
+            return 0;
         }
 
-        int Tool::Config(const char* aOperation)
+        int Tool::Cmd_ClearError(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            ClearError();
+
+            return 0;
+        }
+
+        int Tool::Cmd_Config(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
             int lResult = 0;
 
-            if (!DI::Execute_Operation(this, aOperation))
+            char lOperation[LINE_LENGTH];
+
+            aCmd->GetRemaining(lOperation, sizeof(lOperation));
+
+            if (!DI::Execute_Operation(this, lOperation))
             {
                 lResult = __LINE__;
             }
@@ -305,13 +321,78 @@ namespace KMS
             return lResult;
         }
 
-        void Tool::Delay(unsigned int aDelay_ms)
+        int Tool::Cmd_Delay(CLI::CommandLine* aCmd)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(aDelay_ms));
+            assert(nullptr != aCmd);
+
+            auto lDelay_ms = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            std::this_thread::sleep_for(std::chrono::milliseconds(lDelay_ms));
+
+            return 0;
         }
 
-        void Tool::ExitIfError()
+        int Tool::Cmd_Echo(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            while (!aCmd->IsAtEnd())
+            {
+                std::cout << aCmd->GetCurrent() << " ";
+
+                aCmd->Next();
+            }
+
+            std::cout << std::endl;
+
+            return 0;
+        }
+
+        int Tool::Cmd_ExecuteScript(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            auto lScript = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            return ExecuteScript(lScript);
+        }
+
+        int Tool::Cmd_Exit(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            if (aCmd->IsAtEnd())
+            {
+                exit(0);
+            }
+            else
+            {
+                auto lCode = Convert::ToInt32(aCmd->GetCurrent());
+
+                aCmd->Next();
+
+                KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+                exit(lCode);
+            }
+
+            return 0;
+        }
+
+        int Tool::Cmd_ExitIfError(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             if (0 != mError_Code)
             {
                 // NOT TESTED
@@ -325,15 +406,38 @@ namespace KMS
 
                 mExit_Count++;
             }
+
+            return 0;
         }
 
-        int Tool::Repeat(unsigned int aCount, const char* aC)
+        int Tool::Cmd_Help(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            DisplayHelp(stdout);
+
+            return 0;
+        }
+
+        int Tool::Cmd_Repeat(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
             int lResult = 0;
 
-            for (unsigned int i = 0; i < aCount; i++)
+            auto lCount = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            char lCmd[LINE_LENGTH];
+
+            aCmd->GetRemaining(lCmd, sizeof(lCmd));
+
+            for (unsigned int i = 0; i < lCount; i++)
             {
-                if (!CallExecuteCommand(aC))
+                if (!CallExecuteCommand(lCmd))
                 {
                     lResult = mError_Code;
                     break;
@@ -343,16 +447,31 @@ namespace KMS
             return lResult;
         }
 
-        int Tool::UntilCtrlC(const char* aC)
+        int Tool::Cmd_Shell(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            return ExecuteCommands(stdin);
+        }
+
+        int Tool::Cmd_UntilCtrlC(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
             sContinue = true;
 
             auto lHandler = signal(SIGINT, OnCtrlC);
             int  lResult  = 0;
 
+            char lCmd[LINE_LENGTH];
+            
+            aCmd->GetRemaining(lCmd, sizeof(lCmd));
+
             while (sContinue)
             {
-                if (!CallExecuteCommand(aC))
+                if (!CallExecuteCommand(lCmd))
                 {
                     lResult = mError_Code;
                     break;
@@ -373,7 +492,9 @@ namespace KMS
 
             try
             {
-                auto lRet = ExecuteCommand(aC);
+                CLI::CommandLine lCmd(aC);
+
+                auto lRet = ExecuteCommand(&lCmd);
                 if (0 == lRet)
                 {
                     lResult = true;

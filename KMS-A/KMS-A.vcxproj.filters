@@ -441,6 +441,9 @@
     <ClCompile Include="DAQ_DigitalOutputModule.cpp">
       <Filter>Source Files\DAQ</Filter>
     </ClCompile>
+    <ClCompile Include="CLI_CommandLine.cpp">
+      <Filter>Source Files\CLI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

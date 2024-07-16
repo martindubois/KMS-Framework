@@ -24,8 +24,9 @@ KMS_TEST(Test_TestManager_Fail, "Auto", sTest_Fail)
 
     lC.AddConfigurable(&lTM);
 
-    const char* lVector[5] =
+    const char* lVector[6] =
     {
+        "", // Executable name
         "Tests+=Test_TestManager_Fail0",
         "Tests+=Test_TestManager_Fail1",
         "Tests+=Test_TestManager_Fail2",
@@ -33,7 +34,8 @@ KMS_TEST(Test_TestManager_Fail, "Auto", sTest_Fail)
         "Unknown+=0"
     };
 
-    lC.ParseArguments(5, lVector);
+    CLI::CommandLine lCL0(6, lVector);
+    lC.ParseArguments(&lCL0);
 
     KMS_TEST_COMPARE(lC.GetIgnoredCount(), 1U);
 

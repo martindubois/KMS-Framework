@@ -51,16 +51,12 @@ namespace KMS
 
         Master* LinkAndMaster_Cfg::GetMaster() { assert(nullptr != mMaster); return mMaster; }
 
-        unsigned int LinkAndMaster_Cfg::ParseArguments(unsigned int aCount, const char** aVector)
+        void LinkAndMaster_Cfg::ParseArguments(CLI::CommandLine* aCmdLine)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
-
-            auto lResult = Stream_Cfg::ParseArguments(aCount, aVector);
-
             assert(nullptr == mMaster);
             assert(nullptr == mM_Cfg);
 
+            Stream_Cfg::ParseArguments(aCmdLine);
 
             switch (GetStreamType())
             {
@@ -73,8 +69,6 @@ namespace KMS
             mM_Cfg = new Master_Cfg(mMaster);
 
             GetConfigurator()->AddConfigurable(mM_Cfg);
-
-            return lResult;
         }
 
     }

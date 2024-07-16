@@ -10,6 +10,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+
 #include <KMS/CLI/Macros.h>
 
 namespace KMS
@@ -36,26 +38,26 @@ namespace KMS
 
         // ===== ICommandParser =============================================
 
-        int Macros::ExecuteCommand(const char* aCmd)
+        int Macros::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             int lResult = -1;
 
-            char lCmd [LINE_LENGTH];
-            char lName[NAME_LENGTH];
+            auto lCmd = aCmd->GetCurrent();
 
-            if      (0 == strcmp("Macro Display", aCmd)) { lResult = Cmd_Display(); }
-            else if (1 == sscanf_s(aCmd, "Macro Add %s"  , lName SizeInfo(lName))) { lResult = Cmd_Add (lName); }
-            else if (1 == sscanf_s(aCmd, "Macro + %s"    , lCmd  SizeInfo(lCmd ))) { lResult = Cmd_Plus(lCmd ); }
-            else if (1 == sscanf_s(aCmd, "Macro %[^\r\n]", lCmd  SizeInfo(lCmd ))) { lResult = mMacros.ExecuteCommand(lCmd); }
+            if (0 == strcmp("Macro", lCmd)) { aCmd->Next(); lResult = Cmd(aCmd); }
             else
             {
-                auto lM = mMacros.GetByName_Try(aCmd);
+                auto lM = mMacros.GetByName_Try(lCmd);
                 if (nullptr == lM)
                 {
                     lResult = Module::UNKNOWN_COMMAND;
                 }
                 else
                 {
+                    aCmd->Next();
+
+                    KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
                     lResult = lM->Execute(mParser);
                 }
             }
@@ -80,17 +82,47 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int Macros::Cmd_Add(const char* aName)
+        int Macros::Cmd(CLI::CommandLine* aCmd)
         {
-            auto lM = Add(aName);
+            assert(nullptr != aCmd);
 
-            std::cout << aName << " addded" << std::endl;
+            auto lCmd = aCmd->GetCurrent();
+            int  lResult = __LINE__;
+
+            if      (0 == _stricmp(lCmd, "Add"    )) { aCmd->Next(); lResult = Cmd_Add    (aCmd); }
+            else if (0 == _stricmp(lCmd, "Display")) { aCmd->Next(); lResult = Cmd_Display(aCmd); }
+            else if (0 == _stricmp(lCmd, "+"      )) { aCmd->Next(); lResult = Cmd_Plus   (aCmd); }
+            else
+            {
+                lResult = mMacros.ExecuteCommand(aCmd);
+            }
+
+            return lResult;
+        }
+
+        int Macros::Cmd_Add(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            auto lName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            auto lM = Add(lName);
+
+            std::cout << lName << " addded" << std::endl;
 
             return 0;
         }
 
-        int Macros::Cmd_Display()
+        int Macros::Cmd_Display(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             auto lM = mMacros.GetSelected();
             assert(nullptr != lM);
 
@@ -99,12 +131,18 @@ namespace KMS
             return 0;
         }
 
-        int Macros::Cmd_Plus(const char* aCmd)
+        int Macros::Cmd_Plus(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            char lCmd[LINE_LENGTH];
+
+            aCmd->GetRemaining(lCmd, sizeof(lCmd));
+
             auto lM = mMacros.GetSelected();
             assert(nullptr != lM);
 
-            lM->AddCommand(aCmd);
+            lM->AddCommand(lCmd);
 
             std::cout << "Added" << std::endl;
 

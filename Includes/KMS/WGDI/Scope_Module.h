@@ -32,30 +32,32 @@ namespace KMS
 
             // ===== CLI::Module ============================================
             virtual void DisplayHelp(FILE* aFile) const;
-            virtual int  ExecuteCommand(const char* aC);
+            virtual int  ExecuteCommand(CLI::CommandLine* aCmd);
 
         private:
 
             // ===== Commands ===============================================
-            void Clear();
-            void Channel_Color(const char* aColor);
-            void Channel_EdgeType(const char* aEdgeType);
-            void Channel_Random();
-            void Channel_ScaleY(double aScaleY);
-            void Channel_TrigLevel(double aTrigLevel);
-            void Channel_Y(unsigned int aY_px);
-            void Delete();
-            void ForceTrig();
-            void Frequency(unsigned int aFrequency_Hz);
-            void Info();
-            void Mode(const char* aMode);
-            void Persistence(unsigned int aPersistence);
-            void PositionX(unsigned int aPositionX_px);
-            void ScaleX(unsigned int aScaleX_us_px);
-            void Select(const char* aName);
-            void Show();
-            void Start();
-            void Stop();
+            int Cmd                  (CLI::CommandLine* aCmd);
+            int Cmd_Channel          (CLI::CommandLine* aCmd);
+            int Cmd_Channel_Color    (CLI::CommandLine* aCmd);
+            int Cmd_Channel_EdgeType (CLI::CommandLine* aCmd);
+            int Cmd_Channel_Random   (CLI::CommandLine* aCmd);
+            int Cmd_Channel_ScaleY   (CLI::CommandLine* aCmd);
+            int Cmd_Channel_TrigLevel(CLI::CommandLine* aCmd);
+            int Cmd_Channel_Y        (CLI::CommandLine* aCmd);
+            int Cmd_Clear            (CLI::CommandLine* aCmd);
+            int Cmd_Delete           (CLI::CommandLine* aCmd);
+            int Cmd_ForceTrig        (CLI::CommandLine* aCmd);
+            int Cmd_Frequency        (CLI::CommandLine* aCmd);
+            int Cmd_Info             (CLI::CommandLine* aCmd);
+            int Cmd_Mode             (CLI::CommandLine* aCmd);
+            int Cmd_Persistence      (CLI::CommandLine* aCmd);
+            int Cmd_PositionX        (CLI::CommandLine* aCmd);
+            int Cmd_ScaleX           (CLI::CommandLine* aCmd);
+            int Cmd_Select           (CLI::CommandLine* aCmd);
+            int Cmd_Show             (CLI::CommandLine* aCmd);
+            int Cmd_Start            (CLI::CommandLine* aCmd);
+            int Cmd_Stop             (CLI::CommandLine* aCmd);
 
             typedef std::map<std::string, Scope*> ScopeMap;
 

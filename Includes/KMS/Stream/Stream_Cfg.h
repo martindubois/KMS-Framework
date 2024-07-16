@@ -10,6 +10,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/CLI/CommandLine.h>
 #include <KMS/Com/Port.h>
 #include <KMS/Net/Socket_Client.h>
 #include <KMS/Stream/IStream.h>
@@ -40,7 +41,7 @@ namespace KMS
 
             StreamType GetStreamType() const;
 
-            unsigned int ParseArguments(unsigned int aCount, const char** aVector);
+            void ParseArguments(CLI::CommandLine* aCmdLine);
 
         protected:
 

@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
 #include <KMS/Convert.h>
 
 #include <KMS/DAQ/DigitalOutputModule.h>
@@ -55,19 +56,14 @@ namespace KMS
 
         // ===== CLI::ICommandParser ========================================
 
-        int DigitalOutputModule::ExecuteCommand(const char* aCmd)
+        int DigitalOutputModule::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             assert(nullptr != aCmd);
 
-            int lResult = UNKNOWN_COMMAND;
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
 
-            char lCmd[LINE_LENGTH];
-            char lValue[NAME_LENGTH];
-
-            if      (0 == strcmp(aCmd, "DigitalOutput Display")) { lResult = Cmd_Display(); }
-            else if (0 == strcmp(aCmd, "DigitalOutput List"   )) { lResult = Cmd_List(); }
-            else if (1 == sscanf_s(aCmd, "DigitalOutput Set %s", lValue SizeInfo(lValue))) { lResult = Cmd_Set(lValue); }
-            else if (1 == sscanf_s(aCmd, "DigitalInput %[^\n\r]", lCmd SizeInfo(lCmd))) { lResult = mDigitalOutputs.ExecuteCommand(lCmd); }
+            if (0 == _stricmp(lCmd, "DigitalOutput")) { aCmd->Next(); Cmd(aCmd); }
 
             return lResult;
         }
@@ -87,15 +83,41 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int DigitalOutputModule::Cmd_Display()
+        int DigitalOutputModule::Cmd(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Display")) { aCmd->Next(); lResult = Cmd_Display(aCmd); }
+            else if (0 == _stricmp(lCmd, "List"   )) { aCmd->Next(); lResult = Cmd_List   (aCmd); }
+            else if (0 == _stricmp(lCmd, "Set"    )) { aCmd->Next(); lResult = Cmd_Set    (aCmd); }
+            else
+            {
+                lResult = mDigitalOutputs.ExecuteCommand(aCmd);
+            }
+
+            return lResult;
+        }
+
+        int DigitalOutputModule::Cmd_Display(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             DisplaySelected(std::cout);
 
             return 0;
         }
 
-        int DigitalOutputModule::Cmd_List()
+        int DigitalOutputModule::Cmd_List(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             List(std::cout);
 
             std::cout << mDigitalOutputs.mInstances.size() << " digital outputs" << std::endl;
@@ -103,9 +125,15 @@ namespace KMS
             return 0;
         }
 
-        int DigitalOutputModule::Cmd_Set(const char* aValue)
+        int DigitalOutputModule::Cmd_Set(CLI::CommandLine* aCmd)
         {
-            auto lValue = Convert::ToBool(aValue);
+            assert(nullptr != aCmd);
+
+            auto lValue = Convert::ToBool(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
 
             SetSelected(lValue);
 

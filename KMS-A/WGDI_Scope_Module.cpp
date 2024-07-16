@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+#include <KMS/Convert.h>
 #include <KMS/Scope/Channel_Random.h>
 
 #include <KMS/WGDI/Scope_Module.h>
@@ -74,44 +76,14 @@ namespace KMS
                 "Scope Stop\n");
         }
 
-        int Scope_Module::ExecuteCommand(const char* aC)
+        int Scope_Module::ExecuteCommand(CLI::CommandLine* aCmd)
         {
-            int lResult = CLI::Module::UNKNOWN_COMMAND;
+            assert(nullptr != aCmd);
 
-            char lC[LINE_LENGTH];
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = CLI::Module::UNKNOWN_COMMAND;
 
-            if (1 == sscanf_s(aC, "Scope %[^\n\r]", lC SizeInfo(lC)))
-            {
-                lResult = 0;
-
-                double       lDouble;
-                unsigned int lUInt;
-                char         lStr[NAME_LENGTH];
-
-                if      (0 == strcmp(lC, "Channel Random")) { Channel_Random(); }
-                else if (0 == strcmp(lC, "Clear"         )) { Clear         (); }
-                else if (0 == strcmp(lC, "Delete"        )) { Delete        (); }
-                else if (0 == strcmp(lC, "ForceTrig"     )) { ForceTrig     (); }
-                else if (0 == strcmp(lC, "Info"          )) { Info          (); }
-                else if (0 == strcmp(lC, "Show"          )) { Show          (); }
-                else if (0 == strcmp(lC, "Start"         )) { Start         (); }
-                else if (0 == strcmp(lC, "Stop"          )) { Stop          (); }
-                else if (1 == sscanf_s(lC, "Channel Color %[A-Z]"    , lStr SizeInfo(lStr))) { Channel_Color   (lStr); }
-                else if (1 == sscanf_s(lC, "Channel EdgeType %[A-Z_]", lStr SizeInfo(lStr))) { Channel_EdgeType(lStr); }
-                else if (1 == sscanf_s(lC, "Mode %[A-Z_]"            , lStr SizeInfo(lStr))) { Mode            (lStr); }
-                else if (1 == sscanf_s(lC, "Select %s"               , lStr SizeInfo(lStr))) { Select          (lStr); }
-                else if (1 == sscanf_s(lC, "Channel ScaleY %lf"   , &lDouble)) { Channel_ScaleY   (lDouble); }
-                else if (1 == sscanf_s(lC, "Channel TrigLevel %lf", &lDouble)) { Channel_TrigLevel(lDouble); }
-                else if (1 == sscanf_s(lC, "Channel Y %u"  , &lUInt)) { Channel_Y  (lUInt); }
-                else if (1 == sscanf_s(lC, "Frequency %u"  , &lUInt)) { Frequency  (lUInt); }
-                else if (1 == sscanf_s(lC, "Persistence %u", &lUInt)) { Persistence(lUInt); }
-                else if (1 == sscanf_s(lC, "PositionX %u"  , &lUInt)) { PositionX  (lUInt); }
-                else if (1 == sscanf_s(lC, "ScaleX %u"     , &lUInt)) { ScaleX     (lUInt); }
-                else
-                {
-                    lResult = UNKNOWN_COMMAND;
-                }
-            }
+            if (0 == _stricmp(lCmd, "Scope")) { aCmd->Next(); lResult = Cmd(aCmd); }
 
             return lResult;
         }
@@ -121,74 +93,186 @@ namespace KMS
 
         // ===== Commands ===================================================
 
-        void Scope_Module::Clear()
+        int Scope_Module::Cmd(CLI::CommandLine* aCmd)
         {
-            KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
+            assert(nullptr != aCmd);
 
-            mScope->mScope.Clear();
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Channel"    )) { aCmd->Next(); lResult = Cmd_Channel    (aCmd); }
+            else if (0 == _stricmp(lCmd, "Clear"      )) { aCmd->Next(); lResult = Cmd_Clear      (aCmd); }
+            else if (0 == _stricmp(lCmd, "Delete"     )) { aCmd->Next(); lResult = Cmd_Delete     (aCmd); }
+            else if (0 == _stricmp(lCmd, "ForceTrig"  )) { aCmd->Next(); lResult = Cmd_ForceTrig  (aCmd); }
+            else if (0 == _stricmp(lCmd, "Frequency"  )) { aCmd->Next(); lResult = Cmd_Frequency  (aCmd); }
+            else if (0 == _stricmp(lCmd, "Info"       )) { aCmd->Next(); lResult = Cmd_Info       (aCmd); }
+            else if (0 == _stricmp(lCmd, "Mode"       )) { aCmd->Next(); lResult = Cmd_Mode       (aCmd); }
+            else if (0 == _stricmp(lCmd, "Persistence")) { aCmd->Next(); lResult = Cmd_Persistence(aCmd); }
+            else if (0 == _stricmp(lCmd, "PositionX"  )) { aCmd->Next(); lResult = Cmd_PositionX  (aCmd); }
+            else if (0 == _stricmp(lCmd, "ScaleX"     )) { aCmd->Next(); lResult = Cmd_ScaleX     (aCmd); }
+            else if (0 == _stricmp(lCmd, "Select"     )) { aCmd->Next(); lResult = Cmd_Select     (aCmd); }
+            else if (0 == _stricmp(lCmd, "Show"       )) { aCmd->Next(); lResult = Cmd_Show       (aCmd); }
+            else if (0 == _stricmp(lCmd, "Start"      )) { aCmd->Next(); lResult = Cmd_Start      (aCmd); }
+            else if (0 == _stricmp(lCmd, "Stop"       )) { aCmd->Next(); lResult = Cmd_Stop       (aCmd); }
+            else
+            {
+                lResult = UNKNOWN_COMMAND;
+            }
+
+            return lResult;
         }
 
-        void Scope_Module::Channel_Color(const char* aColor)
+        int Scope_Module::Cmd_Channel(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Color"    )) { aCmd->Next(); lResult = Cmd_Channel_Color    (aCmd); }
+            else if (0 == _stricmp(lCmd, "EdgeType" )) { aCmd->Next(); lResult = Cmd_Channel_EdgeType (aCmd); }
+            else if (0 == _stricmp(lCmd, "Random"   )) { aCmd->Next(); lResult = Cmd_Channel_Random   (aCmd); }
+            else if (0 == _stricmp(lCmd, "ScaleY"   )) { aCmd->Next(); lResult = Cmd_Channel_ScaleY   (aCmd); }
+            else if (0 == _stricmp(lCmd, "TrigLevel")) { aCmd->Next(); lResult = Cmd_Channel_TrigLevel(aCmd); }
+            else if (0 == _stricmp(lCmd, "Y"        )) { aCmd->Next(); lResult = Cmd_Channel_Y        (aCmd); }
+
+            return lResult;
+        }
+
+        int Scope_Module::Cmd_Channel_Color(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            auto lColorName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mChannel, RESULT_INVALID_STATE, "No selected channel", "");
 
             Graph::Color lColor(Graph::Color::BLUE);
 
-            if      (0 == strcmp(aColor, "BLUE" )) { lColor = Graph::Color::BLUE; }
-            else if (0 == strcmp(aColor, "GREEN")) { lColor = Graph::Color::GREEN; }
-            else if (0 == strcmp(aColor, "RED"  )) { lColor = Graph::Color::RED; }
-            else if (0 == strcmp(aColor, "WHITE")) { lColor = Graph::Color::WHITE; }
+            if      (0 == _stricmp(lColorName, "BLUE" )) { lColor = Graph::Color::BLUE; }
+            else if (0 == _stricmp(lColorName, "GREEN")) { lColor = Graph::Color::GREEN; }
+            else if (0 == _stricmp(lColorName, "RED"  )) { lColor = Graph::Color::RED; }
+            else if (0 == _stricmp(lColorName, "WHITE")) { lColor = Graph::Color::WHITE; }
             else
             {
-                KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid color name", aColor);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid color name", lColorName);
             }
 
             mChannel->mColor = lColor;
+
+            return 0;
         }
 
-        void Scope_Module::Channel_EdgeType(const char* aEdgeType)
+        int Scope_Module::Cmd_Channel_EdgeType(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lEdgeTypeName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mChannel, RESULT_INVALID_STATE, "No selected channel", "");
 
             Enum<KMS::Scope::Channel::EdgeType, KMS::Scope::Channel::EDGE_TYPE_NAMES> lEdgeType(mChannel->mEdgeType);
 
-            lEdgeType.SetName(aEdgeType);
+            lEdgeType.SetName(lEdgeTypeName);
 
             mChannel->mEdgeType = lEdgeType;
+
+            return 0;
         }
 
-        void Scope_Module::Channel_Random()
+        int Scope_Module::Cmd_Channel_Random(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             AddChannel(new KMS::Scope::Channel_Random);
+
+            return 0;
         }
 
-        void Scope_Module::Channel_ScaleY(double aScaleY)
+        int Scope_Module::Cmd_Channel_ScaleY(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lScaleY = Convert::ToDouble(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mChannel, RESULT_INVALID_STATE, "No selected channel", "");
 
-            mChannel->mScaleY = aScaleY;
+            mChannel->mScaleY = lScaleY;
+
+            return 0;
         }
 
-        void Scope_Module::Channel_TrigLevel(double aTrigLevel)
+        int Scope_Module::Cmd_Channel_TrigLevel(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lTrigLevel = Convert::ToDouble(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mChannel, RESULT_INVALID_STATE, "No selected channel", "");
 
-            mChannel->mTrigLevel = aTrigLevel;
+            mChannel->mTrigLevel = lTrigLevel;
+
+            return 0;
         }
 
-        void Scope_Module::Channel_Y(unsigned int aY_px)
+        int Scope_Module::Cmd_Channel_Y(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lY_px = Convert::ToUInt16(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mChannel, RESULT_INVALID_STATE, "No selected channel", "");
 
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Channel::Y_MAX_px >= aY_px, RESULT_INVALID_VALUE, "Invalif channel Y", aY_px);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Channel::Y_MAX_px >= lY_px, RESULT_INVALID_VALUE, "Invalif channel Y", lY_px);
 
-            mChannel->mY_px = aY_px;
+            mChannel->mY_px = lY_px;
+
+            return 0;
         }
 
-        void Scope_Module::Delete()
+        int Scope_Module::Cmd_Clear(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
+
+            mScope->mScope.Clear();
+
+            return 0;
+        }
+
+        int Scope_Module::Cmd_Delete(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             for (auto lScope : mScopes)
@@ -202,27 +286,49 @@ namespace KMS
 
             delete mScope;
             mScope = nullptr;
+
+            return 0;
         }
 
-        void Scope_Module::Frequency(unsigned int aFrequency_Hz)
+        int Scope_Module::Cmd_Frequency(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lFrequency_Hz = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::FREQUENCY_MAX_Hz >= aFrequency_Hz, RESULT_INVALID_CONFIG, "The frequency is above the maximum", aFrequency_Hz);
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::FREQUENCY_MIN_Hz <= aFrequency_Hz, RESULT_INVALID_CONFIG, "The frequency is belo the minimum" , aFrequency_Hz);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::FREQUENCY_MAX_Hz >= lFrequency_Hz, RESULT_INVALID_CONFIG, "The frequency is above the maximum", lFrequency_Hz);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::FREQUENCY_MIN_Hz <= lFrequency_Hz, RESULT_INVALID_CONFIG, "The frequency is belo the minimum" , lFrequency_Hz);
 
-            mScope->mScope.mFrequency_Hz = aFrequency_Hz;
+            mScope->mScope.mFrequency_Hz = lFrequency_Hz;
+
+            return 0;
         }
 
-        void Scope_Module::ForceTrig()
+        int Scope_Module::Cmd_ForceTrig(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             mScope->mScope.ForceTrig();
+
+            return 0;
         }
 
-        void Scope_Module::Info()
+        int Scope_Module::Cmd_Info(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             std::cout << mScope->mScope.Channels_GetCount() << " channels\n";
@@ -233,61 +339,111 @@ namespace KMS
             std::cout << "----- Inter sample time (ms) -----\n";
 
             std::cout << mScope->mScope.mStats_InterSample << std::endl;
+
+            return 0;
         }
 
-        void Scope_Module::Mode(const char* aMode)
+        int Scope_Module::Cmd_Mode(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
+
+            auto lModeName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
 
             Enum<KMS::Scope::Scope::Mode, KMS::Scope::Scope::MODE_NAMES> lMode(mScope->mScope.mMode);
 
-            lMode.SetName(aMode);
+            lMode.SetName(lModeName);
 
             mScope->mScope.mMode = lMode;
+
+            return 0;
         }
 
-        void Scope_Module::Persistence(unsigned int aPersistence)
+        int Scope_Module::Cmd_Persistence(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lPersistence = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::PERSISTENCE_MIN <= aPersistence, RESULT_INVALID_CONFIG, "The persistence is below the minimum", aPersistence);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::PERSISTENCE_MIN <= lPersistence, RESULT_INVALID_CONFIG, "The persistence is below the minimum", lPersistence);
 
-            mScope->mScope.mPersistence = aPersistence;
+            mScope->mScope.mPersistence = lPersistence;
+
+            return 0;
         }
 
-        void Scope_Module::PositionX(unsigned int aPositionX_px)
+        int Scope_Module::Cmd_PositionX(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lPositionX_px = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::POSITION_X_MAX_px >= aPositionX_px, RESULT_INVALID_CONFIG, "The position is above the maximum", aPositionX_px);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::POSITION_X_MAX_px >= lPositionX_px, RESULT_INVALID_CONFIG, "The position is above the maximum", lPositionX_px);
 
-            mScope->mScope.mPositionX_px = aPositionX_px;
+            mScope->mScope.mPositionX_px = lPositionX_px;
+
+            return 0;
         }
 
-        void Scope_Module::ScaleX(unsigned int aScaleX_ms_px)
+        int Scope_Module::Cmd_ScaleX(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lScaleX_ms_px = Convert::ToUInt32(aCmd->GetCurrent());
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::SCALE_X_MAX_ms_px >= aScaleX_ms_px, RESULT_INVALID_CONFIG, "The scale is above the maximum", aScaleX_ms_px);
-            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::SCALE_X_MIN_ms_px <= aScaleX_ms_px, RESULT_INVALID_CONFIG, "The scale is belo the minimum" , aScaleX_ms_px);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::SCALE_X_MAX_ms_px >= lScaleX_ms_px, RESULT_INVALID_CONFIG, "The scale is above the maximum", lScaleX_ms_px);
+            KMS_EXCEPTION_ASSERT(KMS::Scope::Scope::SCALE_X_MIN_ms_px <= lScaleX_ms_px, RESULT_INVALID_CONFIG, "The scale is belo the minimum" , lScaleX_ms_px);
 
-            mScope->mScope.mScaleX_ms_px = aScaleX_ms_px;
+            mScope->mScope.mScaleX_ms_px = lScaleX_ms_px;
+
+            return 0;
         }
 
-        void Scope_Module::Select(const char* aName)
+        int Scope_Module::Cmd_Select(CLI::CommandLine* aCmd)
         {
-            assert(nullptr != aName);
+            assert(nullptr != aCmd);
 
-            auto lIt = mScopes.find(aName);
+            auto lName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            assert(nullptr != lName);
+
+            auto lIt = mScopes.find(lName);
             if (mScopes.end() == lIt)
             {
                 char lTitle[NAME_LENGTH];
 
-                sprintf_s(lTitle, "Scope - %s", aName);
+                sprintf_s(lTitle, "Scope - %s", lName);
 
                 mScope = new Scope(lTitle);
 
-                mScopes.insert(ScopeMap::value_type(aName, mScope));
+                mScopes.insert(ScopeMap::value_type(lName, mScope));
             }
             else
             {
@@ -295,27 +451,47 @@ namespace KMS
 
                 mScope = lIt->second;
             }
+
+            return 0;
         }
 
-        void Scope_Module::Show()
+        int Scope_Module::Cmd_Show(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             mScope->Show();
+
+            return 0;
         }
 
-        void Scope_Module::Start()
+        int Scope_Module::Cmd_Start(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             mScope->Start();
+
+            return 0;
         }
 
-        void Scope_Module::Stop()
+        int Scope_Module::Cmd_Stop(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             KMS_EXCEPTION_ASSERT(nullptr != mScope, RESULT_INVALID_STATE, "No selected scope", "");
 
             mScope->Stop();
+
+            return 0;
         }
 
     }

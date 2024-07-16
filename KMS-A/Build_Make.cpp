@@ -205,18 +205,20 @@ namespace KMS
             CLI::Tool::DisplayHelp(aOut);
         }
 
-        int Make::ExecuteCommand(const char* aC)
+        int Make::ExecuteCommand(CLI::CommandLine* aCmd)
         {
-            assert(nullptr != aC);
+            assert(nullptr != aCmd);
 
             int lResult;
 
-            if      (0 == strcmp("Clean" , aC)) { lResult = Run_Clean (); }
-            else if (0 == strcmp("Depend", aC)) { lResult = Run_Depend(); }
-            else if (0 == strcmp("Make"  , aC)) { lResult = Run_Make  (); }
+            auto lCmd = aCmd->GetCurrent();
+
+            if      (0 == strcmp("Clean" , lCmd)) { aCmd->Next(); lResult = Cmd_Clean (aCmd); }
+            else if (0 == strcmp("Depend", lCmd)) { aCmd->Next(); lResult = Cmd_Depend(aCmd); }
+            else if (0 == strcmp("Make"  , lCmd)) { aCmd->Next(); lResult = Cmd_Make  (aCmd); }
             else
             {
-                lResult = CLI::Tool::ExecuteCommand(aC);
+                lResult = CLI::Tool::ExecuteCommand(aCmd);
             }
 
             return lResult;
@@ -468,8 +470,12 @@ namespace KMS
             if (!mF_Lib_Cfg.DoesExist()) { mF_Lib_Cfg.Create(); }
         }
 
-        int Make::Run_Clean()
+        int Make::Cmd_Clean(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             switch (mComponentType)
             {
             case ComponentType::BINARY:
@@ -501,8 +507,12 @@ namespace KMS
             return 0;
         }
 
-        int Make::Run_Depend()
+        int Make::Cmd_Depend(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             switch (mComponentType)
             {
             case ComponentType::BINARY:
@@ -522,8 +532,12 @@ namespace KMS
             return 0;
         }
 
-        int Make::Run_Make()
+        int Make::Cmd_Make(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_FORMAT, "Unsexpected command options", "");
+
             switch (mComponentType)
             {
             case ComponentType::BINARY:

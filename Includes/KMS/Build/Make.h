@@ -53,7 +53,7 @@ namespace KMS
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile);
-            virtual int  ExecuteCommand(const char* aC);
+            virtual int  ExecuteCommand(CLI::CommandLine* aCmd);
             virtual int  Run();
 
         private:
@@ -90,9 +90,9 @@ namespace KMS
 
             void Prepare();
 
-            int Run_Clean();
-            int Run_Depend();
-            int Run_Make();
+            int Cmd_Clean (CLI::CommandLine* aCmd);
+            int Cmd_Depend(CLI::CommandLine* aCmd);
+            int Cmd_Make  (CLI::CommandLine* aCmd);
 
             void VerifyConfig();
 

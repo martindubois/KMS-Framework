@@ -42,27 +42,24 @@ namespace KMS
 
         IStream* Stream_Cfg::GetStream() { return mStream; }
 
-        unsigned int Stream_Cfg::ParseArguments(unsigned int aCount, const char** aVector)
+        void Stream_Cfg::ParseArguments(CLI::CommandLine* aCmdLine)
         {
-            assert(1 <= aCount);
-            assert(nullptr != aVector);
+            assert(nullptr != aCmdLine);
 
             assert(nullptr != mConfigurator);
             assert(nullptr == mStream);
             assert(StreamType::QTY > mType);
 
-            unsigned int lResult = 1;
-
-            if (2 < aCount)
+            if (!aCmdLine->IsAtEnd())
             {
                 KMS::Enum<StreamType, STREAM_TYPE_NAMES> lType(mType);
 
-                if (lType.SetName_Try(aVector[1]))
+                if (lType.SetName_Try(aCmdLine->GetCurrent()))
                 {
-                    lResult = 2;
-
                     mType = lType;
                 }
+
+                aCmdLine->Next();
             }
 
             switch (mType)
@@ -79,8 +76,6 @@ namespace KMS
 
             default: assert(false);
             }
-
-            return lResult;
         }
 
     }

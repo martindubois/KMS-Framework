@@ -3,18 +3,21 @@
 // Copyright (C) 2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/InstanceList.h
+// File      Includes/KMS/CLI/InstanceList.h
 // Library   KMS-A
 
 #pragma once
 
 // ===== C++ ================================================================
 #include <iostream>
+#include <map>
 
 namespace KMS
 {
     namespace CLI
     {
+
+        class CommandLine;
 
         class InstanceList_Base
         {
@@ -48,10 +51,11 @@ namespace KMS
             void DeleteSelected();
 
             // Exception  RESULT_DENIED
+            //            RESULT_INVALID_COMMAND
             //            RESULT_INVALID_NAME
             //            RESULT_INVALID_STATE
             //            RESULT_INVALID_VALUE
-            int ExecuteCommand(const char* aCmd);
+            int ExecuteCommand(CLI::CommandLine* aCmd);
 
             void List(std::ostream& aOut) const;
 
@@ -96,10 +100,10 @@ namespace KMS
 
         private:
 
-            int Cmd_Delete();
-            int Cmd_Delete_All();
-            int Cmd_List() const;
-            int Cmd_Select(const char* aName);
+            int Cmd_Delete    (CLI::CommandLine* aCmd);
+            int Cmd_Delete_All(CLI::CommandLine* aCmd);
+            int Cmd_List      (CLI::CommandLine* aCmd) const;
+            int Cmd_Select    (CLI::CommandLine* aCmd);
 
             void Unselect(void* aInstance);
 

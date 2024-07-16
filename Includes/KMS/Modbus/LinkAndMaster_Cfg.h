@@ -9,6 +9,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
+#include <KMS/CLI/CommandLine.h>
 #include <KMS/Com/Port.h>
 #include <KMS/Modbus/Master_CFG.h>
 #include <KMS/Modbus/Master_IDevice.h>
@@ -31,7 +32,7 @@ namespace KMS
 
             Master* GetMaster();
 
-            unsigned int ParseArguments(unsigned int aCount, const char** aVector);
+            void ParseArguments(CLI::CommandLine* aCmdLine);
 
         private:
 

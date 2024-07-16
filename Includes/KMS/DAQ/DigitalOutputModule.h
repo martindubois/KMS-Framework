@@ -34,7 +34,7 @@ namespace KMS
             void SetSelected(bool aValue);
 
             // ===== ICommandParser =========================================
-            virtual int ExecuteCommand(const char* aC);
+            virtual int ExecuteCommand(CLI::CommandLine* aCmd);
 
             // ===== Module =================================================
             virtual void DisplayHelp(FILE* aOut) const;
@@ -43,9 +43,10 @@ namespace KMS
 
         private:
 
-            int Cmd_Display();
-            int Cmd_List();
-            int Cmd_Set(const char* aValue);
+            int Cmd        (CLI::CommandLine* aCmd);
+            int Cmd_Display(CLI::CommandLine* aCmd);
+            int Cmd_List   (CLI::CommandLine* aCmd);
+            int Cmd_Set    (CLI::CommandLine* aCmd);
 
         };
 

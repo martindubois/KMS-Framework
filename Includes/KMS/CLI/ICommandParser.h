@@ -12,13 +12,15 @@ namespace KMS
     namespace CLI
     {
 
+        class CommandLine;
+
         class ICommandParser
         {
 
         public:
 
             // Exception  CLI_COMMAND_INVALID
-            virtual int ExecuteCommand(const char* aCmd) = 0;
+            virtual int ExecuteCommand(CLI::CommandLine* aCmd) = 0;
 
         };
 

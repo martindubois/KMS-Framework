@@ -50,7 +50,7 @@ namespace KMS
             Macro* Add(const char* aName);
 
             // ===== ICommandParser =========================================
-            virtual int ExecuteCommand(const char* aC);
+            virtual int ExecuteCommand(CLI::CommandLine* aCmd);
 
             // ===== Module =================================================
             virtual void DisplayHelp(FILE* aOut) const;
@@ -59,9 +59,10 @@ namespace KMS
 
         private:
 
-            int Cmd_Add(const char* aName);
-            int Cmd_Display();
-            int Cmd_Plus(const char* aCmd);
+            int Cmd        (CLI::CommandLine* aCmd);
+            int Cmd_Add    (CLI::CommandLine* aCmd);
+            int Cmd_Display(CLI::CommandLine* aCmd);
+            int Cmd_Plus   (CLI::CommandLine* aCmd);
 
             ICommandParser* mParser;
 

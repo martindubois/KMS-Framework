@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+
 #include <KMS/CLI/Macros.h>
 
 namespace KMS
@@ -39,7 +41,9 @@ namespace KMS
 
             for (auto lC : mCommands)
             {
-                lResult = aParser->ExecuteCommand(lC.c_str());
+                CLI::CommandLine lCmd(lC.c_str());
+
+                lResult = aParser->ExecuteCommand(&lCmd);
                 if (0 != lResult)
                 {
                     break;

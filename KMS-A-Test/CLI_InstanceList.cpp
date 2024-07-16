@@ -51,41 +51,51 @@ KMS_TEST(CLI_InstanceList_Base, "Auto", sTest_Base)
 
     lIL0.Add("first", new uint32_t);
 
+    CLI::CommandLine lCL0("Delete");
+
     Console::Redirection lR(Console::Redirection::What::WHAT_ALL);
     {
-        lRet = lIL0.ExecuteCommand("Delete");
+        lRet = lIL0.ExecuteCommand(&lCL0);
     }
     lR.Restore();
     KMS_TEST_COMPARE(lRet, 0);
 
     lIL0.Add("first", new uint32_t);
 
+    CLI::CommandLine lCL1("Select first");
+
     lR.Redirect();
     {
-        lRet = lIL0.ExecuteCommand("Select first");
+        lRet = lIL0.ExecuteCommand(&lCL1);
     }
     lR.Restore();
     KMS_TEST_COMPARE(lRet, 0);
 
+    CLI::CommandLine lCL2("Delete All");
+
     lR.Redirect();
     {
-        lRet = lIL0.ExecuteCommand("Delete All");
+        lRet = lIL0.ExecuteCommand(&lCL2);
     }
     lR.Restore();
     KMS_TEST_COMPARE(lRet, 0);
 
+    CLI::CommandLine lCL3("List");
+
     lR.Redirect();
     {
-        lRet = lIL0.ExecuteCommand("List");
+        lRet = lIL0.ExecuteCommand(&lCL3);
     }
     lR.Restore();
     KMS_TEST_COMPARE(lRet, 0);
 
     lIL0.Add("first", new uint32_t);
 
+    CLI::CommandLine lCL4("List");
+
     lR.Redirect();
     {
-        lRet = lIL0.ExecuteCommand("List");
+        lRet = lIL0.ExecuteCommand(&lCL4);
     }
     lR.Restore();
     KMS_TEST_COMPARE(lRet, 0);
@@ -157,53 +167,77 @@ KMS_TEST(CLI_InstanceList_Exception, "Auto", sTest_Exception)
     KMS_TEST_CATCH(RESULT_INVALID_STATE);
 
     // ExecuteCommand
+
+    CLI::CommandLine lCL0("Delete");
+
     try
     {
-        lIL0.ExecuteCommand("Delete");
+        lIL0.ExecuteCommand(&lCL0);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_INVALID_STATE);
 
+    CLI::CommandLine lCL1("Delete Invalid");
+
     try
     {
-        lIL0.ExecuteCommand("Select DoesNotExist");
+        lIL0.ExecuteCommand(&lCL1);
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_COMMAND);
+
+    CLI::CommandLine lCL2("Select DoesNotExist");
+
+    try
+    {
+        lIL0.ExecuteCommand(&lCL2);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_INVALID_NAME);
 
+    CLI::CommandLine lCL3("Invalid");
+
     try
     {
-        lIL0.ExecuteCommand("Invalid");
+        lIL0.ExecuteCommand(&lCL3);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_INVALID_VALUE);
 
     lIL0.SetAllowedCmds(lIL0.CMD_NONE);
 
+    CLI::CommandLine lCL4("Delete");
+
     try
     {
-        lIL0.ExecuteCommand("Delete");
+        lIL0.ExecuteCommand(&lCL4);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_DENIED);
 
+    CLI::CommandLine lCL5("Delete All");
+
     try
     {
-        lIL0.ExecuteCommand("Delete All");
+        lIL0.ExecuteCommand(&lCL5);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_DENIED);
 
+    CLI::CommandLine lCL6("List");
+
     try
     {
-        lIL0.ExecuteCommand("List");
+        lIL0.ExecuteCommand(&lCL6);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_DENIED);
 
+    CLI::CommandLine lCL7("Select first");
+
     try
     {
-        lIL0.ExecuteCommand("Select first");
+        lIL0.ExecuteCommand(&lCL7);
         KMS_TEST_ASSERT(false);
     }
     KMS_TEST_CATCH(RESULT_DENIED);

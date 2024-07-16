@@ -14,6 +14,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Callback.h>
+#include <KMS/CLI/CommandLine.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Boolean.h>
 #include <KMS/DI/Dictionary.h>
@@ -62,7 +63,7 @@ namespace KMS
 
             void Help(FILE* aOut) const;
 
-            void ParseArguments(int aCount, const char ** aVector);
+            void ParseArguments(CLI::CommandLine* aCmdLine);
 
             void ParseFile(const File::Folder& aFolder, const char* aFile, bool aMandatory = false);
 

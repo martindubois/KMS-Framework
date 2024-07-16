@@ -52,7 +52,7 @@ namespace KMS
             virtual int Run();
 
             // ===== ICommandParser =========================================
-            virtual int ExecuteCommand(const char* aC);
+            virtual int ExecuteCommand(CLI::CommandLine* aCmdLine);
 
             // ===== DI::Container ==========================================
             virtual void Validate() const;
@@ -67,19 +67,19 @@ namespace KMS
 
             NO_COPY(Tool);
 
-            void AbortIfError();
-
-            void ChangeDir(const char* aDir);
-
-            int Config(const char* aOperation);
-
-            void Delay(unsigned int aDelay_ms);
-
-            void ExitIfError();
-
-            int Repeat(unsigned int aCount, const char* aC);
-
-            int UntilCtrlC(const char* aC);
+            int Cmd_AbortIfError (CLI::CommandLine* aCmd);
+            int Cmd_ChangeDir    (CLI::CommandLine* aCmd);
+            int Cmd_ClearError   (CLI::CommandLine* aCmd);
+            int Cmd_Config       (CLI::CommandLine* aCmd);
+            int Cmd_Delay        (CLI::CommandLine* aCmd);
+            int Cmd_Echo         (CLI::CommandLine* aCmd);
+            int Cmd_ExecuteScript(CLI::CommandLine* aCmd);
+            int Cmd_Exit         (CLI::CommandLine* aCmd);
+            int Cmd_ExitIfError  (CLI::CommandLine* aCmd);
+            int Cmd_Help         (CLI::CommandLine* aCmd);
+            int Cmd_Repeat       (CLI::CommandLine* aCmd);
+            int Cmd_Shell        (CLI::CommandLine* aCmd);
+            int Cmd_UntilCtrlC   (CLI::CommandLine* aCmd);
 
             bool CallExecuteCommand(const char* aC);
 

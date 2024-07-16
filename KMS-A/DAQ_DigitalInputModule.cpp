@@ -8,6 +8,8 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+
 #include <KMS/DAQ/DigitalInputModule.h>
 
 namespace KMS
@@ -45,17 +47,14 @@ namespace KMS
 
         // ===== CLI::ICommandParser ========================================
 
-        int DigitalInputModule::ExecuteCommand(const char* aCmd)
+        int DigitalInputModule::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             assert(nullptr != aCmd);
 
-            int lResult = UNKNOWN_COMMAND;
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
 
-            char lCmd[LINE_LENGTH];
-
-            if      (0 == strcmp(aCmd, "DigitalInput Display" )) { lResult = Cmd_Display(); }
-            else if (0 == strcmp(aCmd, "DigitalInput List"    )) { lResult = Cmd_List(); }
-            else if (1 == sscanf_s(aCmd, "DigitalInput %[^\n\r]", lCmd SizeInfo(lCmd))) { lResult = mDigitalInputs.ExecuteCommand(lCmd); }
+            if (0 == _stricmp(lCmd, "DigitalInput")) { aCmd->Next(); Cmd(aCmd); }
 
             return lResult;
         }
@@ -74,15 +73,40 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int DigitalInputModule::Cmd_Display()
+        int DigitalInputModule::Cmd(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lCmd = aCmd->GetCurrent();
+            auto lResult = UNKNOWN_COMMAND;
+
+            if      (0 == _stricmp(lCmd, "Display")) { aCmd->Next(); lResult = Cmd_Display(aCmd); }
+            else if (0 == _stricmp(lCmd, "List"   )) { aCmd->Next(); lResult = Cmd_List   (aCmd); }
+            else
+            {
+                lResult = mDigitalInputs.ExecuteCommand(aCmd);
+            }
+
+            return lResult;
+        }
+
+        int DigitalInputModule::Cmd_Display(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             DisplaySelected(std::cout);
 
             return 0;
         }
 
-        int DigitalInputModule::Cmd_List()
+        int DigitalInputModule::Cmd_List(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
             List(std::cout);
 
             std::cout << mDigitalInputs.mInstances.size() << " digital inputs" << std::endl;

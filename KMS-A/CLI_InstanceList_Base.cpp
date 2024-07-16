@@ -5,11 +5,13 @@
 // Product   KMS-Framework
 // File      KMS-A/CLI_InstanceList_Base.cpp
 
-// TEST COVERAGE 2024-07-10 Martin Dubois
+// TEST COVERAGE 2024-07-16 Martin Dubois
 
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/CommandLine.h>
+
 #include <KMS/CLI/InstanceList.h>
 
 namespace KMS
@@ -71,21 +73,20 @@ namespace KMS
             Typed_Delete(lInstance);
         }
 
-        int InstanceList_Base::ExecuteCommand(const char* aCmd)
+        int InstanceList_Base::ExecuteCommand(CLI::CommandLine* aCmd)
         {
             assert(nullptr != aCmd);
 
+            const char* lCmd = aCmd->GetCurrent();
+
             int lResult = __LINE__;
 
-            char lName[NAME_LENGTH];
-
-            if      (0 == strcmp(aCmd, "Delete All")) { lResult = Cmd_Delete_All(); }
-            else if (0 == strcmp(aCmd, "Delete"    )) { lResult = Cmd_Delete    (); }
-            else if (0 == strcmp(aCmd, "List"      )) { lResult = Cmd_List      (); }
-            else if (1 == sscanf_s(aCmd, "Select %s", lName SizeInfo(lName))) { lResult = Cmd_Select(lName); }
+            if      (0 == _stricmp(lCmd, "Delete")) { aCmd->Next(); lResult = Cmd_Delete(aCmd); }
+            else if (0 == _stricmp(lCmd, "List"  )) { aCmd->Next(); lResult = Cmd_List  (aCmd); }
+            else if (0 == _stricmp(lCmd, "Select")) { aCmd->Next(); lResult = Cmd_Select(aCmd); }
             else
             {
-                KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid command", aCmd);
+                KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid command", lCmd);
             }
 
             return lResult;
@@ -276,19 +277,39 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        int InstanceList_Base::Cmd_Delete()
+        int InstanceList_Base::Cmd_Delete(CLI::CommandLine* aCmd)
         {
-            KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_DELETE), RESULT_DENIED, "Delete command is not allowed", "");
+            int lResult = __LINE__;
 
-            DeleteSelected();
+            if (aCmd->IsAtEnd())
+            {
+                KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_DELETE), RESULT_DENIED, "Delete command is not allowed", "");
 
-            std::cout << "Deleted" << std::endl;
+                DeleteSelected();
 
-            return 0;
+                std::cout << "Deleted" << std::endl;
+
+                lResult = 0;
+            }
+            else
+            {
+                auto lCmd = aCmd->GetCurrent();
+
+                if (0 == strcmp(lCmd, "All")) { aCmd->Next(); lResult = Cmd_Delete_All(aCmd); }
+                else
+                {
+                    KMS_EXCEPTION(RESULT_INVALID_COMMAND, "Invalid command", lCmd);
+                }
+            }
+
+            return lResult;
         }
 
-        int InstanceList_Base::Cmd_Delete_All()
+        int InstanceList_Base::Cmd_Delete_All(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
             KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_DELETE_ALL), RESULT_DENIED, "Delete All command is not allowed", "");
 
             DeleteAll();
@@ -298,8 +319,11 @@ namespace KMS
             return 0;
         }
 
-        int InstanceList_Base::Cmd_List() const
+        int InstanceList_Base::Cmd_List(CLI::CommandLine* aCmd) const
         {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
             KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_LIST), RESULT_DENIED, "List command is not allowed", "");
 
             List(std::cout);
@@ -309,13 +333,20 @@ namespace KMS
             return 0;
         }
 
-        int InstanceList_Base::Cmd_Select(const char* aName)
+        int InstanceList_Base::Cmd_Select(CLI::CommandLine* aCmd)
         {
+            assert(nullptr != aCmd);
+
+            auto lName = aCmd->GetCurrent();
+
+            aCmd->Next();
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
             KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_SELECT), RESULT_DENIED, "Select command is not allowed", "");
 
-            Internal_SelectByName(aName);
+            Internal_SelectByName(lName);
 
-            std::cout << aName << " selected" << std::endl;
+            std::cout << lName << " selected" << std::endl;
 
             return 0;
         }
