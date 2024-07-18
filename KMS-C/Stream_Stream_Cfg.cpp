@@ -42,6 +42,8 @@ namespace KMS
 
         IStream* Stream_Cfg::GetStream() { return mStream; }
 
+        StreamType Stream_Cfg::GetStreamType() const { return mType; }
+
         void Stream_Cfg::ParseArguments(CLI::CommandLine* aCmdLine)
         {
             assert(nullptr != aCmdLine);
@@ -77,6 +79,11 @@ namespace KMS
             default: assert(false);
             }
         }
+
+        // Protected
+        // //////////////////////////////////////////////////////////////////
+
+        Cfg::Configurator* Stream_Cfg::GetConfigurator() { return mConfigurator; }
 
     }
 }

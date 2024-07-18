@@ -66,7 +66,6 @@ namespace KMS
 
             void ClearLocalAddress();
 
-            Address  GetLocalAddress () const;
             uint16_t GetLocalPort    () const;
 
             void SetBroadcastReceive(bool aAllow = true);

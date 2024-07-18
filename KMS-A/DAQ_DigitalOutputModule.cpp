@@ -63,7 +63,7 @@ namespace KMS
             auto lCmd = aCmd->GetCurrent();
             auto lResult = UNKNOWN_COMMAND;
 
-            if (0 == _stricmp(lCmd, "DigitalOutput")) { aCmd->Next(); Cmd(aCmd); }
+            if (0 == _stricmp(lCmd, "DigitalOutput")) { aCmd->Next(); lResult = Cmd(aCmd); }
 
             return lResult;
         }
