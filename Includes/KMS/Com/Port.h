@@ -80,7 +80,6 @@ namespace KMS
             virtual bool Connect();
 
             // ===== Dev::IDevice ===========================================
-            virtual void SetConnectFlags(unsigned int aFlags);
             virtual void ClearReadBuffer();
 
         // Internal

@@ -33,6 +33,8 @@ namespace KMS
 
             void Next();
 
+            void Reset();
+
         private:
 
             StringList_ASCII::iterator mCurrent;

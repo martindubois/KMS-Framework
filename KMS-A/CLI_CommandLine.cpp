@@ -116,7 +116,7 @@ namespace KMS
             default: assert(false);
             }
 
-            mCurrent = mParts.begin();
+            Reset();
         }
 
         CommandLine::CommandLine(int aCount, const char** aVector)
@@ -131,7 +131,7 @@ namespace KMS
                 mParts.push_back(aVector[i]);
             }
 
-            mCurrent = mParts.begin();
+            Reset();
 
             Next(); // Skip the executable name
         }
@@ -168,6 +168,8 @@ namespace KMS
         bool CommandLine::IsAtEnd() const { return mParts.end() == mCurrent; }
 
         void CommandLine::Next() { mCurrent++; }
+
+        void CommandLine::Reset() { mCurrent = mParts.begin(); }
 
     }
 }
