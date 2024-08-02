@@ -156,6 +156,7 @@ namespace KMS
             , mMake         (MAKE_DEFAULT)
             , mProcessor    (PROCESSOR_DEFAULT)
             , mF_Product(File::Folder::Id::CURRENT)
+            , mMacros(this)
         {
             mCleanExtensions.SetCreator(DI::String::Create);
             mIncludes       .SetCreator(DI::String_Expand::Create);
@@ -189,11 +190,13 @@ namespace KMS
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
+
+            AddModule(&mMacros);
         }
 
         // ===== CLI::Tool ==================================================
 
-        void Make::DisplayHelp(FILE* aOut)
+        void Make::DisplayHelp(FILE* aOut) const
         {
             assert(nullptr != aOut);
 

@@ -8,6 +8,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/CLI/Macros.h>
 #include <KMS/CLI/Tool.h>
 #include <KMS/DI/Array.h>
 #include <KMS/DI/Enum.h>
@@ -52,7 +53,7 @@ namespace KMS
             Make();
 
             // ===== CLI::Tool ==============================================
-            virtual void DisplayHelp(FILE* aFile);
+            virtual void DisplayHelp(FILE* aFile) const;
             virtual int  ExecuteCommand(CLI::CommandLine* aCmd);
             virtual int  Run();
 
@@ -101,6 +102,8 @@ namespace KMS
             File::Folder mF_Product;
             File::Folder mF_Lib_Cfg;
             File::Folder mF_Libraries;
+
+            CLI::Macros mMacros;
 
             // ===== Configurable attributes ================================
             DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;
