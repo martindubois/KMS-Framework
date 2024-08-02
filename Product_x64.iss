@@ -50,8 +50,8 @@ Name: "{app}\Libraries\Debug_x86"
 Name: "{app}\Libraries\Debug_Static_x86"
 
 [Files]
-Source: "_DocUser\Documentation.html"                           ; DestDir: "{app}"
-Source: "_DocUser\KMS.ReadMe.txt"                               ; DestDir: "{app}"; Flags: isreadme
+Source: "_DocUser\Documentation.html"                           ; DestDir: "{app}"; Flags: isreadme
+Source: "_DocUser\KMS.ReadMe.txt"                               ; DestDir: "{app}"
 Source: "Debug\*.lib"                                           ; DestDir: "{app}\Libraries\Debug_x86"
 Source: "Debug\KMS-A.pdb"                                       ; DestDir: "{app}\Libraries\Debug_x86"
 Source: "Debug\KMS-B.pdb"                                       ; DestDir: "{app}\Libraries\Debug_x86"
