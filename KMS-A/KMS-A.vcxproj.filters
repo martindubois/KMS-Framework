@@ -79,6 +79,9 @@
     <Filter Include="Source Files\Convert">
       <UniqueIdentifier>{f4f57339-e103-423d-845f-632c514e0b03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Embedded">
+      <UniqueIdentifier>{d62b5007-388b-4009-8778-c120b5f3419e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -443,6 +446,15 @@
     </ClCompile>
     <ClCompile Include="CLI_CommandLine.cpp">
       <Filter>Source Files\CLI</Filter>
+    </ClCompile>
+    <ClCompile Include="Embedded_User.cpp">
+      <Filter>Source Files\Embedded</Filter>
+    </ClCompile>
+    <ClCompile Include="Embedded_UserList.cpp">
+      <Filter>Source Files\Embedded</Filter>
+    </ClCompile>
+    <ClCompile Include="Embedded_Log.cpp">
+      <Filter>Source Files\Embedded</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

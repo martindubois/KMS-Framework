@@ -7,6 +7,9 @@
 
 #pragma once
 
+// ===== C++ ================================================================
+#include <ostream>
+
 #define KMS_RESULT_GLOBAL_DECL(N) \
     extern const KMS::Result N
 
