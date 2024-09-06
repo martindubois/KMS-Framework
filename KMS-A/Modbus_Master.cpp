@@ -247,8 +247,8 @@ namespace KMS
         Master::Master(Stream::IStream* aStream)
             : mDeviceAddress(DEVICE_ADDRESS_DEFAULT)
             , mRetryCount   (RETRY_COUNT_DEFAULT)
-            , mLastException(Exception::NO_EXCEPTION)
             , mStream(aStream)
+            , mLastException(Exception::NO_EXCEPTION)
         {
             assert(nullptr != aStream);
         }

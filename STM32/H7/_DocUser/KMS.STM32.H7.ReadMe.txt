@@ -5,6 +5,8 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      STM32/H7/_DocUser/KMS.STM32.H7.ReadMe.txt
 
+1.2.6-stm32h7 2024-09-06
+
 0.1.75-stm32h7 2023-07-11
 * Use CONFIG and PROCESSOR
 

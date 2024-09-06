@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WOP/Link_USART.h
@@ -36,7 +36,7 @@ namespace KMS
 
             // ===== Callbacks ==============================================
             const Callback<Link_USART> ON_RX_BYTE;
-            unsigned int OnRxByte(void* aData);
+            unsigned int OnRxByte(void* aSender, void* aData);
 
             System         * mSystem;
             Embedded::USART* mUSART;

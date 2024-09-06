@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/WOP_Link_USART.cpp
@@ -21,10 +21,9 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Link_USART::Link_USART(System* aSystem, Embedded::USART* aUSART)
-            : mSystem(aSystem)
+            : ON_RX_BYTE(this, &Link_USART::OnRxByte)
+            , mSystem(aSystem)
             , mUSART(aUSART)
-            // ===== Callbacks ==============================================
-            , ON_RX_BYTE(this, &Link_USART::OnRxByte)
         {
             // assert(nullptr != aSystem);
             // assert(nullptr != aUSART);
@@ -56,7 +55,7 @@ namespace KMS
 
         // ===== Callbacks ==================================================
 
-        unsigned int Link_USART::OnRxByte(void* aData)
+        unsigned int Link_USART::OnRxByte(void* aSender, void* aData)
         {
             // assert(nullptr != aData);
 
