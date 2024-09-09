@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Embedded/UART.h
@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Callback.h>
 #include <KMS/Embedded/WorkItem.h>
 
 namespace KMS

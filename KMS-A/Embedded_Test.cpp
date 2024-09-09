@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2024 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Embedded_Test.cpp
@@ -15,11 +15,6 @@
 // ===== Local ==============================================================
 #include "../../../Common/Version.h"
 
-// Constants
-// //////////////////////////////////////////////////////////////////////////
-
-#define MSG_KEY (1)
-
 namespace KMS
 {
     namespace Embedded
@@ -29,8 +24,7 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         Test::Test(Embedded::USART* aUSART, const DAQ::DigitalOutput& aLED)
-            : mLED(aLED)
-            , mLink(&mSystem, aUSART)
+            : mLink(&mSystem, aUSART)
             , mSystem(VERSION, 0x74736554, 0x00)
         {
             // assert(nullptr != aUSART);

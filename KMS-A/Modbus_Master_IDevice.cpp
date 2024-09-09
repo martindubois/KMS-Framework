@@ -166,7 +166,11 @@ namespace KMS
 
             assert(nullptr != mStream);
 
-            auto lDevice = dynamic_cast<Dev::IDevice*>(mStream);
+            #ifdef _KMS_EMBEDDED_
+                auto lDevice = static_cast<Dev::IDevice*>(mStream);
+            #else
+                auto lDevice = dynamic_cast<Dev::IDevice*>(mStream);
+            #endif
             assert(nullptr != lDevice);
 
             uint8_t lBuffer[BUFFER_SIZE_byte];
