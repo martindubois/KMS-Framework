@@ -27,8 +27,6 @@ namespace KMS
 
         // Internal
 
-            uint32_t Get(const char* aMsg, char* aOut, unsigned int aOutSize_byte) const;
-
             uint16_t GetNumero() const;
 
             void Set(uint8_t aLevel, uint16_t aNumero, uint32_t aTime, uint32_t aVal0, uint32_t aVal1);
@@ -52,7 +50,7 @@ namespace KMS
 
         public:
 
-            Log(LogEntry* aVector, uint16_t aLength, const char** aMessages, uint16_t aQty);
+            Log(LogEntry* aVector, uint16_t aLength);
 
             void Clear();
 
@@ -63,9 +61,6 @@ namespace KMS
             // aIndex  0  Last entry
             const LogEntry* GetEntry(uint16_t aIndex) const;
 
-            // aIndex  0  Last entry
-            uint32_t GetEntry(uint16_t aIndex, char* aOut, unsigned int aOutSize_byte) const;
-
             void Load(IFile* aFile);
 
             bool Save(IFile* aFile);
@@ -74,9 +69,6 @@ namespace KMS
 
             uint16_t mCount;
             uint16_t mLast;
-
-            const char** mMessages;
-            uint16_t     mMessageQty;
 
             LogEntry* mVector;
             uint16_t  mVectorLength;

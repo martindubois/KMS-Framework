@@ -19,8 +19,6 @@
 #define NUMERO_INVALID (0xffff)
 #define TIME_INVALID   (0)
 
-static const char* LEVEL_NAMES[] = { "ERROR", "WARNING", "INFO" };
-
 namespace KMS
 {
     namespace Embedded
@@ -36,11 +34,9 @@ namespace KMS
         LogEntry::LogEntry() : mTime(TIME_INVALID), mNumero(NUMERO_INVALID), mLevel(LEVEL_INVALID)
         {}
 
-        Log::Log(LogEntry* aVector, uint16_t aLength, const char** aMessages, uint16_t aQty)
+        Log::Log(LogEntry* aVector, uint16_t aLength)
             : mCount(0)
             , mLast(0)
-            , mMessages(aMessages)
-            , mMessageQty(aQty)
             , mVector(aVector)
             , mVectorLength(aLength)
         {}
@@ -90,23 +86,6 @@ namespace KMS
             return lResult;
         }
 
-        uint32_t Log::GetEntry(uint16_t aIndex, char* aOut, unsigned int aOutSize_byte) const
-        {
-            uint32_t lResult = TIME_INVALID;
-
-            aOut[0] = '\0';
-
-            auto lEntry = GetEntry(aIndex);
-            if (nullptr != lEntry)
-            {
-                auto lNumero = lEntry->GetNumero();
-
-                lResult = lEntry->Get((mMessageQty > lNumero) ? mMessages[lNumero] : "", aOut, aOutSize_byte);
-            }
-
-            return lResult;
-        }
-
         void Log::Load(IFile* aFile)
         {
             for (uint16_t i = 0; i < mVectorLength; i++)
@@ -141,20 +120,6 @@ namespace KMS
 
         // Internal
         // //////////////////////////////////////////////////////////////////
-
-        uint32_t LogEntry::Get(const char* aMsg, char* aOut, unsigned int aOutSize_byte) const
-        {
-            if ((LEVEL_INVALID == mLevel) || (NUMERO_INVALID == mNumero))
-            {
-                return TIME_INVALID;
-            }
-
-            auto lRet = sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s %u ", LEVEL_NAMES[mLevel], mNumero);
-
-            sprintf_s(aOut + lRet SizeInfo(aOutSize_byte - lRet), aMsg, mValues[0], mValues[1]);
-
-            return mTime;
-        }
 
         uint16_t LogEntry::GetNumero() const { return mNumero; }
 
