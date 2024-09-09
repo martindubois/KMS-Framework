@@ -1,11 +1,11 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2023 KMS
+Copyright (C) 2023-2024 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      STM32/H7/_DocUser/KMS.STM32.H7.ReadMe.txt
 
-1.2.6-stm32h7 2024-09-06
+1.2.7-stm32h7 2024-09-09
 
 0.1.75-stm32h7 2023-07-11
 * Use CONFIG and PROCESSOR
