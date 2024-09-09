@@ -116,6 +116,7 @@ namespace KMS
             "Embedded"        ,
             "Files"           ,
             "Folders"         ,
+            "Processors"      ,
             "Product"         ,
             "Stats_Console"   ,
             "VersionFile"     ,
