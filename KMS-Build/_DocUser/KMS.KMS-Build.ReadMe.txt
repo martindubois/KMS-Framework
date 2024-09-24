@@ -7,7 +7,7 @@ File      KMS-Build/_DocUser/KMS.KMS-Build.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.7-dev Windows 2024-09-09
+1.2.8-dev Windows 2024-09-23
 
 1.2.3-dev Windows 2024-07-15
 * Fix Doxygen on Windows
