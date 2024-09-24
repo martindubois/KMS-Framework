@@ -64,7 +64,7 @@ namespace KMS
 
                 unsigned int lSize_byte = lBuffer[2] + CRC_SIZE_byte;
 
-                unsigned int lResult_byte = mStream->Read(lBuffer + MIN_SIZE_byte, lSize_byte, Dev::IDevice::FLAG_READ_ALL);
+                lResult_byte = mStream->Read(lBuffer + MIN_SIZE_byte, lSize_byte, Dev::IDevice::FLAG_READ_ALL);
                 if (lSize_byte == lResult_byte)
                 {
                     if (!CRC::Verify(lBuffer, MIN_SIZE_byte + lBuffer[2] + CRC_SIZE_byte)) { return ERROR_BAD_CRC; }
@@ -78,6 +78,10 @@ namespace KMS
                     memcpy(aOut, lBuffer + MIN_SIZE_byte, lBuffer[1]);
 
                     lResult_byte = lBuffer[2];
+                }
+                else
+                {
+                    lResult_byte = ERROR_READ;
                 }
             }
 
@@ -114,6 +118,10 @@ namespace KMS
                         memcpy(aOut, lBuffer + MIN_SIZE_byte - 1, aOutSize_byte);
 
                         lResult_byte = aOutSize_byte;
+                    }
+                    else
+                    {
+                        lResult_byte = ERROR_READ;
                     }
                 }
             }
