@@ -81,6 +81,7 @@
     <ClCompile Include="DI_Object.cpp" />
     <ClCompile Include="DI_String.cpp" />
     <ClCompile Include="DI_String_Expand.cpp" />
+    <ClCompile Include="DI_ValueModule.cpp" />
     <ClCompile Include="Embedded_Log.cpp" />
     <ClCompile Include="Embedded_User.cpp" />
     <ClCompile Include="Embedded_UserList.cpp" />

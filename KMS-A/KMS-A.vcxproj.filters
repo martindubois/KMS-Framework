@@ -456,6 +456,9 @@
     <ClCompile Include="Embedded_Log.cpp">
       <Filter>Source Files\Embedded</Filter>
     </ClCompile>
+    <ClCompile Include="DI_ValueModule.cpp">
+      <Filter>Source Files\DI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
