@@ -47,6 +47,8 @@ namespace KMS
 
             int ExecuteScript(const char* aFileName);
 
+            int ToggleError();
+
             virtual void DisplayHelp(FILE* aOut) const;
 
             virtual int Run();
@@ -61,6 +63,8 @@ namespace KMS
 
             Tool();
 
+            void AbortIfError();
+
         private:
 
             typedef std::list<Module*> ModuleList;
@@ -68,6 +72,7 @@ namespace KMS
             NO_COPY(Tool);
 
             int Cmd_AbortIfError (CLI::CommandLine* aCmd);
+            int Cmd_AbortIfNoError(CLI::CommandLine* aCmd);
             int Cmd_ChangeDir    (CLI::CommandLine* aCmd);
             int Cmd_ClearError   (CLI::CommandLine* aCmd);
             int Cmd_Config       (CLI::CommandLine* aCmd);
@@ -79,6 +84,7 @@ namespace KMS
             int Cmd_Help         (CLI::CommandLine* aCmd);
             int Cmd_Repeat       (CLI::CommandLine* aCmd);
             int Cmd_Shell        (CLI::CommandLine* aCmd);
+            int Cmd_ToggleError  (CLI::CommandLine* aCmd);
             int Cmd_UntilCtrlC   (CLI::CommandLine* aCmd);
 
             bool CallExecuteCommand(const char* aC);
@@ -86,7 +92,6 @@ namespace KMS
             void ExitCodeToErrorCode();
 
             int         mError_Code;
-            std::string mError_Command;
 
             int          mExit_Code;
             unsigned int mExit_Count;

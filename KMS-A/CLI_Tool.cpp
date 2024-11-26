@@ -67,7 +67,7 @@ namespace KMS
             mModules.push_back(aModule);
         }
 
-        void Tool::ClearError() { mError_Code = 0; mError_Command = ""; }
+        void Tool::ClearError() { mError_Code = 0; }
 
         int Tool::GetExitCode()
         {
@@ -75,7 +75,7 @@ namespace KMS
             {
                 mExit_Code = mError_Code;
 
-                mError_Code = 0;
+                ClearError();
             }
 
             return mExit_Code;
@@ -143,6 +143,18 @@ namespace KMS
             return GetExitCode();
         }
 
+        int Tool::ToggleError()
+        {
+            if (0 == mError_Code)
+            {
+                return __LINE__;
+            }
+
+            ClearError();
+
+            return 0;
+        }
+
         void Tool::DisplayHelp(FILE* aOut) const
         {
             assert(nullptr != aOut);
@@ -156,6 +168,7 @@ namespace KMS
 
             fprintf(aOut,
                 "AbortIfError\n"
+                "AbortIfNoError\n"
                 "ChangeDir\n"
                 "ClearError\n"
                 "Config {Name} [Op] [Value]\n"
@@ -167,6 +180,7 @@ namespace KMS
                 "Help\n"
                 "Repeat {Count} {Command}\n"
                 "Shell\n"
+                "ToggleError\n"
                 "UntilCtrlC {Command}\n");
         }
 
@@ -188,6 +202,7 @@ namespace KMS
             auto lCmd = aCmd->GetCurrent();
             
             if      (0 == _stricmp(lCmd, "AbortIfError" )) { aCmd->Next(); lResult = Cmd_AbortIfError (aCmd); }
+            else if (0 == _stricmp(lCmd, "AbortIfNoError")) { aCmd->Next(); lResult = Cmd_AbortIfNoError(aCmd); }
             else if (0 == _stricmp(lCmd, "ChangeDir"    )) { aCmd->Next(); lResult = Cmd_ChangeDir    (aCmd); }
             else if (0 == _stricmp(lCmd, "ClearError"   )) { aCmd->Next(); lResult = Cmd_ClearError   (aCmd); }
             else if (0 == _stricmp(lCmd, "Config"       )) { aCmd->Next(); lResult = Cmd_Config       (aCmd); }
@@ -199,6 +214,7 @@ namespace KMS
             else if (0 == _stricmp(lCmd, "Help"         )) { aCmd->Next(); lResult = Cmd_Help         (aCmd); }
             else if (0 == _stricmp(lCmd, "Repeat"       )) { aCmd->Next(); lResult = Cmd_Repeat       (aCmd); }
             else if (0 == _stricmp(lCmd, "Shell"        )) { aCmd->Next(); lResult = Cmd_Shell        (aCmd); }
+            else if (0 == _stricmp(lCmd, "ToggleError"  )) { aCmd->Next(); lResult = Cmd_ToggleError  (aCmd); }
             else if (0 == _stricmp(lCmd, "UntilCtrlC"   )) { aCmd->Next(); lResult = Cmd_UntilCtrlC   (aCmd); }
             else
             {
@@ -254,15 +270,8 @@ namespace KMS
             lEntry.Set(&mCommands, false); AddEntry("Commands", lEntry, &MD_COMMANDS);
         }
 
-        // Private
-        // //////////////////////////////////////////////////////////////////
-
-        int Tool::Cmd_AbortIfError(CLI::CommandLine* aCmd)
+        void Tool::AbortIfError()
         {
-            assert(nullptr != aCmd);
-
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
-
             if (0 != mError_Code)
             {
                 // NOT TESTED
@@ -273,8 +282,39 @@ namespace KMS
 
                 exit(mError_Code);
             }
+        }
+
+        // Private
+        // //////////////////////////////////////////////////////////////////
+
+        int Tool::Cmd_AbortIfError(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            AbortIfError();
 
             return 0;
+        }
+
+        int Tool::Cmd_AbortIfNoError(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            auto lResult = ToggleError();
+            if (0 != lResult)
+            {
+                KMS_DBG_LOG_ERROR_F(KMS::Dbg::Log::FLAG_USER_REDUNDANT);
+                KMS::Dbg::gLog.WriteMessage("An error was expected");
+                mError_Code = lResult;
+            }
+
+            AbortIfError();
+
+            return lResult;
         }
 
         int Tool::Cmd_ChangeDir(CLI::CommandLine* aCmd)
@@ -402,7 +442,8 @@ namespace KMS
                 Dbg::gLog.WriteMessage(lMsg);
 
                 mExit_Code  = mError_Code;
-                mError_Code = 0;
+
+                ClearError();
 
                 mExit_Count++;
             }
@@ -454,6 +495,15 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
 
             return ExecuteCommands(stdin);
+        }
+
+        int Tool::Cmd_ToggleError(CLI::CommandLine* aCmd)
+        {
+            assert(nullptr != aCmd);
+
+            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+
+            return ToggleError();
         }
 
         int Tool::Cmd_UntilCtrlC(CLI::CommandLine* aCmd)
@@ -529,11 +579,6 @@ namespace KMS
                 mError_Code = __LINE__;
             }
 
-            if (!lResult)
-            {
-                mError_Command = aC;
-            }
-
             return lResult;
         }
 
@@ -542,7 +587,6 @@ namespace KMS
             assert(0 < mExit_Count);
 
             mError_Code    = mExit_Code;
-            mError_Command = "";
 
             mExit_Code  = 0;
 
