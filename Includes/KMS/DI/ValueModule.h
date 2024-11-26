@@ -30,6 +30,10 @@ namespace KMS
 
             void List(std::ostream& aOut) const;
 
+            unsigned int List(std::ostream& aOut, const char* aRegEx) const;
+
+            void SetSelected(const char* aValue);
+
             // ===== ICommandParser =========================================
             virtual int ExecuteCommand(CLI::CommandLine* aCmd);
 

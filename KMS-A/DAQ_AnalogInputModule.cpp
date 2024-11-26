@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 
@@ -45,6 +48,31 @@ namespace KMS
             aOut << std::endl;
         }
 
+        unsigned int AnalogInputModule::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lPair : mAnalogInputs.mInstances)
+            {
+                assert(nullptr != lPair.second);
+
+                if (std::regex_match(lPair.first, lRegEx))
+                {
+                    aOut << lPair.first << "\t" << reinterpret_cast<AnalogInput*>(lPair.second)->Read() << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
+        }
+
         // ===== CLI::ICommandParser ========================================
 
         int AnalogInputModule::ExecuteCommand(CLI::CommandLine* aCmd)
@@ -66,7 +94,7 @@ namespace KMS
 
             fprintf(aOut,
                 "AnalogInput Display\n"
-                "AnalogInput List\n"
+                "AnalogInput List [RegEx]\n"
                 "AnalogInput Select {Name}\n");
         }
 
@@ -105,9 +133,20 @@ namespace KMS
         {
             assert(nullptr != aCmd);
 
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+            if (aCmd->IsAtEnd())
+            {
+                List(std::cout);
+            }
+            else
+            {
+                char lText[LINE_LENGTH];
 
-            List(std::cout);
+                aCmd->GetRemaining(lText, sizeof(lText));
+
+                auto lCount = List(std::cout, lText);
+
+                std::cout << lCount << " of ";
+            }
 
             std::cout << mAnalogInputs.mInstances.size() << " analog inputs" << std::endl;
 

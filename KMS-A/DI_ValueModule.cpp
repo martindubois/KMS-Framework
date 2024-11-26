@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 
@@ -55,6 +58,43 @@ namespace KMS
             aOut << std::endl;
         }
 
+        unsigned int ValueModule::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lPair : mValues.mInstances)
+            {
+                assert(nullptr != lPair.second);
+
+                if (std::regex_match(lPair.first, lRegEx))
+                {
+                    char lText[LINE_LENGTH];
+
+                    reinterpret_cast<Value*>(lPair.second)->Get(lText, sizeof(lText));
+
+                    aOut << lPair.first << "\t" << lText << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
+        }
+
+        void ValueModule::SetSelected(const char* aValue)
+        {
+            auto lV = mValues.GetSelected();
+            assert(nullptr != lV);
+
+            lV->Set(aValue);
+        }
+
         // ===== CLI::ICommandParser ========================================
 
         int ValueModule::ExecuteCommand(CLI::CommandLine* aCmd)
@@ -82,7 +122,7 @@ namespace KMS
 
             fprintf(aOut,
                 "%s Display\n"
-                "%s List\n"
+                "%s List [RegEx]\n"
                 "%s Select {Name}\n",
                 mName,
                 mName,
@@ -132,9 +172,20 @@ namespace KMS
         {
             assert(nullptr != aCmd);
 
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+            if (aCmd->IsAtEnd())
+            {
+                List(std::cout);
+            }
+            else
+            {
+                char lText[LINE_LENGTH];
 
-            List(std::cout);
+                aCmd->GetRemaining(lText, sizeof(lText));
+
+                auto lCount = List(std::cout, lText);
+
+                std::cout << lCount << " of ";
+            }
 
             std::cout << mValues.mInstances.size() << " values" << std::endl;
 
@@ -149,10 +200,7 @@ namespace KMS
 
             aCmd->GetRemaining(lText, sizeof(lText));
 
-            auto lV = mValues.GetSelected();
-            assert(nullptr != lV);
-
-            lV->Set(lText);
+            SetSelected(lText);
 
             return 0;
         }

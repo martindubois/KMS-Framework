@@ -7,6 +7,8 @@ File      KMS-A/_DocUser/KMS.KMS-A.ReadMe.txt
 
 EDIT ON BUILD
 
+- CLI::Module - List function with regex
+
 1.2.8-dev Windows 2024-09-23
 - Modbus::Master_IDevice - Fix false error
 

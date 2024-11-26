@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 #include <KMS/Convert.h>
@@ -46,6 +49,31 @@ namespace KMS
             aOut << std::endl;
         }
 
+        unsigned int DigitalOutputModule::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lPair : mDigitalOutputs.mInstances)
+            {
+                assert(nullptr != lPair.second);
+
+                if (std::regex_match(lPair.first, lRegEx))
+                {
+                    aOut << lPair.first << "\t" << (reinterpret_cast<DigitalOutput*>(lPair.second)->Get() ? "true" : "false") << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
+        }
+
         void DigitalOutputModule::SetSelected(bool aValue)
         {
             auto lDO = mDigitalOutputs.GetSelected();
@@ -75,7 +103,7 @@ namespace KMS
 
             fprintf(aOut,
                 "DigitalOutput Display\n"
-                "DigitalOutput List\n"
+                "DigitalOutput List [RegEx]\n"
                 "DigitalOutput Select {Name}\n"
                 "DigitalOutput Set false|true\n");
         }
@@ -116,9 +144,20 @@ namespace KMS
         {
             assert(nullptr != aCmd);
 
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+            if (aCmd->IsAtEnd())
+            {
+                List(std::cout);
+            }
+            else
+            {
+                char lText[LINE_LENGTH];
 
-            List(std::cout);
+                aCmd->GetRemaining(lText, sizeof(lText));
+
+                auto lCount = List(std::cout, lText);
+
+                std::cout << lCount << " of ";
+            }
 
             std::cout << mDigitalOutputs.mInstances.size() << " digital outputs" << std::endl;
 

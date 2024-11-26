@@ -9,6 +9,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 
@@ -100,6 +103,29 @@ namespace KMS
             }
 
             aOut << std::endl;
+        }
+
+        unsigned int InstanceList_Base::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lIt : mInstances)
+            {
+                if (std::regex_match(lIt.first, lRegEx))
+                {
+                    aOut << lIt.first << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
         }
 
         void InstanceList_Base::VerifyInstanceSelected() const
@@ -323,10 +349,22 @@ namespace KMS
         {
             assert(nullptr != aCmd);
 
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
             KMS_EXCEPTION_ASSERT(0 != (mAllowedCmds & CMD_LIST), RESULT_DENIED, "List command is not allowed", "");
 
-            List(std::cout);
+            if (aCmd->IsAtEnd())
+            {
+                List(std::cout);
+            }
+            else
+            {
+                char lText[LINE_LENGTH];
+
+                aCmd->GetRemaining(lText, sizeof(lText));
+
+                auto lCount = List(std::cout, lText);
+
+                std::cout << lCount << " of ";
+            }
 
             std::cout << mInstances.size() << " instances" << std::endl;
 

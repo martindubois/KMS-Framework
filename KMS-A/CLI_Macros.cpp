@@ -74,7 +74,7 @@ namespace KMS
                 "Macro Delete All\n"
                 "Macro Delete\n"
                 "Macro Display\n"
-                "Macro List\n"
+                "Macro List [RegEx]\n"
                 "Macro Select {Name}\n"
                 "Macro + {Command}\n");
         }

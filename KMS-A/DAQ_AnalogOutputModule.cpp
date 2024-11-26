@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 #include <KMS/Convert.h>
@@ -46,6 +49,31 @@ namespace KMS
             aOut << std::endl;
         }
 
+        unsigned int AnalogOutputModule::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lPair : mAnalogOutputs.mInstances)
+            {
+                assert(nullptr != lPair.second);
+
+                if (std::regex_match(lPair.first, lRegEx))
+                {
+                    aOut << lPair.first << "\t" << reinterpret_cast<AnalogOutput*>(lPair.second)->Get() << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
+        }
+
         void AnalogOutputModule::WriteSelected(double aValue)
         {
             auto lAO = mAnalogOutputs.GetSelected();
@@ -76,7 +104,7 @@ namespace KMS
 
             fprintf(aOut,
                 "AnalogOutput Display\n"
-                "AnalogOutput List\n"
+                "AnalogOutput List [RegEx]\n"
                 "AnalogOutput Select {Name}\n"
                 "AnalogOutput Write {Value}\n");
         }
