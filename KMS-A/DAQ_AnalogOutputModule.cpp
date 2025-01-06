@@ -145,9 +145,20 @@ namespace KMS
         {
             assert(nullptr != aCmd);
 
-            KMS_EXCEPTION_ASSERT(aCmd->IsAtEnd(), RESULT_INVALID_COMMAND, "Too many command arguments", aCmd->GetCurrent());
+            if (aCmd->IsAtEnd())
+            {
+                List(std::cout);
+            }
+            else
+            {
+                char lText[LINE_LENGTH];
 
-            List(std::cout);
+                aCmd->GetRemaining(lText, sizeof(lText));
+
+                auto lCount = List(std::cout, lText);
+
+                std::cout << lCount << " of ";
+            }
 
             std::cout << mAnalogOutputs.mInstances.size() << " analog outputs" << std::endl;
 

@@ -7,6 +7,9 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/CLI/CommandLine.h>
 
@@ -43,6 +46,31 @@ namespace KMS
             }
 
             aOut << std::endl;
+        }
+
+        unsigned int DigitalInputModule::List(std::ostream& aOut, const char* aRegEx) const
+        {
+            assert(nullptr != aRegEx);
+
+            unsigned int lResult = 0;
+
+            std::regex lRegEx(aRegEx);
+
+            for (auto lPair : mDigitalInputs.mInstances)
+            {
+                assert(nullptr != lPair.second);
+
+                if (std::regex_match(lPair.first, lRegEx))
+                {
+                    aOut << lPair.first << "\t" << (reinterpret_cast<DigitalInput*>(lPair.second)->Read() ? "true" : "false") << "\n";
+
+                    lResult++;
+                }
+            }
+
+            aOut << std::endl;
+
+            return lResult;
         }
 
         // ===== CLI::ICommandParser ========================================

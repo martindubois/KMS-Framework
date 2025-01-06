@@ -1,22 +1,20 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022-2024 KMS
+Copyright (C) 2022-2025 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocDev/Build.txt
 
-Name                _________________________________________________________
+Name                ________________________________ ( )    Martin Dubois ( )
 
 Date and time       20 ______ - ______ - ______               ______ : ______
 
-Computer            _________________ ( )    KMS-F_L ( )    KMS-Framework ( )
+Computer            ____________________________ ( )    KMS-F_L ( )    MD ( )
 
 File "Common/Version.h" - Edit the Version                                [ ]
 
-Version             ______ . ______ . ______ . ______
-                    {Ma}     {Mi}     {Bu}            -beta               ( )
-                                                      -dev                ( )
-                                                      -rc                 ( )
+Version             ______ . ______ . ______ . ______                     ( )
+                    {Ma}     {Mi}     {Bu}            -dev                ( )
                                                       -test               ( )
                                                       - _________________ ( )
                                                         {Type}

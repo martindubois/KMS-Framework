@@ -1,13 +1,13 @@
 
 Author    KMS - Martin Dubois, P. Eng.
-Copyright (C) 2022-2024 KMS
+Copyright (C) 2022-2025 KMS
 License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      KMS-Sync/_DocUser/KMS.KMS-Sync.ReadMe.txt
 
 EDIT ON BUILD - Windows
 
-1.2.9-dev Windows 2024-11-26
+1.2.10-dev Windows 2025-01-06
 
 1.1.15-dev Windows 2024-02-28
 
