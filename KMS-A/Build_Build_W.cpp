@@ -43,7 +43,8 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 #define INNO_SETUP_FOLDER ("Inno Setup 6")
 #define INSTALLER_FOLDER  ("Installer")
 #define MSBUILD_EXE       ("MSBuild" FILE_EXT_EXE)
-#define MSBUILD_FOLDER    ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define MSBUILD_2019_FOLDER ("Microsoft Visual Studio\\2019\\Professional\\Msbuild\\Current\\Bin")
+#define MSBUILD_2022_FOLDER ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
 #define SIGNTOOL_EXE      ("signtool" FILE_EXT_EXE)
 #define WDK_TOOL_FOLDER   ("Windows Kits\\10\\bin\\10.0.22621.0\\x64")
 
@@ -57,7 +58,8 @@ KMS_RESULT_STATIC(RESULT_WDK_MISSING);
 // Constants
 // /////////////////////////////////////////////////////////////////////////
 
-static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1("CertificatSHA1 = {SHA1}");
+static const KMS::Cfg::MetaData MD_CERTIFICAT_SHA1      ("CertificatSHA1 = {SHA1}");
+static const KMS::Cfg::MetaData MD_VISUAL_STUDIO_VERSION("VisualStudioVersion = 2019|2022");
 
 // Static function declaration
 // /////////////////////////////////////////////////////////////////////////
@@ -76,21 +78,40 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* Build::CERTIFICAT_SHA1_DEFAULT = "B71CF3BCD4E228FEFD58B2FE3353EF31106C1754";
-        const char* Build::EXPORT_FOLDER_DEFAULT   = "K:\\Export";
+        const char   * Build::CERTIFICAT_SHA1_DEFAULT       = "B71CF3BCD4E228FEFD58B2FE3353EF31106C1754";
+        const char   * Build::EXPORT_FOLDER_DEFAULT         = "K:\\Export";
+        const uint32_t Build::VISUAL_STUDIO_VERSION_DEFAULT = 2022;
 
         void Build::Construct_OSDep()
         {
-            mCertificatSHA1 = CERTIFICAT_SHA1_DEFAULT;
-            mExportFolder   = EXPORT_FOLDER_DEFAULT;
+            mCertificatSHA1      = CERTIFICAT_SHA1_DEFAULT;
+            mExportFolder        = EXPORT_FOLDER_DEFAULT;
+            mVisualStudioVersion = VISUAL_STUDIO_VERSION_DEFAULT;
 
             Ptr_OF<DI::Object> lEntry(&mCertificatSHA1, false);
-
             AddEntry("CertificatSHA1", lEntry, &MD_CERTIFICAT_SHA1);
+
+            lEntry.Set(&mVisualStudioVersion, false);
+            AddEntry("VisualStudioVersion", lEntry, &MD_VISUAL_STUDIO_VERSION);
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        File::Folder* Build::GetVisualStudioFolder()
+        {
+            File::Folder* lBin;
+
+            switch (mVisualStudioVersion)
+            {
+            case 2019: lBin = new File::Folder(File::Folder::PROGRAM_FILES_X86, MSBUILD_2019_FOLDER); break;
+            case 2022: lBin = new File::Folder(File::Folder::PROGRAM_FILES, MSBUILD_2022_FOLDER); break;
+
+            default: KMS_EXCEPTION(RESULT_INVALID_CONFIG, "Invalid Visual Studio version", mVisualStudioVersion);
+            }
+
+            return lBin;
+        }
 
         void Build::Compile_VisualStudio(const char* aC)
         {
@@ -111,9 +132,9 @@ namespace KMS
 
         void Build::Compile_VisualStudio(const char* aC, const char* aP)
         {
-            File::Folder lBin(File::Folder::PROGRAM_FILES, MSBUILD_FOLDER);
+            auto lBin = GetVisualStudioFolder();
 
-            Proc::Process lProcess(lBin, MSBUILD_EXE);
+            Proc::Process lProcess(*lBin, MSBUILD_EXE);
 
             lProcess.AddArgument(SLN_FILE_NAME);
 
@@ -132,6 +153,9 @@ namespace KMS
             lProcess.Run(MSBUILD_ALLOWED_TIME_ms);
 
             auto lRet = lProcess.GetExitCode();
+
+            delete lBin;
+
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "The compilation failed", lProcess.GetCmdLine());
         }
 
@@ -273,9 +297,13 @@ namespace KMS
         {
             if ((!mDoNotCompile) && (0 == mEmbedded.GetLength()))
             {
-                File::Folder lBin(File::Folder::PROGRAM_FILES, MSBUILD_FOLDER);
+                auto lBin = GetVisualStudioFolder();
 
-                KMS_EXCEPTION_ASSERT(lBin.DoesFileExist(MSBUILD_EXE), RESULT_VISUAL_STUDIO_MISSING, "Visual Studio 2022 is not installed", "");
+                auto lRet = lBin->DoesFileExist(MSBUILD_EXE);
+
+                delete lBin;
+
+                KMS_EXCEPTION_ASSERT(lRet, RESULT_VISUAL_STUDIO_MISSING, "Visual Studio is not installed", "");
             }
 
             for (const auto& lEntry : mProcessors.mInternal)

@@ -7,7 +7,7 @@ File      KMS-B/_DocUser/KMS.KMS-B.ReadMe.txt
 
 EDIT ON BUILD
 
-1.2.10-dev Windows 2025-01-06
+1.2.11-dev Windows 2025-03-03
 
 1.2.2-dev Windows 2024-07-12
 1.2.2-dev Linux 2024-06-08

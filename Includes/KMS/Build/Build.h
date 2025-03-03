@@ -14,6 +14,7 @@
 #include <KMS/DI/Dictionary.h>
 #include <KMS/DI/Folder.h>
 #include <KMS/DI/String.h>
+#include <KMS/DI/UInt.h>
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 #include <KMS/Version.h>
@@ -66,9 +67,11 @@ namespace KMS
             #endif
 
             #ifdef _KMS_WINDOWS_
-                static const char* CERTIFICAT_SHA1_DEFAULT;
+                static const char   * CERTIFICAT_SHA1_DEFAULT;
+                static const uint32_t VISUAL_STUDIO_VERSION_DEFAULT;
 
-                DI::String_Expand mCertificatSHA1;
+                DI::String_Expand  mCertificatSHA1;
+                DI::UInt<uint32_t> mVisualStudioVersion;
             #endif
 
         public:
@@ -118,6 +121,9 @@ namespace KMS
             void Validate_OSDep();
 
             #ifdef _KMS_WINDOWS_
+
+                File::Folder* GetVisualStudioFolder();
+
                 void CreateDriverCab(const char* aD, const char* aCabFile);
                 bool SignDriver(const char* aCabFile, const char* aSigned, const char* aComponent, const char* aProcessor);
             #endif
