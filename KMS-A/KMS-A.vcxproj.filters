@@ -108,12 +108,6 @@
     <ClCompile Include="HTTP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Build_Build.cpp">
-      <Filter>Source Files\Build</Filter>
-    </ClCompile>
-    <ClCompile Include="Build_Build_W.cpp">
-      <Filter>Source Files\Build</Filter>
-    </ClCompile>
     <ClCompile Include="Build_Depend.cpp">
       <Filter>Source Files\Build</Filter>
     </ClCompile>

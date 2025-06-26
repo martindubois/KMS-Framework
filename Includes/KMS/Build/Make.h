@@ -43,6 +43,7 @@ namespace KMS
 
             // ----- Build --------------------------------------------------
             DI::Array mBinaries;
+            DI::Array mDynamicLibraries;
             DI::Array mLibraries;
             DI::Array mTests;
 

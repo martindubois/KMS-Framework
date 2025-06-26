@@ -46,9 +46,10 @@ static const KMS::Cfg::MetaData MD_PROCESSOR       ("Processor = {Name}");
 
 // ----- Build --------------------------------------------------------------
 
-static const KMS::Cfg::MetaData MD_BINARIES  ("Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_LIBRARIES ("Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
+static const KMS::Cfg::MetaData MD_BINARIES         ("Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_DYNAMIC_LIBRARIES("DynamicLibraries += {Name}");
+static const KMS::Cfg::MetaData MD_LIBRARIES        ("Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_TESTS            ("Tests += {Name}");
 
 #ifdef _KMS_DARWIN_
     #define NAME_OS "Darwin"
@@ -68,9 +69,10 @@ static const KMS::Cfg::MetaData MD_TESTS     ("Tests += {Name}");
     #define NO_OS_1 "Linux"
 #endif
 
-static const KMS::Cfg::MetaData MD_OS_BINARIES (NAME_OS "Binaries += {Name}");
-static const KMS::Cfg::MetaData MD_OS_LIBRARIES(NAME_OS "Libraries += {Name}");
-static const KMS::Cfg::MetaData MD_OS_TESTS    (NAME_OS "Tests += {Name}");
+static const KMS::Cfg::MetaData MD_OS_BINARIES         (NAME_OS "Binaries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_DYNAMIC_LIBRARIES(NAME_OS "DynamicLibraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_LIBRARIES        (NAME_OS "Libraries += {Name}");
+static const KMS::Cfg::MetaData MD_OS_TESTS            (NAME_OS "Tests += {Name}");
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
@@ -177,17 +179,20 @@ namespace KMS
 
             // ----- Build --------------------------------------------------
 
-            mBinaries .SetCreator(DI::String::Create);
-            mLibraries.SetCreator(DI::String::Create);
-            mTests    .SetCreator(DI::String::Create);
+            mBinaries        .SetCreator(DI::String::Create);
+            mDynamicLibraries.SetCreator(DI::String::Create);
+            mLibraries       .SetCreator(DI::String::Create);
+            mTests           .SetCreator(DI::String::Create);
 
-            lEntry.Set(&mBinaries , false); AddEntry("Binaries" , lEntry, &MD_BINARIES);
-            lEntry.Set(&mLibraries, false); AddEntry("Libraries", lEntry, &MD_LIBRARIES);
-            lEntry.Set(&mTests    , false); AddEntry("Tests"    , lEntry, &MD_TESTS);
+            lEntry.Set(&mBinaries        , false); AddEntry("Binaries"        , lEntry, &MD_BINARIES);
+            lEntry.Set(&mDynamicLibraries, false); AddEntry("DynamicLibraries", lEntry, &MD_DYNAMIC_LIBRARIES);
+            lEntry.Set(&mLibraries       , false); AddEntry("Libraries"       , lEntry, &MD_LIBRARIES);
+            lEntry.Set(&mTests           , false); AddEntry("Tests"           , lEntry, &MD_TESTS);
 
-            lEntry.Set(&mBinaries , false); AddEntry(NAME_OS "Binaries" , lEntry, &MD_OS_BINARIES);
-            lEntry.Set(&mLibraries, false); AddEntry(NAME_OS "Libraries", lEntry, &MD_OS_LIBRARIES);
-            lEntry.Set(&mTests    , false); AddEntry(NAME_OS "Tests"    , lEntry, &MD_OS_TESTS);
+            lEntry.Set(&mBinaries        , false); AddEntry(NAME_OS "Binaries"        , lEntry, &MD_OS_BINARIES);
+            lEntry.Set(&mDynamicLibraries, false); AddEntry(NAME_OS "DynamicLibraries", lEntry, &MD_OS_DYNAMIC_LIBRARIES);
+            lEntry.Set(&mLibraries       , false); AddEntry(NAME_OS "Libraries"       , lEntry, &MD_OS_LIBRARIES);
+            lEntry.Set(&mTests           , false); AddEntry(NAME_OS "Tests"           , lEntry, &MD_OS_TESTS);
 
             mF_Binaries  = File::Folder(mF_Product, "Binaries");
             mF_Libraries = File::Folder(mF_Product, "Libraries");
@@ -526,6 +531,7 @@ namespace KMS
 
             case ComponentType::NONE:
                 Depend_Components(mBinaries);
+                Depend_Components(mDynamicLibraries);
                 Depend_Components(mLibraries);
                 Depend_Components(mTests);
                 break;
@@ -557,6 +563,7 @@ namespace KMS
 
             case ComponentType::NONE:
                 Make_Components(mLibraries);
+                Make_Components(mDynamicLibraries);
                 Make_Components(mTests);
                 Make_Components(mBinaries);
                 break;

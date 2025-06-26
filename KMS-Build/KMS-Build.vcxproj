@@ -207,7 +207,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Build.cpp" />
+    <ClCompile Include="Build_W.cpp" />
+    <ClCompile Include="Comp.cpp" />
+    <ClCompile Include="Comp_Archive.cpp" />
+    <ClCompile Include="Comp_Binary.cpp" />
+    <ClCompile Include="Comp_Binary_W.cpp" />
+    <ClCompile Include="Comp_Driver.cpp" />
+    <ClCompile Include="Comp_Driver_W.cpp" />
+    <ClCompile Include="Comp_Library_Dynamic.cpp" />
+    <ClCompile Include="Comp_File_ToPackage.cpp" />
+    <ClCompile Include="Comp_File_ToExport.cpp" />
+    <ClCompile Include="Comp_Folder_ToPackage.cpp" />
+    <ClCompile Include="Comp_Installer_W.cpp" />
+    <ClCompile Include="Comp_Library_Dynamic_W.cpp" />
+    <ClCompile Include="Comp_Library_Static.cpp" />
+    <ClCompile Include="Comp_Library_Static_W.cpp" />
+    <ClCompile Include="Comp_ReadMe.cpp" />
+    <ClCompile Include="Comp_Test.cpp" />
+    <ClCompile Include="Comp_Test_W.cpp" />
     <ClCompile Include="KMS-Build.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="Tool.cpp" />
+    <ClCompile Include="Tool_Command.cpp" />
+    <ClCompile Include="Tool_Doxygen.cpp" />
+    <ClCompile Include="Tool_Editor.cpp" />
+    <ClCompile Include="Tool_Executable.cpp" />
+    <ClCompile Include="Tool_Export.cpp" />
+    <ClCompile Include="Tool_Make.cpp" />
+    <ClCompile Include="Tool_VisualStudio_W.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Common\Version.rc" />
