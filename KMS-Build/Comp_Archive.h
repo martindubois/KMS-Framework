@@ -22,6 +22,7 @@ namespace Comp_Archive
 {
 
     extern void GetBinaryFolder (char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor);
+    extern void GetDriverFolder (char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor);
     extern void GetLibraryFolder(char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor);
 
     extern void CreateComponentAndTool(CompList* aComps, ToolList* aTools, const Config& aCfg);

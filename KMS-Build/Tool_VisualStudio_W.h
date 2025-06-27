@@ -21,8 +21,11 @@ namespace Tool_VisualStudio
 {
 
     extern const char* BINARY_OUTPUT_EXTENSIONS         [2];
+    extern const char* DRIVER_OUTPUT_EXTENSIONS         [4];
     extern const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[1];
     extern const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [2];
+
+    extern KMS::File::Folder* GetDriverOutDir(const char* aConfiguration, const char* aProcessor, const char* aDriver);
 
     extern KMS::File::Folder* GetOutDir(const char* aConfiguration, const char* aProcessor);
 

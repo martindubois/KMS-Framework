@@ -19,11 +19,14 @@
 
 using namespace KMS;
 
+#define FILE_EXT_CAT ".cat"
 #define FILE_EXT_DLL ".dll"
 #define FILE_EXT_EXE ".exe"
+#define FILE_EXT_INF ".inf"
 #define FILE_EXT_LIB ".lib"
 #define FILE_EXT_PDB ".pdb"
 #define FILE_EXT_SLN ".sln"
+#define FILE_EXT_SYS ".sys"
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
@@ -51,11 +54,23 @@ namespace Tool_VisualStudio
     // //////////////////////////////////////////////////////////////////////
 
     const char* BINARY_OUTPUT_EXTENSIONS         [2] = { FILE_EXT_EXE, FILE_EXT_PDB };
+    const char* DRIVER_OUTPUT_EXTENSIONS         [4] = { FILE_EXT_CAT, FILE_EXT_INF, FILE_EXT_PDB, FILE_EXT_SYS };
     const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[1] = { FILE_EXT_DLL };
     const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [2] = { FILE_EXT_LIB, FILE_EXT_PDB };
 
     // Functions
     // //////////////////////////////////////////////////////////////////////
+
+    KMS::File::Folder* GetDriverOutDir(const char* aConfiguration, const char* aProcessor, const char* aDriver)
+    {
+        auto lOutDir = GetOutDir(aConfiguration, aProcessor);
+
+        auto lResult = new File::Folder(*lOutDir, aDriver);
+
+        delete lOutDir;
+
+        return lResult;
+    }
 
     File::Folder* GetOutDir(const char* aConfiguration, const char* aProcessor)
     {

@@ -87,6 +87,16 @@ namespace Comp_Archive
         sprintf_s(aOut, aOutSize_byte, "Binaries/%s_%s", aConfiguration, aProcessor);
     }
 
+    void GetDriverFolder(char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor)
+    {
+        assert(nullptr != aOut);
+        assert(0 < aOutSize_byte);
+        assert(nullptr != aConfiguration);
+        assert(nullptr != aProcessor);
+
+        sprintf_s(aOut, aOutSize_byte, "Drivers/%s_%s", aConfiguration, aProcessor);
+    }
+
     void GetLibraryFolder(char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor)
     {
         assert(nullptr != aOut);
@@ -182,6 +192,7 @@ void T_Archive::Execute_PACKAGE()
     assert(nullptr != mComps);
 
     File::Folder lBinaries (*mTmp_Root, "Binaries" ); lBinaries .Create();
+    File::Folder lDrivers  (*mTmp_Root, "Drivers"  ); lDrivers  .Create();
     File::Folder lLibraries(*mTmp_Root, "Libraries"); lLibraries.Create();
 
     mComps->Package(mTmp_Root);

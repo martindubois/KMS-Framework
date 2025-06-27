@@ -14,7 +14,8 @@ Computer            ____________________________ ( )    KMS-F_L ( )    MD ( )
 File "Common/Version.h" - Edit the Version                                [ ]
 
 Version             ______ . ______ . ______ . ______                     ( )
-                    {Ma}     {Mi}     {Bu}            -dev                ( )
+                    {Ma}     {Mi}     {Bu}            -beta               ( )
+                                                      -dev                ( )
                                                       -test               ( )
                                                       - _________________ ( )
                                                         {Type}

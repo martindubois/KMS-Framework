@@ -11,9 +11,12 @@
 #include <KMS/DI/String.h>
 
 // ==== Local ===============================================================
+#include "Comp_Archive.h"
+#include "Comp_File_ToPackage.h"
 #include "Config.h"
 #include "Phase.h"
 #include "Tool_Executable.h"
+#include "Tool_VisualStudio_W.h"
 
 #include "Comp_Driver.h"
 
@@ -48,6 +51,32 @@ namespace Comp_Driver
 
     void CreateComponentsAndTools_OSDep(CompList* aComps, ToolList* aTools, const Config& aCfg, const char* aDriver, const KMS::DI::Array& aConfigurations, const KMS::DI::Array& aProcessors)
     {
+        for (const auto& lCE : aConfigurations.mInternal)
+        {
+            auto lC = dynamic_cast<const DI::String*>(lCE.Get());
+            assert(nullptr != lC);
+
+            for (const auto& lPE : aProcessors.mInternal)
+            {
+                auto lP = dynamic_cast<const DI::String*>(lPE.Get());
+                assert(nullptr != lP);
+
+                char lDst[PATH_LENGTH];
+
+                Comp_Archive::GetDriverFolder(lDst, sizeof(lDst), lC->Get(), lP->Get());
+    
+                for (unsigned int i = 0; i < sizeof(Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS) / sizeof(Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[0]); i++)
+                {
+                    char lFileName[PATH_LENGTH];
+    
+                    sprintf_s(lFileName, "%s%s", aDriver, Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i]);
+    
+                    auto lSrc = Tool_VisualStudio::GetDriverOutDir(lC->Get(), lP->Get(), aDriver);
+                    Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+                }
+            }
+        }
+    
         char lDDF[PATH_LENGTH];
 
         if (DDF_FileName(aDriver, lDDF, sizeof(lDDF)))
