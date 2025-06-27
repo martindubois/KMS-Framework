@@ -42,7 +42,8 @@ namespace Comp_Binary
 
             Comp_Archive::GetBinaryFolder(lDst, sizeof(lDst), aConfiguration, aProcessor);
 
-            for (unsigned int i = 0; i < sizeof(Tool_VisualStudio::BINARY_OUTPUT_EXTENSIONS) / sizeof(Tool_VisualStudio::BINARY_OUTPUT_EXTENSIONS[0]); i++)
+            unsigned int i = 0;
+            while (nullptr != Tool_VisualStudio::BINARY_OUTPUT_EXTENSIONS[i])
             {
                 char lFileName[PATH_LENGTH];
 
@@ -50,6 +51,8 @@ namespace Comp_Binary
 
                 auto lSrc = Tool_VisualStudio::GetOutDir(aConfiguration, aProcessor);
                 Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+
+                i++;
             }
         }
     }
@@ -67,7 +70,8 @@ void CreateComponents_Embedded(CompList* aComps, const Config& aCfg, const char*
 
     Comp_Archive::GetBinaryFolder(lDst, sizeof(lDst), aConfiguration, aProcessor);
 
-    for (unsigned int i = 0; i < sizeof(Tool_Make::EMBEDDED_BINARY_OUTPUT_EXTENSIONS) / sizeof(Tool_Make::EMBEDDED_BINARY_OUTPUT_EXTENSIONS[0]); i++)
+    unsigned int i = 0;
+    while (nullptr != Tool_Make::EMBEDDED_BINARY_OUTPUT_EXTENSIONS[i])
     {
         char lFileName[PATH_LENGTH];
 
@@ -75,5 +79,7 @@ void CreateComponents_Embedded(CompList* aComps, const Config& aCfg, const char*
 
         auto lSrc = Tool_VisualStudio::GetOutDir(aConfiguration, aProcessor);
         Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+
+        i++;
     }
 }

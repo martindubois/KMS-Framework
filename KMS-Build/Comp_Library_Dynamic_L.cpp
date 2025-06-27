@@ -29,7 +29,8 @@ namespace Comp_Library_Dynamic
 
         Comp_Archive::GetLibraryFolder(lDst, sizeof(lDst), aConfiguration, aProcessor);
 
-        for (unsigned int i = 0; i < sizeof(Tool_Make::LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS) / sizeof(Tool_Make::LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[0]); i++)
+        unsigned int i = 0;
+        while (nullptr != Tool_Make::LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[i])
         {
             char lFileName[PATH_LENGTH];
 
@@ -37,6 +38,8 @@ namespace Comp_Library_Dynamic
 
             auto lSrc = Tool_Make::GetOutDir(aConfiguration, aProcessor);
             Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+
+            i++;
         }
     }
 

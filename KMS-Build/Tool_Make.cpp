@@ -56,9 +56,9 @@ namespace Tool_Make
     // Constants
     // //////////////////////////////////////////////////////////////////////
 
-    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS[1] = { FILE_EXT_A };
+    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_A, nullptr };
 
-    const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[1] = { FILE_EXT_ELF };
+    const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[] = { FILE_EXT_ELF, nullptr };
 
     // Functions
     // //////////////////////////////////////////////////////////////////////

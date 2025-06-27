@@ -23,11 +23,11 @@ class ToolList;
 namespace Tool_Make
 {
 
-    extern const char* BINARY_OUTPUT_EXTENSIONS         [1];
-    extern const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[1];
-    extern const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [1];
+    extern const char* BINARY_OUTPUT_EXTENSIONS         [];
+    extern const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[];
+    extern const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [];
 
-    extern const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[1];
+    extern const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[];
 
     extern KMS::File::Folder* GetOutDir(const char* aConfiguration, const char* aProcessor);
 

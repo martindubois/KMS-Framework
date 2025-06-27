@@ -53,10 +53,10 @@ namespace Tool_VisualStudio
     // Constants
     // //////////////////////////////////////////////////////////////////////
 
-    const char* BINARY_OUTPUT_EXTENSIONS         [2] = { FILE_EXT_EXE, FILE_EXT_PDB };
-    const char* DRIVER_OUTPUT_EXTENSIONS         [4] = { FILE_EXT_CAT, FILE_EXT_INF, FILE_EXT_PDB, FILE_EXT_SYS };
-    const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[1] = { FILE_EXT_DLL };
-    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [2] = { FILE_EXT_LIB, FILE_EXT_PDB };
+    const char* BINARY_OUTPUT_EXTENSIONS         [] = { FILE_EXT_EXE, FILE_EXT_PDB, nullptr };
+    const char* DRIVER_OUTPUT_EXTENSIONS         [] = { FILE_EXT_CAT, FILE_EXT_INF, FILE_EXT_SYS, nullptr };
+    const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_DLL, nullptr };
+    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [] = { FILE_EXT_LIB, FILE_EXT_PDB, nullptr };
 
     // Functions
     // //////////////////////////////////////////////////////////////////////

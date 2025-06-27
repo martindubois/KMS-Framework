@@ -65,7 +65,8 @@ namespace Comp_Driver
 
                 Comp_Archive::GetDriverFolder(lDst, sizeof(lDst), lC->Get(), lP->Get());
     
-                for (unsigned int i = 0; i < sizeof(Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS) / sizeof(Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[0]); i++)
+                unsigned int i = 0;
+                while (nullptr != Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i])
                 {
                     char lFileName[PATH_LENGTH];
     
@@ -73,6 +74,8 @@ namespace Comp_Driver
     
                     auto lSrc = Tool_VisualStudio::GetDriverOutDir(lC->Get(), lP->Get(), aDriver);
                     Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+
+                    i++;
                 }
             }
         }
