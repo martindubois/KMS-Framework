@@ -13,13 +13,12 @@
 // ==== Local ===============================================================
 #include "Comp.h"
 #include "Config.h"
+#include "Error.h"
 #include "Phase.h"
 
 #include "Comp_File_ToPackage.h"
 
 using namespace KMS;
-
-KMS_RESULT_STATIC(RESULT_FILE_DOES_NOT_EXIST);
 
 class C_File_ToPackage final : public Comp
 {
@@ -106,7 +105,12 @@ void C_File_ToPackage::Verify(Phase aPhase)
 
     if (mVerify == aPhase)
     {
-        KMS_EXCEPTION_ASSERT(mSrc->DoesFileExist(mFileName.c_str()), RESULT_FILE_DOES_NOT_EXIST, "File does not exist", mFileName.c_str());
+        auto lFileName = mFileName.c_str();
+
+        if (!mSrc->DoesFileExist(lFileName))
+        {
+            Error_File_DoesNotExist(lFileName);
+        }
     }
 }
 
@@ -125,6 +129,11 @@ void C_File_ToPackage::Package(KMS::File::Folder* aTmpFolder)
     else
     {
         File::Folder lDst(*aTmpFolder, mDst.c_str());
+
+        if (!lDst.DoesExist())
+        {
+            lDst.Create();
+        }
 
         mSrc->Copy(lDst, lFileName);
     }
@@ -158,5 +167,5 @@ void CreateComponent(CompList* aComps, const Config& aCfg, const char* aPath)
         lSrc = new File::Folder(File::Folder::CURRENT, lPath);
     }
 
-    Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, "", lPath, Phase::VERIFY);
+    Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, "", lFileName, Phase::VERIFY);
 }

@@ -13,14 +13,13 @@
 // ===== Local ==============================================================
 #include "Comp.h"
 #include "Config.h"
+#include "Error.h"
 #include "Phase.h"
 #include "Tool.h"
 
 #include "Comp_Archive.h"
 
 using namespace KMS;
-
-KMS_RESULT_STATIC(RESULT_FILE_ALREADY_EXIST);
 
 class C_Archive final : public Comp
 {
@@ -172,12 +171,18 @@ void T_Archive::Execute(Phase aPhase)
 
 void C_Archive::Verify_VERIFY()
 {
-    KMS_EXCEPTION_ASSERT(!mProductFolder->DoesFileExist(mFileName), RESULT_FILE_ALREADY_EXIST, "The file to export already exist", mFileName);
+    if (mProductFolder->DoesFileExist(mFileName))
+    {
+        Error_File_AlreadyExist(mFileName);
+    }
 }
 
 void T_Archive::Execute_PACKAGE()
 {
     assert(nullptr != mComps);
+
+    File::Folder lBinaries (*mTmp_Root, "Binaries" ); lBinaries .Create();
+    File::Folder lLibraries(*mTmp_Root, "Libraries"); lLibraries.Create();
 
     mComps->Package(mTmp_Root);
 }

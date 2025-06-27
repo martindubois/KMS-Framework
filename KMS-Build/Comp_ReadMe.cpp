@@ -33,7 +33,18 @@ namespace Comp_ReadMe
             char lFileName[PATH_LENGTH];
             char lFolder  [PATH_LENGTH];
 
-            sprintf_s(lFileName, "%s.%s.ReadMe" FILE_EXT_TXT, aCfg.GetProduct(), aComponent);
+            auto lProduct = aCfg.GetProduct();
+
+            // TODO  Use a parameter for the ReadMe prefix
+            if (0 == strcmp("KMS-Framework", lProduct))
+            {
+                sprintf_s(lFileName, "KMS.%s.ReadMe" FILE_EXT_TXT, aComponent);
+            }
+            else
+            {
+                sprintf_s(lFileName, "%s.%s.ReadMe" FILE_EXT_TXT, lProduct, aComponent);
+            }
+
             sprintf_s(lFolder  , "%s/_DocUser", aComponent);
 
             auto lSrc = new File::Folder(File::Folder::CURRENT, lFolder);

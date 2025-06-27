@@ -12,13 +12,12 @@
 
 // ==== Local ===============================================================
 #include "Comp.h"
+#include "Error.h"
 #include "Phase.h"
 
 #include "Comp_Folder_ToPackage.h"
 
 using namespace KMS;
-
-KMS_RESULT_STATIC(RESULT_FOLDER_DOES_NOT_EXIST);
 
 class C_Folder_ToPackage final : public Comp
 {
@@ -119,5 +118,8 @@ void C_Folder_ToPackage::Package(KMS::File::Folder* aTmpFolder)
 
 void C_Folder_ToPackage::Verify_VERIFY()
 {
-    KMS_EXCEPTION_ASSERT(mSrc->DoesExist(), RESULT_FOLDER_DOES_NOT_EXIST, "The folder does not exist", mSrc->GetPath());
+    if (!mSrc->DoesExist())
+    {
+        Error_Folder_DoesNotExist(mSrc->GetPath());
+    }
 }

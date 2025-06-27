@@ -10,13 +10,12 @@
 // ==== Local ===============================================================
 #include "Comp.h"
 #include "Config.h"
+#include "Error.h"
 #include "Phase.h"
 
 #include "Comp_File_ToExport.h"
 
 using namespace KMS;
-
-KMS_RESULT_STATIC(RESULT_FILE_ALREADY_EXIST);
 
 class C_File_ToExport final : public Comp
 {
@@ -101,5 +100,10 @@ void C_File_ToExport::Export()
 
 void C_File_ToExport::Verify_VERIFY()
 {
-    KMS_EXCEPTION_ASSERT(!mProductFolder->DoesFileExist(mFileName.c_str()), RESULT_FILE_ALREADY_EXIST, "The file to export already exist", mFileName.c_str());
+    auto lFileName = mFileName.c_str();
+
+    if (mProductFolder->DoesFileExist(lFileName))
+    {
+        Error_File_AlreadyExist(lFileName);
+    }
 }

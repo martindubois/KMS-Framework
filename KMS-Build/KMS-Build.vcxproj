@@ -226,6 +226,7 @@
     <ClCompile Include="Comp_ReadMe.cpp" />
     <ClCompile Include="Comp_Test.cpp" />
     <ClCompile Include="Comp_Test_W.cpp" />
+    <ClCompile Include="Error.cpp" />
     <ClCompile Include="KMS-Build.cpp" />
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="Tool.cpp" />

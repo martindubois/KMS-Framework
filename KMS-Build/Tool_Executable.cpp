@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ==== Local ===============================================================
+#include "Error.h"
 #include "Phase.h"
 
 #include "Tool_Executable.h"
@@ -15,8 +16,6 @@
 using namespace KMS;
 
 KMS_RESULT_STATIC(RESULT_EXECUTABLE_FAILED);
-KMS_RESULT_STATIC(RESULT_FILE_DOES_NOT_EXIST);
-KMS_RESULT_STATIC(RESULT_FOLDER_DOES_NOT_EXIST);
 
 #define FILE_EXT_EXE ".exe"
 
@@ -78,8 +77,15 @@ namespace Tool_Executable
             auto lExe = mExecutable.c_str();
             auto lExeExt = AddExtension(lExe);
 
-            KMS_EXCEPTION_ASSERT(mFolder->DoesExist(), RESULT_FOLDER_DOES_NOT_EXIST, "The executable folder does not exist", mFolder->GetPath());
-            KMS_EXCEPTION_ASSERT(mFolder->DoesFileExist(lExeExt), RESULT_FILE_DOES_NOT_EXIST, "The executable file does not exist", lExe);
+            if (!mFolder->DoesExist())
+            {
+                Error_Folder_DoesNotExist(mFolder->GetPath());
+            }
+
+            if (!mFolder->DoesFileExist(lExeExt))
+            {
+                Error_File_DoesNotExist(lExeExt);
+            }
         }
 
         if (mExecute == aPhase)
