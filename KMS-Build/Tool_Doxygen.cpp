@@ -16,7 +16,9 @@ using namespace KMS;
 
 #define FILE_EXT_TXT ".txt"
 
-#define FOLDER "doxygen\\bin"
+#ifdef _KMS_WINDOWS_
+    #define FOLDER "doxygen\\bin"
+#endif
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
@@ -46,19 +48,6 @@ namespace Tool_Doxygen
         for (unsigned int i = 0; i < LANGUAGE_QTY; i++)
         {
             CreateTool(aTools, aCfg, LANGUAGES[i]);
-
-            char lFileName[PATH_LENGTH];
-
-            sprintf_s(lFileName, "DoxyFile_%s" FILE_EXT_TXT, LANGUAGES[i]);
-    
-            if (File::Folder::CURRENT.DoesFileExist(lFileName))
-            {
-                auto lFolder = new File::Folder(File::Folder::PROGRAM_FILES, FOLDER);
-            
-                auto lTool = Tool_Executable::CreateTool(aTools, aCfg, lFolder, EXECUTABLE, ALLOWED_TIME_ms, Phase::VERIFY, Phase::GENERATE_DOC);
-
-                lTool->AddArgument(lFileName);
-            }   
         }
     }
 
@@ -77,8 +66,14 @@ void CreateTool(ToolList* aTools, const Config& aCfg, const char* aLanguage)
 
     if (File::Folder::CURRENT.DoesFileExist(lFileName))
     {
-        auto lFolder = new File::Folder(File::Folder::PROGRAM_FILES, FOLDER);
-    
+        #ifdef _KMS_LINUX_
+            auto lFolder = new File::Folder(File::Folder::NONE);
+        #endif
+
+        #ifdef _KMS_WINDWS_
+            auto lFolder = new File::Folder(File::Folder::PROGRAM_FILES, FOLDER);
+        #endif
+
         auto lTool = Tool_Executable::CreateTool(aTools, aCfg, lFolder, EXECUTABLE, ALLOWED_TIME_ms, Phase::VERIFY, Phase::GENERATE_DOC);
 
         lTool->AddArgument(lFileName);

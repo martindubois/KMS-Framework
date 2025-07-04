@@ -49,6 +49,9 @@ static bool SH_FileName (const char* aProcessor, char* aOut, unsigned int aOutSi
 
 const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
 
+// Private
+// //////////////////////////////////////////////////////////////////////////
+
 void Build::Construct_OSDep()
 {
     mPackages.SetCreator(DI::String_Expand::Create);
@@ -60,10 +63,12 @@ void Build::Construct_OSDep()
     mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
 }
 
-// Private
-// //////////////////////////////////////////////////////////////////////////
+void Build::CreateLists_OSDep()
+{
+    // TODO
+}
 
-void Build::CreateInstaller(const char* aP)
+/* TODO void Build::CreateInstaller(const char* aP)
 {
     char lFileName[PATH_LENGTH];
 
@@ -186,4 +191,4 @@ bool SH_FileName(const char* aProcessor, char* aOut, unsigned int aOutSize_byte)
     sprintf(aOut, "Product_%s" FILE_EXT_SH, aProcessor);
 
     return File::Folder::CURRENT.DoesFileExist(aOut);
-}
+} */

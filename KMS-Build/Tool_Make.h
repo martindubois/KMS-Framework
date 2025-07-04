@@ -29,7 +29,8 @@ namespace Tool_Make
 
     extern const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[];
 
-    extern KMS::File::Folder* GetOutDir(const char* aConfiguration, const char* aProcessor);
+    extern KMS::File::Folder* GetBinaryOutDir (const char* aConfiguration, const char* aProcessor);
+    extern KMS::File::Folder* GetLibraryOutDir(const char* aConfiguration, const char* aProcessor);
 
     extern void CreateTools(ToolList* aTools, const Config& aCfg, const KMS::DI::Array& aConfiguration, const KMS::DI::Array& aProcessors);
 

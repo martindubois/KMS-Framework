@@ -34,7 +34,7 @@ namespace Comp_Library_Static
 
             sprintf_s(lFileName, "%s%s", aLibrary, Tool_Make::LIBRARY_STATIC_OUTPUT_EXTENSIONS[i]);
 
-            auto lSrc = Tool_Make::GetOutDir(aConfiguration, aProcessor);
+            auto lSrc = Tool_Make::GetLibraryOutDir(aConfiguration, aProcessor);
             Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
 
             i++;

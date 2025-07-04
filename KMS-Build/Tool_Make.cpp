@@ -24,6 +24,7 @@ KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
 #define FILE_EXT_A   ".a"
 #define FILE_EXT_CFG ".cfg"
 #define FILE_EXT_ELF ".elf"
+#define FILE_EXT_SO  ".so"
 
 class T_Make final : public Tool
 {
@@ -56,12 +57,26 @@ namespace Tool_Make
     // Constants
     // //////////////////////////////////////////////////////////////////////
 
-    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_A, nullptr };
+    const char* BINARY_OUTPUT_EXTENSIONS         [] = { "", nullptr };
+    const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [] = { FILE_EXT_A, nullptr };
+    const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_A, FILE_EXT_SO, nullptr };
 
     const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[] = { FILE_EXT_ELF, nullptr };
 
     // Functions
     // //////////////////////////////////////////////////////////////////////
+
+    File::Folder* GetBinaryOutDir(const char* aConfiguration, const char* aProcessor)
+    {
+        // TODO
+        return nullptr;
+    }
+
+    File::Folder* GetLibraryOutDir(const char* aConfiguration, const char* aProcessor)
+    {
+        // TODO
+        return nullptr;
+    }
 
     void CreateTools(ToolList* aTools, const Config& aCfg, const DI::Array& aConfigurations, const DI::Array& aProcessors)
     {

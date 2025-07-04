@@ -84,7 +84,7 @@ namespace Comp_Archive
         assert(nullptr != aConfiguration);
         assert(nullptr != aProcessor);
 
-        sprintf_s(aOut, aOutSize_byte, "Binaries/%s_%s", aConfiguration, aProcessor);
+        sprintf_s(aOut SizeInfo(aOutSize_byte), "Binaries/%s_%s", aConfiguration, aProcessor);
     }
 
     void GetDriverFolder(char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor)
@@ -94,7 +94,7 @@ namespace Comp_Archive
         assert(nullptr != aConfiguration);
         assert(nullptr != aProcessor);
 
-        sprintf_s(aOut, aOutSize_byte, "Drivers/%s_%s", aConfiguration, aProcessor);
+        sprintf_s(aOut SizeInfo(aOutSize_byte), "Drivers/%s_%s", aConfiguration, aProcessor);
     }
 
     void GetLibraryFolder(char* aOut, unsigned int aOutSize_byte, const char* aConfiguration, const char* aProcessor)
@@ -104,7 +104,7 @@ namespace Comp_Archive
         assert(nullptr != aConfiguration);
         assert(nullptr != aProcessor);
 
-        sprintf_s(aOut, aOutSize_byte, "Libraries/%s_%s", aConfiguration, aProcessor);
+        sprintf_s(aOut SizeInfo(aOutSize_byte), "Libraries/%s_%s", aConfiguration, aProcessor);
     }
 
     void CreateComponentAndTool(CompList* aComps, ToolList* aTools, const Config& aCfg)

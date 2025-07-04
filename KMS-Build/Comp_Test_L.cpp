@@ -30,7 +30,7 @@ namespace Comp_Test
     {
         if (!aCfg.GetDoNotTest())
         {
-            auto lFolder = Tool_Make::GetOutDir(aConfiguration, aProcessor);
+            auto lFolder = Tool_Make::GetBinaryOutDir(aConfiguration, aProcessor);
 
             auto lTool = Tool_Executable::CreateTool(aTools, aCfg, lFolder, aTest, ALLOWED_TIME_ms, Phase::TEST, Phase::TEST);
 

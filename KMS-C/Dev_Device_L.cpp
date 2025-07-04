@@ -28,7 +28,7 @@ namespace KMS
 
         // ===== IDevice ====================================================
 
-        bool Device::Connect(unsigned int aFlags)
+        bool Device::Connect()
         {
             if (IsConnected())
             {
@@ -39,14 +39,14 @@ namespace KMS
 
             int lFlags = 0;
 
-            switch (aFlags & (FLAG_ACCESS_READ | FLAG_ACCESS_WRITE))
+            switch (mConnectFlags & (FLAG_ACCESS_READ | FLAG_ACCESS_WRITE))
             {
             case FLAG_ACCESS_READ : lFlags |= O_RDONLY; break;
             case FLAG_ACCESS_WRITE: lFlags |= O_WRONLY; break;
 
             case FLAG_ACCESS_READ | FLAG_ACCESS_WRITE: lFlags |= O_RDWR; break;
 
-            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid flags", aFlags);
+            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid flags", mConnectFlags);
             }
 
             mHandle = open(mLink, lFlags);

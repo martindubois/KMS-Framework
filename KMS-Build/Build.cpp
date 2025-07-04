@@ -273,7 +273,13 @@ bool ::Build::IsEmbedded() const { return 0 < mEmbedded.GetLength(); }
 
 void ::Build::CreateLists()
 {
-    Config lCfg(mCertificatSHA1, mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion, mVisualStudioVersion);
+    #ifdef _KMS_LINUX_
+        Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+    #endif
+
+    #ifdef _KMS_WINDOWS_
+        Config lCfg(mCertificatSHA1, mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion, mVisualStudioVersion);
+    #endif
     
     Comp_Archive         ::CreateComponentAndTool(&mComps, &mTools, lCfg);
     Comp_Binary          ::CreateComponents(&mComps, lCfg, mBinaries, mConfigurations, mProcessors);

@@ -18,11 +18,17 @@ class Config
 
 public:
 
-    Config(const char* aCertificatSHA1, bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-        bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
-        const char* aProduct, const KMS::Version& aVersion, uint32_t aVisualStudioVersion);
+    #ifdef _KMS_LINUX_
+        Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
+            bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
+            const char* aProduct, const KMS::Version& aVersion);
+    #endif
 
-    const char* GetCertificatSHA1() const;
+    #ifdef _KMS_WINDOWS_
+        Config(const char* aCertificatSHA1, bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
+            bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
+            const char* aProduct, const KMS::Version& aVersion, uint32_t aVisualStudioVersion);
+    #endif
 
     bool GetDoNotClean  () const;
     bool GetDoNotCompile() const;
@@ -38,15 +44,17 @@ public:
 
     const KMS::Version& GetVersion() const;
 
-    uint32_t GetVisualStudioVersion() const;
-
     bool IsEmbedded() const;
 
     bool IsOSIndependent() const;
 
+    #ifdef _KMS_WINDOWS_
+        const char* GetCertificatSHA1     () const;
+        uint32_t    GetVisualStudioVersion() const;
+    #endif
+
 private:
 
-    std::string       mCertificatSHA1;
     bool              mDoNotClean;
     bool              mDoNotCompile;
     bool              mDoNotExport;
@@ -57,6 +65,10 @@ private:
     bool              mOSIndependent;
     std::string       mProduct;
     KMS::Version      mVersion;
-    uint32_t          mVisualStudioVersion;
+
+    #ifdef _KMS_WINDOWS_
+        std::string mCertificatSHA1;
+        uint32_t    mVisualStudioVersion;
+    #endif
 
 };

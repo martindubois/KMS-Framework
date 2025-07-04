@@ -36,7 +36,7 @@ namespace Comp_Binary
 
             sprintf_s(lFileName, "%s%s", aBinary, Tool_Make::BINARY_OUTPUT_EXTENSIONS[i]);
 
-            auto lSrc = Tool_Make::GetOutDir(aConfiguration, aProcessor);
+            auto lSrc = Tool_Make::GetBinaryOutDir(aConfiguration, aProcessor);
             Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
 
             i++;

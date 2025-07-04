@@ -82,6 +82,8 @@ namespace KMS
 
             void* Internal_GetByName_Try(const char* aName);
 
+            const void* Internal_GetSelected() const;
+
             void* Internal_GetSelected();
 
             void Internal_Delete(void* aInstance);
@@ -197,7 +199,7 @@ namespace KMS
         }
 
         template <typename T>
-        const T* InstanceList<T>::GetSelected() const { return reinterpret_cast<T*>(Internal_GetSelected()); }
+        const T* InstanceList<T>::GetSelected() const { return reinterpret_cast<const T*>(Internal_GetSelected()); }
 
         template <typename T>
         T* InstanceList<T>::GetSelected() { return reinterpret_cast<T*>(Internal_GetSelected()); }
