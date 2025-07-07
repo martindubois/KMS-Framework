@@ -22,9 +22,7 @@
 #include "Comp.h"
 #include "Tool.h"
 
-using namespace KMS;
-
-class Build final : public DI::Dictionary
+class Build final : public KMS::DI::Dictionary
 {
 
 public:
@@ -40,38 +38,38 @@ public:
     static const char* PRODUCT_DEFAULT;
     static const char* VERSION_FILE_DEFAULT;
 
-    DI::Array   mBinaries;
-    DI::Array   mConfigurations;
-    DI::Array   mDynamicLibraries;
-    DI::Boolean mDoNotClean;
-    DI::Boolean mDoNotCompile;
-    DI::Boolean mDoNotExport;
-    DI::Boolean mDoNotPackage;
-    DI::Boolean mDoNotTest;
-    DI::Array   mDrivers;
-    DI::Array   mEditOperations;
-    DI::String  mEmbedded;
-    DI::Folder  mExportFolder;
-    DI::Array   mFiles;
-    DI::Array   mFolders;
-    DI::Array   mLibraries;
-    DI::Boolean mOSIndependent;
-    DI::Array   mPreBuildCmds;
-    DI::Array   mProcessors;
-    DI::String  mProduct;
-    DI::String  mVersionFile;
-    DI::Array   mTests;
+    KMS::DI::Array   mBinaries;
+    KMS::DI::Array   mConfigurations;
+    KMS::DI::Array   mDynamicLibraries;
+    KMS::DI::Boolean mDoNotClean;
+    KMS::DI::Boolean mDoNotCompile;
+    KMS::DI::Boolean mDoNotExport;
+    KMS::DI::Boolean mDoNotPackage;
+    KMS::DI::Boolean mDoNotTest;
+    KMS::DI::Array   mDrivers;
+    KMS::DI::Array   mEditOperations;
+    KMS::DI::String  mEmbedded;
+    KMS::DI::Folder  mExportFolder;
+    KMS::DI::Array   mFiles;
+    KMS::DI::Array   mFolders;
+    KMS::DI::Array   mLibraries;
+    KMS::DI::Boolean mOSIndependent;
+    KMS::DI::Array   mPreBuildCmds;
+    KMS::DI::Array   mProcessors;
+    KMS::DI::String  mProduct;
+    KMS::DI::String  mVersionFile;
+    KMS::DI::Array   mTests;
 
     #ifdef _KMS_LINUX_
-        DI::Array mPackages;
+        KMS::DI::Array mPackages;
     #endif
 
     #ifdef _KMS_WINDOWS_
         static const char   * CERTIFICAT_SHA1_DEFAULT;
         static const uint32_t VISUAL_STUDIO_VERSION_DEFAULT;
 
-        DI::String_Expand  mCertificatSHA1;
-        DI::UInt<uint32_t> mVisualStudioVersion;
+        KMS::DI::String_Expand  mCertificatSHA1;
+        KMS::DI::UInt<uint32_t> mVisualStudioVersion;
     #endif
 
 public:
@@ -98,6 +96,6 @@ private:
 
     CompList mComps;
     ToolList mTools;
-    Version  mVersion;
+    KMS::Version mVersion;
 
 };
