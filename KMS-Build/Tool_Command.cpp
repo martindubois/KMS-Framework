@@ -74,9 +74,12 @@ T_Command::T_Command(const char* aCommand, Phase aPhase)
 
 void T_Command::Execute(Phase aPhase)
 {
-    auto lRet = system(mCommand.c_str());
+    if (mPhase == aPhase)
+    {
+        auto lRet = system(mCommand.c_str());
 
-    KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMMAND_FAILED, "The command failed", mCommand.c_str());
+        KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMMAND_FAILED, "The command failed", mCommand.c_str());
+    }
 }
 
 // Static functions
