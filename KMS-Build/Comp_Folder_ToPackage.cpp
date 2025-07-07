@@ -34,7 +34,7 @@ public:
 
 private:
 
-    void Verify_VERIFY();
+    void Verify_COMPILE();
 
     std::string   mDst;
     File::Folder* mSrc;
@@ -100,7 +100,7 @@ void C_Folder_ToPackage::Verify(Phase aPhase)
 {
     switch (aPhase)
     {
-    case Phase::VERIFY: Verify_VERIFY(); break;
+    case Phase::COMPILE: Verify_COMPILE(); break;
     }
 }
 
@@ -116,7 +116,7 @@ void C_Folder_ToPackage::Package(KMS::File::Folder* aTmpFolder)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
-void C_Folder_ToPackage::Verify_VERIFY()
+void C_Folder_ToPackage::Verify_COMPILE()
 {
     if (!mSrc->DoesExist())
     {
