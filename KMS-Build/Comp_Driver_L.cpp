@@ -17,6 +17,7 @@ namespace Comp_Driver
 
     void CreateComponentsAndTools_OSDep(CompList* aComps, ToolList* aTools, const Config& aCfg, const char* aDriver, const KMS::DI::Array& aConfigurations, const KMS::DI::Array& aProcessors)
     {
+        assert(false);
         // TODO
     }
 

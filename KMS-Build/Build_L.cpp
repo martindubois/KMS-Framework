@@ -12,6 +12,9 @@
 #include <KMS/Proc/Process.h>
 
 // ===== Local ==============================================================
+#include "Config.h"
+#include "Tool_Make.h"
+
 #include "Build.h"
 
 using namespace KMS;
@@ -47,12 +50,12 @@ static bool SH_FileName (const char* aProcessor, char* aOut, unsigned int aOutSi
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-const char* Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
+const char* ::Build::EXPORT_FOLDER_DEFAULT = "{$HOME}/Export";
 
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
-void Build::Construct_OSDep()
+void ::Build::Construct_OSDep()
 {
     mPackages.SetCreator(DI::String_Expand::Create);
 
@@ -63,9 +66,11 @@ void Build::Construct_OSDep()
     mExportFolder = File::Folder(File::Folder::Id::HOME, "Export");
 }
 
-void Build::CreateLists_OSDep()
+void ::Build::CreateLists_OSDep()
 {
-    // TODO
+    Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+
+    Tool_Make::CreateTools(&mTools, lCfg, mConfigurations, mProcessors);
 }
 
 /* TODO void Build::CreateInstaller(const char* aP)

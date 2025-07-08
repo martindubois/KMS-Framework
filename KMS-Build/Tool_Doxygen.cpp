@@ -42,7 +42,6 @@ namespace Tool_Doxygen
     // Functions
     // //////////////////////////////////////////////////////////////////////////
 
-    // TODO  Add some #ifdef
     void CreateTools(ToolList* aTools, const Config& aCfg)
     {
         for (unsigned int i = 0; i < LANGUAGE_QTY; i++)

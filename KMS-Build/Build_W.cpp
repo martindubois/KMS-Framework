@@ -54,7 +54,7 @@ void Build::CreateLists_OSDep()
 
     Comp_Installer::CreateComponentsAndTools(&mComps, &mTools, lCfg, mProcessors);
 
-    if ((!IsEmbedded()) && (!mDoNotCompile))
+    if (!IsEmbedded())
     {
         Tool_VisualStudio::CreateTools(&mTools, lCfg, mConfigurations, mProcessors);
     }

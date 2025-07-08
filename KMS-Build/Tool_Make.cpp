@@ -68,14 +68,20 @@ namespace Tool_Make
 
     File::Folder* GetBinaryOutDir(const char* aConfiguration, const char* aProcessor)
     {
-        // TODO
-        return nullptr;
+        char lPath[PATH_LENGTH];
+
+        sprintf_s(lPath, "Binaries/%s_%s", aConfiguration, aProcessor);
+
+        return new File::Folder(File::Folder::CURRENT, lPath);
     }
 
     File::Folder* GetLibraryOutDir(const char* aConfiguration, const char* aProcessor)
     {
-        // TODO
-        return nullptr;
+        char lPath[PATH_LENGTH];
+
+        sprintf_s(lPath, "Libraries/%s_%s", aConfiguration, aProcessor);
+
+        return new File::Folder(File::Folder::CURRENT, lPath);
     }
 
     void CreateTools(ToolList* aTools, const Config& aCfg, const DI::Array& aConfigurations, const DI::Array& aProcessors)

@@ -28,7 +28,7 @@ const Layout = () =>
             </div>
 
             <Footer Author  = "KMS"
-Version = "0.0.14_front-end"
+Version = "1.3.2-dev"
                     Year    = "2022" />
         </> )
 };
