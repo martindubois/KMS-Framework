@@ -22,4 +22,6 @@ namespace Tool_Command
 
     extern void CreateTools(ToolList* aTools, const KMS::DI::Array& aCommands, Phase aPhase);
 
+    extern void CreateTool(ToolList* aTools, const char* aCommand, Phase aPhase);
+
 };

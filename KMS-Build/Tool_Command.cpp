@@ -40,8 +40,6 @@ private:
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static void CreateTool(ToolList* aTools, const char* aCommand, Phase aPhase);
-
 namespace Tool_Command
 {
 
@@ -57,6 +55,15 @@ namespace Tool_Command
 
             CreateTool(aTools, lC->Get(), aPhase);
         }
+    }
+
+    void CreateTool(ToolList* aTools, const char* aCommand, Phase aPhase)
+    {
+        assert(nullptr != aTools);
+
+        auto lComp = new T_Command(aCommand, aPhase);
+
+        aTools->Add(lComp);
     }
 
 }
@@ -80,16 +87,4 @@ void T_Command::Execute(Phase aPhase)
 
         KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMMAND_FAILED, "The command failed", mCommand.c_str());
     }
-}
-
-// Static functions
-// //////////////////////////////////////////////////////////////////////////
-
-void CreateTool(ToolList* aTools, const char* aCommand, Phase aPhase)
-{
-    assert(nullptr != aTools);
-
-    auto lComp = new T_Command(aCommand, aPhase);
-
-    aTools->Add(lComp);
 }

@@ -63,7 +63,7 @@ namespace KMS
         {
             struct stat lStat;
 
-            return (0 == stat(mPath.c_str(), &lStat)) && S_ISDIR(lStat.st_mode);
+            return (mPath.empty()) || (0 == stat(mPath.c_str(), &lStat)) && S_ISDIR(lStat.st_mode);
         }
 
         bool Folder::DoesFileExist(const char* aFile) const
@@ -115,14 +115,14 @@ namespace KMS
 
             Proc::Process lP(Folder(Id::NONE), "unzip");
 
-            lP.AddArgument(lSrc);
-            lP.AddArgument("-d");
-            lP.AddArgument(mPath.c_str());
-
             if (0 != (aFlags & FLAG_OVERWRITE))
             {
                 lP.AddArgument("-o");
             }
+
+            lP.AddArgument(lSrc);
+            lP.AddArgument("-d");
+            lP.AddArgument(mPath.c_str());
 
             lP.Run(UNZIP_ALLOWED_TIME_ms);
 

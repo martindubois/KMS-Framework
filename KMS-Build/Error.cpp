@@ -35,7 +35,7 @@ void Error_File_DoesNotExist(const char* aName)
 
     char lMsg[LINE_LENGTH];
 
-    sprintf_s(lMsg, "%s does not exist", aName);
+    sprintf_s(lMsg, "%s does not exist (file)", aName);
 
     KMS_EXCEPTION(RESULT_FILE_DOES_NOT_EXIST, lMsg, "");
 }
@@ -46,7 +46,7 @@ void Error_Folder_DoesNotExist(const char* aName)
 
     char lMsg[LINE_LENGTH];
 
-    sprintf_s(lMsg, "%s does not exist", aName);
+    sprintf_s(lMsg, "%s does not exist (folder)", aName);
 
     KMS_EXCEPTION(RESULT_FOLDER_DOES_NOT_EXIST, lMsg, "");
 

@@ -70,6 +70,8 @@ namespace Tool_Executable
 
     void Tool::Execute(Phase aPhase)
     {
+        std::cout << __FUNCTION__ << "( " << static_cast<unsigned int>(aPhase) << " ) - " << mExecutable.c_str() << std::endl;
+
         assert(0 < mTimeout_ms);
 
         if (mVerify == aPhase)
@@ -77,14 +79,17 @@ namespace Tool_Executable
             auto lExe = mExecutable.c_str();
             auto lExeExt = AddExtension(lExe);
 
-            if (!mFolder->DoesExist())
+            if (0 != strcmp("", mFolder->GetPath()))
             {
-                Error_Folder_DoesNotExist(mFolder->GetPath());
-            }
+                if (!mFolder->DoesExist())
+                {
+                    Error_Folder_DoesNotExist(mFolder->GetPath());
+                }
 
-            if (!mFolder->DoesFileExist(lExeExt))
-            {
-                Error_File_DoesNotExist(lExeExt);
+                if (!mFolder->DoesFileExist(lExeExt))
+                {
+                    Error_File_DoesNotExist(lExeExt);
+                }
             }
         }
 

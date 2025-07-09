@@ -15,19 +15,11 @@ using namespace KMS;
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-Config::Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-    bool aEmbedded, const File::Folder aExportFolder, bool aOSIndependent, const char* aProduct, const Version& aVersion)
-    : mDoNotClean  (aDoNotClean)
-    , mDoNotCompile(aDoNotCompile)
-    , mDoNotExport (aDoNotExport)
-    , mDoNotPackage(aDoNotPackage)
-    , mDoNotTest   (aDoNotTest)
-    , mEmbedded(aEmbedded)
-    , mExportFolder(aExportFolder)
-    , mOSIndependent(aOSIndependent)
-    , mProduct(aProduct)
-    , mVersion(aVersion)
+void Config::Init_OSDep(const KMS::DI::Array* aPackages)
 {
-    assert(nullptr != aProduct);
+    assert(nullptr != aPackages);
+
+    mPackages = aPackages;
 }
 
+const DI::Array* Config::GetPackages() const { return mPackages; }

@@ -15,6 +15,22 @@ using namespace KMS;
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
+Config::Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
+    bool aEmbedded, const File::Folder aExportFolder, bool aOSIndependent, const char* aProduct, const Version& aVersion)
+    : mDoNotClean  (aDoNotClean)
+    , mDoNotCompile(aDoNotCompile)
+    , mDoNotExport (aDoNotExport)
+    , mDoNotPackage(aDoNotPackage)
+    , mDoNotTest   (aDoNotTest)
+    , mEmbedded(aEmbedded)
+    , mExportFolder(aExportFolder)
+    , mOSIndependent(aOSIndependent)
+    , mProduct(aProduct)
+    , mVersion(aVersion)
+{
+    assert(nullptr != aProduct);
+}
+
 bool Config::GetDoNotClean  () const { return mDoNotClean  ; }
 bool Config::GetDoNotCompile() const { return mDoNotCompile; }
 bool Config::GetDoNotExport () const { return mDoNotExport ; }

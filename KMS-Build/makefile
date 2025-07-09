@@ -21,6 +21,8 @@ SOURCES = Build_L.cpp                \
 		  Comp_File_ToExport.cpp     \
 		  Comp_File_ToPackage.cpp    \
 		  Comp_Folder_ToPackage.cpp  \
+		  Comp_Installer_L.cpp       \
+		  Comp_Installer.cpp         \
 		  Comp_Library_Dynamic_L.cpp \
 		  Comp_Library_Dynamic.cpp   \
 		  Comp_Library_Static_L.cpp  \

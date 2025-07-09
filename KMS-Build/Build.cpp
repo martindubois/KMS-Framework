@@ -20,6 +20,7 @@
 #include "Comp_Driver.h"
 #include "Comp_File_ToPackage.h"
 #include "Comp_Folder_ToPackage.h"
+#include "Comp_Installer.h"
 #include "Comp_Library_Dynamic.h"
 #include "Comp_Library_Static.h"
 #include "Comp_Test.h"
@@ -273,12 +274,14 @@ bool ::Build::IsEmbedded() const { return 0 < mEmbedded.GetLength(); }
 
 void ::Build::CreateLists()
 {
+    Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+
     #ifdef _KMS_LINUX_
-        Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+        lCfg.Init_OSDep(&mPackages);
     #endif
 
     #ifdef _KMS_WINDOWS_
-        Config lCfg(mCertificatSHA1, mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion, mVisualStudioVersion);
+        lCfg.Init_OSDep(mCertificatSHA1, mVisualStudioVersion);
     #endif
     
     Comp_Archive         ::CreateComponentAndTool(&mComps, &mTools, lCfg);
@@ -286,8 +289,9 @@ void ::Build::CreateLists()
     Comp_Driver          ::CreateComponentsAndTools(&mComps, &mTools, lCfg, mDrivers, mConfigurations, mProcessors);
     Comp_File_ToPackage  ::CreateComponents(&mComps, lCfg, mFiles);
     Comp_Folder_ToPackage::CreateComponents(&mComps, lCfg, mFolders);
+    Comp_Installer       ::CreateComponentsAndTools(&mComps, &mTools, lCfg, mProcessors);
     Comp_Library_Dynamic ::CreateComponents(&mComps, lCfg, mDynamicLibraries, mConfigurations, mProcessors);
-    Comp_Library_Static  ::CreateComponents(&mComps, lCfg, mLibraries, mConfigurations, mProcessors);
+    Comp_Library_Static  ::CreateComponents(&mComps, lCfg, mLibraries, mConfigurations, mProcessors, false);
     Comp_Test            ::CreateTools(&mTools, lCfg, mTests, mConfigurations, mProcessors);
 
     Tool_Command::CreateTools(&mTools, mPreBuildCmds, Phase::PRE_BUILD);

@@ -11,6 +11,7 @@
 #include <string>
 
 // ===== Includes ===========================================================
+#include <KMS/DI/Array.h>
 #include <KMS/Version.h>
 
 class Config
@@ -18,17 +19,9 @@ class Config
 
 public:
 
-    #ifdef _KMS_LINUX_
-        Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-            bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
-            const char* aProduct, const KMS::Version& aVersion);
-    #endif
-
-    #ifdef _KMS_WINDOWS_
-        Config(const char* aCertificatSHA1, bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-            bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
-            const char* aProduct, const KMS::Version& aVersion, uint32_t aVisualStudioVersion);
-    #endif
+    Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
+        bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
+        const char* aProduct, const KMS::Version& aVersion);
 
     bool GetDoNotClean  () const;
     bool GetDoNotCompile() const;
@@ -48,9 +41,21 @@ public:
 
     bool IsOSIndependent() const;
 
+    #ifdef _KMS_LINUX_
+
+        void Init_OSDep(const KMS::DI::Array* aPackages);
+
+        const KMS::DI::Array* GetPackages() const;
+
+    #endif
+
     #ifdef _KMS_WINDOWS_
+
+        void Init_OSDep(const char* aCertificatSHA1, , uint32_t aVisualStudioVersion);
+
         const char* GetCertificatSHA1     () const;
         uint32_t    GetVisualStudioVersion() const;
+
     #endif
 
 private:
@@ -65,6 +70,10 @@ private:
     bool              mOSIndependent;
     std::string       mProduct;
     KMS::Version      mVersion;
+
+    #ifdef _KMS_LINUX_
+        const KMS::DI::Array* mPackages;
+    #endif
 
     #ifdef _KMS_WINDOWS_
         std::string mCertificatSHA1;

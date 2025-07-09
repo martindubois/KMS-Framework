@@ -20,8 +20,8 @@ class Config;
 namespace Comp_Library_Static
 {
 
-    extern void CreateComponents(CompList* aComps, const Config& aCfg, const KMS::DI::Array& aLibrary, const KMS::DI::Array& aConfigurations, const KMS::DI::Array& aProcessors);
+    extern void CreateComponents(CompList* aComps, const Config& aCfg, const KMS::DI::Array& aLibrary, const KMS::DI::Array& aConfigurations, const KMS::DI::Array& aProcessors, bool aDynamic);
 
-    extern void CreateComponents_OSDep(CompList* aComps, const Config& aCfg, const char* aLibrary, const char* aConfiguration, const char* aProcessor);
+    extern void CreateComponents_OSDep(CompList* aComps, const Config& aCfg, const char* aLibrary, const char* aConfiguration, const char* aProcessor, bool aDynamic);
     
 };

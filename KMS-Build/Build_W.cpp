@@ -11,7 +11,6 @@
 #include <KMS/Cfg/MetaData.h>
 
 // ===== Local ==============================================================
-#include "Comp_Installer_W.h"
 #include "Config.h"
 #include "Tool_VisualStudio_W.h"
 
@@ -52,7 +51,7 @@ void Build::CreateLists_OSDep()
 {
     Config lCfg(mCertificatSHA1, mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion, mVisualStudioVersion);
 
-    Comp_Installer::CreateComponentsAndTools(&mComps, &mTools, lCfg, mProcessors);
+    lCfg::Init_OSDep(mCertificateSHA1, mVisualStudioVersion);
 
     if (!IsEmbedded())
     {

@@ -26,7 +26,7 @@ namespace Comp_Library_Static
     // Public
     // //////////////////////////////////////////////////////////////////////
 
-    void CreateComponents(CompList* aComps, const Config& aCfg, const DI::Array& aLibraries, const DI::Array& aConfigurations, const DI::Array& aProcessors)
+    void CreateComponents(CompList* aComps, const Config& aCfg, const DI::Array& aLibraries, const DI::Array& aConfigurations, const DI::Array& aProcessors, bool aDynamic)
     {
         for (const auto& lLE : aLibraries.mInternal)
         {
@@ -45,7 +45,7 @@ namespace Comp_Library_Static
                     auto lP = dynamic_cast<const DI::String*>(lPE.Get());
                     assert(nullptr != lC);
         
-                    CreateComponents_OSDep(aComps, aCfg, lL->Get(), lC->Get(), lP->Get());
+                    CreateComponents_OSDep(aComps, aCfg, lL->Get(), lC->Get(), lP->Get(), aDynamic);
                 }
             }
         }

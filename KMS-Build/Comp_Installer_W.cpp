@@ -7,16 +7,13 @@
 
 #include "Component.h"
 
-// ==== Includes ============================================================
-#include <KMS/DI/String.h>
-
 // ==== Local ===============================================================
 #include "Comp_File_ToExport.h"
 #include "Config.h"
 #include "Phase.h"
 #include "Tool_Executable.h"
 
-#include "Comp_Installer_W.h"
+#include "Comp_Installer.h"
 
 using namespace KMS;
 
@@ -47,21 +44,15 @@ namespace Comp_Installer
 // Functions
 // //////////////////////////////////////////////////////////////////////////
 
-    void CreateComponentsAndTools(CompList* aComps, ToolList* aTools, const Config& aCfg, const DI::Array& aProcessors)
+    void CreateComponentAndTool_OSDep(CompList* aComps, ToolList* aTools, const Config& aCfg, const char* aProcessor)
     {
-        for (const auto& lPE : aProcessors.mInternal)
+        char lFileName[PATH_LENGTH];
+
+        if (ISS_FileName(aProcessor, lFileName, sizeof(lFileName)))
         {
-            auto lP = dynamic_cast<const DI::String*>(lPE.Get());
-            assert(nullptr != lP);
+            CreateTool(aTools, aCfg, lFileName);
 
-            char lFileName[PATH_LENGTH];
-
-            if (ISS_FileName(lP->Get(), lFileName, sizeof(lFileName)))
-            {
-                CreateTool(aTools, aCfg, lFileName);
-
-                CreateComponent(aComps, aCfg, lP->Get());
-            }
+            CreateComponent(aComps, aCfg, aProcessor);
         }
     }
 

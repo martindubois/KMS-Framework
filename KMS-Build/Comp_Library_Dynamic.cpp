@@ -26,7 +26,7 @@ namespace Comp_Library_Dynamic
 
     void CreateComponents(CompList* aComps, const Config& aCfg, const DI::Array& aLibraries, const DI::Array& aConfigurations, const DI::Array& aProcessors)
     {
-        Comp_Library_Static::CreateComponents(aComps, aCfg, aLibraries, aConfigurations, aProcessors);
+        Comp_Library_Static::CreateComponents(aComps, aCfg, aLibraries, aConfigurations, aProcessors, true);
 
         for (const auto& lLE : aLibraries.mInternal)
         {

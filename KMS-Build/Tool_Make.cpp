@@ -59,7 +59,7 @@ namespace Tool_Make
 
     const char* BINARY_OUTPUT_EXTENSIONS         [] = { "", nullptr };
     const char* LIBRARY_STATIC_OUTPUT_EXTENSIONS [] = { FILE_EXT_A, nullptr };
-    const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_A, FILE_EXT_SO, nullptr };
+    const char* LIBRARY_DYNAMIC_OUTPUT_EXTENSIONS[] = { FILE_EXT_SO, nullptr };
 
     const char* EMBEDDED_BINARY_OUTPUT_EXTENSIONS[] = { FILE_EXT_ELF, nullptr };
 

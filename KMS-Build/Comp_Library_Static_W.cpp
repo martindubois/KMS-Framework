@@ -30,9 +30,11 @@ namespace Comp_Library_Static
     // Functions
     // //////////////////////////////////////////////////////////////////////
 
-    void CreateComponents_OSDep(CompList* aComps, const Config& aCfg, const char* aLibrary, const char* aConfiguration, const char* aProcessor)
+    void CreateComponents_OSDep(CompList* aComps, const Config& aCfg, const char* aLibrary, const char* aConfiguration, const char* aProcessor, bool aDynamic)
     {
         assert(nullptr != aLibrary);
+
+        (void)aDynamic;
 
         if (aCfg.IsEmbedded())
         {
