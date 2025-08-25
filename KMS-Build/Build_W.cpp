@@ -49,12 +49,12 @@ void Build::Construct_OSDep()
 
 void Build::CreateLists_OSDep()
 {
-    Config lCfg(mCertificatSHA1, mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion, mVisualStudioVersion);
-
-    lCfg::Init_OSDep(mCertificateSHA1, mVisualStudioVersion);
-
     if (!IsEmbedded())
     {
-        Tool_VisualStudio::CreateTools(&mTools, lCfg, mConfigurations, mProcessors);
+        auto lCfg = CreateConfig();
+
+        Tool_VisualStudio::CreateTools(&mTools, *lCfg, mConfigurations, mProcessors);
+
+        delete lCfg;
     }
 }

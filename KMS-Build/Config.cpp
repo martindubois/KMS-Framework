@@ -16,7 +16,7 @@ using namespace KMS;
 // //////////////////////////////////////////////////////////////////////////
 
 Config::Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-    bool aEmbedded, const File::Folder aExportFolder, bool aOSIndependent, const char* aProduct, const Version& aVersion)
+    bool aEmbedded, const File::Folder aExportFolder, bool aOSIndependent, const char* aProduct, const char* aReadMePrefix, const Version& aVersion)
     : mDoNotClean  (aDoNotClean)
     , mDoNotCompile(aDoNotCompile)
     , mDoNotExport (aDoNotExport)
@@ -26,6 +26,7 @@ Config::Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDo
     , mExportFolder(aExportFolder)
     , mOSIndependent(aOSIndependent)
     , mProduct(aProduct)
+    , mReadMePrefix(aReadMePrefix)
     , mVersion(aVersion)
 {
     assert(nullptr != aProduct);
@@ -40,6 +41,8 @@ bool Config::GetDoNotTest   () const { return mDoNotTest   ; }
 const File::Folder& Config::GetExportFolder() const { return mExportFolder; }
 
 const char* Config::GetProduct() const { return mProduct.c_str(); }
+
+const char* Config::GetReadMePrefix() const { return mReadMePrefix.c_str(); }
 
 const Version& Config::GetVersion() const { return mVersion; }
 

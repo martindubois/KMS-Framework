@@ -65,6 +65,7 @@ static const KMS::Cfg::MetaData MD_OS_INDEPENDENT   ("OSIntependent = false | tr
 static const KMS::Cfg::MetaData MD_PRE_BUILD_CMDS   ("PreBuildCmds += {Command}");
 static const KMS::Cfg::MetaData MD_PROCESSORS       ("Processors += x64 | x86 | ...");
 static const KMS::Cfg::MetaData MD_PRODUCT          ("Product = {Name}");
+static const KMS::Cfg::MetaData MD_READ_ME_PREFIX   ("ReadMePrefix = {Name}");
 static const KMS::Cfg::MetaData MD_TESTS            ("Tests += {Name}");
 static const KMS::Cfg::MetaData MD_VERSION_FILE     ("VersionFile = {Path}");
 
@@ -126,6 +127,7 @@ const bool  ::Build::DO_NOT_TEST_DEFAULT    = false;
 const char* ::Build::EMBEDDED_DEFAULT       = "";
 const bool  ::Build::OS_INDEPENDENT_DEFAULT = false;
 const char* ::Build::PRODUCT_DEFAULT        = "";
+const char* ::Build::READ_ME_PREFIX_DEFAULT = "";
 const char* ::Build::VERSION_FILE_DEFAULT   = "Common" SLASH "Version.h";
 
 int ::Build::Main(int aCount, const char ** aVector)
@@ -161,6 +163,7 @@ int ::Build::Main(int aCount, const char ** aVector)
     , mEmbedded     (EMBEDDED_DEFAULT)
     , mOSIndependent(OS_INDEPENDENT_DEFAULT)
     , mProduct      (PRODUCT_DEFAULT)
+    , mReadMePrefix (READ_ME_PREFIX_DEFAULT)
     , mVersionFile  (VERSION_FILE_DEFAULT)
 {
     mBinaries        .SetCreator(DI::String::Create);
@@ -196,6 +199,7 @@ int ::Build::Main(int aCount, const char ** aVector)
     lEntry.Set(&mPreBuildCmds    , false); AddEntry("PreBuildCmds"    , lEntry, &MD_PRE_BUILD_CMDS);
     lEntry.Set(&mProcessors      , false); AddEntry("Processors"      , lEntry, &MD_PROCESSORS);
     lEntry.Set(&mProduct         , false); AddEntry("Product"         , lEntry, &MD_PRODUCT);
+    lEntry.Set(&mReadMePrefix    , false); AddEntry("ReadMePrefix"    , lEntry, &MD_READ_ME_PREFIX);
     lEntry.Set(&mTests           , false); AddEntry("Tests"           , lEntry, &MD_TESTS);
     lEntry.Set(&mVersionFile     , false); AddEntry("VersionFile"     , lEntry, &MD_VERSION_FILE);
 
@@ -272,37 +276,51 @@ void ::Build::Validate() const
 
 bool ::Build::IsEmbedded() const { return 0 < mEmbedded.GetLength(); }
 
-void ::Build::CreateLists()
+Config* ::Build::CreateConfig()
 {
-    Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+    auto lResult = new Config(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mReadMePrefix, mVersion);
 
     #ifdef _KMS_LINUX_
-        lCfg.Init_OSDep(&mPackages);
+        lResult->Init_OSDep(&mPackages);
     #endif
 
     #ifdef _KMS_WINDOWS_
-        lCfg.Init_OSDep(mCertificatSHA1, mVisualStudioVersion);
+        lResult->Init_OSDep(mCertificatSHA1, mVisualStudioVersion);
     #endif
-    
-    Comp_Archive         ::CreateComponentAndTool(&mComps, &mTools, lCfg);
-    Comp_Binary          ::CreateComponents(&mComps, lCfg, mBinaries, mConfigurations, mProcessors);
-    Comp_Driver          ::CreateComponentsAndTools(&mComps, &mTools, lCfg, mDrivers, mConfigurations, mProcessors);
-    Comp_File_ToPackage  ::CreateComponents(&mComps, lCfg, mFiles);
-    Comp_Folder_ToPackage::CreateComponents(&mComps, lCfg, mFolders);
-    Comp_Installer       ::CreateComponentsAndTools(&mComps, &mTools, lCfg, mProcessors);
-    Comp_Library_Dynamic ::CreateComponents(&mComps, lCfg, mDynamicLibraries, mConfigurations, mProcessors);
-    Comp_Library_Static  ::CreateComponents(&mComps, lCfg, mLibraries, mConfigurations, mProcessors, false);
-    Comp_Test            ::CreateTools(&mTools, lCfg, mTests, mConfigurations, mProcessors);
+
+    return lResult;
+}
+
+void ::Build::CreateLists()
+{
+    if (0 == mReadMePrefix.GetLength())
+    {
+        mReadMePrefix = mProduct;
+    }
+
+    auto lCfg = CreateConfig();
+
+    Comp_Archive         ::CreateComponentAndTool(&mComps, &mTools, *lCfg);
+    Comp_Binary          ::CreateComponents(&mComps, *lCfg, mBinaries, mConfigurations, mProcessors);
+    Comp_Driver          ::CreateComponentsAndTools(&mComps, &mTools, *lCfg, mDrivers, mConfigurations, mProcessors);
+    Comp_File_ToPackage  ::CreateComponents(&mComps, *lCfg, mFiles);
+    Comp_Folder_ToPackage::CreateComponents(&mComps, *lCfg, mFolders);
+    Comp_Installer       ::CreateComponentsAndTools(&mComps, &mTools, *lCfg, mProcessors);
+    Comp_Library_Dynamic ::CreateComponents(&mComps, *lCfg, mDynamicLibraries, mConfigurations, mProcessors);
+    Comp_Library_Static  ::CreateComponents(&mComps, *lCfg, mLibraries, mConfigurations, mProcessors, false);
+    Comp_Test            ::CreateTools(&mTools, *lCfg, mTests, mConfigurations, mProcessors);
 
     Tool_Command::CreateTools(&mTools, mPreBuildCmds, Phase::PRE_BUILD);
-    Tool_Doxygen::CreateTools(&mTools, lCfg);
-    Tool_Editor ::CreateTools(&mTools, lCfg, mEditOperations);
-    Tool_Export ::CreateTool (&mTools, lCfg, &mComps);
+    Tool_Doxygen::CreateTools(&mTools, *lCfg);
+    Tool_Editor ::CreateTools(&mTools, *lCfg, mEditOperations);
+    Tool_Export ::CreateTool (&mTools, *lCfg, &mComps);
 
     if (IsEmbedded())
     {
-        Tool_Make::CreateTools(&mTools, lCfg, mConfigurations, mProcessors);
+        Tool_Make::CreateTools(&mTools, *lCfg, mConfigurations, mProcessors);
     }
+
+    delete lCfg;
 
     CreateLists_OSDep();
 }

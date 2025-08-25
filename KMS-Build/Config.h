@@ -21,7 +21,7 @@ public:
 
     Config(bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
         bool aEmbedded, const KMS::File::Folder aExportFolder, bool aOSIndependent,
-        const char* aProduct, const KMS::Version& aVersion);
+        const char* aProduct, const char* aReadMePrefix, const KMS::Version& aVersion);
 
     bool GetDoNotClean  () const;
     bool GetDoNotCompile() const;
@@ -34,6 +34,8 @@ public:
     const char* GetProduct() const;
 
     KMS::File::Folder* GetProductFolder() const;
+
+    const char* GetReadMePrefix() const;
 
     const KMS::Version& GetVersion() const;
 
@@ -51,7 +53,7 @@ public:
 
     #ifdef _KMS_WINDOWS_
 
-        void Init_OSDep(const char* aCertificatSHA1, , uint32_t aVisualStudioVersion);
+        void Init_OSDep(const char* aCertificatSHA1, uint32_t aVisualStudioVersion);
 
         const char* GetCertificatSHA1     () const;
         uint32_t    GetVisualStudioVersion() const;
@@ -69,6 +71,7 @@ private:
     KMS::File::Folder mExportFolder;
     bool              mOSIndependent;
     std::string       mProduct;
+    std::string       mReadMePrefix;
     KMS::Version      mVersion;
 
     #ifdef _KMS_LINUX_

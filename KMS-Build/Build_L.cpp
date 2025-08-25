@@ -45,9 +45,9 @@ void ::Build::Construct_OSDep()
 
 void ::Build::CreateLists_OSDep()
 {
-    Config lCfg(mDoNotClean, mDoNotCompile, mDoNotExport, mDoNotPackage, mDoNotTest, IsEmbedded(), mExportFolder, mOSIndependent, mProduct, mVersion);
+    auto lCfg = CreateConfig();
 
-    lCfg.Init_OSDep(&mPackages);
+    Tool_Make::CreateTools(&mTools, *lCfg, mConfigurations, mProcessors);
 
-    Tool_Make::CreateTools(&mTools, lCfg, mConfigurations, mProcessors);
+    delete lCfg;
 }

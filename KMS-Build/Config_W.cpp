@@ -15,23 +15,12 @@ using namespace KMS;
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-Config::Config(const char* aCertificatSHA1, bool aDoNotClean, bool aDoNotCompile, bool aDoNotExport, bool aDoNotPackage, bool aDoNotTest,
-    bool aEmbedded, const File::Folder aExportFolder, bool aOSIndependent, const char* aProduct, const Version& aVersion, uint32_t aVisualStudioVersion)
-    : mCertificatSHA1(aCertificatSHA1)
-    , mDoNotClean  (aDoNotClean)
-    , mDoNotCompile(aDoNotCompile)
-    , mDoNotExport (aDoNotExport)
-    , mDoNotPackage(aDoNotPackage)
-    , mDoNotTest   (aDoNotTest)
-    , mEmbedded(aEmbedded)
-    , mExportFolder(aExportFolder)
-    , mOSIndependent(aOSIndependent)
-    , mProduct(aProduct)
-    , mVersion(aVersion)
-    , mVisualStudioVersion(aVisualStudioVersion)
+void Config::Init_OSDep(const char* aCertificatSHA1, uint32_t aVisualStudioVersion)
 {
     assert(nullptr != aCertificatSHA1);
-    assert(nullptr != aProduct);
+
+    mCertificatSHA1      = aCertificatSHA1;
+    mVisualStudioVersion = aVisualStudioVersion;
 }
 
 const char* Config::GetCertificatSHA1() const { return mCertificatSHA1.c_str(); }

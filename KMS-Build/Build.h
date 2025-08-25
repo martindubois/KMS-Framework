@@ -22,6 +22,8 @@
 #include "Comp.h"
 #include "Tool.h"
 
+class Config;
+
 class Build final : public KMS::DI::Dictionary
 {
 
@@ -36,6 +38,7 @@ public:
     static const char* EXPORT_FOLDER_DEFAULT;
     static const bool  OS_INDEPENDENT_DEFAULT;
     static const char* PRODUCT_DEFAULT;
+    static const char* READ_ME_PREFIX_DEFAULT;
     static const char* VERSION_FILE_DEFAULT;
 
     KMS::DI::Array   mBinaries;
@@ -57,6 +60,7 @@ public:
     KMS::DI::Array   mPreBuildCmds;
     KMS::DI::Array   mProcessors;
     KMS::DI::String  mProduct;
+    KMS::DI::String  mReadMePrefix;
     KMS::DI::String  mVersionFile;
     KMS::DI::Array   mTests;
 
@@ -90,6 +94,8 @@ private:
     void Construct_OSDep();
 
     bool IsEmbedded() const;
+
+    Config* CreateConfig();
 
     void CreateLists();
     void CreateLists_OSDep();

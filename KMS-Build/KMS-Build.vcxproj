@@ -215,6 +215,7 @@
     <ClCompile Include="Comp_Binary_W.cpp" />
     <ClCompile Include="Comp_Driver.cpp" />
     <ClCompile Include="Comp_Driver_W.cpp" />
+    <ClCompile Include="Comp_Installer.cpp" />
     <ClCompile Include="Comp_Library_Dynamic.cpp" />
     <ClCompile Include="Comp_File_ToPackage.cpp" />
     <ClCompile Include="Comp_File_ToExport.cpp" />
@@ -226,6 +227,7 @@
     <ClCompile Include="Comp_ReadMe.cpp" />
     <ClCompile Include="Comp_Test.cpp" />
     <ClCompile Include="Comp_Test_W.cpp" />
+    <ClCompile Include="Config_W.cpp" />
     <ClCompile Include="Error.cpp" />
     <ClCompile Include="KMS-Build.cpp" />
     <ClCompile Include="Config.cpp" />
