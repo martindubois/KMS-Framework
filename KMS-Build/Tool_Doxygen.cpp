@@ -69,7 +69,7 @@ void CreateTool(ToolList* aTools, const Config& aCfg, const char* aLanguage)
             auto lFolder = new File::Folder(File::Folder::NONE);
         #endif
 
-        #ifdef _KMS_WINDWS_
+        #ifdef _KMS_WINDOWS_
             auto lFolder = new File::Folder(File::Folder::PROGRAM_FILES, FOLDER);
         #endif
 

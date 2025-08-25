@@ -74,7 +74,6 @@ void CreateComponents(CompList* aComps, const Config& aCfg, const char* aProcess
 
         DEB_FileName(lP->Get(), aCfg.GetVersion(), lFileName, sizeof(lFileName));
 
-
         Comp_File_ToExport::CreateComponent(aComps, aCfg, lPackages, lFileName);
     }
 }
