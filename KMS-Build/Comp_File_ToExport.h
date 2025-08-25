@@ -19,6 +19,6 @@ namespace Comp_File_ToExport
 {
 
     // aFolder  The function deletes it
-    extern void CreateComponent(CompList* aComps, const Config& aCfg, KMS::File::Folder* aFolder, const char* aFileName);
+    extern void CreateComponent(CompList* aComps, const Config& aCfg, KMS::File::Folder* aFolder, const char* aFileName_Src, const char* aFileName_Dst = nullptr);
 
 };

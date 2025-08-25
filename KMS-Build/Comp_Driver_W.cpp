@@ -12,6 +12,7 @@
 
 // ==== Local ===============================================================
 #include "Comp_Archive.h"
+#include "Comp_File_ToExport.h"
 #include "Comp_File_ToPackage.h"
 #include "Config.h"
 #include "Phase.h"
@@ -22,8 +23,10 @@
 
 using namespace KMS;
 
-#define FILE_EXT_CAB ".cab"
-#define FILE_EXT_DDF ".ddf"
+#define FILE_EXT_CAB     ".cab"
+#define FILE_EXT_DDF     ".ddf"
+#define FILE_EXT_PDB     ".pdb"
+#define FILE_EXT_VCXPROJ ".vcxproj"
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
@@ -41,41 +44,55 @@ using namespace KMS;
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static void CAB_FileName(const char* aDriver, const char* aFolder, char* aOut, unsigned int aOutSize_byte);
-static bool DDF_FileName(const char* aDriver,                      char* aOut, unsigned int aOutSize_byte);
+static void CAB_FileName       (const char* aDriver, const char* aFolder, char* aOut, unsigned int aOutSize_byte);
+static void CAB_FileName_Export(const char* aDriver, const Config & aCfg, char* aOut, unsigned int aOutSize_byte);
+static bool DDF_FileName       (const char* aDriver,                      char* aOut, unsigned int aOutSize_byte);
 
 namespace Comp_Driver
 {
     // Functions
     // //////////////////////////////////////////////////////////////////////
 
+    // In some cases, the driver is not compiled because we just repackage an
+    // already compiled driver with a new INF file. In these cases, we do not
+    // package the driver files, we only create the .CAB package.
     void CreateComponentsAndTools_OSDep(CompList* aComps, ToolList* aTools, const Config& aCfg, const char* aDriver, const KMS::DI::Array& aConfigurations, const KMS::DI::Array& aProcessors)
     {
-        for (const auto& lCE : aConfigurations.mInternal)
+        char lFileName[PATH_LENGTH];
+
+        sprintf_s(lFileName, "%s\\%s" FILE_EXT_VCXPROJ, aDriver, aDriver);
+
+        if (File::Folder::CURRENT.DoesFileExist(lFileName))
         {
-            auto lC = dynamic_cast<const DI::String*>(lCE.Get());
-            assert(nullptr != lC);
-
-            for (const auto& lPE : aProcessors.mInternal)
+            for (const auto& lCE : aConfigurations.mInternal)
             {
-                auto lP = dynamic_cast<const DI::String*>(lPE.Get());
-                assert(nullptr != lP);
+                auto lC = dynamic_cast<const DI::String*>(lCE.Get());
+                assert(nullptr != lC);
 
-                char lDst[PATH_LENGTH];
-
-                Comp_Archive::GetDriverFolder(lDst, sizeof(lDst), lC->Get(), lP->Get());
-    
-                unsigned int i = 0;
-                while (nullptr != Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i])
+                for (const auto& lPE : aProcessors.mInternal)
                 {
-                    char lFileName[PATH_LENGTH];
-    
-                    sprintf_s(lFileName, "%s%s", aDriver, Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i]);
-    
-                    auto lSrc = Tool_VisualStudio::GetDriverOutDir(lC->Get(), lP->Get(), aDriver);
-                    Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+                    auto lP = dynamic_cast<const DI::String*>(lPE.Get());
+                    assert(nullptr != lP);
 
-                    i++;
+                    char lDst[PATH_LENGTH];
+
+                    Comp_Archive::GetDriverFolder(lDst, sizeof(lDst), lC->Get(), lP->Get());
+
+                    unsigned int i = 0;
+                    while (nullptr != Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i])
+                    {
+                        sprintf_s(lFileName, "%s%s", aDriver, Tool_VisualStudio::DRIVER_OUTPUT_EXTENSIONS[i]);
+
+                        auto lSrc = Tool_VisualStudio::GetDriverOutDir(lC->Get(), lP->Get(), aDriver);
+                        Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
+
+                        i++;
+                    }
+
+                    sprintf_s(lFileName, "%s" FILE_EXT_PDB, aDriver);
+
+                    auto lSrc = Tool_VisualStudio::GetOutDir(lC->Get(), lP->Get());
+                    Comp_File_ToPackage::CreateComponent(aComps, aCfg, lSrc, lDst, lFileName, Phase::TEST);
                 }
             }
         }
@@ -116,6 +133,12 @@ namespace Comp_Driver
             lTool->AddArgument("/sha1");
             lTool->AddArgument(aCfg.GetCertificatSHA1());
             lTool->AddArgument(lCAB);
+
+            char lCAB_Export[PATH_LENGTH];
+
+            CAB_FileName_Export(aDriver, aCfg, lCAB_Export, sizeof(lCAB_Export));
+
+            Comp_File_ToExport::CreateComponent(aComps, aCfg, &File::Folder::CURRENT, lCAB, lCAB_Export);
         }
     }
 
@@ -138,6 +161,15 @@ void CAB_FileName(const char* aDriver, const char* aFolder, char* aOut, unsigned
     {
         sprintf_s(aOut, aOutSize_byte, "%s\\%s" FILE_EXT_CAB, aFolder, aDriver);
     }
+}
+
+void CAB_FileName_Export(const char* aDriver, const Config& aCfg, char* aOut, unsigned int aOutSize_byte)
+{
+    char lVersion[PATH_LENGTH];
+
+    aCfg.GetVersion().GetString(lVersion, sizeof(lVersion));
+
+    sprintf_s(aOut, aOutSize_byte, "%s_%s" FILE_EXT_CAB, aDriver, lVersion);
 }
 
 bool DDF_FileName(const char* aDriver, char* aOut, unsigned int aOutSize_byte)

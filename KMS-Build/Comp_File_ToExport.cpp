@@ -23,7 +23,7 @@ class C_File_ToExport final : public Comp
 public:
 
     // aFolder  The method deletes it
-    C_File_ToExport(const Config& aCfg, File::Folder* aFolder, const char* aFileName);
+    C_File_ToExport(const Config& aCfg, File::Folder* aFolder, const char* aFileName_Src, const char* aFileName_Dst);
 
     // ===== Comp ===========================================================
     virtual ~C_File_ToExport();
@@ -34,7 +34,8 @@ private:
 
     virtual void Verify_VERIFY();
 
-    std::string   mFileName;
+    std::string   mFileName_Dst;
+    std::string   mFileName_Src;
     File::Folder* mFolder;
     File::Folder* mProductFolder;
 
@@ -46,13 +47,13 @@ namespace Comp_File_ToExport
     // Functions
     // //////////////////////////////////////////////////////////////////////
 
-    void CreateComponent(CompList* aComps, const Config& aCfg, File::Folder* aFolder, const char* aFileName)
+    void CreateComponent(CompList* aComps, const Config& aCfg, File::Folder* aFolder, const char* aFileName_Src, const char* aFileName_Dst)
     {
         assert(nullptr != aComps);
 
         if (!aCfg.GetDoNotExport())
         {
-            auto lComp = new C_File_ToExport(aCfg, aFolder, aFileName);
+            auto lComp = new C_File_ToExport(aCfg, aFolder, aFileName_Src, aFileName_Dst);
 
             aComps->Add(lComp);
         }
@@ -63,11 +64,13 @@ namespace Comp_File_ToExport
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-C_File_ToExport::C_File_ToExport(const Config& aCfg, File::Folder* aFolder, const char* aFileName)
-    : Comp("File_ToExport"), mFileName(aFileName), mFolder(aFolder), mProductFolder(aCfg.GetProductFolder())
+C_File_ToExport::C_File_ToExport(const Config& aCfg, File::Folder* aFolder, const char* aFileName_Src, const char* aFileName_Dst)
+    : Comp("File_ToExport"), mFileName_Src(aFileName_Src), mFolder(aFolder), mProductFolder(aCfg.GetProductFolder())
 {
     assert(nullptr != aFolder);
-    assert(nullptr != aFileName);
+    assert(nullptr != aFileName_Src);
+
+    mFileName_Dst = (nullptr != aFileName_Dst) ? aFileName_Dst : aFileName_Src;
 }
 
 // ===== Comp ===============================================================
@@ -92,7 +95,7 @@ void C_File_ToExport::Export()
     assert(nullptr != mFolder);
     assert(nullptr != mProductFolder);
 
-    mFolder->Copy(*mProductFolder, mFileName.c_str());
+    mFolder->Copy(*mProductFolder, mFileName_Src.c_str(), mFileName_Dst.c_str());
 }
 
 // Private
@@ -100,7 +103,7 @@ void C_File_ToExport::Export()
 
 void C_File_ToExport::Verify_VERIFY()
 {
-    auto lFileName = mFileName.c_str();
+    auto lFileName = mFileName_Src.c_str();
 
     if (mProductFolder->DoesFileExist(lFileName))
     {
