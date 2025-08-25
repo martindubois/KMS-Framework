@@ -9,7 +9,7 @@ Name                ________________________________ ( )    Martin Dubois ( )
 
 Date and time       20 ______ - ______ - ______               ______ : ______
 
-Computer            ____________________________ ( )    KMS-F_L ( )    MD ( )
+Computer            ______________________________ ( )    Dev_L ( )    MD ( )
 
 File "Common/Version.h" - Edit the Version                                [ ]
 
