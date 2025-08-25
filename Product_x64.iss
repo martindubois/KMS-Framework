@@ -10,9 +10,9 @@ AppName=KMS-Framework
 AppPublisher=KMS
 AppPublisherURL=https://www.kms-quebec.com
 AppSupportURL=https://www.kms-quebec.com
-AppVersion=1.3.2-dev
+AppVersion=1.3.5-beta
 DefaultDirName={pf}\KMS-Framework
-OutputBaseFilename=KMS-Framework_1.3.2-dev_x64
+OutputBaseFilename=KMS-Framework_1.3.5-beta_x64
 OutputDir=Installer
 
 [Dir]
