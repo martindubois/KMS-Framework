@@ -36,7 +36,7 @@ using namespace KMS;
 #define EXECUTABLE ("MSBuild")
 
 #define FOLDER_2019 ("Microsoft Visual Studio\\2019\\Professional\\Msbuild\\Current\\Bin")
-#define FOLDER_2022 ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin")
+#define FOLDER_2022 ("Microsoft Visual Studio\\2022\\Professional\\Msbuild\\Current\\Bin\\amd64")
 
 static const char* SLN_FILE_NAME = "Solution" FILE_EXT_SLN;
 
