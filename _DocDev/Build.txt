@@ -11,7 +11,7 @@ Date and time       20 ______ - ______ - ______               ______ : ______
 
 Computer            ______________________________ ( )    Dev_L ( )    MD ( )
 
-File "Common/Version.h" - Edit the Version                                [ ]
+File "Common/Version.h" - Edit the Version
 
 Version             ______ . ______ . ______ . ______                     ( )
                     {Ma}     {Mi}     {Bu}            -beta               ( )

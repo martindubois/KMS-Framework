@@ -107,7 +107,6 @@ namespace Comp_Driver
             {
                 lTool = Tool_Executable::CreateTool(aTools, aCfg, new File::Folder(File::Folder::NONE), MAKECAB, MAKECAB_ALLOWED_TIME_ms, Phase::NONE, Phase::PACKAGE);
 
-                lTool->AddArgument("-f");
                 lTool->AddArgument(lDDF);
             }
 
@@ -165,9 +164,9 @@ void CAB_FileName(const char* aDriver, const char* aFolder, char* aOut, unsigned
 
 void CAB_FileName_Export(const char* aDriver, const Config& aCfg, char* aOut, unsigned int aOutSize_byte)
 {
-    char lVersion[PATH_LENGTH];
+    char lVersion[NAME_LENGTH];
 
-    aCfg.GetVersion().GetString(lVersion, sizeof(lVersion));
+    aCfg.GetVersion().GetString(lVersion, sizeof(lVersion), 3, true);
 
     sprintf_s(aOut, aOutSize_byte, "%s_%s" FILE_EXT_CAB, aDriver, lVersion);
 }

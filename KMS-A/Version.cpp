@@ -136,16 +136,31 @@ namespace KMS
             KMS_EXCEPTION(RESULT_CORRUPTED_FILE, "Incomplet version file (NOT TESTED)", aFile);
         }
 
-        void Version::GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement) const
+        void Version::GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement, bool aType) const
         {
-            switch (aElement)
+            if (aType && (0 < strlen(mType)))
             {
-            case 1: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mMajor); break;
-            case 2: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u", mMajor, mMinor); break;
-            case 3: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u", mMajor, mMinor, mBuild); break;
-            case 4: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u", mMajor, mMinor, mBuild, mCompat); break;
+                switch (aElement)
+                {
+                case 1: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u-%s", mMajor, mType); break;
+                case 2: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u-%s", mMajor, mMinor, mType); break;
+                case 3: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u-%s", mMajor, mMinor, mBuild, mType); break;
+                case 4: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u-%s", mMajor, mMinor, mBuild, mCompat, mType); break;
 
-            default: assert(false);
+                default: assert(false);
+                }
+            }
+            else
+            {
+                switch (aElement)
+                {
+                case 1: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u", mMajor); break;
+                case 2: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u", mMajor, mMinor); break;
+                case 3: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u", mMajor, mMinor, mBuild); break;
+                case 4: sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u.%u", mMajor, mMinor, mBuild, mCompat); break;
+
+                default: assert(false);
+                }
             }
         }
 

@@ -65,23 +65,13 @@ void CreateComponent(CompList* aComps, const Config& aCfg, const char* aProcesso
 {
     assert(nullptr != aProcessor);
 
-    auto lVersion = aCfg.GetVersion();
+    char lVersion[NAME_LENGTH];
 
-    auto lMa   = lVersion.GetMajor();
-    auto lMi   = lVersion.GetMinor();
-    auto lBu   = lVersion.GetBuild();
-    auto lType = lVersion.GetType ();
+    aCfg.GetVersion().GetString(lVersion, sizeof(lVersion), 3, true);
 
     char lFileName[PATH_LENGTH];
 
-    if (0 == strlen(lType))
-    {
-        sprintf_s(lFileName, "%s_%u.%u.%u_%s" FILE_EXT_EXE, aCfg.GetProduct(), lMa, lMi, lBu, aProcessor);
-    }
-    else
-    {
-        sprintf_s(lFileName, "%s_%u.%u.%u-%s_%s" FILE_EXT_EXE, aCfg.GetProduct(), lMa, lMi, lBu, lType, aProcessor);
-    }
+    sprintf_s(lFileName, "%s_%s_%s" FILE_EXT_EXE, aCfg.GetProduct(), lVersion, aProcessor);
 
     auto lInstaller = new File::Folder(File::Folder::Id::CURRENT, INSTALLER_FOLDER);
 

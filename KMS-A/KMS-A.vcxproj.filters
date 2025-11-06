@@ -82,6 +82,9 @@
     <Filter Include="Source Files\Embedded">
       <UniqueIdentifier>{d62b5007-388b-4009-8778-c120b5f3419e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DI2">
+      <UniqueIdentifier>{6276e902-041f-4574-867c-b4548d2ed5a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -452,6 +455,30 @@
     </ClCompile>
     <ClCompile Include="DI_ValueModule.cpp">
       <Filter>Source Files\DI</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_String.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Sized.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Array.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_BitField.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Float.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Int.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_UInt.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Struct.cpp">
+      <Filter>Source Files\DI2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

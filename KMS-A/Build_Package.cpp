@@ -27,34 +27,17 @@ namespace KMS
 
             auto lProduct = mProduct.c_str();
 
-            auto lMajor = mVersion.GetMajor();
-            auto lMinor = mVersion.GetMinor();
-            auto lBuild = mVersion.GetBuild();
-            auto lType  = mVersion.GetType ();
+            char lVersion[NAME_LENGTH];
 
-            auto lTypePresent = 0 < strlen(lType);
+            mVersion.GetString(lVersion, sizeof(lVersion), 3, true);
 
             if (mOSIndependent)
             {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u-%s.zip", lProduct, lMajor, lMinor, lBuild, lType);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%u.%u.%u.zip", lProduct, lMajor, lMinor, lBuild);
-                }
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s.zip", lProduct, lVersion);
             }
             else
             {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u-%s.zip", lProduct, OS_NAME_PROC, lMajor, lMinor, lBuild, lType);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%u.%u.%u.zip", lProduct, OS_NAME_PROC, lMajor, lMinor, lBuild);
-                }
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s_%s.zip", lProduct, OS_NAME_PROC, lVersion);
             }
         }
 
@@ -65,34 +48,17 @@ namespace KMS
             assert(nullptr != aOut);
             assert(0 < aOutSize_byte);
 
-            auto lMajor = mVersion.GetMajor();
-            auto lMinor = mVersion.GetMinor();
-            auto lBuild = mVersion.GetBuild();
-            auto lType  = mVersion.GetType ();
+            char lVersion[NAME_LENGTH];
 
-            auto lTypePresent = 0 < strlen(lType);
+            mVersion.GetString(lVersion, sizeof(lVersion), 3, true);
 
             if (mOSIndependent)
             {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfo(aOutSize_byte), "%u.%u.%u-%s", lMajor, lMinor, lBuild, lType);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfo(aOutSize_byte), "%u.%u.%u", lMajor, lMinor, lBuild);
-                }
+                sprintf_s(aOut SizeInfo(aOutSize_byte), "%s", lVersion);
             }
             else
             {
-                if (lTypePresent)
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u-%s_%s", lMajor, lMinor, lBuild, lType, OS_NAME_PROC);
-                }
-                else
-                {
-                    sprintf_s(aOut SizeInfoV(aOutSize_byte), "%u.%u.%u_%s", lMajor, lMinor, lBuild, OS_NAME_PROC);
-                }
+                sprintf_s(aOut SizeInfoV(aOutSize_byte), "%s_%s", lVersion, OS_NAME_PROC);
             }
         }
 

@@ -44,7 +44,7 @@ namespace KMS
 
             Version(const File::Folder& aFolder, const char* aFile);
 
-            void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3) const;
+            void GetString(char* aOut, unsigned int aOutSize_byte, unsigned int aElement = 3, bool aType = false) const;
 
             // Internal
 
