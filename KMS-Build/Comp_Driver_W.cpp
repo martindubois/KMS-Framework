@@ -107,6 +107,7 @@ namespace Comp_Driver
             {
                 lTool = Tool_Executable::CreateTool(aTools, aCfg, new File::Folder(File::Folder::NONE), MAKECAB, MAKECAB_ALLOWED_TIME_ms, Phase::NONE, Phase::PACKAGE);
 
+                lTool->AddArgument("/F");
                 lTool->AddArgument(lDDF);
             }
 
