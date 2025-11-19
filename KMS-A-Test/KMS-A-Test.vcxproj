@@ -220,6 +220,7 @@
     <ClCompile Include="CLI_Tool.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dbg_Log.cpp" />
+    <ClCompile Include="DI2.cpp" />
     <ClCompile Include="DI_Array.cpp" />
     <ClCompile Include="DI_Dictionary.cpp" />
     <ClCompile Include="DI_Folder.cpp" />

@@ -456,16 +456,7 @@
     <ClCompile Include="DI_ValueModule.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="DI2_String.cpp">
-      <Filter>Source Files\DI2</Filter>
-    </ClCompile>
     <ClCompile Include="DI2_Sized.cpp">
-      <Filter>Source Files\DI2</Filter>
-    </ClCompile>
-    <ClCompile Include="DI2_Array.cpp">
-      <Filter>Source Files\DI2</Filter>
-    </ClCompile>
-    <ClCompile Include="DI2_BitField.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
     <ClCompile Include="DI2_Float.cpp">
@@ -477,7 +468,13 @@
     <ClCompile Include="DI2_UInt.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
-    <ClCompile Include="DI2_Struct.cpp">
+    <ClCompile Include="DI2_Output.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Input.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Container.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
   </ItemGroup>

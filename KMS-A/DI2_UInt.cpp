@@ -15,45 +15,10 @@ namespace KMS
     namespace DI2
     {
 
-        // Public
-        // //////////////////////////////////////////////////////////////////
-
-        UInt::UInt(unsigned int aSize_byte) : Sized(aSize_byte)
-        {
-            assert((sizeof(uint8_t ) == aSize_byte)
-                || (sizeof(uint16_t) == aSize_byte)
-                || (sizeof(uint32_t) == aSize_byte)
-                || (sizeof(uint64_t) == aSize_byte));
-        }
-
-        // ===== IType ======================================================
-
-        // Value
-        void UInt::Code_ASCII(const void* aData, char* aOut, unsigned int aOutSize_byte, char** aNext) const
-        {
-            // TODO
-        }
-
-        // Value
-        void UInt::Code_JSON(const void* aData, char* aOut, unsigned int aOutSize_byte, char** aNext) const
-        {
-            // TODO
-        }
-
-        // Operators = += -= *= /= |= &= ^=
-        // 
-        // Value
-        // op Value
-        void UInt::Decode_ASCII(void* aData, const char* aIn, const char** aNext) const
-        {
-            // TODO
-        }
-
-        // Value
-        void UInt::Decode_JSON(void* aData, const char* aIn, const char** aNext) const
-        {
-            // TODO
-        }
+        const UInt<uint64_t> TYPE_UINT64;
+        const UInt<uint32_t> TYPE_UINT32;
+        const UInt<uint16_t> TYPE_UINT16;
+        const UInt<uint8_t > TYPE_UINT8 ;
 
     }
 }

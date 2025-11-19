@@ -132,6 +132,9 @@
     <ClCompile Include="CLI_Macros.cpp">
       <Filter>Source Files\CLI</Filter>
     </ClCompile>
+    <ClCompile Include="DI2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

@@ -66,13 +66,12 @@
     <ClCompile Include="Dbg_Stats_Entry.cpp" />
     <ClCompile Include="Dbg_Stats_Timer.cpp" />
     <ClCompile Include="Dbg_Stats_W.cpp" />
-    <ClCompile Include="DI2_Array.cpp" />
-    <ClCompile Include="DI2_BitField.cpp" />
+    <ClCompile Include="DI2_Container.cpp" />
     <ClCompile Include="DI2_Float.cpp" />
+    <ClCompile Include="DI2_Input.cpp" />
     <ClCompile Include="DI2_Int.cpp" />
+    <ClCompile Include="DI2_Output.cpp" />
     <ClCompile Include="DI2_Sized.cpp" />
-    <ClCompile Include="DI2_String.cpp" />
-    <ClCompile Include="DI2_Struct.cpp" />
     <ClCompile Include="DI2_UInt.cpp" />
     <ClCompile Include="DI_Array_Sparse.cpp" />
     <ClCompile Include="DI_Boolean.cpp" />

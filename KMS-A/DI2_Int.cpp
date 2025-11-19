@@ -15,45 +15,10 @@ namespace KMS
     namespace DI2
     {
 
-        // Public
-        // //////////////////////////////////////////////////////////////////
-
-        Int::Int(unsigned int aSize_byte) : Sized(aSize_byte)
-        {
-            assert((sizeof(int8_t ) == aSize_byte)
-                || (sizeof(int16_t) == aSize_byte)
-                || (sizeof(int32_t) == aSize_byte)
-                || (sizeof(int64_t) == aSize_byte));
-        }
-
-        // ===== IType ======================================================
-
-        // Value
-        void Int::Code_ASCII(const void* aData, char* aOut, unsigned int aOutSize_byte, char** aNext) const
-        {
-            // TODO
-        }
-
-        // Value
-        void Int::Code_JSON(const void* aData, char* aOut, unsigned int aOutSize_byte, char** aNext) const
-        {
-            // TODO
-        }
-
-        // Operators += -= *= /= |= &= ^=
-        // 
-        // Value
-        // op Value
-        void Int::Decode_ASCII(void* aData, const char* aIn, const char** aNext) const
-        {
-            // TODO
-        }
-
-        // Value
-        void Int::Decode_JSON(void* aData, const char* aIn, const char** aNext) const
-        {
-            // TODO
-        }
+        const Int<int64_t> TYPE_INT64;
+        const Int<int32_t> TYPE_INT32;
+        const Int<int16_t> TYPE_INT16;
+        const Int<int8_t > TYPE_INT8;
 
     }
 }
