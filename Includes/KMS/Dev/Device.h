@@ -53,6 +53,14 @@ namespace KMS
 
         public:
 
+            #ifdef _KMS_LINUX_
+                static unsigned int GetCount(const char* aFormat);
+            #endif
+
+            #ifdef _KMS_WINDOWS_
+                static unsigned int GetCount(const ::GUID* aInterface);
+            #endif
+
             Device();
 
             virtual ~Device();

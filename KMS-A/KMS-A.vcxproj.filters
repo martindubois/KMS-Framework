@@ -456,9 +456,6 @@
     <ClCompile Include="DI_ValueModule.cpp">
       <Filter>Source Files\DI</Filter>
     </ClCompile>
-    <ClCompile Include="DI2_Sized.cpp">
-      <Filter>Source Files\DI2</Filter>
-    </ClCompile>
     <ClCompile Include="DI2_Float.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>

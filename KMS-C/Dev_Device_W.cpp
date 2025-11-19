@@ -38,6 +38,34 @@ namespace KMS
 
         const ::GUID Device::INTERFACE_DEFAULT;
 
+        unsigned int Device::GetCount(const ::GUID* aInterface)
+        {
+            unsigned int lResult = 0;
+
+            auto lDevInfo = SetupDi::GetClassDevs_Interface(*aInterface);
+            assert(INVALID_HANDLE_VALUE != lDevInfo);
+
+            for (unsigned int i = 0;; i++)
+            {
+                SP_DEVINFO_DATA lDevInfoData;
+
+                auto lRet = SetupDi::EnumDeviceInfo(lDevInfo, i, &lDevInfoData);
+                if (!lRet)
+                {
+                    break;
+                }
+
+                SP_DEVICE_INTERFACE_DATA lDevIntData;
+
+                if (SetupDi::EnumDeviceInterfaces(lDevInfo, &lDevInfoData, *aInterface, &lDevIntData))
+                {
+                    lResult++;
+                }
+            }
+
+            return lResult;
+        }
+
         // ===== Stream::IStream ============================================
 
         bool Device::Connect()

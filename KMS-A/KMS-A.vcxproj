@@ -71,7 +71,6 @@
     <ClCompile Include="DI2_Input.cpp" />
     <ClCompile Include="DI2_Int.cpp" />
     <ClCompile Include="DI2_Output.cpp" />
-    <ClCompile Include="DI2_Sized.cpp" />
     <ClCompile Include="DI2_UInt.cpp" />
     <ClCompile Include="DI_Array_Sparse.cpp" />
     <ClCompile Include="DI_Boolean.cpp" />
