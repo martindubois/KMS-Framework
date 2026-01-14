@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/String_Expand.h
@@ -8,7 +8,7 @@
 // Library   KMS-A
 
 // External type : const char*
-// Internal type : str::string
+// Internal type : String_ASCII
 
 #pragma once
 
@@ -25,7 +25,7 @@ namespace KMS
 
         public:
 
-            String_Expand_Ptr(std::string* aPtr);
+            String_Expand_Ptr(String_ASCII* aPtr);
 
             // ===== String_Ptr =============================================
             using String_Ptr::operator const char*;

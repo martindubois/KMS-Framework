@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_FileInfoList.cpp
@@ -258,7 +258,7 @@ namespace KMS
             {
                 do
                 {
-                    std::string lFileName = aFullFolder;
+                    String_ASCII lFileName = aFullFolder;
 
                     lFileName += "\\";
                     lFileName += lData.cFileName;

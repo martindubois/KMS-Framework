@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/File/FileInfoList.h
@@ -77,7 +77,7 @@ namespace KMS
             void Find(const char * aPattern, bool aRecurse);
             void FindInFolder(const char * aFullFolder, const char * aFolder, const char * aPattern);
 
-            typedef std::map<std::string, FileInfo *> FileInfoMap;
+            typedef std::map<String_ASCII, FileInfo *> FileInfoMap;
 
             FileInfoMap mFiles;
            

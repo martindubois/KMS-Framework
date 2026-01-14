@@ -108,6 +108,9 @@
     <ClCompile Include="HTTP_Transaction_W.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
+    <ClCompile Include="Net_Name.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

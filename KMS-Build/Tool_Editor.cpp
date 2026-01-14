@@ -36,7 +36,7 @@ private:
     void Execute_EDIT();
 
     unsigned int mIndex;
-    std::string  mOperation;
+    String_ASCII mOperation;
     KMS::Version mVersion;
 
 };
@@ -44,11 +44,11 @@ private:
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////
 
-static void operator += (std::string& aString, unsigned int aValue);
+static void operator += (String_ASCII& aString, unsigned int aValue);
 
 static void CreateTool(ToolList* aTools, const Config& aCfg, const char* aOperation, unsigned int aIndex);
 
-static std::string ProcessReplaceLine(const char* aIn, const KMS::Version& aVersion);
+static String_ASCII ProcessReplaceLine(const char* aIn, const KMS::Version& aVersion);
 
 namespace Tool_Editor
 {
@@ -138,7 +138,7 @@ void T_Editor::Execute_EDIT()
 // Static functions
 // //////////////////////////////////////////////////////////////////////////
 
-void operator += (std::string& aString, unsigned int aValue)
+void operator += (String_ASCII& aString, unsigned int aValue)
 {
     char lValue[32];
 
@@ -156,7 +156,7 @@ void CreateTool(ToolList* aTools, const Config& aCfg, const char* aOperation, un
     aTools->Add(lComp);
 }
 
-std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
+String_ASCII ProcessReplaceLine(const char * aIn, const Version & aVersion)
 {
     // --> INIT <--+
     //      |      |
@@ -167,7 +167,7 @@ std::string ProcessReplaceLine(const char * aIn, const Version & aVersion)
     assert(nullptr != aIn);
 
     auto         lIn = aIn;
-    std::string  lResult;
+    String_ASCII lResult;
     unsigned int lState = STATE_INIT;
     auto         lType = aVersion.GetType();
 

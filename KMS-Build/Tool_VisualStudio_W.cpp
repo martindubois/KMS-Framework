@@ -144,7 +144,7 @@ void CreateTool(ToolList* aTools, const Config& aCfg, const char* aConfiguration
             lTool->AddArgument("/target:rebuild");
         }
 
-        lTool->AddArgument((std::string("/Property:Configuration=") + aConfiguration).c_str());
-        lTool->AddArgument(("/property:Platform=" + std::string(aProcessor)).c_str());
+        lTool->AddArgument((String_ASCII("/Property:Configuration=") + aConfiguration).c_str());
+        lTool->AddArgument(("/property:Platform=" + String_ASCII(aProcessor)).c_str());
     }
 }

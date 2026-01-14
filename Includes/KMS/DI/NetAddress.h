@@ -1,13 +1,13 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/NetAddress.h
 // Library   KMS-B
 
 // External type : Net::Address (const char*)
-// Internal type : Net::Address (std::string)
+// Internal type : Net::Address (String_ASCII)
 
 #pragma once
 

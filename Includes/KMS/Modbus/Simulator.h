@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Modbus/Simulator.h
@@ -81,7 +81,7 @@ namespace KMS
                 virtual bool Clear();
 
                 unsigned int  mFlags;
-                std::string   mName;
+                String_ASCII  mName;
                 RegisterValue mValue;
 
             };

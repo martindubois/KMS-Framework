@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_W.cpp
@@ -160,7 +160,7 @@ namespace KMS
         {
             Proc::Process lProcess(Folder(Id::NONE), "xcopy");
 
-            lProcess.AddArgument("/CEKIV");
+            lProcess.AddArgument("/CEKIVY");
             lProcess.AddArgument(mPath.c_str());
             lProcess.AddArgument(aDst.GetPath());
 

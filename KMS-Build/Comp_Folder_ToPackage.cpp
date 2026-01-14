@@ -36,7 +36,7 @@ private:
 
     void Verify_COMPILE();
 
-    std::string   mDst;
+    String_ASCII  mDst;
     File::Folder* mSrc;
 
 };

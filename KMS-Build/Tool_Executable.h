@@ -39,7 +39,7 @@ namespace Tool_Executable
     private:
 
         Phase              mExecute;
-        std::string        mExecutable;
+        KMS::String_ASCII  mExecutable;
         KMS::File::Folder* mFolder;
         KMS::Proc::Process mProcess;
         uint32_t           mTimeout_ms;

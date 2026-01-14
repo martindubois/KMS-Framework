@@ -33,7 +33,7 @@ private:
 
     CompList              * mComps;
     const KMS::File::Folder mExportFolder;
-    std::string             mProduct;
+    String_ASCII            mProduct;
 
 };
 

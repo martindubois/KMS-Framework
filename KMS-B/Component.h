@@ -14,6 +14,7 @@
     #define SECURITY_WIN32
     #include <WinSock2.h>
     #include <Windows.h>
+    #include <Ws2ipdef.h>
     #include <security.h>
 #endif
 

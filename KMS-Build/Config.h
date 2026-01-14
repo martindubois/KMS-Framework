@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Array.h>
+#include <KMS/String.h>
 #include <KMS/Version.h>
 
 class Config
@@ -70,8 +71,8 @@ private:
     bool              mEmbedded;
     KMS::File::Folder mExportFolder;
     bool              mOSIndependent;
-    std::string       mProduct;
-    std::string       mReadMePrefix;
+    KMS::String_ASCII mProduct;
+    KMS::String_ASCII mReadMePrefix;
     KMS::Version      mVersion;
 
     #ifdef _KMS_LINUX_
@@ -79,8 +80,8 @@ private:
     #endif
 
     #ifdef _KMS_WINDOWS_
-        std::string mCertificatSHA1;
-        uint32_t    mVisualStudioVersion;
+        KMS::String_ASCII mCertificatSHA1;
+        uint32_t     mVisualStudioVersion;
     #endif
 
 };

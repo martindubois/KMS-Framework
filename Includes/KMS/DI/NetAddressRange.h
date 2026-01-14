@@ -1,13 +1,13 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/NetAddressRange.h
 // Library   KMS-B
 
 // External type : Net::AddressRange (const char*)
-// Internal type : Net::AddressRange (std::string)
+// Internal type : Net::AddressRange (String_ASCII)
 
 #pragma once
 

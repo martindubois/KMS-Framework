@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Text_File_ASCII.cpp
@@ -187,7 +187,7 @@ namespace KMS
                 KMS_EXCEPTION(RESULT_OPEN_FAILED, lMsg, "");
             }
 
-            std::string lLine;
+            String_ASCII lLine;
             unsigned int lLineNo = 0;
 
             while (getline(lStream, lLine))
@@ -211,11 +211,11 @@ namespace KMS
         // //////////////////////////////////////////////////////////////////
 
         File_ASCII::Line::Line(const char* aIn, unsigned int aUserLineNo)
-            : std::string(aIn), mUserLineNo(aUserLineNo)
+            : String_ASCII(aIn), mUserLineNo(aUserLineNo)
         {}
 
-        File_ASCII::Line::Line(const std::string& aIn, unsigned int aUserLineNo)
-            : std::string(aIn), mUserLineNo(aUserLineNo)
+        File_ASCII::Line::Line(const String_ASCII& aIn, unsigned int aUserLineNo)
+            : String_ASCII(aIn), mUserLineNo(aUserLineNo)
         {}
 
         unsigned int File_ASCII::Line::GetUserLineNo() const { return mUserLineNo; }

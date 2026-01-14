@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Exception.h
@@ -13,6 +13,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Result.h>
+#include <KMS/String.h>
 
 namespace KMS
 {
@@ -52,16 +53,16 @@ namespace KMS
 
         Result mCode;
 
-        std::string mFile;
-        std::string mFunction;
+        String_ASCII mFile;
+        String_ASCII mFunction;
 
         unsigned int mLine;
 
-        std::string mInfo;
+        String_ASCII mInfo;
 
         unsigned int mLastError;
 
-        std::string mMessage;
+        String_ASCII mMessage;
 
     };
 

@@ -31,7 +31,7 @@ public:
 
 private:
 
-    std::string mCommand;
+    String_ASCII mCommand;
 
     Phase mPhase;
 

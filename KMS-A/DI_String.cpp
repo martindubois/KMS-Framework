@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_String.cpp
@@ -24,7 +24,7 @@ namespace KMS
 
         DI::Object* String::Create() { return new String; }
 
-        String_Ptr::String_Ptr(std::string* aPtr) : mPtr(aPtr) {}
+        String_Ptr::String_Ptr(String_ASCII* aPtr) : mPtr(aPtr) {}
 
         String::String(const char* aIn) : String_Ptr(&mInternal), mInternal(aIn) {}
 
@@ -67,7 +67,7 @@ namespace KMS
             return static_cast<unsigned int>(mPtr->size());
         }
 
-        const std::string& String_Ptr::GetString() const
+        const String_ASCII& String_Ptr::GetString() const
         {
             assert(nullptr != mPtr);
 

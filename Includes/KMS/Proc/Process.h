@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Proc/Process.h
@@ -67,12 +67,12 @@ namespace KMS
 
             StringList_ASCII mArguments;
             char           * mCmdLine;
-            std::string      mExecutable;
+            String_ASCII     mExecutable;
             int              mExitCode;
             File::Folder     mFolder;
             uint64_t         mHandle;
-            std::string      mVerb;
-            std::string      mWorkingDirectory;
+            String_ASCII     mVerb;
+            String_ASCII     mWorkingDirectory;
 
         };
 

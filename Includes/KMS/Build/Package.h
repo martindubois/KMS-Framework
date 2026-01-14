@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Package.h
@@ -37,9 +37,9 @@ namespace KMS
 
         private:
 
-            bool        mOSIndependent;
-            std::string mProduct;
-            Version     mVersion;
+            bool         mOSIndependent;
+            String_ASCII mProduct;
+            Version      mVersion;
 
         };
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/String.h
@@ -8,7 +8,7 @@
 // Library   KMS-A
 
 // External type : const char*
-// Internal type : std::string
+// Internal type : String_ASCII
 
 #pragma once
 
@@ -17,6 +17,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI/Value.h>
+#include <KMS/String.h>
 
 namespace KMS
 {
@@ -30,7 +31,7 @@ namespace KMS
 
             static const char* DEFAULT_VALUE;
 
-            String_Ptr(std::string* aPtr);
+            String_Ptr(String_ASCII* aPtr);
 
             void operator = (const char* aIn);
 
@@ -42,7 +43,7 @@ namespace KMS
 
             unsigned int GetLength() const;
 
-            const std::string& GetString() const;
+            const String_ASCII& GetString() const;
 
             // ===== Value ==================================================
             virtual unsigned int Get(char* aOut, unsigned int aOutSize_byte) const;
@@ -54,7 +55,7 @@ namespace KMS
 
         private:
 
-            std::string* mPtr;
+            String_ASCII* mPtr;
 
         };
 
@@ -74,7 +75,7 @@ namespace KMS
 
         private:
 
-            std::string mInternal;
+            String_ASCII mInternal;
 
         };
 

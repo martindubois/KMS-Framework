@@ -28,6 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Build_Depend.cpp" />
+    <ClCompile Include="Build_Editor.cpp" />
+    <ClCompile Include="Build_Editor_DI2.cpp" />
     <ClCompile Include="Build_Make.cpp" />
     <ClCompile Include="Build_Package.cpp" />
     <ClCompile Include="Callback.cpp" />
@@ -136,6 +138,7 @@
     <ClCompile Include="Scope_Scope.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Stats_Stats.cpp" />
+    <ClCompile Include="String_DI2.cpp" />
     <ClCompile Include="Test_Test.cpp" />
     <ClCompile Include="Test_TestManager.cpp" />
     <ClCompile Include="Text_File_ASCII.cpp" />
@@ -147,6 +150,7 @@
     <ClCompile Include="Thread_Thread.cpp" />
     <ClCompile Include="Thread_Thread_W.cpp" />
     <ClCompile Include="Version.cpp" />
+    <ClCompile Include="Version_DI2.cpp" />
     <ClCompile Include="WGDI_Scope.cpp" />
     <ClCompile Include="WGDI_Scope_Module.cpp" />
     <ClCompile Include="WGDI_Window_Bitmap.cpp" />

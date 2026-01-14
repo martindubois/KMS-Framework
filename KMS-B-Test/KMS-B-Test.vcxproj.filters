@@ -19,6 +19,9 @@
     <Filter Include="Source Files\Proc">
       <UniqueIdentifier>{95d15474-c036-459c-8e30-3bda9ef98d45}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Net">
+      <UniqueIdentifier>{bccf02b1-c7d1-4d7d-989d-d9456c620b14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-B-Test.cpp">
@@ -33,14 +36,17 @@
     <ClCompile Include="HTTP_Client.cpp">
       <Filter>Source Files\HTTP</Filter>
     </ClCompile>
-    <ClCompile Include="Net_Address.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Proc_Browser.cpp">
       <Filter>Source Files\Proc</Filter>
     </ClCompile>
     <ClCompile Include="Proc_Browser_W.cpp">
       <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Address.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Net_Name.cpp">
+      <Filter>Source Files\Net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

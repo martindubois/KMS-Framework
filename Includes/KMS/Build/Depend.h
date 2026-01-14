@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Make.h
@@ -42,7 +42,7 @@ namespace KMS
 
             bool LocateLocalDependency(StringSet_ASCII* aInOut, const char* aFile, const char* aFrom);
 
-            typedef std::map<std::string, StringSet_ASCII*> FileMap;
+            typedef std::map<String_ASCII, StringSet_ASCII*> FileMap;
 
             FileMap mCache;
 

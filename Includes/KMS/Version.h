@@ -38,6 +38,8 @@ namespace KMS
         unsigned int GetBuild() const;
         unsigned int GetCompat() const;
 
+        bool IsZero() const;
+
         #ifndef _KMS_EMBEDDED_
 
             Version(const char* aVersion);

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2024 KMS
+// Copyright (C) 2023-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Transaction.h
@@ -136,7 +136,7 @@ namespace KMS
             unsigned int mMajor;
             unsigned int mMinor;
 
-            std::string mPath;
+            String_ASCII mPath;
 
             Ptr_OF<Net::Socket> mSocket;
 

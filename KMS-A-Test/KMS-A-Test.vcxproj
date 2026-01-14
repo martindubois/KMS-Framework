@@ -213,6 +213,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Build_Editor.cpp" />
     <ClCompile Include="Cfg_Configurator.cpp" />
     <ClCompile Include="Click_Master.cpp" />
     <ClCompile Include="CLI_InstanceList.cpp" />

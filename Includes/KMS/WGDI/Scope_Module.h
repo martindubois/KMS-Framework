@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WGDI/Scope_Module.h
@@ -59,7 +59,7 @@ namespace KMS
             int Cmd_Start            (CLI::CommandLine* aCmd);
             int Cmd_Stop             (CLI::CommandLine* aCmd);
 
-            typedef std::map<std::string, Scope*> ScopeMap;
+            typedef std::map<String_ASCII, Scope*> ScopeMap;
 
             KMS::Scope::Channel* mChannel;
             Scope              * mScope;

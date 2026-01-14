@@ -255,6 +255,16 @@ namespace KMS
         // Functions
         // //////////////////////////////////////////////////////////////////
 
+        void Decode_ASCII_Arguments(void* aData, const IType* aType, int aCount, const char** aVector)
+        {
+            assert(nullptr != aVector);
+
+            for (int i = 0; i < aCount; i++)
+            {
+                Decode_ASCII_String(aData, aType, aVector[i]);
+            }
+        }
+
         void Decode_ASCII_String(void* aData, const IType* aType, const char* aString)
         {
             assert(nullptr != aType);

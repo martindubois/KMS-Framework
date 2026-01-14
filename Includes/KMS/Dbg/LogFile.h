@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/LogFile.h
@@ -17,6 +17,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/File/Folder.h>
+#include <KMS/String.h>
 
 namespace KMS
 {
@@ -109,17 +110,17 @@ namespace KMS
 
             NO_COPY(LogFile);
 
-            uint8_t      mBuffer[256];
-            unsigned int mCounter;
-            unsigned int mDataSize_byte;
-            EntryType    mEntryType;
-            FILE       * mFile;
-            std::string  mFunction;
-            Level        mLevel;
-            unsigned int mLine;
-            std::string  mMessage;
-            std::string  mSourceFile;
-            uint64_t     mTimestamp;
+            uint8_t       mBuffer[256];
+            unsigned int  mCounter;
+            unsigned int  mDataSize_byte;
+            EntryType     mEntryType;
+            FILE        * mFile;
+            String_ASCII  mFunction;
+            Level         mLevel;
+            unsigned int  mLine;
+            String_ASCII  mMessage;
+            String_ASCII  mSourceFile;
+            uint64_t      mTimestamp;
 
         };
 

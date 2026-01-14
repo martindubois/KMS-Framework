@@ -31,6 +31,9 @@
     <Filter Include="Source Files\CLI">
       <UniqueIdentifier>{917ea89f-b5b1-4ffa-89c7-3956cfef857b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Build">
+      <UniqueIdentifier>{fe0192f9-761f-4d40-a2ea-eea0c1fdf9ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KMS-A-Test.cpp">
@@ -134,6 +137,9 @@
     </ClCompile>
     <ClCompile Include="DI2.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Editor.cpp">
+      <Filter>Source Files\Build</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

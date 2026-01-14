@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/DI_String_Expand.cpp
@@ -24,7 +24,7 @@ namespace KMS
 
         Object* String_Expand::Create() { return new String_Expand; }
 
-        String_Expand_Ptr::String_Expand_Ptr(std::string* aPtr) : String_Ptr(aPtr) {}
+        String_Expand_Ptr::String_Expand_Ptr(String_ASCII* aPtr) : String_Ptr(aPtr) {}
 
         String_Expand::String_Expand(const char* aIn)
         {

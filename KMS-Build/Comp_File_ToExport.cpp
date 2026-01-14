@@ -34,8 +34,8 @@ private:
 
     virtual void Verify_VERIFY();
 
-    std::string   mFileName_Dst;
-    std::string   mFileName_Src;
+    String_ASCII  mFileName_Dst;
+    String_ASCII  mFileName_Src;
     File::Folder* mFolder;
     File::Folder* mProductFolder;
 

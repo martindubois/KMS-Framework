@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Text/File_ASCII.h
@@ -58,13 +58,13 @@ namespace KMS
 
         // Internal
 
-            class Line : public std::string
+            class Line : public String_ASCII
             {
 
             public:
 
-                Line(const char       * aIn, unsigned int aUserLineNo = 0xffffffff);
-                Line(const std::string& aIn, unsigned int aUserLineNo = 0xffffffff);
+                Line(const char        * aIn, unsigned int aUserLineNo = 0xffffffff);
+                Line(const String_ASCII& aIn, unsigned int aUserLineNo = 0xffffffff);
 
                 unsigned int GetUserLineNo() const;
 

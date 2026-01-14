@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
@@ -46,7 +46,7 @@ namespace KMS
 
         private:
 
-            typedef std::map<std::string, ICallback*> FunctionMap;
+            typedef std::map<String_ASCII, ICallback*> FunctionMap;
 
             NO_COPY(ReactApp);
 

@@ -474,6 +474,18 @@
     <ClCompile Include="DI2_Container.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
+    <ClCompile Include="Build_Editor.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Build_Editor_DI2.cpp">
+      <Filter>Source Files\Build</Filter>
+    </ClCompile>
+    <ClCompile Include="Version_DI2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="String_DI2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

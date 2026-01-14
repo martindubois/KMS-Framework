@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/DI_String_Expand.cpp
@@ -15,7 +15,7 @@ using namespace KMS;
 KMS_TEST(DI_String_Expand_Base, "Auto", sTest_Base)
 {
     // Constructor
-    std::string       lI0;
+    String_ASCII      lI0;
     DI::String        lS0;
     DI::String_Ptr    lSP0(&lI0);
     DI::String_Expand lSE0;
@@ -38,7 +38,7 @@ KMS_TEST(DI_String_Expand_Base, "Auto", sTest_Base)
     KMS_TEST_COMPARE(lS0.GetLength(), 0U);
 
     // GetString
-    const std::string& lI1 = lS0.GetString();
+    const String_ASCII& lI1 = lS0.GetString();
 }
 
 KMS_TEST(DI_String_Expand_Exception, "Auto", sText_Exception)

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Test/Test.h
@@ -67,8 +67,8 @@ namespace KMS
             NO_COPY(Test);
 
             unsigned int mErrorCount;
-            std::string  mGroup;
-            std::string  mName;
+            String_ASCII mGroup;
+            String_ASCII mName;
 
         };
 

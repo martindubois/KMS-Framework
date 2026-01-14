@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Version.cpp
@@ -54,6 +54,17 @@ namespace KMS
     unsigned int Version::GetBuild () const { return mBuild ; }
     unsigned int Version::GetCompat() const { return mCompat; }
 
+    bool Version::IsZero() const
+    {
+        return (0 == mMajor)
+            && (0 == mMinor)
+            && (0 == mBuild)
+            && (0 == mCompat)
+            && (0 == mDebug)
+            && (0 == strlen(mDate))
+            && (0 == strlen(mType));
+    }
+
     #ifndef _KMS_EMBEDDED_
 
         Version::Version(const char* aVersion) : mDebug(false)
@@ -91,7 +102,7 @@ namespace KMS
 
             unsigned int lState = 0;
 
-            for (std::string lLine : lTF.mLines)
+            for (String_ASCII lLine : lTF.mLines)
             {
                 unsigned int lMajor;
                 unsigned int lMinor;

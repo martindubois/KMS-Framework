@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2024 KMS
+// Copyright (C) 2024-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/CLI/InstanceList.h
@@ -11,6 +11,9 @@
 // ===== C++ ================================================================
 #include <iostream>
 #include <map>
+
+// ===== Includes ===========================================================
+#include <KMS/String.h>
 
 namespace KMS
 {
@@ -66,7 +69,7 @@ namespace KMS
 
             void Unselect();
 
-            typedef std::map<std::string, void*> InstanceMap;
+            typedef std::map<String_ASCII, void*> InstanceMap;
 
             InstanceMap mInstances;
 

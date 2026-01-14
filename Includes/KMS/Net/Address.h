@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Net/Address.h
@@ -113,7 +113,7 @@ namespace KMS
             }
             mAddress;
 
-            std::string mName;
+            String_ASCII mName;
 
         };
 

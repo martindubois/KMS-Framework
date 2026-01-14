@@ -34,8 +34,8 @@ public:
 
 private:
 
-    std::string mDst;
-    std::string mFileName;
+    String_ASCII mDst;
+    String_ASCII mFileName;
 
     File::Folder* mSrc;
 

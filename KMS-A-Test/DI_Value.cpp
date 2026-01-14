@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/DI_Value.cpp
@@ -71,10 +71,10 @@ KMS_TEST(DI_Value_Base, "Auto", sTest_Base)
     int32_t                                 lI0I = 0;
     DI::Int_Ptr<int32_t>                    lI0  (&lI0I);
     DI::Int<int32_t>                        lI1  (1);
-    std::string                             lS0I ("Test 1");
+    String_ASCII                            lS0I ("Test 1");
     DI::String_Ptr                          lS0  (&lS0I);
     DI::String                              lS1  ("Test 2");
-    std::string                             lSE0I("TestE 1");
+    String_ASCII                            lSE0I("TestE 1");
     DI::String_Expand_Ptr                   lSE0 (&lSE0I);
     DI::String_Expand                       lSE1 ("TestE 2");
     uint32_t                                lUI0I(0);

@@ -25,7 +25,7 @@ public:
 
 private:
 
-    std::string mName;
+    KMS::String_ASCII mName;
 
 };
 

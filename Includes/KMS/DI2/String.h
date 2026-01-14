@@ -9,8 +9,9 @@
 #pragma once
 
 // ===== Includes ===========================================================
-#include <KMS/DI2/Output.h>
+#include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
+#include <KMS/DI2/Output.h>
 
 namespace KMS
 {
