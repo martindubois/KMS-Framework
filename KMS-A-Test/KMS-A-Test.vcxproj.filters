@@ -141,6 +141,9 @@
     <ClCompile Include="Build_Editor.cpp">
       <Filter>Source Files\Build</Filter>
     </ClCompile>
+    <ClCompile Include="Script_Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

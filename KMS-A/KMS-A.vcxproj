@@ -136,6 +136,10 @@
     <ClCompile Include="Scope_Channel_Modbus.cpp" />
     <ClCompile Include="Scope_Channel_Random.cpp" />
     <ClCompile Include="Scope_Scope.cpp" />
+    <ClCompile Include="Script_Script.cpp" />
+    <ClCompile Include="Script_Script_Cmd.cpp" />
+    <ClCompile Include="Script_Script_PS.cpp" />
+    <ClCompile Include="Script_Script_Sh.cpp" />
     <ClCompile Include="Stats_Histogram.cpp" />
     <ClCompile Include="Stats_Stats.cpp" />
     <ClCompile Include="String_DI2.cpp" />

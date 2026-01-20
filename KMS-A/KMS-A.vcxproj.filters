@@ -85,6 +85,9 @@
     <Filter Include="Source Files\DI2">
       <UniqueIdentifier>{6276e902-041f-4574-867c-b4548d2ed5a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Script">
+      <UniqueIdentifier>{d6c34125-3570-4b65-af2d-6e3028adb958}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Exception.cpp">
@@ -485,6 +488,18 @@
     </ClCompile>
     <ClCompile Include="String_DI2.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Script_Cmd.cpp">
+      <Filter>Source Files\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Script.cpp">
+      <Filter>Source Files\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Script_PS.cpp">
+      <Filter>Source Files\Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Script_Script_Sh.cpp">
+      <Filter>Source Files\Script</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
