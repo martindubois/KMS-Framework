@@ -156,6 +156,9 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(0 == lProcess.GetExitCode(), RESULT_UNCOMPRESS_FAILED, "Cannot uncompress the elements", lProcess.GetCmdLine());
         }
 
+        // TODO  Add a flag for OVERWRITE to control the /Y switch
+        // TODO  Replace / by \ in filename
+
         void Folder::Copy(const Folder& aDst) const
         {
             Proc::Process lProcess(Folder(Id::NONE), "xcopy");

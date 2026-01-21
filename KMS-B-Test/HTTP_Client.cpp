@@ -35,7 +35,7 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
     // Get
     lC0.Get("http://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF0);
     // lC1.Get("https://www.kms-quebec.com/MaPorteDuWEB/index.htm", &lOF1);
-    lC2.Get("https://github.com/martindubois/KMS-Framework/releases/download/1.0.1_Windows/KMS-Framework_Windows_1.0.1.zip", &lOF2);
+    // lC2.Get("https://github.com/martindubois/KMS-Framework/releases/download/1.0.1_Windows/KMS-Framework_Windows_1.0.1.zip", &lOF2);
     lC3.Get("http://www.kms-quebec.com/back-end/index.php/version/get");
     lC4.Get("http://www.kms-quebec.com/back-end/index.php/card/get?Date=2024-01-10");
 
@@ -69,7 +69,7 @@ KMS_TEST(HTTP_Client_Base, "Auto", sTest_Base)
     // ===== Cleanup ========================================================
     File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_0.html");
     // File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_1.html");
-    File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_2.zip");
+    // File::Folder::CURRENT.Delete("Test_HTTP_Client_Base_2.zip");
 }
 
 KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)

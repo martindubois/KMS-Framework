@@ -201,6 +201,13 @@ namespace KMS
             AddModule(&mMacros);
         }
 
+        void Make::SetScript(Script::Script* aScript)
+        {
+            assert(nullptr != aScript);
+
+            mScript = aScript;
+        }
+
         // ===== CLI::Tool ==================================================
 
         void Make::DisplayHelp(FILE* aOut) const
