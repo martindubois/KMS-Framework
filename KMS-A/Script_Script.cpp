@@ -52,6 +52,24 @@ namespace KMS
             Write_Comment(lComment.c_str());
         }
 
+        void Script::Write_CreateFolder_IfNeeded(const char* aFolder, unsigned int aFlags)
+        {
+            Write_If_NotExist(aFolder, aFlags);
+            {
+                Write_CreateFolder(aFolder, aFlags);
+            }
+            Write_If_End();
+        }
+
+        void Script::Write_DeleteFile_IfNeeded(const char* aFile, unsigned int aFlags)
+        {
+            Write_If_Exist(aFile, aFlags);
+            {
+                Write_DeleteFile(aFile, aFlags);
+            }
+            Write_If_End();
+        }
+
         void Script::Write_Echo_Executing(const char* aMessage, unsigned int aFlags)
         {
             assert(nullptr != aMessage);

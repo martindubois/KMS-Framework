@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Make.cpp
@@ -160,6 +160,7 @@ namespace KMS
             , mProcessor    (PROCESSOR_DEFAULT)
             , mF_Product(File::Folder::Id::CURRENT)
             , mMacros(this)
+            , mScript(nullptr)
         {
             mCleanExtensions.SetCreator(DI::String::Create);
             mIncludes       .SetCreator(DI::String_Expand::Create);
@@ -275,6 +276,15 @@ namespace KMS
             {
                 mF_Bin_Cfg.Delete(aB);
             }
+
+            if (nullptr != mScript)
+            {
+                char lPath[PATH_LENGTH];
+
+                mF_Bin_Cfg.GetPath(aB, lPath, sizeof(lPath));
+
+                mScript->Write_DeleteFile_IfNeeded(lPath);
+            }
         }
 
         void Make::Clean_Component(const char* aC)
@@ -285,7 +295,19 @@ namespace KMS
             {
                 auto lCE = dynamic_cast<const DI::String*>(lEntry.Get());
 
-                lC.DeleteFiles(lCE->Get());
+                auto lExt = lCE->Get();
+                assert(nullptr != lExt);
+
+                lC.DeleteFiles(lExt);
+
+                if (nullptr != mScript)
+                {
+                    char lPath[PATH_LENGTH];
+
+                    lC.GetPath(lExt, lPath, sizeof(lPath));
+
+                    mScript->Write_DeleteFile_IfNeeded(lPath);
+                }
             }
         }
 
@@ -298,6 +320,15 @@ namespace KMS
             if (mF_Lib_Cfg.DoesFileExist(lL))
             {
                 mF_Lib_Cfg.Delete(lL);
+
+                if (nullptr != mScript)
+                {
+                    char lPath[PATH_LENGTH];
+
+                    mF_Lib_Cfg.GetPath(lL, lPath, sizeof(lPath));
+
+                    mScript->Write_DeleteFile_IfNeeded(lPath);
+                }
             }
         }
 
@@ -453,9 +484,21 @@ namespace KMS
 
             lP.Run(MAKE_ALLOWED_TIME_ms);
 
+            auto lCmdLine = lP.GetCmdLine();
+            assert(nullptr != lCmdLine);
+
             if (0 != lP.GetExitCode())
             {
-                KMS_EXCEPTION(RESULT_COMPILATION_FAILED, "Cannot make", lP.GetCmdLine());
+                KMS_EXCEPTION(RESULT_COMPILATION_FAILED, "Cannot make", lCmdLine);
+            }
+
+            if (nullptr != mScript)
+            {
+                mScript->Write_PushDirectory(aC);
+                {
+                    mScript->Write_Command(lCmdLine, Script::Script::FLAG_DO_NOT_PROCESS);
+                }
+                mScript->Write_PopDirectory();
             }
         }
 
@@ -477,6 +520,15 @@ namespace KMS
 
             if (!mF_Bin_Cfg.DoesExist()) { mF_Bin_Cfg.Create(); }
             if (!mF_Lib_Cfg.DoesExist()) { mF_Lib_Cfg.Create(); }
+
+            if (nullptr != mScript)
+            {
+                mScript->Write_CreateFolder_IfNeeded(mF_Binaries .GetPath());
+                mScript->Write_CreateFolder_IfNeeded(mF_Libraries.GetPath());
+
+                mScript->Write_CreateFolder_IfNeeded(mF_Bin_Cfg.GetPath());
+                mScript->Write_CreateFolder_IfNeeded(mF_Lib_Cfg.GetPath());
+            }
         }
 
         int Make::Cmd_Clean(CLI::CommandLine* aCmd)

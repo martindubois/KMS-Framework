@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Build.cpp
@@ -164,7 +164,7 @@ int ::Build::Main(int aCount, const char ** aVector)
     , mOSIndependent(OS_INDEPENDENT_DEFAULT)
     , mProduct      (PRODUCT_DEFAULT)
     , mReadMePrefix (READ_ME_PREFIX_DEFAULT)
-    , mVersionFile  (VERSION_FILE_DEFAULT)
+    , mVersionFile(VERSION_FILE_DEFAULT)
 {
     mBinaries        .SetCreator(DI::String::Create);
     mConfigurations  .SetCreator(DI::String::Create);
@@ -224,10 +224,44 @@ int ::Build::Run()
 
     CreateLists();
 
+    std::unique_ptr<Script::Script> lScript;
+
+    // TODO if ((!mDoNotClean.Get()) && (!mDoNotCompile.Get()) && (!mDoNotPackage.Get()) && (!mDoNotTest.Get()))
+    {
+        #ifdef _KMS_LINUX_
+            lScript = std::make_unique<Script::Script_Sh>("KMS-Build");
+        #endif
+
+        #ifdef _KMS_WINDOWS_
+            lScript = std::make_unique<Script::Script_Cmd>("KMS-Build");
+        #endif
+    }
+
     for (auto lPhase = Phase::VERIFY; lPhase != Phase::NONE; ++lPhase)
     {
-        mComps.Verify (lPhase);
-        mTools.Execute(lPhase);
+        if (nullptr != lScript)
+        {
+            const char* lSection = nullptr;
+
+            switch (lPhase)
+            {
+            case Phase::COMPILE  : lSection = "Compile"  ; break;
+            case Phase::PACKAGE  : lSection = "Package"  ; break;
+            case Phase::PRE_BUILD: lSection = "Pre-Build"; break;
+            case Phase::SIGN     : lSection = "Sign"     ; break;
+            case Phase::TEST     : lSection = "Test"     ; break;
+            case Phase::VERIFY   : lSection = "Verify"   ; break;
+            }
+
+            if (nullptr != lSection)
+            {
+                lScript->Write_Comment_Section(lSection);
+                lScript->Write_EmptyLine();
+            }
+        }
+
+        mComps.Verify (lPhase, lScript.get());
+        mTools.Execute(lPhase, lScript.get());
     }
 
     return 0;

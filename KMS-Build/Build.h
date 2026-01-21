@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Build.h
@@ -17,6 +17,14 @@
 #include <KMS/File/Folder.h>
 #include <KMS/Types.h>
 #include <KMS/Version.h>
+
+#ifdef _KMS_LINUX_
+    #include <KMS/Script/Script_Sh.h>
+#endif
+
+#ifdef _KMS_WINDOWS_
+    #include <KMS/Script/Script_Cmd.h>
+#endif
 
 // ===== Local ==============================================================
 #include "Comp.h"

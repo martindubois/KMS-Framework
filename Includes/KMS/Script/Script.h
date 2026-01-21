@@ -55,6 +55,16 @@ namespace KMS
             /// \see Write_Comment
             void Write_Comment_Section(const char* aComment);
 
+            /// \param aFolder The folder name
+            /// \param aFlags  FLAG_COMMAND and FLAG_FILE_NAME are assummed
+            /// \see FLAG_DO_NOT_PROCESS
+            void Write_CreateFolder_IfNeeded(const char* aFolder, unsigned int aFlags = 0);
+
+            /// \param aFile  The file name
+            /// \param aFlags FLAG_COMMAND and FLAG_FILE_NAME are assummed
+            /// \see FLAG_DO_NOT_PROCESS
+            void Write_DeleteFile_IfNeeded(const char* aFile, unsigned int aFlags = 0);
+
             /// \param aMessage Add a command to the script, to display this
             ///                 message
             /// \param aFlags   FLAG_MESSAGE is assumed
@@ -102,6 +112,16 @@ namespace KMS
             /// \param aComment The comment to add to the script
             virtual void Write_Comment(const char* aComment) = 0;
 
+            /// \param aFolder The folder name
+            /// \param aFlags  FLAG_FILE_NAME is assummed
+            /// \see FLAG_DO_NOT_PROCESS
+            virtual void Write_CreateFolder(const char* aFolder, unsigned int aFlags) = 0;
+
+            /// \param aFile  The file name
+            /// \param aFlags FLAG_FILE_NAME is assummed
+            /// \see FLAG_DO_NOT_PROCESS
+            virtual void Write_DeleteFile(const char* aFile, unsigned int aFlags = 0) = 0;
+
             /// \param aMessage The message the command display
             /// \param aFlags   FLAG_MESSAGE is assumed
             /// \see FLAG_DO_NOT_PROCESS, FLAG_DO_NOT_QUOTE, FLAG_FILE_NAME
@@ -125,13 +145,26 @@ namespace KMS
             /// \see Write_If_End
             virtual void Write_If_Error() = 0;
 
-            /// \brief aFileName The file name
-            /// \brief aFlags    FLAG_COMMAND and FLAG_FILE_NAME are assumed
+            /// \param aFile  The file name
+            /// \param aFlags FLAG_COMMAND and FLAG_FILE_NAME are assumed
             /// \see FLAG_DO_NOT_PROCESS, FLAG_DO_NOT_QUOTE, Write_If_End
-            virtual void Write_If_NotExist(const char* aFileName, unsigned int aFlags = 0) = 0;
+            virtual void Write_If_Exist(const char* aFile, unsigned int aFlags = 0) = 0;
+
+            /// \param aFile  The file name
+            /// \param aFlags FLAG_COMMAND and FLAG_FILE_NAME are assumed
+            /// \see FLAG_DO_NOT_PROCESS, FLAG_DO_NOT_QUOTE, Write_If_End
+            virtual void Write_If_NotExist(const char* aFile, unsigned int aFlags = 0) = 0;
 
             /// \brief Add a pause command into the script
             virtual void Write_Pause() = 0;
+
+            /// \see FLAG_DO_NOT_PROCESS, Write_PushDirectory
+            virtual void Write_PopDirectory() = 0;
+
+            /// \param aFolder The folder name
+            /// \param aFlags FLAG_COMMAND and FLAG_FILE_NAME are assumed
+            /// \see FLAG_DO_NOT_PROCESS, Write_PopDirectory
+            virtual void Write_PushDirectory(const char* aFolder, unsigned int aFlags = 0) = 0;
 
             /// \brief aVariable The variable name
             /// \brief aValue    The variable value
@@ -142,9 +175,9 @@ namespace KMS
         protected:
 
             /// \brief Constructor
-            /// \param aFileName  The file name, without the extension
+            /// \param aFile      The file name, without the extension
             /// \param aExtension The file extension (including the initial dot)
-            Script(const char* aFileName, const char* aExtension);
+            Script(const char* aFile, const char* aExtension);
 
             /// \param aLine The line to add to the script
             void Write_Line(const std::string& aLine);

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool_Executable.cpp
@@ -68,16 +68,21 @@ namespace Tool_Executable
         delete mFolder;
     }
 
-    void Tool::Execute(Phase aPhase)
+    // SCRIPT  Verify the executable exist and execute the tool
+    void Tool::Execute(Phase aPhase, Script::Script* aScript)
     {
         std::cout << __FUNCTION__ << "( " << static_cast<unsigned int>(aPhase) << " ) - " << mExecutable.c_str() << std::endl;
 
+        assert(nullptr != mFolder);
         assert(0 < mTimeout_ms);
 
         if (mVerify == aPhase)
         {
             auto lExe = mExecutable.c_str();
             auto lExeExt = AddExtension(lExe);
+
+            assert(nullptr != lExe);
+            assert(nullptr != lExeExt);
 
             if (0 != strcmp("", mFolder->GetPath()))
             {
@@ -90,6 +95,15 @@ namespace Tool_Executable
                 {
                     Error_File_DoesNotExist(lExeExt);
                 }
+
+                if (nullptr != aScript)
+                {
+                    char lPath[PATH_LENGTH];
+
+                    mFolder->GetPath(lExeExt, lPath, sizeof(lPath));
+
+                    aScript->Write_Verify_Exist(lPath);
+                }
             }
         }
 
@@ -100,6 +114,14 @@ namespace Tool_Executable
             auto lRet = mProcess.GetExitCode();
 
             KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_EXECUTABLE_FAILED, "The compilation failed", mProcess.GetCmdLine());
+
+            if (nullptr != aScript)
+            {
+                auto lCmd = mProcess.GetCmdLine();
+                assert(nullptr != lCmd);
+
+                aScript->Write_Command(lCmd, Script::Script::FLAG_DO_NOT_PROCESS);
+            }
         }
     }
 

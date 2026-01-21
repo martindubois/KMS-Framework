@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp_Folder_ToPackage.cpp
@@ -29,12 +29,12 @@ public:
 
     // ===== Comp ===========================================================
     virtual ~C_Folder_ToPackage();
-    virtual void Verify (Phase aPhase) override;
-    virtual void Package(File::Folder* aTmpFolder) override;
+    virtual void Verify (Phase aPhase, Script::Script* aScript) override;
+    virtual void Package(File::Folder* aTmpFolder, Script::Script* aScript) override;
 
 private:
 
-    void Verify_COMPILE();
+    void Verify_COMPILE(Script::Script* aScript);
 
     String_ASCII  mDst;
     File::Folder* mSrc;
@@ -96,15 +96,16 @@ C_Folder_ToPackage::~C_Folder_ToPackage()
     delete mSrc;
 }
 
-void C_Folder_ToPackage::Verify(Phase aPhase)
+void C_Folder_ToPackage::Verify(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
-    case Phase::COMPILE: Verify_COMPILE(); break;
+    case Phase::COMPILE: Verify_COMPILE(aScript); break;
     }
 }
 
-void C_Folder_ToPackage::Package(KMS::File::Folder* aTmpFolder)
+// SCRIPT  TODO  The script does not package to a temporary folder.
+void C_Folder_ToPackage::Package(KMS::File::Folder* aTmpFolder, Script::Script* aScript)
 {
     assert(nullptr != mSrc);
 
@@ -116,10 +117,21 @@ void C_Folder_ToPackage::Package(KMS::File::Folder* aTmpFolder)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
-void C_Folder_ToPackage::Verify_COMPILE()
+// SCRIPT  Verify the needed file exist
+void C_Folder_ToPackage::Verify_COMPILE(Script::Script* aScript)
 {
+    assert(nullptr != mSrc);
+
     if (!mSrc->DoesExist())
     {
-        Error_Folder_DoesNotExist(mSrc->GetPath());
+        auto lPath = mSrc->GetPath();
+        assert(nullptr != lPath);
+
+        Error_Folder_DoesNotExist(lPath);
+
+        if (nullptr != aScript)
+        {
+            aScript->Write_Verify_Exist(lPath);
+        }
     }
 }

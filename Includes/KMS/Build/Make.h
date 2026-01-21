@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Build/Make.h
@@ -14,6 +14,7 @@
 #include <KMS/DI/Enum.h>
 #include <KMS/DI/String_Expand.h>
 #include <KMS/File/Folder.h>
+#include <KMS/Script/Script.h>
 #include <KMS/Text/File_ASCII.h>
 
 namespace KMS
@@ -52,6 +53,8 @@ namespace KMS
             static int Main(int aCount, const char** aVector);
 
             Make();
+
+            void SetScript(Script::Script* aScript);
 
             // ===== CLI::Tool ==============================================
             virtual void DisplayHelp(FILE* aFile) const;
@@ -105,6 +108,8 @@ namespace KMS
             File::Folder mF_Libraries;
 
             CLI::Macros mMacros;
+
+            Script::Script* mScript;
 
             // ===== Configurable attributes ================================
             DI::Enum<ComponentType, COMPONENT_TYPE_NAMES> mComponentType;

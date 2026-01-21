@@ -23,19 +23,24 @@ namespace KMS
         public:
 
             /// \brief Constructor
-            /// \param aFileName The name of the script without the extension
-            Script_Sh(const char* aFileName);
+            /// \param aFile The name of the script without the extension
+            Script_Sh(const char* aFile);
 
             // ===== Script =================================================
             virtual ~Script_Sh() override;
             virtual void Write_Comment(const char* aComment) override;
+            virtual void Write_CreateFolder(const char* aFolder, unsigned int aFlags = 0) override;
+            virtual void Write_DeleteFile(const char* aFile, unsigned int aFlags = 0) override;
             virtual void Write_Echo(const std::string& aMessage, unsigned int aFlags = 0) override;
             virtual void Write_Exit(int aCode) override;
             virtual void Write_If(const std::string& aCondition, unsigned int aFlags = 0) override;
             virtual void Write_If_End() override;
             virtual void Write_If_Error() override;
-            virtual void Write_If_NotExist(const char* aFileName, unsigned int aFlags = 0) override;
+            virtual void Write_If_Exist(const char* aFile, unsigned int aFlags = 0) override;
+            virtual void Write_If_NotExist(const char* aFile, unsigned int aFlags = 0) override;
             virtual void Write_Pause() override;
+            virtual void Write_PopDirectory() override;
+            virtual void Write_PushDirectory(const char* aFolder, unsigned int aFlags = 0) override;
             virtual void Write_Variable_Set(const char* aVariable, const char* aValue, unsigned int aFlags = 0) override;
 
         protected:

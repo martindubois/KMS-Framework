@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp.cpp
@@ -20,9 +20,9 @@ Comp::Comp(const char* aName) : mName(aName)
     assert(nullptr != aName);
 }
 
-void Comp::Verify(Phase) {}
+void Comp::Verify(Phase, Script::Script*) {}
 
-void Comp::Package(KMS::File::Folder*) {}
+void Comp::Package(KMS::File::Folder*, Script::Script*) {}
 
 void Comp::Export() {}
 
@@ -43,23 +43,23 @@ void CompList::Add(Comp* aComp)
     mComps.push_back(aComp);
 }
 
-void CompList::Verify(Phase aPhase)
+void CompList::Verify(Phase aPhase, Script::Script* aScript)
 {
     for (auto lC : mComps)
     {
         assert(nullptr != lC);
 
-        lC->Verify(aPhase);
+        lC->Verify(aPhase, aScript);
     }
 }
 
-void CompList::Package(File::Folder* aTmp_Root)
+void CompList::Package(File::Folder* aTmp_Root, Script::Script* aScript)
 {
     for (auto lC : mComps)
     {
         assert(nullptr != lC);
 
-        lC->Package(aTmp_Root);
+        lC->Package(aTmp_Root, aScript);
     }
 }
 

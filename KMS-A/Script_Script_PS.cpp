@@ -39,6 +39,34 @@ namespace KMS
             Write_Line(lComment);
         }
 
+        void Script_PS::Write_CreateFolder(const char* aFolder, unsigned int aFlags)
+        {
+            char lFolder[PATH_LENGTH];
+
+            Process_String(aFolder, lFolder, sizeof(lFolder), aFlags | FLAG_COMMAND | FLAG_FILE_NAME);
+
+            std::string lCmd = "New-Item -Path ";
+
+            lCmd += lFolder;
+            lCmd += " - ItemType Directory";
+
+            Write_Command(lCmd, FLAG_DO_NOT_PROCESS);
+        }
+
+        void Script_PS::Write_DeleteFile(const char* aFile, unsigned int aFlags)
+        {
+            char lFile[PATH_LENGTH];
+
+            Process_String(aFile, lFile, sizeof(lFile), aFlags | FLAG_COMMAND | FLAG_FILE_NAME);
+
+            std::string lCmd = "Remove-Item -Path ";
+
+            lCmd += lFile;
+            lCmd += " -Force";
+
+            Write_Command(lCmd, FLAG_DO_NOT_PROCESS);
+        }
+
         void Script_PS::Write_Echo(const std::string& aMessage, unsigned int aFlags)
         {
             char lMessage[LINE_LENGTH];
@@ -82,15 +110,28 @@ namespace KMS
 
         void Script_PS::Write_If_Error() { Write_If("$?"); }
 
-        void Script_PS::Write_If_NotExist(const char* aFileName, unsigned int aFlags)
+        void Script_PS::Write_If_Exist(const char* aFile, unsigned int aFlags)
         {
-            char lFileName[PATH_LENGTH];
+            char lFile[PATH_LENGTH];
 
-            Process_String(aFileName, lFileName, sizeof(lFileName), aFlags |= FLAG_FILE_NAME);
+            Process_String(aFile, lFile, sizeof(lFile), aFlags | FLAG_COMMAND | FLAG_FILE_NAME);
+
+            std::string lCond = "Test-Path ";
+
+            lCond += lFile;
+
+            Write_If(lCond, FLAG_DO_NOT_PROCESS);
+        }
+
+        void Script_PS::Write_If_NotExist(const char* aFile, unsigned int aFlags)
+        {
+            char lFile[PATH_LENGTH];
+
+            Process_String(aFile, lFile, sizeof(lFile), aFlags | FLAG_COMMAND | FLAG_FILE_NAME);
 
             std::string lCond = "! ( Test-Path ";
             {
-                lCond += lFileName;
+                lCond += lFile;
             }
             lCond += " )";
 
@@ -100,6 +141,24 @@ namespace KMS
         void Script_PS::Write_Pause()
         {
             Write_Command("Read-Host -Prompt \"Press Enter to continue...\"", FLAG_DO_NOT_PROCESS);
+        }
+
+        void Script_PS::Write_PopDirectory()
+        {
+            Write_Command("popd", FLAG_DO_NOT_PROCESS);
+        }
+
+        void Script_PS::Write_PushDirectory(const char* aFolder, unsigned int aFlags)
+        {
+            char lFolder[PATH_LENGTH];
+
+            Process_String(aFolder, lFolder, sizeof(lFolder), aFlags | FLAG_COMMAND | FLAG_FILE_NAME);
+
+            std::string lCmd = "pushd ";
+
+            lCmd += lFolder;
+
+            Write_Command(lCmd, FLAG_DO_NOT_PROCESS);
         }
 
         void Script_PS::Write_Variable_Set(const char* aVariable, const char* aValue, unsigned int aFlags)

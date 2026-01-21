@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool_Export.cpp
@@ -25,7 +25,7 @@ public:
     T_Export(CompList* aComps, const Config& aCfg);
 
     // ===== Tool ===========================================================
-    virtual void Execute(Phase aPhase) override;
+    virtual void Execute(Phase aPhase, Script::Script* aScript) override;
 
 private:
 
@@ -68,7 +68,7 @@ T_Export::T_Export(CompList* aComps, const Config& aCfg)
 
 // ===== Tool ===============================================================
 
-void T_Export::Execute(Phase aPhase)
+void T_Export::Execute(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
@@ -79,6 +79,7 @@ void T_Export::Execute(Phase aPhase)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+// SCRIPT  The script does no include the EXPORT phase.
 void T_Export::Execute_TOOL_EXPORT()
 {
     assert(nullptr != mComps);

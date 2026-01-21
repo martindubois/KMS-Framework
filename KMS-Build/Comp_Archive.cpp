@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp_Archive.cpp
@@ -31,7 +31,7 @@ public:
 
     // ===== Comp ===========================================================
     virtual ~C_Archive();
-    virtual void Verify(Phase aPhase) override;
+    virtual void Verify(Phase aPhase, Script::Script* aScript) override;
     virtual void Export() override;
 
     File::Folder mTmp_Root;
@@ -53,11 +53,11 @@ public:
     T_Archive(CompList* aComps, File::Folder* aTmp_Root);
 
     // ===== Tool ===========================================================
-    virtual void Execute(Phase aPhase) override;
+    virtual void Execute(Phase aPhase, Script::Script* aScript) override;
 
 private:
 
-    void Execute_PACKAGE();
+    void Execute_PACKAGE(Script::Script* aScript);
 
     CompList* mComps;
     
@@ -151,7 +151,7 @@ C_Archive::~C_Archive()
     delete mProductFolder;
 }
 
-void C_Archive::Verify(Phase aPhase)
+void C_Archive::Verify(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
@@ -159,6 +159,7 @@ void C_Archive::Verify(Phase aPhase)
     }
 }
 
+// SCRIPT  The script does not include the EXPORT phase.
 void C_Archive::Export()
 {
     assert(nullptr != mProductFolder);
@@ -168,17 +169,18 @@ void C_Archive::Export()
 
 // ===== Tool ===============================================================
 
-void T_Archive::Execute(Phase aPhase)
+void T_Archive::Execute(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
-    case Phase::PACKAGE: Execute_PACKAGE(); break;
+    case Phase::PACKAGE: Execute_PACKAGE(aScript); break;
     }
 }
 
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+// SCRIPT  The script does not include the EXPORT phase.
 void C_Archive::Verify_VERIFY()
 {
     if (mProductFolder->DoesFileExist(mFileName))
@@ -187,7 +189,7 @@ void C_Archive::Verify_VERIFY()
     }
 }
 
-void T_Archive::Execute_PACKAGE()
+void T_Archive::Execute_PACKAGE(Script::Script* aScript)
 {
     assert(nullptr != mComps);
 
@@ -195,7 +197,7 @@ void T_Archive::Execute_PACKAGE()
     File::Folder lDrivers  (*mTmp_Root, "Drivers"  ); lDrivers  .Create();
     File::Folder lLibraries(*mTmp_Root, "Libraries"); lLibraries.Create();
 
-    mComps->Package(mTmp_Root);
+    mComps->Package(mTmp_Root, aScript);
 }
 
 // Static functions

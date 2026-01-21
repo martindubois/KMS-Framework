@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool_Make.cpp
@@ -34,11 +34,11 @@ public:
     T_Make(const Config& aCfg, const char* aConfiguration, const char* aProcessor);
 
     // ===== Tool ===========================================================
-    virtual void Execute(Phase aPhase) override;
+    virtual void Execute(Phase aPhase, Script::Script* aScript) override;
 
 private:
 
-    void Execute_COMPILE();
+    void Execute_COMPILE(Script::Script* aScript);
 
     KMS::Cfg::Configurator mConfigurator;
     KMS::Build::Make       mMake;
@@ -134,19 +134,22 @@ T_Make::T_Make(const Config& aCfg, const char* aConfiguration, const char* aProc
 
 // ===== Tool ===============================================================
 
-void T_Make::Execute(Phase aPhase)
+void T_Make::Execute(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
-    case Phase::COMPILE: Execute_COMPILE(); break;
+    case Phase::COMPILE: Execute_COMPILE(aScript); break;
     }
 }
 
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
-void T_Make::Execute_COMPILE()
+// SCRIPT  TODO  Compile
+void T_Make::Execute_COMPILE(Script::Script* aScript)
 {
+    mMake.SetScript(aScript);
+
     auto lRet = mMake.Run();
     KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_COMPILATION_FAILED, "KMS::Build::Make::Run failed", lRet);
 }

@@ -53,6 +53,9 @@ bool ExecuteTest(Script::Script& aS)
 
     // Write_Comment_Section
 
+    // Write_CreateFolder_IfNeeded
+    aS.Write_CreateFolder_IfNeeded("Test_Script__Base");
+
     // Write_Echo_Executing
     aS.Write_Echo_Executing("Executing");
 
@@ -96,6 +99,8 @@ bool ExecuteTest(Script::Script& aS)
     // Write_Command
 
     // Write_Comment
+
+    // Write_CreateFolder
 
     // Write_Echo
     aS.Write_Echo("/Option");

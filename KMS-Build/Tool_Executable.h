@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool_Executable.h
@@ -34,7 +34,7 @@ namespace Tool_Executable
     
         // ===== Tool ===========================================================
         virtual ~Tool();
-        virtual void Execute(Phase aPhase) override;
+        virtual void Execute(Phase aPhase, KMS::Script::Script* aScript) override;
     
     private:
 

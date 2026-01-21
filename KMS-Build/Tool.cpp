@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool.cpp
@@ -9,6 +9,8 @@
 
 // ==== Local ===============================================================
 #include "Tool.h"
+
+using namespace KMS;
 
 // Public
 // //////////////////////////////////////////////////////////////////////////
@@ -32,14 +34,14 @@ void ToolList::Add(Tool* aTool)
 
 Tool::Tool(const char* aName) : mName(aName) { assert(nullptr != aName); }
 
-void Tool::Execute(Phase) {}
+void Tool::Execute(Phase, Script::Script*) {}
 
-void ToolList::Execute(Phase aPhase)
+void ToolList::Execute(Phase aPhase, Script::Script* aScript)
 {
     for (auto lT : mTools)
     {
         assert(nullptr != lT);
 
-        lT->Execute(aPhase);
+        lT->Execute(aPhase, aScript);
     }
 }

@@ -45,7 +45,7 @@ static const char* SLN_FILE_NAME = "Solution" FILE_EXT_SLN;
 
 static File::Folder* GetVisualStudioFolder(uint32_t aVersion);
 
-static void CreateTool(ToolList* aTools, const Config& aCfg, const char* aConfiguration, const char* aProcessor);
+static void CreateTool(ToolList* aTools, const Config& aCfg, const char* aConfiguration, const char* aProcessor, Phase aVerify);
 
 namespace Tool_VisualStudio
 {
@@ -90,6 +90,8 @@ namespace Tool_VisualStudio
 
     void Tool_VisualStudio::CreateTools(ToolList* aTools, const Config& aCfg, const DI::Array& aConfigurations, const DI::Array& aProcessors)
     {
+        auto lVerify = Phase::VERIFY;
+
         for (const auto& lCE : aConfigurations.mInternal)
         {
             auto lC = dynamic_cast<const DI::String*>(lCE.Get());
@@ -100,7 +102,9 @@ namespace Tool_VisualStudio
                 auto lP = dynamic_cast<const DI::String*>(lPE.Get());
                 assert(nullptr != lP);
 
-                CreateTool(aTools, aCfg, lC->Get(), lP->Get());
+                CreateTool(aTools, aCfg, lC->Get(), lP->Get(), lVerify);
+
+                lVerify = Phase::NONE;
             }
         }
     }
@@ -125,13 +129,13 @@ File::Folder* GetVisualStudioFolder(uint32_t aVersion)
     return lBin;
 }
 
-void CreateTool(ToolList* aTools, const Config& aCfg, const char* aConfiguration, const char* aProcessor)
+void CreateTool(ToolList* aTools, const Config& aCfg, const char* aConfiguration, const char* aProcessor, Phase aVerify)
 {
     auto lFolder = GetVisualStudioFolder(aCfg.GetVisualStudioVersion());
 
     if (!aCfg.GetDoNotCompile())
     {
-        auto lTool = Tool_Executable::CreateTool(aTools, aCfg, lFolder, EXECUTABLE, ALLOWED_TIME_ms, Phase::VERIFY, Phase::COMPILE);
+        auto lTool = Tool_Executable::CreateTool(aTools, aCfg, lFolder, EXECUTABLE, ALLOWED_TIME_ms, aVerify, Phase::COMPILE);
 
         lTool->AddArgument(SLN_FILE_NAME);
 

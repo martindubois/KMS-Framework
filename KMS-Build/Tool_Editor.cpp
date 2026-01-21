@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool_Editor.cpp
@@ -29,7 +29,7 @@ public:
     T_Editor(const char* aOperation, unsigned int aIndex, const KMS::Version& aVersion);
 
     // ===== Tool ===========================================================
-    virtual void Execute(Phase aPhase) override;
+    virtual void Execute(Phase aPhase, Script::Script* aScript) override;
 
 private:
 
@@ -86,7 +86,7 @@ T_Editor::T_Editor(const char* aOperation, unsigned int aIndex, const Version& a
 
 // ===== Tool ===============================================================
 
-void T_Editor::Execute(Phase aPhase)
+void T_Editor::Execute(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
@@ -99,6 +99,7 @@ void T_Editor::Execute(Phase aPhase)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+// SCRIPT  Script does not include the EDIT phase.
 void T_Editor::Execute_EDIT()
 {
     char lFile   [FILE_LENGTH];

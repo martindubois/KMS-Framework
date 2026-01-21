@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Tool.h
@@ -10,6 +10,9 @@
 // ===== C++ ================================================================
 #include <list>
 #include <string>
+
+// ===== Includes ===========================================================
+#include <KMS/Script/Script.h>
 
 // ===== Local ==============================================================
 enum class Phase;
@@ -21,7 +24,7 @@ public:
 
     Tool(const char* aName);
 
-    virtual void Execute(Phase aPhase);
+    virtual void Execute(Phase aPhase, KMS::Script::Script* aScript);
 
 private:
 
@@ -39,7 +42,7 @@ public:
     // aComp  This method deletes it
     void Add(Tool* aComp);
 
-    void Execute(Phase aPhase);
+    void Execute(Phase aPhase, KMS::Script::Script* aScript);
 
 public:
 

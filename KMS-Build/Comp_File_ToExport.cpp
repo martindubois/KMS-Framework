@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp_File_ToExport.cpp
@@ -27,7 +27,7 @@ public:
 
     // ===== Comp ===========================================================
     virtual ~C_File_ToExport();
-    virtual void Verify(Phase aPhase) override;
+    virtual void Verify(Phase aPhase, Script::Script* aScript) override;
     virtual void Export() override;
 
 private:
@@ -82,7 +82,7 @@ C_File_ToExport::~C_File_ToExport()
     delete mFolder;
 }
 
-void C_File_ToExport::Verify(Phase aPhase)
+void C_File_ToExport::Verify(Phase aPhase, Script::Script* aScript)
 {
     switch (aPhase)
     {
@@ -90,6 +90,7 @@ void C_File_ToExport::Verify(Phase aPhase)
     }
 }
 
+// SCRIPT  The script does not include the EXPORT phase.
 void C_File_ToExport::Export()
 {
     assert(nullptr != mFolder);
@@ -101,9 +102,13 @@ void C_File_ToExport::Export()
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+// SCRIPT  The script does not include the EXPORT phase.
 void C_File_ToExport::Verify_VERIFY()
 {
+    assert(nullptr != mProductFolder);
+
     auto lFileName = mFileName_Src.c_str();
+    assert(nullptr != lFileName);
 
     if (mProductFolder->DoesFileExist(lFileName))
     {

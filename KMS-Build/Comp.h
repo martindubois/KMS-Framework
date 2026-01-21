@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp.h
@@ -10,6 +10,9 @@
 // ===== C++ ================================================================
 #include <list>
 #include <string>
+
+// ===== Includes ===========================================================
+#include <KMS/Script/Script.h>
 
 // ===== Local ==============================================================
 enum class Phase;
@@ -21,9 +24,9 @@ public:
 
     Comp(const char* aName);
 
-    virtual void Verify(Phase aPhase);
+    virtual void Verify(Phase aPhase, KMS::Script::Script* aScript);
 
-    virtual void Package(KMS::File::Folder* aTmpFolder);
+    virtual void Package(KMS::File::Folder* aTmpFolder, KMS::Script::Script* aScript);
 
     virtual void Export();
 
@@ -43,9 +46,9 @@ public:
     // aComp  This method deletes it
     void Add(Comp* aComp);
 
-    void Verify(Phase aPhase);
+    void Verify(Phase aPhase, KMS::Script::Script* aScript);
 
-    void Package(KMS::File::Folder* aTmpFolder);
+    void Package(KMS::File::Folder* aTmpFolder, KMS::Script::Script* aScript);
 
     void Export();
 

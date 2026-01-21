@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-Build/Comp_File_ToPackage.cpp
@@ -29,8 +29,8 @@ public:
 
     // ===== Comp ===========================================================
     virtual ~C_File_ToPackage();
-    virtual void Verify (Phase aPhase) override;
-    virtual void Package(KMS::File::Folder* aTmpFolder) override;
+    virtual void Verify (Phase aPhase, Script::Script* aScript) override;
+    virtual void Package(KMS::File::Folder* aTmpFolder, Script::Script* aScript) override;
 
 private:
 
@@ -99,28 +99,41 @@ C_File_ToPackage::~C_File_ToPackage()
     delete mSrc;
 }
 
-void C_File_ToPackage::Verify(Phase aPhase)
+// SCRIPT  Verify the file to package exist
+void C_File_ToPackage::Verify(Phase aPhase, Script::Script* aScript)
 {
     assert(nullptr != mSrc);
 
     if (mVerify == aPhase)
     {
         auto lFileName = mFileName.c_str();
+        assert(nullptr != lFileName);
 
         if (!mSrc->DoesFileExist(lFileName))
         {
             Error_File_DoesNotExist(lFileName);
         }
+
+        if (nullptr != aScript)
+        {
+            char lPath[PATH_LENGTH];
+
+            mSrc->GetPath(lFileName, lPath, sizeof(lPath));
+
+            aScript->Write_Verify_Exist(lPath);
+        }
     }
 }
 
-void C_File_ToPackage::Package(KMS::File::Folder* aTmpFolder)
+// SCRIPT  TODO  The script does not package to a temporary folder
+void C_File_ToPackage::Package(KMS::File::Folder* aTmpFolder, Script::Script* aScript)
 {
     assert(nullptr != aTmpFolder);
 
     assert(nullptr != mSrc);
 
     auto lFileName = mFileName.c_str();
+    assert(nullptr != lFileName);
 
     if (mDst.empty())
     {
