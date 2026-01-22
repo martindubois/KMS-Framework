@@ -2,7 +2,9 @@
 
 # This file has been genereted using KMS-Framework
 
+
 # ===== Verify =====
+
 
 if [ ! -e "/home/mdubois/_VC/KMS-Framework/_DocUser/Documentation.html" ] ; then
     echo ERROR  /home/mdubois/_VC/KMS-Framework/_DocUser/Documentation.html  does not exist
@@ -16,9 +18,13 @@ if [ ! -e "/home/mdubois/_VC/KMS-Framework/_DocUser/KMS.ReadMe.txt" ] ; then
     exit 20
 fi
 
+
 # ===== Pre-Build =====
 
+
+
 # ===== Compile =====
+
 
 if [ ! -e "/home/mdubois/_VC/KMS-Framework/Binaries" ] ; then
     mkdir /home/mdubois/_VC/KMS-Framework/Binaries
@@ -242,7 +248,9 @@ popd
 pushd KMS-Make
 "make" CONFIG=Release PROCESSOR=x86_64
 popd
+
 # ===== Test =====
+
 
 if [ ! -e "/home/mdubois/_VC/KMS-Framework/Binaries/Debug_x86_64/KMS-Build" ] ; then
     echo ERROR  /home/mdubois/_VC/KMS-Framework/Binaries/Debug_x86_64/KMS-Build  does not exist
@@ -359,10 +367,16 @@ fi
 
 "/home/mdubois/_VC/KMS-Framework/Binaries/Release_x86_64/KMS-C-Test" Groups+=Auto
 "doxygen" DoxyFile_en.txt
+
 # ===== Package =====
+
+
 
 # ===== Sign =====
 
 
+
+
 # ===== End =====
+
 echo OK

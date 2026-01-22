@@ -49,7 +49,9 @@ namespace KMS
             lComment += aComment;
             lComment += " =====";
 
+            Write_EmptyLine();
             Write_Comment(lComment.c_str());
+            Write_EmptyLine();
         }
 
         void Script::Write_CreateFolder_IfNeeded(const char* aFolder, unsigned int aFlags)
