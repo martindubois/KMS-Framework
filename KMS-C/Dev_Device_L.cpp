@@ -26,7 +26,29 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // ===== IDevice ====================================================
+        unsigned int Device::GetCount(const char* aPattern)
+        {
+            unsigned int lResult = 0;
+
+            char lLink[32];
+
+            for (;;)
+            {
+                sprintf(lLink, aPattern, lResult);
+
+                auto lRet = access(lLink, R_OK);
+                if (0 != lRet)
+                {
+                    break;
+                }
+
+                lResult++;
+            }
+
+            return lResult;
+        }
+
+        // ===== Stream::IStream ============================================
 
         bool Device::Connect()
         {
