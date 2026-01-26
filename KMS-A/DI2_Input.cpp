@@ -5,6 +5,9 @@
 // Product   KMS-Framework
 // File      KMS-A/DI2_Input.cpp
 
+// CODE REVIEW
+// TEST COVERAGE 2026-01-24 Martin Dubois
+
 #include "Component.h"
 
 // ===== Includes ===========================================================
@@ -20,7 +23,7 @@
 #define FORMAT_FLOAT         "%lf"
 #define FORMAT_FLOAT_STR     "%[0-9.]"
 #define FORMAT_NAME_STR      "%[0-9A-Z_a-z]"
-#define FORMAT_OPERATOR_STR  "%[&*+-/=]"
+#define FORMAT_OPERATOR_STR  "%[&*+-/=|^]"
 #define FORMAT_QUOTED_STR    "\"%[^\"]\""
 #define FORMAT_STRING_STR    "%[^\n\r\t]"
 #define FORMAT_UINT          "%llu"
@@ -51,13 +54,55 @@ namespace KMS
         {
             if (mDelete)
             {
+                assert(nullptr != mString);
+
                 delete[] mString;
             }
+        }
+
+        void Input::Init_File(const char* aFile)
+        {
+            assert(nullptr != aFile);
+
+            assert(!mDelete);
+            assert(0 == mIndex);
+            assert(nullptr == mString);
+
+            FILE* lFile = nullptr;
+
+            auto lRet = fopen_s(&lFile, aFile, "rb");
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_OPEN_FAILED, "Cannot open input file", aFile);
+
+            assert(nullptr != lFile);
+
+            lRet = fseek(lFile, 0, SEEK_END);
+            KMS_EXCEPTION_ASSERT(0 == lRet, RESULT_OPERATION_FAILED, "Cannot retrieve file size (NOT TESTED)", aFile);
+
+            auto lSize_byte = ftell(lFile);
+            if (0 < lSize_byte)
+            {
+                lRet = fseek(lFile, 0, SEEK_SET);
+                assert(0 == lRet);
+
+                mDelete = true;
+                mIndex  = 0;
+                mString = new char[lSize_byte];
+
+                auto lRet_byte = fread(const_cast<char*>(mString), sizeof(char), lSize_byte, lFile);
+                KMS_EXCEPTION_ASSERT(lSize_byte == lRet_byte, RESULT_READ_FAILED, "Cannot read input file (NOT TESTED)", aFile);
+            }
+
+            lRet = fclose(lFile);
+            assert(0 == lRet);
         }
 
         void Input::Init_String(const char* aString)
         {
             assert(nullptr != aString);
+
+            assert(!mDelete);
+            assert(0 == mIndex);
+            assert(nullptr == mString);
 
             mDelete = false;
             mIndex  = 0;
@@ -88,6 +133,8 @@ namespace KMS
 
             SkipBlank();
 
+            // TODO Handle the end of string condition
+
             auto lPtr = strchr(aChars, mString[mIndex]);
             KMS_EXCEPTION_ASSERT(nullptr != lPtr, RESULT_INVALID_FORMAT, "Invalid format", "");
 
@@ -109,13 +156,6 @@ namespace KMS
             }
 
             return lResult;
-        }
-
-        char Input::Token_GetChar() const
-        {
-            KMS_EXCEPTION_ASSERT('\0' != mValue[0], RESULT_INVALID_FORMAT, "Invalid format", "");
-
-            return mValue[0];
         }
 
         double Input::Token_GetFloat() const
@@ -265,6 +305,24 @@ namespace KMS
             }
         }
 
+        void Decode_ASCII_Arguments(void* aData, const IType* aType, ArgList* aArgList)
+        {
+            assert(nullptr != aArgList);
+
+            auto lCount = aArgList->GetCount();
+
+            for (unsigned int i = 0; i < lCount; i++)
+            {
+                auto lArg = aArgList->GetArgument(i);
+                assert(nullptr != lArg);
+
+                if (Decode_ASCII_String_Try(aData, aType, lArg))
+                {
+                    aArgList->IncUseCount(i);
+                }
+            }
+        }
+
         void Decode_ASCII_String(void* aData, const IType* aType, const char* aString)
         {
             assert(nullptr != aType);
@@ -274,6 +332,33 @@ namespace KMS
             lInput.Init_String(aString);
 
             aType->Decode_ASCII(aData, &lInput);
+        }
+
+        bool Decode_ASCII_String_Try(void* aData, const IType* aType, const char* aString)
+        {
+            assert(nullptr != aType);
+
+            Input lInput;
+
+            lInput.Init_String(aString);
+
+            bool lResult = false;
+
+            try
+            {
+                aType->Decode_ASCII(aData, &lInput);
+
+                lResult = true;
+            }
+            catch (KMS::Exception eE)
+            {
+                if (RESULT_INVALID_NAME != eE.GetCode())
+                {
+                    throw eE;
+                }
+            }
+
+            return lResult;
         }
 
     }

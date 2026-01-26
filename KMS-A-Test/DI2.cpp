@@ -63,6 +63,30 @@ static const DI2::Struct<TEST_STRUCT_FIELDS>                TYPE_TEST_STRUCT;
 // Tests
 // //////////////////////////////////////////////////////////////////////////
 
+KMS_TEST(DI2_ArgList, "auto", sTest_ArgList)
+{
+    static const char* ARGUMENTS[] = { "mField0=0", "DoesNotExist=1"};
+
+    ArgList lAL0(0, nullptr);
+    ArgList lAL1(1, ARGUMENTS);
+    ArgList lAL2(2, ARGUMENTS);
+    TestStruct lTS0;
+    TestStruct lTS1;
+    TestStruct lTS2;
+
+    DI2::Decode_ASCII_Arguments(&lTS0, &TYPE_TEST_STRUCT, &lAL0);
+
+    DI2::Decode_ASCII_Arguments(&lTS1, &TYPE_TEST_STRUCT, &lAL1);
+    KMS_TEST_COMPARE(lAL1.GetUseCount(0), 1U);
+    lAL1.Display(std::cout);
+    lAL1.RemoveUsed();
+    lAL1.Display(std::cout);
+
+    DI2::Decode_ASCII_Arguments(&lTS2, &TYPE_TEST_STRUCT, &lAL2);
+    KMS_TEST_COMPARE(lAL2.GetUseCount(1), 0U);
+    KMS_TEST_COMPARE(lAL2.GetUseCount(2), ArgList::INVALID_USE_COUNT);
+}
+
 KMS_TEST(DI2_Array, "auto", sTest_Array)
 {
     char lASCII[4096];
@@ -88,6 +112,96 @@ KMS_TEST(DI2_BitField, "auto", sTest_BitField)
     memset(&lTBF, 0, sizeof(lTBF));
     DI2::Decode_ASCII_String(&lTBF, &TYPE_TEST_BIT_FIELD, lASCII);
     KMS_TEST_ASSERT(1 == lTBF.mField0);
+}
+
+KMS_TEST(DI2_Input, "auto", sTest_Input)
+{
+    DI2::Input lI0;
+    DI2::Input lI1;
+    DI2::Input lI2;
+
+    lI0.Init_File(".gitignore");
+
+    lI1.Init_String("+= &= = /= *= |= -= ^=");
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::ADD == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::AND == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::ASSIGN == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::DIV == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::MULT == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::OR == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::SUB == lI1.Token_GetOperator());
+    lI1.Token_Next(DI2::TokenType::OPERATOR);
+    KMS_TEST_ASSERT(DI2::Operator::XOR == lI1.Token_GetOperator());
+
+    lI2.Init_String("1");
+    lI2.Token_Next(DI2::TokenType::UINT);
+    KMS_TEST_ASSERT(1 == lI2.Token_GetUInt());
+    lI2.Token_Next(DI2::TokenType::END);
+
+    TestStruct lTS3;
+
+    KMS_TEST_ASSERT( DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mField0=0"));
+    KMS_TEST_ASSERT(!DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mDield1=0"));
+}
+
+KMS_TEST(DI2_Input_Exception, "auto", sTest_Input_Exception)
+{
+    DI2::Input lI0;
+    DI2::Input lI1;
+    DI2::Input lI2;
+
+    // Init_File
+    try
+    {
+        lI0.Init_File("DoesNotExist");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_OPEN_FAILED);
+
+    // Char_Next
+    lI1.Init_String("b");
+
+    try
+    {
+        lI1.Char_Next('a');
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    try
+    {
+        lI1.Char_Next("a");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    // Token_GetOperator
+    lI2.Init_String("=+");
+    lI2.Token_Next(DI2::TokenType::OPERATOR);
+
+    try
+    {
+        lI2.Token_GetOperator();
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+
+    // Decode_ASCII_String_Try
+    TestStruct lTS3;
+
+    try
+    {
+        DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mField0=+0");
+        KMS_TEST_ASSERT(false);
+    }
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 }
 
 KMS_TEST(DI2_Simple, "Auto", sTest_Simple)

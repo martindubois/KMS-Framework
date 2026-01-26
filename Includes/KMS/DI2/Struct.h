@@ -1,10 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/DI2/Struct.h
-// Library   KMS-A
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2025-2026 KMS
+/// \file      Includes/KMS/DI2/Struct.h
 
 #pragma once
 
@@ -12,12 +13,14 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
 #include <KMS/DI2/Output.h>
+#include <KMS/Exception.h>
 
 namespace KMS
 {
     namespace DI2
     {
 
+        /// \brief Structure used to describe a structure field
         typedef struct
         {
             const char * mName;
@@ -26,12 +29,14 @@ namespace KMS
         }
         Struct_Field;
 
+        /// \brief Structure description
         template<const Struct_Field* F>
         class Struct : public IType
         {
 
         public:
 
+            /// \brief Constructor
             Struct();
 
             // ===== IType ==================================================

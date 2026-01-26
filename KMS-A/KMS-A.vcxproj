@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ArgList.cpp" />
     <ClCompile Include="Build_Depend.cpp" />
     <ClCompile Include="Build_Editor.cpp" />
     <ClCompile Include="Build_Editor_DI2.cpp" />
