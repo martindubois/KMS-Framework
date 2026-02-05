@@ -1,25 +1,34 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Configurable.h
+// Library   KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2025-2026 KMS
+/// \file      Includes/KMS/Configurable.h
 
 #pragma once
 
 namespace KMS
 {
     
+    /// \brief Base class for configurable instance
     template <class T>
     class Configurable
     {
 
     public:
 
+        /// \brief Set the configuration to default configuration
         virtual void Config_Default();
 
+        /// \brief Get the current configuration
+        /// \param aOut Output buffer
         virtual void Config_Get(T* aOut) const;
 
+        /// \brief Set the current configuration
+        /// \param aIn Configuration
+        /// \exception Exception
         virtual void Config_Set(const T& aIn);
 
     protected:
@@ -50,6 +59,7 @@ namespace KMS
 // Macros
 // //////////////////////////////////////////////////////////////////////////
 
+/// \brief Define common method for all configuration structure
 #define KMS_Config_METHODS(T)                                                 \
     T() { SetDefault(); };                                                    \
     void IsEqual(const T& aB) const;                                          \

@@ -21,10 +21,10 @@ namespace KMS
 
         class IType;
 
-        /// \brief Input data to the DI2 infrastructure
+        /// \brief Input data to the `DI2` infrastructure
         /// \note This class is not intended to be used by KMS-Framework's
         ///       users. The normal KMS-Framework users should use the
-        ///       Decode_... functions
+        ///       `Decode_...` functions
         class Input final
         {
 
@@ -76,15 +76,15 @@ namespace KMS
             /// \see Previous
             TokenType Token_Next(TokenType aTypes);
 
-            /// \return The double value in the current token (FLOAT)
+            /// \return The `double` value in the current token (`FLOAT`)
             /// \exception KMS::Exception RESULT_INVALID_FORMAT
             double Token_GetFloat() const;
 
-            /// \return The int64_t value in the current token (INT)
+            /// \return The `int64_t` value in the current token (`INT`)
             /// \exception KMS::Exception RESULT_INVALID_FORMAT
             int64_t Token_GetInt() const;
 
-            /// \return The operator in the current token (OPERATOR)
+            /// \return The operator in the current token (`OPERATOR`)
             /// \exception KMS::Exception RESULT_INVALID_FORMAT
             Operator Token_GetOperator() const;
 
@@ -93,7 +93,7 @@ namespace KMS
             /// \exception KMS::Exception RESULT_OUTPUT_TOO_SHORT
             void Token_GetText(char* aOut, unsigned int aOutSize_byte) const;
 
-            /// \return The uint64_t in the current token (UINT, UINT_HEX)
+            /// \return The `uint64_t` in the current token (`UINT`, `UINT_HEX`)
             /// \exception KMS::Exception RESULT_INVALID_FORMAT
             uint64_t Token_GetUInt() const;
 
@@ -110,20 +110,20 @@ namespace KMS
         };
 
         /// \param aData   Data output
-        /// \param aType   The type description
+        /// \param aType   The `DI2` type description
         /// \param aCount  The argument count
         /// \param aVector The arguments to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_ASCII_Arguments(void* aData, const IType* aType, int aCount, const char** aVector);
 
         /// \param aData   Data output
-        /// \param aType   The type description
-        /// \param aArgList The ArgList to parse
+        /// \param aType   The `DI2` type description
+        /// \param aArgList The `ArgList` to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_ASCII_Arguments(void* aData, const IType* aType, KMS::ArgList* aArgList);
 
         /// \param aData Data output
-        /// \param aType The type description
+        /// \param aType The `DI2` type description
         /// \param aFile The file to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         ///                           RESULT_OPEN_FAILED
@@ -132,26 +132,26 @@ namespace KMS
         void Decode_ASCII_File(void* aData, const IType* aType, const char* aFile);
 
         /// \param aData   Data output
-        /// \param aType   The type description
+        /// \param aType   The `DI2` type description
         /// \param aString The string to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_ASCII_String(void* aData, const IType* aType, const char* aString);
 
         /// \param aData   Data output
-        /// \param aType   The type description
+        /// \param aType   The `DI2` type description
         /// \param aString The string to try to parse
         /// \retval false Cannot parse the string
         /// \retval true  String parsed
         bool Decode_ASCII_String_Try(void* aData, const IType* aType, const char* aString);
 
         /// \param aData  Data output
-        /// \param aType  The type description
+        /// \param aType  The `DI2` type description
         /// \param aInput The input to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_JSON(void* aData, const IType* aType, Input* aInput);
 
         /// \param aData   Data output
-        /// \param aType   The type description
+        /// \param aType   The `DI2` type description
         /// \param aString The string to parse
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_JSON_String(void* aData, const IType* aType, const char* aString);

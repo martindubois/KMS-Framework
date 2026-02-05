@@ -21,7 +21,8 @@ namespace KMS
     {
 
         class Package;
-        
+
+        /// \brief TODO Move to KMS-Import project
         class Import final : public DI::Dictionary
         {
 

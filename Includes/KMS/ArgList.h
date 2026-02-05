@@ -41,8 +41,8 @@ namespace KMS
         unsigned int GetCount() const;
 
         /// \param aIndex The argument index
-        /// \retval INVALID_USE_COUNT  Invalid index
-        ///         Other              The use count of the argument
+        /// \retval INVALID_USE_COUNT Invalid index
+        ///         Other             The use count of the argument
         unsigned int GetUseCount(unsigned int aIndex) const;
 
         /// \param aOut The output stream

@@ -1,17 +1,18 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
-// File      Includes/KMS/Callback.h
-// Status    PROD_READY
 // Library   KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2023-2026 KMS
+/// \file      Includes/KMS/Callback.h
 
 #pragma once
 
 namespace KMS
 {
 
+    /// \brief Interface to receive callback
     class ICallback
     {
 
@@ -35,23 +36,39 @@ namespace KMS
         static const unsigned int FLAG_NOT_SET   = 0x00020000;
         static const unsigned int FLAGS_WARNINGS = 0x00ff0000;
 
+        /// \param aSender The instance calling the callback
+        /// \param aData   Data passed to the callback
+        /// \return See `FLAG_...`
         virtual unsigned int Send(void* aSender, void* aData = nullptr) = 0;
 
     };
 
+    /// \brief Pointer to a ICallback interface
+    /// \note This is what, here at KMS, we call a value class.
+    ///       - copy allowed
+    ///       - limited size
+    ///       - no virtual method
     class Callback_Ptr final
     {
 
     public:
 
+        /// \brief Constructor
         Callback_Ptr();
 
+        /// \param aPtr Instance to assign
         void operator = (const ICallback *aPtr);
 
+        /// \param Set the internal pointer to nullptr
         void Clear();
 
+        /// \retval false The pointer is `nullptr`
+        /// \retval true  The pointer is set
         bool IsSet();
 
+        /// \param aSender The instance calling the calback
+        /// \param aData   Data passed to the callback
+        /// \return See `FLAG_...`
         unsigned int Send(void* aSender, void* aData = nullptr);
 
     private:
@@ -60,14 +77,21 @@ namespace KMS
 
     };
 
+    /// \brief Use to attach a ICallback interface to a method
     template < class T >
     class Callback final : public ICallback
     {
 
     public:
 
+        /// \param aSender The instance calling the callback
+        /// \param aData   Data passed to the callback
+        /// \return See `FLAG_...`
         typedef unsigned int (T::*Method)(void* aSender, void* aData);
 
+        /// \brief Constructor
+        /// \param aInstance The instance to receive the callback
+        /// \param aMethod   The methode called to process the callback
         Callback(T* aInstance, Method aMethod);
 
         // ===== ICallback ==============================================
@@ -97,5 +121,5 @@ namespace KMS
 
 }
 
-#define CALLBACK_SUCCESS(R)            (0 == ((R) & (ICallback::FLAGS_ERRORS|ICallback::FLAGS_WARNINGS)))
-#define CALLBACK_SUCCESS_OR_WARNING(R) (0 == ((R) &  ICallback::FLAGS_ERRORS))
+#define CALLBACK_SUCCESS(R)            (0 == ((R) & (KMS::ICallback::FLAGS_ERRORS|KMS::ICallback::FLAGS_WARNINGS)))
+#define CALLBACK_SUCCESS_OR_WARNING(R) (0 == ((R) &  KMS::ICallback::FLAGS_ERRORS))

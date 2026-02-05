@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI2/String.h
@@ -43,7 +43,7 @@ namespace KMS
         template <unsigned int N>
         void String<N>::Code_JSON(const void* aData, Output* aOutput) const
         {
-            // TODO
+            assert(false);
         }
 
         // Operators = +=
@@ -84,7 +84,7 @@ namespace KMS
         template <unsigned int N>
         void String<N>::Decode_JSON(void* aData, Input* aInput) const
         {
-            // TODO
+            assert(false);
         }
 
     }

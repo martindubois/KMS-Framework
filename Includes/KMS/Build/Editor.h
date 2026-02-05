@@ -1,9 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Build/Editor.h
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2025-2026 KMS
+/// \file      Includes/KMS/Build/Editor.h
 
 #pragma once
 
@@ -18,7 +20,15 @@ namespace KMS
     namespace Build
     {
 
-        class Editor_Config
+        /// \brief Configuration for the Editor class
+        /// \note This is what, here at KMS, we call a configuration class.
+        ///       - copy allowed
+        ///       - final
+        ///       - no virtual method
+        ///       - public members
+        ///       - uses `KMS_Config_METHODS` macro to declare standard
+        ///         configurtion methodes
+        class Editor_Config final
         {
 
         public:
@@ -31,7 +41,9 @@ namespace KMS
 
         };
 
-        class Editor : public Configurable<Editor_Config>
+        /// \brief Editor used to replace KMS software version in source
+        ///        files
+        class Editor final : public Configurable<Editor_Config>
         {
 
         public:

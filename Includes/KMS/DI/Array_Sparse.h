@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI/Array_Sparse.h
@@ -17,6 +17,8 @@
 
 namespace KMS
 {
+
+    /// \brief Deprecated
     namespace DI
     {
 

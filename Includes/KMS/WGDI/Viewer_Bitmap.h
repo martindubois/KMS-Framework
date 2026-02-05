@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/WGDI/Viewer_Bitmap.h
@@ -18,6 +18,7 @@ namespace KMS
     namespace WGDI
     {
 
+        /// \brief TODO Remove use of DI namespace
         class Viewer_Bitmap final : public DI::Dictionary
         {
 

@@ -66,8 +66,6 @@ namespace KMS
         void Device::Validate() const
         {
             DI::Dictionary::Validate();
-
-            // TODO
         }
 
         // Protected

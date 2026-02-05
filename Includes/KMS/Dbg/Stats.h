@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/Stats.h
@@ -24,6 +24,7 @@ namespace KMS
     {
         class Stats_Entry;
 
+        /// \brief TODO Remove use of DI namespace
         class Stats final : public DI::Dictionary
         {
 

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/HTTP.h
@@ -31,6 +31,7 @@ namespace KMS
         extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_HTML;
         extern const DI::String FIELD_VALUE_CONTENT_TYPE_TEXT_PLAIN;
 
+        /// \brief TODO Remove use of DI namespace
         namespace Request
         {
 
@@ -50,6 +51,7 @@ namespace KMS
 
         }
 
+        /// \brief TODO Remove use of DI namespace
         namespace Response
         {
 
@@ -72,8 +74,10 @@ namespace KMS
 
         }
 
+        /// \brief TODO Remove use of DI namespace
         extern unsigned int Decode_Dictionary(DI::Dictionary* aDictionary, const char* aIn, unsigned int aInSize_byte);
 
+        /// \brief TODO Remove use of DI namespace
         extern unsigned int Encode_Dictionary(const DI::Dictionary* aDictionary, char* aOut, unsigned int aOutSize_byte);
 
     }

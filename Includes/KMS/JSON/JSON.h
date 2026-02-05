@@ -12,6 +12,7 @@
 
 namespace KMS
 {
+    /// \brief Deprecated
     namespace JSON
     {
 

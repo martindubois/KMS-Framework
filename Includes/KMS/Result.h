@@ -1,9 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Result.h
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2023-2026 KMS
+/// \file      Includes/KMS/Result.h
 
 #pragma once
 
@@ -22,15 +24,17 @@
 namespace KMS
 {
 
-    // Value class
-    // - Limited size
-    // - No virtual method
-    // - Copy allowed
+    /// \brief Result
+    /// \note This is what, here at KMS, we call a value class.
+    ///       - copy allowed
+    ///       - limited size
+    ///       - no virtual method
     class Result final
     {
 
     public:
 
+        /// \brief Result level
         enum class Level
         {
             LEVEL_SUCCESS = 0,
@@ -40,6 +44,7 @@ namespace KMS
             QTY
         };
 
+        /// \brief Result type
         enum class Type
         {
             TYPE_GLOBAL = 0,
@@ -49,37 +54,69 @@ namespace KMS
             QTY
         };
 
+        /// \brief Default constructor
         Result();
 
+        /// \brief Cast operator
         operator uint32_t () const;
 
+        /// \retval false Different
+        /// \retval true  Equal
         bool operator == (Result aIn) const;
 
-        bool IsError           () const;
-        bool IsErrorOrWarning  () const;
-        bool IsSuccess         () const;
-        bool IsSuccessOrWarning() const;
-        bool IsWarning         () const;
+        /// \retval false Not an error (success or warning)
+        /// \retval true  An error
+        bool IsError() const;
 
+        /// \retval false A success
+        /// \retval true  A warning or an error
+        bool IsErrorOrWarning() const;
+
+        /// \retval false A warning or an error
+        /// \retval true  A success
+        bool IsSuccess() const;
+
+        /// \retval false An error
+        /// \retval true  A warning or a success
+        bool IsSuccessOrWarning() const;
+
+        /// \retval false A success or an error
+        /// \retval true  A warning
+        bool IsWarning() const;
+
+        /// \return Result's index
         unsigned int GetIndex() const;
 
+        /// \return The level
         Level GetLevel() const;
 
+        /// \return The result name
         const char* GetName() const;
-
-        unsigned int GetText(char* aOut, unsigned int aOutSize_byte) const;
 
         Type GetType() const;
 
     // Internal
 
+        /// \brief Constructor
+        /// \param aIn Value
         Result(uint32_t aIn);
 
-        // Thread  C++ init
+        /// \brief Construction
+        /// \param aName  Result name
+        /// \param aLevel Level
+        /// \param aType  Type
+        /// \note Thread C++ init
         Result(const char* aName, Level aLevel, Type aType);
 
+        /// \brief Construction
+        /// \param aName  Result name
+        /// \param aLevel Level
+        /// \param aType  Type
+        /// \param aIndex Index
         Result(const char* aName, Level aLevel, Type aType, unsigned int aIndex);
 
+        /// \brief Display the result
+        /// \param aOut The output stream
         void Display(std::ostream& aOut) const;
 
     private:
@@ -132,32 +169,59 @@ namespace KMS
 
 }
 
+/// \brief Output operator
+/// \param aOut  The output stream
+/// \param aCode The code to display
 std::ostream& operator << (std::ostream& aOut, KMS::Result aCode);
 
-// Thread  C++ Init
+// TODO Rename KMS_RESULT_GLOBAL -> KMS_RESULT_ERROR_GLOBAL,
+//      KMS_RESULT_MEMBER -> KMS_RESULT_ERROR_MEMBER, KMS_RESULT_STATIC ->
+//      KMS_RESULT_ERROR_STATIC
+
+/// \brief Create a global error code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_GLOBAL(N) const KMS::Result N(#N, KMS::Result::Level::LEVEL_ERROR, KMS::Result::Type::TYPE_GLOBAL)
 
-// Thread  C++ Init
+/// \brief Create a member error code
+/// \param C The class
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_MEMBER(C, N) static const KMS::Result C::N(#N, KMS::Result::Level::LEVEL_ERROR, KMS::Result::Type::TYPE_MEMBER)
 
-// Thread  C++ Init
+/// \brief Create a static error code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_STATIC(N) static const KMS::Result N(#N, KMS::Result::Level::LEVEL_ERROR, KMS::Result::Type::TYPE_STATIC)
 
-// Thread  C++ Init
+/// \brief Create a global success code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_SUCCESS_GLOBAL(N) const KMS::Result N(#N, KMS::Result::Level::LEVEL_SUCCESS, KMS::Result::Type::TYPE_GLOBAL)
 
-// Thread  C++ Init
+/// \brief Create a member success code
+/// \param C The class
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_SUCCESS_MEMBER(C, N) static const KMS::Result C::N(#N, KMS::Result::Level::LEVEL_SUCCESS, KMS::Result::Type::TYPE_MEMBER)
 
-// Thread  C++ Init
+/// \brief Create a static success code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_SUCCESS_STATIC(N) static const KMS::Result N(#N, KMS::Result::Level::LEVEL_SUCCESS, KMS::Result::Type::TYPE_STATIC)
 
-// Thread  C++ Init
+/// \brief Create a global warning code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_WARNING_GLOBAL(N) const KMS::Result N(#N, KMS::Result::Level::LEVEL_WARNING, KMS::Result::Type::TYPE_GLOBAL)
 
-// Thread  C++ Init
+/// \brief Create a member warning code
+/// \param C The class
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_WARNING_MEMBER(C, N) static const KMS::Result C::N(#N, KMS::Result::Level::LEVEL_WARNIN, KMS::Result::Type::TYPE_MEMBER)
 
-// Thread  C++ Init
+/// \brief Create a static warning code
+/// \param N The name
+/// \note Thread C++ Init
 #define KMS_RESULT_WARNING_STATIC(N) static const KMS::Result N(#N, KMS::Result::Level::LEVEL_WARNING, KMS::Result::Type::TYPE_STATIC)
-

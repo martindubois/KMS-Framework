@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI2/Array.h
@@ -64,7 +64,7 @@ namespace KMS
         template <typename T, unsigned int N>
         void Array<T, N>::Code_JSON(const void* aData, Output* aOutput) const
         {
-            // TODO
+            assert(false);
         }
 
         // [0] op Value0
@@ -128,7 +128,7 @@ namespace KMS
         template <typename T, unsigned int N>
         void Array<T, N>::Decode_JSON(void* aData, Input* aInput) const
         {
-            // TODO
+            assert(false);
         }
 
     }

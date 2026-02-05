@@ -1,10 +1,10 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2024 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Ptr.h
-// Library   KMS-A
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2024-2026 KMS
+/// \file      Includes/KMS/Ptr.h
 
 #pragma once
 
@@ -14,22 +14,30 @@
 namespace KMS
 {
 
+    /// \brief Mandatory dynamic pointer
     template <typename T>
     class Ptr_M
     {
 
     public:
 
+        /// \brief Constructor
+        /// \param aInit The initial value
         Ptr_M(T* aInit);
 
+        /// \brief Destructor - Delete the pointed `T` instance
         ~Ptr_M();
 
+        /// \return The `T` instance pointer
         const T* operator -> () const;
 
+        /// \return The `T` instance pointer
         T* operator -> ();
 
+        /// \brief Cast operator
         operator const T* () const;
 
+        /// \brief Cast operator
         operator T* ();
 
     private:
@@ -41,28 +49,40 @@ namespace KMS
 
     };
 
+    /// \brief Optional dynamic pointer
     template <typename T>
     class Ptr_O
     {
 
     public:
 
+        /// \brief Default constructor
+        /// \param aInit The initial value
         Ptr_O(T* aInit = nullptr);
 
+        /// \brief Destructor - Delete the pointed `T` instance
         ~Ptr_O();
 
+        /// \return The `T` instance pointer
         const T* operator -> () const;
 
+        /// \return The `T` instance pointer
         T* operator -> ();
 
+        /// \brief Cast operator
         operator const T* () const;
 
+        /// \brief Cast operator
         operator T* ();
 
+        /// \brief Assignment operator
+        /// \param aSet The new pointer
         void operator = (T* aSet);
 
+        /// \return The `T` instance pointer
         T* Detach();
 
+        /// \brief Delete the pointed `T` instance
         void Release();
 
     private:
@@ -74,101 +94,115 @@ namespace KMS
 
     };
 
+    /// \brief Optional pointer with flags
     template <typename T>
     class Ptr_OF
     {
 
     public:
 
+        /// \brief Default constructor
         Ptr_OF();
 
-        // aInit  The instance keep the pointer, protect the data against
-        //        modification (const) and is not responsible for deleting
-        //        the T instance.
+        /// \brief Constructor
+        /// \param aInit The instance keep the pointer, protect the data
+        ///              against modification (const) and is not responsible
+        ///              for deleting the `T` instance.
         Ptr_OF(const T* aInit);
 
-        // aInit    The instance keep the pointer.
-        // aDelete  false  The instance is not responsible for deleting the
-        //                 T instance
-        //          true   The instance is responsible for deleting the T
-        //                 instance
+        /// \brief Constructor
+        /// \param aInit   The instance keep the pointer.
+        /// \param aDelete false  The instance is not responsible for
+        ///                       deleting the `T` instance
+        ///                true   The instance is responsible for deleting
+        ///                       the `T` instance
         Ptr_OF(T* aInit, bool aDelete);
 
-        // Release the T instance if the current instance is responsible for
-        // doing that.
+        /// \brief Destructor
+        /// \note Release the `T` instance if the current instance is
+        ///       responsible for doing that.
         ~Ptr_OF();
 
+        /// \return The `T` instance pointer
         const T* operator -> () const;
         
-        // Exception  RESULT_DENIED
+        /// \return The `T` instance pointer
+        /// \exception Exception  RESULT_DENIED
         T* operator -> ();
 
+        /// \brief Cast operator
         operator const T* () const;
 
-        // Exception  RESULT_DENIED
+        /// \brief Cast operator
+        /// \exception Exception RESULT_DENIED
         operator T* ();
 
-        // aSet  The instance keep the pointer, protect the data against
-        //       modification (const) and is not responsible for deleting
-        //       the T instance.
-        //
-        // This method can cause previous pointed T instance to be deleted.
+        /// \brief Assignment operator
+        /// \param aSet The instance keep the pointer, protect the data
+        ///             against modification (const) and is not responsible
+        ///             for deleting the `T` instance.
+        /// \note This method can cause previous pointed `T` instance to be
+        ///       deleted.
         void operator = (const T* aSet);
 
+        /// \return The `T` instance pointer
         const T* Get() const;
 
-        // Exception  RESULT_DENIED
+        /// \return The `T` instance pointer
+        /// \exception Exception  RESULT_DENIED
         T* Get();
 
+        /// \retval false The `T` instance is not const
+        /// \retval true  The `T` instance is const
         bool IsConst() const;
 
-        // aSet  The value passed here is reset to nullptr when the method
-        //       returns.
-        //       If aSet is responsible for deleting the T instance, the
-        //       current instance become responsible for deleting the T
-        //       instance.
-        //
-        // This method can cause previous pointed T instance to be deleted.
+        /// \param aSet The value passed here is reset to nullptr when the
+        ///             method returns.
+        ///             If `aSet` is responsible for deleting the `T`
+        ///             instance, the current instance become responsible for
+        ///             deleting the `T` instance.
+        /// \note This method can cause previous pointed `T` instance to be
+        ///       deleted.
         void Set(Ptr_OF<T>& aSet);
 
-        // aSet  The instance keep the pointer, protect the data against
-        //       modification (const) and is not responsible for deleting
-        //       the T instance.
-        //
-        // This method can cause previous pointed T instance to be deleted.
+        /// \param aSet The instance keep the pointer, protect the data
+        ///             against modification (const) and is not responsible
+        ///             for deleting the `T` instance.
+        /// \note This method can cause previous pointed `T` instance to be
+        ///       deleted.
         void Set(const T* aSet);
 
-        // aSet     The instance keep the pointer.
-        // aDelete  false  The instance is not responsible for deleting the
-        //                 T instance
-        //          true   The instance is responsible for deleting the T
-        //                 instance
-        //
-        // This method can cause previous pointed T instance to be deleted.
+        /// \param aSet    The instance keep the pointer.
+        /// \param aDelete false  The instance is not responsible for
+        ///                       deleting the `T` instance
+        ///                true   The instance is responsible for deleting
+        ///                       the `T` instance
+        /// \note This method can cause previous pointed `T` instance to be
+        ///       deleted.
         void Set(T* aSet, bool aDelete);
 
-        // This method reset the instance to nullptr.
+        /// \return The `T` instance pointer
+        /// \note This method reset the instance to `nullptr`.
         T* Detach();
 
-        // Release the T instance if the current instance is responsible for
-        // doing that.
-        // This method reset the instance to nullptr.
+        /// \brief Release the `T` instance
+        /// \note If the current instance is responsible for doing that.
+        /// \note This method reset the instance to `nullptr`.
         void Release();
 
     // Internal
 
-        // aSet  The value passed here is reset to nullptr when the method
-        //       returns.
-        //       If aSet is responsible for deleting the T instance, the
-        //       current instance become responsible for deleting the T
-        //       instance.
-        //
-        // This method can cause previous pointed T instance to be deleted.
+        /// \param aSet The value passed here is reset to `nullptr` when the
+        ///             method returns.
+        ///             If aSet is responsible for deleting the `T` instance,
+        ///             the current instance become responsible for deleting
+        ///             the `T` instance.
+        /// \note This method can cause previous pointed `T` instance to be
+        ///       deleted.
         Ptr_OF(const Ptr_OF& aIn);
 
-        // aIn  Must contain nullptr.
-        //
-        // Exception  RESULT_NOT_IMPLEMENTED
+        /// \param aIn Must contain `nullptr`.
+        /// \exception Exception RESULT_NOT_IMPLEMENTED
         void operator = (Ptr_OF& aIn);
 
     private:

@@ -226,7 +226,7 @@ int ::Build::Run()
 
     std::unique_ptr<Script::Script> lScript;
 
-    // TODO if ((!mDoNotClean.Get()) && (!mDoNotCompile.Get()) && (!mDoNotPackage.Get()) && (!mDoNotTest.Get()))
+    if ((!mDoNotClean.Get()) && (!mDoNotCompile.Get()) && (!mDoNotPackage.Get()) && (!mDoNotTest.Get()))
     {
         #ifdef _KMS_LINUX_
             lScript = std::make_unique<Script::Script_Sh>("KMS-Build");

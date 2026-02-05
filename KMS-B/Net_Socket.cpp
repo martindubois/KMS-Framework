@@ -159,8 +159,6 @@ namespace KMS
         void Socket::Validate() const
         {
             DI::Dictionary::Validate();
-
-            // TODO
         }
 
         // Internal

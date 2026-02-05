@@ -1,10 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2024 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Console/Redirection.h
-// Library   KMS-A
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2024-2026 KMS
+/// \file      Includes/KMS/Console/Redirection.h
 
 #pragma once
 
@@ -21,6 +22,9 @@ namespace KMS
     namespace Console
     {
 
+        /// \brief Redirect standard outputs
+        /// \note This is mainly used to redirect output while testing
+        ///       classes
         class Redirection final
         {
 
@@ -30,6 +34,7 @@ namespace KMS
 
             static File::Folder sFolder;
 
+            /// \brief What to redirect
             enum class What
             {
                 WHAT_STDERR = 0,
@@ -40,6 +45,7 @@ namespace KMS
                 QTY
             };
 
+            /// \brief Where to refirect
             enum class To
             {
                 TO_FILE,
@@ -48,12 +54,18 @@ namespace KMS
                 QTY
             };
 
+            /// \brief Default contructor
+            /// \param aWhat Wath to redirect
+            /// \param aTo   Where to redirect
             Redirection(What aWhat = What::WHAT_ALL, To aTo = To::TO_NULL);
 
+            /// \brief Destructor
             ~Redirection();
 
+            /// \bried Redirect
             void Redirect();
 
+            /// \brief Restore normal standard output
             void Restore();
 
         private:

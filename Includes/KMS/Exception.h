@@ -1,9 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Exception.h
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2022-2026 KMS
+/// \file      Includes/KMS/Exception.h
 
 #pragma once
 
@@ -18,25 +20,61 @@
 namespace KMS
 {
 
+    /// \brief Exception class
     class Exception final : public std::exception
     {
 
     public:
 
+        /// \brief Register a structured exception translator
+        /// \return The current translator. Pass this value to
+        ///         `RestoreTranslator` to unregister the translator
         static void* RegisterTranslator();
 
+        /// \brief Restore a translator
+        /// \param aTranslator Usualy the value `RegisterTranslater` returned
         static void RestoreTranslator(void* aTranslator);
 
+        /// \param aFile     The source file name
+        /// \param aFunction The function name
+        /// \param aLine     The source code line number
+        /// \param aCode     See Result
+        /// \param aMsg      Error message
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg);
+
+        /// \param aFile     The source file name
+        /// \param aFunction The function name
+        /// \param aLine     The source code line number
+        /// \param aCode     See Result
+        /// \param aMsg      Error message
+        /// \param aInfo     Additional information
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg, const char * aInfo);
+
+        /// \param aFile     The source file name
+        /// \param aFunction The function name
+        /// \param aLine     The source code line number
+        /// \param aCode     See Result
+        /// \param aMsg      Error message
+        /// \param aInfo     Additional information
         Exception(const char* aFile, const char* aFunction, unsigned int aLine, Result aCode, const char* aMsg, uint64_t aInfo);
 
-        Result       GetCode     () const;
-        const char * GetFile     () const;
-        const char * GetFunction () const;
-        const char * GetInfo     () const;
+        /// \return The exception code
+        Result GetCode() const;
+
+        /// \return The source file name
+        const char * GetFile() const;
+
+        /// \return The function name
+        const char * GetFunction() const;
+
+        /// \return The additional information
+        const char * GetInfo () const;
+
+        /// \return The recorder last error code
         unsigned int GetLastError() const;
-        unsigned int GetLine     () const;
+
+        /// \return The source line number
+        unsigned int GetLine() const;
 
         // ===== std::exception =============================================
         virtual const char* what() const throw();
@@ -72,8 +110,10 @@ namespace KMS
 // The KMS/Dbg/Log.h header file use the Exception class.
 #include <KMS/Dbg/Log.h>
 
+/// \brief Stream operator
 std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE);
 
+/// \brief Standard catch bloc
 #define KMS_CATCH                                                          \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
@@ -90,6 +130,7 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE);
         KMS::Dbg::gLog.WriteMessage("Unknown exception");                  \
     }
 
+/// \brief Standard catch bloc storing result in a variable
 #define KMS_CATCH_RESULT(R)                                                \
     catch (KMS::Exception eE)                                              \
     {                                                                      \
@@ -109,9 +150,11 @@ std::ostream& operator << (std::ostream& aOut, const KMS::Exception& aE);
         R = __LINE__;                                                      \
     }
 
+/// \brief Throw an exception
 #define KMS_EXCEPTION(C, M, I) \
     throw KMS::Exception(__FILE__, __FUNCTION__, __LINE__, (C), (M), (I))
 
+/// \brief Throw an exception if a condition is false
 #define KMS_EXCEPTION_ASSERT(A, C, M, I) \
     if (!(A))                            \
     {                                    \

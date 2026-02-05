@@ -1,9 +1,11 @@
 
-// Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
-// License   http://www.apache.org/licenses/LICENSE-2.0
-// Product   KMS-Framework
-// File      Includes/KMS/Build/Make.h
+// License http://www.apache.org/licenses/LICENSE-2.0
+// Product KMS-Framework
+// Library KMS-A
+
+/// \author    KMS - Martin Dubois, P. Eng.
+/// \copyright Copyright &copy; 2022-2026 KMS
+/// \file      Includes/KMS/Build/Make.h
 
 #pragma once
 
@@ -17,6 +19,7 @@ namespace KMS
     namespace Build
     {
 
+        /// \brief TODO Remove use of DI namespace
         class Depend final
         {
 

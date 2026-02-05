@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/HTTP/Server.h
@@ -26,6 +26,7 @@ namespace KMS
     namespace HTTP
     {
 
+        /// \brief TODO Remove use of DI namespace
         class ReactApp : public DI::Dictionary
         {
 
@@ -33,7 +34,7 @@ namespace KMS
 
             static const char* DEFAULT_ROUTE;
 
-            KMS::DI::Array mRoutes;
+            DI::Array mRoutes;
 
             ReactApp();
 

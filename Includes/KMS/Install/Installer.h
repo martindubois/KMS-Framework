@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Install/Installer.h
@@ -17,6 +17,7 @@ namespace KMS
     namespace Install
     {
 
+        /// \brief TODO Remove use of DI namespace
         class Installer final : public DI::Dictionary
         {
 

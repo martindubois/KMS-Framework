@@ -193,7 +193,7 @@ namespace KMS
             /// \param aIn           Input string
             /// \param aOut          Output string
             /// \param aOutSize_byte Output string size
-            /// \param aFlags        FLAG_...
+            /// \param aFlags        `FLAG_...`
             virtual void Process_String(const char* aIn, char* aOut, unsigned int aOutSize_byte, unsigned int aFlags) = 0;
 
             /// \brief Write script footer

@@ -16,8 +16,8 @@
 // Macros
 // //////////////////////////////////////////////////////////////////////////
 
-/// \brief Begin of a standard main
-/// \note This macro define 2 variables: int lResult; ArgList ArgList;
+/// \brief Begin of a standard `main`
+/// \note This macro define 2 variables: `int lResult; ArgList ArgList;`
 /// \see KMS_MAIN2_CONFIG_END KMS_MAIN2_END KMS_MAIN2_RETURN
 #define KMS_MAIN2_BEGIN     \
     int lResult = __LINE__; \
@@ -26,7 +26,8 @@
         KMS::ArgList lArgList(aCount, aVector)
 
 /// \brief Macro to use after parting arguments
-/// \note This macro use lArgList variable the KMS_MAIN2_BEGIN macro defines
+/// \note This macro use `lArgList` variable the `KMS_MAIN2_BEGIN` macro
+///       defines
 /// \see KMS_MAIN2_BEGIN
 #define KMS_MAIN2_CONFIG_END                                 \
         if (0 != lArgList.GetCount())                        \
@@ -39,15 +40,17 @@
             std::cout << Console::Color::WHITE << std::endl; \
         }
 
-/// \brief End of a standard main
-/// \note This macro use lResult variable the KMS_MAIN2_BEGIN macro defines
+/// \brief End of a standard `main`
+/// \note This macro use `lResult` variable the `KMS_MAIN2_BEGIN` macro
+///       defines
 /// \see KMS_MAIN2_BEGIN KMS_MAIN2_RETURN
 #define KMS_MAIN2_END \
     }                 \
     KMS_CATCH_RESULT(lResult)
 
 /// \brief Return lResult
-/// \note This macro use lResult variable the KMS_MAIN2_BEGIN macro defines
+/// \note This macro use `lResult` variable the `KMS_MAIN2_BEGIN` macro
+///       defines
 /// \see KMS_MAIN2_BEGIN KMS_MAIN2_END
 #define KMS_MAIN2_RETURN \
     return lResult

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI2/Int.h
@@ -53,7 +53,7 @@ namespace KMS
         template <typename T>
         void Int<T>::Code_JSON(const void* aData, Output* aOutput) const
         {
-            // TODO
+            assert(false);
         }
 
         // Operators += -= *= /= |= &= ^=
@@ -105,7 +105,7 @@ namespace KMS
         template <typename T>
         void Int<T>::Decode_JSON(void* aData, Input* aInput) const
         {
-            // TODO
+            assert(false);
         }
 
     }

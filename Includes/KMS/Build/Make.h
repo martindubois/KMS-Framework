@@ -24,6 +24,7 @@ namespace KMS
 
         class Depend;
 
+        /// \brief TODO Move to KMS-Make project
         class Make final : public CLI::Tool
         {
 
