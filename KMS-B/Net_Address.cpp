@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Address.cpp
@@ -23,10 +23,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Net/Address.h>
-
-KMS_RESULT_STATIC(RESULT_ADDRESS_RESOLUTION_FAILED);
-KMS_RESULT_STATIC(RESULT_INVALID_ADDRESS);
-KMS_RESULT_STATIC(RESULT_INVALID_PORT);
 
 namespace KMS
 {

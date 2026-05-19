@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/File_Folder_L.cpp
@@ -17,16 +17,6 @@
 #include <KMS/Proc/Process.h>
 
 #include <KMS/File/Folder.h>
-
-KMS_RESULT_STATIC(RESULT_COPY_FAILED);
-KMS_RESULT_STATIC(RESULT_CREATE_FAILED);
-KMS_RESULT_STATIC(RESULT_COMPRESS_FAILED);
-KMS_RESULT_STATIC(RESULT_DELETE_FAILED);
-KMS_RESULT_STATIC(RESULT_FOLDER_CHANGE_FAILED);
-KMS_RESULT_STATIC(RESULT_INIT_FAILED);
-KMS_RESULT_STATIC(RESULT_REMOVE_FAILED);
-KMS_RESULT_STATIC(RESULT_RENAME_FAILED);
-KMS_RESULT_STATIC(RESULT_UNCOMPRESS_FAILED);
 
 // Configuration
 // //////////////////////////////////////////////////////////////////////////

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket_Server.cpp
@@ -12,8 +12,6 @@
 #include <KMS/DI/NetAddressRange.h>
 
 #include <KMS/Net/Socket_Server.h>
-
-KMS_RESULT_STATIC(RESULT_SOCKET_LISTEN_FAILED);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////

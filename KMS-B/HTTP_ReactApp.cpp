@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Server.cpp
@@ -13,8 +13,6 @@
 #include <KMS/HTTP/Transaction.h>
 
 #include <KMS/HTTP/ReactApp.h>
-
-KMS_RESULT_STATIC(RESULT_INSTALLATION_ERROR);
 
 // Constantes
 // //////////////////////////////////////////////////////////////////////////

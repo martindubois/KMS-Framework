@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2024 KMS
+// Copyright (C) 2024-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Dev_Device_L.cpp
@@ -15,8 +15,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device.h>
-
-KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
 
 namespace KMS
 {

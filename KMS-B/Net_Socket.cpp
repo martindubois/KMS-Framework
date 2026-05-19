@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket.cpp
@@ -18,10 +18,6 @@
 #include <KMS/Cfg/MetaData.h>
 
 #include <KMS/Net/Socket.h>
-
-KMS_RESULT_STATIC(RESULT_SOCKET_BIND_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////

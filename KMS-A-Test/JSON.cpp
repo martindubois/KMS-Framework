@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/JSON.cpp
@@ -116,5 +116,5 @@ KMS_TEST(JSON_Exception, "Auto", sTest_Exception)
         JSON::Decode(&lO0, "\"", 1);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_TOO_SHORT");
+    KMS_TEST_CATCH(RESULT_TOO_SHORT);
 }

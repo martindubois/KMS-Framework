@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/NET_Address.cpp
@@ -84,14 +84,14 @@ KMS_TEST(NET_Address_Exception, "Auto", sTest_Exception)
         lA0.SetAddress("192.168.0.256");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_INVALID_ADDRESS");
+    KMS_TEST_CATCH(RESULT_INVALID_ADDRESS);
 
     try
     {
         lA0.SetAddress("doesnotexist.kms-quebec.com");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_ADDRESS_RESOLUTION_FAILED");
+    KMS_TEST_CATCH(RESULT_ADDRESS_RESOLUTION_FAILED);
 
     // SetPortNumber
     try
@@ -99,6 +99,6 @@ KMS_TEST(NET_Address_Exception, "Auto", sTest_Exception)
         lA0.SetPortNumber(static_cast<unsigned int>(0x10000));
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_INVALID_PORT");
+    KMS_TEST_CATCH(RESULT_INVALID_PORT);
 
 }

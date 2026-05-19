@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/File_Binary_W.cpp
@@ -9,10 +9,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/File/Binary.h>
-
-KMS_RESULT_STATIC(RESULT_ACCESS_FAILED);
-KMS_RESULT_STATIC(RESULT_MAPPING_FAILED);
-KMS_RESULT_STATIC(RESULT_TOO_SHORT);
 
 namespace KMS
 {

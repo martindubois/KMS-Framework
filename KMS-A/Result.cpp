@@ -58,6 +58,50 @@ namespace KMS
     const Result RESULT_TIMEOUT          ("RESULT_TIMEOUT"          , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffffe);
     const Result RESULT_WRITE_FAILED     ("RESULT_WRITE_FAILED"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xffffff);
 
+    const Result RESULT_ACCESS_FAILED            ("RESULT_ACCESS_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe01);
+    const Result RESULT_ACCESS_VIOLATION         ("RESULT_ACCESS_VIOLATION"         , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe02);
+    const Result RESULT_ADDRESS_RESOLUTION_FAILED("RESULT_ADDRESS_RESULUTION_FAILED", Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe03);
+    const Result RESULT_BACKUP_FAILED            ("RESULT_BACKUP_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe04);
+    const Result RESULT_CLEAR_FAILED             ("RESULT_CLEAR_FAILED"             , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe05);
+    const Result RESULT_COMPILATION_FAILED       ("RESULT_COMPILATION_FAILED"       , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe06);
+    const Result RESULT_CONFIG_FAILED            ("RESULT_CONFIG_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe07);
+    const Result RESULT_CONTROL_FAILED           ("RESULT_CONTROL_FAILED"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe08);
+    const Result RESULT_COMPRESS_FAILED          ("RESULT_COMPRESS_FAILED"          , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe09);
+    const Result RESULT_COPY_FAILED              ("RESULT_COPY_FAILED"              , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0a);
+    const Result RESULT_CORRUPTED_FILE           ("RESULT_CORRUPTED_FILE"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0b);
+    const Result RESULT_CREATE_FAILED            ("RESULT_CREATE_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0c);
+    const Result RESULT_DELETE_FAILED            ("RESULT_DELETE_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0d);
+    const Result RESULT_EXPAND_FAILED            ("RESULT_EXPAND_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0e);
+    const Result RESULT_FOLDER_CHANGE_FAILED     ("RESULT_FOLDER_CHANGE_FAILED"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe0f);
+    const Result RESULT_INIT_FAILED              ("RESULT_INIT_FAILED"              , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe10);
+    const Result RESULT_INTEGER_DIVIDE_BY_ZERO   ("RESULT_INTEGER_DIVIDE_BY_ZERO"   , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe11);
+    const Result RESULT_INVALID_ADDRESS          ("RESULT_INVALID_ADDRESS"          , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe12);
+    const Result RESULT_INVALID_ADDRESS_RANGE    ("RESULT_INVALID_ADDRESS_RANGE"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe13);
+    const Result RESULT_INVALID_NUMBER           ("RESULT_INVALID_NUMBER"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe14);
+    const Result RESULT_INVALID_PORT             ("RESULT_INVALID_PORT"             , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe15);
+    const Result RESULT_KILL_FAILED              ("RESULT_KILL_FAILED"              , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe16);
+    const Result RESULT_MAPPING_FAILED           ("RESULT_MAPPING_FAILED"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe17);
+    const Result RESULT_NO_DEVICE                ("RESULT_NO_DEVICE"                , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe18);
+    const Result RESULT_RECV_ERROR               ("RESULT_RECV_ERROR"               , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe19);
+    const Result RESULT_REG_OPEN_FAILED          ("RESULT_REG_OPEN_FAILED"          , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1a);
+    const Result RESULT_REG_QUERY_FAILED         ("RESULT_REG_QUERY_FAILED"         , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1b);
+    const Result RESULT_REG_SET_FAILED           ("RESULT_REG_SET_FAILED"           , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1c);
+    const Result RESULT_REMOVE_FAILED            ("RESULT_REMOVE_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1d);
+    const Result RESULT_RENAME_FAILED            ("RESULT_RENAME_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1e);
+    const Result RESULT_SETUP_API_ERROR          ("RESULT_SETUP_API_ERROR"          , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe1f);
+    const Result RESULT_SOCKET_FAILED            ("RESULT_SOCKET_FAILED"            , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe20);
+    const Result RESULT_SOCKET_BIND_FAILED       ("RESULT_SOCKET_BIND_FAILED"       , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe21);
+    const Result RESULT_SOCKET_CONNECT_FAILED    ("RESULT_SOCKET_CONNECT_FAILED"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe22);
+    const Result RESULT_SOCKET_LISTEN_FAILED     ("RESULT_SOCKET_LISTEN_FAILED"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe23);
+    const Result RESULT_SOCKET_OPTION_FAILED     ("RESULT_SOCKET_OPTION_FAILED"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe24);
+    const Result RESULT_SOCKET_SECURITY_ERROR    ("RESULT_SOCKET_SECURITY_ERROR"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe25);
+    const Result RESULT_SOCKET_STARTUP_FAILED    ("RESULT_SOCKET_STARTUP_FAILED"    , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe26);
+    const Result RESULT_START_FAILED             ("RESULT_START_FAILED"             , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe27);
+    const Result RESULT_STRUCTURED_EXCEPTION     ("RESULT_STRUCTURED_EXCEPTION"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe28);
+    const Result RESULT_TOO_SHORT                ("RESULT_TOO_SHORT"                , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe29);
+    const Result RESULT_UNCOMPRESS_FAILED        ("RESULT_UNCOMPRESS_FAILED"        , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe2a);
+    const Result RESULT_UNEXPECTED_EXCEPTION     ("RESULT_UNEXPECTED_EXCEPTION"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe2b);
+
     Result::Result() { mUnion.mCode = 0; }
 
     Result::Result(uint32_t aValue) { mUnion.mCode = aValue; }

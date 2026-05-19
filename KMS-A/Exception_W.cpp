@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Exception_W.cpp
@@ -9,10 +9,6 @@
 
 // ====== Windows ===========================================================
 #include <Windows.h>
-
-KMS_RESULT_STATIC(RESULT_ACCESS_VIOLATION);
-KMS_RESULT_STATIC(RESULT_INTEGER_DIVIDE_BY_ZERO);
-KMS_RESULT_STATIC(RESULT_STRUCTURED_EXCEPTION);
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////

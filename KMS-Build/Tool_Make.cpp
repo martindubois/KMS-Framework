@@ -19,8 +19,6 @@
 
 using namespace KMS;
 
-KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
-
 #define FILE_EXT_A   ".a"
 #define FILE_EXT_CFG ".cfg"
 #define FILE_EXT_ELF ".elf"

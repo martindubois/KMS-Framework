@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/File_Folder.cpp
@@ -68,7 +68,7 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
         File::Folder::ChangeCurrentDirectory("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_FOLDER_CHANGE_FAILED");
+    KMS_TEST_CATCH(RESULT_FOLDER_CHANGE_FAILED);
 
     // Compress
 
@@ -78,7 +78,7 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
         File::Folder::CURRENT.Delete("DoesNotExist");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_DELETE_FAILED");
+    KMS_TEST_CATCH(RESULT_DELETE_FAILED);
 
     try
     {
@@ -86,7 +86,7 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
         lF.Delete();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_REMOVE_FAILED");
+    KMS_TEST_CATCH(RESULT_REMOVE_FAILED);
 
     // Rename
     try
@@ -94,7 +94,7 @@ KMS_TEST(File_Folder_Exception, "Auto", sTest_Exception)
         File::Folder::CURRENT.Rename("DoesNotExist", "Test_File_Folder_Exception_1.zip");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_RENAME_FAILED");
+    KMS_TEST_CATCH(RESULT_RENAME_FAILED);
 
     // Uncompress
 }

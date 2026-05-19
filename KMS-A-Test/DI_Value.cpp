@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2025 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/DI_Value.cpp
@@ -309,7 +309,7 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
         lSE0.Set("{$DoesNotExist}");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_EXPAND_FAILED");
+    KMS_TEST_CATCH(RESULT_EXPAND_FAILED);
 
     try
     {

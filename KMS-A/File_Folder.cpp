@@ -15,8 +15,6 @@
 
 #include <KMS/File/Folder.h>
 
-KMS_RESULT_STATIC(RESULT_BACKUP_FAILED);
-
 namespace KMS
 {
     namespace File

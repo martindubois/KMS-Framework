@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2024 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/File_Folder_W.cpp
@@ -45,7 +45,7 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_OUTPUT_END_N("RESULT_COMPRESS_FAILED");
+    KMS_TEST_CATCH_OUTPUT_END(RESULT_COMPRESS_FAILED);
 
     // Uncompress
     try
@@ -58,7 +58,7 @@ KMS_TEST(File_Folder_Windows_Exception, "Auto", sTest_Windows_Exception)
         KMS_TEST_OUTPUT_END();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_OUTPUT_END_N("RESULT_UNCOMPRESS_FAILED");
+    KMS_TEST_CATCH_OUTPUT_END(RESULT_UNCOMPRESS_FAILED);
 
     // ===== Cleanup ========================================================
     File::Folder lF("Test_File_Folder_Exception_2");

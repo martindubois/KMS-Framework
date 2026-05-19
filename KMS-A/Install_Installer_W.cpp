@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Installer_W.cpp
@@ -12,10 +12,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Install/Installer.h>
-
-KMS_RESULT_STATIC(RESULT_REG_OPEN_FAILED);
-KMS_RESULT_STATIC(RESULT_REG_QUERY_FAILED);
-KMS_RESULT_STATIC(RESULT_REG_SET_FAILED);
 
 // Constants
 // //////////////////////////////////////////////////////////////////////////
@@ -115,6 +111,8 @@ namespace KMS
 
     }
 }
+
+using namespace KMS;
 
 // Static function declarations
 // //////////////////////////////////////////////////////////////////////////

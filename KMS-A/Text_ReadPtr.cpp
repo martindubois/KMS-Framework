@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Text_ReadPtr.cpp
@@ -9,8 +9,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Text/ReadPtr.h>
-
-KMS_RESULT_STATIC(RESULT_TOO_SHORT);
 
 namespace KMS
 {

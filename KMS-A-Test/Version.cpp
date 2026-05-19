@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A-Test/Version.cpp
@@ -78,5 +78,5 @@ KMS_TEST(Version_Fail, "Auto", sTest_Fail)
         Version lV0("0.0.0.256");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_INVALID_NUMBER");
+    KMS_TEST_CATCH(RESULT_INVALID_NUMBER);
 }

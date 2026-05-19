@@ -20,8 +20,6 @@
 
 #include <KMS/Build/Make.h>
 
-KMS_RESULT_STATIC(RESULT_COMPILATION_FAILED);
-
 // Configuration
 // //////////////////////////////////////////////////////////////////////////
 

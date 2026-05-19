@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2024 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Socket_W.cpp
@@ -13,9 +13,6 @@
 #include <KMS/Net/Socket.h>
 
 #pragma comment (lib, "ws2_32.lib")
-
-KMS_RESULT_STATIC(RESULT_SOCKET_OPTION_FAILED);
-KMS_RESULT_STATIC(RESULT_SOCKET_STARTUP_FAILED);
 
 namespace KMS
 {

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-C/Com_Port_W.cpp
@@ -9,10 +9,6 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Com/Port.h>
-
-KMS_RESULT_STATIC(RESULT_CLEAR_FAILED);
-KMS_RESULT_STATIC(RESULT_CONFIG_FAILED);
-KMS_RESULT_STATIC(RESULT_CONTROL_FAILED);
 
 namespace KMS
 {

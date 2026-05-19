@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2024 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B-Test/HTTP_Client.cpp
@@ -101,14 +101,14 @@ KMS_TEST(HTTP_Client_Exception, "Auto", sTest_Exception)
         lC0.Get("http://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_SOCKET_CONNECT_FAILED");
+    KMS_TEST_CATCH(RESULT_SOCKET_CONNECT_FAILED);
 
     try
     {
         lC1.Get("https://localhost/index.htm", &lOF0);
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH_N("RESULT_SOCKET_CONNECT_FAILED");
+    KMS_TEST_CATCH(RESULT_SOCKET_CONNECT_FAILED);
 
     Net::Thread_Cleanup();
 }
