@@ -9,6 +9,9 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device2.h>
+#include <KMS/Dev/Device2_DI2.h>
+#include <KMS/DI2/Input.h>
+#include <KMS/DI2/Output.h>
 
 using namespace KMS;
 
@@ -34,6 +37,17 @@ KMS_TEST(Dev_Device2_Config, "Auto", sTest_Config)
 
     // Validate
     lCfg0.Validate();
+}
+
+KMS_TEST(Dev_Device2_Config_DI2, "Auto", sTest_Config_DI2)
+{
+    char lBuffer[4096];
+
+    Dev::Device2_Config lCfg0;
+
+    DI2::Code_ASCII_String(&lCfg0, &Dev::Device2_Config_TYPE, sizeof(lBuffer), lBuffer);
+
+    DI2::Decode_ASCII_String(&lCfg0, &Dev::Device2_Config_TYPE, lBuffer);
 }
 
 KMS_TEST(Dev_Device2_Config_Exception, "Auto", sTest_Config_Exception)

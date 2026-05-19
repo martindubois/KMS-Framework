@@ -245,12 +245,27 @@ namespace KMS
 
             KMS_EXCEPTION_ASSERT('\0' != mString[mIndex], RESULT_INVALID_FORMAT, "Unexpected end", "");
 
-            TokenType lResult;
+            TokenType    lResult;
+            unsigned int lSkip = 0;
 
             PARSE_0(TokenType::FLOAT   , FORMAT_FLOAT_STR   );
             PARSE_0(TokenType::INT     , FORMAT_INT_STR     );
             PARSE_0(TokenType::OPERATOR, FORMAT_OPERATOR_STR);
-            PARSE_0(TokenType::QUOTED  , FORMAT_QUOTED_STR  );
+
+            if (IsTokenTypePresent(aTypes, TokenType::QUOTED) && (0 == strncmp(mString + mIndex, "\"\"", 2)))
+            {
+                lResult = TokenType::QUOTED;
+                lSkip = 2;
+                goto End;
+            }
+
+            if (IsTokenTypePresent(aTypes, TokenType::QUOTED) && (1 == sscanf_s(mString + mIndex, FORMAT_QUOTED_STR, mValue SizeInfo(mValue))))
+            {
+                lResult = TokenType::QUOTED;
+                lSkip = 2;
+                goto End;
+            }
+
             PARSE_0(TokenType::UINT_HEX, FORMAT_UINT_HEX_STR);
 
             PARSE_0(TokenType::UINT    , FORMAT_UINT_STR    );
@@ -264,16 +279,9 @@ namespace KMS
         End:
             mPrevious = mIndex;
             mIndex += static_cast<unsigned int>(strlen(mValue));
+            mIndex += lSkip;
             return lResult;
         }
-
-        #define PARSE_1(T,F)                                                       \
-            case (T):                                                              \
-                if (1 == sscanf_s(mString + mIndex, (F), mValue SizeInfo(mValue))) \
-                {                                                                  \
-                    goto End;                                                      \
-                }                                                                  \
-                break
 
         // Private
         // //////////////////////////////////////////////////////////////////

@@ -7,6 +7,8 @@ File      KMS-C/_DocUser/KMS.KMS-C.ReadMe.txt
 
 EDIT ON BUILD
 
+- Dev::Device2
+
 1.3.11 Linux 2026-01-22
 - Dev::Device::GetCount on Linux
 

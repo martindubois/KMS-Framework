@@ -72,5 +72,8 @@
     <ClCompile Include="Dev_Device2_W.cpp">
       <Filter>Source Files\Dev</Filter>
     </ClCompile>
+    <ClCompile Include="Dev_Device2_DI2.cpp">
+      <Filter>Source Files\Dev</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
