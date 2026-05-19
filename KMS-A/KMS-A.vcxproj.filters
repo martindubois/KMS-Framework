@@ -504,6 +504,9 @@
     <ClCompile Include="ArgList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DI2_GUID_W.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

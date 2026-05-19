@@ -71,6 +71,7 @@
     <ClCompile Include="Dbg_Stats_W.cpp" />
     <ClCompile Include="DI2_Container.cpp" />
     <ClCompile Include="DI2_Float.cpp" />
+    <ClCompile Include="DI2_GUID_W.cpp" />
     <ClCompile Include="DI2_Input.cpp" />
     <ClCompile Include="DI2_Int.cpp" />
     <ClCompile Include="DI2_Output.cpp" />
