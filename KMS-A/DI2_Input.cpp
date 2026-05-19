@@ -12,6 +12,7 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI2/IType.h>
+#include <KMS/Environment.h>
 
 #include <KMS/DI2/Input.h>
 
@@ -321,6 +322,38 @@ namespace KMS
                     aArgList->IncUseCount(i);
                 }
             }
+        }
+
+        void Decode_ASCII_Env(void* aData, const IType* aType, const char* aVarName)
+        {
+            try
+            {
+                char lValue[LINE_LENGTH];
+
+                auto lRet = Env::GetVariableValue(aVarName, lValue, sizeof(lValue));
+
+                auto lPart = lValue;
+
+                for (unsigned int i = 0; i < lRet; i++)
+                {
+                    if ('\0' == lValue[i])
+                    {
+                        Decode_ASCII_String(aData, aType, lPart);
+                        break;
+                    }
+
+                    if (';' == lValue[i])
+                    {
+                        lValue[i] = '\0';
+
+                        Decode_ASCII_String(aData, aType, lPart);
+
+                        lPart = lValue + i + 1;
+                    }
+                }
+            }
+            catch (KMS::Exception)
+            {}
         }
 
         void Decode_ASCII_String(void* aData, const IType* aType, const char* aString)

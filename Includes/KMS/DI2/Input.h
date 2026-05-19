@@ -122,6 +122,11 @@ namespace KMS
         /// \exception KMS::Exception RESULT_INVALID_FORMAT
         void Decode_ASCII_Arguments(void* aData, const IType* aType, KMS::ArgList* aArgList);
 
+        /// \param aData    Data output
+        /// \param aType    The `DI2` type description
+        /// \param aVarName The environment variable name
+        void Decode_ASCII_Env(void* aData, const IType* aType, const char* aVarName);
+
         /// \param aData Data output
         /// \param aType The `DI2` type description
         /// \param aFile The file to parse
