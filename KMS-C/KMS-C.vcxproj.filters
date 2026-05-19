@@ -66,5 +66,11 @@
     <ClCompile Include="Stream_Stream_Cfg.cpp">
       <Filter>Source Files\Stream</Filter>
     </ClCompile>
+    <ClCompile Include="Dev_Device2.cpp">
+      <Filter>Source Files\Dev</Filter>
+    </ClCompile>
+    <ClCompile Include="Dev_Device2_W.cpp">
+      <Filter>Source Files\Dev</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

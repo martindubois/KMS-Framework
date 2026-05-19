@@ -18,10 +18,13 @@
     <ClCompile Include="KMS-C-Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dev_IDevice.cpp">
+    <ClCompile Include="Dev_IDevice2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dev_Device.cpp">
+    <ClCompile Include="Dev_Device2_W.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dev_Device2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

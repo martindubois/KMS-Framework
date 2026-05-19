@@ -12,11 +12,6 @@
 // ===== C++ ================================================================
 #include <string>
 
-#ifdef _KMS_WINDOWS_
-    // ===== Windows ========================================================
-    #include <Windows.h>
-#endif
-
 // ===== Includes ===========================================================
 #include <KMS/Dev/IDevice.h>
 #include <KMS/DI/Dictionary.h>
@@ -32,7 +27,7 @@ namespace KMS
     namespace Dev
     {
 
-        /// \brief TODO Remove use of DI namespace
+        /// \brief Deprecated
         class Device : public DI::Dictionary, public IDevice
         {
 

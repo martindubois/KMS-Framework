@@ -207,8 +207,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Dev_Device.cpp" />
-    <ClCompile Include="Dev_IDevice.cpp" />
+    <ClCompile Include="Dev_Device2.cpp" />
+    <ClCompile Include="Dev_Device2_W.cpp" />
+    <ClCompile Include="Dev_IDevice2.cpp" />
     <ClCompile Include="KMS-C-Test.cpp" />
   </ItemGroup>
   <ItemGroup>
