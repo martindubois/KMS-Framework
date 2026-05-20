@@ -5,11 +5,11 @@ License   http://www.apache.org/licenses/LICENSE-2.0
 Product   KMS-Framework
 File      _DocDev/Build.txt
 
-Name                ________________________________ ( )    Martin Dubois ( )
+Name                ____________________________________    Martin Dubois ( )
 
 Date and time       20 ______ - ______ - ______               ______ : ______
 
-Computer            ______________________________ ( )    Dev_U ( )    MD ( )
+Computer            __________________________________    Dev_U ( )    MD ( )
 
 File "Common/Version.h" - Edit the Version
 
@@ -17,7 +17,7 @@ Version             ______ . ______ . ______ . ______                     ( )
                     {Ma}     {Mi}     {Bu}            -beta               ( )
                                                       -dev                ( )
                                                       -test               ( )
-                                                      - _________________ ( )
+                                                      - _____________________
                                                         {Type}
 
 Search "EDIT ON BUILD" and edit found file as needed                      [ ]

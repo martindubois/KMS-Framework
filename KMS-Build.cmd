@@ -2,7 +2,9 @@
 
 rem This file has been genereted using KMS-Framework
 
+
 rem ===== Verify =====
+
 
 if not exist C:\_VC\KMS-Framework\_DocUser\Documentation.html (
     echo "ERROR  C:\_VC\KMS-Framework\_DocUser\Documentation.html  does not exist"
@@ -34,9 +36,13 @@ if not exist "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild
     exit /B 50
 )
 
+
 rem ===== Pre-Build =====
 
+
+
 rem ===== Compile =====
+
 
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe" Solution.sln /target:rebuild /Property:Configuration=Debug /property:Platform=x64
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe" Solution.sln /target:rebuild /Property:Configuration=Debug /property:Platform=x86
@@ -44,7 +50,9 @@ rem ===== Compile =====
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe" Solution.sln /target:rebuild /Property:Configuration=Release /property:Platform=x86
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe" Solution.sln /target:rebuild /Property:Configuration=Release_Static /property:Platform=x64
 "C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe" Solution.sln /target:rebuild /Property:Configuration=Release_Static /property:Platform=x86
+
 rem ===== Test =====
+
 
 if not exist C:\_VC\KMS-Framework\x64\Debug\KMS-Build.exe (
     echo "ERROR  C:\_VC\KMS-Framework\x64\Debug\KMS-Build.exe  does not exist"
@@ -598,91 +606,9 @@ if not exist C:\_VC\KMS-Framework\x64\Debug\KMS-B-Test.exe (
     exit /B 960
 )
 
-"C:\_VC\KMS-Framework\x64\Debug\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Debug\KMS-B-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Debug\KMS-B-Test.exe  does not exist"
-    pause
-    exit /B 970
-)
-
-"C:\_VC\KMS-Framework\Debug\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\x64\Release\KMS-B-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\x64\Release\KMS-B-Test.exe  does not exist"
-    pause
-    exit /B 980
-)
-
-"C:\_VC\KMS-Framework\x64\Release\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Release\KMS-B-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Release\KMS-B-Test.exe  does not exist"
-    pause
-    exit /B 990
-)
-
-"C:\_VC\KMS-Framework\Release\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\x64\Release_Static\KMS-B-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\x64\Release_Static\KMS-B-Test.exe  does not exist"
-    pause
-    exit /B 1000
-)
-
-"C:\_VC\KMS-Framework\x64\Release_Static\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Release_Static\KMS-B-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Release_Static\KMS-B-Test.exe  does not exist"
-    pause
-    exit /B 1010
-)
-
-"C:\_VC\KMS-Framework\Release_Static\KMS-B-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\x64\Debug\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\x64\Debug\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1020
-)
-
-"C:\_VC\KMS-Framework\x64\Debug\KMS-C-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Debug\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Debug\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1030
-)
-
-"C:\_VC\KMS-Framework\Debug\KMS-C-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\x64\Release\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\x64\Release\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1040
-)
-
-"C:\_VC\KMS-Framework\x64\Release\KMS-C-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Release\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Release\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1050
-)
-
-"C:\_VC\KMS-Framework\Release\KMS-C-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\x64\Release_Static\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\x64\Release_Static\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1060
-)
-
-"C:\_VC\KMS-Framework\x64\Release_Static\KMS-C-Test.exe" Groups+=Auto
-if not exist C:\_VC\KMS-Framework\Release_Static\KMS-C-Test.exe (
-    echo "ERROR  C:\_VC\KMS-Framework\Release_Static\KMS-C-Test.exe  does not exist"
-    pause
-    exit /B 1070
-)
-
-"C:\_VC\KMS-Framework\Release_Static\KMS-C-Test.exe" Groups+=Auto
-"C:\Program Files\doxygen\bin\doxygen.exe" DoxyFile_en.txt
-rem ===== Package =====
-
-"C:\Program Files (x86)\Inno Setup 6\Compil32.exe" /cc Product_x64.iss
-rem ===== Sign =====
 
 
 rem ===== End =====
+
 echo OK
 exit /B 0

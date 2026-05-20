@@ -62,7 +62,6 @@ namespace KMS
 /// \brief Define common method for all configuration structure
 #define KMS_Config_METHODS(T)                                                 \
     T() { SetDefault(); };                                                    \
-    void IsEqual(const T& aB) const;                                          \
     bool IsValid(char* aMsg = nullptr, unsigned int aMsgSize_byte = 0) const; \
     void SetDefault();                                                        \
     void Validate() const;
