@@ -10,6 +10,7 @@
 // ===== Includes ===========================================================
 #include <KMS/DI2/String.h>
 #include <KMS/DI2/UInt.h>
+
 #include <KMS/Version_DI2.h>
 
 namespace KMS
@@ -20,13 +21,13 @@ namespace KMS
 
     const DI2::Struct_Field Version_FIELDS[8] =
     {
-        { "Major" , 0, &DI2::TYPE_UINT8 },
-        { "Minor" , 1, &DI2::TYPE_UINT8 },
-        { "Build" , 2, &DI2::TYPE_UINT8 },
-        { "Compat", 3, &DI2::TYPE_UINT8 },
-        { "Debug" , 4, &DI2::TYPE_UINT8 },
-        { "Date"  , 5, &STRING_27       },
-        { "Type"  , 5, &STRING_16       },
+        { "Major" ,  0, &DI2::TYPE_UINT8 },
+        { "Minor" ,  1, &DI2::TYPE_UINT8 },
+        { "Build" ,  2, &DI2::TYPE_UINT8 },
+        { "Compat",  3, &DI2::TYPE_UINT8 },
+        { "Debug" ,  4, &DI2::TYPE_UINT8 },
+        { "Date"  ,  5, &STRING_27       },
+        { "Type"  , 32, &STRING_16       },
 
         { nullptr, 0, nullptr }
     };
