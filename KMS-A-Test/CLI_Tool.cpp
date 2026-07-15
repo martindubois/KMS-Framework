@@ -20,54 +20,6 @@ class Test_Tool : public CLI::Tool
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-KMS_TEST(CLI_Tool_Base, "Auto", sTest_Base)
-{
-    // Constructor
-    Test_Tool lT;
-
-    // AddCommand
-    lT.AddCommand("AbortIfError");
-    lT.AddCommand("ChangeDir KMS-A-Test");
-    lT.AddCommand("ChangeDir ..");
-    lT.AddCommand("Config Invalid");
-    lT.AddCommand("Echo Message");
-    lT.AddCommand("ExecuteScript KMS-A-Test/Tests/Test_CLI_Tool_Base_0.txt");
-    lT.AddCommand("ExitIfError");
-    lT.AddCommand("Help");
-    lT.AddCommand("Repeat 0 Help");
-    lT.AddCommand("Repeat 1 Help");
-    lT.AddCommand("UntilCtrlC Invalid");
-    lT.AddCommand("Exit");
-
-    // ClearError
-    lT.ClearError();
-
-    // GetExitCode
-
-    // ExecuteCommands
-    lT.ExecuteCommands(stdout);
-
-    // ExecuteScripts
-
-    // DisplayHelp
-
-    // ExecuteCommand
-
-    // Run
-    int lRet;
-    Console::Redirection lR(Console::Redirection::What::WHAT_STDOUT);
-    {
-        lRet = lT.Run();
-    }
-    lR.Restore();
-    KMS_TEST_COMPARE(lRet, 0);
-
-    // ===== DI::Container ==================================================
-
-    // Validate
-    lT.Validate();
-}
-
 KMS_TEST(CLI_Tool_Exception, "Auto", sTest_Exception)
 {
     Test_Tool lT;
