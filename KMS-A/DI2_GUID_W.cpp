@@ -59,29 +59,35 @@ namespace KMS
 
         // Operator =
         //
+        // {00000000-0000-0000-0000-000000000000}
         // "{00000000-0000-0000-0000-000000000000}"
+        // op {00000000-0000-0000-0000-000000000000}
         // op "{00000000-0000-0000-0000-000000000000}"
         void GUID::Decode_ASCII(void* aData, KMS::DI2::Input* aInput) const
         {
+            static const std::regex REGEX_0("^(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})");
+            static const std::regex REGEX_1("^\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"");
+            static const std::regex REGEX_2("^=\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})");
+            static const std::regex REGEX_3("^=\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"");
+
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
-            auto lTT = aInput->Token_Next(DI2::TokenType::OPERATOR | DI2::TokenType::QUOTED);
-            if (DI2::TokenType::OPERATOR == lTT)
+            std::smatch lMatch;
+
+            if (   aInput->Next(REGEX_0, lMatch)
+                || aInput->Next(REGEX_1, lMatch)
+                || aInput->Next(REGEX_2, lMatch)
+                || aInput->Next(REGEX_3, lMatch))
             {
-                auto lOP = aInput->Token_GetOperator();
-                KMS_EXCEPTION_ASSERT(DI2::Operator::ASSIGN == lOP, RESULT_INVALID_VALUE, "Invalid operator", "");
+                auto lData = reinterpret_cast<::GUID*>(aData);
 
-                aInput->Token_Next(DI2::TokenType::QUOTED);
+                *lData = Convert::ToGUID(lMatch[1].str().c_str());
             }
-
-            char lStr[48];
-
-            aInput->Token_GetText(lStr, sizeof(lStr));
-
-            auto lData = reinterpret_cast<::GUID*>(aData);
-
-            *lData = Convert::ToGUID(lStr);
+            else
+            {
+                KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid GUID format", "");
+            }
         }
 
         void GUID::Decode_JSON(void* aData, KMS::DI2::Input* aInput) const

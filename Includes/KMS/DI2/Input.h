@@ -9,6 +9,9 @@
 
 #pragma once
 
+// ===== C++ ================================================================
+#include <regex>
+
 // ===== Includes ===========================================================
 #include <KMS/ArgList.h>
 #include <KMS/DI2/Operator.h>
@@ -44,6 +47,16 @@ namespace KMS
 
             /// \param aString The string to parse
             void Init_String(const char* aString);
+
+            /// \retval false Not consummed
+            /// \retval true  Consummed
+            bool IsConsummed();
+
+            /// \param aRegex The regular expression
+            /// \param aMatch The match container
+            /// \retval false  No match
+            /// \retval true   Match
+            bool Next(const std::regex& aRegex, std::smatch& aMatch);
 
             /// \brief Go back one token or one char
             /// \see Char_Next Char_Next_Try Token_Next
@@ -105,6 +118,7 @@ namespace KMS
             unsigned int mIndex;
             unsigned int mPrevious;
             const char * mString;
+            std::string  mStringR;
             char         mValue[LINE_LENGTH];
 
         };

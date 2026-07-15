@@ -46,7 +46,7 @@ namespace KMS
 
             for (unsigned int i = 1; i <= 36; i++)
             {
-                lValue <<= 8;
+                lValue <<= 4;
 
                 uint8_t lValue2;
 

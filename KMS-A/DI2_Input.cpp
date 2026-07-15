@@ -110,6 +110,28 @@ namespace KMS
             mString = aString;
         }
 
+        bool Input::IsConsummed()
+        {
+            assert(nullptr != mString);
+
+            SkipBlank();
+
+            return ('\0' == mString[mIndex]);
+        }
+
+        bool Input::Next(const std::regex& aRegex, std::smatch& aMatch)
+        {
+            mStringR = mString + mIndex;
+
+            auto lResult = std::regex_match(mStringR, aMatch, aRegex);
+            if (lResult)
+            {
+                mIndex += static_cast<unsigned int>(aMatch[0].length());
+            }
+
+            return lResult;
+        }
+
         void Input::Previous()
         {
             assert(mIndex > mPrevious);
@@ -373,6 +395,8 @@ namespace KMS
             lInput.Init_String(aString);
 
             aType->Decode_ASCII(aData, &lInput);
+
+            KMS_EXCEPTION_ASSERT(lInput.IsConsummed(), RESULT_INVALID_FORMAT, "Invalid format", aString);
         }
 
         bool Decode_ASCII_String_Try(void* aData, const IType* aType, const char* aString)
@@ -389,7 +413,7 @@ namespace KMS
             {
                 aType->Decode_ASCII(aData, &lInput);
 
-                lResult = true;
+                lResult = lInput.IsConsummed();
             }
             catch (KMS::Exception eE)
             {

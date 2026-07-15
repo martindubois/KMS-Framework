@@ -7,10 +7,16 @@
 
 #include "Component.h"
 
+#ifdef _KMS_WINDOWS_
+    // ===== Windows ========================================================
+    #include <Windows.h>
+#endif
+
 // ===== Includes ===========================================================
 #include <KMS/DI2/Array.h>
 #include <KMS/DI2/BitField.h>
 #include <KMS/DI2/Float.h>
+#include <KMS/DI2/GUID.h>
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Int.h>
 #include <KMS/DI2/UInt.h>
@@ -50,7 +56,7 @@ static const DI2::BitField_Field TEST_BIT_FIELD_FIELDS[] =
 
 static const DI2::Struct_Field TEST_STRUCT_FIELDS[] =
 {
-    { "mField0", 0, &DI2::TYPE_UINT32 },
+    { "mField0", offsetof(TestStruct, mField0), &DI2::TYPE_UINT32 },
 
     { nullptr, 0, nullptr }
 };
@@ -63,9 +69,9 @@ static const DI2::Struct<TEST_STRUCT_FIELDS>                TYPE_TEST_STRUCT;
 // Tests
 // //////////////////////////////////////////////////////////////////////////
 
-KMS_TEST(DI2_ArgList, "auto", sTest_ArgList)
+KMS_TEST(DI2_ArgList, "Auto", sTest_ArgList)
 {
-    static const char* ARGUMENTS[] = { "mField0=0", "DoesNotExist=1"};
+    static const char* ARGUMENTS[] = { "mField0=0", "DoesNotExist=1" };
 
     ArgList lAL0(0, nullptr);
     ArgList lAL1(1, ARGUMENTS);
@@ -87,7 +93,7 @@ KMS_TEST(DI2_ArgList, "auto", sTest_ArgList)
     KMS_TEST_COMPARE(lAL2.GetUseCount(2), ArgList::INVALID_USE_COUNT);
 }
 
-KMS_TEST(DI2_Array, "auto", sTest_Array)
+KMS_TEST(DI2_Array, "Auto", sTest_Array)
 {
     char lASCII[4096];
 
@@ -101,7 +107,7 @@ KMS_TEST(DI2_Array, "auto", sTest_Array)
     KMS_TEST_COMPARE(lArray[1], 2L);
 }
 
-KMS_TEST(DI2_BitField, "auto", sTest_BitField)
+KMS_TEST(DI2_BitField, "Auto", sTest_BitField)
 {
     char lASCII[4096];
 
@@ -114,7 +120,25 @@ KMS_TEST(DI2_BitField, "auto", sTest_BitField)
     KMS_TEST_ASSERT(1 == lTBF.mField0);
 }
 
-KMS_TEST(DI2_Input, "auto", sTest_Input)
+KMS_TEST(DI2_GUID, "Auto", sTest_GUID)
+{
+    #ifdef _KMS_WINDOWS_
+
+        char lASCII[4096];
+
+        // {F374BABB-38FA-415D-A8AF-0C3CF05246F6}
+        ::GUID lG0 = { 0xf374babb, 0x38fa, 0x415d, { 0xa8, 0xaf, 0xc, 0x3c, 0xf0, 0x52, 0x46, 0xf6 } };
+        ::GUID lG1;
+
+        DI2::Code_ASCII_String(&lG0, &DI2::TYPE_GUID, sizeof(lASCII), lASCII);
+        memset(&lG1, 0, sizeof(lG1));
+        DI2::Decode_ASCII_String(&lG1, &DI2::TYPE_GUID, lASCII);
+        KMS_TEST_ASSERT(0 == memcmp(&lG0, &lG1, sizeof(lG0)));
+
+    #endif
+}
+
+KMS_TEST(DI2_Input, "Auto", sTest_Input)
 {
     DI2::Input lI0;
     DI2::Input lI1;
@@ -151,7 +175,7 @@ KMS_TEST(DI2_Input, "auto", sTest_Input)
     KMS_TEST_ASSERT(!DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mDield1=0"));
 }
 
-KMS_TEST(DI2_Input_Exception, "auto", sTest_Input_Exception)
+KMS_TEST(DI2_Input_Exception, "Auto", sTest_Input_Exception)
 {
     DI2::Input lI0;
     DI2::Input lI1;
