@@ -27,7 +27,7 @@ static const KMS::Cfg::MetaData MD_VISUAL_STUDIO_VERSION("VisualStudioVersion = 
 // Public
 // //////////////////////////////////////////////////////////////////////////
 
-const char   * Build::CERTIFICAT_SHA1_DEFAULT       = "B71CF3BCD4E228FEFD58B2FE3353EF31106C1754";
+const char   * Build::CERTIFICAT_SHA1_DEFAULT       = "2BC769FC44223ABBB89C1089F76259FF9A4020FF";
 const char   * Build::EXPORT_FOLDER_DEFAULT         = "K:\\Export";
 const uint32_t Build::VISUAL_STUDIO_VERSION_DEFAULT = 2022;
 
