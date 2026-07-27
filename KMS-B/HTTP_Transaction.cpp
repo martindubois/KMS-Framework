@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Transaction.cpp
@@ -428,6 +428,8 @@ namespace KMS
             }
         }
 
+        // TODO  Use regex
+
         // Return  false  NOT TESTED
         bool Transaction::Request_Parse(unsigned int* aHeaderSize_byte)
         {
@@ -467,6 +469,7 @@ namespace KMS
             return true;
         }
 
+        // TODO  Use regex
         void Transaction::Response_Parse(unsigned int aSize_byte)
         {
             assert(0 < aSize_byte);

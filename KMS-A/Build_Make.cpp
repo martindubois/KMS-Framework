@@ -421,6 +421,7 @@ namespace KMS
 
             for (auto lIt = aMF->mLines.begin(); lIt != aMF->mLines.end(); lIt++)
             {
+                // TODO Use regex
                 if (1 == sscanf_s(lIt->c_str(), "SOURCES = %[^ \\\n\r\r]", lSource SizeInfo(lSource)))
                 {
                     aSources->insert(lSource);

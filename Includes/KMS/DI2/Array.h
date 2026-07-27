@@ -67,6 +67,8 @@ namespace KMS
             assert(false);
         }
 
+        // TODO  Use regex
+
         // [0] op Value0
         // { Value0; Value1; }
         // = { Value0; Value1; }

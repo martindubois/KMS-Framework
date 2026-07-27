@@ -125,6 +125,7 @@ namespace KMS
             return lResult_byte;
         }
 
+        // TODO  Use regex
         void Address::SetAddress(const char* aA)
         {
             assert(nullptr != aA);

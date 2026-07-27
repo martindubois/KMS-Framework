@@ -47,6 +47,7 @@ namespace Comp_Folder_ToPackage
     // Functions
     // //////////////////////////////////////////////////////////////////////
 
+    // TODO  Use regex
     void CreateComponent(CompList* aComps, const Config& aCfg, const char* aFolder)
     {
         assert(nullptr != aComps);

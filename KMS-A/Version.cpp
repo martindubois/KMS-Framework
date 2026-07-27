@@ -64,6 +64,7 @@ namespace KMS
 
     #ifndef _KMS_EMBEDDED_
 
+        // TODO  Use regex
         Version::Version(const char* aVersion) : mDebug(false)
         {
             Construct();
@@ -86,6 +87,7 @@ namespace KMS
             SetNumbers(lMajor, lMinor, lBuild, lCompat);
         }
 
+        // TODO  Use regex
         Version::Version(const File::Folder& aFolder, const char* aFile) : mDebug(false)
         {
             Construct();

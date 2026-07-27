@@ -99,6 +99,8 @@ void T_Editor::Execute(Phase aPhase, Script::Script* aScript)
 // Private
 // //////////////////////////////////////////////////////////////////////////
 
+// TODO  Use regex
+
 // SCRIPT  Script does not include the EDIT phase.
 void T_Editor::Execute_EDIT()
 {

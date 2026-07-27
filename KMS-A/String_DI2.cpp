@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Version_DI2.cpp
@@ -79,6 +79,7 @@ using namespace KMS;
 // Static fonction declarations
 // //////////////////////////////////////////////////////////////////////////
 
+// TODO  Use regex
 static void StringList_ASCII_Decode_ASCII(StringList_ASCII* aData, DI2::Input* aInput, DI2::TokenType aTokenTypes)
 {
     assert(nullptr != aData);

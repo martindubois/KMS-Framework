@@ -12,6 +12,7 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
 #include <KMS/DI2/Output.h>
+#include <KMS/Result.h>
 
 namespace KMS
 {
@@ -45,6 +46,8 @@ namespace KMS
         {
             assert(false);
         }
+
+        // TODO  Use regex
 
         // Operators = +=
         //

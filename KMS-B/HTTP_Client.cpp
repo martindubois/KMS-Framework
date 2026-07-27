@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023-2024 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/HTTP_Client.cpp
@@ -202,6 +202,7 @@ namespace KMS
             mSocket->Connect();
         }
 
+        // TODO  Use regex
         void Client::ParseURL(const char* aURL, char* aHost, unsigned int aHostSize_byte, char* aPath, unsigned int aPathSize_byte)
         {
             assert(nullptr != aURL);

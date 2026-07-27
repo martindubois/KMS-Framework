@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Depend.cpp
@@ -77,6 +77,7 @@ namespace KMS
                 {
                     char lInclude[FILE_LENGTH];
 
+                    // TODO  Use regex
                     if (1 == sscanf_s(lLine.c_str(), "#include <%[^>]>", lInclude SizeInfo(lInclude)))
                     {
                         LocateDependency(lResult, lInclude);

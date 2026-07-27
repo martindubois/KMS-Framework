@@ -56,6 +56,8 @@ namespace KMS
             assert(false);
         }
 
+        // TODO  Use regex
+
         // Operators += -= *= /= |= &= ^=
         //
         // Value

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2023 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/DI_NetAddress.cpp
@@ -19,6 +19,7 @@ namespace KMS
         // Functions
         // //////////////////////////////////////////////////////////////////
 
+        // TODO  Use regex
         Net::Address ToNetAddress(const char* aASCII)
         {
             Net::Address lResult;
@@ -49,6 +50,7 @@ namespace KMS
             return lResult;
         }
 
+        // TODO  Use regex
         Net::AddressRange ToNetAddressRange(const char* aASCII)
         {
             Net::AddressRange lResult;

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Editor.cpp
@@ -192,6 +192,7 @@ void Operation::Execute(unsigned int aIndex, const Version& aVersion)
 
 }
 
+// TODO  Use regex
 bool Operation::Parse(const char* aIn)
 {
     auto lRet = sscanf_s(aIn, "%[^;];%[^;];%[^\n\r]", mFile SizeInfo(mFile), mRegEx SizeInfo(mRegEx), mReplace SizeInfo(mReplace));

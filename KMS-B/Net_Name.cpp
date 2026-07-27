@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-B/Net_Name.cpp
@@ -83,6 +83,7 @@ namespace KMS
             mFlags.mIPv4 = true;
         }
 
+        // TODO  Use regex
         void Name::SetIPv4(const char* aIn)
         {
             unsigned int lAddr[4];
@@ -168,6 +169,7 @@ namespace KMS
             { nullptr, 0, Protocol::UNKNOWN }
         };
 
+        // TODO  Use regex
         void Name::SetURL(const char* aIn, char* aOut, unsigned int aOutSize_byte)
         {
             unsigned int lPortNumber;

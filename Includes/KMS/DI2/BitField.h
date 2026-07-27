@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI2/BitField.h
@@ -71,6 +71,8 @@ namespace KMS
 
             mType->Code_JSON(aData, aOutput);
         }
+
+        // TODO  Use regex
 
         // Operators = += -= *= /= |= &= ^=
         //
@@ -146,6 +148,8 @@ namespace KMS
 
         // Private
         // //////////////////////////////////////////////////////////////////
+
+        // TODO  Use regex
 
         template <typename T, const BitField_Field* F>
         void BitField<T, F>::DecodeField_ASCII(void* aData, Input* aInput) const

@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2025 KMS
+// Copyright (C) 2025-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/DI2/UInt.h
@@ -55,6 +55,8 @@ namespace KMS
         {
             // TODO
         }
+
+        // TODO  Use regex
 
         // Operators = += -= *= /= |= &= ^=
         //

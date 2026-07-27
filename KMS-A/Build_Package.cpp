@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2023 KMS
+// Copyright (C) 2023-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Build_Package.cpp
@@ -72,6 +72,7 @@ namespace KMS
             mVersion = aVersion;
         }
 
+        // TODO  Use regex
         void Package::Parse(const char* aIn)
         {
             assert(nullptr != aIn);
