@@ -8,6 +8,7 @@
 #include "Component.h"
 
 // ===== Includes ===========================================================
+#include <KMS/Dev/Device2.h>
 #include <KMS/DI2/String.h>
 #include <KMS/DI2/UInt.h>
 
@@ -20,24 +21,25 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-static const KMS::DI2::String<PATH_LENGTH> LINK_TYPE;
+static const KMS::DI2::String<PATH_LENGTH> PATH_TYPE;
 
 namespace KMS
 {
     namespace Dev
     {
 
-        const DI2::Struct_Field Device2_Config_FIELDS[4] =
+        const DI2::Struct_Field Device2_Config_FIELDS[5] =
         {
-            { "Link" ,           0, &LINK_TYPE  },
-            { "Index", PATH_LENGTH, &DI2::TYPE_UINT8 },
+            { "Index"  , offsetof(Device2_Config, mIndex  ), &DI2::TYPE_UINT8 },
+            { "Link"   , offsetof(Device2_Config, mLink   ), &PATH_TYPE       },
+            { "Pattern", offsetof(Device2_Config, mPattern), &PATH_TYPE       },
 
             #ifdef _KMS_LINUX_
                 { nullptr, 0, nullptr }
             #endif
 
             #ifdef _KMS_WINDOWS_
-                { "Interface", PATH_LENGTH + sizeof(uint8_t) * 8, &DI2::TYPE_GUID },
+                { "Interface", offsetof(Device2_Config, mInterface), &DI2::TYPE_GUID },
             #endif
 
             { nullptr, 0, nullptr }

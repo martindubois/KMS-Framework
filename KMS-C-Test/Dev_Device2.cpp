@@ -44,10 +44,13 @@ KMS_TEST(Dev_Device2_Config_DI2, "Auto", sTest_Config_DI2)
     char lBuffer[4096];
 
     Dev::Device2_Config lCfg0;
+    Dev::Device2_Config lCfg1;
 
     DI2::Code_ASCII_String(&lCfg0, &Dev::Device2_Config_TYPE, sizeof(lBuffer), lBuffer);
 
-    DI2::Decode_ASCII_String(&lCfg0, &Dev::Device2_Config_TYPE, lBuffer);
+    DI2::Decode_ASCII_String(&lCfg1, &Dev::Device2_Config_TYPE, lBuffer);
+
+    KMS_TEST_ASSERT(0 == memcmp(&lCfg0, &lCfg1, sizeof(lCfg0)));
 }
 
 KMS_TEST(Dev_Device2_Config_Exception, "Auto", sTest_Config_Exception)

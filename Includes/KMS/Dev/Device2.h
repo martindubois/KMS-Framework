@@ -33,32 +33,37 @@ namespace KMS
 
             KMS_Config_METHODS(Device2_Config);
 
-            /// \brief Is the mInteface value valid
-            /// \retval false
-            /// \retval true
-            bool IsInterfaceValid() const;
-
             /// \brief Is the mLink value valid
             /// \retval false
             /// \retval true
             bool IsLinkValid() const;
 
+            /// \brief Is the mPattern value valid
+            /// \retval false
+            /// \retval true
+            bool IsPatternValid() const;
+
             /// \brief Set the mLink value
             /// \param aLink The new value
             void SetLink(const char* aLink);
 
+            /// \brief Set the mPattern value
+            /// \param aPattern The new value
+            void SetPattern(const char* aPattern);
+
+            void LinkFromPatternAndIndex();
+
             char    mLink[PATH_LENGTH];
             uint8_t mIndex;
-
             uint8_t mReserved[7];
-
-            #ifdef _KMS_LINUX_
-
-                void LinkFromIndex();
-
-            #endif
+            char    mPattern[PATH_LENGTH];
 
             #ifdef _KMS_WINDOWS_
+
+                /// \brief Is the mInteface value valid
+                /// \retval false
+                /// \retval true
+                bool IsInterfaceValid() const;
 
                 void LinkFromInterfaceAndIndex();
 

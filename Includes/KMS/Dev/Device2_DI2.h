@@ -19,11 +19,11 @@ namespace KMS
 
         /// \brief Field list
         /// \see Device2_Config
-        extern const DI2::Struct_Field Device2_Config_FIELDS[4];
+        extern const DI2::Struct_Field Device2_Config_FIELDS[5];
 
         /// \brief The `DI2` type description for `Device2_Config`
         /// \see Editor_Config
-        extern const class DI2::Struct<Device2_Config_FIELDS> Device2_Config_TYPE;
+        extern const DI2::Struct<Device2_Config_FIELDS> Device2_Config_TYPE;
 
     }
 }

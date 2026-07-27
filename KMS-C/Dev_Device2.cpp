@@ -20,9 +20,13 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        bool Device2_Config::IsLinkValid() const { return 0 < strlen(mLink); }
+        bool Device2_Config::IsLinkValid   () const { return 0 < strlen(mLink   ); }
+        bool Device2_Config::IsPatternValid() const { return 0 < strlen(mPattern); }
 
-        void Device2_Config::SetLink(const char* aLink) { assert(nullptr != aLink); strcpy_s(mLink, aLink); }
+        void Device2_Config::SetLink   (const char* aLink   ) { assert(nullptr != aLink   ); strcpy_s(mLink   , aLink   ); }
+        void Device2_Config::SetPattern(const char* aPattern) { assert(nullptr != aPattern); strcpy_s(mPattern, aPattern); }
+
+        void Device2_Config::LinkFromPatternAndIndex() { sprintf_s(mLink, mPattern, mIndex); }
 
         void Device2_Config::SetDefault() { memset(this, 0, sizeof(*this)); }
 

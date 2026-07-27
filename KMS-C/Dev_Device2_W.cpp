@@ -21,28 +21,40 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        unsigned int Device2::GetCount(const Device2_Config& aConfig)
+        unsigned int Device2::GetCount(const Device2_Config& aCfg)
         {
             unsigned int lResult = 0;
 
-            auto lDevInfo = SetupDi::GetClassDevs_Interface(aConfig.mInterface);
-            assert(INVALID_HANDLE_VALUE != lDevInfo);
-
-            for (unsigned int i = 0;; i++)
+            if (aCfg.IsLinkValid())
             {
-                SP_DEVINFO_DATA lDevInfoData;
+                lResult = 1;
+            }
+            else if (aCfg.IsPatternValid())
+            {
+                // TODO  Count device
+                lResult = 1;
+            }
+            else
+            {
+                auto lDevInfo = SetupDi::GetClassDevs_Interface(aCfg.mInterface);
+                assert(INVALID_HANDLE_VALUE != lDevInfo);
 
-                auto lRet = SetupDi::EnumDeviceInfo(lDevInfo, i, &lDevInfoData);
-                if (!lRet)
+                for (unsigned int i = 0;; i++)
                 {
-                    break;
-                }
+                    SP_DEVINFO_DATA lDevInfoData;
 
-                SP_DEVICE_INTERFACE_DATA lDevIntData;
+                    auto lRet = SetupDi::EnumDeviceInfo(lDevInfo, i, &lDevInfoData);
+                    if (!lRet)
+                    {
+                        break;
+                    }
 
-                if (SetupDi::EnumDeviceInterfaces(lDevInfo, &lDevInfoData, aConfig.mInterface, &lDevIntData))
-                {
-                    lResult++;
+                    SP_DEVICE_INTERFACE_DATA lDevIntData;
+
+                    if (SetupDi::EnumDeviceInterfaces(lDevInfo, &lDevInfoData, aCfg.mInterface, &lDevIntData))
+                    {
+                        lResult++;
+                    }
                 }
             }
 
@@ -71,11 +83,11 @@ namespace KMS
                 memset(aMsg, 0, aMsgSize_byte);
             }
 
-            if ((!IsInterfaceValid()) && (!(IsLinkValid())))
+            if ((!IsInterfaceValid()) && (!(IsLinkValid()) && (!(IsPatternValid()))))
             {
                 if ((nullptr != aMsg) && (0 < aMsgSize_byte))
                 {
-                    strncpy_s(aMsg SizeInfoV(aMsgSize_byte), "The interface and the link are not valid", aMsgSize_byte - 1);
+                    strncpy_s(aMsg SizeInfoV(aMsgSize_byte), "The interface, link and pattern are not valid", aMsgSize_byte - 1);
                 }
 
                 return false;

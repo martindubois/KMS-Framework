@@ -16,13 +16,16 @@
 
 // ===== Includes ===========================================================
 #include <KMS/Dev/Device2.h>
+#include <KMS/Dev/Device2_DI2.h>
+#include <KMS/DI2/Input.h>
+#include <KMS/DI2/Output.h>
 
 using namespace KMS;
 
 // {586DBACF-6F76-4448-85C4-DEF8DE99C438}
 static const GUID INVALID_INTERFACE = { 0x586dbacf, 0x6f76, 0x4448, { 0x85, 0xc4, 0xde, 0xf8, 0xde, 0x99, 0xc4, 0x38 } };
 
-KMS_TEST(Dev_Device2_Windows_Config, "Auto", sTest_Windows)
+KMS_TEST(Dev_Device2_Config_W, "Auto", sTest_Config_W)
 {
     Dev::Device2_Config lCfg0;
 
@@ -51,7 +54,23 @@ KMS_TEST(Dev_Device2_Windows_Config, "Auto", sTest_Windows)
     KMS_TEST_ASSERT(1 <= lNet);
 }
 
-KMS_TEST(Dev_Device2_Windows_Exception, "Auto", sTest_Windows_Exception)
+KMS_TEST(Dev_Device2_Config_DI2_W, "Auto", sTest_Config_DI2_W)
+{
+    char lBuffer[4096];
+
+    Dev::Device2_Config lCfg0;
+    Dev::Device2_Config lCfg1;
+
+    lCfg0.mInterface = INVALID_INTERFACE;
+
+    DI2::Code_ASCII_String(&lCfg0, &Dev::Device2_Config_TYPE, sizeof(lBuffer), lBuffer);
+
+    DI2::Decode_ASCII_String(&lCfg1, &Dev::Device2_Config_TYPE, lBuffer);
+
+    KMS_TEST_ASSERT(0 == memcmp(&lCfg0, &lCfg1, sizeof(lCfg0)));
+}
+
+KMS_TEST(Dev_Device2_Exception_W, "Auto", sTest_Exception_W)
 {
     Dev::Device2_Config lCfg0;
 
