@@ -274,7 +274,7 @@ KMS_TEST(DI_Value_Exception, "Auto", sTest_Exception)
         lE0.Set("Invalid");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_NAME);
+    KMS_TEST_CATCH(RESULT_INVALID_ENUM_NAME);
 
     try
     {

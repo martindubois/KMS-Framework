@@ -23,9 +23,12 @@ namespace KMS
             OR,
             SUB,
             XOR,
+
+            QTY
         };
 
-        const char* ToString(Operator aOpertor);
+        const char* Operator_NAMES[];
+        const char* Operator_SYMBOLS[];
 
     }
 }

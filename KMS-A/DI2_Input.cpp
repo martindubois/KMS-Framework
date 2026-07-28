@@ -119,11 +119,21 @@ namespace KMS
             return ('\0' == mString[mIndex]);
         }
 
-        bool Input::Next(const std::regex& aRegex, std::smatch& aMatch)
+        void Input::Next(const std::regex& aRegex, std::smatch& aMatch)
         {
             mStringR = mString + mIndex;
 
-            auto lResult = std::regex_match(mStringR, aMatch, aRegex);
+            auto lRet = std::regex_search(mStringR, aMatch, aRegex);
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid format", "");
+
+            mIndex += static_cast<unsigned int>(aMatch[0].length());
+        }
+
+        bool Input::Next_Try(const std::regex& aRegex, std::smatch& aMatch)
+        {
+            mStringR = mString + mIndex;
+
+            auto lResult = std::regex_search(mStringR, aMatch, aRegex);
             if (lResult)
             {
                 mIndex += static_cast<unsigned int>(aMatch[0].length());
@@ -203,20 +213,7 @@ namespace KMS
 
         Operator Input::Token_GetOperator() const
         {
-            Operator lResult;
-
-            if      (0 == strcmp(mValue, "=" )) { lResult = Operator::ASSIGN; }
-            else if (0 == strcmp(mValue, "+=")) { lResult = Operator::ADD; }
-            else if (0 == strcmp(mValue, "&=")) { lResult = Operator::AND; }
-            else if (0 == strcmp(mValue, "/=")) { lResult = Operator::DIV; }
-            else if (0 == strcmp(mValue, "*=")) { lResult = Operator::MULT; }
-            else if (0 == strcmp(mValue, "|=")) { lResult = Operator::OR; }
-            else if (0 == strcmp(mValue, "-=")) { lResult = Operator::SUB; }
-            else if (0 == strcmp(mValue, "^=")) { lResult = Operator::XOR; }
-            else
-            {
-                KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid operator", mValue);
-            }
+            Enum<Operator, Operator_SYMBOLS> lResult(mValue);
 
             return lResult;
         }

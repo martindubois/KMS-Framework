@@ -31,6 +31,15 @@ using namespace KMS;
 
 typedef struct
 {
+    const DI2::IType* mType;
+
+    const char* mInput;
+    const char* mOutput;
+}
+TestCase;
+
+typedef struct
+{
     uint32_t mReserved0 : 4;
     uint32_t mField0    : 4;
 
@@ -49,7 +58,7 @@ TestStruct;
 
 static const DI2::BitField_Field TEST_BIT_FIELD_FIELDS[] =
 {
-    { "mField0", 0x000000f0, 0 },
+    { "mField0", 0x000000f0, 4 },
     
     { nullptr, 0, 0 }
 };
@@ -65,6 +74,210 @@ static const DI2::Array<uint32_t, 2>                        TYPE_ARRAY(&DI2::TYP
 static const DI2::BitField<uint32_t, TEST_BIT_FIELD_FIELDS> TYPE_TEST_BIT_FIELD(&DI2::TYPE_UINT32);
 static const DI2::String<32>                                TYPE_STRING_32;
 static const DI2::Struct<TEST_STRUCT_FIELDS>                TYPE_TEST_STRUCT;
+
+static const TestCase TEST_CASES[] =
+{
+    // ===== DI2/BitField.h =================================================
+
+    // Value
+    { &TYPE_TEST_BIT_FIELD,     "100",        "100" },
+    { &TYPE_TEST_BIT_FIELD,    " 101",        "101" },
+
+    // op Value
+    { &TYPE_TEST_BIT_FIELD,    "=102",        "102" },
+    { &TYPE_TEST_BIT_FIELD,   "= 103",        "103" },
+    { &TYPE_TEST_BIT_FIELD,  " = 104",        "104" },
+    { &TYPE_TEST_BIT_FIELD,   "+=105",        "105" },
+    { &TYPE_TEST_BIT_FIELD,  "+= 106",        "106" },
+    { &TYPE_TEST_BIT_FIELD, " += 107",        "107" },
+    { &TYPE_TEST_BIT_FIELD,   "-=108", "4294967188" },
+    { &TYPE_TEST_BIT_FIELD,  "-= 109", "4294967187" },
+    { &TYPE_TEST_BIT_FIELD, " -= 110", "4294967186" },
+    { &TYPE_TEST_BIT_FIELD,   "*=111",          "0" },
+    { &TYPE_TEST_BIT_FIELD,  "*= 112",          "0" },
+    { &TYPE_TEST_BIT_FIELD, " *= 113",          "0" },
+    { &TYPE_TEST_BIT_FIELD,   "/=114",          "0" },
+    { &TYPE_TEST_BIT_FIELD,  "/= 115",          "0" },
+    { &TYPE_TEST_BIT_FIELD, " /= 116",          "0" },
+    { &TYPE_TEST_BIT_FIELD,   "|=117",        "117" },
+    { &TYPE_TEST_BIT_FIELD,  "|= 118",        "118" },
+    { &TYPE_TEST_BIT_FIELD, " |= 119",        "119" },
+    { &TYPE_TEST_BIT_FIELD,   "&=120",          "0" },
+    { &TYPE_TEST_BIT_FIELD,  "&= 121",          "0" },
+    { &TYPE_TEST_BIT_FIELD, " &= 122",          "0" },
+    { &TYPE_TEST_BIT_FIELD,   "^=123",        "123" },
+    { &TYPE_TEST_BIT_FIELD,  "^= 124",        "124" },
+    { &TYPE_TEST_BIT_FIELD, " ^= 125",        "125" },
+
+    // Field0 op Value0
+    { &TYPE_TEST_BIT_FIELD,     "mField0=1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0= 1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0 =1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,    " mField0=1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 = 1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0 =1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 = 1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0+=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0+= 2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 +=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0+=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 += 2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 +=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 += 2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0-=3", "208" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0-= 3", "208" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 -=3", "208" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0-=3", "208" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 -= 3", "208" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 -=3", "208" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 -= 3", "208" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0*=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0*= 4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 *=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0*=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 *= 4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 *=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 *= 4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0/=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0/= 5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 /=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0/=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 /= 5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 /=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 /= 5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0|=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0|= 6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 |=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0|=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 |= 6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 |=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 |= 6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0&=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0&= 6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 &=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0&=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 &= 6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 &=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 &= 6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,    "mField0^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0^= 7", "112" },
+    { &TYPE_TEST_BIT_FIELD,   "mField0 ^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD,   " mField0^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD,  "mField0 ^= 7", "112" },
+    { &TYPE_TEST_BIT_FIELD,  " mField0 ^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD, " mField0 ^= 7", "112" },
+
+    // .Field0 op Value0
+    { &TYPE_TEST_BIT_FIELD,    ".mField0=1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0= 1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0 =1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 = 1",  "16" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0+=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0+= 2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 +=2",  "32" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 += 2",  "32" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0-=3", "208" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0-= 3", "208" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 -=3", "208" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 -= 3", "208" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0*=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0*= 4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 *=4",   "0" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 *= 4",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0/=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0/= 5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 /=5",   "0" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 /= 5",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0|=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0|= 6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 |=6",  "96" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 |= 6",  "96" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0&=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0&= 6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 &=6",   "0" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 &= 6",   "0" },
+    { &TYPE_TEST_BIT_FIELD,   ".mField0^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0^= 7", "112" },
+    { &TYPE_TEST_BIT_FIELD,  ".mField0 ^=7", "112" },
+    { &TYPE_TEST_BIT_FIELD, ".mField0 ^= 7", "112" },
+
+    // { Field0 op Value0; Field1 op Value1; }
+    { &TYPE_TEST_BIT_FIELD,       "{mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "{mField0=0; }", "0" }, // 1 space
+    { &TYPE_TEST_BIT_FIELD,      "{mField0=0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "{mField0= 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "{mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "{ mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      " {mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "{mField0=0 ; }", "0" }, // 2 spaces
+    { &TYPE_TEST_BIT_FIELD,     "{mField0= 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "{mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "{ mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     " { mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    "{mField0= 0 ; }", "0" }, // 3 spaces
+    { &TYPE_TEST_BIT_FIELD,    "{mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    "{ mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    " { mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,   "{mField0 = 0 ; }", "0" }, // 4 spaces
+    { &TYPE_TEST_BIT_FIELD,   "{ mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,   " { mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,  "{ mField0 = 0 ; }", "0" }, // 5 spaces
+    { &TYPE_TEST_BIT_FIELD,  " { mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD, " { mField0 = 0 ; }", "0" }, // 6 spaces
+
+    // = { Field0 op Value0; Field1 op Value1; }
+    { &TYPE_TEST_BIT_FIELD,        "={mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       "={mField0=0; }", "0" }, // 1 space
+    { &TYPE_TEST_BIT_FIELD,       "={mField0=0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       "={mField0= 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       "={mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       "={ mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       "= {mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,       " ={mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "={mField0=0 ; }", "0" }, // 2 spaces
+    { &TYPE_TEST_BIT_FIELD,      "={mField0= 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "={mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "={ mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      "= { mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,      " = {mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "={mField0= 0 ; }", "0" }, // 3 spaces
+    { &TYPE_TEST_BIT_FIELD,     "={mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "={ mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     "= { mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,     " = { mField0=0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    "={mField0 = 0 ; }", "0" }, // 4 spaces
+    { &TYPE_TEST_BIT_FIELD,    "={ mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    "= { mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,    " = { mField0 =0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,   "={ mField0 = 0 ; }", "0" }, // 5 spaces
+    { &TYPE_TEST_BIT_FIELD,   "= { mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,   " = { mField0 = 0;}", "0" },
+    { &TYPE_TEST_BIT_FIELD,  "= { mField0 = 0 ; }", "0" }, // 6 spaces
+    { &TYPE_TEST_BIT_FIELD,  " = { mField0 = 0 ;}", "0" },
+    { &TYPE_TEST_BIT_FIELD, " = { mField0 = 0 ; }", "0" }, // 7 spaces
+
+    // ===== DI2_GUID_W.cpp =================================================
+
+    // {00000000-0000-0000-0000-000000000000}
+    { &DI2::TYPE_GUID, "{00000001-0002-0003-0004-000000000005}", "\"{00000001-0002-0003-0004-000000000005}\"" },
+
+    // "{00000000-0000-0000-0000-000000000000}"
+    { &DI2::TYPE_GUID, "\"{00000006-0007-0008-0009-00000000000A}\"", "\"{00000006-0007-0008-0009-00000000000A}\"" },
+
+    // op {00000000-0000-0000-0000-000000000000}
+    { &DI2::TYPE_GUID,   "={00000001-0002-0003-0004-000000000005}", "\"{00000001-0002-0003-0004-000000000005}\"" },
+    { &DI2::TYPE_GUID,  "= {00000001-0002-0003-0004-000000000005}", "\"{00000001-0002-0003-0004-000000000005}\"" },
+    { &DI2::TYPE_GUID,  " ={00000001-0002-0003-0004-000000000005}", "\"{00000001-0002-0003-0004-000000000005}\"" },
+    { &DI2::TYPE_GUID, " = {00000001-0002-0003-0004-000000000005}", "\"{00000001-0002-0003-0004-000000000005}\"" },
+
+    // op "{00000000-0000-0000-0000-000000000000}"
+    { &DI2::TYPE_GUID,   "=\"{00000006-0007-0008-0009-00000000000A}\"", "\"{00000006-0007-0008-0009-00000000000A}\"" },
+    { &DI2::TYPE_GUID,  "= \"{00000006-0007-0008-0009-00000000000A}\"", "\"{00000006-0007-0008-0009-00000000000A}\"" },
+    { &DI2::TYPE_GUID,  " =\"{00000006-0007-0008-0009-00000000000A}\"", "\"{00000006-0007-0008-0009-00000000000A}\"" },
+    { &DI2::TYPE_GUID, " = \"{00000006-0007-0008-0009-00000000000A}\"", "\"{00000006-0007-0008-0009-00000000000A}\"" },
+
+    { nullptr, nullptr, nullptr }
+};
 
 // Tests
 // //////////////////////////////////////////////////////////////////////////
@@ -118,6 +331,29 @@ KMS_TEST(DI2_BitField, "Auto", sTest_BitField)
     memset(&lTBF, 0, sizeof(lTBF));
     DI2::Decode_ASCII_String(&lTBF, &TYPE_TEST_BIT_FIELD, lASCII);
     KMS_TEST_ASSERT(1 == lTBF.mField0);
+}
+
+KMS_TEST(DI2_Cases, "Auto", sTest_Cases)
+{
+    unsigned int lCase = 0;
+
+    while (nullptr != TEST_CASES[lCase].mType)
+    {
+        uint8_t lData[4096];
+        char    lOutput[LINE_LENGTH];
+        auto    lTest = TEST_CASES + lCase;
+
+        std::cout << "Test case " << lCase << " : " << lTest->mInput << std::endl;
+
+        memset(&lData, 0, sizeof(lData));
+
+        DI2::Decode_ASCII_String(lData, lTest->mType, lTest->mInput);
+        DI2::Code_ASCII_String(lData, lTest->mType, sizeof(lOutput), lOutput);
+
+        KMS_TEST_ASSERT(0 == strcmp(lOutput, lTest->mOutput));
+
+        lCase++;
+    }
 }
 
 KMS_TEST(DI2_GUID, "Auto", sTest_GUID)
@@ -215,7 +451,7 @@ KMS_TEST(DI2_Input_Exception, "Auto", sTest_Input_Exception)
         lI2.Token_GetOperator();
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+    KMS_TEST_CATCH(RESULT_INVALID_ENUM_NAME);
 
     // Decode_ASCII_String_Try
     TestStruct lTS3;
@@ -225,7 +461,7 @@ KMS_TEST(DI2_Input_Exception, "Auto", sTest_Input_Exception)
         DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mField0=+0");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
+    KMS_TEST_CATCH(RESULT_INVALID_ENUM_NAME);
 }
 
 KMS_TEST(DI2_Simple, "Auto", sTest_Simple)

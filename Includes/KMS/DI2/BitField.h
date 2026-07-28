@@ -9,7 +9,10 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
+#include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
+#include <KMS/DI2/Operator.h>
 
 namespace KMS
 {
@@ -40,13 +43,33 @@ namespace KMS
 
         private:
 
+            void Decode_ASCII(void* aData, const char* aOp, const char* aValue) const;
+            void Decode_ASCII(void* aData, const char* aValue) const;
+
             void DecodeField_ASCII(void* aData, Input* aInput) const;
+            void DecodeField_ASCII(void* aData, const char* aField, const char* aOp, const char* aFieldValue) const;
+
+            uint64_t EvalOp(uint64_t aCurrent, Operator aOp, uint64_t aValue) const;
 
             const BitField_Field* FindField(const char* aName) const;
 
             const IType* mType;
 
         };
+
+        extern const std::regex BitField_REGEX_BEGIN;
+        extern const std::regex BitField_REGEX_END;
+        extern const std::regex BitField_REGEX_FIELD_END;
+        extern const std::regex BitField_REGEX_DEC;
+        extern const std::regex BitField_REGEX_HEX;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_0;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_1;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_0;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_1;
+        extern const std::regex BitField_REGEX_OP_VALUE_DEC;
+        extern const std::regex BitField_REGEX_OP_VALUE_HEX;
+        extern const std::regex BitField_REGEX_VALUE_DEC;
+        extern const std::regex BitField_REGEX_VALUE_HEX;
 
         template <typename T, const BitField_Field* F>
         BitField<T, F>::BitField(const IType* aType) : mType(aType)
@@ -72,8 +95,6 @@ namespace KMS
             mType->Code_JSON(aData, aOutput);
         }
 
-        // TODO  Use regex
-
         // Operators = += -= *= /= |= &= ^=
         //
         // Value
@@ -85,55 +106,37 @@ namespace KMS
         template <typename T, const BitField_Field* F>
         void BitField<T, F>::Decode_ASCII(void* aData, Input* aInput) const
         {
-            if (aInput->Char_Next_Try('='))
-            {
-                if (aInput->Char_Next_Try('{'))
-                {
-                    while (!aInput->Char_Next_Try('}'))
-                    {
-                        DecodeField_ASCII(aData, aInput);
+            std::smatch lMatch;
 
-                        aInput->Char_Next(';');
-                    }
-                }
-                else
-                {
-                    aInput->Previous();
-                    mType->Decode_ASCII(aData, aInput);
-                }
-            }
-            else if (aInput->Char_Next_Try('{'))
+            if (   (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_0, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_1, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_0, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_1, lMatch)))
             {
-                while (!aInput->Char_Next_Try('}'))
+                DecodeField_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str(), lMatch[3].str().c_str());
+            }
+            else if ((aInput->Next_Try(BitField_REGEX_OP_VALUE_DEC, lMatch))
+                ||   (aInput->Next_Try(BitField_REGEX_OP_VALUE_HEX, lMatch)))
+            {
+                Decode_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str());
+            }
+            else if ((aInput->Next_Try(BitField_REGEX_VALUE_DEC, lMatch))
+                ||   (aInput->Next_Try(BitField_REGEX_VALUE_HEX, lMatch)))
+            {
+                Decode_ASCII(aData, lMatch[1].str().c_str());
+            }
+            else if (aInput->Next_Try(BitField_REGEX_BEGIN, lMatch))
+            {
+                while (!aInput->Next_Try(BitField_REGEX_END, lMatch))
                 {
                     DecodeField_ASCII(aData, aInput);
 
-                    aInput->Char_Next(';');
+                    aInput->Next(BitField_REGEX_FIELD_END, lMatch);
                 }
-            }
-            else if (aInput->Char_Next_Try('.'))
-            {
-                DecodeField_ASCII(aData, aInput);
             }
             else
             {
-                auto lTT = aInput->Token_Next(TokenType::NAME | TokenType::OPERATOR | TokenType::UINT);
-                switch (lTT)
-                {
-                case TokenType::NAME:
-                    aInput->Previous();
-
-                    DecodeField_ASCII(aData, aInput);
-                    break;
-
-                case TokenType::OPERATOR:
-                case TokenType::UINT:
-                    aInput->Previous();
-                    mType->Decode_ASCII(aData, aInput);
-                    break;
-
-                default: assert(false);
-                }
+                KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid bitfiel format", "");
             }
         }
 
@@ -149,47 +152,58 @@ namespace KMS
         // Private
         // //////////////////////////////////////////////////////////////////
 
-        // TODO  Use regex
+        template <typename T, const BitField_Field* F>
+        void BitField<T, F>::Decode_ASCII(void* aData, const char* aOp, const char* aValue) const
+        {
+            assert(nullptr != aData);
 
+            Enum<Operator, Operator_SYMBOLS> lOp(aOp);
+
+            auto lValue = EvalOp(*reinterpret_cast<T*>(aData), lOp, KMS::Convert::ToUInt32(aValue));
+
+            *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
+        }
+
+        template <typename T, const BitField_Field* F>
+        void BitField<T, F>::Decode_ASCII(void* aData, const char* aValue) const
+        {
+            assert(nullptr != aData);
+
+            auto lValue = KMS::Convert::ToUInt32(aValue);
+
+            *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
+        }
+
+        // Field op Value
         template <typename T, const BitField_Field* F>
         void BitField<T, F>::DecodeField_ASCII(void* aData, Input* aInput) const
         {
-            assert(nullptr != aData);
             assert(nullptr != aInput);
 
-            char lName[NAME_LENGTH];
+            std::smatch lMatch;
 
-            aInput->Token_Next(TokenType::NAME);
-            aInput->Token_GetText(lName, sizeof(lName));
-            auto lField = FindField(lName);
-            aInput->Token_Next(TokenType::OPERATOR);
-            auto lOp = aInput->Token_GetOperator();
-            aInput->Token_Next(TokenType::UINT);
-            auto lFieldValue = aInput->Token_GetUInt();
+            auto lRet = aInput->Next_Try(BitField_REGEX_DEC, lMatch) || aInput->Next_Try(BitField_REGEX_HEX, lMatch);
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalide bitfield filed format", "");
 
-            uint64_t lCurrent = *reinterpret_cast<T*>(aData);
+            DecodeField_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str(), lMatch[3].str().c_str());
+        }
+
+        template <typename T, const BitField_Field* F>
+        void BitField<T, F>::DecodeField_ASCII(void* aData, const char* aField, const char* aOp, const char* aFieldValue) const
+        {
+            assert(nullptr != aData);
+
+            Enum<Operator, Operator_SYMBOLS> lOp(aOp);
+
+            auto lField = FindField(aField);
+            assert(nullptr != lField);
+
+            uint64_t lCurrent      = *reinterpret_cast<T*>(aData);
             uint64_t lCurrentField = lCurrent & lField->mMask;
 
             lCurrentField >>= lField->mShift;
 
-            switch (lOp)
-            {
-            case Operator::ASSIGN: break;
-
-            case Operator::ADD : lFieldValue = lCurrentField + lFieldValue; break;
-            case Operator::AND : lFieldValue = lCurrentField & lFieldValue; break;
-            case Operator::MULT: lFieldValue = lCurrentField * lFieldValue; break;
-            case Operator::OR  : lFieldValue = lCurrentField | lFieldValue; break;
-            case Operator::SUB : lFieldValue = lCurrentField - lFieldValue; break;
-            case Operator::XOR : lFieldValue = lCurrentField ^ lFieldValue; break;
-
-            case Operator::DIV:
-                KMS_EXCEPTION_ASSERT(0 != lFieldValue, RESULT_INVALID_VALUE, "Cannot divide by 0", "");
-                lFieldValue = lCurrentField / lFieldValue;
-                break;
-
-            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid operator", "");
-            }
+            auto lFieldValue = EvalOp(lCurrentField, lOp, KMS::Convert::ToUInt32(aFieldValue));
 
             lFieldValue <<= lField->mShift;
             lFieldValue &= lField->mMask;
@@ -198,7 +212,33 @@ namespace KMS
             lCurrent |= lFieldValue;
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lCurrent);
+        }
 
+        template <typename T, const BitField_Field* F>
+        uint64_t BitField<T, F>::EvalOp(uint64_t aCurrent, Operator aOp, uint64_t aValue) const
+        {
+            uint64_t lResult;
+
+            switch (aOp)
+            {
+            case Operator::ASSIGN: lResult = aValue; break;
+
+            case Operator::ADD : lResult = aCurrent + aValue; break;
+            case Operator::AND : lResult = aCurrent & aValue; break;
+            case Operator::MULT: lResult = aCurrent * aValue; break;
+            case Operator::OR  : lResult = aCurrent | aValue; break;
+            case Operator::SUB : lResult = aCurrent - aValue; break;
+            case Operator::XOR : lResult = aCurrent ^ aValue; break;
+
+            case Operator::DIV:
+                KMS_EXCEPTION_ASSERT(0 != aValue, RESULT_INVALID_VALUE, "Cannot divide by 0", "");
+                lResult = aCurrent / aValue;
+                break;
+
+            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid operator", "");
+            }
+
+            return lResult;
         }
 
         template <typename T, const BitField_Field* F>
@@ -208,7 +248,7 @@ namespace KMS
 
             unsigned int lIndex = 0;
 
-            const BitField_Field* lResult = nullptr;
+            const BitField_Field* lResult;
 
             for (;;)
             {

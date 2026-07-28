@@ -54,9 +54,13 @@ namespace KMS
 
             /// \param aRegex The regular expression
             /// \param aMatch The match container
+            void Next(const std::regex& aRegex, std::smatch& aMatch);
+
+            /// \param aRegex The regular expression
+            /// \param aMatch The match container
             /// \retval false  No match
             /// \retval true   Match
-            bool Next(const std::regex& aRegex, std::smatch& aMatch);
+            bool Next_Try(const std::regex& aRegex, std::smatch& aMatch);
 
             /// \brief Go back one token or one char
             /// \see Char_Next Char_Next_Try Token_Next

@@ -65,20 +65,20 @@ namespace KMS
         // op "{00000000-0000-0000-0000-000000000000}"
         void GUID::Decode_ASCII(void* aData, KMS::DI2::Input* aInput) const
         {
-            static const std::regex REGEX_0("^(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})");
-            static const std::regex REGEX_1("^\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"");
-            static const std::regex REGEX_2("^=\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})");
-            static const std::regex REGEX_3("^=\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"");
+            static const std::regex REGEX_0("^\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\\s*");
+            static const std::regex REGEX_1("^\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"\\s*");
+            static const std::regex REGEX_2("^\\s*=\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\\s*");
+            static const std::regex REGEX_3("^\\s*=\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"\\s*");
 
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
             std::smatch lMatch;
 
-            if (   aInput->Next(REGEX_0, lMatch)
-                || aInput->Next(REGEX_1, lMatch)
-                || aInput->Next(REGEX_2, lMatch)
-                || aInput->Next(REGEX_3, lMatch))
+            if (   aInput->Next_Try(REGEX_0, lMatch)
+                || aInput->Next_Try(REGEX_1, lMatch)
+                || aInput->Next_Try(REGEX_2, lMatch)
+                || aInput->Next_Try(REGEX_3, lMatch))
             {
                 auto lData = reinterpret_cast<::GUID*>(aData);
 

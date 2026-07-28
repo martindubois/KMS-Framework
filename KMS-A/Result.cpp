@@ -102,6 +102,8 @@ namespace KMS
     const Result RESULT_UNCOMPRESS_FAILED        ("RESULT_UNCOMPRESS_FAILED"        , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe2a);
     const Result RESULT_UNEXPECTED_EXCEPTION     ("RESULT_UNEXPECTED_EXCEPTION"     , Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffe2b);
 
+    const Result RESULT_INVALID_ENUM_NAME        ("RESULT_INVALID_ENUM_NAME", Result::Level::LEVEL_ERROR, Result::Type::TYPE_GLOBAL, 0xfffd01);
+
     Result::Result() { mUnion.mCode = 0; }
 
     Result::Result(uint32_t aValue) { mUnion.mCode = aValue; }

@@ -45,7 +45,7 @@ namespace KMS
         bool Set(T aValue);
 
         /// \param aName The enum value name
-        /// \exception Exception RESULT_INVALID_NAME
+        /// \exception Exception RESULT_INVALID_ENUM_NAME
         bool SetName(const char* aName);
 
         /// \param aName    The enum value name
@@ -119,7 +119,7 @@ namespace KMS
             }
         }
 
-        throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_NAME, "Invalid enumeration value name");
+        throw Exception(__FILE__, __FUNCTION__, __LINE__, RESULT_INVALID_ENUM_NAME, "Invalid enumeration value name");
     }
 
     template <typename T, const char** N>

@@ -507,6 +507,12 @@
     <ClCompile Include="DI2_GUID_W.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
+    <ClCompile Include="DI2_Operator.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_BitField.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
