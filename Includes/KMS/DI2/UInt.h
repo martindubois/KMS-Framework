@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Output.h>
 #include <KMS/DI2/IType.h>
@@ -37,6 +38,11 @@ namespace KMS
         extern const UInt<uint16_t> TYPE_UINT16;
         extern const UInt<uint8_t > TYPE_UINT8;
 
+        extern const std::regex UInt_REGEX_OP_VALUE_DEC_C2;
+        extern const std::regex UInt_REGEX_OP_VALUE_HEX_C2;
+        extern const std::regex UInt_REGEX_VALUE_DEC_C1;
+        extern const std::regex UInt_REGEX_VALUE_HEX_C1;
+
         // Value
         template <typename T>
         void UInt<T>::Code_ASCII(const void* aData, Output* aOutput) const
@@ -53,7 +59,7 @@ namespace KMS
         template <typename T>
         void UInt<T>::Code_JSON(const void* aData, Output* aOutput) const
         {
-            // TODO
+            // TODO  JSON
         }
 
         // TODO  Use regex
@@ -68,35 +74,25 @@ namespace KMS
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
-            auto lOp = Operator::ASSIGN;
+            std::smatch lMatch;
+            uint64_t    lValue;
 
-            auto lTT = aInput->Token_Next(TokenType::OPERATOR | TokenType::UINT | TokenType::UINT_HEX);
-            if (TokenType::OPERATOR == lTT)
+            if (  aInput->Next_Try(UInt_REGEX_VALUE_HEX_C1, lMatch)
+               || aInput->Next_Try(UInt_REGEX_VALUE_DEC_C1, lMatch))
             {
-                lOp = aInput->Token_GetOperator();
-
-                aInput->Token_Next(TokenType::UINT);
+                lValue = Convert::ToUInt64(lMatch[1].str().c_str());
             }
-
-            auto lValue = aInput->Token_GetInt();
-
-            uint64_t lCurrent = *reinterpret_cast<T*>(aData);
-            switch (lOp)
+            else
             {
-            case Operator::ASSIGN: break;
+                auto lRet = aInput->Next_Try(UInt_REGEX_OP_VALUE_HEX_C2, lMatch)
+                    ||      aInput->Next_Try(UInt_REGEX_OP_VALUE_DEC_C2, lMatch);
+                KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid UInt format", "");
 
-            case Operator::ADD : lValue = lCurrent + lValue; break;
-            case Operator::AND : lValue = lCurrent & lValue; break;
-            case Operator::MULT: lValue = lCurrent * lValue; break;
-            case Operator::OR  : lValue = lCurrent | lValue; break;
-            case Operator::SUB : lValue = lCurrent - lValue; break;
+                Enum<Operator, Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
 
-            case Operator::DIV:
-                KMS_EXCEPTION_ASSERT(0 != lValue, RESULT_INVALID_VALUE, "Cannot divide by 0", "");
-                lValue = lCurrent / lValue;
-                break;
+                lValue = Convert::ToUInt64(lMatch[2].str().c_str());
 
-            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid operator", "");
+                lValue = Operator_Eval(*reinterpret_cast<T*>(aData), lOp, lValue);
             }
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
@@ -108,7 +104,7 @@ namespace KMS
         template <typename T>
         void UInt<T>::Decode_JSON(void* aData, Input* aInput) const
         {
-            // TODO
+            // TODO  JSON
         }
 
     }

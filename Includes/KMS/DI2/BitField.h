@@ -49,27 +49,25 @@ namespace KMS
             void DecodeField_ASCII(void* aData, Input* aInput) const;
             void DecodeField_ASCII(void* aData, const char* aField, const char* aOp, const char* aFieldValue) const;
 
-            uint64_t EvalOp(uint64_t aCurrent, Operator aOp, uint64_t aValue) const;
-
             const BitField_Field* FindField(const char* aName) const;
 
             const IType* mType;
 
         };
 
-        extern const std::regex BitField_REGEX_BEGIN;
-        extern const std::regex BitField_REGEX_END;
+        extern const std::regex BitField_REGEX_DEC_C3;
+        extern const std::regex BitField_REGEX_HEX_C3;
         extern const std::regex BitField_REGEX_FIELD_END;
-        extern const std::regex BitField_REGEX_DEC;
-        extern const std::regex BitField_REGEX_HEX;
-        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_0;
-        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_1;
-        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_0;
-        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_1;
-        extern const std::regex BitField_REGEX_OP_VALUE_DEC;
-        extern const std::regex BitField_REGEX_OP_VALUE_HEX;
-        extern const std::regex BitField_REGEX_VALUE_DEC;
-        extern const std::regex BitField_REGEX_VALUE_HEX;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_0_C3;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_DEC_1_C3;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_0_C3;
+        extern const std::regex BitField_REGEX_FIELD_OP_VALUE_HEX_1_C3;
+        extern const std::regex BitField_REGEX_GROUP_BEGIN;
+        extern const std::regex BitField_REGEX_GROUP_END;
+        extern const std::regex BitField_REGEX_OP_VALUE_DEC_C2;
+        extern const std::regex BitField_REGEX_OP_VALUE_HEX_C2;
+        extern const std::regex BitField_REGEX_VALUE_DEC_C1;
+        extern const std::regex BitField_REGEX_VALUE_HEX_C1;
 
         template <typename T, const BitField_Field* F>
         BitField<T, F>::BitField(const IType* aType) : mType(aType)
@@ -108,35 +106,33 @@ namespace KMS
         {
             std::smatch lMatch;
 
-            if (   (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_0, lMatch))
-                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_1, lMatch))
-                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_0, lMatch))
-                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_1, lMatch)))
+            if (   (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_0_C3, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_DEC_1_C3, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_0_C3, lMatch))
+                || (aInput->Next_Try(BitField_REGEX_FIELD_OP_VALUE_HEX_1_C3, lMatch)))
             {
                 DecodeField_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str(), lMatch[3].str().c_str());
             }
-            else if ((aInput->Next_Try(BitField_REGEX_OP_VALUE_DEC, lMatch))
-                ||   (aInput->Next_Try(BitField_REGEX_OP_VALUE_HEX, lMatch)))
+            else if ((aInput->Next_Try(BitField_REGEX_OP_VALUE_DEC_C2, lMatch))
+                ||   (aInput->Next_Try(BitField_REGEX_OP_VALUE_HEX_C2, lMatch)))
             {
                 Decode_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str());
             }
-            else if ((aInput->Next_Try(BitField_REGEX_VALUE_DEC, lMatch))
-                ||   (aInput->Next_Try(BitField_REGEX_VALUE_HEX, lMatch)))
+            else if ((aInput->Next_Try(BitField_REGEX_VALUE_DEC_C1, lMatch))
+                ||   (aInput->Next_Try(BitField_REGEX_VALUE_HEX_C1, lMatch)))
             {
                 Decode_ASCII(aData, lMatch[1].str().c_str());
             }
-            else if (aInput->Next_Try(BitField_REGEX_BEGIN, lMatch))
+            else
             {
-                while (!aInput->Next_Try(BitField_REGEX_END, lMatch))
+                aInput->Next(BitField_REGEX_GROUP_BEGIN);
+
+                while (!aInput->Next_Try(BitField_REGEX_GROUP_END))
                 {
                     DecodeField_ASCII(aData, aInput);
 
-                    aInput->Next(BitField_REGEX_FIELD_END, lMatch);
+                    aInput->Next(BitField_REGEX_FIELD_END);
                 }
-            }
-            else
-            {
-                KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid bitfiel format", "");
             }
         }
 
@@ -159,7 +155,7 @@ namespace KMS
 
             Enum<Operator, Operator_SYMBOLS> lOp(aOp);
 
-            auto lValue = EvalOp(*reinterpret_cast<T*>(aData), lOp, KMS::Convert::ToUInt32(aValue));
+            auto lValue = Operator_Eval(static_cast<uint64_t>(*reinterpret_cast<T*>(aData)), lOp, KMS::Convert::ToUInt64(aValue));
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
         }
@@ -169,7 +165,7 @@ namespace KMS
         {
             assert(nullptr != aData);
 
-            auto lValue = KMS::Convert::ToUInt32(aValue);
+            auto lValue = KMS::Convert::ToUInt64(aValue);
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
         }
@@ -182,7 +178,7 @@ namespace KMS
 
             std::smatch lMatch;
 
-            auto lRet = aInput->Next_Try(BitField_REGEX_DEC, lMatch) || aInput->Next_Try(BitField_REGEX_HEX, lMatch);
+            auto lRet = aInput->Next_Try(BitField_REGEX_DEC_C3, lMatch) || aInput->Next_Try(BitField_REGEX_HEX_C3, lMatch);
             KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalide bitfield filed format", "");
 
             DecodeField_ASCII(aData, lMatch[1].str().c_str(), lMatch[2].str().c_str(), lMatch[3].str().c_str());
@@ -203,7 +199,7 @@ namespace KMS
 
             lCurrentField >>= lField->mShift;
 
-            auto lFieldValue = EvalOp(lCurrentField, lOp, KMS::Convert::ToUInt32(aFieldValue));
+            auto lFieldValue = Operator_Eval(lCurrentField, lOp, KMS::Convert::ToUInt64(aFieldValue));
 
             lFieldValue <<= lField->mShift;
             lFieldValue &= lField->mMask;
@@ -212,33 +208,6 @@ namespace KMS
             lCurrent |= lFieldValue;
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lCurrent);
-        }
-
-        template <typename T, const BitField_Field* F>
-        uint64_t BitField<T, F>::EvalOp(uint64_t aCurrent, Operator aOp, uint64_t aValue) const
-        {
-            uint64_t lResult;
-
-            switch (aOp)
-            {
-            case Operator::ASSIGN: lResult = aValue; break;
-
-            case Operator::ADD : lResult = aCurrent + aValue; break;
-            case Operator::AND : lResult = aCurrent & aValue; break;
-            case Operator::MULT: lResult = aCurrent * aValue; break;
-            case Operator::OR  : lResult = aCurrent | aValue; break;
-            case Operator::SUB : lResult = aCurrent - aValue; break;
-            case Operator::XOR : lResult = aCurrent ^ aValue; break;
-
-            case Operator::DIV:
-                KMS_EXCEPTION_ASSERT(0 != aValue, RESULT_INVALID_VALUE, "Cannot divide by 0", "");
-                lResult = aCurrent / aValue;
-                break;
-
-            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid operator", "");
-            }
-
-            return lResult;
         }
 
         template <typename T, const BitField_Field* F>

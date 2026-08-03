@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI2/Container.h>
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
@@ -34,6 +35,14 @@ namespace KMS
             virtual void Decode_JSON(void* aData, Input* aInput) const override;
 
         };
+
+        extern const std::regex Array_REGEX_GROUP_BEGIN;
+        extern const std::regex Array_REGEX_GROUP_END;
+
+        extern const std::regex Array_REGEX_INDEX_DEC_C1;
+        extern const std::regex Array_REGEX_INDEX_HEX_C1;
+
+        extern const std::regex Array_REGEX_VALUE_END;
 
         template <typename T, unsigned int N>
         Array<T, N>::Array(const IType* aElementType) : Container(aElementType) {}
@@ -67,62 +76,48 @@ namespace KMS
             assert(false);
         }
 
-        // TODO  Use regex
-
         // [0] op Value0
-        // { Value0; Value1; }
-        // = { Value0; Value1; }
+        // { Value0, Value1 }
+        // = { Value0, Value1 }
         template <typename T, unsigned int N>
         void Array<T, N>::Decode_ASCII(void* aData, Input* aInput) const
         {
+            assert(nullptr != aData);
             assert(nullptr != aInput);
 
             auto lData = reinterpret_cast<T*>(aData);
 
-            uint64_t lIndex = 0;
+            std::smatch lMatch;
 
-            auto lC = aInput->Char_Next("[{=");
-            switch (lC)
+            if (   aInput->Next_Try(Array_REGEX_INDEX_DEC_C1, lMatch)
+                || aInput->Next_Try(Array_REGEX_INDEX_HEX_C1, lMatch))
             {
-            case '[':
-                aInput->Token_Next(TokenType::UINT);
-                lIndex = aInput->Token_GetUInt();
-                aInput->Char_Next(']');
-                KMS_EXCEPTION_ASSERT(N > lIndex, RESULT_INVALID_INDEX, "Invalid index", "");
-                DecodeElement_ASCII(lData + lIndex, aInput);
-                break;
+                auto lIndex = KMS::Convert::ToUInt32(lMatch[1].str().c_str());
 
-            case '{':
-                if (!aInput->Char_Next_Try('}'))
+                KMS_EXCEPTION_ASSERT(N > lIndex, RESULT_INVALID_INDEX, "Invalid index", "");
+
+                DecodeElement_ASCII(lData + lIndex, aInput);
+            }
+            else
+            {
+                aInput->Next(Array_REGEX_GROUP_BEGIN);
+
+                if (!aInput->Next_Try(Array_REGEX_GROUP_END))
                 {
+                    uint32_t lIndex = 0;
+
                     do
                     {
                         KMS_EXCEPTION_ASSERT(N > lIndex, RESULT_INVALID_INDEX, "Invalid index", "");
+
                         DecodeElement_ASCII(lData + lIndex, aInput);
+
                         lIndex++;
                     }
-                    while (aInput->Char_Next_Try(','));
+                    while (aInput->Next_Try(Array_REGEX_VALUE_END));
 
-                    aInput->Char_Next('}');
+                    aInput->Next(Array_REGEX_GROUP_END);
                 }
-                break;
-
-            case '=':
-                aInput->Char_Next('{');
-                if (!aInput->Char_Next_Try('}'))
-                {
-                    do
-                    {
-                        KMS_EXCEPTION_ASSERT(N > lIndex, RESULT_INVALID_INDEX, "Invalid index", "");
-                        DecodeElement_ASCII(lData + lIndex, aInput);
-                        lIndex++;
-                    } while (aInput->Char_Next_Try(','));
-
-                    aInput->Char_Next('}');
-                }
-                break;
-
-            default: assert(false);
             }
         }
 

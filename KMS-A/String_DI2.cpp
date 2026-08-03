@@ -9,15 +9,17 @@
 
 // ===== Includes ===========================================================
 #include <KMS/DI2/Input.h>
+#include <KMS/DI2/Operator.h>
 #include <KMS/DI2/Output.h>
 #include <KMS/String.h>
 
 #include <KMS/String_DI2.h>
 
+// ===== Local ==============================================================
+#include "DI2_Regex.h"
+
 // Static fonction declarations
 // //////////////////////////////////////////////////////////////////////////
-
-static void StringList_ASCII_Decode_ASCII(KMS::StringList_ASCII* aData, KMS::DI2::Input* aInput, KMS::DI2::TokenType aTokenTypes);
 
 namespace KMS
 {
@@ -51,7 +53,7 @@ namespace KMS
 
     void StringList_ASCII_Type::Code_JSON(const void* aData, DI2::Output* aOutput) const
     {
-        // TODO
+        // TODO  JSON
     }
 
     // { "String0", "String1" }
@@ -62,80 +64,57 @@ namespace KMS
     // -= "String0"
     void StringList_ASCII_Type::Decode_ASCII(void* aData, DI2::Input* aInput) const
     {
+        static const std::regex REGEX_ELEMENT_END (DI2_Regex_BEGIN DI2_Regex_SPACE "," DI2_Regex_SPACE);
+        static const std::regex REGEX_GROUP_BEGIN (DI2_Regex_GROUP_BEGIN);
+        static const std::regex REGEX_GROUP_END   (DI2_Regex_GROUP_END);
+        static const std::regex REGEX_OP_STRING_C2(DI2_Regex_BEGIN DI2_Regex_OP_C1      DI2_Regex_SPACE "\"(.*)\"" DI2_Regex_SPACE);
+        static const std::regex REGEX_STRING_C1   (DI2_Regex_BEGIN DI2_Regex_ASSIGN_OPT DI2_Regex_SPACE "\"(.*)\"" DI2_Regex_SPACE);
+
         auto lData = reinterpret_cast<StringList_ASCII*>(aData);
 
-        StringList_ASCII_Decode_ASCII(lData, aInput, DI2::TokenType::OPERATOR | DI2::TokenType::QUOTED | DI2::TokenType::STRING);
+        std::smatch lMatch;
+
+        if (aInput->Next_Try(REGEX_STRING_C1, lMatch))
+        {
+            lData->clear();
+            lData->push_back(lMatch[1].str().c_str());
+        }
+        else if (aInput->Next_Try(REGEX_OP_STRING_C2, lMatch))
+        {
+            Enum<DI2::Operator, DI2::Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
+
+            switch (lOp)
+            {
+            case DI2::Operator::ADD: lData->push_back(lMatch[2].str().c_str()); break;
+            case DI2::Operator::SUB: lData->remove   (lMatch[2].str().c_str()); break;
+
+            default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid string list operator", lMatch[1].str().c_str());
+            }
+        }
+        else
+        {
+            aInput->Next(REGEX_GROUP_BEGIN);
+
+            lData->clear();
+
+            if (!aInput->Next_Try(REGEX_GROUP_END))
+            {
+                do
+                {
+                    aInput->Next(REGEX_STRING_C1, lMatch);
+
+                    lData->push_back(lMatch[1].str().c_str());
+                }
+                while (aInput->Next_Try(REGEX_ELEMENT_END));
+
+                aInput->Next(REGEX_GROUP_END);
+            }
+        }
     }
 
     void StringList_ASCII_Type::Decode_JSON(void* aData, DI2::Input* aInput) const
     {
-        // TODO
+        // TODO  JSON
     }
 
-}
-
-using namespace KMS;
-
-// Static fonction declarations
-// //////////////////////////////////////////////////////////////////////////
-
-// TODO  Use regex
-static void StringList_ASCII_Decode_ASCII(StringList_ASCII* aData, DI2::Input* aInput, DI2::TokenType aTokenTypes)
-{
-    assert(nullptr != aData);
-    assert(nullptr != aInput);
-
-    if (aInput->Char_Next_Try('{'))
-    {
-        // TODO
-    }
-    else
-    {
-        StringList_ASCII::iterator lIt;
-        char lString[LINE_LENGTH];
-
-        auto lTT = aInput->Token_Next(aTokenTypes);
-        switch (lTT)
-        {
-        case DI2::TokenType::OPERATOR:
-            DI2::Operator lOp;
-            lOp = aInput->Token_GetOperator();
-            switch (lOp)
-            {
-            case DI2::Operator::ADD:
-                aInput->Token_Next(DI2::TokenType::QUOTED | DI2::TokenType::STRING);
-                aInput->Token_GetText(lString, sizeof(lString));
-                aData->push_back(lString);
-                break;
-            case DI2::Operator::ASSIGN:
-                StringList_ASCII_Decode_ASCII(aData, aInput, DI2::TokenType::QUOTED | DI2::TokenType::STRING);
-                break;
-            case DI2::Operator::SUB:
-                aInput->Token_Next(DI2::TokenType::QUOTED | DI2::TokenType::STRING);
-                aInput->Token_GetText(lString, sizeof(lString));
-                lIt = aData->begin();
-                while (aData->end() != lIt)
-                {
-                    if (0 == strcmp(lString, lIt->c_str()))
-                    {
-                        aData->erase(lIt);
-                        break;
-                    }
-
-                    lIt++;
-                }
-                break;
-
-            default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid operator", "");
-            }
-            break;
-
-        case DI2::TokenType::QUOTED:
-        case DI2::TokenType::STRING:
-            aInput->Token_GetText(lString, sizeof(lString));
-            aData->clear();
-            aData->push_back(lString);
-            break;
-        }
-    }
 }

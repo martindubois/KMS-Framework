@@ -17,6 +17,9 @@
 
 #include <KMS/DI2/GUID.h>
 
+// ===== Local ==============================================================
+#include "DI2_Regex.h"
+
 namespace KMS
 {
     namespace DI2
@@ -65,29 +68,21 @@ namespace KMS
         // op "{00000000-0000-0000-0000-000000000000}"
         void GUID::Decode_ASCII(void* aData, KMS::DI2::Input* aInput) const
         {
-            static const std::regex REGEX_0("^\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\\s*");
-            static const std::regex REGEX_1("^\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"\\s*");
-            static const std::regex REGEX_2("^\\s*=\\s*(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\\s*");
-            static const std::regex REGEX_3("^\\s*=\\s*\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"\\s*");
+            static const std::regex REGEX_0_C1(DI2_Regex_BEGIN DI2_Regex_ASSIGN_OPT DI2_Regex_SPACE "(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})"     DI2_Regex_SPACE);
+            static const std::regex REGEX_1_C1(DI2_Regex_BEGIN DI2_Regex_ASSIGN_OPT DI2_Regex_SPACE "\"(\\{[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}\\})\"" DI2_Regex_SPACE);
 
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
             std::smatch lMatch;
 
-            if (   aInput->Next_Try(REGEX_0, lMatch)
-                || aInput->Next_Try(REGEX_1, lMatch)
-                || aInput->Next_Try(REGEX_2, lMatch)
-                || aInput->Next_Try(REGEX_3, lMatch))
-            {
-                auto lData = reinterpret_cast<::GUID*>(aData);
+            bool lRet = aInput->Next_Try(REGEX_0_C1, lMatch)
+                ||      aInput->Next_Try(REGEX_1_C1, lMatch);
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid GUID format", "");
 
-                *lData = Convert::ToGUID(lMatch[1].str().c_str());
-            }
-            else
-            {
-                KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid GUID format", "");
-            }
+            auto lData = reinterpret_cast<::GUID*>(aData);
+
+            *lData = Convert::ToGUID(lMatch[1].str().c_str());
         }
 
         void GUID::Decode_JSON(void* aData, KMS::DI2::Input* aInput) const

@@ -19,21 +19,6 @@
 // Constants
 // //////////////////////////////////////////////////////////////////////////
 
-#define FORMAT_INT           "%lld"
-#define FORMAT_INT_STR       "%[0-9-]"
-#define FORMAT_FLOAT         "%lf"
-#define FORMAT_FLOAT_STR     "%[0-9.]"
-#define FORMAT_NAME_STR      "%[0-9A-Z_a-z]"
-#define FORMAT_OPERATOR_STR  "%[&*+-/=|^]"
-#define FORMAT_QUOTED_STR    "\"%[^\"]\""
-#define FORMAT_STRING_STR    "%[^\n\r\t]"
-#define FORMAT_UINT          "%llu"
-#define FORMAT_UINT_STR      "%[0-9]"
-#define FORMAT_UINT_HEX      "0x%llx"
-#define FORMAT_UINT_HEX_STR  "%[0-9A-Fa-fx]"
-
-#define INVALID_INDEX (0xffffffff)
-
 namespace KMS
 {
     namespace DI2
@@ -45,7 +30,6 @@ namespace KMS
         Input::Input()
             : mDelete(false)
             , mIndex(0)
-            , mPrevious(INVALID_INDEX)
             , mString(nullptr)
         {
             memset(mValue, 0, sizeof(mValue));
@@ -119,6 +103,18 @@ namespace KMS
             return ('\0' == mString[mIndex]);
         }
 
+        void Input::Next(const std::regex& aRegex)
+        {
+            mStringR = mString + mIndex;
+
+            std::smatch lMatch;
+
+            auto lRet = std::regex_search(mStringR, lMatch, aRegex);
+            KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid format", "");
+
+            mIndex += static_cast<unsigned int>(lMatch[0].length());
+        }
+
         void Input::Next(const std::regex& aRegex, std::smatch& aMatch)
         {
             mStringR = mString + mIndex;
@@ -127,6 +123,21 @@ namespace KMS
             KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid format", "");
 
             mIndex += static_cast<unsigned int>(aMatch[0].length());
+        }
+
+        bool Input::Next_Try(const std::regex& aRegex)
+        {
+            mStringR = mString + mIndex;
+
+            std::smatch lMatch;
+
+            auto lResult = std::regex_search(mStringR, lMatch, aRegex);
+            if (lResult)
+            {
+                mIndex += static_cast<unsigned int>(lMatch[0].length());
+            }
+
+            return lResult;
         }
 
         bool Input::Next_Try(const std::regex& aRegex, std::smatch& aMatch)
@@ -139,166 +150,6 @@ namespace KMS
                 mIndex += static_cast<unsigned int>(aMatch[0].length());
             }
 
-            return lResult;
-        }
-
-        void Input::Previous()
-        {
-            assert(mIndex > mPrevious);
-
-            mIndex    = mPrevious;
-            mPrevious = INVALID_INDEX;
-        }
-
-        void Input::Char_Next(char aChar)
-        {
-            SkipBlank();
-
-            KMS_EXCEPTION_ASSERT(mString[mIndex] == aChar, RESULT_INVALID_FORMAT, "Invalid format", "");
-
-            mPrevious = mIndex;
-            mIndex++;
-        }
-
-        char Input::Char_Next(const char* aChars)
-        {
-            assert(nullptr != aChars);
-
-            SkipBlank();
-
-            // TODO Handle the end of string condition
-
-            auto lPtr = strchr(aChars, mString[mIndex]);
-            KMS_EXCEPTION_ASSERT(nullptr != lPtr, RESULT_INVALID_FORMAT, "Invalid format", "");
-
-            mPrevious = mIndex;
-            mIndex++;
-
-            return *lPtr;
-        }
-
-        bool Input::Char_Next_Try(char aChar)
-        {
-            SkipBlank();
-
-            bool lResult = (mString[mIndex] == aChar);
-            if (lResult)
-            {
-                mPrevious = mIndex;
-                mIndex++;
-            }
-
-            return lResult;
-        }
-
-        double Input::Token_GetFloat() const
-        {
-            double lResult;
-
-            auto lRet = sscanf_s(mValue, FORMAT_FLOAT, &lResult);
-            KMS_EXCEPTION_ASSERT(1 == lRet, RESULT_INVALID_FORMAT, "Invalid floating point value", mValue);
-
-            return lResult;
-        }
-
-        int64_t Input::Token_GetInt() const
-        {
-            int64_t lResult;
-
-            auto lRet = sscanf_s(mValue, FORMAT_INT, &lResult);
-            KMS_EXCEPTION_ASSERT(1 == lRet, RESULT_INVALID_FORMAT, "Invalid integer value", mValue);
-
-            return lResult;
-        }
-
-        Operator Input::Token_GetOperator() const
-        {
-            Enum<Operator, Operator_SYMBOLS> lResult(mValue);
-
-            return lResult;
-        }
-
-        void Input::Token_GetText(char* aOut, unsigned int aOutSize_byte) const
-        {
-            assert(nullptr != aOut);
-
-            memset(aOut, 0, aOutSize_byte);
-
-            auto lLen = strlen(mValue);
-
-            KMS_EXCEPTION_ASSERT(aOutSize_byte > lLen, RESULT_OUTPUT_TOO_SHORT, "String is too long", mValue);
-
-            memcpy(aOut, mValue, lLen);
-        }
-
-        uint64_t Input::Token_GetUInt() const
-        {
-            uint64_t lResult;
-
-            if (1 != sscanf_s(mValue, FORMAT_UINT_HEX, &lResult))
-            {
-                auto lRet = sscanf_s(mValue, FORMAT_UINT, &lResult);
-                KMS_EXCEPTION_ASSERT(1 == lRet, RESULT_INVALID_FORMAT, "Invalid unsigned integer format", mValue);
-            }
-
-            return lResult;
-        }
-
-        #define PARSE_0(T,F)                                                                                        \
-            if (IsTokenTypePresent(aTypes, (T)) && (1 == sscanf_s(mString + mIndex, (F), mValue SizeInfo(mValue)))) \
-            {                                                                                                       \
-                lResult = (T); goto End;                                                                            \
-            }
-
-        TokenType Input::Token_Next(TokenType aTypes)
-        {
-            SkipBlank();
-
-            memset(mValue, 0, sizeof(mValue));
-
-            if (   IsTokenTypePresent(aTypes, TokenType::END)
-                && ('\0' == mString[mIndex]))
-            {
-                return TokenType::END;
-            }
-
-            KMS_EXCEPTION_ASSERT('\0' != mString[mIndex], RESULT_INVALID_FORMAT, "Unexpected end", "");
-
-            TokenType    lResult;
-            unsigned int lSkip = 0;
-
-            PARSE_0(TokenType::FLOAT   , FORMAT_FLOAT_STR   );
-            PARSE_0(TokenType::INT     , FORMAT_INT_STR     );
-            PARSE_0(TokenType::OPERATOR, FORMAT_OPERATOR_STR);
-
-            if (IsTokenTypePresent(aTypes, TokenType::QUOTED) && (0 == strncmp(mString + mIndex, "\"\"", 2)))
-            {
-                lResult = TokenType::QUOTED;
-                lSkip = 2;
-                goto End;
-            }
-
-            if (IsTokenTypePresent(aTypes, TokenType::QUOTED) && (1 == sscanf_s(mString + mIndex, FORMAT_QUOTED_STR, mValue SizeInfo(mValue))))
-            {
-                lResult = TokenType::QUOTED;
-                lSkip = 2;
-                goto End;
-            }
-
-            PARSE_0(TokenType::UINT_HEX, FORMAT_UINT_HEX_STR);
-
-            PARSE_0(TokenType::UINT    , FORMAT_UINT_STR    );
-
-            PARSE_0(TokenType::NAME    , FORMAT_NAME_STR    );
-
-            PARSE_0(TokenType::STRING  , FORMAT_STRING_STR  );
-
-            KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid format", "");
-
-        End:
-            mPrevious = mIndex;
-            mIndex += static_cast<unsigned int>(strlen(mValue));
-            mIndex += lSkip;
             return lResult;
         }
 

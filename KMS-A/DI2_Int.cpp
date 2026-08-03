@@ -10,6 +10,9 @@
 // ===== Includes ===========================================================
 #include <KMS/DI2/Int.h>
 
+// ===== Local ==============================================================
+#include "DI2_Regex.h"
+
 namespace KMS
 {
     namespace DI2
@@ -19,6 +22,9 @@ namespace KMS
         const Int<int32_t> TYPE_INT32;
         const Int<int16_t> TYPE_INT16;
         const Int<int8_t > TYPE_INT8;
+
+        const std::regex Int_REGEX_OP_VALUE_C2(DI2_Regex_BEGIN DI2_Regex_OP_C1      DI2_Regex_SPACE "(\\-?\\d+)" DI2_Regex_SPACE);
+        const std::regex Int_REGEX_VALUE_C1   (DI2_Regex_BEGIN DI2_Regex_ASSIGN_OPT DI2_Regex_SPACE "(\\-?\\d+)" DI2_Regex_SPACE);
 
     }
 }

@@ -53,8 +53,16 @@ namespace KMS
             bool IsConsummed();
 
             /// \param aRegex The regular expression
+            void Next(const std::regex& aRegex);
+
+            /// \param aRegex The regular expression
             /// \param aMatch The match container
             void Next(const std::regex& aRegex, std::smatch& aMatch);
+
+            /// \param aRegex The regular expression
+            /// \retval false  No match
+            /// \retval true   Match
+            bool Next_Try(const std::regex& aRegex);
 
             /// \param aRegex The regular expression
             /// \param aMatch The match container
@@ -62,65 +70,12 @@ namespace KMS
             /// \retval true   Match
             bool Next_Try(const std::regex& aRegex, std::smatch& aMatch);
 
-            /// \brief Go back one token or one char
-            /// \see Char_Next Char_Next_Try Token_Next
-            void Previous();
-
-            // ===== Char ===================================================
-
-            /// \param aChar Verify the next char is this one
-            /// \see Previous
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            void Char_Next(char aChar);
-
-            /// \param aChars Verify the next char is one of them
-            /// \return The current char
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            /// \see Previous
-            char Char_Next(const char* aChars);
-
-            /// \param aChar Verify the next char is this one
-            /// \retval false This is not the next char
-            /// \retval true  This is the next char
-            /// \see Previous
-            bool Char_Next_Try(char aChar);
-
-            // ===== Token ==================================================
-
-            /// \param aTypes Allower token types
-            /// \return The current token type
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            /// \see Previous
-            TokenType Token_Next(TokenType aTypes);
-
-            /// \return The `double` value in the current token (`FLOAT`)
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            double Token_GetFloat() const;
-
-            /// \return The `int64_t` value in the current token (`INT`)
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            int64_t Token_GetInt() const;
-
-            /// \return The operator in the current token (`OPERATOR`)
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            Operator Token_GetOperator() const;
-
-            /// \param aOut          The output buffer
-            /// \param aOutSize_byte The output buffer size
-            /// \exception KMS::Exception RESULT_OUTPUT_TOO_SHORT
-            void Token_GetText(char* aOut, unsigned int aOutSize_byte) const;
-
-            /// \return The `uint64_t` in the current token (`UINT`, `UINT_HEX`)
-            /// \exception KMS::Exception RESULT_INVALID_FORMAT
-            uint64_t Token_GetUInt() const;
-
         private:
 
             void SkipBlank();
 
             bool         mDelete;
             unsigned int mIndex;
-            unsigned int mPrevious;
             const char * mString;
             std::string  mStringR;
             char         mValue[LINE_LENGTH];

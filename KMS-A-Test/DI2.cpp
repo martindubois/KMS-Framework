@@ -19,10 +19,10 @@
 #include <KMS/DI2/GUID.h>
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Int.h>
-#include <KMS/DI2/UInt.h>
 #include <KMS/DI2/Output.h>
 #include <KMS/DI2/String.h>
 #include <KMS/DI2/Struct.h>
+#include <KMS/DI2/UInt.h>
 
 using namespace KMS;
 
@@ -35,6 +35,8 @@ typedef struct
 
     const char* mInput;
     const char* mOutput;
+
+    const char* mException;
 }
 TestCase;
 
@@ -77,6 +79,62 @@ static const DI2::Struct<TEST_STRUCT_FIELDS>                TYPE_TEST_STRUCT;
 
 static const TestCase TEST_CASES[] =
 {
+    // ===== DI2/Array.h ====================================================
+
+    // [0] op Value0
+    { &TYPE_ARRAY,     "[0]=1", "{1,0}" },
+    { &TYPE_ARRAY,    "[0]= 2", "{2,0}" }, // 1 space
+    { &TYPE_ARRAY,    "[0] =3", "{3,0}" },
+    { &TYPE_ARRAY,    "[0 ]=4", "{4,0}" },
+    { &TYPE_ARRAY,    "[ 0]=5", "{5,0}" },
+    { &TYPE_ARRAY,   "[0] = 6", "{6,0}" }, // 2 spaces
+    { &TYPE_ARRAY,   "[0 ] =7", "{7,0}" },
+    { &TYPE_ARRAY,   "[ 0 ]=8", "{8,0}" },
+    { &TYPE_ARRAY,  "[0 ] = 9", "{9,0}" }, // 3 spaces
+    { &TYPE_ARRAY,  "[ 0 ] =9", "{9,0}" },
+    { &TYPE_ARRAY, "[ 0 ] = 9", "{9,0}" }, // 4 spaces
+
+    // { Value0, Value1 }
+    { &TYPE_ARRAY,     "{1}", "{1,0}" },
+    { &TYPE_ARRAY,    "{2 }", "{2,0}" }, // 1 space
+    { &TYPE_ARRAY,    "{ 3}", "{3,0}" },
+    { &TYPE_ARRAY,    " {4}", "{4,0}" },
+    { &TYPE_ARRAY,   "{ 5 }", "{5,0}" }, // 2 spaces
+    { &TYPE_ARRAY,   " { 6}", "{6,0}" },
+    { &TYPE_ARRAY,  " { 7 }", "{7,0}" }, // 3 spaces
+
+    // = { Value0; Value1; }
+    { &TYPE_ARRAY,       "={1,2}", "{1,2}" },
+    { &TYPE_ARRAY,      "={2,3} ", "{2,3}" }, // 1 space
+    { &TYPE_ARRAY,      "={3,4 }", "{3,4}" },
+    { &TYPE_ARRAY,      "={4, 5}", "{4,5}" },
+    { &TYPE_ARRAY,      "={5 ,6}", "{5,6}" },
+    { &TYPE_ARRAY,      "={ 6,7}", "{6,7}" },
+    { &TYPE_ARRAY,      "= {7,8}", "{7,8}" },
+    { &TYPE_ARRAY,      " ={8,9}", "{8,9}" },
+    { &TYPE_ARRAY,     "={1, 2 }", "{1,2}" }, // 2 spaces
+    { &TYPE_ARRAY,     "={2 , 3}", "{2,3}" },
+    { &TYPE_ARRAY,     "={ 3 ,4}", "{3,4}" },
+    { &TYPE_ARRAY,     "= { 4,5}", "{4,5}" },
+    { &TYPE_ARRAY,     " = {5,6}", "{5,6}" },
+    { &TYPE_ARRAY,    "={6, 7 } ", "{6,7}" }, // 3 spaces
+    { &TYPE_ARRAY,    "={7 , 8 }", "{7,8}" },
+    { &TYPE_ARRAY,    "={ 8 , 9}", "{8,9}" },
+    { &TYPE_ARRAY,    "= { 1 ,2}", "{1,2}" },
+    { &TYPE_ARRAY,    " = { 2,3}", "{2,3}" },
+    { &TYPE_ARRAY,   "={3 , 4 } ", "{3,4}" }, // 4 spaces
+    { &TYPE_ARRAY,   "={ 4 , 5 }", "{4,5}" },
+    { &TYPE_ARRAY,   "= { 5 , 6}", "{5,6}" },
+    { &TYPE_ARRAY,   " = { 6 ,7}", "{6,7}" },
+    { &TYPE_ARRAY,  "={ 7 , 8 } ", "{7,8}" }, // 5 spaces
+    { &TYPE_ARRAY,  "= { 8 , 9 }", "{8,9}" },
+    { &TYPE_ARRAY,  " = { 1 , 2}", "{1,2}" },
+    { &TYPE_ARRAY, " = { 2 , 3 }", "{2,3}" }, // 6 spaces
+
+    // Exceptions
+    { &TYPE_ARRAY,    "[2]=1", nullptr, "RESULT_INVALID_INDEX" },
+    { &TYPE_ARRAY, "={0,1,2}", nullptr, "RESULT_INVALID_INDEX" },
+
     // ===== DI2/BitField.h =================================================
 
     // Value
@@ -84,32 +142,41 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,    " 101",        "101" },
 
     // op Value
+
     { &TYPE_TEST_BIT_FIELD,    "=102",        "102" },
     { &TYPE_TEST_BIT_FIELD,   "= 103",        "103" },
     { &TYPE_TEST_BIT_FIELD,  " = 104",        "104" },
+
     { &TYPE_TEST_BIT_FIELD,   "+=105",        "105" },
     { &TYPE_TEST_BIT_FIELD,  "+= 106",        "106" },
     { &TYPE_TEST_BIT_FIELD, " += 107",        "107" },
+
     { &TYPE_TEST_BIT_FIELD,   "-=108", "4294967188" },
     { &TYPE_TEST_BIT_FIELD,  "-= 109", "4294967187" },
     { &TYPE_TEST_BIT_FIELD, " -= 110", "4294967186" },
+
     { &TYPE_TEST_BIT_FIELD,   "*=111",          "0" },
     { &TYPE_TEST_BIT_FIELD,  "*= 112",          "0" },
     { &TYPE_TEST_BIT_FIELD, " *= 113",          "0" },
+
     { &TYPE_TEST_BIT_FIELD,   "/=114",          "0" },
     { &TYPE_TEST_BIT_FIELD,  "/= 115",          "0" },
     { &TYPE_TEST_BIT_FIELD, " /= 116",          "0" },
+
     { &TYPE_TEST_BIT_FIELD,   "|=117",        "117" },
     { &TYPE_TEST_BIT_FIELD,  "|= 118",        "118" },
     { &TYPE_TEST_BIT_FIELD, " |= 119",        "119" },
+
     { &TYPE_TEST_BIT_FIELD,   "&=120",          "0" },
     { &TYPE_TEST_BIT_FIELD,  "&= 121",          "0" },
     { &TYPE_TEST_BIT_FIELD, " &= 122",          "0" },
+
     { &TYPE_TEST_BIT_FIELD,   "^=123",        "123" },
     { &TYPE_TEST_BIT_FIELD,  "^= 124",        "124" },
     { &TYPE_TEST_BIT_FIELD, " ^= 125",        "125" },
 
     // Field0 op Value0
+
     { &TYPE_TEST_BIT_FIELD,     "mField0=1",  "16" },
     { &TYPE_TEST_BIT_FIELD,    "mField0= 1",  "16" },
     { &TYPE_TEST_BIT_FIELD,    "mField0 =1",  "16" },
@@ -117,6 +184,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,   "mField0 = 1",  "16" },
     { &TYPE_TEST_BIT_FIELD,   " mField0 =1",  "16" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 = 1",  "16" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0+=2",  "32" },
     { &TYPE_TEST_BIT_FIELD,   "mField0+= 2",  "32" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 +=2",  "32" },
@@ -124,6 +192,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 += 2",  "32" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 +=2",  "32" },
     { &TYPE_TEST_BIT_FIELD, " mField0 += 2",  "32" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0-=3", "208" },
     { &TYPE_TEST_BIT_FIELD,   "mField0-= 3", "208" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 -=3", "208" },
@@ -131,6 +200,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 -= 3", "208" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 -=3", "208" },
     { &TYPE_TEST_BIT_FIELD, " mField0 -= 3", "208" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0*=4",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0*= 4",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 *=4",   "0" },
@@ -138,6 +208,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 *= 4",   "0" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 *=4",   "0" },
     { &TYPE_TEST_BIT_FIELD, " mField0 *= 4",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0/=5",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0/= 5",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 /=5",   "0" },
@@ -145,6 +216,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 /= 5",   "0" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 /=5",   "0" },
     { &TYPE_TEST_BIT_FIELD, " mField0 /= 5",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0|=6",  "96" },
     { &TYPE_TEST_BIT_FIELD,   "mField0|= 6",  "96" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 |=6",  "96" },
@@ -152,6 +224,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 |= 6",  "96" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 |=6",  "96" },
     { &TYPE_TEST_BIT_FIELD, " mField0 |= 6",  "96" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0&=6",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0&= 6",   "0" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 &=6",   "0" },
@@ -159,6 +232,7 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "mField0 &= 6",   "0" },
     { &TYPE_TEST_BIT_FIELD,  " mField0 &=6",   "0" },
     { &TYPE_TEST_BIT_FIELD, " mField0 &= 6",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,    "mField0^=7", "112" },
     { &TYPE_TEST_BIT_FIELD,   "mField0^= 7", "112" },
     { &TYPE_TEST_BIT_FIELD,   "mField0 ^=7", "112" },
@@ -168,34 +242,42 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD, " mField0 ^= 7", "112" },
 
     // .Field0 op Value0
+
     { &TYPE_TEST_BIT_FIELD,    ".mField0=1",  "16" },
     { &TYPE_TEST_BIT_FIELD,   ".mField0= 1",  "16" },
     { &TYPE_TEST_BIT_FIELD,   ".mField0 =1",  "16" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 = 1",  "16" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0+=2",  "32" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0+= 2",  "32" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 +=2",  "32" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 += 2",  "32" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0-=3", "208" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0-= 3", "208" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 -=3", "208" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 -= 3", "208" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0*=4",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0*= 4",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 *=4",   "0" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 *= 4",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0/=5",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0/= 5",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 /=5",   "0" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 /= 5",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0|=6",  "96" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0|= 6",  "96" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 |=6",  "96" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 |= 6",  "96" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0&=6",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0&= 6",   "0" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 &=6",   "0" },
     { &TYPE_TEST_BIT_FIELD, ".mField0 &= 6",   "0" },
+
     { &TYPE_TEST_BIT_FIELD,   ".mField0^=7", "112" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0^= 7", "112" },
     { &TYPE_TEST_BIT_FIELD,  ".mField0 ^=7", "112" },
@@ -255,6 +337,178 @@ static const TestCase TEST_CASES[] =
     { &TYPE_TEST_BIT_FIELD,  "= { mField0 = 0 ; }", "0" }, // 6 spaces
     { &TYPE_TEST_BIT_FIELD,  " = { mField0 = 0 ;}", "0" },
     { &TYPE_TEST_BIT_FIELD, " = { mField0 = 0 ; }", "0" }, // 7 spaces
+
+    // Exception
+    { &TYPE_TEST_BIT_FIELD, " = { Invalid; }"    , nullptr, "RESULT_INVALID_FORMAT" },
+    { &TYPE_TEST_BIT_FIELD, " = { Invalid = 0; }", nullptr, "RESULT_INVALID_NAME"   },
+
+        // ===== DI2/Float.h ====================================================
+
+        // Value
+    { &DI2::TYPE_FLOAT,  "0.1", "0.100000" },
+    { &DI2::TYPE_FLOAT, "0.2 ", "0.200000" }, // 1 space
+    { &DI2::TYPE_FLOAT, " 0.3", "0.300000" },
+
+    // op Value
+
+    { &DI2::TYPE_FLOAT,    "=0.1", "0.100000" },
+    { &DI2::TYPE_FLOAT,   "=0.2 ", "0.200000" }, // 1 space
+    { &DI2::TYPE_FLOAT,   "= 0.3", "0.300000" },
+    { &DI2::TYPE_FLOAT,   " =0.4", "0.400000" },
+    { &DI2::TYPE_FLOAT,  "= 0.5 ", "0.500000" }, // 2 space
+    { &DI2::TYPE_FLOAT,  " = 0.6", "0.600000" },
+    { &DI2::TYPE_FLOAT, " = 0.7 ", "0.700000" }, // 3 space
+
+    { &DI2::TYPE_FLOAT,    "+=0.1", "0.100000" },
+    { &DI2::TYPE_FLOAT,   "+=0.2 ", "0.200000" }, // 1 space
+    { &DI2::TYPE_FLOAT,   "+= 0.3", "0.300000" },
+    { &DI2::TYPE_FLOAT,   " +=0.4", "0.400000" },
+    { &DI2::TYPE_FLOAT,  "+= 0.5 ", "0.500000" }, // 2 space
+    { &DI2::TYPE_FLOAT,  " += 0.6", "0.600000" },
+    { &DI2::TYPE_FLOAT, " += 0.7 ", "0.700000" }, // 3 space
+
+    { &DI2::TYPE_FLOAT,    "-=0.1", "-0.100000" },
+    { &DI2::TYPE_FLOAT,   "-=0.2 ", "-0.200000" }, // 1 space
+    { &DI2::TYPE_FLOAT,   "-= 0.3", "-0.300000" },
+    { &DI2::TYPE_FLOAT,   " -=0.4", "-0.400000" },
+    { &DI2::TYPE_FLOAT,  "-= 0.5 ", "-0.500000" }, // 2 space
+    { &DI2::TYPE_FLOAT,  " -= 0.6", "-0.600000" },
+    { &DI2::TYPE_FLOAT, " -= 0.7 ", "-0.700000" }, // 3 space
+
+    { &DI2::TYPE_FLOAT,    "*=0.1", "0.000000" },
+    { &DI2::TYPE_FLOAT,   "*=0.2 ", "0.000000" }, // 1 space
+    { &DI2::TYPE_FLOAT,   "*= 0.3", "0.000000" },
+    { &DI2::TYPE_FLOAT,   " *=0.4", "0.000000" },
+    { &DI2::TYPE_FLOAT,  "*= 0.5 ", "0.000000" }, // 2 space
+    { &DI2::TYPE_FLOAT,  " *= 0.6", "0.000000" },
+    { &DI2::TYPE_FLOAT, " *= 0.7 ", "0.000000" }, // 3 space
+
+    { &DI2::TYPE_FLOAT,    "/=0.1", "0.000000" },
+    { &DI2::TYPE_FLOAT,   "/=0.2 ", "0.000000" }, // 1 space
+    { &DI2::TYPE_FLOAT,   "/= 0.3", "0.000000" },
+    { &DI2::TYPE_FLOAT,   " /=0.4", "0.000000" },
+    { &DI2::TYPE_FLOAT,  "/= 0.5 ", "0.000000" }, // 2 space
+    { &DI2::TYPE_FLOAT,  " /= 0.6", "0.000000" },
+    { &DI2::TYPE_FLOAT, " /= 0.7 ", "0.000000" }, // 3 space
+
+    // Exceptions
+    { &DI2::TYPE_FLOAT, " /= 0", nullptr, "RESULT_INVALID_VALUE" },
+
+    // ===== DI2/Int.h ======================================================
+
+    // Value
+    { &DI2::TYPE_INT32,  "-1", "-1" },
+    { &DI2::TYPE_INT32, "-2 ", "-2" },
+    { &DI2::TYPE_INT32, " -3", "-3" },
+
+    // op Value
+
+    { &DI2::TYPE_INT32,    "=-4", "-4" },
+    { &DI2::TYPE_INT32,   "=-5 ", "-5" }, // 1 space
+    { &DI2::TYPE_INT32,   "= -6", "-6" },
+    { &DI2::TYPE_INT32,   " =-7", "-7" },
+    { &DI2::TYPE_INT32,  "= -8 ", "-8" }, // 2 space
+    { &DI2::TYPE_INT32,  " = -9", "-9" },
+    { &DI2::TYPE_INT32, " = -1 ", "-1" }, // 3 space
+
+    { &DI2::TYPE_INT32,    "+=-2", "-2" },
+    { &DI2::TYPE_INT32,   "+=-3 ", "-3" }, // 1 space
+    { &DI2::TYPE_INT32,   "+= -4", "-4" },
+    { &DI2::TYPE_INT32,   " +=-5", "-5" },
+    { &DI2::TYPE_INT32,  "+= -6 ", "-6" }, // 2 space
+    { &DI2::TYPE_INT32,  " += -7", "-7" },
+    { &DI2::TYPE_INT32, " += -8 ", "-8" }, // 3 space
+
+    { &DI2::TYPE_INT32,    "-=-9", "9" },
+    { &DI2::TYPE_INT32,   "-=-1 ", "1" }, // 1 space
+    { &DI2::TYPE_INT32,   "-= -2", "2" },
+    { &DI2::TYPE_INT32,   " -=-3", "3" },
+    { &DI2::TYPE_INT32,  "-= -4 ", "4" }, // 2 space
+    { &DI2::TYPE_INT32,  " -= -5", "5" },
+    { &DI2::TYPE_INT32, " -= -6 ", "6" }, // 3 space
+
+    { &DI2::TYPE_INT32,    "*=-7", "0" },
+    { &DI2::TYPE_INT32,   "*=-8 ", "0" }, // 1 space
+    { &DI2::TYPE_INT32,   "*= -9", "0" },
+    { &DI2::TYPE_INT32,   " *=-1", "0" },
+    { &DI2::TYPE_INT32,  "*= -2 ", "0" }, // 2 space
+    { &DI2::TYPE_INT32,  " *= -3", "0" },
+    { &DI2::TYPE_INT32, " *= -4 ", "0" }, // 3 space
+
+    { &DI2::TYPE_INT32,    "/=-5", "0" },
+    { &DI2::TYPE_INT32,   "/=-6 ", "0" }, // 1 space
+    { &DI2::TYPE_INT32,   "/= -7", "0" },
+    { &DI2::TYPE_INT32,   " /=-8", "0" },
+    { &DI2::TYPE_INT32,  "/= -9 ", "0" }, // 2 space
+    { &DI2::TYPE_INT32,  " /= -1", "0" },
+    { &DI2::TYPE_INT32, " /= -2 ", "0" }, // 3 space
+
+    { &DI2::TYPE_INT32, " |= 1", "1" },
+
+    { &DI2::TYPE_INT32, " &= 2", "0" },
+
+    { &DI2::TYPE_INT32, " ^= 3", "3" },
+
+    // Exception
+    { &DI2::TYPE_INT32, "3000000000", nullptr, "RESULT_INVALID_VALUE" },
+    { &DI2::TYPE_INT32,       "/= 0", nullptr, "RESULT_INVALID_VALUE" },
+
+    // ===== DI2/String.h ===================================================
+
+    // Value
+    { &TYPE_STRING_32, "Alpha", "\"Alpha\"" },
+
+    // "Value"
+    { &TYPE_STRING_32, "\"Bravo\"", "\"Bravo\"" },
+
+    // op Value
+    { &TYPE_STRING_32, "=Charlie", "\"Charlie\"" },
+    { &TYPE_STRING_32, "+=Delta" , "\"Delta\""   },
+
+    // op "Value"
+    { &TYPE_STRING_32, "=\"Echo\""    , "\"Echo\""    },
+    { &TYPE_STRING_32, "+=\"Foxtrot\"", "\"Foxtrot\"" },
+
+    // Exceptions
+    { &TYPE_STRING_32, "=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" , nullptr, "RESULT_INVALID_FORMAT" },
+    { &TYPE_STRING_32, "+=0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ", nullptr, "RESULT_INVALID_FORMAT" },
+    { &TYPE_STRING_32, "-=String"                              , nullptr, "RESULT_INVALID_FORMAT" },
+    { &TYPE_STRING_32, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"  , nullptr, "RESULT_INVALID_FORMAT" },
+
+    // ===== DI2/Struct.h ===================================================
+
+    // Field0 op Value0
+    { &TYPE_TEST_STRUCT, "mField0 = 1", "{mField0=1;}" },
+
+    // .Field0 op Value0
+    { &TYPE_TEST_STRUCT, ".mField0 = 2", "{mField0=2;}" },
+
+    // { Field0 op Value0; Field1 op Value0; }
+    { &TYPE_TEST_STRUCT, "{ mField0 = 3; }", "{mField0=3;}" },
+
+    // = { Field0 op Value0; Field1 op Value0; }
+    { &TYPE_TEST_STRUCT, "= { mField0 = 4; }", "{mField0=4;}" },
+
+    // Exceptions
+    { &TYPE_TEST_STRUCT, "= { Invalid = 5; }", nullptr, "RESULT_INVALID_NAME" },
+
+    // ===== DI2/UInt.h =====================================================
+
+    // Value
+    { &DI2::TYPE_UINT32,   "1", "1" },
+    { &DI2::TYPE_UINT32, "0x2", "2" },
+
+    // op Value
+
+    { &DI2::TYPE_UINT32,   "= 3", "3" },
+    { &DI2::TYPE_UINT32, "= 0x4", "4" },
+
+    { &DI2::TYPE_UINT32,   " += 5", "5" },
+    { &DI2::TYPE_UINT32, " += 0x6", "6" },
+
+    // Exceptions
+    { &DI2::TYPE_UINT32, "5000000000", nullptr, "RESULT_INVALID_VALUE" },
+    { &DI2::TYPE_UINT32,      " /= 0", nullptr, "RESULT_INVALID_VALUE" },
 
     // ===== DI2_GUID_W.cpp =================================================
 
@@ -347,10 +601,29 @@ KMS_TEST(DI2_Cases, "Auto", sTest_Cases)
 
         memset(&lData, 0, sizeof(lData));
 
-        DI2::Decode_ASCII_String(lData, lTest->mType, lTest->mInput);
-        DI2::Code_ASCII_String(lData, lTest->mType, sizeof(lOutput), lOutput);
+        if (nullptr != lTest->mOutput)
+        {
+            DI2::Decode_ASCII_String(lData, lTest->mType, lTest->mInput);
+            DI2::Code_ASCII_String  (lData, lTest->mType, sizeof(lOutput), lOutput);
 
-        KMS_TEST_ASSERT(0 == strcmp(lOutput, lTest->mOutput));
+            KMS_TEST_ASSERT(0 == strcmp(lOutput, lTest->mOutput));
+        }
+        else
+        {
+            try
+            {
+                DI2::Decode_ASCII_String(lData, lTest->mType, lTest->mInput);
+                DI2::Code_ASCII_String  (lData, lTest->mType, sizeof(lOutput), lOutput);
+
+                KMS_TEST_ASSERT(false);
+            }
+            catch (Exception eE)
+            {
+                Result lR(eE.GetCode());
+
+                KMS_TEST_ASSERT(0 == strcmp(lTest->mException, lR.GetName()));
+            }
+        }
 
         lCase++;
     }
@@ -376,35 +649,6 @@ KMS_TEST(DI2_GUID, "Auto", sTest_GUID)
 
 KMS_TEST(DI2_Input, "Auto", sTest_Input)
 {
-    DI2::Input lI0;
-    DI2::Input lI1;
-    DI2::Input lI2;
-
-    lI0.Init_File(".gitignore");
-
-    lI1.Init_String("+= &= = /= *= |= -= ^=");
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::ADD == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::AND == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::ASSIGN == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::DIV == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::MULT == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::OR == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::SUB == lI1.Token_GetOperator());
-    lI1.Token_Next(DI2::TokenType::OPERATOR);
-    KMS_TEST_ASSERT(DI2::Operator::XOR == lI1.Token_GetOperator());
-
-    lI2.Init_String("1");
-    lI2.Token_Next(DI2::TokenType::UINT);
-    KMS_TEST_ASSERT(1 == lI2.Token_GetUInt());
-    lI2.Token_Next(DI2::TokenType::END);
-
     TestStruct lTS3;
 
     KMS_TEST_ASSERT( DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mField0=0"));
@@ -425,34 +669,6 @@ KMS_TEST(DI2_Input_Exception, "Auto", sTest_Input_Exception)
     }
     KMS_TEST_CATCH(RESULT_OPEN_FAILED);
 
-    // Char_Next
-    lI1.Init_String("b");
-
-    try
-    {
-        lI1.Char_Next('a');
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
-
-    try
-    {
-        lI1.Char_Next("a");
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
-
-    // Token_GetOperator
-    lI2.Init_String("=+");
-    lI2.Token_Next(DI2::TokenType::OPERATOR);
-
-    try
-    {
-        lI2.Token_GetOperator();
-        KMS_TEST_ASSERT(false);
-    }
-    KMS_TEST_CATCH(RESULT_INVALID_ENUM_NAME);
-
     // Decode_ASCII_String_Try
     TestStruct lTS3;
 
@@ -461,7 +677,7 @@ KMS_TEST(DI2_Input_Exception, "Auto", sTest_Input_Exception)
         DI2::Decode_ASCII_String_Try(&lTS3, &TYPE_TEST_STRUCT, "mField0=+0");
         KMS_TEST_ASSERT(false);
     }
-    KMS_TEST_CATCH(RESULT_INVALID_ENUM_NAME);
+    KMS_TEST_CATCH(RESULT_INVALID_FORMAT);
 }
 
 KMS_TEST(DI2_Simple, "Auto", sTest_Simple)

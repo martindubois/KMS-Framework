@@ -244,6 +244,44 @@ namespace KMS
             return lResult;
         }
 
+        int64_t ToInt64(const char* aASCII, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+
+            int64_t lResult;
+
+            if (!ToInt64_Try(aASCII, &lResult, aRadix))
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid integer value", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
+            }
+
+            return lResult;
+        }
+
+        bool ToInt64_Try(const char* aASCII, int64_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            auto lRadix = aRadix;
+
+            auto lASCII = DetectHex(aASCII, &lRadix);
+
+            char* lPtr;
+
+            auto lOut = strtoll(lASCII, &lPtr, static_cast<int>(lRadix));
+
+            auto lResult = ('\0' == *lPtr);
+            if (lResult)
+            {
+                *aOut = lOut;
+            }
+
+            return lResult;
+        }
+
         int8_t ToInt8(const char* aASCII, Radix aRadix)
         {
             assert(nullptr != aASCII);
@@ -342,6 +380,44 @@ namespace KMS
             char* lPtr;
 
             auto lOut = strtoul(lASCII, &lPtr, static_cast<int>(lRadix));
+
+            auto lResult = '\0' == *lPtr;
+            if (lResult)
+            {
+                *aOut = lOut;
+            }
+
+            return lResult;
+        }
+
+        uint64_t ToUInt64(const char* aASCII, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+
+            uint64_t lResult;
+
+            if (!ToUInt64_Try(aASCII, &lResult, aRadix))
+            {
+                char lMsg[64 + NAME_LENGTH];
+                sprintf_s(lMsg, "\"%s\" is not a valid positive integer value", aASCII);
+                KMS_EXCEPTION(RESULT_INVALID_DATA_TYPE, lMsg, "");
+            }
+
+            return lResult;
+        }
+
+        bool ToUInt64_Try(const char* aASCII, uint64_t* aOut, Radix aRadix)
+        {
+            assert(nullptr != aASCII);
+            assert(nullptr != aOut);
+
+            auto lRadix = aRadix;
+
+            auto lASCII = DetectHex(aASCII, &lRadix);
+
+            char* lPtr;
+
+            auto lOut = strtoull(lASCII, &lPtr, static_cast<int>(lRadix));
 
             auto lResult = '\0' == *lPtr;
             if (lResult)

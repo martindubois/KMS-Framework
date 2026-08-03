@@ -9,6 +9,7 @@
 #pragma once
 
 // ===== Includes ===========================================================
+#include <KMS/Convert.h>
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Output.h>
 #include <KMS/DI2/IType.h>
@@ -34,6 +35,9 @@ namespace KMS
 
         extern const Float<double> TYPE_DOUBLE;
         extern const Float<float > TYPE_FLOAT;
+
+        extern const std::regex Float_REGEX_OP_VALUE_C2;
+        extern const std::regex Float_REGEX_VALUE_C1;
 
         // Value
         template <typename T>
@@ -66,39 +70,25 @@ namespace KMS
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
-            auto lOp = Operator::ASSIGN;
+            std::smatch lMatch;
+            double      lValue;
 
-            auto lTT = aInput->Token_Next(TokenType::FLOAT | TokenType::OPERATOR);
-            if (TokenType::OPERATOR == lTT)
+            if (aInput->Next_Try(Float_REGEX_VALUE_C1, lMatch))
             {
-                lOp = aInput->Token_GetOperator();
-
-                aInput->Token_Next(TokenType::FLOAT);
+                lValue = Convert::ToDouble(lMatch[1].str().c_str());
             }
-
-            auto lValue = aInput->Token_GetFloat();
-
-            double lCurrent = *reinterpret_cast<T*>(aData);
-
-            switch (lOp)
+            else
             {
-            case Operator::ASSIGN: break;
+                aInput->Next(Float_REGEX_OP_VALUE_C2, lMatch);
 
-            case Operator::ADD : lValue = lCurrent + lValue; break;
-            case Operator::MULT: lValue = lCurrent * lValue; break;
-            case Operator::SUB : lValue = lCurrent - lValue; break;
+                Enum<Operator, Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
 
-            case Operator::DIV:
-                KMS_EXCEPTION_ASSERT(0.0 != lValue, RESULT_INVALID_VALUE, "Cannot divide by 0", "");
-                lValue = lCurrent / lValue;
-                break;
+                lValue = Convert::ToDouble(lMatch[2].str().c_str());
 
-            default: KMS_EXCEPTION(RESULT_INVALID_VALUE, "Invalid operator", "");
+                lValue = Operator_Eval(*reinterpret_cast<T*>(aData), lOp, lValue);
             }
 
             *reinterpret_cast<T*>(aData) = static_cast<T>(lValue);
-
-            KMS_EXCEPTION_ASSERT(*reinterpret_cast<T*>(aData) == lValue, RESULT_INVALID_VALUE, "floating point value too large", "");
         }
 
         // Value

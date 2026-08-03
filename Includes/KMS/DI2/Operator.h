@@ -30,5 +30,9 @@ namespace KMS
         const char* Operator_NAMES[];
         const char* Operator_SYMBOLS[];
 
+        int64_t  Operator_Eval( int64_t aCurrent, Operator aOp,  int64_t aValue);
+        uint64_t Operator_Eval(uint64_t aCurrent, Operator aOp, uint64_t aValue);
+        double   Operator_Eval(double   aCurrent, Operator aOp, double   aValue);
+
     }
 }

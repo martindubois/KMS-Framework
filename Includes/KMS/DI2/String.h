@@ -33,6 +33,11 @@ namespace KMS
 
         };
 
+        extern const std::regex String_REGEX_OP_VALUE_0_C2;
+        extern const std::regex String_REGEX_OP_VALUE_1_C2;
+        extern const std::regex String_REGEX_VALUE_0_C1;
+        extern const std::regex String_REGEX_VALUE_1_C1;
+
         // "Value"
         template <unsigned int N>
         void String<N>::Code_ASCII(const void* aData, Output* aOutput) const
@@ -61,25 +66,48 @@ namespace KMS
             assert(nullptr != aData);
             assert(nullptr != aInput);
 
-            auto lOp = Operator::ASSIGN;
-
-            auto lTT = aInput->Token_Next(TokenType::OPERATOR | TokenType::QUOTED | TokenType::STRING);
-            if (TokenType::OPERATOR == lTT)
-            {
-                lOp = aInput->Token_GetOperator();
-
-                aInput->Token_Next(TokenType::QUOTED | TokenType::STRING);
-            }
-
             auto lData = reinterpret_cast<char*>(aData);
-            auto lLen  = static_cast<unsigned int>(strlen(lData));
 
-            switch (lOp)
+            std::smatch lMatch;
+
+            if (   aInput->Next_Try(String_REGEX_OP_VALUE_0_C2, lMatch)
+                || aInput->Next_Try(String_REGEX_OP_VALUE_1_C2, lMatch))
             {
-            case Operator::ASSIGN: aInput->Token_GetText(lData       , N       ); break;
-            case Operator::ADD   : aInput->Token_GetText(lData + lLen, N - lLen); break;
+                Enum<Operator, Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
 
-            default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid operator for string", "");
+                auto lCurrentLen = strlen(lData);
+                auto lValueLen   = lMatch[2].length();
+
+                switch (lOp)
+                {
+                case Operator::ASSIGN:
+                    KMS_EXCEPTION_ASSERT(N > lValueLen, RESULT_INVALID_FORMAT, "String too long", lMatch[2].str().c_str());
+
+                    memset(aData, 0, N);
+
+                    strcpy_s(lData SizeInfoV(N), lMatch[2].str().c_str());
+                    break;
+
+                case Operator::ADD:
+                    KMS_EXCEPTION_ASSERT(N > lCurrentLen + lValueLen, RESULT_INVALID_FORMAT, "String too long", lMatch[2].str().c_str());
+
+                    strcpy_s(lData + lCurrentLen SizeInfoV(N - lCurrentLen), lMatch[2].str().c_str());
+                    break;
+
+                default: KMS_EXCEPTION(RESULT_INVALID_FORMAT, "Invalid operator for string", "");
+                }
+            }
+            else
+            {
+                auto lRet = aInput->Next_Try(String_REGEX_VALUE_0_C1, lMatch)
+                    ||      aInput->Next_Try(String_REGEX_VALUE_1_C1, lMatch);
+                KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid string format", "");
+
+                KMS_EXCEPTION_ASSERT(N > lMatch[1].length(), RESULT_INVALID_FORMAT, "String too long", lMatch[1].str().c_str());
+
+                memset(aData, 0, N);
+
+                strcpy_s(lData SizeInfoV(N), lMatch[1].str().c_str());
             }
         }
 

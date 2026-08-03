@@ -66,6 +66,11 @@ namespace KMS
 
         extern bool ToInt32_Try(const char* aASCII, int32_t* aOut, Radix aRadix = Radix::DECIMAL);
 
+        // Exception  RESULT_INVALID_DATA_TYPE
+        extern int64_t ToInt64(const char* aASCII, Radix aRadix = Radix::DECIMAL);
+
+        extern bool ToInt64_Try(const char* aASCII, int64_t* aOut, Radix aRadix = Radix::DECIMAL);
+
         // Exception  RESULT_INVALID_VALUE
         extern int8_t ToInt8(const char* aASCII, Radix aRadix = Radix::DECIMAL);
 
@@ -80,6 +85,11 @@ namespace KMS
         extern uint32_t ToUInt32(const char* aASCII, Radix aRadix = Radix::DECIMAL);
 
         extern bool ToUInt32_Try(const char* aASCII, uint32_t* aOut, Radix aRadix = Radix::DECIMAL);
+
+        // Exception  RESULT_INVALID_DATA_TYPE
+        extern uint64_t ToUInt64(const char* aASCII, Radix aRadix = Radix::DECIMAL);
+
+        extern bool ToUInt64_Try(const char* aASCII, uint64_t* aOut, Radix aRadix = Radix::DECIMAL);
 
         // Exception  RESULT_INVALID_DATA_TYPE
         extern uint8_t ToUInt8 (const char* aASCII, Radix aRadix = Radix::DECIMAL);

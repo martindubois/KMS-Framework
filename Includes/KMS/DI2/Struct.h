@@ -47,11 +47,19 @@ namespace KMS
 
         private:
 
-            void DecodeField_ASCII(void* aData, Input* aInput) const;
+            void DecodeField_ASCII(void* aData, Input* aInput, const char* aName) const;
 
             const Struct_Field* FindField(const char* aName) const;
 
         };
+
+        extern const std::regex Struct_REGEX_FIELD_0_C1;
+        extern const std::regex Struct_REGEX_FIELD_1_C1;
+
+        extern const std::regex Struct_REGEX_FIELD_END;
+
+        extern const std::regex Struct_REGEX_GROUP_BEGIN;
+        extern const std::regex Struct_REGEX_GROUP_END;
 
         template <const Struct_Field* F>
         Struct<F>::Struct() {}
@@ -93,7 +101,7 @@ namespace KMS
         template<const Struct_Field* F>
         void Struct<F>::Code_JSON(const void* aData, Output* aOutput) const
         {
-            // TODO
+            // TODO  JSON
         }
 
         // Field0 op Value0
@@ -105,57 +113,46 @@ namespace KMS
         {
             assert(nullptr != aInput);
 
-            if (aInput->Char_Next_Try('='))
-            {
-                aInput->Char_Next('{');
+            std::smatch lMatch;
 
-                while (!aInput->Char_Next_Try('}'))
-                {
-                    DecodeField_ASCII(aData, aInput);
-
-                    aInput->Char_Next(';');
-                }
-            }
-            else if (aInput->Char_Next_Try('{'))
+            if (   aInput->Next_Try(Struct_REGEX_FIELD_0_C1, lMatch)
+                || aInput->Next_Try(Struct_REGEX_FIELD_1_C1, lMatch))
             {
-                while (!aInput->Char_Next_Try('}'))
-                {
-                    DecodeField_ASCII(aData, aInput);
-                    
-                    aInput->Char_Next(';');
-                }
+                DecodeField_ASCII(aData, aInput, lMatch[1].str().c_str());
             }
             else
             {
-                aInput->Char_Next_Try('.');
+                aInput->Next(Struct_REGEX_GROUP_BEGIN);
 
-                DecodeField_ASCII(aData, aInput);
+                while (!aInput->Next_Try(Struct_REGEX_GROUP_END))
+                {
+                    aInput->Next(Struct_REGEX_FIELD_0_C1, lMatch);
+
+                    DecodeField_ASCII(aData, aInput, lMatch[1].str().c_str());
+
+                    aInput->Next(Struct_REGEX_FIELD_END);
+                }
             }
         }
 
         template<const Struct_Field* F>
         void Struct<F>::Decode_JSON(void* aData, Input* aInput) const
         {
-            // TODO
+            // TODO  JSON
         }
 
         // Private
         // //////////////////////////////////////////////////////////////////
 
         template<const Struct_Field* F>
-        void Struct<F>::DecodeField_ASCII(void* aData, Input* aInput) const
+        void Struct<F>::DecodeField_ASCII(void* aData, Input* aInput, const char* aName) const
         {
             assert(nullptr != aData);
-            assert(nullptr != aInput);
 
             auto lData = reinterpret_cast<uint8_t*>(aData);
 
-            char lName[NAME_LENGTH];
-
-            aInput->Token_Next(TokenType::NAME);
-            aInput->Token_GetText(lName, sizeof(lName));
-
-            auto lField = FindField(lName);
+            auto lField = FindField(aName);
+            assert(nullptr != lField);
 
             lField->mType->Decode_ASCII(lData + lField->mOffset_byte, aInput);
         }

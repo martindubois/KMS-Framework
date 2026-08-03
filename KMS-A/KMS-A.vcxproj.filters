@@ -513,6 +513,15 @@
     <ClCompile Include="DI2_BitField.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
+    <ClCompile Include="DI2_Array.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_Struct.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
+    <ClCompile Include="DI2_String.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
