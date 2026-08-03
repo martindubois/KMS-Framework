@@ -131,21 +131,21 @@ namespace KMS
 
         unsigned int Master_IDevice::Request_C(Function aFunction, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             assert(false);
             return 0;
         }
 
         unsigned int Master_IDevice::Request_D(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             assert(false);
             return 0;
         }
 
         unsigned int Master_IDevice::Request_E(Function aFunction, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             assert(false);
             return 0;
         }
@@ -153,12 +153,12 @@ namespace KMS
         void Master_IDevice::Request_F(Function aFunction, uint16_t aAddr, uint16_t aCount, const void* aIn, unsigned int aInSize_byte)
         {
             assert(false);
-            // TODO
+            // TODO  Modbus
         }
 
         unsigned int Master_IDevice::Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             assert(false);
             return 0;
         }

@@ -66,8 +66,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // TODO  Add exception and _Try version
-
         template <typename T>
         const T* Array_Sparse::GetEntry_R(int aIndex) const
         {

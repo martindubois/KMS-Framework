@@ -89,8 +89,6 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        // TODO  Add Exception and _Try version
-
         template <typename T>
         const T* Dictionary::GetEntry_R(const char* aName) const
         {

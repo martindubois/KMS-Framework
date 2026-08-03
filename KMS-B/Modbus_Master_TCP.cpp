@@ -122,30 +122,30 @@ namespace KMS
 
         unsigned int Master_TCP::Request_C(Function aFunction, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             return 0;
         }
 
         unsigned int Master_TCP::Request_D(Function aFunction, const void* aIn, unsigned int aInSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             return 0;
         }
 
         unsigned int Master_TCP::Request_E(Function aFunction, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             return 0;
         }
 
         void Master_TCP::Request_F(Function aFunction, uint16_t aAddr, uint16_t aCount, const void* aIn, unsigned int aInSize_byte)
         {
-            // TODO
+            // TODO  Modbus
         }
 
         unsigned int Master_TCP::Request_G(Function aFunction, const void* aIn, unsigned int aSize_byte, void* aOut, unsigned int aOutSize_byte)
         {
-            // TODO
+            // TODO  Modbus
             return 0;
         }
 
