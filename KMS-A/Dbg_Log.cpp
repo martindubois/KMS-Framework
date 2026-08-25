@@ -24,29 +24,48 @@ namespace KMS
         // Public
         // //////////////////////////////////////////////////////////////////
 
-        const char* Log::CONSOLE_MODE_NAMES[] = { "DEBUG", "USER" };
+        void Log_Config::SetFolder(const char* aFolder)
+        {
+            assert(nullptr != aFolder);
 
-        const LogFile::Level   Log::CONSOLE_LEVEL_DEFAULT = LogFile::Level::LEVEL_WARNING;
-        const Log::ConsoleMode Log::CONSOLE_MODE_DEFAULT  = Log::ConsoleMode::MODE_USER;
-        const LogFile::Level   Log::FILE_LEVEL_DEFAULT    = LogFile::Level::LEVEL_INFO;
+            strcpy_s(mFolder, aFolder);
+        }
+
+        void Log_Config::SetDefault()
+        {
+            #ifdef _DEBUG
+                mConsoleLevel = Level::LEVEL_INFO;
+                mConsoleMode = ConsoleMode::MODE_DEBUG;
+                mFileLevel = Level::LEVEL_NOISE;
+            #else
+                mConsoleLevel = Level::LEVEL_WARNING;
+                mConsoleMode = ConsoleMode::MODE_USER;
+                mFileLevel = Level::LEVEL_INFO;
+            #endif
+
+            memset(&mFolder, 0, sizeof(mFolder));
+        }
+
+        void Log_Config::Validate() const
+        {
+            KMS_EXCEPTION_ASSERT(Level::QTY       > mConsoleLevel, RESULT_INVALID_CONFIG, "Invalid console level", "");
+            KMS_EXCEPTION_ASSERT(ConsoleMode::QTY > mConsoleMode , RESULT_INVALID_CONFIG, "Invalid console mode" , "");
+            KMS_EXCEPTION_ASSERT(Level::QTY       > mFileLevel   , RESULT_INVALID_CONFIG, "Invalid file level"   , "");
+        }
 
         const unsigned int Log::FLAG_USER_REDUNDANT = 0x00000001;
 
         Log::Log()
-            : mConsoleLevel(CONSOLE_LEVEL_DEFAULT)
-            , mConsoleMode (CONSOLE_MODE_DEFAULT)
-            , mFileLevel   (FILE_LEVEL_DEFAULT)
-            , mFolder      (File::Folder(File::Folder::HOME, "KMS-Framework"))
-            , mCounter(0)
-            , mEntryLevel(LogFile::Level::LEVEL_NOISE)
+            : mCounter(0)
+            , mEntryLevel(Level::LEVEL_NOISE)
             , mProcessId(OS::GetProcessId())
         {
-            CloseLogFiles();
+            VerifyFolder();
         }
 
         Log::~Log() { CloseLogFiles(); }
 
-        bool Log::IsFileEnabled() const { return mEnabled; }
+        bool Log::IsFileEnabled() const { return mFileEnabled; }
 
         void Log::CloseLogFiles()
         {
@@ -56,12 +75,10 @@ namespace KMS
             }
 
             mFiles.clear();
-
-            mEnabled = mFolder.DoesExist();
         }
 
-        #define IF_FILE       if (mEnabled && (mFileLevel >= mEntryLevel))
-        #define IF_CONSOLE(F) if ((0 == ((F) & FLAG_USER_REDUNDANT)) && (mConsoleLevel >= mEntryLevel))
+        #define IF_FILE       if (mFileEnabled && (mConfig.GetFileLevel() >= mEntryLevel))
+        #define IF_CONSOLE(F) if ((0 == ((F) & FLAG_USER_REDUNDANT)) && (mConfig.GetConsoleLevel() >= mEntryLevel))
 
         void Log::WriteData(const void* aData, unsigned int aSize_byte, unsigned int aFlags)
         {
@@ -76,26 +93,25 @@ namespace KMS
 
             IF_CONSOLE(aFlags)
             {
-                switch (mConsoleMode)
+                switch (mConfig.GetConsoleMode())
                 {
                 case ConsoleMode::MODE_DEBUG:
                     switch (mEntryLevel)
                     {
-                    case LogFile::Level::LEVEL_ERROR:
+                    case Level::LEVEL_ERROR:
                         std::cerr << Console::Color::RED;
                         std::cerr << "Data\t" << aSize_byte << " bytes";
                         std::cerr << Console::Color::WHITE << std::endl;
                         break;
 
-                    case LogFile::Level::LEVEL_WARNING:
+                    case Level::LEVEL_WARNING:
                         std::cerr << Console::Color::YELLOW;
                         std::cerr << "Data\t" << aSize_byte << " bytes";
                         std::cerr << Console::Color::WHITE << std::endl;
                         break;
 
-                    case LogFile::Level::LEVEL_INFO:
-                    case LogFile::Level::LEVEL_NOISE:
-                        // NOT TESTED
+                    case Level::LEVEL_INFO:
+                    case Level::LEVEL_NOISE:
                         std::cerr << "Data\t" << aSize_byte << "bytes";
                         std::cerr << std::endl;
                         break;
@@ -106,7 +122,7 @@ namespace KMS
             }
         }
 
-        void Log::WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, Dbg::LogFile::Level aLevel, unsigned int aFlags)
+        void Log::WriteEntry(const char* aFile, const char* aFunction, unsigned int aLine, Level aLevel, unsigned int aFlags)
         {
             mEntryLevel = aLevel;
 
@@ -125,25 +141,23 @@ namespace KMS
             {
                 switch (mEntryLevel)
                 {
-                case LogFile::Level::LEVEL_ERROR:
+                case Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
                     DisplayInConsole("ERROR", aFile, aFunction, aLine);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_WARNING:
+                case Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
                     DisplayInConsole("WARNING", aFile, aFunction, aLine);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_INFO:
-                    // NOT TESTED
+                case Level::LEVEL_INFO:
                     DisplayInConsole("INFO", aFile, aFunction, aLine);
                     break;
 
-                case LogFile::Level::LEVEL_NOISE:
-                    // NOT TESTED
+                case Level::LEVEL_NOISE:
                     DisplayInConsole("NOISE", aFile, aFunction, aLine);
                     break;
 
@@ -167,21 +181,20 @@ namespace KMS
             {
                 switch (mEntryLevel)
                 {
-                case LogFile::Level::LEVEL_ERROR:
+                case Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
                     DisplayInConsole(aException);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_WARNING:
+                case Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
                     DisplayInConsole(aException);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_INFO:
-                case LogFile::Level::LEVEL_NOISE:
-                    // NOT TESTED
+                case Level::LEVEL_INFO:
+                case Level::LEVEL_NOISE:
                     DisplayInConsole(aException);
                     break;
 
@@ -205,21 +218,20 @@ namespace KMS
             {
                 switch (mEntryLevel)
                 {
-                case LogFile::Level::LEVEL_ERROR:
+                case Level::LEVEL_ERROR:
                     std::cerr << Console::Color::RED;
                     DisplayInConsole(aMsg);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_WARNING:
+                case Level::LEVEL_WARNING:
                     std::cerr << Console::Color::YELLOW;
                     DisplayInConsole(aMsg);
                     std::cerr << Console::Color::WHITE << std::endl;
                     break;
 
-                case LogFile::Level::LEVEL_INFO:
-                case LogFile::Level::LEVEL_NOISE:
-                    // NOT TESTED
+                case Level::LEVEL_INFO:
+                case Level::LEVEL_NOISE:
                     DisplayInConsole(aMsg);
                     break;
 
@@ -227,6 +239,22 @@ namespace KMS
                 }
             }
         }
+
+        // ===== Configurable ===============================================
+
+        void Log::Config_Set(const Log_Config& aIn)
+        {
+            Configurable::Config_Set(aIn);
+
+            CloseLogFiles();
+            VerifyFolder();
+        }
+
+        const char* ConsoleMode_NAMES[] =
+        {
+            "MODE_DEBUG",
+            "MODE_USER",
+        };
 
         Log gLog;
 
@@ -237,7 +265,7 @@ namespace KMS
         {
             assert(nullptr != aMsg);
 
-            switch (mConsoleMode)
+            switch (mConfig.GetConsoleMode())
             {
             case ConsoleMode::MODE_DEBUG:
                 std::cerr << "Message\t\"" << aMsg << "\"" << std::endl;
@@ -257,7 +285,7 @@ namespace KMS
             assert(nullptr != aFile);
             assert(0 != aLine);
 
-            switch (mConsoleMode)
+            switch (mConfig.GetConsoleMode())
             {
             case ConsoleMode::MODE_DEBUG:
                 std::cerr << aTitle << "\n";
@@ -276,7 +304,7 @@ namespace KMS
 
         void Log::DisplayInConsole(const Exception& aException)
         {
-            switch (mConsoleMode)
+            switch (mConfig.GetConsoleMode())
             {
             case ConsoleMode::MODE_DEBUG:
                 std::cerr << "Exception\n";
@@ -302,12 +330,13 @@ namespace KMS
             {
                 try
                 {
-                    lResult = new LogFile(mFolder, mProcessId, lThreadId);
+                    lResult = new LogFile(mConfig.GetFolder(), mProcessId, lThreadId);
 
                     mFiles.insert(FileMap::value_type(lThreadId, lResult));
                 }
                 catch (Exception eE)
                 {
+                    // NOT TESTED
                     KMS_EXCEPTION_ASSERT(RESULT_OPEN_FAILED == eE.GetCode(), RESULT_UNEXPECTED_EXCEPTION, "Unexpected exception", "");
                 }
             }
@@ -319,6 +348,25 @@ namespace KMS
             }
 
             return lResult;
+        }
+
+        void Log::VerifyFolder()
+        {
+            auto lFolder = mConfig.GetFolder();
+
+            mFileEnabled = 0 < strlen(lFolder);
+            if (mFileEnabled)
+            {
+                struct _stat lStat;
+
+                auto lRet = _stat(lFolder, &lStat);
+
+                mFileEnabled = 0 == lRet;
+                if (mFileEnabled)
+                {
+                    KMS_EXCEPTION_ASSERT(0 != (lStat.st_mode & _S_IFDIR), RESULT_INVALID_CONFIG, "Invalid folder name", lFolder);
+                }
+            }
         }
 
     }

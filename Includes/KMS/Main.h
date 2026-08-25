@@ -11,7 +11,6 @@
 // ===== Includes ===========================================================
 #include <KMS/Cfg/Configurator.h>
 #include <KMS/CLI/CommandLine.h>
-#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/Dbg/Stats.h>
 #include <KMS/Dbg/Stats_Timer.h>
 #include <KMS/Install/Installer.h>
@@ -27,9 +26,7 @@
     {                                                           \
         KMS::Cfg::Configurator  lConfigurator;                  \
         KMS::Install::Installer lInstaller;                     \
-        KMS::Dbg::Log_Cfg       lLogCfg(&KMS::Dbg::gLog);       \
         lConfigurator.AddConfigurable(&lInstaller);             \
-        lConfigurator.AddConfigurable(&lLogCfg);                \
         lConfigurator.AddConfigurable(&Dbg::gStats)
 
 #define KMS_MAIN_END          \

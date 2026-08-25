@@ -40,7 +40,6 @@ private:
 
     KMS::Cfg::Configurator mConfigurator;
     KMS::Build::Make       mMake;
-    KMS::Dbg::Log_Cfg      mLogCfg;
 
 };
 

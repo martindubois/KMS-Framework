@@ -1,10 +1,9 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2025 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      Includes/KMS/Dbg/LogFile.h
-// Status    PROD_READY
 // Library   KMS-A
 
 #pragma once
@@ -28,21 +27,21 @@ namespace KMS
     namespace Dbg
     {
 
+        enum class Level
+        {
+            LEVEL_NONE,
+            LEVEL_ERROR,
+            LEVEL_WARNING,
+            LEVEL_INFO,
+            LEVEL_NOISE,
+
+            QTY
+        };
+
         class LogFile final
         {
 
         public:
-
-            enum class Level
-            {
-                LEVEL_NONE   ,
-                LEVEL_ERROR  ,
-                LEVEL_WARNING,
-                LEVEL_INFO   ,
-                LEVEL_NOISE  ,
-
-                QTY
-            };
 
             enum class EntryType
             {
@@ -123,6 +122,8 @@ namespace KMS
             uint64_t      mTimestamp;
 
         };
+
+        extern const char* Level_NAMES[];
 
     }
 }

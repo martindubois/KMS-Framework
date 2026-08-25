@@ -153,5 +153,14 @@ namespace KMS
             fflush(mFile);
         }
 
+        const char* Level_NAMES[] =
+        {
+            "LEVEL_NONE",
+            "LEVEL_ERROR",
+            "LEVEL_WARNING",
+            "LEVEL_INFO",
+            "LEVEL_NOISE",
+        };
+
     }
 }

@@ -13,7 +13,6 @@
 // ===== Includes ===========================================================
 #include <KMS/Build/Make.h>
 #include <KMS/Cfg/Configurator.h>
-#include <KMS/Dbg/Log_Cfg.h>
 #include <KMS/DI/Array.h>
 
 // ===== Local ==============================================================

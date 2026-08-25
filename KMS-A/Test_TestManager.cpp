@@ -1,6 +1,6 @@
 
 // Author    KMS - Martin Dubois, P. Eng.
-// Copyright (C) 2022-2024 KMS
+// Copyright (C) 2022-2026 KMS
 // License   http://www.apache.org/licenses/LICENSE-2.0
 // Product   KMS-Framework
 // File      KMS-A/Test_TestManager.cpp
@@ -37,7 +37,13 @@ namespace KMS
             assert(1 <= aCount);
             assert(nullptr != aVector);
 
-            KMS::Dbg::gLog.mConsoleLevel = Dbg::LogFile::Level::LEVEL_NONE;
+            Dbg::Log_Config lCfg;
+
+            Dbg::gLog.Config_Get(&lCfg);
+
+            lCfg.SetConsoleLevel(Dbg::Level::LEVEL_NONE);
+
+            Dbg::gLog.Config_Set(lCfg);
 
             KMS_MAIN_BEGIN;
             {
