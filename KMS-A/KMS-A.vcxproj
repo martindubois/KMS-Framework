@@ -118,6 +118,7 @@
     <ClCompile Include="File_FileInfoList.cpp" />
     <ClCompile Include="File_Folder_W.cpp" />
     <ClCompile Include="File_Sync.cpp" />
+    <ClCompile Include="Dbg_Log_DI2.cpp" />
     <ClCompile Include="Modbus.cpp" />
     <ClCompile Include="Modbus_CRC.cpp" />
     <ClCompile Include="Modbus_Master.cpp" />
