@@ -10,14 +10,19 @@
 
 #include "Component.h"
 
+// ===== C++ ================================================================
+#include <fstream>
+
 // ===== Includes ===========================================================
 #include <KMS/DI2/IType.h>
 #include <KMS/Environment.h>
 
 #include <KMS/DI2/Input.h>
 
-// Constants
+// Static function declarations
 // //////////////////////////////////////////////////////////////////////////
+
+static bool ReadArgumentFile(void* aData, const KMS::DI2::IType* aType, const char* aString);
 
 namespace KMS
 {
@@ -234,40 +239,73 @@ namespace KMS
             {}
         }
 
+        void Decode_ASCII_File(void* aData, const IType* aType, const char* aFile)
+        {
+            std::ifstream lFile(aFile, std::ios::binary);
+            KMS_EXCEPTION_ASSERT(lFile.is_open(), RESULT_OPEN_FAILED, "Cannot open input file", aFile);
+
+            std::string lLine;
+
+            while (getline(lFile, lLine))
+            {
+                static std::regex REGEX_COMMENT("^\\s*#.*\r?\n?$");
+                static std::regex REGEX_EMPTY  ("^\\s*\r?\n?$");
+                static std::regex REGEX_STRING ("^\\s*(.+)\\s*\r?\n?$");
+
+                std::smatch lMatch;
+
+                if (std::regex_match(lLine, lMatch, REGEX_STRING))
+                {
+                    Decode_ASCII_String(aData, aType, lMatch[1].str().c_str());
+                }
+                else
+                {
+                    auto lRet = std::regex_match(lLine, lMatch, REGEX_COMMENT) || std::regex_match(lLine, lMatch, REGEX_EMPTY);
+                    KMS_EXCEPTION_ASSERT(lRet, RESULT_INVALID_FORMAT, "Invalid file format", lLine.c_str());
+                }
+            }
+        }
+
         void Decode_ASCII_String(void* aData, const IType* aType, const char* aString)
         {
             assert(nullptr != aType);
 
-            Input lInput;
+            auto lRet = ReadArgumentFile(aData, aType, aString);
+            if (!lRet)
+            {
+                Input lInput;
 
-            lInput.Init_String(aString);
+                lInput.Init_String(aString);
 
-            aType->Decode_ASCII(aData, &lInput);
+                aType->Decode_ASCII(aData, &lInput);
 
-            KMS_EXCEPTION_ASSERT(lInput.IsConsummed(), RESULT_INVALID_FORMAT, "Invalid format", aString);
+                KMS_EXCEPTION_ASSERT(lInput.IsConsummed(), RESULT_INVALID_FORMAT, "Invalid format", aString);
+            }
         }
 
         bool Decode_ASCII_String_Try(void* aData, const IType* aType, const char* aString)
         {
             assert(nullptr != aType);
 
-            Input lInput;
-
-            lInput.Init_String(aString);
-
-            bool lResult = false;
-
-            try
+            auto lResult = ReadArgumentFile(aData, aType, aString);
+            if (!lResult)
             {
-                aType->Decode_ASCII(aData, &lInput);
+                Input lInput;
 
-                lResult = lInput.IsConsummed();
-            }
-            catch (KMS::Exception eE)
-            {
-                if (RESULT_INVALID_NAME != eE.GetCode())
+                lInput.Init_String(aString);
+
+                try
                 {
-                    throw eE;
+                    aType->Decode_ASCII(aData, &lInput);
+
+                    lResult = lInput.IsConsummed();
+                }
+                catch (KMS::Exception eE)
+                {
+                    if (RESULT_INVALID_NAME != eE.GetCode())
+                    {
+                        throw eE;
+                    }
                 }
             }
 
@@ -275,4 +313,27 @@ namespace KMS
         }
 
     }
+}
+
+using namespace KMS;
+
+// Static functions
+// //////////////////////////////////////////////////////////////////////////
+
+bool ReadArgumentFile(void* aData, const KMS::DI2::IType* aType, const char* aString)
+{
+    static const std::regex REGEX("^@\\s*(.+)\\s*$");
+
+    assert(nullptr != aString);
+
+    std::smatch lMatch;
+    std::string lString(aString);
+
+    bool lResult = std::regex_match(lString, lMatch, REGEX);
+    if (lResult)
+    {
+        DI2::Decode_ASCII_File(aData, aType, lMatch[1].str().c_str());
+    }
+
+    return lResult;
 }
