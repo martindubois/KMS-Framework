@@ -13,6 +13,7 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Output.h>
 #include <KMS/DI2/IType.h>
+#include <KMS/Enum.h>
 
 namespace KMS
 {
@@ -61,8 +62,6 @@ namespace KMS
         {
             // TODO  JSON
         }
-
-        // TODO  Use regex
 
         // Operators = += -= *= /= |= &= ^=
         //

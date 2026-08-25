@@ -11,6 +11,7 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/Operator.h>
 #include <KMS/DI2/Output.h>
+#include <KMS/Enum.h>
 #include <KMS/String.h>
 
 #include <KMS/String_DI2.h>

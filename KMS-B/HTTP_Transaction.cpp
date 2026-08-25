@@ -13,6 +13,7 @@
 #include <KMS/DI/MetaData.h>
 #include <KMS/DI/String.h>
 #include <KMS/DI/UInt.h>
+#include <KMS/Enum.h>
 #include <KMS/HTTP/HTTP.h>
 #include <KMS/JSON/JSON.h>
 

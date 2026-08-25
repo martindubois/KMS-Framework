@@ -522,6 +522,9 @@
     <ClCompile Include="DI2_String.cpp">
       <Filter>Source Files\DI2</Filter>
     </ClCompile>
+    <ClCompile Include="DI2_Enum.cpp">
+      <Filter>Source Files\DI2</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">

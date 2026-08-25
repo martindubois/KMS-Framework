@@ -12,6 +12,7 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
 #include <KMS/DI2/Output.h>
+#include <KMS/Enum.h>
 #include <KMS/Result.h>
 
 namespace KMS
@@ -52,8 +53,6 @@ namespace KMS
             assert(false);
         }
 
-        // TODO  Use regex
-
         // Operators = +=
         //
         // Value
@@ -73,7 +72,7 @@ namespace KMS
             if (   aInput->Next_Try(String_REGEX_OP_VALUE_0_C2, lMatch)
                 || aInput->Next_Try(String_REGEX_OP_VALUE_1_C2, lMatch))
             {
-                Enum<Operator, Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
+                KMS::Enum<Operator, Operator_SYMBOLS> lOp(lMatch[1].str().c_str());
 
                 auto lCurrentLen = strlen(lData);
                 auto lValueLen   = lMatch[2].length();

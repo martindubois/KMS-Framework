@@ -13,6 +13,7 @@
 #include <KMS/DI2/Input.h>
 #include <KMS/DI2/IType.h>
 #include <KMS/DI2/Operator.h>
+#include <KMS/Enum.h>
 
 namespace KMS
 {
